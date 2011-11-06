@@ -8,7 +8,7 @@ Feature: Administer users
       | email                     | first_name | last_name |
       | raul@intersect.org.au     | Raul       | Carrizo   |
       | georgina@intersect.org.au | Georgina   | Edwards   |
-    And I have the usual roles and permissions
+    And I have the usual roles
     And I am logged in as "georgina@intersect.org.au"
     And "georgina@intersect.org.au" has role "Administrator"
 

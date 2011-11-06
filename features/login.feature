@@ -4,15 +4,7 @@ Feature: Logging In
   I want to login
 
   Background:
-    Given I have roles
-      | name       |
-      | Administrator  |
-      | Researcher |
-    And I have permissions
-      | entity | action          | roles     |
-      | User   | read            | Administrator |
-      | User   | admin           | Administrator |
-      | User   | access_requests | Administrator |
+    Given I have the usual roles
     And I have a user "georgina@intersect.org.au"
     And "georgina@intersect.org.au" has role "Administrator"
 

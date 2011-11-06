@@ -16,19 +16,3 @@ Then /^I should get the following security outcomes$/ do |table|
   end
 end
 
-Given /^I have the usual roles and permissions$/ do
-  
-  super_role = "Administrator"
-  # TODO: adjust roles and permissions here
-  Role.create!(:name => super_role)
-  Role.create!(:name => "Researcher")
-
-  create_permission("User", "read", [super_role])
-  create_permission("User", "update_role", [super_role])
-  create_permission("User", "activate_deactivate", [super_role])
-  create_permission("User", "admin", [super_role])
-  create_permission("User", "reject", [super_role])
-  create_permission("User", "approve", [super_role])
-
-end
-

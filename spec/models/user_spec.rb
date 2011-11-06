@@ -150,23 +150,6 @@ describe User do
     end
   end
 
-  describe "Has permission method" do
-    it "should return true if the specified permission is in the list" do
-      user = Factory(:user, :password => "Pass.123")
-      user.role = Factory(:role)
-      user.role.permissions = [Factory(:permission, :entity => "Abc", :action => "def")]
-      user.role.has_permission("Abc", "def").should be_true
-      user.role.has_permission("Abc", "ghi").should be_false
-      user.role.has_permission("Abb", "def").should be_false
-    end
-    it "should return false if the permissions are empty" do
-      user = Factory(:user, :password => "Pass.123")
-      user.role = Factory(:role)
-      user.role.permissions = []
-      user.role.has_permission("Abc", "ghi").should be_false
-    end
-  end
-  
   describe "Find the number of superusers method" do
     it "should return true if there are at least 2 superusers" do
       super_role = Factory(:role, :name => 'Administrator')

@@ -10,22 +10,17 @@ Given /^I have users$/ do |table|
   end
 end
 
-Given /^I have roles$/ do |table|
-  table.hashes.each do |hash|
-    Factory(:role, hash)
-  end
+Given /^I have the usual roles$/ do
+  Role.create!(:name => "Administrator")
+  Role.create!(:name => "Researcher")
 end
+
+
 
 And /^I have role "([^"]*)"$/ do |name|
   Factory(:role, :name => name)
 end
 
-
-Given /^I have permissions$/ do |table|
-  table.hashes.each do |hash|
-    create_permission_from_hash(hash)
-  end
-end
 
 def create_permission_from_hash(hash)
   roles = hash[:roles].split(",")

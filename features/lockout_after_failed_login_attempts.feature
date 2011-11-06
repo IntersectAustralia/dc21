@@ -4,7 +4,7 @@ Feature: Locking out users after multiple failed password attempts
   I want users to be locked out after 3 failed attempts
 
   Background:
-    Given I have the usual roles and permissions
+    Given I have the usual roles
     And I have a user "georgina@intersect.org.au" with role "Administrator"
 
   Scenario: 3 consecutive failed logins results in account being locked.

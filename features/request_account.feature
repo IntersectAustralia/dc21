@@ -4,8 +4,7 @@ Feature: Request an account
   I want to request an account
 
   Background:
-    Given I have no users
-    Given I have the usual roles and permissions
+    Given I have the usual roles
     And I have a user "diego.alonso@intersect.org.au" with role "Administrator"
 
   Scenario: Request account

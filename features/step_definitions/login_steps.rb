@@ -36,10 +36,6 @@ Given /^I am logged in as "([^"]*)"$/ do |email|
   click_button("Log in")
 end
 
-Given /^I have no users$/ do
-  User.delete_all
-end
-
 Then /^I should be able to log in with "([^"]*)" and "([^"]*)"$/ do |email, password|
   visit path_to("the logout page")
   visit path_to("the login page")

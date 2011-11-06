@@ -4,7 +4,7 @@ Feature: Reject access requests
   I want to reject access requests
   
   Background:
-    Given I have the usual roles and permissions
+    Given I have the usual roles
     And I have a user "georgina@intersect.org.au"
     And "georgina@intersect.org.au" has role "Administrator"
     And I have access requests

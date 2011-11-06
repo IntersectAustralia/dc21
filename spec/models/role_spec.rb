@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Role do
   describe "Associations" do
-    it { should have_and_belong_to_many(:permissions) }
     it { should have_many(:users) }
   end
   
