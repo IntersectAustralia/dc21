@@ -1,5 +1,6 @@
 Then /^I should see "([^"]*)" table with$/ do |table_id, expected_table|
-  expected_table.diff!(tableish("table##{table_id} tr", 'td,th'))
+  actual = find("table##{table_id}").all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
+  expected_table.diff!(actual)
 end
 
 Then /^I should see field "([^"]*)" with value "([^"]*)"$/ do |field, value|
