@@ -1,0 +1,9 @@
+- title "Select Role For #{@user.email}"
+= form_for(@user, :url => approve_user_path(@specimen)) do |f|
+  = render "shared/error_messages", :target => @user
+  .field
+    = f.label :role_id, "Role"
+    = f.collection_select(:role_id, @roles, :id, :name, {:include_blank => ""})
+  .actions
+    = f.submit("Approve")
+    = link_to 'Back', access_requests_users_path

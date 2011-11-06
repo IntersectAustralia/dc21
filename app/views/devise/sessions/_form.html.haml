@@ -1,0 +1,10 @@
+.container
+  %h2 Please enter your email and password to log in
+  .field
+    = f.label :email
+    = f.text_field :email
+  .field
+    = f.label :password
+    = f.password_field :password
+  .actions
+    = f.submit "Log in", :class => "blue floatright"
