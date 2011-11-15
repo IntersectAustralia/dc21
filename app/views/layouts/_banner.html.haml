@@ -1,0 +1,17 @@
+#header
+  .container
+    .logo
+      = link_to root_path, :id => :owner_logo_container do
+        DC.21
+      -#= t('app_name')
+    .menu
+      %ul
+        - if user_signed_in?
+          - if can? :admin, User
+            %li= link_to 'Management', "#"
+          %li= link_to 'Preferences', edit_user_registration_path
+          %li= link_to 'Logout ' + current_user.full_name, destroy_user_session_path
+        - else
+          %li= link_to "Sign Up", new_user_registration_path
+          %li= link_to "Login", new_user_session_path
+          %li= link_to "Forgot your password?", new_user_password_path
