@@ -1,9 +1,31 @@
-.container
-  - title 'Home'
-  - if !user_signed_in?
-    = form_for("user", :url => user_session_path) do |f|
-      = render(:partial => 'devise/sessions/form', :locals => { :f => f })
-    = link_to "Sign Up", new_user_registration_path, :class => "button"
-    = link_to "Forgot your password?", new_user_password_path, :class => "button"
-  - else
-    %p TODO: you are logged in: put your own home page content here
+- if !user_signed_in?
+  #content_container
+    .container
+      = form_for("user", :url => user_session_path) do |f|
+        = render(:partial => 'devise/sessions/form', :locals => { :f => f })
+      = link_to "Sign Up", new_user_registration_path, :class => "whitebutton"
+      = link_to "Forgot your password?", new_user_password_path, :class => "whitebutton"
+- else
+  .pageactions
+    = link_to "+ New Entry", root_url, :class => "bluebutton"
+    = link_to "New Search", root_url, :class => "whitebutton floatright"
+  %h1 Home / Dashboard
+  #content_container
+    .adminnavigation
+      = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
+        = tab.dashboard 'Dashboard', home_pages_path
+        = tab.explore 'Explore Data', explore_pages_path
+        = tab.accessrequests 'Members', access_requests_users_path
+    .userpannel
+      .myprojects
+        %h3 My Projects
+      .recentuploads
+        %h3 Recent Uploads
+    .recentactivity
+      %table.activity
+        %tr
+          %th Name
+          %th Date
+          %th User
+        %tr{:class => cycle('field_bg', 'field_nobg')}
+          %td

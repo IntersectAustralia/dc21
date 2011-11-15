@@ -24,8 +24,14 @@ end
       put :approve
 
     end
+
+
   end
 
+  resource :pages do
+    get :explore
+    get :home
+  end
 
   root :to => "pages#home"
 
