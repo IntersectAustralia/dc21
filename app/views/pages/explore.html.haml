@@ -1,0 +1,24 @@
+.pageactions
+  = link_to "+ Upload Data", root_url, :class => "bluebutton"
+  = link_to "New Search", root_url, :class => "whitebutton floatright"
+%h1 Home / Explore Data
+#content_container
+  .adminnavigation
+    = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
+      = tab.dashboard 'Dashboard', users_path
+      = tab.explore 'Explore Data', explore_pages_path
+      = tab.accessrequests 'Members', access_requests_users_path
+  .userpannel
+    .myprojects
+      %h3 My Projects
+    .recentuploads
+      %h3 Recent Uploads
+  .recentactivity
+    %table.activity
+      %tr
+        %th Name
+        %th Date
+        %th User
+      %tr{:class => cycle('field_bg', 'field_nobg')}
+        %td
+

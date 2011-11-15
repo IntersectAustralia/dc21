@@ -1,0 +1,681 @@
+@charset"UTF-8";
+
+/* CSS RESET ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, figure, footer, header, hgroup, menu, nav, section, menu, time, mark, audio, video {
+  margin: 0; padding: 0;
+  border: 0; outline: 0;
+  font-size: 100%; vertical-align: baseline;
+  background: transparent;
+}
+
+article, aside, figure, footer, header, hgroup, nav, section {display: block;}
+img, object, embed {max-width: 100%;}
+html {overflow-y: scroll;} /* force a vertical scrollbar to prevent a jumpy page */
+ul {list-style: none;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after {content: ''; content: none;}
+a {margin: 0; padding: 0; font-size: 100%; vertical-align: baseline; background: transparent;}
+del {text-decoration: line-through;}
+abbr[title], dfn[title] {border-bottom: 1px dotted #000; cursor: help;}
+table {border-collapse: collapse; border-spacing: 0;} /* tables still need cellspacing="0" in the markup */
+th {font-weight: bold; vertical-align: bottom;}
+td {font-weight: normal; vertical-align: top;}
+hr {display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;}
+input, select {vertical-align: middle;}
+pre { white-space: pre; /* CSS2 */ white-space: pre-wrap; /* CSS 2.1 */ white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */ word-wrap: break-word; /* IE */ }
+input[type="radio"] {vertical-align: text-bottom;}
+input[type="checkbox"] {vertical-align: bottom; *vertical-align: baseline;}
+.ie6 input {vertical-align: text-bottom;}
+select, input, textarea {font: 99% sans-serif;}
+table {font-size: inherit; font: 100%;}
+ a:hover, a:active {outline: none;} /* Accessible focus treatment people.opera.com/patrickl/experiments/keyboard/test */
+small {font-size: 85%;}
+strong, th {font-weight: bold;}
+td, td img {vertical-align: top;} 
+sub, sup {font-size: 75%; line-height: 0; position: relative;} sup {top: -0.5em;} sub {bottom: -0.25em;}
+pre, code, kbd, samp {font-family: monospace, sans-serif;} /* standardize any monospaced elements */
+.clickable, label, input[type=button], input[type=submit], button {cursor: pointer;} /* hand cursor on clickable elements */
+button, input, select, textarea {margin: 0;} /* Webkit browsers add a 2px margin outside the chrome of form elements */
+button {width: auto; overflow: visible;} /* make buttons play nice in IE */
+.ie7 img {-ms-interpolation-mode: bicubic;} /* scale images in IE7 more attractively */
+.ie6 html {filter: expression(document.execCommand("BackgroundImageCache", false, true));} /* prevent BG image flicker upon hover */
+
+/* let's clear some floats */
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }  
+.clearfix:after { clear: both; }  
+.clearfix { zoom: 1; }  
+
+/* new Linux- and Windows-friendly sans-serif font stack: http://mky.be/fontstack */
+body {font: 13px Helvetica, Arial, sans-serif;}
+/* Custom text-selection colors (remove any text shadows: twitter.com/miketaylr/status/12228805301) */
+ins {background-color: #fcd700; color: #000; text-decoration: none;}
+mark {background-color: #220cfc; color: #000; font-style: italic; font-weight: bold;}
+
+
+/* BASE STYLES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+html, body { height: 100%; width: 100%; font: normal normal normal 100%/1.25em Helvetica, Arial, sans-serif; color: #333; vertical-align: baseline; }
+body { }
+
+h1, h2, h3, h4, h5, h6 { font: normal normal normal 1em/1em Helvetica, Arial, sans-serif; } /* Base heading styles */ 
+h1 { font: normal normal bold 2em/40px Helvetica, Arial, sans-serif; color: #333; }
+h2 { font: normal normal bold 1.25em/30px Helvetica, Arial, sans-serif; color: #333; margin: 0 0 20px 0; padding: 0 0 10px 0; border-bottom: 1px dashed #B9B9B9; }
+h3 { font: normal normal bold 1em/30px Helvetica, Arial, sans-serif; }
+
+p { } /* Paragraph style. Use for text, or for a libe break. </br> is for pebs, and you're not a pleb right? */
+span { } /* Use as a default container for text that requires a Class or ID */
+a, a:visited { font: normal normal bold 1em Helvetica, Arial, sans-serif; color: #000; text-decoration: none; cursor: pointer; }
+a:hover { text-decoration: underline; } /* Basic link feedback for user */
+
+ul { }
+li { }
+
+label {
+  margin: 0 -4px 0 0; padding: 10px 20px 10px 10px; width: 130px;
+  font: normal normal bold 1em/18px Helvetica, Arial, sans-serif; color: #333; white-space: nowrap; cursor: pointer;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+}
+
+input[type=textarea], input[type=text], input[type=password], input[type=search], textarea { 
+  margin: 3px 0; padding: 0 10px;  height: 30px; border: 1px solid #D9D9D9; border-top-color: #C0C0C0; resize: none; 
+  font: normal normal normal 1em/1em Helvetica, Arial, sans-serif; color: #333;
+  border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+}
+input[type=textarea]:hover, input[type=text]:hover, input[type=password]:hover, input[type=search]:hover, textarea:hover { border-color: #B9B9B9; }
+input[type=textarea]:focus, input[type=text]:focus, input[type=password]:focus, input[type=search]:focus, textarea:focus { border-color: #3079ED; outline: none; }
+input[type=password] { font: normal normal normal 1.25em/1em Helvetica, Arial, sans-serif; color: #333; }
+
+/* BASE STYLES - NOTIFICATIONS
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Base notification container for users */
+
+#notice {
+	margin: 0px; padding: 10px 0; width: 100%; height: 20px; top: 0px; left: 0px; position: relative;
+  font: normal normal bold 1em/20px Helvetica, Arial, sans-serif; color: #F7F7F7; text-align: center;
+	background-color: #4d90fe; border-bottom: 1px solid #3079ed; cursor: pointer;
+}
+
+#alert {
+	margin: 0px; padding: 10px 0; width: 100%; height: 20px; top: 0px; left: 0px; position: relative;
+  font: normal normal bold 1em/20px Helvetica, Arial, sans-serif; color: #F7F7F7; text-align: center;
+	background-color: #DD4C39; border-bottom: 1px solid #B0281A; cursor: pointer;
+}
+
+
+.formerror { margin: 0 0 20px 0; color: #E25358; }
+
+.field_with_errors { width: 160px; display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */ }
+.field_with_errors input { border: 1px solid #E25358; }
+
+/* BASE STYLES - STRUCTURE MODULES
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Apply these class modules to elements. Any more than 3 modules per element is overkill and you should probably have a specific container. */
+
+.floatleft { float: left; } /* Float an element to the left */
+.floatright { float: right; } /* Float an element to the right */
+
+.row { margin: 0; } /* Basic row container */
+.rowform { margin: 0 0 18px 0; } /* Basic row / horizontal container with 1 paragraph return equiv. */
+.fields { margin: 0 0 18px 0; display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */ }
+
+.actions { margin: 36px 0 0 0; }
+
+.field_bg { background: #E5F6FD; border: 1px solid #E5F6FD; border-width: 1px 0 1px 0; } 
+.field_nobg { border: 1px solid #DCDCDC; border-width: 1px 0 1px 0; } 
+
+/* BASE STYLES - TEXT MODULES
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Apply these to specific font containers. Any more than 2 text modules is overkill and a specific style / container should be used */
+
+.details { font: normal normal normal 0.75em/18px Helvetica, Arial, sans-serif; color: #666; }
+.required { color: #E25358; }
+
+.bold { font-weight: bold; }
+
+.textalignleft { text-align: left; } /* Align text to the left */
+.textalignright { text-align: right; } /* Align text to the right */
+.textaligncenter { text-align: center; } /* Align text to the center */
+
+.truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* BUTTONS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+/* BUTTONS - DEFAULT BUTTON STYLE
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input[type=button], button { /* Default button style */
+  margin: 0; padding: 5px 10px; height: 30px; cursor: pointer;
+  font: normal normal normal 14px/20px Helvetica, Arial, sans-serif; color: #666; text-decoration: none;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+  background-color: #F5F5F5; border: 1px solid #DCDCDC; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#F1F1F1)); /* Chrome,Safari4+ */
+  background-image: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1); /* Chrome10+,Safari5.1+ */
+  background-image: -moz-linear-gradient(top, #F5F5F5, #F1F1F1); /* FF3.6+ */
+  background-image: -ms-linear-gradient(top, #F5F5F5, #F1F1F1); /* IE10+ */
+  background-image: -o-linear-gradient(top, #F5F5F5, #F1F1F1); /* Opera11.10+ */
+  background-image: linear-gradient(top, #F5F5F5, #F1F1F1); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F7F7F7', endColorstr='#EDEDED', GradientType=0); /* IE6-9 */
+}
+
+input[type=button]:hover, button:hover {
+  color: #333; text-shadow: 0 1px rgba(0,0,0,0.1);
+  background-color: #F1F1F1; border: 1px solid #C6C6C6; 
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#F8F8F8),to(#F1F1F1));
+  background-image: -webkit-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -moz-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -ms-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -o-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: linear-gradient(top,#F8F8F8),#F1F1F1));
+}
+
+input[type=button]:active, button:active {
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1); -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1); -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* BUTTONS - DISABLED BUTTON STYLE
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input[type=disabled], input[type=disabled]:hover {
+  margin: 0; padding: 5px 10px; height: 30px; cursor: default;
+  font: normal normal normal 14px/36px Helvetica, Arial, sans-serif; color: #CCC; text-decoration: none;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+  background-color: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#F7F7F7), to(#EDEDED));
+  background-image: -webkit-linear-gradient(top,#F7F7F7,#EDEDED);
+  background-image: -moz-linear-gradient(top,#F7F7F7,#EDEDED);
+  background-image: -ms-linear-gradient(top,#F7F7F7,#EDEDED);
+  background-image: -o-linear-gradient(top,#F7F7F7,#EDEDED);
+  background-image: linear-gradient(top,#F7F7F7,#EDEDED);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F7F7F7', endColorstr='#EDEDED', GradientType=0);
+}
+
+input[type=disabled]:active { box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; } /* Disabled Button Style */
+
+/* BUTTONS - WHITE / GREY
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.whitebutton, a.whitebutton {
+  margin: 0; padding: 5px 10px; height: 18px;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+  font: normal normal normal 14px/18px Helvetica, Arial, sans-serif; color: #666; text-decoration: none;
+  background-color: #F5F5F5; border: 1px solid #DCDCDC; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#F5F5F5),to(#F1F1F1));
+  background-image: -webkit-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: -moz-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: -ms-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: -o-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: linear-gradient(top,#F5F5F5),#F1F1F1));
+}
+
+.whitebutton:hover, a.whitebutton:hover {
+  color: #333; text-shadow: 0 1px rgba(0,0,0,0.1);
+  background-color: #F1F1F1; border: 1px solid #C6C6C6; 
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#F8F8F8),to(#F1F1F1));
+  background-image: -webkit-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -moz-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -ms-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -o-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: linear-gradient(top,#F8F8F8),#F1F1F1));
+}
+
+.whitebutton:active, a.whitebutton:active {
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1); -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1); -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* BUTTONS - BLUE
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.bluebutton, button.bluebutton, a.bluebutton, .bluebutton, input[type=submit] {
+  padding: 5px 10px; min-width: 140px;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+  font: normal normal normal 14px/18px Helvetica, Arial, sans-serif; color: #FFF; text-decoration: none; text-align: center; text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+  background-color: #4787ED; border: 1px solid #3079ED; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#4D90FE), to(#4787ED));
+  background-image: -webkit-linear-gradient(top,#4D90FE,#4787ED);
+  background-image: -moz-linear-gradient(top,#4D90FE,#4787ED);
+  background-image: -ms-linear-gradient(top,#4D90FE,#4787ED);
+  background-image: -o-linear-gradient(top,#4D90FE,#4787ED);
+  background-image: linear-gradient(top,#4D90FE,#4787ED);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#4D90FE', EndColorStr = '#4787ED');
+}
+
+button.bluebutton, input.bluebutton[type=submit] { height: 30px; }
+
+input.bluebutton:hover, button.bluebutton:hover, a.bluebutton:hover, .bluebutton:hover, input[type=submit]:hover {
+  background-color: #357AE8; border: 1px solid #2F5BB7; text-shadow: 0 1px rgba(0,0,0,0.3);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#4D90FE),to(#357AE8));
+  background-image: -webkit-linear-gradient(top,#4D90FE,#357AE8);
+  background-image: -moz-linear-gradient(top,#4D90FE,#357AE8);
+  background-image: -ms-linear-gradient(top,#4D90FE,#357AE8);
+  background-image: -o-linear-gradient(top,#4D90FE,#357AE8);
+  background-image: linear-gradient(top,#4D90FE,#357AE8);
+}
+
+button.bluebutton:active, .bluebutton:active {
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.3); -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.3); -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* BUTTONS - RED
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.redbutton, button.redbutton, a.redbutton, .redbutton {
+  margin: 0; padding: 5px 10px; height: 18px;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+  font: normal normal normal 0.875em/18px Helvetica, Arial, sans-serif; color: #FFF; text-decoration: none; text-shadow: 0 1px rgba(0,0,0,0.1);
+  background-color: #DD4C39; border: 1px solid #DD4C39; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#FF5742),to(#DD4C39));
+  background-image: -webkit-linear-gradient(top,#FF5742,#DD4C39);
+  background-image: -moz-linear-gradient(top,#FF5742,#DD4C39);
+  background-image: -ms-linear-gradient(top,#FF5742,#DD4C39);
+  background-image: -o-linear-gradient(top,#FF5742,#DD4C39);
+  background-image: linear-gradient(top,#FF5742,#DD4C39);
+}
+
+.redbutton:hover, a.redbutton:hover {
+  background-color: #DB3D2B; border: 1px solid #B0281A; text-shadow: 0 1px rgba(0,0,0,0.3);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#FF5742),to(#DB3D2B));
+  background-image: -webkit-linear-gradient(top,#FF5742,#DB3D2B);
+  background-image: -moz-linear-gradient(top,#FF5742,#DB3D2B);
+  background-image: -ms-linear-gradient(top,#FF5742,#DB3D2B);
+  background-image: -o-linear-gradient(top,#FF5742,#DB3D2B);
+  background-image: linear-gradient(top,#FF5742,#DB3D2B);
+}
+
+.redbutton:active, a.redbutton:active {
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1); -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1); -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* BUTTONS - GENERAL ICONS
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.add img { /* Add button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_PLUS_000000.png') no-repeat left center; line-height: 18px; }
+.edit img { /* Edit button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_EDIT_000000.png') no-repeat left center; line-height: 18px; }
+.down img { /* Down button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_ARROW_STALK_DOWN_000000.png') no-repeat left center; line-height: 18px; }
+.delete img { /* Delete button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_DEL_000000.png') no-repeat left center; line-height: 18px; }
+
+/* TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/`
+
+/* Note: Table Data cells will stretch to fill 100% of a table's width. If the width specified on individual cells 
+ * dosen't add up to the total width, they  will expand to fit. */
+
+table, tbody { width: 1100px; max-width: 1100px; min-width: 1100px; overflow: hidden; }
+
+tr { margin: 0; padding: 0; }
+th { margin: 0; padding: 10px 20px 10px 0; width: 140px; height: 20px; line-height: 20px; max-width: 140px; min-width: 140px; text-align: left; color: #333; }
+td { margin: 0; padding: 10px 20px 10px 0; width: 140px; height: 20px; max-width: 140px; min-width: 140px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* Specific cell types to balance width - List Users */
+th.view, td.view { width: 60px; min-width: 60px; max-width: 60px; text-align: center; } 
+th.role, td.role, th.status, td.status { width: 60px; min-width: 60px; max-width: 60px; } 
+th.email, td.email { width: 220px; min-width: 220px; max-width: 220px; } 
+th.date, td.date { width: 220px; min-width: 220px; max-width: 220px; } 
+th.actions, td.actions { width: 40px; min-width: 40px; max-width: 40px; text-align: center; }
+
+/* Specific cell types to balance width - View Access Requests  */
+#access_requests tr.email, #access_requests td.email { width: 300px; } 
+#access_requests tr.firstname, #access_requests td.firstname, #access_requests th.lastname, #access_requests td.lastname { width: 220px; min-width: 220px; max-width: 220px; } 
+#access_requests th.email, #access_requests td.email { width: 300px; min-width: 300px; max-width: 300px; }
+#access_requests th.actions, #access_requests td.actions { padding: 10px 0; width: 220px; min-width: 220px; max-width: 220px; } 
+
+a.approve, a.reject, a.spam { padding: 6px 10px; color: #333; cursor: pointer; background: #EFEFEF; 
+  font: normal normal normal 14px/18px Helvetica, Arial, sans-serif; }
+a:hover.approve, a:hover.reject, a:hover.spam { background: #F5F5F5; text-decoration: none; }
+
+a.spam { border-width: 1px 0 1px 1px; -webkit-border-radius: 5px 0 0 5px; -moz-border-radius: 5px 0 0 5px; border-radius: 5px 0 0 5px;
+  margin: 0 -10px 0 0; padding: 6px 20px 6px 10px;
+  color: #666;
+  border: 1px solid #DCDCDC; 
+  background-color: #F5F5F5;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#F5F5F5),to(#F1F1F1));
+  background-image: -webkit-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: -moz-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: -ms-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: -o-linear-gradient(top,#F5F5F5),#F1F1F1));
+  background-image: linear-gradient(top,#F5F5F5),#F1F1F1));
+}
+
+a:hover.spam { text-decoration: none; 
+  color: #333;
+  text-shadow: 0 1px rgba(0,0,0,0.1);
+  border: 1px solid #C6C6C6; 
+  background-color: #F5F5F5;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#F8F8F8),to(#F1F1F1));
+  background-image: -webkit-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -moz-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -ms-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: -o-linear-gradient(top,#F8F8F8),#F1F1F1));
+  background-image: linear-gradient(top,#F8F8F8),#F1F1F1));
+}
+
+a.reject { color: #FFF; border: 1px solid #E25358; border-width: 1px 0 1px 1px; -webkit-border-radius: 5px 0 0 5px; -moz-border-radius: 5px 0 0 5px; border-radius: 5px 0 0 5px;
+  border: 1px solid #DD4C39; 
+  text-shadow: 0 1px rgba(0,0,0,0.1);
+  background-color: #d14836;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#dd4b39),to(#d14836));
+  background-image: -webkit-linear-gradient(top,#FF5742,#DD4C39);
+  background-image: -moz-linear-gradient(top,#dd4b39,#d14836);
+  background-image: -ms-linear-gradient(top,#dd4b39,#d14836);
+  background-image: -o-linear-gradient(top,#dd4b39,#d14836);
+  background-image: linear-gradient(top,#dd4b39,#d14836);
+}
+a:hover.reject { 
+border: 1px solid #b0281a;
+  color: #fff;
+  text-shadow: 0 1px rgba(0,0,0,0.3);
+  background-color: #c53727;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#dd4b39),to(#c53727));
+  background-image: -webkit-linear-gradient(top,#FF5742,#DB3D2B);
+  background-image: -moz-linear-gradient(top,#dd4b39,#c53727);
+  background-image: -ms-linear-gradient(top,#dd4b39,#c53727);
+  background-image: -o-linear-gradient(top,#dd4b39,#c53727);
+  background-image: linear-gradient(top,#dd4b39,#c53727);
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  -ms-box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  -o-box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+a.approve { background: #4D90FE; color: #FFF; border: 1px solid #3079ED; -webkit-border-radius: 0 5px 5px 0; -moz-border-radius: 0 5px 5px 0; border-radius: 0 5px 5px 0; 
+  text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#4D90FE), to(#4787ED));
+  background-image: -webkit-linear-gradient(top, #4D90FE, #4787ED);
+  background-image: -moz-linear-gradient(top, #4D90FE, #4787ED);
+  background-image: -ms-linear-gradient(top, #4D90FE, #4787ED);
+  background-image: -o-linear-gradient(top, #4D90FE, #4787ED);
+  background-image: linear-gradient(top, #4D90FE, #4787ED);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#4d90fe', EndColorStr = '#4787ed');
+}
+a:hover.approve { text-decoration: none; 
+  border: 1px solid #2f5bb7;
+  color: #fff;
+  text-shadow: 0 1px rgba(0,0,0,0.3);
+  background-color: #357ae8;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#4d90fe),to(#357ae8));
+  background-image: -webkit-linear-gradient(top,#4d90fe,#357ae8);
+  background-image: -moz-linear-gradient(top,#4d90fe,#357ae8);
+  background-image: -ms-linear-gradient(top,#4d90fe,#357ae8);
+  background-image: -o-linear-gradient(top,#4d90fe,#357ae8);
+  background-image: linear-gradient(top,#4d90fe,#357ae8);
+  }
+
+
+
+/* LAYOUT ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+/* LAYOUT - HEADER
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Header container for Header items + notifications */
+#header { margin: 0; padding: 0; width: 100%; position: relative; top: 0; }
+/* Wrapper for header background to span page */
+#header #header_wrapper {  margin: 0; padding: 0; height: 88px; background: url('../images/header-bg.png') top left repeat-x; color: #666; }
+/* Container for header centered within the wrapper */
+#header .container { margin: 0 auto; padding: 0 20px; min-width: 940px; max-width: 1100px; min-height: 100%; }
+
+/* Container to hold the Header logo */
+#header .logo { 
+  font: normal normal bold 3em/1em Helvetica, Arial, sans-serif; color: #333; text-shadow: #EEE 0px 2px 0px;
+  margin: 20px 0 0 0; padding: 0; height: 48px; width: 300px; float:left; }
+
+/* Container to hold the Header menu */
+#header .menu { margin: 49px 0 0 0; padding: 0; float: right; }
+#header .menu li { 
+  margin: 0 0 0 20px; border: 0px solid transparent; border-width: 0;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+}
+
+#header .menu a, #header .menu span { 
+  margin: 0; padding: 10px; line-height: 18px; color: #666; font-weight: normal;  text-shadow: #EEE 0px 1px 0px;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+}
+#header .menu a:hover { color: #333; text-decoration: none;  cursor: pointer;  }
+
+#header .menu li#home a { padding: 6px 20px 8px 20px; width: 20px; height: 24px; background: url('../images/icon_home_light.png') center 8px no-repeat; }
+#header .menu li#home a:hover { background: url('../images/icon_home_dark.png') center 8px no-repeat; }
+#header .menu li#home.active a { background: url('../images/icon_home_dark.png') center 8px no-repeat; }
+
+#header .menu li.user a { color: #4D90FE; }
+#header .menu li.user a:hover { color: #3079ED; }
+
+#header .menu li.active { height: 50px;
+  background: url('../images/header-active.png') center 38px no-repeat; border: 0px solid #C6C6C6; border-width: 0; border-radius: 3px 3px 0 0; -moz-border-radius: 3px 3px 0 0; -webkit-border-radius: 3px 3px 0 0; }
+#header .menu li.active a { color: #333; }
+
+#header .menu li.signup { background: #4D90F3; border: 1px solid #3079ED; border-width: 1px 1px 0 1px; border-radius: 3px 3px 0 0; -moz-border-radius: 3px 3px 0 0; -webkit-border-radius: 3px 3px 0 0; }
+#header .menu li.signup a { padding: 10px 20px 9px 20px; height: 18px; color: #F7F7F7; text-shadow: 0 1px rgba(0,0,0,0.1); }
+#header .menu li.signup:hover { text-shadow: 0 1px rgba(0,0,0,0.3); border: 1px solid #2F5BB7; border-width: 1px 1px 0 1px; text-shadow: 0 1px rgba(0,0,0,0.3);
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.3); -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.3); -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#header #accountmenu_container { 
+  margin: 0 -548px 0 0; top: 87px; right: 50%; position: absolute; overflow: hidden; 
+  background: #D6D6D6; color: #333; display: none; border: 1px solid #C6C6C6; border-width: 0 1px 1px 1px; 
+  -webkit-border-radius: 0 5px 5px 0; -moz-border-radius: 0 5px 5px 0; border-radius: 0 0 5px 5px;
+}
+#header #accountmenu_container ul li { margin: 0; padding: 0; display: block; }
+#header #accountmenu_container ul li:hover { background: #333; }
+#header #accountmenu_container ul li a { margin: 0; padding: 10px 0 10px 13px; color: #333; text-shadow: none; display: block; }
+#header #accountmenu_container ul li:hover a { color: #F1F1F1; }
+
+.menu span#accountmenu { margin: 10px; padding: 0 25px 0 0; cursor: pointer; background: transparent url(../images/icon_options_light.png) no-repeat scroll right 1px; background-size: 16px; }
+.menu span#accountmenu:hover { color: #333; cursor: pointer; background: transparent url(../images/icon_options_dark.png) no-repeat scroll right 1px; background-size: 16px; }
+.menu li.active span#accountmenu { color: #333; background: transparent url(../images/icon_options_dark.png) no-repeat scroll right 1px; background-size: 16px; }
+
+.menu input#search { display: none; margin: 10px; padding: 0 25px 0 0; cursor: pointer; background: transparent url(../images/icon_search.png) no-repeat scroll right 1px; background-size: 16px; }
+.menu input#search:hover { color: #333; cursor: pointer; background: transparent url(../images/icon_search.png) no-repeat scroll right 1px; background-size: 16px; }
+.menu li.active input#search { color: #333; background: transparent url(../images/icon_options_dark.png) no-repeat scroll right 1px; background-size: 16px; }
+
+/* Actions to controll scrolling headder / Notifications / Menu */
+#content_wrapper.scrollheader #header { position: fixed; top: 0; }
+#content_wrapper.scrollheader #header .logo { 
+  margin: 56px 0 0 0; padding: 0; height: 20px;
+  font: normal normal bold 1.5em/1em Helvetica, Arial, sans-serif; color: #333; text-shadow: #EEE 0px 1px 0px;
+}
+#content_wrapper.scrollheader #header #header_wrapper {  margin: -48px 0 0 0; }
+#content_wrapper.scrollheader.scrollnotification #header #header_wrapper { margin: -8px 0 0 0; }
+#content_wrapper.scrollnotification #header #header_wrapper {  margin: 41px 0 0 0; }
+
+#content_wrapper.scrollheader #content { margin: 88px auto 0 auto; }
+#content_wrapper.scrollheader.scrollnotification #content { margin: 129px auto 0 auto; }
+
+#content_wrapper.scrollnotification #notice, #content_wrapper.scrollnotification #alert { position: fixed; }
+
+#content_wrapper.notification #header #accountmenu_container { top: 128px; }
+#content_wrapper.scrollheader #header #accountmenu_container { top: 39px; }
+#content_wrapper.scrollnotification #header #accountmenu_container { top: 87px; }
+#content_wrapper.scrollheader.scrollnotification #header #accountmenu_container { top: 79px; }
+
+/* LAYOUT - CONTENT
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#content_wrapper { min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -37px;  } /* wrapper to hold content + header. Required to make sticky footer work. */
+
+#content {
+  margin: 0 auto; padding: 40px 20px 60px 20px; min-width: 940px; max-width: 1100px;
+  /* background: url('../images/infinite2060columns.png'); */
+}
+
+
+/*=== Float Containment and Bug Fixes (Do Not Alter These!) ===*/
+body:before { /*Opera min-height 100% Fix (Kohoutec)*/
+  content: ""; height: 100%; float: left; width: 0; margin-top: -32767px; /*eliminate need for inner non clearing element (Erik.J)*/
+}
+
+#page:after, /* #wrapper:after for IE8 min-height:100% Fix*/ #inner:after {
+/* #inner:after for Float Containment*/
+  clear: both; content: ""; display: block; height: 1%; /*fix IE8 min-height:100% bug (Erik.J)*/ font-size: 0;
+}
+
+/* LAYOUT - LOGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+/* LAYOUT - FOOTER
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#footer {
+  margin: 0 auto; padding: 10px 0 0 0; min-width: 600px; height: 26px; bottom: 0; left: 0; right: 0;
+  border-top: 1px solid #DFDFDF;
+  background: #F5F5F5;
+  font-size: 0.875em; color: #666666; text-align: center;
+  clear: both;
+}
+
+#footer .logo {
+  margin: 0 6px 0 0; height: 14px; width: 14px;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: middle; /* Cross-browser Inline-block */
+  background: url(/images/intersect_logo.png) bottom;
+}
+
+/* LAYOUT - 404
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.input_group { margin: 0 0 20px 0; }
+
+/* LAYOUT - 404
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.dialog { margin: 36px auto 0 auto; width: 800px; text-align: center; }
+
+
+
+/* ADMIN /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+/* ADMIN - TABBED NAVIGATION
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.adminnavigation { margin: 0 0 40px 0; padding: 0; border: 1px solid #C6C6C6; border-width: 0 0 1px 0; display:block; }
+.adminnavigation li { 
+  margin: 0 0 -1px 0; height: 39px; background: #F1F1F1; border: 1px solid #DFDFDF; border-bottom: 1px solid #C6C6C6;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+  border-radius: 3px 3px 0 0; -moz-border-radius: 3px 3px 0 0; -webkit-border-radius: 3px 3px 0 0; 
+}
+.adminnavigation li a { 
+  margin: 0; padding: 10px 15px; line-height: 20px; color: #666; font-weight: normal; text-shadow: #EEE 0px 1px 0px; text-decoration: none;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+}
+.adminnavigation li a:hover { color: #333; text-decoration: none; cursor: pointer;  }
+
+.adminnavigation li.active {
+ background: #FFF; border: 1px solid #C6C6C6; border-bottom: 1px solid #FFF; 
+ border-radius: 3px 3px 0 0; -moz-border-radius: 3px 3px 0 0; -webkit-border-radius: 3px 3px 0 0; }
+.adminnavigation li.active a { color: #333; }
+
+
+/* ADMIN - 
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* GENERAL ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+#content .container { margin: 20px auto; width: 460px; }
+
+
+#content .container input[type="password"], #content .container input[type="text"] { width: 278px; }
+.container .row span { line-height: 36px; }
+
+/* LIGHTBOX //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+.jqmWindow { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; } /* Border radius for LB body */
+
+.lightbox {
+  background: #FFF; height: auto;
+}
+
+.lightbox textarea { width: 648px; }
+
+.lightbox input.text, .lightbox textarea.text {
+  padding: 5px; height: 19px; width: 648px;
+  font: normal normal normal 0.875em/18px Helvetica, Arial, sans-serif;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: bottom; /* Cross-browser Inline-block */
+}
+
+#project_description, #sample_description, #experiment_description, #ands_publishable_collection_description {
+  min-height: 100px;
+  line-height: 20px;
+}
+
+.lightbox label {
+  
+  color: #000; font-weight: bold;
+  display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; vertical-align: top; /* Cross-browser Inline-block */
+}
+
+.lightbox .member_picker label { padding-top: 2px; width: auto; }
+
+.lightbox div.field { margin: 18px 0 0 0; }
+
+.lightbox div.field .darkgray { text-align: center; }
+
+.lightbox .member_find_col { width: 30%; float: left; }
+
+.lightbox .member_buttons_col { position: relative; width: 15%; margin-left: 50%; }
+
+.lightbox .members_list_col { position: relative; width: 30%; margin-left: 70%; }
+
+.lightbox #member_chosen { padding: 2px; }
+
+.lightbox ul#member_list { margin: 0; font: normal normal normal 0.875em/18px Helvetica, Arial, sans-serif; list-style: none; }
+
+.lightbox #project_submit { margin: 10px 0 0 0; }
+
+.lightbox .actions { text-align: right; }
+
+.metadata { color: #000; }
+
+.note { font-size: 0.7em; }
+
+.lightbox input.text.keyword {
+  padding: 5px; height: 19px; width: 628px;
+}
+
+#project_document { border: 0px solid; }
+
+/* NOTIFICATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+
+/* UNKNOWN / MISC
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.debug_dump { padding-top: 32px; }
+
