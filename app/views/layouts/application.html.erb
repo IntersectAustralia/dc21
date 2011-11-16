@@ -26,7 +26,7 @@
             <div class="menu">
               <%= tabs_tag(:builder => MenuTabBuilder) do |tab| %>
                 <%= tab.home '', root_url, :id => "home" %>
-                <%= tab.about 'About', root_url %>
+                <%= tab.about 'About', about_pages_path %>
                 <% if !user_signed_in? %><% else %><%= tab.admin 'Admin', users_path %><% end %>
                 <% if !user_signed_in? %>
                   <%= tab.signup "Sign Up", new_user_registration_path, :class => "signup" %>

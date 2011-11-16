@@ -1,13 +1,3 @@
- layout :layout_by_resource
-
- def layout_by_resource
-   if devise_controller?
-     "guest"
-   else
-     "application"
-   end
- end
-
 class ApplicationController < ActionController::Base
   protect_from_forgery
   # catch access denied and redirect to the home page

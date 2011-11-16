@@ -218,8 +218,6 @@ input[type=password] { font: normal normal normal 1.25em/1em Helvetica, Arial, s
 
 .actions { margin: 36px 0 0 0; }
 
-.field_bg { background: #E5F6FD; border: 1px solid #E5F6FD; border-width: 1px 0 1px 0; } 
-.field_nobg { border: 1px solid #DCDCDC; border-width: 1px 0 1px 0; } 
 
 /* BASE STYLES - TEXT MODULES
 /////////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -348,7 +346,40 @@ th.actions, td.actions { width: 40px; min-width: 40px; max-width: 40px; text-ali
 #access_requests tr.email, #access_requests td.email { width: 300px; } 
 #access_requests tr.firstname, #access_requests td.firstname, #access_requests th.lastname, #access_requests td.lastname { width: 220px; min-width: 220px; max-width: 220px; } 
 #access_requests th.email, #access_requests td.email { width: 300px; min-width: 300px; max-width: 300px; }
-#access_requests th.actions, #access_requests td.actions { padding: 10px 0; width: 220px; min-width: 220px; max-width: 220px; } 
+#access_requests th.actions, #access_requests td.actions { padding: 10px 0; width: 220px; min-width: 220px; max-width: 220px; }
+
+table {
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  font-size: 13px;
+  border-collapse: collapse;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+table td {
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+table tbody th {
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+.field_bg tbody tr td, .field_bg tbody tr th {
+  background-color: #f9f9f9;
+}
+.zebra-striped tbody tr:hover td, .zebra-striped tbody tr:hover th {
+  background-color: #f5f5f5;
+}
+
 
 a.approve, a.reject, a.spam { padding: 6px 10px; cursor: pointer; @include font("", "", 0.875em, 18px, "", none, center); }
 a:hover.approve, a:hover.reject, a:hover.spam { text-decoration: none; }
@@ -542,7 +573,7 @@ body:before { /*Opera min-height 100% Fix (Kohoutec)*/
 #content_wrapper { min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -37px;  } /* wrapper to hold content + header. Required to make sticky footer work. */
 
 #content {
-  margin: 20px auto 0 auto; padding: 0; min-width: 940px; max-width: 1100px;
+  margin: 20px auto 0 auto; padding: 0; min-width: 940px; max-width: 1100px; height: 100%; min-height: 100%;
   border-bottom: 60px solid $blue6;
   /* background: url('../images/infinite2060columns.png'); */
 }
@@ -557,26 +588,6 @@ body:before { /*Opera min-height 100% Fix (Kohoutec)*/
 
 #content .container { margin: 20px auto; width: 460px; }
 
-
-#content .container input[type="password"], #content .container input[type="text"] { width: 278px; }
-.container .row span { line-height: 36px; }
-
-.pageactions { margin: 10px 0; }
-
-.userpannel { margin: 0 20px 0 0; @include crossbrowser-inlineblock; }
-.userpannel h3 { padding: 5px 10px 5px 15px; border-bottom: 1px solid #E1E1E1; @include gradient-light-1; }
-
-.myprojects { margin: 0 0 20px 0; padding: 0; width: 260px; height: 300px; @include crossbrowser-borderradius-2;
-background: #FAFAFA; @include border(#DCDCDC);
-}
-.recentuploads { margin: 0 0 20px 0; padding: 0; width: 260px; height: 300px; @include crossbrowser-borderradius-2;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1); -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1); -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-background: #FAFAFA; @include border(#DCDCDC);
-}
-
-.recentactivity { margin: 0; @include crossbrowser-borderradius-2; @include crossbrowser-inlineblock; }
-
-
 /* NOTIFICATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -588,23 +599,3 @@ background: #FAFAFA; @include border(#DCDCDC);
 /////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 .debug_dump { padding-top: 32px; }
-
-
-
-
-/* BUTTONS - GENERAL ICONS
-/////////////////////////////////////////////////////////////////////////////////////////////////*/
-
-.add img { /* Add button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_PLUS_000000.png') no-repeat left center; line-height: 18px; }
-.edit img { /* Edit button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_EDIT_000000.png') no-repeat left center; line-height: 18px; }
-.down img { /* Down button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_ARROW_STALK_DOWN_000000.png') no-repeat left center; line-height: 18px; }
-.delete img { /* Delete button icon */ padding: 0 0 0 20px; background: url('../images/ICON_VECTOR_12_DEL_000000.png') no-repeat left center; line-height: 18px; }
-
-/* TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-*/
-
-
-

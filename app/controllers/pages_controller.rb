@@ -1,27 +1,17 @@
-class PagesController < ApplicationController:
-  
- layout 'overview'
+class PagesController < ApplicationController
 
  def home
-   render :layout => 'guest' and return unless user_signed_in?
-
-   if @memberships.count.eql?(1)
-     redirect_to system_path(@memberships.first)
-   end
-
+   set_tab :home
+   set_tab :dashboard, :adminnavigation
  end
 
- def routing_error
-    render :file => "#{Rails.root}/public/404.html", :status => 404
-  end
+ def about
+   set_tab :about
+ end
 
+ def explore
+   set_tab :home
+   set_tab :explore, :adminnavigation
+ end
 
-  def home
-    set_tab :home
-    set_tab :dashboard, :adminnavigation
-  end
-  def explore
-    set_tab :home
-    set_tab :explore, :adminnavigation
-  end
 end

@@ -1,19 +1,27 @@
-- title 'Access Requests'
-%table#access_requests
-  %tr
-    %th First name
-    %th Last name
-    %th Email
-    %th Actions
-  - @users.each do |user|
-    %tr{:class => cycle('field_bg', 'field_nobg')}
-      %td= user.first_name
-      %td= user.last_name
-      %td= user.email
-      %td
-        - if can?(:approve, user) then
-          = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}"
-        - if can?(:reject, user) then
-          = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}"
-          = link_to "Reject as Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}"
-        = link_to "View Details", user, :id => "view_#{user.id}"
+#content_container
+  .adminnavigation
+    = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
+      = tab.users 'List all users', users_path
+      = tab.accessrequests 'Access Requests', access_requests_users_path
+
+
+  %table#access_requests
+    %tr
+      %th.view
+      %th.firstname First name
+      %th.lastname Last name
+      %th.email Email
+      %th.actions Actions
+    - @users.each do |user|
+      %tr{:class => cycle('field_bg', 'field_nobg')}
+        %td.view= link_to "View Details", user, :id => "view_#{user.id}"
+        %td.firstname= user.first_name
+        %td.lastname= user.last_name
+        %td.email= user.email
+        %td.actions
+          - if can?(:reject, user) then
+            = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "spam"
+            = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "reject"
+          - if can?(:approve, user) then
+            = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "approve"
+          

@@ -8,17 +8,14 @@
       = tab.dashboard 'Dashboard', users_path
       = tab.explore 'Explore Data', explore_pages_path
       = tab.accessrequests 'Members', access_requests_users_path
-  .userpannel
-    .myprojects
-      %h3 My Projects
-    .recentuploads
-      %h3 Recent Uploads
-  .recentactivity
-    %table.activity
-      %tr
-        %th Name
-        %th Date
-        %th User
+  %table#users
+    %tr
+      %th Name
+      %th Date
+      %th Type
+      %th User
+      %th Status
+      %th Last modified
+      %th Actions
       %tr{:class => cycle('field_bg', 'field_nobg')}
         %td
-

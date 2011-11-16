@@ -31,6 +31,7 @@ end
   resource :pages do
     get :explore
     get :home
+    get :about
   end
 
   root :to => "pages#home"
