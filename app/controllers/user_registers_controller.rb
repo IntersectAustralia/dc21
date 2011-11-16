@@ -4,6 +4,7 @@ class UserRegistersController < Devise::RegistrationsController
   set_tab :editaccount, :only => %w(profile edit)
 
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy, :edit_password, :update_password, :profile]
+  layout 'application', :only => [:edit]
 
   def profile
 

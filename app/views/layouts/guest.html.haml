@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    = render 'layouts/head'
+  %body
+    #content_wrapper
+      = render 'layouts/banner'
+      #container_right_content
+      = render 'layouts/messages'
+      %h1 guest layout (app/layouts/guest.html.haml)
+
+      = yield
+    = render 'layouts/footer'
