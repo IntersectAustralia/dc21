@@ -1,3 +1,4 @@
+%h1 Admin / Access Requests
 #content_container
   .adminnavigation
     = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
@@ -14,7 +15,7 @@
       %th.actions Actions
     - @users.each do |user|
       %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td.view= link_to "View Details", user, :id => "view_#{user.id}"
+        %td.view= link_to icon('view'), user, :id => "view_#{user.id}"
         %td.firstname= user.first_name
         %td.lastname= user.last_name
         %td.email= user.email

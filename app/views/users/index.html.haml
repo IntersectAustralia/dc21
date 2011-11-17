@@ -1,3 +1,4 @@
+%h1 Admin / List all users
 #content_container
   .adminnavigation
     = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
@@ -17,7 +18,7 @@
 
     - @users.each do |user|
       %tr{ :class => cycle('field_bg', 'field_nobg')}
-        %td{ :id => "view_#{user.id}", :class => "view"}= link_to
+        %td{ :id => "view_#{user.id}", :class => "view"}= link_to icon('view')
         %td= user.first_name
         %td= user.last_name
         %td.email= user.email
@@ -34,4 +35,4 @@
             = user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
         %td.actions
           - if can?(:update_role, User)
-            = link_to icon('edit'), edit_role_user_path(user), :id => "edit_role_#{user.id}" &nbsp;
+            = link_to icon('edit'), edit_role_user_path(user), :id => "edit_role_#{user.id}"

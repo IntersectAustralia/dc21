@@ -6,6 +6,7 @@ class UsersController < ApplicationController
 
   def index
     @users = User.deactivated_or_approved
+    set_tab :users, :adminnavigation
   end
 
   def show
@@ -17,6 +18,7 @@ class UsersController < ApplicationController
 
   def access_requests
     @users = User.pending_approval
+    set_tab :accessrequests, :adminnavigation
   end
 
   def deactivate

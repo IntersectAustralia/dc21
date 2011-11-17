@@ -17,6 +17,10 @@ module ApplicationHelper
     render_field_content(label, (h value)) if value != nil && !value.empty?
   end
 
+  def icon(type)
+    "<img src='/images/icon_#{type}.png' border=0 class='icon' alt='#{type}' />".html_safe
+  end
+
   # as above but takes a block for the field value
   def render_field_with_block(label, &block)
     content = with_output_buffer(&block)

@@ -329,7 +329,7 @@ input.redbutton, button.redbutton, a.redbutton, .redbutton {
 /* Note: Table Data cells will stretch to fill 100% of a table's width. If the width specified on individual cells 
  * dosen't add up to the total width, they  will expand to fit. */
 
-table, tbody { width: 1100px; max-width: 1100px; min-width: 1100px; overflow: hidden; }
+table, tbody { width: 1060px; max-width: 1060px; min-width: 1060px; overflow: hidden; }
 
 tr { margin: 0; padding: 0; }
 th { margin: 0; padding: 10px 20px 10px 0; width: 140px; height: 20px; line-height: 20px; max-width: 140px; min-width: 140px; text-align: left; color: #333; }
@@ -339,12 +339,13 @@ td { margin: 0; padding: 10px 20px 10px 0; width: 140px; height: 20px; max-width
 th.view, td.view { width: 60px; min-width: 60px; max-width: 60px; text-align: center; } 
 th.role, td.role, th.status, td.status { width: 60px; min-width: 60px; max-width: 60px; } 
 th.email, td.email { width: 220px; min-width: 220px; max-width: 220px; } 
-th.date, td.date { width: 220px; min-width: 220px; max-width: 220px; } 
+th.date, td.date { width: 140px; min-width: 140px; max-width: 140px; } 
 th.actions, td.actions { width: 40px; min-width: 40px; max-width: 40px; text-align: center; }
 
 /* Specific cell types to balance width - View Access Requests  */
-#access_requests tr.email, #access_requests td.email { width: 300px; } 
-#access_requests tr.firstname, #access_requests td.firstname, #access_requests th.lastname, #access_requests td.lastname { width: 220px; min-width: 220px; max-width: 220px; } 
+#access_requests th.email, #access_requests td.email { width: 300px; } 
+#access_requests th.firstname, #access_requests td.firstname { width: 140px; min-width: 140px; max-width: 140px; } 
+#access_requests th.lastname, #access_requests td.lasttname { width: 220px; min-width: 220px; max-width: 220px; } 
 #access_requests th.email, #access_requests td.email { width: 300px; min-width: 300px; max-width: 300px; }
 #access_requests th.actions, #access_requests td.actions { padding: 10px 0; width: 220px; min-width: 220px; max-width: 220px; }
 
@@ -373,9 +374,7 @@ table tbody th {
   border-top: 1px solid #ddd;
   vertical-align: top;
 }
-.field_bg tbody tr td, .field_bg tbody tr th {
-  background-color: #f9f9f9;
-}
+tbody tr.field_bg { background-color: #f9f9f9; }
 .zebra-striped tbody tr:hover td, .zebra-striped tbody tr:hover th {
   background-color: #f5f5f5;
 }
