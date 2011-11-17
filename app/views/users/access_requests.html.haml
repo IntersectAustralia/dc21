@@ -25,4 +25,3 @@
             = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "reject"
           - if can?(:approve, user) then
             = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "approve"
-          
