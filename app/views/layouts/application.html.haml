@@ -1,42 +1,11 @@
 !!!
 %html
   %head
-    %title
-      Dc21app - #{yield :title}
-    = stylesheet_link_tag    "application"
-    = javascript_include_tag "application"
-    = csrf_meta_tags
+    = render 'layouts/head'
   %body
     #content_wrapper
-      #header
-        - if alert
-          #alert{:style => "display:none"}= alert
-        - if notice
-          #notice{:style => "display:none"}= notice
-        #header_wrapper
-          .container
-            .logo DC.21
-            .menu
-              = tabs_tag(:builder => MenuTabBuilder) do |tab|
-                = tab.home '', root_url, :id => "home"
-                = tab.about 'About', root_url
-                - if !user_signed_in?
-                - else
-                  = tab.admin 'Admin', users_path
-                - if !user_signed_in?
-                  = tab.signup "Sign Up", new_user_registration_path, :class => "signup"
-                - else
-                  %input#headersearch{:name => "headersearch", :placeholder => "Search...", :type => "text"}
-                    = tab.search '', root_url, :id => "search"
-                    = tabs_tag(:builder => AccountTabBuilder) do |tab|
-                      = tab.editaccount current_user.email, :id => "accountmenu"
-                    #accountmenu_container
-                      %ul
-                        %li= link_to "Settings", edit_user_registration_path
-                        %li= link_to "Sign out", destroy_user_session_path
+      = render 'layouts/banner'
       #content
         %h1= yield :title
         = yield
-    #footer
-      %a.logo{:href => "http://www.intersect.org.au/attribution-policy", :target => "_about"}>
-      Developed by Intersect Australia Ltd
+    = render 'layouts/footer'

@@ -7,13 +7,21 @@
           DC.21
         -#= t('app_name')
       .menu
-        %ul
-          - if user_signed_in?
-            - if can? :admin, User
-              %li= link_to 'Management', "#"
-            %li= link_to 'Preferences', edit_user_registration_path
-            %li= link_to 'Logout ' + current_user.full_name, destroy_user_session_path
+        = tabs_tag(:builder => MenuTabBuilder) do |tab|
+          - if !user_signed_in?
           - else
-            %li= link_to "Sign Up", new_user_registration_path
-            %li= link_to "Login", new_user_session_path
-            %li= link_to "Forgot your password?", new_user_password_path
+            = tab.home '', root_url, :id => "home"
+          = tab.about 'About', root_url
+          - if !user_signed_in?
+            = tab.login 'Log in', root_url
+            = tab.signup "Sign Up", new_user_registration_path, :class => "signup"
+          - else
+            = tab.login 'Admin', users_path
+            %input#headersearch{:name => "headersearch", :placeholder => "Search...", :type => "text"}
+              = tab.search '', root_url, :id => "search"
+              = tabs_tag(:builder => AccountTabBuilder) do |tab|
+                = tab.editaccount current_user.email, :id => "accountmenu"
+              #accountmenu_container
+                %ul
+                  %li= link_to "Settings", edit_user_registration_path
+                  %li= link_to "Sign out", destroy_user_session_path
