@@ -8,9 +8,9 @@
 //= require jquery_ujs
 //= require_tree .
 
+document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
-
 // NOTIFICATIONS //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
