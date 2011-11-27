@@ -1,3 +1,4 @@
+%h1 User Log In / Reset Password
 #content_container
   .container
     %h2 "Forgot Your Password?"
@@ -7,4 +8,5 @@
         = f.label :email, "Email:"
         = f.text_field :email
       .actions
+        = link_to 'Cancel', root_path, :class => "whitebutton"
         = f.submit "Send me reset password instructions", :class => "floatright"

@@ -11,17 +11,15 @@
           - if !user_signed_in?
           - else
             = tab.home '', root_url, :id => "home"
-          = tab.about 'About', root_url
+          = tab.about 'About', about_pages_path
           - if !user_signed_in?
             = tab.login 'Log in', root_url
-            = tab.signup "Sign Up", new_user_registration_path, :class => "signup"
+            = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
           - else
-            = tab.login 'Admin', users_path
-            %input#headersearch{:name => "headersearch", :placeholder => "Search...", :type => "text"}
-              = tab.search '', root_url, :id => "search"
-              = tabs_tag(:builder => AccountTabBuilder) do |tab|
-                = tab.editaccount current_user.email, :id => "accountmenu"
-              #accountmenu_container
-                %ul
-                  %li= link_to "Settings", edit_user_registration_path
-                  %li= link_to "Sign out", destroy_user_session_path
+            = tab.admin 'Admin', users_path
+            = tabs_tag(:builder => AccountTabBuilder) do |tab|
+              = tab.account current_user.email, :id => "accountmenu"
+            #accountmenu_container
+              %ul
+                %li= link_to "Settings", users_profile_path
+                %li= link_to "Sign out", destroy_user_session_path

@@ -45,10 +45,6 @@ button {width: auto; overflow: visible;} /* make buttons play nice in IE */
 .ie7 img {-ms-interpolation-mode: bicubic;} /* scale images in IE7 more attractively */
 .ie6 html {filter: expression(document.execCommand("BackgroundImageCache", false, true));} /* prevent BG image flicker upon hover */
 
-/* let's clear some floats */
-.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }  
-.clearfix:after { clear: both; }  
-.clearfix { zoom: 1; }  
 
 /* new Linux- and Windows-friendly sans-serif font stack: http://mky.be/fontstack */
 body {font: 13px Helvetica, Arial, sans-serif;}

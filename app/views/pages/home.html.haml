@@ -1,4 +1,5 @@
 - if !user_signed_in?
+  %h1 User Log In /
   #content_container
     .container
       = form_for("user", :url => user_session_path) do |f|
@@ -7,7 +8,7 @@
       = link_to "Forgot your password?", new_user_password_path, :class => "whitebutton"
 - else
   .pageactions
-    = link_to "+ New Entry", root_url, :class => "bluebutton"
+    = link_to "+ New Data Entry", root_url, :class => "bluebutton"
     = link_to "New Search", root_url, :class => "whitebutton floatright"
   %h1 Home / Dashboard
   #content_container
@@ -16,13 +17,14 @@
         = tab.dashboard 'Dashboard', home_pages_path
         = tab.explore 'Explore Data', explore_pages_path
         = tab.myuploads 'My Data Uploads', explore_pages_path
-        = tab.accessrequests 'Members', access_requests_users_path
+        = tab.accessrequests 'Members', explore_pages_path
     .userpannel
       .myprojects
         %h3 My Projects
       .recentuploads
         %h3 Recent Uploads
     .recentactivity
+      %h2 Recent Activity
       %table.activity
         %tr
           %th Name

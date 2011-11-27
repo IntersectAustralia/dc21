@@ -1,18 +1,24 @@
 class UserRegistersController < Devise::RegistrationsController
 
-  set_tab :signup, :only => %w(sign_up)
-  set_tab :editaccount, :only => %w(profile edit)
+  set_tab :signup
 
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy, :edit_password, :update_password, :profile]
-  layout 'application', :only => [:edit]
+  layout 'application'
 
   def profile
+    set_tab :account
+    set_tab :overview, :adminnavigation
+  end
 
+  def edit
+    set_tab :account
+    set_tab :editdetails, :adminnavigation
   end
 
   # Override the create method in the RegistrationsController to add the notification hook
   # https://github.com/plataformatec/devise/blob/v1.3.4/app/controllers/devise/registrations_controller.rb
   def create
+
     build_resource
 
     if resource.save
@@ -46,6 +52,8 @@ class UserRegistersController < Devise::RegistrationsController
   end
 
   def edit_password
+    set_tab :account
+    set_tab :changepassword, :adminnavigation
     render_with_scope :edit_password
   end
 

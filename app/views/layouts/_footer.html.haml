@@ -1,4 +1,10 @@
 #footer
-  %a.logo{:href => "http://www.intersect.org.au/attribution-policy", :target => "_about"}>
-  =t('developer_footer')
-  \#{debug(params) if Rails.env.development?}
+  #devinfo
+    #{debug(params) if Rails.env.development?}
+  .footerwrapper
+    %a.logo{:href => "http://www.intersect.org.au/attribution-policy", :target => "_about"}>
+    - if Rails.env.development?
+      #dev 
+        %p DC21 Env: Development. Click for debug info.
+    - else
+      %p Developed by Intersect Australia Ltd.

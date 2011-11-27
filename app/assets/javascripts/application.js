@@ -11,10 +11,12 @@
 document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
-// NOTIFICATIONS //////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+//
 
 $(window).load(function() {
+
+  // NOTIFICATIONS //////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   $('#accountmenu_container').hide();
 
@@ -23,15 +25,18 @@ $(window).load(function() {
     if (alert.length > 0) {
       alert.slideDown();
       $('#content_wrapper').addClass('notification');
+      $('#footer').addClass('notification');
 
       var alerttimer = window.setTimeout(function() {
         alert.slideUp();
         $('#content_wrapper').removeClass('notification');
+        $('#footer').removeClass('notification');
       }, 900000);
       $("#alert").click(function () {
         window.clearTimeout(alerttimer);
         alert.slideUp();
         $('#content_wrapper').removeClass('notification');
+        $('#footer').removeClass('notification');
       });
     }
   });
@@ -41,15 +46,18 @@ $(window).load(function() {
     if (notice.length > 0) {
       notice.slideDown();
       $('#content_wrapper').addClass('notification');
+      $('#footer').addClass('notification');
 
       var noticetimer = window.setTimeout(function() {
         notice.slideUp();
         $('#content_wrapper').removeClass('notification');
+        $('#footer').removeClass('notification');
       }, 9000000);
       $("#notice").click(function () {
         window.clearTimeout(noticetimer);
         notice.slideUp();
         $('#content_wrapper').removeClass('notification');
+        $('#footer').removeClass('notification');
       });
     }
   });
@@ -61,6 +69,7 @@ $(window).load(function() {
     var accountmenu = $('#accountmenu').width() + 45;
     $('#accountmenu_container').css('width', accountmenu );
     $('#accountmenu_container').slideToggle('normal', function() {} );
+    $('#accountmenu').toggleClass('active');
   });
 
   $('#accountmenu_container').click(function(event){
@@ -72,16 +81,27 @@ $(window).load(function() {
 
   $('html').click(function() {
     $('#accountmenu_container').hide();
+    $('#accountmenu').removeClass('active');
+  });
+
+  // DEV FOOTER /////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+  $('#dev').click(function(event) {
+    $('#devinfo').slideToggle('fast', function() {} );
+    $('#footer').toggleClass('active');
+    $('#content_wrapper').toggleClass('devinfo');
   });
 
 });
 
-// SCROLLING HEADER & NOTIFICATIONS ///////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+// SCROLLING HEAD//ER & NOTIFICATIONS ///////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
 var checkonScroll = true;
 $('#notice, #alert').live("click", function() {
   $('#content_wrapper').removeClass('scrollnotification');
+  $('#footer').removeClass('scrollnotification');
   checkonScroll = false;
 });
 
@@ -98,8 +118,10 @@ $(window).scroll(function(e){
 
   if ($(this).scrollTop() > scrollHeader && $el.css('position') != 'fixed'){
     $('#content_wrapper').addClass('scrollheader');
+    $('#footer').addClass('scrollheader');
   } else if ((position.top < scrollHeader) && ($el.css('position') != 'relative')){
     $('#content_wrapper').removeClass('scrollheader');
+    $('#footer').removeClass('scrollheader');
   }
   if (!checkonScroll) {
     return;
@@ -107,9 +129,16 @@ $(window).scroll(function(e){
   if ($('#notice, #alert').length > 0){
     if ($(this).scrollTop() > scrollNotifications && $al.css('position') != 'fixed'){
       $('#content_wrapper').addClass('scrollnotification');
+      $('#footer').addClass('scrollnotification');
     } else if ((notposition.top < scrollNotifications) && ($al.css('position') != 'relative')){
       $('#content_wrapper').removeClass('scrollnotification');
+      $('#footer').removeClass('scrollnotification');
     }
   }
 });
+
+
+
+
+
 

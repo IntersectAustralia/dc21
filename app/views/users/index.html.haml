@@ -1,24 +1,29 @@
+= render 'users/pageactions'
 %h1 Admin / List all users
 #content_container
-  .adminnavigation
-    = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
-      = tab.users 'List all users', users_path
-      = tab.accessrequests 'Access Requests', access_requests_users_path
-
+  = render 'users/admintabs'
   %table.data_table.margin_top_small#users
     %tr.header
       %th.view View
-      %th First name
-      %th Last name
-      %th.email Email
+      %th
+        First name
+        %span
+      %th
+        Last name
+        %span
+      %th.email
+        Email
+        %span
       %th.role Role
       %th.status Status
-      %th.date Last signed in
+      %th.date 
+        Last signed in
+        %span
       %th.actions
 
     - @users.each do |user|
       %tr{ :class => cycle('field_bg', 'field_nobg')}
-        %td{ :id => "view_#{user.id}", :class => "view"}= link_to icon('view_light')
+        %td{ :id => "view_#{user.id}", :class => "view"}= link_to '', users_path, :class => "view"
         %td= user.first_name
         %td= user.last_name
         %td.email= user.email
@@ -35,4 +40,4 @@
             = user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
         %td.actions
           - if can?(:update_role, User)
-            = link_to icon('edit'), edit_role_user_path(user), :id => "edit_role_#{user.id}"
+            = link_to '', edit_role_user_path(user), :id => "edit_role_#{user.id}", :class => "edit"
