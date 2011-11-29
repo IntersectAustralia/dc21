@@ -5,3 +5,4 @@ tmp/
 .sass-cache/
 coverage/
 .idea/workspace.xml
+.DS_Store
