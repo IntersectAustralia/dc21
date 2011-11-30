@@ -1,11 +1,13 @@
 %h1 User Sign Up /
 #content_container
-  .container
+  .container_centered
     %h2 User Sign Up
     = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
       .formerror= render "shared/error_messages", :target => @user
       = render :partial => 'personal_details', :locals  => {:f => f}
       = render :partial => 'account_details', :locals  => {:f => f}
       .actions
+        .cancelbutton
+          %span
+          = link_to 'Cancel', root_path, :class => "cancelbutton"
         = f.submit "Submit Request", :class => "floatright"
-        = link_to 'Cancel', root_path, :class => "whitebutton"

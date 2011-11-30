@@ -1,4 +1,4 @@
-.container
+.container_centered
   %h2 Please enter your email and password to log in
   .rowform
     = f.label :email, "Email:"
@@ -7,4 +7,6 @@
     = f.label :password, "Password:"
     = f.password_field :password
   .actions
+    = link_to "Sign Up", new_user_registration_path, :class => "whitebutton"
+    = link_to "Forgot your password?", new_user_password_path, :class => "whitebutton"
     = f.submit "Log in", :class => "floatright"

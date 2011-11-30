@@ -1,7 +1,7 @@
-%h1 User / Edit Details
+%h1 #{@user.email} / Edit Details
 #content_container
-  .adminnavigation
-    = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
+  .contentnavigation
+    = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
       = tab.overview 'Overview', users_profile_path
       = tab.editdetails 'Edit Details', edit_user_registration_path
       = tab.changepassword 'Change Password', users_edit_password_path

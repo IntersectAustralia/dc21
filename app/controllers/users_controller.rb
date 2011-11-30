@@ -6,11 +6,11 @@ class UsersController < ApplicationController
 
   def index
     @users = User.deactivated_or_approved
-    set_tab :users, :adminnavigation
+    set_tab :users, :contentnavigation
   end
 
   def show
-    set_tab :accessrequests, :adminnavigation
+    set_tab :accessrequests, :contentnavigation
   end
 
   def admin
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def access_requests
     @users = User.pending_approval
-    set_tab :accessrequests, :adminnavigation
+    set_tab :accessrequests, :contentnavigation
   end
 
   def deactivate
@@ -48,6 +48,7 @@ class UsersController < ApplicationController
   end
 
   def edit_role
+    set_tab :users, :contentnavigation
     if @user == current_user
       flash.now[:alert] = "You are changing the role of the user you are logged in as."
     elsif @user.rejected?

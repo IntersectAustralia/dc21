@@ -22,9 +22,7 @@ end
       put :update_role
       get :edit_approval
       put :approve
-
     end
-
 
   end
 
@@ -34,8 +32,11 @@ end
     get :about
   end
 
-  root :to => "pages#home"
+  resource :data do
+    get :upload
+  end
 
+  root :to => "pages#home"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

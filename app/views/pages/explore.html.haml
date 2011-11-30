@@ -1,30 +1,23 @@
-.pageactions
-  = link_to "+ New Data Entry", root_url, :class => "bluebutton"
-  = link_to "<span>New Search</span>".html_safe, root_url, :class => "search whitebutton floatright"
+= render 'pages/pageactions'
 %h1 Home / Explore Data
 #content_container
-  .adminnavigation
-    = tabs_tag(:builder => MenuTabBuilder, :namespace => :adminnavigation) do |tab|
-      = tab.dashboard 'Dashboard', home_pages_path
-      = tab.explore 'Explore Data', explore_pages_path
-      = tab.myuploads 'My Data Uploads', explore_pages_path
-      = tab.accessrequests 'Members', explore_pages_path
-  %h2 Displaying 0 of 0 results
+  = render 'pages/contentnavigation'
+  %h3 Displaying 0 of 0 results
   %table#exploredata
     %tr.header
       %th.view View
       %th.lastname
-        %span
         Name
+        %span
       %th.email 
-        %span
         User
+        %span
       %th 
+        tbc
         %span
-        Type
       %th.date 
-        %span
         Date range
+        %span
       %th.date Tags
       %tr{:class => cycle('field_bg', 'field_nobg')}
         %td

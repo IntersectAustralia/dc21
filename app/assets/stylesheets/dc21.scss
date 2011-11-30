@@ -8,8 +8,20 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
 
-#content .container input[type="password"], #content .container input[type="text"] { width: 278px; }
-.container .row span { line-height: 36px; }
+.container h2, .container_centered h2 { margin: 0 0 20px 0; border-bottom: 1px dashed #B9B9B9; }
+
+
+/* GENERAL ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+#content .container input[type="password"], #content .container input[type="text"] { width: 428px; }
+#content .container_centered input[type="password"], #content .container_centered input[type="text"] { width: 428px; }
+.container .rowform span, .container_centered .rowform span { line-height: 36px; }
+
+.container label, .container_centered label { padding: 10px 20px 10px 0; }
 
 /* LAYOUT - PAGE STRUCTURE
 /////////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -28,7 +40,7 @@
 
 .userpannel { margin: 0 20px 0 0; @include inlineblock; }
 
-.userpannel h3 { padding: 5px 10px 5px 15px; border-bottom: 1px solid #E1E1E1; @include gradient-light-1; }
+.userpannel h3 { padding: 5px 10px 5px 15px; border-bottom: 1px solid #E1E1E1; color: $dark3; @include gradient-light-1; }
 
 .myprojects, .recentuploads { 
   margin: 0 0 20px 0; padding: 0; width: 260px; height: 300px; 
@@ -60,3 +72,4 @@ th.actions, td.actions { padding: 0; width: 40px; min-width: 40px; max-width: 40
 
 #exploredata th { padding: 10px 25px 9px 0; }
 th span { margin: 2px 10px 0 5px; padding: 0; height: 14px; width: 20px; @include inlineblock; cursor: pointer; background: url('../images/header-active.png') center center no-repeat; background-size: 12px;  }
+th span:hover { background: url('../images/header-active-dark.png') center center no-repeat; }

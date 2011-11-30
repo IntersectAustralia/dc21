@@ -7,12 +7,12 @@ class UserRegistersController < Devise::RegistrationsController
 
   def profile
     set_tab :account
-    set_tab :overview, :adminnavigation
+    set_tab :overview, :contentnavigation
   end
 
   def edit
     set_tab :account
-    set_tab :editdetails, :adminnavigation
+    set_tab :editdetails, :contentnavigation
   end
 
   # Override the create method in the RegistrationsController to add the notification hook
@@ -53,7 +53,7 @@ class UserRegistersController < Devise::RegistrationsController
 
   def edit_password
     set_tab :account
-    set_tab :changepassword, :adminnavigation
+    set_tab :changepassword, :contentnavigation
     render_with_scope :edit_password
   end
 

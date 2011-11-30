@@ -54,6 +54,7 @@ $red1: #FF5742; $red2: #DD4C39; $red3: #DB3D2B; $red4: #DD4C39; $red5: #B0281A;
 @mixin border($color) { border: 1px solid $color; }
 
 @mixin borderradius-2 { border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px; /* Cross-browser Border-Radius */ }
+@mixin borderradius-right-2 { border-radius: 0 5px 5px 0; -moz-border-radius: 0 5px 5px 0; -webkit-border-radius: 0 5px 5px 0; /* Cross-browser Border-Radius */ }
  
 @mixin borderradius-top-3 { border-radius: 3px 3px 0 0; -moz-border-radius: 3px 3px 0 0; -webkit-border-radius: 3px 3px 0 0; }
 
@@ -152,8 +153,8 @@ body { background: $blue6; }
 
 h1, h2, h3, h4, h5, h6 { @include font("", "", 1em, 1em, $dark2); } /* Base heading styles */ 
 h1 { @include font("", normal, 1.5em, 40px); }
-h2 { @include font("", bold, 1.25em, 30px); margin: 0 0 20px 0; padding: 0 0 10px 0; border-bottom: 1px dashed #B9B9B9; }
-h3 { @include font("", bold, 1em, 30px, $dark3); }
+h2 { @include font("", bold, 1.25em, 30px); padding: 0 0 10px 0; }
+h3 { @include font("", bold, 1em, 30px, $dark2); padding: 0 0 10px 0; }
 
 p { } /* Paragraph style. Use for text, or for a libe break. </br> is for pebs, and you're not a pleb right? */
 span { } /* Use as a default container for text that requires a Class or ID */
@@ -325,6 +326,26 @@ input.redbutton, button.redbutton, a.redbutton, .redbutton {
 .redbutton:hover, a.redbutton:hover { @include boxshadow; @include border($red5); @include gradient-red-2; }
 .redbutton:active, a.redbutton:active { @include boxshadow; }
 
+/* BUTTONS - BACK / CANCEL
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.cancelbutton, input[type=button], button.cancelbutton, a.cancelbutton {
+  margin: 0; padding: 5px 10px; height: 18px; @include font("", normal, 0.875em, 18px, $dark3, none, center); position: relative; z-index: 9;
+  @include gradient-light-1; @include border(#DCDCDC); border-width: 1px 1px 1px 0; @include borderradius-right-2; @include inlineblock;
+}
+.cancelbutton span { margin: 4px -15px 0 0; padding: 0; width: 20px; height: 20px; z-index: 1;
+  @include gradient-light-1; @include border(#DCDCDC); @include borderradius-2; @include inlineblock; cursor: pointer;
+  -webkit-transform: rotate(45deg); 
+  -moz-transform: rotate(45deg);  
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=5); /*for IE*/  
+  }
+
+.cancelbutton { @include inlineblock; }
+
+.cancelbutton:hover span { @include gradient-light-2; @include border(#C6C6C6); @include inlineblock; }
+.cancelbutton:hover a, .cancelbutton:hover span { color: $dark2; @include border(#C6C6C6); @include gradient-light-2; }
+.cancelbutton:hover a { border-width: 1px 1px 1px 0; }
+a.cancelbutton:active, .cancelbutton:hover span { @include boxshadow; }
 
 
 /* TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,7 +508,21 @@ table.activity, table.activity tbody { width: 770px; min-width: 770px; max-width
 #content_wrapper { min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -38px; }
 #content { margin: 20px auto 0 auto; min-width: 940px; max-width: 1100px; height: 100%; border-bottom: 80px solid $blue6; }
 #content_container { margin: 10px auto 0 auto; padding: 20px; min-width: 940px; max-width: 1100px; @include boxshadow-2; @include borderradius-2; background: $light0; }
-#content .container { margin: 20px auto; width: 460px; @include clearfix; }
+#content .container { margin: 20px 0; width: 600px; @include clearfix; }
+#content .container_centered { margin: 20px auto; width: 600px; @include clearfix; }
+
+/* BODY - TABBED CONTENT NAVIGATION
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.contentnavigation { margin: 0 0 40px 0; padding: 0; @include border($dark4); border-width: 0 0 1px 0; display:block; }
+.contentnavigation li { margin: 0 0 -1px 0; height: 39px; background: #F1F1F1; @include border(#DFDFDF); border-bottom: 1px solid $dark4;
+@include inlineblock; @include borderradius-top-3;
+}
+.contentnavigation li a { margin: 0; padding: 10px 15px; @include font("", normal, 1em, 20px, $dark3); @include textshadow-2; @include inlineblock; }
+.contentnavigation li a:hover { color: $dark2; text-decoration: none; cursor: pointer; }
+
+.contentnavigation li.active { background: #FFF; @include border($dark4); border-bottom: 1px solid #FFF; }
+.contentnavigation li.active a { color: $dark2; }
 
 
 /* FOOTER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -534,17 +569,4 @@ table.activity, table.activity tbody { width: 770px; min-width: 770px; max-width
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
-
-/* ADMIN - TABBED NAVIGATION
-/////////////////////////////////////////////////////////////////////////////////////////////////*/
-
-.adminnavigation { margin: 0 0 40px 0; padding: 0; @include border($dark4); border-width: 0 0 1px 0; display:block; }
-.adminnavigation li { margin: 0 0 -1px 0; height: 39px; background: #F1F1F1; @include border(#DFDFDF); border-bottom: 1px solid $dark4;
-@include inlineblock; @include borderradius-top-3;
-}
-.adminnavigation li a { margin: 0; padding: 10px 15px; @include font("", normal, "", 20px, $dark3); @include textshadow-2; @include inlineblock; }
-.adminnavigation li a:hover { color: $dark2; text-decoration: none; cursor: pointer; }
-
-.adminnavigation li.active { background: #FFF; @include border($dark4); border-bottom: 1px solid #FFF; }
-.adminnavigation li.active a { color: $dark2; }
 
