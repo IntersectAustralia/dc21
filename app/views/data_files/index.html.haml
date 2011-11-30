@@ -1,0 +1,14 @@
+- title 'Data Files'
+
+= link_to 'Upload Files', new_data_file_path
+
+- if @data_files.empty?
+  No files to display.
+- else
+  %table#data_files
+    %tr
+      %th Name
+    - @data_files.each do |data_file|
+      %tr
+        %td= link_to data_file.filename, data_file
+

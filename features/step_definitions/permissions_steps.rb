@@ -16,3 +16,10 @@ Then /^I should get the following security outcomes$/ do |table|
   end
 end
 
+Then /users should be required to login on (.+)$/ do |page_name|
+  visit path_to("the logout page")
+  visit path_to(page_name)
+  page.should have_content("You need to log in before continuing.")
+  current_path = URI.parse(current_url).path
+  current_path.should == path_to("the login page")
+end

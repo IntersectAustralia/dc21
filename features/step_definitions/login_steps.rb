@@ -22,14 +22,23 @@ Given /^I have a user "([^"]*)" with an expired lock$/ do |email|
   Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A', :locked_at => Time.now - 1.hour - 1.second, :failed_attempts => 3)
 end
 
-Given /^I have a user "([^"]*)" with role "([^"]*)"$/ do |email, role|
-  user            = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
-  role         = Role.where(:name => role).first
+def set_user_role(user, role_name)
+  role = Role.find_or_create_by_name(role_name)
   user.role_id = role.id
   user.save!
 end
 
+Given /^I have a user "([^"]*)" with role "([^"]*)"$/ do |email, role|
+  user            = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
+  set_user_role(user, role)
+end
+
 Given /^I am logged in as "([^"]*)"$/ do |email|
+  unless User.find_by_email(email)
+    user = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
+    set_user_role(user, "Administrator")
+  end
+
   visit path_to("the login page")
   fill_in("user_email", :with => email)
   fill_in("user_password", :with => "Pas$w0rd")
