@@ -8,14 +8,14 @@ Feature: View the list of data files
 
   Scenario: View the list
     Given I have data files
-      | filename     |
-      | sample.txt   |
-      | datafile.dat |
+      | filename     | created_at       | uploaded_by               |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     |
     When I am on the list data files page
     Then I should see "data_files" table with
-      | Name         |
-      | datafile.dat |
-      | sample.txt   |
+      | Name         | Date added       |
+      | sample.txt   | 2011-12-01 13:45 |
+      | datafile.dat | 2011-11-30 10:15 |
 
   Scenario: View the list when there's nothing to show
     When I am on the list data files page

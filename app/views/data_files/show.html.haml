@@ -3,3 +3,5 @@
 = link_to "Back", data_files_path
 
 = render_field "Name", @data_file.filename
+= render_field "Date added", @data_file.created_at.to_s(:with_time)
+= render_field "Added by", @data_file.created_by.email

@@ -14,13 +14,13 @@ Then /^I should see field "([^"]*)" with value "([^"]*)"$/ do |field, value|
   end
 end
 
-Then /^I should see fields displayed$/ do |table|
+Then /^I should see details displayed$/ do |table|
   # as above, this assumes you're using the helper to render the field which sets the div id based on the field name
-  table.hashes.each do |row|
-    field = row[:field]
-    value = row[:value]
+  table.rows.each do |row|
+    field = row[0]
+    value = row[1]
     div_id = field.tr(" ,", "_").downcase
-    div_scope = "div#display_#{div_id}"
+    div_scope = "\"div#display_#{div_id}\""
     with_scope(div_scope) do
       page.should have_content(field)
       page.should have_content(value)

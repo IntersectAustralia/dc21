@@ -6,13 +6,16 @@ Feature: View the details of a data file
   Background:
     Given I am logged in as "georgina@intersect.org.au"
     And I have data files
-      | filename     |
-      | sample.txt   |
+      | filename   | created_at       | uploaded_by           |
+      | sample.txt | 01/12/2011 13:45 | sean@intersect.org.au |
 
   Scenario: Navigate from list and view a data file
     When I am on the list data files page
     And I follow "sample.txt"
-    Then I should see field "Name" with value "sample.txt"
+    Then I should see details displayed
+      | Name       | sample.txt            |
+      | Date added | 2011-12-01 13:45      |
+      | Added by   | sean@intersect.org.au |
 
   Scenario: Navigate back to the list
     When I am on the data file details page for sample.txt
