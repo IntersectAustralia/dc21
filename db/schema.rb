@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130232211) do
+ActiveRecord::Schema.define(:version => 20111201040643) do
 
   create_table "data_files", :force => true do |t|
     t.string   "filename"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(:version => 20111130232211) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by_id"
+    t.datetime "start_time"
+    t.datetime "end_time"
   end
 
   create_table "roles", :force => true do |t|

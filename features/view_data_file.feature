@@ -6,8 +6,9 @@ Feature: View the details of a data file
   Background:
     Given I am logged in as "georgina@intersect.org.au"
     And I have data files
-      | filename   | created_at       | uploaded_by           |
-      | sample.txt | 01/12/2011 13:45 | sean@intersect.org.au |
+      | filename     | created_at       | uploaded_by               | start_time       | end_time            |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |                  |                     |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 |
 
   Scenario: Navigate from list and view a data file
     When I am on the list data files page
@@ -16,6 +17,15 @@ Feature: View the details of a data file
       | Name       | sample.txt            |
       | Date added | 2011-12-01 13:45      |
       | Added by   | sean@intersect.org.au |
+      | Start time | 2010-06-01 6:42:01    |
+      | End time   | 2011-11-30 18:05:23   |
+
+  Scenario: View a data file with no start/end times
+    When I am on the data file details page for datafile.dat
+    Then I should see details displayed
+      | Name       | datafile.dat              |
+      | Date added | 2011-11-30 10:15          |
+      | Added by   | georgina@intersect.org.au |
 
   Scenario: Navigate back to the list
     When I am on the data file details page for sample.txt
