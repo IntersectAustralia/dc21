@@ -5,8 +5,7 @@ gem 'rails', '3.1.1'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
-
+gem 'pg'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -17,19 +16,15 @@ group :assets do
 end
 
 gem 'jquery-rails'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
-
+gem "haml"
+gem "haml-rails"
+gem "tabs_on_rails"
+gem "devise"
+gem "cancan"
+gem "capistrano-ext"
+gem "capistrano"
+gem "metrical", :group => :test
+gem "simplecov", ">=0.3.8", :require => false, :group => :test
 
 group :development, :test do
   gem "rspec-rails"
@@ -37,6 +32,7 @@ group :development, :test do
   gem "shoulda"
 
   # cucumber gems
+  gem "email_spec"
   gem "cucumber"
   gem "cucumber-rails"
   gem "capybara"
@@ -48,13 +44,3 @@ end
 group :development do
   gem "rails3-generators"
 end
-gem "haml"
-gem "haml-rails"
-gem "tabs_on_rails"
-gem "devise"
-gem "email_spec", :group => :test
-gem "cancan"
-gem "capistrano-ext"
-gem "capistrano"
-gem "metrical"
-gem "simplecov", ">=0.3.8", :require => false, :group => :test
