@@ -43,6 +43,12 @@ module NavigationHelpers
     when /the list users page/
       users_path
 
+    when /the list data files page/
+      data_files_path
+
+    when /the data file details page for (.*)$/
+      data_file_path(DataFile.find_by_filename($1))
+
 # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

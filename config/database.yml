@@ -1,11 +1,9 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
 development:
-  adapter: sqlite3
-  database: db/development.sqlite3
+  adapter: postgresql
+  host: localhost
+  database: dc21-dev
+  username: dc21
+  password: dc21
   pool: 5
   timeout: 5000
 
@@ -13,16 +11,31 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test: &test
-  adapter: sqlite3
-  database: db/test.sqlite3
+  adapter: postgresql
+  host: localhost
+  database: dc21-test
+  username: dc21
+  password: dc21
   pool: 5
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  host: localhost
+  database: dc21
+  username: dc21
+  password: ******
   pool: 5
   timeout: 5000
 
+staging:
+  production # same configuration, but on different server
+
+qa:
+  production # same configuration, but on different server
+
 cucumber:
+  <<: *test
+
+spec:
   <<: *test

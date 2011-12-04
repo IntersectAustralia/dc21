@@ -41,6 +41,8 @@ class Ability
 
     return unless user.role
 
+    can :manage, DataFile
+
     if user.role.admin?
       can :read, User
       can :update_role, User
