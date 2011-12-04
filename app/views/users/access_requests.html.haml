@@ -1,19 +1,29 @@
-- title 'Access Requests'
-%table#access_requests
-  %tr
-    %th First name
-    %th Last name
-    %th Email
-    %th Actions
-  - @users.each do |user|
-    %tr{:class => cycle('field_bg', 'field_nobg')}
-      %td= user.first_name
-      %td= user.last_name
-      %td= user.email
-      %td
-        - if can?(:approve, user) then
-          = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}"
-        - if can?(:reject, user) then
-          = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}"
-          = link_to "Reject as Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}"
-        = link_to "View Details", user, :id => "view_#{user.id}"
+= render 'users/pageactions'
+%h1 Admin / Access Requests
+#content_container
+  = render 'users/contentnavigation'
+  %table#access_requests
+    %tr
+      %th.view
+      %th.firstname
+        First name
+        %span
+      %th.lastname
+        Last name
+        %span
+      %th.email
+        Email
+        %span
+      %th.actions Actions
+    - @users.each do |user|
+      %tr{:class => cycle('field_bg', 'field_nobg')}
+        %td.view{ :id => "view_#{user.id}"}= link_to '', user_path(user), :class => "view"
+        %td.firstname= user.first_name
+        %td.lastname= user.last_name
+        %td.email= user.email
+        %td.actions
+          - if can?(:reject, user) then
+            = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "spam floatleft"
+            = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "reject floatleft"
+          - if can?(:approve, user) then
+            = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "approve floatleft"

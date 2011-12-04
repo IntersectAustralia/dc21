@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    = render 'layouts/head'
+  %body
+    #content_wrapper
+      = render 'layouts/banner'
+      #container_right_content
+        = render 'layouts/messages'
+        %h1 Application layout (app/layouts/sample_application.html.haml). #TODO - refactor application.html.haml
+        = yield
+
+      #wizard.jqmWindow.lightbox
+    = render 'layouts/footer'

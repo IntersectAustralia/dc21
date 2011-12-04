@@ -1,0 +1,25 @@
+#header
+  = render 'layouts/messages'
+  #header_wrapper
+    .container
+      .logo
+        = link_to root_path, :id => :owner_logo_container do
+          DC.21
+        -#= t('app_name')
+      .menu
+        = tabs_tag(:builder => MenuTabBuilder) do |tab|
+          - if !user_signed_in?
+          - else
+            = tab.home '', root_url, :id => "home"
+          = tab.about 'About', about_pages_path
+          - if !user_signed_in?
+            = tab.login 'Log in', root_url
+            = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
+          - else
+            = tab.admin 'Admin', users_path
+            = tabs_tag(:builder => AccountTabBuilder) do |tab|
+              = tab.account current_user.email, :id => "accountmenu"
+            #accountmenu_container
+              %ul
+                %li= link_to "Settings", users_profile_path
+                %li= link_to "Sign out", destroy_user_session_path

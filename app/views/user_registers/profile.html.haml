@@ -1,4 +1,17 @@
-- title 'User Profile'
-
-= link_to "Edit My Details", edit_user_registration_path, :class => "button"
-= link_to "Change My Password", users_edit_password_path, :class => "button"
+%h1 #{@user.email} / Overview
+#content_container
+  .contentnavigation
+    = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
+      = tab.overview 'Overview', users_profile_path
+      = tab.editdetails 'Edit Details', edit_user_registration_path
+      = tab.changepassword 'Change Password', users_edit_password_path
+  .container
+    .rowform
+      = label :user , "User Name:"
+      %span= current_user.email
+    .rowform
+      = label :first_name , "First Name:"
+      %span= current_user.first_name
+    .rowform
+      = label :last_name  , "Last Name:"
+      %span= current_user.last_name

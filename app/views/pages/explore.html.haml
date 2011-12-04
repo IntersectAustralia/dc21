@@ -1,0 +1,23 @@
+= render 'pages/pageactions'
+%h1 Home / Explore Data
+#content_container
+  = render 'pages/contentnavigation'
+  %h3 Displaying 0 of 0 results
+  %table#exploredata
+    %tr.header
+      %th.view View
+      %th.lastname
+        Name
+        %span
+      %th.email 
+        User
+        %span
+      %th 
+        tbc
+        %span
+      %th.date 
+        Date range
+        %span
+      %th.date Tags
+      %tr{:class => cycle('field_bg', 'field_nobg')}
+        %td

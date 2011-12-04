@@ -1,0 +1,13 @@
+- if alert
+  #alert
+    %p= alert
+    %span ×
+- flash.each do |key, msg|
+  - if not key.to_s[/alert/]
+    #notice
+      %p= msg
+      %span ×
+  - elsif key.to_s.eql?("entry_alert")
+    #alert
+      %p= msg
+      %span ×

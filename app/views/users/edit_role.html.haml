@@ -1,10 +1,14 @@
-- title "Edit Role For #{@user.email}"
-
-= form_for(@user, :url => update_role_user_path(@specimen)) do |f|
-  = render "shared/error_messages", :target => @user
-  .field
-    = f.label :role_id, "Role"
-    = f.collection_select(:role_id, @roles, :id, :name, {:include_blank => ""})
-  .actions
-    = f.submit "Save"
-    = link_to 'Back', @user
+%h1 Admin / Users / #{@user.email}
+#content_container
+  = render 'users/contentnavigation'
+  .container
+    = form_for(@user, :url => update_role_user_path(@specimen)) do |f|
+      = render "shared/error_messages", :target => @user
+      .rowfield
+        = f.label :role_id, "Role"
+        = f.collection_select(:role_id, @roles, :id, :name, {:include_blank => ""})
+      .actions
+        .cancelbutton
+          %span
+          = link_to 'Back', @user, :class => "cancelbutton"
+        = f.submit "Save", :class => "floatright"

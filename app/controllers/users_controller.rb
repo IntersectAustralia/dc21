@@ -2,13 +2,15 @@ class UsersController < ApplicationController
 
   before_filter :authenticate_user!
   load_and_authorize_resource
-  set_tab :admin
+    set_tab :admin
 
   def index
     @users = User.deactivated_or_approved
+    set_tab :users, :contentnavigation
   end
 
   def show
+    set_tab :accessrequests, :contentnavigation
   end
 
   def admin
@@ -17,6 +19,7 @@ class UsersController < ApplicationController
 
   def access_requests
     @users = User.pending_approval
+    set_tab :accessrequests, :contentnavigation
   end
 
   def deactivate
@@ -45,6 +48,7 @@ class UsersController < ApplicationController
   end
 
   def edit_role
+    set_tab :users, :contentnavigation
     if @user == current_user
       flash.now[:alert] = "You are changing the role of the user you are logged in as."
     elsif @user.rejected?

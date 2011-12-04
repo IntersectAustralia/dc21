@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    = render 'layouts/head'
+  %body
+    #content_wrapper
+      = render 'layouts/banner'
+      #content
+        %h1= yield :title
+        = yield
+    = render 'layouts/footer'
