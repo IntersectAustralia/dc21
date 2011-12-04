@@ -1,0 +1,6 @@
+.contentnavigation
+  = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
+    = tab.dashboard 'Dashboard', home_pages_path
+    = tab.explore 'Explore Data', explore_pages_path
+    = tab.myuploads 'My Data Uploads', explore_pages_path
+    = tab.accessrequests 'Members', access_requests_users_path

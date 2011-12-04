@@ -1,0 +1,981 @@
+@charset "UTF-8"
+
+/*/ VARIABLES /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*/
+
+// VARIABLES - COLOURS
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+$dark0: black
+$dark1: #333333
+$dark2: #333333
+$dark3: #666666
+$dark4: #999999
+
+$light0: white
+$light1: #f8f8f8
+$light2: #f5f5f5
+$light3: #f1f1f1
+
+$blue1: #4d90fe
+$blue2: #4787ed
+$blue3: #357ae8
+$blue4: #3079ed
+$blue5: #2f5bb7
+$blue6: #e5f6fd
+
+$red1: #ff5742
+$red2: #dd4c39
+$red3: #db3d2b
+$red4: #dd4c39
+$red5: #b0281a
+
+// MIXINS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+
+// MIXINS - MARGIN + PADDING + WIDTH + HEIGHT + POSITION + TOP + BOTTOM + LEFT + RIGHT + FLOAT
+/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=m-p-w-h-p-t-b-l-r-f($margin: "", $padding: "", $width: "", $height: "", $position: "", $top: "", $bottom: "", $left: "", $right: "", $float: "")
+  @if $margin != ""
+    margin: $margin
+  @if $padding != ""
+    padding: $padding
+  @if $width != ""
+    width: $width
+  @if $height != ""
+    height: $height
+  @if $position != ""
+    position: $position
+  @if $top != ""
+    top: $top
+  @if $bottom != ""
+    bottom: $bottom
+  @if $left != ""
+    left: $left
+  @if $right != ""
+    right: $right
+  @if $float != ""
+    float: $float
+
+// MIXINS - WIDTH - NORMAL + MIN + MAX
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=width($width: "", $minwidth: "", $maxwidth: "")
+  @if $width != ""
+    width: $width
+  @if $minwidth != ""
+    min-width: $minwidth
+  @if $maxwidth != ""
+    max-width: $maxwidth
+
+// MIXINS - BORDER CONTROLL
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=borderradius($corner: "")
+  border-radius: $corner
+  -moz-border-radius: $corner
+  -webkit-border-radius: $corner
+
+=border($borderwidth: "", $borderstyle: "", $bordercolor: "", $allborderwidth: "", $borderradius: "", $topborderwidth: "", $topborderstyle: "", $topbordercolor: "", $bottomborderwidth: "", $bottomborderstyle: "", $bottombordercolor: "", $leftborderwidth: "", $leftborderstyle: "", $leftbordercolor: "", $rightborderwidth: "", $rightborderstyle: "", $rightbordercolor: "")
+  border: $borderwidth $borderstyle $bordercolor
+  border-width: $allborderwidth
+  +borderradius($borderradius)
+  border-top: $topborderwidth $topborderstyle $topbordercolor
+  border-bottom: $bottomborderwidth $bottomborderstyle $bottombordercolor
+  border-left: $leftborderwidth $leftborderstyle $leftbordercolor
+  border-right: $rightborderwidth $rightborderstyle $rightbordercolor
+
+// MIXINS - OPACITY
+/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=opacity($opacity: "", $filteropacity: "")
+  filter: alpha(opacity = $filteropacity)
+  -khtml-opacity: $opacity
+  -moz-opacity: $opacity
+  opacity: $opacity
+
+=opacity-25
+  +opacity(0.25, 25)
+=opacity-50
+  +opacity(0.50, 50)
+=opacity-75
+  +opacity(0.75, 75)
+=opacity-100
+  +opacity(1, 100)
+
+// MIXINS - CROSS-BROWSER INLINEBLOCK
+/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=inlineblock
+  display: -moz-inline-stack
+  display: inline-block
+  zoom: 1
+  *display: inline
+  vertical-align: top
+
+// MIXINS - CROSS-BROWSER INLINEBLOCK
+/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=truncate
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+// MIXINS - BOX SHADOW
+/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=boxshadow($offsetx: "", $offsety: "", $blur: "")
+  box-shadow: $offsetx $offsety $blur rgba(0, 0, 0, 0.1)
+  -moz-box-shadow: $offsetx $offsety $blur rgba(0, 0, 0, 0.1)
+  -webkit-box-shadow: $offsetx $offsety $blur rgba(0, 0, 0, 0.1)
+
+=boxshadow-2-inset
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1)
+  -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1)
+  -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1)
+
+=boxshadow-2
+  +boxshadow(0px, 1px, 2px)
+
+// MIXINS - FONT CONTROLL
+/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=font($style: "", $weight: "", $size: "", $leading: "", $color: "", $decoration: "", $align: "")
+  @if $style != ""
+    font-style: $style
+  @if $weight != ""
+    font-weight: $weight
+  @if $size != ""
+    font-size: $size
+  @if $leading != ""
+    line-height: $leading
+  @if $color != ""
+    color: $color
+  @if $decoration != ""
+    text-decoration: $decoration
+  @if $align != ""
+    text-align: $align
+  font-family: Helvetica, Arial, sans-serif
+
+=textshadow-2
+  text-shadow: #EEE 0px 2px 0px
+
+
+// MIXINS - GRADIENTS
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+=gradient($color1: "", $color2: "")
+  background-color: $color1
+  text-shadow: 0 1px rgba(0, 0, 0, 0.1)
+  background-image: -webkit-gradient(linear, left top, left bottom, from($color1), to($light2))
+  background-image: -webkit-linear-gradient(top, $color1, $color2)
+  background-image: -moz-linear-gradient(top, $color1, $color2)
+  background-image: -ms-linear-gradient(top, $color1, $color2)
+  background-image: -o-linear-gradient(top, $color1, $color2)
+  background-image: linear-gradient(top, $color1, $color2)
+
+=gradient-light-1
+  +gradient($light1, $light2)
+=gradient-light-2
+  +gradient($light1, $light3)
+
+=gradient-blue-1
+  +gradient($blue1, $blue2)
+=gradient-blue-2
+  +gradient($blue1, $blue3)
+
+=gradient-red-1
+  +gradient($red1, $red2)
+=gradient-red-2
+  +gradient($red1, $red3)
+
+// MIXINS - CLEARFIX
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Include this Mixin on things that will contain floats. These rules will cause the space to be filled.
+=clearfix
+  zoom: 1
+  &:before
+    content: "\0020"
+    display: block
+    height: 0
+    overflow: hidden
+  &:after
+    content: "\0020"
+    display: block
+    height: 0
+    overflow: hidden
+    clear: both
+
+// BASE STYLES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+html, body
+  +m-p-w-h-p-t-b-l-r-f("", "", 100%, 100%)
+  +font("", "", 100%, 1.25em, $dark2, "")
+  vertical-align: baseline
+
+body
+  background: $blue6
+
+h1, h2, h3, h4, h5, h6
+  +font("", "", 1em, 1em, $dark2)
+
+/* Base heading styles
+h1
+  +font("", normal, 1.5em, 40px)
+
+h2
+  +m-p-w-h-p-t-b-l-r-f(0 0 20px 0, 0 0 10px 0)
+  +font("", bold, 1.25em, 30px)
+
+h3
+  +font("", bold, 1em, 30px, $dark2)
+  padding: 0 0 10px 0
+
+p
+
+/* Paragraph style. Use for text, or for a libe break. </br> is for pebs, and you're not a pleb right?
+span
+
+/* Use as a default container for text that requires a Class or ID
+a, a:visited
+  +font("", bold, 1em, "", $dark1, none)
+  cursor: pointer
+
+a:hover
+  text-decoration: underline
+
+/* Basic link feedback for user
+
+ul
+
+li
+
+label
+  +m-p-w-h-p-t-b-l-r-f(0 -4px 0 0, 10px 20px 10px 10px, 130px)
+  +inlineblock
+  +font("", bold, 1em, 18px)
+  wight-space: nowrap
+  cursor: pointer
+
+input[type=textarea], input[type=text], input[type=password], input[type=search], textarea
+  +m-p-w-h-p-t-b-l-r-f(3px 0, 0 10px, "", 30px)
+  +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
+  resize: none
+  +font("", "", 1em, 1em)
+  &:hover
+    +border(1px, solid, #B9B9B9)
+  &:focus
+    +border(1px, solid, #3079ED)
+    outline: none
+
+input[type=password]
+  +font("", "", 1.25em, 1em, $dark1)
+
+// NOTIFICATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+/* Base notification container for users
+
+#notice, #alert
+  p
+    +m-p-w-h-p-t-b-l-r-f("", 10px 0, 100%, 20px, relative)
+    +font("", bold, 1em, 20px, $light0, "", center)
+  span
+    +m-p-w-h-p-t-b-l-r-f(-40px 10px 0 0, "", 20px, "", "", "", "", "", "", right)
+    +font("", bold, 1.75em, 35px, #404040)
+    text-shadow: 0 1px 0 $light0
+    +opacity-25
+    cursor: pointer
+  &:hover
+    span
+      +opacity-50
+
+#notice
+  p
+    background: $blue1
+    +border(1px, solid, $blue4, 0 0 1px 0)
+    cursor: pointer
+
+#alert 
+  p
+    background-color: $red2
+    +border(1px, solid, $red5, 0 0 1px 0)
+    cursor: pointer
+
+.formerror
+  +m-p-w-h-p-t-b-l-r-f(0 0 20px 0)
+  color: $red4
+
+.field_with_errors
+  +m-p-w-h-p-t-b-l-r-f("", "", 160px)
+  +inlineblock
+
+.field_with_errors input
+  +border(1px, solid, $red4)
+
+// MODULES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+// BASE STYLES - STRUCTURE MODULES
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Apply these class modules to elements. Any more than 3 modules per element is overkill and you should probably have a specific container.
+
+.floatleft
+  float: left
+
+/* Float an element to the left
+.floatright
+  float: right
+
+/* Float an element to the right
+
+.row
+  margin: 0
+
+/* Basic row container
+.rowform
+  margin: 0 0 18px 0
+
+/* Basic row / horizontal container with 1 paragraph return equiv.
+.fields
+  margin: 0 0 18px 0
+  +inlineblock
+
+.actions
+  margin: 36px 0 0 0
+
+// BASE STYLES - TEXT MODULES
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Apply these to specific font containers. Any more than 2 text modules is overkill and a specific style / container should be used
+
+.details
+  +font("", "", 0.75em, 18px, $dark3)
+
+.required
+  color: #E25358
+
+.bold
+  font-weight: bold
+
+.textalignleft
+  text-align: left
+
+/* Align text to the left
+.textalignright
+  text-align: right
+
+/* Align text to the right
+.textaligncenter
+  text-align: center
+
+/* Align text to the center
+
+.truncate
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+// ICONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+a.search.whitebutton 
+  span
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px)
+    background: url("../images/icon_search_light.png") left center no-repeat
+  &:hover
+    span
+      background: url("../images/icon_search_dark.png") left center no-repeat
+
+a.view, a.edit
+  +m-p-w-h-p-t-b-l-r-f(1px auto, "", 100%, 16px)
+  display: block
+a.view
+  background: url("../images/icon_view_light.png") center center no-repeat
+  &:hover
+    background: url("../images/icon_view_dark.png") center center no-repeat
+a.edit
+  background: url("../images/icon_edit_light.png") center center no-repeat
+  &:hover
+    background: url("../images/icon_edit_dark.png") center center no-repeat
+
+// BUTTONS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+// BUTTONS - DEFAULT BUTTON STYLE
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input[type=button], button
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px, 30px)
+  cursor: pointer
+  +inlineblock
+  +font("", "", 0.875em, 20px, $dark3, none, center)
+  +gradient-light-1
+  +border(1px, solid, #dcdcdc, "", 2px)
+  &:hover
+    color: $dark2
+    +border(1px, solid, #c6c6c6)
+    +gradient-light-2
+  &:active
+    +boxshadow-2-inset
+
+// BUTTONS - DISABLED BUTTON STYLE
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input[type=disabled], input[type=disabled]:hover
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px, 30px)
+  cursor: default
+  +inlineblock
+  +font("", "", 0.875em, 20px, $dark3, none, center)
+  +gradient-light-1
+  +border(1px, solid, #E0E0E0, "", 2px)
+  background-color: #FFFFFF
+
+input[type=disabled]:active
+  box-shadow: none
+  -moz-box-shadow: none
+  -webkit-box-shadow: none
+
+// BUTTONS - WHITE / GREY
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.whitebutton, input[type=button], button.whitebutton, a.whitebutton, .whitebutton
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px, "", 18px)
+  +font("", normal, 0.875em, 18px, $dark3, none, center)
+  +gradient-light-1
+  +border(1px, solid, #dcdcdc, "", 2px)
+  +inlineblock
+  &:hover
+    color: $dark2
+    +border(#c6c6c6)
+    +gradient-light-2
+  &:active
+    +boxshadow-2-inset
+
+// BUTTONS - BLUE
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.bluebutton, input[type=submit], button.bluebutton, a.bluebutton, .bluebutton
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px)
+  min-width: 140px
+  +font("", normal, 0.875em, 18px, $light0, none, center)
+  +gradient-blue-1
+  +border(1px, solid, $blue4, "", 2px)
+  +inlineblock
+  &:hover
+    +gradient-blue-2
+    +border(1px, solid, $blue5)
+  &:active
+    +boxshadow-2-inset
+
+button.bluebutton, input.bluebutton[type=submit]
+  height: 30px
+
+// BUTTONS - RED
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.redbutton, button.redbutton, a.redbutton, .redbutton
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px, "", 18px)
+  +font("", normal, 0.875em, 18px, $light0, none, center)
+  +gradient-red-1
+  +border(1px, solid, $red4, "", 2px)
+  +inlineblock
+  &:hover
+    +gradient-red-2
+    +border(1px, solid, $red5)
+  &:active
+    +boxshadow-2-inset
+
+// BUTTONS - BACK / CANCEL
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+input.cancelbutton, input[type=button], button.cancelbutton, a.cancelbutton
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px, "", 18px, relative)
+  +font("", normal, 0.875em, 18px, $dark3, none, center)
+  z-index: 9
+  +gradient-light-1
+  +border(1px, solid, #dcdcdc, 1px 1px 1px 0, 2px)
+  +inlineblock
+
+.cancelbutton
+  +inlineblock
+
+  span
+    +m-p-w-h-p-t-b-l-r-f(4px -15px 0 0, "", 20px, 20px)
+    z-index: 1
+    +gradient-light-1
+    +border(1px, solid, #dcdcdc, "", 2px)
+    +inlineblock
+    cursor: pointer
+    -webkit-transform: rotate(45deg)
+    -moz-transform: rotate(45deg)
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=45)
+  &:hover
+    span, a
+      color: $dark2
+      +border(1px, solid, #c6c6c6)
+      +gradient-light-2
+  &:hover
+    span
+      +gradient-light-2
+      +border(1px, solid, #c6c6c6)
+      +inlineblock
+  &:hover
+    a
+      +border(1px, solid, #c6c6c6, 1px 1px 1px 0)
+  &:active
+    span, a
+      +boxshadow-2-inset
+
+// TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+/* Note: Table Data cells will stretch to fill 100% of a table's width. If the width specified on individual cells 
+ * dosen't add up to the total width, they  will expand to fit.
+
+table
+  +font("", "", 0.813em, 18px, "", left)
+
+table, tbody
+  +width(1060px, 1060px, 1060px)
+  border-collapse: collapse
+  overflow: hidden
+
+th, td
+  +border(1px, solid, #DDD, 1px 0 0 0)
+
+tr
+
+th
+  +m-p-w-h-p-t-b-l-r-f("", 10px 10px 9px 0)
+  +width(140px, 140px, 140px)
+  +font("", bold, 1em, 18px, "", "", left)
+
+td
+  +m-p-w-h-p-t-b-l-r-f("", 10px 10px 9px 0)
+  +width(140px, 140px, 140px)
+  +truncate
+
+tbody tr.field_bg
+  background-color: #f9f9f9
+
+/* Specific cell types to balance width - View Access Requests
+
+#access_requests
+  th.firstname, td.firstname
+    +width(140px, 140px, 140px)
+  th.lastname, td.lastname
+    +width(220px, 220px, 220px)
+  th.email, td.email
+    +width(300px, 300px, 300px)
+  th.actions, td.actions
+    +m-p-w-h-p-t-b-l-r-f("", 3px 0 0 0)
+    +width(160px, 160px, 160px)
+
+// BUTTONS - TABLE WHITE RED BLUE
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+a.approve, a.reject, a.spam
+  +m-p-w-h-p-t-b-l-r-f("", 6px 10px)
+  cursor: pointer
+  +font("", normal, 1em, 18px, "", none, center)
+  &:hover
+    text-decoration: none
+
+a.spam
+  +m-p-w-h-p-t-b-l-r-f(0 -10px 0 0, 6px 20px 6px 10px)
+  color: $dark3
+  +border(1px, solid, #dcdcdc, "", 5px 0 0 5px)
+  +gradient-light-1
+  &:hover
+    color: $dark2
+    +border(1px, solid, #c6c6c6)
+    +gradient-light-2
+
+a.reject
+  color: $light0
+  +border(1px, solid, $red4, "", 5px 0 0 5px)
+  +gradient-red-1
+  &:hover
+    color: $light0
+    +border(1px, solid, $red5)
+    +gradient-red-2
+
+a.approve
+  color: $light0
+  +border(1px, solid, $blue4, "", 0 5px 5px 0)
+  +gradient-blue-1
+  &:hover
+    color: $light0
+    +border(1px, solid, $blue5)
+    +gradient-blue-2
+
+// TABLES - ACTIVITY
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+table.activity, table.activity tbody
+  +width(770px, 770px, 770px)
+  overflow: hidden
+
+// SCROLLING /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+// SCROLLING - HEADER
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#content_wrapper.scrollheader 
+  #header
+    position: fixed
+    top: 0
+
+    #header_wrapper
+      +m-p-w-h-p-t-b-l-r-f(-48px 0 0 0)
+      .logo
+        +m-p-w-h-p-t-b-l-r-f(56px 0 0 0, "", "", 20px)
+        +font("", normal, 1.5em, 1em, $dark1)
+        text-shadow: #EEE 0px 1px 0px
+  #content
+    +m-p-w-h-p-t-b-l-r-f(0 auto, 97px 0 0 0)
+
+// SCROLLING - NOTIFICATION
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#content_wrapper.scrollnotification
+  #header #header_wrapper
+    margin: 41px 0 0 0
+  #notice, #alert
+    +m-p-w-h-p-t-b-l-r-f("", "", "", "", fixed, 0, "", 0, 0)
+
+// SCROLLING - HEADER + NOTIFICATION
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#content_wrapper.scrollheader.scrollnotification
+  #header #header_wrapper
+    margin: -8px 0 0 0
+  #content
+    padding: 138px 0 0 0
+
+// SCROLLING - ACCOUNT MENU
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#content_wrapper.scrollheader 
+  #header #accountmenu_container
+    top: 39px
+#content_wrapper.notification #header #accountmenu_container
+  top: 128px
+#content_wrapper.scrollnotification #header #accountmenu_container
+  top: 87px
+#content_wrapper.scrollheader.scrollnotification #header #accountmenu_container
+  top: 79px
+
+// SCROLLING - ACCOUNT MENU
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#content_wrapper
+  .devinfo #content
+    padding: 0 0 100px 0
+  .devinfo.scrollheader #content
+    padding: 97px 0 100px 0
+  .devinfo.scrollheader.scrollnotification #content
+    padding: 138px 0 100px 0
+
+// HEADER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+// HEADER - LAYOUT
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#header
+  +m-p-w-h-p-t-b-l-r-f("", "", 100%, "", relative, 0)
+  +boxshadow-2
+
+  #header_wrapper
+    height: 88px
+    background: url("../images/header-bg.png") top left repeat-x
+    color: $dark3
+
+    .container
+      +m-p-w-h-p-t-b-l-r-f(0 auto, 0 20px)
+      +width("", 940px, 1100px)
+      min-height: 100%
+
+      .logo
+        +m-p-w-h-p-t-b-l-r-f(20px 0 0 0, "", 300px, 48px)
+        float: left
+        +font("", bold, 3em, 1em, $dark2)
+        +textshadow-2
+        a
+          &:hover
+            text-decoration: none
+
+// HEADER - MENU
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#header
+  .menu
+    +m-p-w-h-p-t-b-l-r-f(49px 0 0 0, "", "", "", "", "", "", "", "", right)
+    li
+      margin: 0 0 0 20px
+      +inlineblock
+      cursor: pointer
+      a, span
+        +m-p-w-h-p-t-b-l-r-f("", 10px)
+        +font("", normal, "", "", $dark3)
+        +textshadow-2
+        +inlineblock
+        &:hover
+          color: $dark2
+          text-decoration: none
+          cursor: pointer
+    li.active
+      height: 50px
+      background: url("../images/header-active.png") center 38px no-repeat
+      a, span
+        color: $dark1
+
+// HEADER - MENU - HOME
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#header
+  #home 
+    a
+      +m-p-w-h-p-t-b-l-r-f("", 6px 20px 8px 20px, 20px, 24px)
+      background: url("../images/icon_home_light.png") center 8px no-repeat
+      &:hover
+        background: url("../images/icon_home_dark.png") center 8px no-repeat
+
+  #home.active
+    a
+      background: url("../images/icon_home_dark.png") center 8px no-repeat
+
+// HEADER - MENU - USER
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#header
+  span#accountmenu
+    +m-p-w-h-p-t-b-l-r-f(10px, 0 25px 0 0)
+    background: url("../images/icon_options_light.png") right center no-repeat
+    background-size: 16px
+    &:hover, .active
+      color: $dark1
+      background: url("../images/icon_options_dark.png") right center no-repeat
+  span#accountmenu.active
+    color: $dark1
+    background: url("../images/icon_options_dark.png") right center no-repeat
+
+  li.active #accountmenu
+    color: $dark1
+    background: url("../images/icon_options_dark.png") right center no-repeat
+    background-size: 16px
+
+#header
+
+  #accountmenu_container
+    +m-p-w-h-p-t-b-l-r-f(0 -548px 0 0, "", "", "", absolute, 87px, "", "", 50%)
+    display: none
+    color: $dark1
+    background: #D6D6D6
+    +border(1px, solid, #c6c6c6, 0 1px 1px 1px, 0 0 5px 5px)
+
+    ul li
+      +m-p-w-h-p-t-b-l-r-f(0px)
+      display: block
+      &:hover
+        background: $dark1
+
+      a
+        +m-p-w-h-p-t-b-l-r-f("", 10px 0 10px 13px)
+        color: $dark3
+        display: block
+        text-shadow: none
+        &:hover
+          color: #F1F1F1
+
+// HEADER - MENU - SIGNUP
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#header
+  .menu 
+    li#signup
+      background: #4D90F3
+      +border(1px, solid, #3079ed, "", 3px 3px 0 0)
+
+      a
+        +m-p-w-h-p-t-b-l-r-f("", 10px 20px 9px 20px, "", 18px)
+        color: #F7F7F7
+        text-shadow: 0 1px rgba(0, 0, 0, 0.1)
+
+    li#signup.active
+      +m-p-w-h-p-t-b-l-r-f("", "", "", 37px)
+
+      a
+        +m-p-w-h-p-t-b-l-r-f("", "", "", 30px)
+        background: transparent url(../images/header-active-signup.png) center 37px no-repeat
+
+// BODY //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+#content_wrapper
+  min-height: 100%
+  height: auto !important
+  height: 100%
+  margin: 0 auto -38px
+
+#content
+  +m-p-w-h-p-t-b-l-r-f(20px auto 0 auto, "", "", 100%)
+  +width("", 940px, 1100px)
+  +border(80px, solid, $blue6, 0 0 80px 0)
+
+#content_container
+  +m-p-w-h-p-t-b-l-r-f(10px auto 0 auto, 20px)
+  +width("", 940px, 1100px)
+  +boxshadow-2
+  +border("", "", "", "", 2px)
+  background: $light0
+
+#content 
+  .container
+    +m-p-w-h-p-t-b-l-r-f(20px 0, "", 600px)
+    +clearfix
+
+  .container_centered
+    +m-p-w-h-p-t-b-l-r-f(20px auto, "", 600px)
+    +clearfix
+
+// BODY - TABBED CONTENT NAVIGATION
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.contentnavigation
+  +m-p-w-h-p-t-b-l-r-f(0 0 40px 0)
+  +border(1px, solid, $dark4, 0 0 1px 0)
+  display: block
+
+  li
+    +m-p-w-h-p-t-b-l-r-f(0 0 -1px 0, "", "", 39px)
+    background: #F1F1F1
+    +border(1px, solid, #dfdfdf, "", 3px 3px 0 0, "", "", "", 1px, solid, $dark4)
+    +inlineblock
+
+    a
+      +m-p-w-h-p-t-b-l-r-f("", 10px 15px)
+      +font("", normal, 1em, 20px, $dark3)
+      +textshadow-2
+      +inlineblock
+      &:hover
+        color: $dark2
+        text-decoration: none
+        cursor: pointer
+
+  li.active
+    background: #FFF
+    +border(1px, solid, $dark4, "", "", "", "", "", 1px, solid, #FFF)
+    a
+      color: $dark2
+
+// FOOTER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+#footer
+  +m-p-w-h-p-t-b-l-r-f(0 auto, "", "", "", relative)
+  +font("", normal, 0.813em, "", $dark3, none, center)
+
+  .footerwrapper
+    +m-p-w-h-p-t-b-l-r-f("", 10px 0 0 0, "", 26px, "", 0, 0, "", 0)
+    min-width: 600px
+    background: #F5F5F5
+    +border(1px, solid, #dfdfdf)
+
+  .logo
+    +m-p-w-h-p-t-b-l-r-f(3px 6px 0 0, "", 14px, 14px)
+    +inlineblock
+    background: url(/images/intersect_logo.png) center
+
+  #dev
+    cursor: pointer
+    +inlineblock
+
+// FOOTER - DEV INFO
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+#footer 
+  #devinfo
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 13px 0, 100%, "", absolute, "", 25px)
+    display: none
+    background: transparent url(../images/header-active-dark.png) center bottom no-repeat
+    +border(1px, solid, #666, 1px 0 0 0)
+
+    .debug_dump
+      +m-p-w-h-p-t-b-l-r-f("", 20px)
+      color: #FFF
+      background: #333
+      +boxshadow-2
+      box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.5)
+      -moz-box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.5)
+      -webkit-box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.5)
+
+// LAYOUT ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
+
+// LAYOUT - 404
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.input_group
+  margin: 0 0 20px 0
+
+// LAYOUT - 404
+///*///////////////////////////////////////////////////////////////////////////////////////////////*/
+
+.dialog
+  margin: 36px auto 0 auto
+  width: 800px
+  text-align: center
+
+// ADMIN /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*/
