@@ -2,12 +2,14 @@ defaults: &defaults
   password_reset_email_sender: pwd-reset@intersect.org.au
   account_request_user_status_email_sender: account-status@intersect.org.au
   account_request_admin_notification_sender: account-request@intersect.org.au
+  files_root: /data/dc21-data
 
 development:
   <<: *defaults
 
 test:
   <<: *defaults
+  files_root: /tmp
 
 production:
   <<: *defaults

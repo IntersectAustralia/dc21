@@ -1,7 +1,7 @@
 class DataFilesController < ApplicationController
 
-  before_filter :authenticate_user!
-  load_and_authorize_resource
+  before_filter :authenticate_user!, :except => [:create]
+  load_and_authorize_resource :except => [:create]
   set_tab :home
 
   def index
@@ -17,5 +17,13 @@ class DataFilesController < ApplicationController
 
   end
 
+  def create
+    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], nil)
+    result = attachment_builder.build()
+
+    respond_to do |format|
+      format.json { render :json => result }
+    end
+  end
 
 end
