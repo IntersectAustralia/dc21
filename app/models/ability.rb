@@ -39,19 +39,19 @@ class Ability
     # alias reject_as_spam to reject so they are considered the same
     alias_action :reject_as_spam, :to => :reject
 
-    return unless user.role
+    return unless user && user.role
 
+    # all users can do stuff with data files
     can :manage, DataFile
 
     if user.role.admin?
+      # only admins can manage users
       can :read, User
       can :update_role, User
       can :activate_deactivate, User
       can :admin, User
       can :reject, User
       can :approve, User
-    else
-      # other permissions go here
     end
 
   end
