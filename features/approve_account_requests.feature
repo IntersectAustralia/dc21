@@ -101,7 +101,7 @@ Feature: Approve access requests
     And I select "Administrator" from "Role"
     And I press "Approve"
     And I am on the home page
-    And I follow "Logout"
+    And I follow "Sign out"
     Then I should be able to log in with "diego@intersect.org.au" and "Pas$w0rd"
 
   Scenario: Approved user roles should be correctly saved

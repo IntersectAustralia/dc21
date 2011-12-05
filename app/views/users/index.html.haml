@@ -23,7 +23,7 @@
 
     - @users.each do |user|
       %tr{ :class => cycle('field_bg', 'field_nobg')}
-        %td{ :id => "view_#{user.id}", :class => "view"}= link_to '', users_path, :class => "view"
+        %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}"
         %td= user.first_name
         %td= user.last_name
         %td.email= user.email

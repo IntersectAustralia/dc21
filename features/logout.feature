@@ -11,12 +11,12 @@ Feature: Logging Out
   
   Scenario: Successful logout
     Given I am on the home page
-    When I follow "Logout"
+    When I follow "Sign out"
     Then I should see "Logged out successfully."
 
   Scenario: Logged out user can't access secure pages
     Given I am on the list users page
-    And I follow "Logout"
+    And I follow "Sign out"
     When I am on the list users page
     Then I should be on the login page
     And I should see "You need to log in before continuing."

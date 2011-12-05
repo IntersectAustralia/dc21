@@ -2,6 +2,10 @@ Given /^I have a user "([^"]*)"$/ do |email|
   Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
 end
 
+Given /^I have a user "([^"]*)" with name "([^"]*)" "([^"]*)"$/ do |email, first, last|
+  Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A', :first_name => first, :last_name => last)
+end
+
 Given /^I have a locked user "([^"]*)"$/ do |email|
   Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A', :locked_at => Time.now - 30.minute, :failed_attempts => 3)
 end
@@ -74,3 +78,12 @@ And /^I request a reset for "([^"]*)"$/ do |email|
   click_button "Send me reset password instructions"
 end
 
+When /^I attempt to change my password with old password "([^"]*)", new password "([^"]*)" and confirmation "([^"]*)"$/ do |old, new, confirm_new|
+  visit path_to("the home page")
+  click_link ("Settings")
+  click_link("Change Password")
+  fill_in("New password", :with => new)
+  fill_in("Confirm new password", :with => confirm_new)
+  fill_in("Current password", :with => old)
+  click_button("Update")
+end

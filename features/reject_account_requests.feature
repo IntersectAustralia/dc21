@@ -49,7 +49,7 @@ Feature: Reject access requests
   Scenario: Reject an access request as spam from the view details page
     Given I am on the access requests page
     When I follow "View Details" for "diego@intersect.org.au"
-    And I follow "Reject as Spam"
+    And I follow "Spam"
     Then I should see "The access request for diego@intersect.org.au was rejected and this email address will be permanently blocked."
     And I should see "access_requests" table with
       | First name | Last name | Email                 |
@@ -59,7 +59,7 @@ Feature: Reject access requests
     Given I am on the access requests page
     When I follow "Reject" for "diego@intersect.org.au"
     And I am on the home page
-    And I follow "Logout"
+    And I follow "Sign out"
     And I am on the login page
     And I fill in "Email" with "diego@intersect.org.au"
     And I fill in "Password" with "Pas$w0rd"
@@ -71,7 +71,7 @@ Feature: Reject access requests
     Given I am on the access requests page
     When I follow "Reject as Spam" for "diego@intersect.org.au"
     And I am on the home page
-    And I follow "Logout"
+    And I follow "Sign out"
     And I am on the login page
     And I fill in "Email" with "diego@intersect.org.au"
     And I fill in "Password" with "Pas$w0rd"
@@ -83,7 +83,7 @@ Feature: Reject access requests
     Given I am on the access requests page
     When I follow "Reject" for "diego@intersect.org.au"
     And I am on the home page
-    And I follow "Logout"
+    And I follow "Sign out"
     And I am on the request account page
     And I fill in the following:
       | Email                 | diego@intersect.org.au |
@@ -98,7 +98,7 @@ Feature: Reject access requests
     Given I am on the access requests page
     When I follow "Reject as Spam" for "diego@intersect.org.au"
     And I am on the home page
-    And I follow "Logout"
+    And I follow "Sign out"
     And I am on the request account page
     And I fill in the following:
       | Email                 | diego@intersect.org.au |
