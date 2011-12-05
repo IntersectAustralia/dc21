@@ -69,4 +69,9 @@ class UserRegistersController < Devise::RegistrationsController
     end
   end
 
+  protected
+  def after_update_path_for(resource)
+    users_profile_path
+  end
+
 end

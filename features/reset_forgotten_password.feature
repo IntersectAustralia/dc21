@@ -102,7 +102,7 @@ Feature: Reset forgotten password
     And I fill in "Password confirmation" with "Pass.456"
     And I press "Change Your Password"
     Then I should see "Your password was changed successfully. You are now signed in."
-    When I follow "Logout"
+    When I follow "Sign out"
     And I open the email
     And I follow "Change my password" in the email
     And I fill in "Password" with "Pass.000"

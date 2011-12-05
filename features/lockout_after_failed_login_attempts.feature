@@ -26,7 +26,7 @@ Feature: Locking out users after multiple failed password attempts
     When I attempt to login with "georgina@intersect.org.au" and "Pas$w0rd"
     Then I should see "Logged in successfully."
     And the failed attempt count for "georgina@intersect.org.au" should be "0"
-    When I follow "Logout"
+    When I follow "Sign out"
     And I attempt to login with "georgina@intersect.org.au" and "blah"
     Then I should see "Invalid email or password."
     And the failed attempt count for "georgina@intersect.org.au" should be "1"

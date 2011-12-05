@@ -16,19 +16,20 @@ Feature: Administer users
     Given "raul@intersect.org.au" is deactivated
     When I am on the list users page
     Then I should see "users" table with
-      | First name | Last name | Email                     | Role          | Status |
-      | Georgina   | Edwards   | georgina@intersect.org.au | Administrator | Active |
+      | First name | Last name | Email                     | Role          | Status      |
+      | Georgina   | Edwards   | georgina@intersect.org.au | Administrator | Active      |
       | Raul       | Carrizo   | raul@intersect.org.au     |               | Deactivated |
 
   Scenario: View user details
     Given "raul@intersect.org.au" has role "Researcher"
     And I am on the list users page
     When I follow "View Details" for "raul@intersect.org.au"
-    Then I should see field "Email" with value "raul@intersect.org.au"
-    And I should see field "First name" with value "Raul"
-    And I should see field "Last name" with value "Carrizo"
-    And I should see field "Role" with value "Researcher"
-    And I should see field "Status" with value "Active"
+    Then I should see details displayed
+      | Email      | raul@intersect.org.au |
+      | First name | Raul                  |
+      | Last name  | Carrizo               |
+      | Role       | Researcher            |
+      | Status     | Active                |
 
   Scenario: Go back from user details
     Given I am on the list users page
