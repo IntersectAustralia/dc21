@@ -12,7 +12,7 @@ Feature: View the list of data files
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 |
       | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     |                  |                     |
     When I am on the list data files page
-    Then I should see "data_files" table with
+    Then I should see "exploredata" table with
       | Name         | Date added       | Added by                  | Start time         | End time            |
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     |                    |                     |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | 2010-06-01  6:42:01 | 2011-11-30 18:05:23 |

@@ -12,7 +12,7 @@ Feature: View the details of a data file
 
   Scenario: Navigate from list and view a data file
     When I am on the list data files page
-    And I follow "sample.txt"
+    And I follow the view link for data file "sample.txt"
     Then I should see details displayed
       | Name       | sample.txt            |
       | Date added | 2011-12-01 13:45      |

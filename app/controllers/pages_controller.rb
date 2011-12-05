@@ -23,13 +23,4 @@ class PagesController < ApplicationController
       set_tab :about
   end
 
-  def explore
-    if !user_signed_in?
-      set_tab :login
-      render :layout => 'guest' and return
-    else
-      set_tab :home
-      set_tab :explore, :contentnavigation
-    end
-  end
 end
