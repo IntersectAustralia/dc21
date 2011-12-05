@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def render_field_if_not_empty(label, value)
-    render_field_content(label, (h value)) if value != nil && !value.empty?
+    render_field_content(label, (h value)) unless value.blank?
   end
 
   def icon(type)

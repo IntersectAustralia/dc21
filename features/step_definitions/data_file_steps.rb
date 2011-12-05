@@ -11,3 +11,8 @@ Given /^I have data files$/ do |table|
     Factory(:data_file, attributes)
   end
 end
+
+And /^I follow the view link for data file "([^"]*)"$/ do |filename|
+  file = DataFile.find_by_filename(filename)
+  click_link("view_#{file.id}")
+end
