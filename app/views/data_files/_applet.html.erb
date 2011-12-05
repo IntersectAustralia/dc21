@@ -1,0 +1,136 @@
+<applet id="upload_applet"
+        type="application/x-java-applet;version=1.6"
+        code="au.org.intersect.uploader.main.UploadApplet"
+        archive="/applets/uploader.jar, /applets/commons-codec-1.4.jar, /applets/commons-httpclient-3.1.jar, /applets/commons-logging-1.1.1.jar, /applets/log4j-1.2.15.jar, /applets/plugin.jar"
+        name='UploadApplet'
+        width="110"
+        height="40"
+        MAYSCRIPT>
+
+  <param name="destDir" value="/">
+  <param name="uploadURL" value="<%= upload_url %>">
+  <param name="sendVerifyRequestFirst" value="false">
+  <param name="verifyRequestURL" value="false">
+  <param name="allowMultiselect" value="<%= allow_multiselect %>">
+  <param name="fileSelectionMode" value="<%= file_selection_mode %>">
+  <param name="backgroundColour" value="#FFFFFF">
+</applet>
+
+<script type="text/javascript">
+    var uploaded = false;
+    var session_message = "Your upload was not successful. <%= I18n.t :session_timeout, :scope => [:views, :shared] %>";
+
+    function failedToUpload(filename, message) {
+        msg = message || 'please try again or contact your system administrator';
+        return '<span class="failed required">' + filename + ' failed to upload: ' + msg + '</span>';
+    }
+
+    function disableButtons() {
+        //$('#next_button').prop('disabled', true);
+    }
+
+    function enableButtons() {
+        //$('#next_button').prop('disabled', false);
+    }
+
+    function appletReady() {
+        //$('#new_dataset_dialog').removeClass('loads_applet');
+        //enableButtons();
+    }
+
+    function startingWork() {
+        disableButtons();
+    }
+
+    function finishedWork() {
+        enableButtons();
+        uploaded = true;
+    }
+
+    function unexpectedError(msg) {
+        alert("Something went wrong: " + msg);
+    }
+
+    function unauthorisedError() {
+        alert(session_message);
+        window.location = '<%= root_path %>';
+    }
+
+    function extractFilename(path) {
+        var parts = path.split("/");
+        if (parts.length <= 1) {
+            parts = path.split("\\");
+        }
+        // Would use pop(), but Safari doesn't like it!?!
+        return parts[parts.length - 1];
+    }
+
+    function uploadStarting(path) {
+        var filename = extractFilename(path);
+
+        //$('#upload_notifications').focus();
+        $('#upload_notifications').append('<div class="file_status"><span class="working">' + filename + '</span></div>');
+    }
+
+    function findLatestFile(filename) {
+        return $("div.file_status").filter(
+                function() {
+                    return $(this).text() == filename;
+                }).last();
+    }
+
+    function uploadFailed(path, message, responseCode) {
+        var filename = extractFilename(path);
+
+        if (responseCode == "401") {
+            unauthorisedError();
+        }
+        else {
+            findLatestFile(filename).html(failedToUpload(filename));
+        }
+    }
+
+    function uploadFinished(responseJson) {
+        //server returns a response of the form {"filename" : {"status" : "success", "message" : "some message"}, "filename2" : {"status" : "failed", "message" : "some failure msg"}}
+        var obj = $.parseJSON(responseJson);
+        $.each(obj, function(filename, value) {
+            var fileStatus = value.status;
+            var message = value.message;
+
+            if (fileStatus == "success") {
+                findLatestFile(filename).html('<span class="success">' + filename + '</span>');
+            } else {
+                //TODO: for now we just display a failure message, later we may want to do something with the message
+                findLatestFile(filename).html(failedToUpload(filename, message));
+            }
+        });
+    }
+
+    function getAuthToken() {
+        return "";
+    }
+
+
+    function handleAbortVerificationResult(path, message) {
+        var filename = extractFilename(path);
+        findLatestFile(filename).html('<span class="failedexistance required">' + filename + '</span><span class="required"> - ' + message + '</span>');
+    }
+
+    function handlePromptVerificationResult(fileName, message) {
+        //should never happen for us, do nothing
+        return false;
+    }
+
+    function verificationFailed(path, responseCode) {
+        var filename = extractFilename(path);
+        if (responseCode == "401") {
+            unauthorisedError();
+        }
+        else {
+            findLatestFile(filename).html(failedToUpload(filename));
+        }
+    }
+
+    var session_message = "<%= I18n.t :session_timeout, :scope => [:views, :shared] %>";
+
+</script>
