@@ -11,4 +11,21 @@ describe DataFile do
   describe "Associations" do
     it { should belong_to(:created_by) }
   end
+
+  describe "Get file extension" do
+    it "should return the correct extension" do
+      Factory(:data_file, :filename => "abc.csv").extension.should eq("csv")
+      Factory(:data_file, :filename => "abc.def.csv").extension.should eq("csv")
+      Factory(:data_file, :filename => "abc.txt").extension.should eq("txt")
+      Factory(:data_file, :filename => "abc.txt123").extension.should eq("txt123")
+      Factory(:data_file, :filename => "txt123").extension.should be_nil
+    end
+
+    it "should downcase the extension" do
+      Factory(:data_file, :filename => "abc.csv").extension.should eq("csv")
+      Factory(:data_file, :filename => "abc.CSV").extension.should eq("csv")
+      Factory(:data_file, :filename => "abc.cSV").extension.should eq("csv")
+      Factory(:data_file, :filename => "abc.Csv").extension.should eq("csv")
+    end
+  end
 end

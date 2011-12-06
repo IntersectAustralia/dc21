@@ -8,4 +8,9 @@ class DataFile < ActiveRecord::Base
 #  validates_presence_of :created_by_id
 
   scope :most_recent_first, order("created_at DESC")
+
+  def extension
+    ext = File.extname(filename)[1..-1]
+    ext ? ext.downcase : nil
+  end
 end

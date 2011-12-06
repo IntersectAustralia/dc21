@@ -16,15 +16,54 @@ describe AttachmentBuilder do
     Rails.root.join('tmp')
   }
 
-  describe "Building attachments" do
-
-    it "should create new data file objects" do
-      params = {
+  let(:applet_params) {
+    {
         :dirStruct => '[{"file_1":"file.a"}]',
         :destDir => "/",
         :file_1 => file1
-      }
-      ab = AttachmentBuilder.new(params, files_root, nil)
+    }
+  }
+
+  describe "Building attachments" do
+
+    it "should create new data file objects" do
+      file_type_determiner = mock(FileTypeDeterminer)
+      file_type_determiner.should_receive(:identify_file).and_return([false, nil])
+      ab = AttachmentBuilder.new(applet_params, files_root, nil, file_type_determiner, nil)
+      result = ab.build
+      result.include?("file.a").should be_true
+      result["file.a"][:status].should == "success"
+
+      DataFile.count.should eq(1)
+      data_file = DataFile.first
+      data_file.filename.should == "file.a"
+    end
+
+    it "should extract metadata if file type is recognised" do
+      file_type_determiner = mock(FileTypeDeterminer)
+      metadata_extractor = mock(MetadataExtractor)
+      file_type_determiner.should_receive(:identify_file).and_return([true, FileTypeDeterminer::TOA5])
+      metadata_extractor.should_receive(:extract_metadata)
+
+      file_type_determiner
+      ab = AttachmentBuilder.new(applet_params, files_root, nil, file_type_determiner, metadata_extractor)
+      result = ab.build
+      result.include?("file.a").should be_true
+      result["file.a"][:status].should == "success"
+
+      DataFile.count.should eq(1)
+      data_file = DataFile.first
+      data_file.filename.should == "file.a"
+    end
+
+    it "should not extract metadata if file type is unknown" do
+      file_type_determiner = mock(FileTypeDeterminer)
+      metadata_extractor = mock(MetadataExtractor)
+      file_type_determiner.should_receive(:identify_file).and_return([false, nil])
+      metadata_extractor.should_not_receive(:extract_metadata)
+
+      file_type_determiner
+      ab = AttachmentBuilder.new(applet_params, files_root, nil, file_type_determiner, metadata_extractor)
       result = ab.build
       result.include?("file.a").should be_true
       result["file.a"][:status].should == "success"
