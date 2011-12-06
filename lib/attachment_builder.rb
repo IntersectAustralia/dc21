@@ -1,9 +1,11 @@
 class AttachmentBuilder
 
-  def initialize(post_params, files_root, current_user)
+  def initialize(post_params, files_root, current_user, file_type_determiner, metadata_extractor)
     @post_params = post_params
     @files_root = files_root
     @current_user = current_user
+    @file_type_determiner = file_type_determiner
+    @metadata_extractor = metadata_extractor
   end
 
   def build
@@ -40,13 +42,20 @@ class AttachmentBuilder
       attachment = DataFile.create(attributes.merge({:created_by => @current_user}))
       if attachment.save
         result[attributes[:filename]] = {:status => "success", :message => ""}
+        process_metadata(attachment)
       else
         Rails.logger.info("Failed: #{attachment.errors}")
         result[attributes[:filename]] = {:status => "failure", :message => attachment.errors}
       end
     end
-
     result
+  end
+
+  def process_metadata(attachment)
+    known, type = @file_type_determiner.identify_file(attachment)
+    if known
+      @metadata_extractor.extract_metadata(attachment, type)
+    end
   end
 
   def write_files(dest_dir, file_tree)
