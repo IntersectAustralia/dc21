@@ -93,6 +93,25 @@ $(window).load(function() {
     $('#content_wrapper').toggleClass('devinfo');
   });
 
+  // SEARCH /////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+
+  $('#search').click(function(event) {
+    $('.searchcontainer').fadeToggle('normal', function() {} );
+    $("#search").animate({width:'toggle'},550);
+    $('.searchactions').fadeToggle('normal', function() {} );
+    $('#newdataentry').toggleClass('bluebutton');
+    $('#newdataentry').toggleClass('whitebutton');
+  });
+  $('.searchclose').click(function(event) {
+    $('.searchcontainer').fadeToggle('normal', function() {} );
+    $("#search").animate({width:'toggle'},550);
+    $('.searchactions').fadeToggle('normal', function() {} );
+    $('#newdataentry').toggleClass('bluebutton');
+    $('#newdataentry').toggleClass('whitebutton');
+  });
+
 });
 
 // SCROLLING HEAD//ER & NOTIFICATIONS ///////////////////////////////////////////

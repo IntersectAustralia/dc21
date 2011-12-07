@@ -402,13 +402,46 @@ input[type=password]
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-a.search.whitebutton 
+.options
+  cursor: pointer
   span
     +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px)
-    background: url("../images/icon_search_light.png") left center no-repeat
+    background: url("../images/icon_options_light.png") left center no-repeat
+    background-size: 16px
   &:hover
     span
+      color: $dark1
+      background: url("../images/icon_options_dark.png") left center no-repeat
+
+.close
+  cursor: pointer
+  span
+    +m-p-w-h-p-t-b-l-r-f("", "", 16px, "", "", "", "", "", "", right)
+    +font("", bold, 1.75em, 14px, #404040)
+    text-shadow: 0 1px 0 $light0
+    +opacity-25
+    cursor: pointer
+  &:hover
+    span
+      +opacity-50
+
+.search.whitebutton 
+  cursor: pointer
+  label, span
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 85px)
+    font-weight: normal
+    background: url("../images/icon_search_light.png") left center no-repeat
+  &:hover
+    label, span
       background: url("../images/icon_search_dark.png") left center no-repeat
+
+.search.bluebutton 
+  +m-p-w-h-p-t-b-l-r-f(3px 0, "", 80px, 20px)
+  +border("", "", "", "", 0 2px 2px 0)
+  cursor: pointer
+  label, span
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 16px)
+    background: url("../images/icon_search_white.png") left center no-repeat
 
 a.view, a.edit
   +m-p-w-h-p-t-b-l-r-f(1px auto, "", 100%, 16px)
@@ -483,7 +516,6 @@ input.whitebutton, input[type=button], button.whitebutton, a.whitebutton, .white
 
 input.bluebutton, input[type=submit], button.bluebutton, a.bluebutton, .bluebutton
   +m-p-w-h-p-t-b-l-r-f("", 5px 10px)
-  min-width: 140px
   +font("", normal, 0.875em, 18px, $light0, none, center)
   +gradient-blue-1
   +border(1px, solid, $blue4, "", 2px)
@@ -703,12 +735,14 @@ table.activity, table.activity tbody
 // SCROLLING - ACCOUNT MENU
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-#content_wrapper
-  .devinfo #content
+#content_wrapper.devinfo 
+  #content
     padding: 0 0 100px 0
-  .devinfo.scrollheader #content
+#content_wrapper.devinfo.scrollheader 
+  #content
     padding: 97px 0 100px 0
-  .devinfo.scrollheader.scrollnotification #content
+#content_wrapper.devinfo.scrollheader.scrollnotification 
+  #content
     padding: 138px 0 100px 0
 
 // HEADER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
