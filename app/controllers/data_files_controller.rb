@@ -24,4 +24,14 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def download
+    extname = File.extname(@data_file.filename)[1..-1]
+    mime_type = Mime::Type.lookup_by_extension(extname)
+    content_type = mime_type.to_s unless mime_type.nil?
+
+    file_params = {:filename => @data_file.filename}
+    file_params[:type] = content_type if content_type
+    send_file @data_file.path, file_params
+  end
+
 end

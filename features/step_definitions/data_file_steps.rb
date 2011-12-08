@@ -27,3 +27,30 @@ When /^I upload "([^"]*)" through the applet$/ do |filename|
   post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
 end
 
+Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|
+  page.response_headers['Content-Type'].should == type
+  page.response_headers['Content-Disposition'].should include("filename=\"#{name}\"")
+  page.response_headers['Content-Disposition'].should include("attachment")
+  #check_driver_responds_to(:response)
+  #check_response_responds_to(:content_type)
+  ##page.driver.response.content_type.should == type
+  #check_response_responds_to(:content_disposition)
+  #page.driver.response.content_disposition.should == "AAH"
+end
+
+Then /^the file should contain "([^"]*)"$/ do |expected|
+  actual = page.source.strip
+  expected.strip.should eq(actual)
+end
+
+def check_driver_responds_to(method)
+  unless page.driver.respond_to?(method)
+    raise "Current driver does not support the #{method} method. Try using rack::test instead."
+  end
+end
+
+def check_response_responds_to(method)
+  unless page.driver.response.respond_to?(method)
+    raise "Current driver response object does not support the #{method} method. Try using rack::test instead."
+  end
+end

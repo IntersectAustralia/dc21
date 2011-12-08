@@ -18,4 +18,4 @@ Feature: Upload files
     Then users should be required to login on the upload page
 
   Scenario: Must be logged in to upload
-    Given pending
+    #TODO
