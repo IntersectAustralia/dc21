@@ -30,12 +30,12 @@ Dc21app::Application.routes.draw do
     get :about
   end
 
-  resource :data_files do
-    get :index
-    get :show
-    get :new
-    get :create
+  resources :data_files do
+    member do
+      get :download
+    end
   end
+
 
   root :to => "pages#home"
 
