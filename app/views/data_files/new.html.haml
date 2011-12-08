@@ -1,18 +1,8 @@
 %h1 Data / Upload
 #content_container
-  = link_to "Pick files to upload", upload_data_path, :class => "bluebutton"
-  %h3.upload Displaying 0 of 0 results
-  %table#exploredata
-    %tr.header
-      %th.view Completed
-      %th.lastname File Name
-      %th.email 
-      %th.date File Type
-      %th.date Tags
-      %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td
-  .actions
-    .cancelbutton
-      %span
-      = link_to 'Cancel', root_path, :class => "cancelbutton"
-    = link_to "Submit Files", root_url, :class => "bluebutton floatright"
+  = render :partial => 'applet', :locals => {:allow_multiselect => true,
+                                                  :file_selection_mode => "files_only",
+                                                  :upload_url => data_files_url(:format => :json)}
+
+  #upload_notifications
+  

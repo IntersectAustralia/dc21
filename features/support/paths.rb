@@ -49,6 +49,9 @@ module NavigationHelpers
     when /the data file details page for (.*)$/
       data_file_path(DataFile.find_by_filename($1))
 
+    when /the upload page/
+      new_data_file_path
+
 # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
