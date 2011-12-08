@@ -12,7 +12,9 @@ set :shell, '/bin/bash'
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
 set :rvm_type, :user
 
-# Deploy using copy since the servers can't see our SVN server
+# Deploy using copy for now
+set :scm, 'git'
+set :repository, 'ssh://git.intersect.org.au/git/dc21'
 set :deploy_via, :copy
 set :copy_exclude, [".git/*"]
 
