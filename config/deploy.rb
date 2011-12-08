@@ -6,10 +6,10 @@ require 'bundler/capistrano'
 set :application, 'dc21app'
 set :stages, %w(qa staging production)
 set :default_stage, "qa"
-set :rpms, %w{httpd-devel apr-devel apr-util-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql84-server postgresql84 postgresql84-devel}
+set :rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql84-server postgresql84 postgresql84-devel}
 set :shared_children, shared_children + %w(log_archive)
 set :shell, '/bin/bash'
-set :rvm_ruby_string, 'ruby-1.9.2-p180@acdata'
+set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
 set :rvm_type, :user
 
 # Deploy using copy since the servers can't see our SVN server
@@ -127,6 +127,7 @@ namespace :deploy do
   desc "Full redepoyment, it runs deploy:update and deploy:refresh_db"
   task :full_redeploy do
     update
+    rebundle
     refresh_db
   end
 
