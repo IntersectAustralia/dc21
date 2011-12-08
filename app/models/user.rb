@@ -137,6 +137,21 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}".strip
   end
 
+  def status_description
+    case self.status
+      when 'A'
+        "Active"
+      when 'D'
+        "Deactivated"
+      when 'U'
+        "Pending Approval"
+      when 'R'
+        "Rejected"
+      else
+        "Unknown" 
+    end
+  end
+
   private
 
   def initialize_status

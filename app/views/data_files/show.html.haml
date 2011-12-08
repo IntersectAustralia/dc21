@@ -1,7 +1,7 @@
 - title @data_file.filename
 
-= link_to "Back", data_files_path
-= link_to "Download", download_data_file_path(@data_file)
+= link_to "Back", data_files_path, :class => "cancelbutton"
+= link_to "Download", download_data_file_path(@data_file), :class => "bluebutton"
 
 = render_field "Name", @data_file.filename
 = render_field "Date added", @data_file.created_at.to_s(:with_time)
