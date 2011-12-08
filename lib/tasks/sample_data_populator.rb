@@ -57,7 +57,7 @@ end
 
 def create_rejected_user(attrs)
   user = User.new(attrs.merge(:password => "Pass.123"))
-  user.reject_access_request
+  user.status = "R"
   user.save!
   user
 end
