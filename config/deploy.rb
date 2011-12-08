@@ -22,7 +22,7 @@ set(:user) { "#{defined?(user) ? user : 'devel'}" }
 set(:group) { "#{defined?(group) ? group : user}" }
 set(:user_home) { "/home/#{user}" }
 set(:deploy_to) { "#{user_home}/#{application}" }
-set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/acdata-samples'}" }
+set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-samples'}" }
 
 default_run_options[:pty] = true
 
