@@ -1,33 +1,88 @@
-set :stages, %w(qa staging production)
-set :default_stage, "qa"
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+require 'rvm/capistrano'
 require 'capistrano/ext/multistage'
-
 require 'bundler/capistrano'
 
 set :application, 'dc21app'
-set :repository, Proc.new { `svn info | grep URL | sed 's/URL: //'`.chomp }
+set :stages, %w(qa staging production)
+set :default_stage, "qa"
+set :rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql84-server postgresql84 postgresql84-devel}
+set :shared_children, shared_children + %w(log_archive)
+set :shell, '/bin/bash'
+set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
+set :rvm_type, :user
 
-set :scm, :subversion
-
-# Deploy using copy since the servers can't see our SVN server
+# Deploy using copy for now
+set :scm, 'git'
+set :repository, 'ssh://git.intersect.org.au/git/dc21'
 set :deploy_via, :copy
-set :copy_exclude, [".svn/*"]
+set :copy_exclude, [".git/*"]
 
-set :user, "devel"
-user_home = "/home/#{user}"
-set :deploy_to, "#{user_home}/#{application}"
+set(:user) { "#{defined?(user) ? user : 'devel'}" }
+set(:group) { "#{defined?(group) ? group : user}" }
+set(:user_home) { "/home/#{user}" }
+set(:deploy_to) { "#{user_home}/#{application}" }
+set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-samples'}" }
 
 default_run_options[:pty] = true
 
-namespace :custom do
-  task :dir_perms do
-    run "[[ -d #{deploy_to} ]] || #{try_sudo} mkdir #{deploy_to}"
-    run "#{try_sudo} chown -R devel.devel #{deploy_to}"
-    run "#{try_sudo} chmod 0711 #{user_home}"
+namespace :server_setup do
+  task :rpm_install, :roles => :app do
+    run "#{try_sudo} yum install -y #{rpms.join(' ')}"
+  end
+  namespace :filesystem do
+    task :dir_perms, :roles => :app do
+      run "[[ -d #{data_dir} ]] || #{try_sudo} mkdir -p #{data_dir}"
+      run "#{try_sudo} chown -R #{user}.#{group} #{data_dir}"
+      run "[[ -d #{deploy_to} ]] || #{try_sudo} mkdir #{deploy_to}"
+      run "#{try_sudo} chown -R #{user}.#{group} #{deploy_to}"
+      run "#{try_sudo} chmod 0711 #{user_home}"
+    end
+  end
+  namespace :rvm do
+    task :trust_rvmrc do
+      run "rvm rvmrc trust #{release_path}"
+    end
+  end
+  task :gem_install, :roles => :app do
+    run "gem install bundler passenger"
+  end
+  task :passenger, :roles => :app do
+    run "passenger-install-apache2-module -a"
+  end
+  namespace :config do
+    task :apache do
+      src = "#{release_path}/config/httpd/#{stage}_rails_#{application}.conf"
+      dest = "/etc/httpd/conf.d/rails_#{application}.conf"
+      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} && #{try_sudo} /sbin/service httpd graceful; /bin/true"
+    end
+  end
+  namespace :logging do
+    task :rotation, :roles => :app do
+      src = "#{release_path}/config/#{application}.logrotate"
+      dest = "/etc/logrotate.d/#{application}"
+      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest}; /bin/true"
+      src = "#{release_path}/config/httpd/httpd.logrotate"
+      dest = "/etc/logrotate.d/httpd"
+      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest}; /bin/true"
+    end
   end
 end
 
-after 'deploy:setup', "custom:dir_perms"
+before 'deploy:setup' do
+  server_setup.rpm_install
+  server_setup.rvm.trust
+  server_setup.gem_install
+  server_setup.passenger
+end
+after 'deploy:setup' do
+  server_setup.filesystem.dir_perms
+end
+after 'deploy:update' do
+  server_setup.logging.rotation
+  server_setup.config.apache
+  deploy.restart
+end
 
 namespace :deploy do
 
@@ -71,17 +126,11 @@ namespace :deploy do
     run("cd #{current_path} && rake db:seed", :env => {'RAILS_ENV' => "#{stage}"})
   end
 
-  # Set the revision
-  desc "Set SVN revision on the server so that we can see it in the deployed application"
-  task :set_svn_revision, :roles => :app do
-    put("#{real_revision}", "#{release_path}/app/views/layouts/_revision.rhtml")
-  end
-
-  desc "Full redepoyment, it runs deploy:update, deploy:refresh_db, and deploy:copy_to_passenger"
+  desc "Full redepoyment, it runs deploy:update and deploy:refresh_db"
   task :full_redeploy do
     update
+    rebundle
     refresh_db
-    copy_to_passenger
   end
 
   # Helper task which re-creates the database
@@ -95,7 +144,6 @@ end
 
 after 'deploy:update_code' do
   generate_database_yml
-  deploy.set_svn_revision
 end
 
 desc "After updating code we need to populate a new database.yml"

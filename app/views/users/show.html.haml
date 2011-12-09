@@ -13,15 +13,7 @@
         - else
           = @user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
     = render_field "Role", (@user.role ? @user.role.name : "")
-    = render_field_with_block "Status" do
-      - if @user.status == 'A'
-        Active
-      - elsif @user.status == 'D'
-        Deactivated
-      - elsif @user.status == 'U'
-        Pending Approval
-      - elsif @user.status == 'R'
-        Rejected
+    = render_field "Status", @user.status_description
     .actions
       - if @user.pending_approval?
         .floatright

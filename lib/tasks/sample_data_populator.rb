@@ -1,49 +1,77 @@
 def populate_data
-
-  User.delete_all
-
   create_test_users
-
   create_test_files
 end
 
 def create_test_files
   DataFile.delete_all
-  DataFile.create!(:format => "file", :path => "/data/dc21-data/sample.txt", :filename => "sample.txt", :created_by => User.first, :start_time => Time.now - 3.days, :end_time => Time.now - 1.day)
-  DataFile.create!(:format => "file", :path => "/data/dc21-data/sample2.txt", :filename => "sample2.txt", :created_by => User.first, :start_time => Time.now - 3.years, :end_time => Time.now - 1.year)
-  DataFile.create!(:format => "file", :path => "/data/dc21-data/sample3.txt", :filename => "sample3.txt", :created_by => User.last)
+  create_data_file("sample1.txt", "georgina@intersect.org.au")
+  create_data_file("sample2.txt", "sean@intersect.org.au")
+  create_data_file("weather_station_15_min.dat", "sean@intersect.org.au")
+  create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
+  create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
 end
 
 def create_test_users
+  User.delete_all
   create_user(:email => "sean@intersect.org.au", :first_name => "Sean", :last_name => "McCarthy")
   create_user(:email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")
-  create_user(:email => "veronica@intersect.org.au", :first_name => "Veronica", :last_name => "Luke")
-  create_user(:email => "shuqian@intersect.org.au", :first_name => "Shuqian", :last_name => "Hon")
+  create_user(:email => "matthew@intersect.org.au", :first_name => "Matthew", :last_name => "Hillman")
+  create_user(:email => "kali@intersect.org.au", :first_name => "Kali", :last_name => "Waterford")
+  create_user(:email => "researcher1@intersect.org.au", :first_name => "Researcher", :last_name => "One")
+  r2 = create_user(:email => "researcher2@intersect.org.au", :first_name => "Researcher", :last_name => "Two")
+  r2.deactivate
+  create_rejected_user(:email => "rejected@intersect.org.au", :first_name => "Rejected", :last_name => "One")
   create_unapproved_user(:email => "unapproved1@intersect.org.au", :first_name => "Unapproved", :last_name => "One")
   create_unapproved_user(:email => "unapproved2@intersect.org.au", :first_name => "Unapproved", :last_name => "Two")
   set_role("sean@intersect.org.au", "Administrator")
   set_role("georgina@intersect.org.au", "Administrator")
-  set_role("veronica@intersect.org.au", "Administrator")
-  set_role("shuqian@intersect.org.au", "Administrator")
+  set_role("matthew@intersect.org.au", "Administrator")
+  set_role("kali@intersect.org.au", "Administrator")
+  set_role("researcher1@intersect.org.au", "Researcher")
+  set_role("researcher2@intersect.org.au", "Researcher")
 
 end
 
+def create_data_file(filename, uploader)
+  # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
+  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
+  params = {:file_1 => file, :dirStruct => "[{\"file_1\":\"#{filename}\"}]"}
+  builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
+  builder.build
+end
+
 def set_role(email, role)
-  user      = User.where(:email => email).first
-  role      = Role.where(:name => role).first
+  user = User.where(:email => email).first
+  role = Role.where(:name => role).first
   user.role = role
   user.save!
 end
 
 def create_user(attrs)
-  u = User.new(attrs.merge(:password => "Pass.123"))
-  u.activate
-  u.save!
+  user = User.new(attrs.merge(:password => "Pass.123"))
+  user.activate
+  user.save!
+  user
+end
+
+def create_rejected_user(attrs)
+  user = User.new(attrs.merge(:password => "Pass.123"))
+  user.status = "R"
+  user.save!
+  user
 end
 
 def create_unapproved_user(attrs)
-  u = User.create!(attrs.merge(:password => "Pass.123"))
-  u.save!
+  user = User.create!(attrs.merge(:password => "Pass.123"))
+  user.save!
+  user
 end
 
+def get_file_path
+  config_file = File.expand_path('../../../config/dc21_config.yml', __FILE__)
+  config = YAML::load_file(config_file)
+  env = ENV["RAILS_ENV"] || "development"
+  config[env]['files_root']
+end
 

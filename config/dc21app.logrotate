@@ -1,0 +1,10 @@
+/home/devel/dc21app/shared/log/*.log {
+    rotate 520
+    weekly
+    copytruncate
+    missingok
+    notifempty
+    olddir /home/devel/dc21app/shared/log_archive
+    compress
+    dateext
+}

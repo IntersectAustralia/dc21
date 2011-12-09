@@ -65,39 +65,40 @@ describe User do
     end
   end
 
-  describe "Status Methods" do
-    context "Active" do
-      it "should be active" do
-        user = Factory(:user, :status => 'A')
-        user.approved?.should be_true
-      end
-      it "should not be pending approval" do
-        user = Factory(:user, :status => 'A')
-        user.pending_approval?.should be_false
-      end
+  describe "Status methods and status description" do
+    let(:active) {Factory(:user, :status => 'A')}
+    let(:deactivated) {Factory(:user, :status => 'D')}
+    let(:rejected) {Factory(:user, :status => 'R')}
+    let(:pending_approval) {Factory(:user, :status => 'U')}
+    it "should identify active users correctly" do
+      active.approved?.should be_true
+      active.pending_approval?.should be_false
+      active.deactivated?.should be_false
+      active.rejected?.should be_false
+      active.status_description.should == "Active"
+    end
+    it "should identify deactivated users correctly" do
+      deactivated.approved?.should be_false
+      deactivated.pending_approval?.should be_false
+      deactivated.deactivated?.should be_true
+      deactivated.rejected?.should be_false
+      deactivated.status_description.should == "Deactivated"
+    end
+    it "should identify rejected users correctly" do
+      rejected.approved?.should be_false
+      rejected.pending_approval?.should be_false
+      rejected.deactivated?.should be_false
+      rejected.rejected?.should be_true
+      rejected.status_description.should == "Rejected"
+    end
+    it "should identify pending approval users correctly" do
+      pending_approval.approved?.should be_false
+      pending_approval.pending_approval?.should be_true
+      pending_approval.deactivated?.should be_false
+      pending_approval.rejected?.should be_false
+      pending_approval.status_description.should == "Pending Approval"
     end
 
-    context "Unapproved" do
-      it "should not be active" do
-        user = Factory(:user, :status => 'U')
-        user.approved?.should be_false
-      end
-      it "should be pending approval" do
-        user = Factory(:user, :status => 'U')
-        user.pending_approval?.should be_true
-      end
-    end
-
-    context "Rejected" do
-      it "should not be active" do
-        user = Factory(:user, :status => 'R')
-        user.approved?.should be_false
-      end
-      it "should not be pending approval" do
-        user = Factory(:user, :status => 'R')
-        user.pending_approval?.should be_false
-      end
-    end
   end
 
   describe "Update password" do
