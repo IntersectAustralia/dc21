@@ -96,20 +96,13 @@ $(window).load(function() {
   // SEARCH /////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-
   $('#search').click(function(event) {
-    $('.searchcontainer').fadeToggle('normal', function() {} );
-    $("#search").animate({width:'toggle'},550);
-    $('.searchactions').fadeToggle('normal', function() {} );
-    $('#newdataentry').toggleClass('bluebutton');
-    $('#newdataentry').toggleClass('whitebutton');
+    $('.searchbox').animate({width:'toggle'},550);
+    $('#search').toggle();
   });
   $('.searchclose').click(function(event) {
-    $('.searchcontainer').fadeToggle('normal', function() {} );
-    $("#search").animate({width:'toggle'},550);
-    $('.searchactions').fadeToggle('normal', function() {} );
-    $('#newdataentry').toggleClass('bluebutton');
-    $('#newdataentry').toggleClass('whitebutton');
+    $('#search').fadeToggle();
+    $('.searchbox').toggle();
   });
 
 });

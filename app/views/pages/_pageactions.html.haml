@@ -1,15 +1,15 @@
 .pageactions
-  = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
-  #search.search.whitebutton.floatright
-    %label{ :for => "datasearch"} Search Data
-  .searchactions.floatright
-    .options.whitebutton
-      %span Advanced Search
-    .close.searchclose.redbutton
-      %span ×
-.searchcontainer
-  .close.reset
-    %span.searchreset ×
-  <input id="datasearch" name="datasearch" type="text" placeholder="Search...">
-  .search.datasearchsubmit.bluebutton
-    %span
+  = link_to "+ New Data Entry", new_data_files_path, :id => "newdataentry", :class => "bluebutton"
+  .searchcontainer
+
+    .searchbox
+      <input id="datasearch" name="datasearch" type="text" placeholder="Search...">
+      .search.datasearchsubmit.bluebutton
+        %span
+      .searchactions
+        .options.whitebutton
+          %span
+        .close.searchclose.redbutton
+          %span ×
+    #search.search.whitebutton
+      %label{ :for => "datasearch"} Search Data

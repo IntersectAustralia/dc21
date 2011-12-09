@@ -93,12 +93,27 @@ th.actions, td.actions
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
+.pageactions
+  .bluebutton
+    +m-p-w-h-p-t-b-l-r-f("", 6px 10px)
+
 .searchcontainer
-  +m-p-w-h-p-t-b-l-r-f(20px 0 10px 0)
-  display: none
+  +inlineblock
+  float: right
+  .searchbox, .search
+    +inlineblock
+    .bluebutton
+      +m-p-w-h-p-t-b-l-r-f("", "", "", 18px)
+  .searchbox
+    +m-p-w-h-p-t-b-l-r-f("", "", 861px, 32px)
+    +inlineblock
+    display: none
 
 .searchactions
-  display: none
+  +m-p-w-h-p-t-b-l-r-f("")
+  +inlineblock
+  .options, .close
+    +m-p-w-h-p-t-b-l-r-f("", 6px 10px)
 
 .close.reset
   +m-p-w-h-p-t-b-l-r-f(0 -435px 0 0, "", "", "", absolute, 167px, "", "", 50%)
@@ -106,11 +121,11 @@ th.actions, td.actions
 
 input#datasearch
   +inlineblock
-  +m-p-w-h-p-t-b-l-r-f(3px -10px 3px 0, "", 982px)
+  +m-p-w-h-p-t-b-l-r-f(0 -10px 0 0, "", 660px)
 
 input.datasearchsubmit
   +inlineblock
-  +m-p-w-h-p-t-b-l-r-f(3px 0 3px -144px, "", "", 32px, "", "", "", "", "", right)
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 -144px, "", "", 32px, "", "", "", "", "", right)
 
 #exploredata th
   padding: 10px 25px 9px 0
