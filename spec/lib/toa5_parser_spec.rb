@@ -15,12 +15,19 @@ describe Toa5Parser do
       data_file.end_time.should eq("3/11/2011 11:55")
     end
 
-    it "should extract datalogger model" do
+    it "should extract datalogger info from first line" do
       data_file = toa5_dat
       Toa5Parser.extract_metadata(data_file)
       # reload to make sure it survives being persisted
       data_file.reload
+
       data_file.metadata[:datalogger_model].should eq("CR3000")
+      data_file.metadata[:station_name].should eq("ROS_WS")
+      data_file.metadata[:serial_number].should eq("4909")
+      data_file.metadata[:os_version].should eq("CR3000.Std.11")
+      data_file.metadata[:dld_name].should eq("CPU:weather_station_final.CR3")
+      data_file.metadata[:dld_signature].should eq("30238")
+      data_file.metadata[:table_name].should eq("Table05min")
     end
   end
 end
