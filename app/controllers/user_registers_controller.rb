@@ -69,6 +69,16 @@ class UserRegistersController < Devise::RegistrationsController
     end
   end
 
+  def get_authentication_token
+    if current_user.nil?
+      head :unauthorized
+    else
+      current_user.reset_authentication_token!
+      render :json => current_user.authentication_token.to_json
+    end
+  end
+
+
   protected
   def after_update_path_for(resource)
     users_profile_path

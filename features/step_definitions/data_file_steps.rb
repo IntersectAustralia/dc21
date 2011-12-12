@@ -19,23 +19,26 @@ end
 
 When /^I upload "([^"]*)" through the applet$/ do |filename|
   #post to the upload controller just like the applet would
-  #user = User.find_by_email(user)
-  #user.reset_authentication_token!
-  #token = user.authentication_token
-  post_path = data_files_url(:format => :json) #, :auth_token => token)
+  user = User.first
+  user.reset_authentication_token!
+  token = user.authentication_token
+  post_path = data_files_url(:format => :json, :auth_token => token)
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
   post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+end
+
+When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|
+  #post to the upload controller just like the applet would
+  post_path = data_files_url(:format => :json, :auth_token => "blah")
+  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
+  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response.status.should eq(401)
 end
 
 Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|
   page.response_headers['Content-Type'].should == type
   page.response_headers['Content-Disposition'].should include("filename=\"#{name}\"")
   page.response_headers['Content-Disposition'].should include("attachment")
-  #check_driver_responds_to(:response)
-  #check_response_responds_to(:content_type)
-  ##page.driver.response.content_type.should == type
-  #check_response_responds_to(:content_disposition)
-  #page.driver.response.content_disposition.should == "AAH"
 end
 
 Then /^the file should contain "([^"]*)"$/ do |expected|

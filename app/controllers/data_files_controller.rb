@@ -1,7 +1,7 @@
 class DataFilesController < ApplicationController
 
-  before_filter :authenticate_user!, :except => [:create]
-  load_and_authorize_resource :except => [:create]
+  before_filter :authenticate_user!
+  load_and_authorize_resource
   set_tab :home
 
   def index

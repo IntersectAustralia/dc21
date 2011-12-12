@@ -18,4 +18,5 @@ Feature: Upload files
     Then users should be required to login on the upload page
 
   Scenario: Must be logged in to upload
-#TODO
+    Given I am on the upload page
+    When I attempt to upload "sample1.txt" through the applet without an auth token I should get an error
