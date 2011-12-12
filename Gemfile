@@ -28,7 +28,7 @@ gem "simplecov", ">=0.3.8", :require => false, :group => :test
 
 group :development, :test do
   gem "rspec-rails"
-  gem "factory_girl_rails"
+  gem "factory_girl_rails", :require => false
   gem "shoulda"
 
   # cucumber gems
