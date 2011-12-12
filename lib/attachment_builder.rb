@@ -14,17 +14,17 @@ class AttachmentBuilder
     file_list = ActiveSupport::JSON.decode(json_string)
     Rails.logger.debug("AttachmentBuilder.build file_list=#{file_list.inspect}")
 
-    # Turn tree into some attributes ready to build attachments
+    # Turn tree into some attributes ready to build files
     candidates = []
     file_list.each do |file_tree|
       attrs = process_file_or_folder(dest_dir, file_tree)
       candidates << attrs
     end
 
-    process_attachments(candidates, dest_dir)
+    process_files(candidates, dest_dir)
   end
 
-  def process_attachments(candidates, dest_dir)
+  def process_files(candidates, dest_dir)
     result = {}
 
     if !Dir.exist? dest_dir
@@ -32,29 +32,31 @@ class AttachmentBuilder
       FileUtils.mkdir_p(dest_dir)
     end
 
-    create_attachments(candidates, dest_dir, result)
+    create_data_files(candidates, dest_dir, result)
   end
 
-  def create_attachments(new_attachments, dest_dir, result)
-    new_attachments.each do |attributes|
+  def create_data_files(new_files, dest_dir, result)
+    new_files.each do |attributes|
       Rails.logger.info("Processing: #{attributes}")
 
-      attachment = DataFile.create(attributes.merge({:created_by => @current_user}))
-      if attachment.save
+      data_file = DataFile.create(attributes.merge({:created_by => @current_user}))
+      if data_file.save
         result[attributes[:filename]] = {:status => "success", :message => ""}
-        process_metadata(attachment)
+        process_metadata(data_file)
       else
-        Rails.logger.info("Failed: #{attachment.errors}")
-        result[attributes[:filename]] = {:status => "failure", :message => attachment.errors}
+        Rails.logger.info("Failed: #{data_file.errors}")
+        result[attributes[:filename]] = {:status => "failure", :message => data_file.errors}
       end
     end
     result
   end
 
-  def process_metadata(attachment)
-    known, type = @file_type_determiner.identify_file(attachment)
+  def process_metadata(data_file)
+    known, type = @file_type_determiner.identify_file(data_file)
     if known
-      @metadata_extractor.extract_metadata(attachment, type)
+      @metadata_extractor.extract_metadata(data_file, type)
+      data_file.format = type
+      data_file.save
     end
   end
 
@@ -66,12 +68,10 @@ class AttachmentBuilder
 
   def process_file_or_folder(dest_dir, file_tree)
     filename = write_files(dest_dir, file_tree)
-    format = 'file'
     path = File.join(dest_dir, filename)
 
     {:filename => filename,
-     :path => path,
-     :format => format}
+     :path => path}
   end
 
   def get_filename(file_tree)
@@ -89,10 +89,6 @@ class AttachmentBuilder
       end
       FileUtils.cp_r(file.path, upload_path)
     end
-  end
-
-  def add_metadata(attachment)
-    # do nothing right now
   end
 
 end

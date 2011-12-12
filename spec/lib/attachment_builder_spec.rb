@@ -54,6 +54,7 @@ describe AttachmentBuilder do
       DataFile.count.should eq(1)
       data_file = DataFile.first
       data_file.filename.should == "file.a"
+      data_file.format.should == "TOA5"
     end
 
     it "should not extract metadata if file type is unknown" do
@@ -71,6 +72,7 @@ describe AttachmentBuilder do
       DataFile.count.should eq(1)
       data_file = DataFile.first
       data_file.filename.should == "file.a"
+      data_file.format.should be_nil
     end
 
     after(:each) do
