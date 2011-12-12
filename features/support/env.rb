@@ -59,4 +59,5 @@ Spork.each_run do
   #     DatabaseCleaner.strategy = :transaction
   #   end
   #
+  require 'factory_girl_rails'
 end
