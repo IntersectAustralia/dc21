@@ -16,7 +16,8 @@
             = tab.login 'Log in', root_url
             = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
           - else
-            = tab.admin 'Admin', users_path
+            - if can?(:read, User)
+              = tab.admin 'Admin', users_path
             = tabs_tag(:builder => AccountTabBuilder) do |tab|
               = tab.account current_user.email, :id => "accountmenu"
             #accountmenu_container
