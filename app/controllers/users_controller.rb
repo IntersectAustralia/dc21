@@ -10,7 +10,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    set_tab :accessrequests, :contentnavigation
+    if @user.pending_approval?
+      set_tab :accessrequests, :contentnavigation
+    else
+      set_tab :users, :contentnavigation
+    end
   end
 
   def admin
