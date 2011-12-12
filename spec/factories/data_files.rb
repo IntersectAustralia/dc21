@@ -3,7 +3,6 @@
 FactoryGirl.define do
   factory :data_file do
       filename "MyString"
-      format "MyString"
       path "MyString"
     end
 end

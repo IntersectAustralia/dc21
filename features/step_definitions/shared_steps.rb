@@ -4,28 +4,28 @@ Then /^I should see "([^"]*)" table with$/ do |table_id, expected_table|
 end
 
 Then /^I should see field "([^"]*)" with value "([^"]*)"$/ do |field, value|
-  # this assumes you're using the helper to render the field which sets the div id based on the field name
-  div_id = field.tr(" ,", "_").downcase
-  # use a quoted selector so it doesn't pass through the selectors.rb logic
-  div_scope = "\"div#display_#{div_id}\""
-  with_scope(div_scope) do
-    page.should have_content(field)
-    page.should have_content(value)
-  end
+  # this assumes you're using the helper to render the field and therefore have the usual div/label/span setup
+  check_displayed_field(field, value)
 end
 
 Then /^I should see details displayed$/ do |table|
-  # as above, this assumes you're using the helper to render the field which sets the div id based on the field name
+  # as above, this assumes you're using the helper to render the field and therefore have the usual div/label/span setup
   table.rows.each do |row|
-    field = row[0]
-    value = row[1]
-    div_id = field.tr(" ,", "_").downcase
-    div_scope = "\"div#display_#{div_id}\""
-    with_scope(div_scope) do
-      page.should have_content(field)
-      page.should have_content(value)
+    check_displayed_field(row[0], row[1])
+  end
+end
+
+def check_displayed_field(label, value)
+  fields = all(".rowform").map { |div| div.all('label, span').map { |cell| cell.text.strip } }
+  found = false
+  fields.each do |row|
+    if row[0] == (label + ":")
+      row[1].should eq(value)
+      found = true
     end
   end
+
+  raise "Didn't find displayed field with label '#{label}'" unless found
 end
 
 Then /^I should see button "([^"]*)"$/ do |arg1|
@@ -80,7 +80,7 @@ end
 
 When /^(?:|I )deselect "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
-    unselect(value, :from => field)
+    unselect(row[1], :from => row[0])
   end
 end
 
