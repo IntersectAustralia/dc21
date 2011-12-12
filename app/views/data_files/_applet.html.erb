@@ -98,7 +98,7 @@
             var message = value.message;
 
             if (fileStatus == "success") {
-                findLatestFile(filename).html('<span class="success">' + filename + '</span>');
+                findLatestFile(filename).html('<span class="success">' + filename + ' - done</span>');
             } else {
                 //TODO: for now we just display a failure message, later we may want to do something with the message
                 findLatestFile(filename).html(failedToUpload(filename, message));
@@ -107,7 +107,23 @@
     }
 
     function getAuthToken() {
-        return "";
+      var token;
+      $.ajax({
+          url: '<%= users_get_authentication_token_url(:format => :json) %>',
+          dataType: 'json',
+          data: {},
+          async: false,
+          cache: false,
+          success: function(json) {
+            token = json.toString();
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status != 401) {
+              unauthorisedError();
+            }
+          }
+      });
+      return token;
     }
 
 
