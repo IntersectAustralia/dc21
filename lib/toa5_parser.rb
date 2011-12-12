@@ -30,13 +30,27 @@ class Toa5Parser
       data_file.add_metadata_item(:dld_signature, dld_signature) unless dld_signature.blank?
       data_file.add_metadata_item(:table_name, table_name) unless table_name.blank?
     end
+
+    if interesting_lines[:line_2] && interesting_lines[:line_3] && interesting_lines[:line_4]
+      headers = interesting_lines[:line_2].gsub("\n", "").split("\t")
+      units = interesting_lines[:line_3].gsub("\n", "").split("\t")
+      col_types = interesting_lines[:line_4].gsub("\n", "").split("\t")
+      data_file.add_metadata_item(:column_headers, extract_column_info(headers, units, col_types))
+    end
     data_file.save!
   end
 
+  def self.extract_column_info(headers, units, col_types)
+    col_info = []
+    headers.each_with_index do |header, index|
+      col_info << [header, units[index], col_types[index]]
+    end
+    col_info
+  end
 
   def self.extract_time_from_data_line(line)
     details = line.split("\t")
-    time_string = details.first + " UTC" #force to consider it UTC as we don't know the timezone
+    time_string = details.first + " UTC" #force to consider it UTC as we don't know the timezone  
     Time.parse(time_string)
   end
 
@@ -45,6 +59,9 @@ class Toa5Parser
     lines = {}
     file.each_line do |line|
       lines[:line_1] = line if counter == 1
+      lines[:line_2] = line if counter == 2
+      lines[:line_3] = line if counter == 3
+      lines[:line_4] = line if counter == 4
       lines[:line_5] = line if counter == 5
       lines[:last_line] = line
       counter += 1

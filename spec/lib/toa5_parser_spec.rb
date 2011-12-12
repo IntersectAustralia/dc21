@@ -29,5 +29,24 @@ describe Toa5Parser do
       data_file.metadata[:dld_signature].should eq("30238")
       data_file.metadata[:table_name].should eq("Table05min")
     end
+
+    it "should extract column header information" do
+      data_file = toa5_dat
+      Toa5Parser.extract_metadata(data_file)
+      # reload to make sure it survives being persisted
+      data_file.reload
+
+      #TIMESTAMP	RECORD	PPFD_Avg	AirTC_Avg	RH	WS_ms_Avg	WS_ms_Max	WindDir	NetSW_Avg	NetLW_Avg	NetRad_Avg	LWmV_Avg	LWMDry_Tot	LWMCon_Tot	LWMWet_Tot
+      #TS	RN	mV	Deg C	%	meters/second	meters/second	degrees	W/m^2	W/m^2	W/m^2	mV	Minutes	Minutes	Minutes
+      #    Avg	Avg	Smp	Avg	Max	Smp	Avg	Avg	Avg	Avg	Tot	Tot	Tot
+
+      headers = data_file.metadata[:column_headers]
+      headers.is_a?(Array).should be_true
+      headers.length.should eq(15)
+      headers[0].should eq(["TIMESTAMP", "TS", ""])
+      headers[1].should eq(["RECORD", "RN", ""])
+      headers[2].should eq(["PPFD_Avg", "mV", "Avg"])
+      headers[14].should eq(["LWMWet_Tot", "Minutes", "Tot"])
+    end
   end
 end

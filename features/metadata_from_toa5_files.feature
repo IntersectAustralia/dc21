@@ -28,3 +28,20 @@ Feature: Viewing metadata from toa5 files
       | Dld name         | CPU:weather_station_final.CR3 |
       | Dld signature    | 30238                         |
       | Table name       | Table05min                    |
+    And I should see "column_info" table with
+      | Column     | Unit         | Measurement Type |
+      | TIMESTAMP  | TS            |                  |
+      | RECORD     | RN            |                  |
+      | PPFD_Avg   | mV            | Avg              |
+      | AirTC_Avg  | Deg C         | Avg              |
+      | RH         | %             | Smp              |
+      | WS_ms_Avg  | meters/second | Avg              |
+      | WS_ms_Max  | meters/second | Max              |
+      | WindDir    | degrees       | Smp              |
+      | NetSW_Avg  | W/m^2         | Avg              |
+      | NetLW_Avg  | W/m^2         | Avg              |
+      | NetRad_Avg | W/m^2         | Avg              |
+      | LWmV_Avg   | mV            | Avg              |
+      | LWMDry_Tot | Minutes       | Tot              |
+      | LWMCon_Tot | Minutes       | Tot              |
+      | LWMWet_Tot | Minutes       | Tot              |

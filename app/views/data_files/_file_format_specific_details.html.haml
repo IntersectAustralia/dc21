@@ -1,3 +1,15 @@
 - if @data_file.format == "TOA5"
-  - @data_file.metadata.each do |key, value|
+  - @data_file.metadata_key_value_pairs.each do |key, value|
     = render_field key.to_s.humanize, value
+
+  %h3 Data File Columns
+  %table#column_info
+    %tr
+      %th Column
+      %th Unit
+      %th Measurement Type
+    - @data_file.metadata[:column_headers].each do |col_info|
+      %tr
+        %td= col_info[0]
+        %td= col_info[1]
+        %td= col_info[2]
