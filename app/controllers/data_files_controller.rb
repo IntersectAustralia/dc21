@@ -3,11 +3,12 @@ class DataFilesController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
   set_tab :home
+  helper_method :sort_column, :sort_direction  
 
   def index
     set_tab :explore, :contentnavigation
-    @data_files = @data_files.most_recent_first
-  end
+    @data_files = DataFile.joins(:created_by).order(sort_column + ' ' + sort_direction)
+  end  
 
   def show
   end
@@ -33,5 +34,20 @@ class DataFilesController < ApplicationController
     file_params[:type] = content_type if content_type
     send_file @data_file.path, file_params
   end
+
+private 
+
+  def sort_column  
+    if params[:sort] == "users.email"
+      "users.email"
+    else params[:sort] != "users.email"
+      @data_files.column_names.include?(params[:sort]) ? params[:sort] : "id"
+    end  
+  end
+
+  def sort_direction  
+    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "asc"  
+  end  
+
 
 end

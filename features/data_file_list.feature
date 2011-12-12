@@ -23,3 +23,29 @@ Feature: View the list of data files
 
   Scenario: Must be logged in to view the list
     Then users should be required to login on the list data files page
+
+  Scenario: Sort the list of files by ascending start time
+    Given I have data files
+      | filename     | created_at       | uploaded_by               | start_time       | end_time            |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 2/7/2010 6:45:41 | 28/11/2011 22:05:11 |
+    When I am on the list data files page
+    And I follow "Start Time"
+    Then I should see "exploredata" table with
+      | filename     | created_at       | uploaded_by               | start_time       | end_time            |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 2/7/2010 6:45:41 | 28/11/2011 22:05:11 |
+
+  Scenario: Sort the list of files by descending emails
+    Given I have data files
+      | filename     | created_at       | uploaded_by               | start_time       | end_time            |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 2/7/2010 6:45:41 | 28/11/2011 22:05:11 |
+    When I am on the list data files page
+    And I follow "Added by"
+    And I follow "Added by"
+    Then I should see "exploredata" table with
+      | filename     | created_at       | uploaded_by               | start_time       | end_time            |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 2/7/2010 6:45:41 | 28/11/2011 22:05:11 |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 |
+

@@ -46,6 +46,9 @@ Then /^the file should contain "([^"]*)"$/ do |expected|
   expected.strip.should eq(actual)
 end
 
+
+
+
 def check_driver_responds_to(method)
   unless page.driver.respond_to?(method)
     raise "Current driver does not support the #{method} method. Try using rack::test instead."

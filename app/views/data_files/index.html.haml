@@ -9,11 +9,11 @@
     %table#exploredata
       %tr
         %th.view View
-        %th Name
-        %th Date added
-        %th Added by
-        %th Start time
-        %th End time
+        %th= sortable "filename" 
+        %th= sortable "created_at", "Date added"
+        %th= sortable "users.email", "Added by"
+        %th= sortable "start_time", "Start time"
+        %th= sortable "end_time", "End time"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
