@@ -1,5 +1,5 @@
 = render 'data_files/pageactions'
-%h1 Data / View / @data_file.filename
+%h1 Data / View / #{@data_file.filename}
 #content_container
   = render_field "Name", @data_file.filename
   = render_field "Date added", @data_file.created_at.to_s(:with_time)
