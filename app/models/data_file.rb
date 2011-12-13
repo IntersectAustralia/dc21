@@ -20,6 +20,11 @@ class DataFile < ActiveRecord::Base
     self.metadata[key] = value
   end
 
+  def metadata_key_value_pairs
+    #collect metadata items that are strings
+    metadata.reject {|k,v| !v.is_a?(String)}
+  end
+
   def format_for_display
     self.format.nil? ? "Unknown" : self.format
   end
