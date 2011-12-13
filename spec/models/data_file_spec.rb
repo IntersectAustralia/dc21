@@ -4,7 +4,7 @@ describe DataFile do
   describe "Validations" do
     it { should validate_presence_of(:filename) }
     it { should validate_presence_of(:path) }
-#TODO:    it { should validate_presence_of(:created_by_id) }
+    it { should validate_presence_of(:created_by_id) }
   end
 
   describe "Associations" do

@@ -2,7 +2,8 @@
 
 FactoryGirl.define do
   factory :data_file do
-      filename "MyString"
-      path "MyString"
-    end
+    filename "a-filename"
+    path "a-path"
+    association :created_by, :factory => :user
+  end
 end

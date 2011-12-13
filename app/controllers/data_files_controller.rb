@@ -17,7 +17,7 @@ class DataFilesController < ApplicationController
   end
 
   def create
-    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], nil, FileTypeDeterminer.new, MetadataExtractor.new)
+    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
     result = attachment_builder.build()
 
     respond_to do |format|

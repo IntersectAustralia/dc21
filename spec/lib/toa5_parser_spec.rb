@@ -7,6 +7,11 @@ describe Toa5Parser do
     Factory(:data_file, :path => path, :filename => 'toa5.dat')
   end
 
+  let(:toa5_dat_with_blanks) do
+    path = Rails.root.join('spec/samples', 'toa5_with_blanks.dat')
+    Factory(:data_file, :path => path, :filename => 'toa5_with_blanks.dat')
+  end
+
   describe "valid file" do
     it "should extract the start date from the file" do
       data_file = toa5_dat
@@ -36,10 +41,6 @@ describe Toa5Parser do
       # reload to make sure it survives being persisted
       data_file.reload
 
-      #TIMESTAMP	RECORD	PPFD_Avg	AirTC_Avg	RH	WS_ms_Avg	WS_ms_Max	WindDir	NetSW_Avg	NetLW_Avg	NetRad_Avg	LWmV_Avg	LWMDry_Tot	LWMCon_Tot	LWMWet_Tot
-      #TS	RN	mV	Deg C	%	meters/second	meters/second	degrees	W/m^2	W/m^2	W/m^2	mV	Minutes	Minutes	Minutes
-      #    Avg	Avg	Smp	Avg	Max	Smp	Avg	Avg	Avg	Avg	Tot	Tot	Tot
-
       headers = data_file.metadata[:column_headers]
       headers.is_a?(Array).should be_true
       headers.length.should eq(15)
@@ -47,6 +48,21 @@ describe Toa5Parser do
       headers[1].should eq(["RECORD", "RN", ""])
       headers[2].should eq(["PPFD_Avg", "mV", "Avg"])
       headers[14].should eq(["LWMWet_Tot", "Minutes", "Tot"])
+    end
+
+    it "should ignore blanks column header information" do
+      data_file = toa5_dat_with_blanks
+      Toa5Parser.extract_metadata(data_file)
+      # reload to make sure it survives being persisted
+      data_file.reload
+
+      headers = data_file.metadata[:column_headers]
+      headers.is_a?(Array).should be_true
+      headers.length.should eq(4)
+      headers[0].should eq(["TIMESTAMP", "TS", ""])
+      headers[1].should eq(["RECORD", "RN", ""])
+      headers[2].should eq(["BattV_Min", "Volts", "Min"])
+      headers[3].should eq(["PTemp_C_Max", "Deg C", "Max"])
     end
   end
 end

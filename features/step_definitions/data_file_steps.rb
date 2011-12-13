@@ -24,7 +24,9 @@ When /^I upload "([^"]*)" through the applet$/ do |filename|
   token = user.authentication_token
   post_path = data_files_url(:format => :json, :auth_token => token)
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
-  post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response.status.should eq(200)
+  DataFile.count.should_not eq(0)
 end
 
 When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|

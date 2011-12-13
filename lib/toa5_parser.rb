@@ -43,7 +43,7 @@ class Toa5Parser
   def self.extract_column_info(headers, units, col_types)
     col_info = []
     headers.each_with_index do |header, index|
-      col_info << [header, units[index], col_types[index]]
+      col_info << [header, units[index], col_types[index]] unless header.blank?
     end
     col_info
   end
