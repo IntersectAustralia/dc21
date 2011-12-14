@@ -25,6 +25,7 @@ gem "capistrano-ext"
 gem "capistrano"
 gem "metrical", :group => :test
 gem "simplecov", ">=0.3.8", :require => false, :group => :test
+gem "squeel"
 
 group :development, :test do
   gem "rspec-rails"

@@ -48,17 +48,9 @@ Then /^the file should contain "([^"]*)"$/ do |expected|
   expected.strip.should eq(actual)
 end
 
-
-
-
-def check_driver_responds_to(method)
-  unless page.driver.respond_to?(method)
-    raise "Current driver does not support the #{method} method. Try using rack::test instead."
-  end
+When /^I do a date search for data files with date "([^"]*)"$/ do |date|
+  visit path_to("the list data files page")
+  fill_in "Date", :with => date
+  click_button "Search"
 end
 
-def check_response_responds_to(method)
-  unless page.driver.response.respond_to?(method)
-    raise "Current driver response object does not support the #{method} method. Try using rack::test instead."
-  end
-end

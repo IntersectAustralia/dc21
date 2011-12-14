@@ -35,7 +35,40 @@ class DataFilesController < ApplicationController
     send_file @data_file.path, file_params
   end
 
-private 
+  def search
+    @searched = false
+    if params[:date]
+      @date = params[:date]
+      date = parse_date(@date)
+      if date
+        @searched = true
+        @data_files = DataFile.search_by_date(date)
+        if @data_files.empty?
+          @search_status_line = "No files found for #{date.to_s(:date_only)}."
+        else
+          @search_status_line = "Showing files containing data for #{date.to_s(:date_only)}."
+        end
+
+      end
+    end
+    render :index
+  end
+
+  private
+
+  def parse_date(text)
+    if params[:date].blank?
+      flash.now[:alert] = "Please enter a date"
+      return nil
+    end
+
+    begin
+      Date.parse(text)
+    rescue Exception
+      flash.now[:alert] = "The date you entered was invalid. Please enter a valid date."
+      nil
+    end
+  end
 
   def sort_column  
     if params[:sort] == "users.email"
