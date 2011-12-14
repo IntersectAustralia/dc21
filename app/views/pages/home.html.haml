@@ -8,17 +8,15 @@
   %h1 Home / Dashboard
   #content_container
     = render 'pages/contentnavigation'
-    .userpannel
-      .myprojects
-        %h3 My Projects
-      .recentuploads
-        %h3 Recent Uploads
     .recentactivity
       %h3 Recent Activity
-      %table.activity
+      %table#exploredata
         %tr
-          %th Name
-          %th Date
-          %th User
-        %tr{:class => cycle('field_bg', 'field_nobg')}
-          %td
+          %th= "Filename"
+          %th= "Date added"
+          %th= "Added by"
+        - @data_files.each do |data_file|
+          %tr{:class => cycle('field_bg', 'field_nobg')}
+            %td= data_file.filename
+            %td= data_file.created_at.to_s(:with_time)
+            %td= data_file.created_by.email if data_file.created_by

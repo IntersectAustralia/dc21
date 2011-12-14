@@ -10,6 +10,7 @@ def create_test_files
   create_data_file("weather_station_15_min.dat", "sean@intersect.org.au")
   create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
   create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
+  create_data_file("sample3.txt", "kali@intersect.org.au")
 end
 
 def create_test_users
@@ -39,6 +40,11 @@ def create_data_file(filename, uploader)
   params = {:file_1 => file, :dirStruct => "[{\"file_1\":\"#{filename}\"}]"}
   builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
   builder.build
+  df = DataFile.last
+  rand_mins = rand(10000)
+  # make the created at semi-random
+  df.created_at = df.created_at - rand_mins.minutes
+  df.save!
 end
 
 def set_role(email, role)

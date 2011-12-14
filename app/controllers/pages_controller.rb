@@ -16,6 +16,7 @@ class PagesController < ApplicationController
     else
       set_tab :home
       set_tab :dashboard, :contentnavigation
+      @data_files = DataFile.most_recent_first.limit(5)
     end
   end
 
