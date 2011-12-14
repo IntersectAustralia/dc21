@@ -36,11 +36,8 @@ Dc21app::Application.routes.draw do
       get :download
     end
     collection do
-<<<<<<< HEAD
       get :download_all
-=======
       get :search
->>>>>>> 1d46400ca842a4d9edebbb28f228961975c565ee
     end
   end
 

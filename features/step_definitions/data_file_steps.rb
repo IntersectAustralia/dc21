@@ -48,21 +48,14 @@ Then /^the file should contain "([^"]*)"$/ do |expected|
   expected.strip.should eq(actual)
 end
 
-<<<<<<< HEAD
 Then /^I should get a download of all data files$/ do
   page.response_headers['Content-Disposition'].should include("filename=\"download_all.zip\"")
   page.response_headers['Content-Disposition'].should include("attachment")
 end
 
-def check_driver_responds_to(method)
-  unless page.driver.respond_to?(method)
-    raise "Current driver does not support the #{method} method. Try using rack::test instead."
-  end
-=======
 When /^I do a date search for data files with date "([^"]*)"$/ do |date|
   visit path_to("the list data files page")
   fill_in "Date", :with => date
   click_button "Search"
->>>>>>> 1d46400ca842a4d9edebbb28f228961975c565ee
 end
 
