@@ -29,4 +29,7 @@ class DataFile < ActiveRecord::Base
     self.format.nil? ? "Unknown" : self.format
   end
 
+  def make_zip
+    generate_zip(data_file_path, filename)
+  end
 end

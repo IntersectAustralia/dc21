@@ -1,0 +1,66 @@
+require 'find'
+module ProjectZip
+  # Say:
+  # src_path is /data/acdata-samples/1/2/
+  # zip_root_folder_name is "blah"
+  #
+  # So the zip file is created with a folder "blah" which contains the files
+  # found under "/data/acdata-samples/1/2/"
+
+  def generate_zip(src_path, zip_folder_path)
+    tempfile = File::Temp.temp_name
+    Zip::ZipOutputStream.open(tempfile) do |zos|
+      add_entries(src_path, zip_folder_path, zos)
+    end
+    return tempfile
+  end
+
+  def add_entries(src_path, zip_folder_path, zos)
+    # executes block on all files and
+    # directories in path recursively
+    Find.find(src_path) do |f|
+      next if FileTest.directory?(f)
+      Rails.logger.debug("Up to file #{f}")
+
+      # /data/acdata-samples/1/2/file1.txt --> blah/file1.txt
+      filepath = f.sub(src_path, zip_folder_path)
+      Rails.logger.debug("Adding #{f} to #{filepath}")
+      zos.put_next_entry(filepath)
+      # http://stackoverflow.com/questions/4956282/losing-data-when-zipping-files
+      # read as binary
+      zos << File.open(f,'rb'){|file|file.read}
+    end
+  end
+
+  def generate_project_zip(project)
+    tempfile = File::Temp.temp_name
+    Zip::ZipOutputStream.open(tempfile) do |zos|
+
+      project.experiments.each do |experiment|
+        experiment.samples.each do |sample|
+          sample.datasets.each do |dataset|
+            if dataset.attachments.present?
+              src_path = dataset.dataset_path
+              zip_folder_path = "#{project.name.to_filename}/#{experiment.name.to_filename}/#{sample.name.to_filename}/#{dataset.name.to_filename}"
+              add_entries(src_path, zip_folder_path, zos)
+            end
+          end
+        end
+      end
+
+      project.samples.each do |sample|
+        sample.datasets.each do |dataset|
+          if dataset.attachments.present?
+            src_path = dataset.dataset_path
+            zip_folder_path = "#{project.name.to_filename}/#{sample.name.to_filename}/#{dataset.name.to_filename}"
+            add_entries(src_path, zip_folder_path, zos)
+          end
+        end
+      end
+
+    end
+
+    return tempfile
+  end
+
+end

@@ -7,6 +7,7 @@ Given /^I have data files$/ do |table|
         user = Factory(:user, :email => email)
       end
       attributes[:created_by] = user
+      attributes[:path] = "samples/sample1.txt"
     end
     Factory(:data_file, attributes)
   end

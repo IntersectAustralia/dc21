@@ -40,6 +40,7 @@ class DataFilesController < ApplicationController
     Zip::ZipOutputStream.open(t.path) do |zos|
       @data_files.each do |dfile|
         zos.put_next_entry("#{dfile.filename}")
+#        zos.write IO.read(dfile.path)
         zos << File.open(dfile.path,'rb'){|file|file.read}
       end
     end
