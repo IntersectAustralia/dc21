@@ -51,7 +51,6 @@ class Toa5Parser
       time_string = details.first
       parse_time(time_string)
     rescue
-      puts "Error parsing date from TOA5 file: #{$!}"
       ::Rails.logger.info("Error parsing date from TOA5 file: #{$!} (#{time_string}")
       nil
     end
