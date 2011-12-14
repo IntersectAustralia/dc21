@@ -16,3 +16,6 @@ production:
 
 qa:
   <<: *defaults
+
+staging:
+  <<: *defaults
