@@ -17,7 +17,7 @@ class DataFilesController < ApplicationController
   end
 
   def create
-    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], nil, FileTypeDeterminer.new, MetadataExtractor.new)
+    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
     result = attachment_builder.build()
 
     respond_to do |format|
@@ -47,12 +47,45 @@ class DataFilesController < ApplicationController
     t.close
   end
 
-private 
+  def search
+    @searched = false
+    if params[:date]
+      @date = params[:date]
+      date = parse_date(@date)
+      if date
+        @searched = true
+        @data_files = DataFile.search_by_date(date).joins(:created_by).order(sort_column + ' ' + sort_direction)
+        if @data_files.empty?
+          @search_status_line = "No files found for #{date.to_s(:date_only)}."
+        else
+          @search_status_line = "Showing files containing data for #{date.to_s(:date_only)}."
+        end
+
+      end
+    end
+    render :index
+  end
+
+  private
+
+  def parse_date(text)
+    if params[:date].blank?
+      flash.now[:alert] = "Please enter a date"
+      return nil
+    end
+
+    begin
+      Date.parse(text)
+    rescue Exception
+      flash.now[:alert] = "The date you entered was invalid. Please enter a valid date."
+      nil
+    end
+  end
 
   def sort_column  
     if params[:sort] == "users.email"
       "users.email"
-    else params[:sort] != "users.email"
+    else
       @data_files.column_names.include?(params[:sort]) ? params[:sort] : "id"
     end  
   end

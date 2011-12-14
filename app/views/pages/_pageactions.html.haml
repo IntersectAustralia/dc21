@@ -3,13 +3,15 @@
   .searchcontainer
 
     .searchbox
-      <input id="datasearch" name="datasearch" type="text" placeholder="Search...">
-      .search.datasearchsubmit.bluebutton
-        %span
+      = form_tag(search_data_files_path, :method => :get) do
+        = label_tag :date, "Date"
+        = text_field_tag :date, @date
+        .search.datasearchsubmit.bluebutton
+          = submit_tag "Search"
       .searchactions
-        .options.whitebutton
-          %span
         .close.searchclose.redbutton
           %span ×
     #search.search.whitebutton
       %span Search Data
+
+

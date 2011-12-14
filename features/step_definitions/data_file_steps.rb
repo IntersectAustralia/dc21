@@ -24,7 +24,9 @@ When /^I upload "([^"]*)" through the applet$/ do |filename|
   token = user.authentication_token
   post_path = data_files_url(:format => :json, :auth_token => token)
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
-  post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response.status.should eq(200)
+  DataFile.count.should_not eq(0)
 end
 
 When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|
@@ -46,6 +48,7 @@ Then /^the file should contain "([^"]*)"$/ do |expected|
   expected.strip.should eq(actual)
 end
 
+<<<<<<< HEAD
 Then /^I should get a download of all data files$/ do
   page.response_headers['Content-Disposition'].should include("filename=\"download_all.zip\"")
   page.response_headers['Content-Disposition'].should include("attachment")
@@ -55,10 +58,11 @@ def check_driver_responds_to(method)
   unless page.driver.respond_to?(method)
     raise "Current driver does not support the #{method} method. Try using rack::test instead."
   end
+=======
+When /^I do a date search for data files with date "([^"]*)"$/ do |date|
+  visit path_to("the list data files page")
+  fill_in "Date", :with => date
+  click_button "Search"
+>>>>>>> 1d46400ca842a4d9edebbb28f228961975c565ee
 end
 
-def check_response_responds_to(method)
-  unless page.driver.response.respond_to?(method)
-    raise "Current driver response object does not support the #{method} method. Try using rack::test instead."
-  end
-end

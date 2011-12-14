@@ -10,14 +10,14 @@ Feature: Viewing metadata from toa5 files
   Scenario: View on list page
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Name     | Added by | Start time          | End time            |
-      | toa5.dat |          | 2011-10-06  0:40:00 | 2011-11-03 11:55:00 |
+      | Filename | Added by                  | Start time          | End time            |
+      | toa5.dat | georgina@intersect.org.au | 2011-10-06  0:40:00 | 2011-11-03 11:55:00 |
 
   Scenario: View details
     When I am on the data file details page for toa5.dat
     Then I should see details displayed
       | Name             | toa5.dat                      |
-      | Added by         |                               |
+      | Added by         | georgina@intersect.org.au     |
       | Start time       | 2011-10-06  0:40:00           |
       | End time         | 2011-11-03 11:55:00           |
       | File format      | TOA5                          |
@@ -29,7 +29,7 @@ Feature: Viewing metadata from toa5 files
       | Dld signature    | 30238                         |
       | Table name       | Table05min                    |
     And I should see "column_info" table with
-      | Column     | Unit         | Measurement Type |
+      | Column     | Unit          | Measurement Type |
       | TIMESTAMP  | TS            |                  |
       | RECORD     | RN            |                  |
       | PPFD_Avg   | mV            | Avg              |

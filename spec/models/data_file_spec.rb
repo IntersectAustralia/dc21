@@ -4,7 +4,7 @@ describe DataFile do
   describe "Validations" do
     it { should validate_presence_of(:filename) }
     it { should validate_presence_of(:path) }
-#TODO:    it { should validate_presence_of(:created_by_id) }
+    it { should validate_presence_of(:created_by_id) }
   end
 
   describe "Associations" do
@@ -35,6 +35,23 @@ describe DataFile do
 
     it "should return the format if set" do
       Factory(:data_file, :format => "TOA5").format_for_display.should eq("TOA5")
+    end
+  end
+
+  describe "Search by date" do
+    it "should return files for which the date range covers the given date" do
+      f1 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-25 11:00") # starts before, ends after = IN
+      f2 = Factory(:data_file, :start_time => "2011-12-24 11:00", :end_time => "2011-12-25 11:00") # starts on, ends after = IN
+      f3 = Factory(:data_file, :start_time => "2011-12-24 23:59", :end_time => "2011-12-25 11:00") # starts on, ends after = IN
+      f4 = Factory(:data_file, :start_time => "2011-12-25 00:00", :end_time => "2011-12-25 11:00") # starts after, ends after = OUT
+      f5 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-23 23:59") # starts before, ends before = OUT
+      f6 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-24 00:00") # starts before, ends on = IN
+      f7 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-24 11:00") # starts before, end on = IN
+      f8 = Factory(:data_file, :start_time => nil, :end_time => nil)
+
+      search_result = DataFile.search_by_date(Date.parse("2011-12-24"))
+      search_result.size.should eq(5)
+      search_result.collect(&:id).sort.should eq([f1.id, f2.id, f3.id, f6.id, f7.id])
     end
   end
 end

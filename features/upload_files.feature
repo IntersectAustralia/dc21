@@ -9,10 +9,11 @@ Feature: Upload files
   Scenario: Upload a single file
     Given I am on the upload page
     When I upload "sample1.txt" through the applet
-    When I am on the list data files page
+    When I follow "Done"
+    Then I should be on the list data files page
     Then I should see "exploredata" table with
-      | Name        | Added by | Start time | End time |
-      | sample1.txt |          |            |          |
+      | Filename    | Added by                  | Start time | End time |
+      | sample1.txt | georgina@intersect.org.au |            |          |
 
   Scenario: Must be logged in to view the upload page
     Then users should be required to login on the upload page

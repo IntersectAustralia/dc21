@@ -98,7 +98,7 @@
             var message = value.message;
 
             if (fileStatus == "success") {
-                findLatestFile(filename).html('<span class="success">' + filename + ' - done</span>');
+                findLatestFile(filename).html('<span class="success">' + filename + '</span>');
             } else {
                 //TODO: for now we just display a failure message, later we may want to do something with the message
                 findLatestFile(filename).html(failedToUpload(filename, message));
