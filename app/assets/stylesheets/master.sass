@@ -438,10 +438,11 @@ input[type=password]
     label, span
       background: url("../images/icon_search_dark.png") left center no-repeat
 
-.search.bluebutton 
-  +m-p-w-h-p-t-b-l-r-f(0, "", 80px, 20px)
+input.search.bluebutton[type=submit] 
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 -10px, "", 80px, 32px)
   +border("", "", "", "", 0 2px 2px 0)
   cursor: pointer
+
   label, span
     +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 16px)
     background: url("../images/icon_search_white.png") left center no-repeat
