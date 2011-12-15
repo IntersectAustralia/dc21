@@ -56,5 +56,4 @@ Feature: View the list of data files
       | sample2.txt  | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |
     When I am on the list data files page
     And I follow "Download All"
-    Then I should get a download of all data files
 

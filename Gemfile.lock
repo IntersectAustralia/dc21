@@ -294,6 +294,7 @@ DEPENDENCIES
   rails (= 3.1.1)
   rails3-generators
   rspec-rails
+  rubyzip
   sass-rails (~> 3.1.4)
   shoulda
   simplecov (>= 0.3.8)

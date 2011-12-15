@@ -3,9 +3,7 @@
 #content_container
   = render 'pages/contentnavigation'
 
-  %p= @search_status_line
-
-  - if (@data_files.empty? && !@searched)
+  - if @data_files.empty?
     No files to display.
   - else
     %form

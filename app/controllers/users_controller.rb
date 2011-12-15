@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   before_filter :authenticate_user!
   load_and_authorize_resource
-    set_tab :admin
+  set_tab :admin
 
   def index
     @users = User.deactivated_or_approved
@@ -62,6 +62,7 @@ class UsersController < ApplicationController
   end
 
   def edit_approval
+    set_tab :accessrequests, :contentnavigation
     @roles = Role.by_name
   end
 
