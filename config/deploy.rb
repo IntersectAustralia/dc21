@@ -144,6 +144,7 @@ end
 
 after 'deploy:update_code' do
   generate_database_yml
+  run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
 end
 
 desc "After updating code we need to populate a new database.yml"
