@@ -5,8 +5,8 @@
   = render_field "Date added", @data_file.created_at.to_s(:with_time)
   = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
   = render_field "File format", @data_file.format_for_display
-  = render_field "Start time", @data_file.start_time.to_s(:with_seconds) if @data_file.start_time
-  = render_field "End time", @data_file.end_time.to_s(:with_seconds) if @data_file.end_time
+  = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
+  = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
   = render "file_format_specific_details"
   .cancelbutton
     %span

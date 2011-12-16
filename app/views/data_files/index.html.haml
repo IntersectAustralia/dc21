@@ -23,6 +23,6 @@
             %td= data_file.filename
             %td= data_file.created_at.to_s(:with_time)
             %td= data_file.created_by.email if data_file.created_by
-            %td= data_file.start_time.to_s(:with_seconds) if data_file.start_time
-            %td= data_file.end_time.to_s(:with_seconds) if data_file.end_time
+            %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
+            %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
       %div= link_to "Download All", download_all_data_files_path, :class =>"bluebutton"
