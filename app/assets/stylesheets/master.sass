@@ -274,7 +274,7 @@ input[type=textarea], input[type=text], input[type=password], input[type=search]
   +m-p-w-h-p-t-b-l-r-f(3px 0, 0 10px, "", 30px)
   +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
   resize: none
-  +font("", "", 1em, 1em)
+  +font("", "", 1em, 30px)
   &:hover
     +border(1px, solid, #B9B9B9)
   &:focus
@@ -282,7 +282,7 @@ input[type=textarea], input[type=text], input[type=password], input[type=search]
     outline: none
 
 input[type=password]
-  +font("", "", 1.25em, 1em, $dark1)
+  +font("", "", 1.25em, 28px, $dark1)
 
 // NOTIFICATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -964,12 +964,14 @@ table.activity, table.activity tbody
     min-width: 600px
     background: #F5F5F5
     +border(1px, solid, #dfdfdf)
+    p
+      +inlineblock
 
   .logo
     +m-p-w-h-p-t-b-l-r-f(3px 6px 0 0, "", 14px, 14px)
     +inlineblock
     background: url(/images/intersect_logo.png) center
-
+    
   #dev
     cursor: pointer
     +inlineblock
