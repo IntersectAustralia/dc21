@@ -1,7 +1,15 @@
 Dc21app::Application.configure do
 
-  # TODO: set your own correct URL for action mailer
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => Socket.gethostname }
+
+  # email configuration
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    :address => 'localhost',
+    :port => 25,
+    :authentication => :plain
+  }
 
   # Settings specified here will take precedence over those in config/application.rb
 
