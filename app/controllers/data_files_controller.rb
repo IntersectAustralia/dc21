@@ -11,6 +11,7 @@ class DataFilesController < ApplicationController
   end  
 
   def show
+    set_tab :explore, :contentnavigation
   end
 
   def new
