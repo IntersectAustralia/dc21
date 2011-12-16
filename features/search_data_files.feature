@@ -6,14 +6,14 @@ Feature: Search data files by date range
   Background:
     Given I am logged in as "georgina@intersect.org.au"
     And I have data files
-      | filename      | created_at       | uploaded_by               | start_time        | end_time           |
-      | datafile7.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01  | 10/6/2010 18:05:23 |
-      | datafile6.dat | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01  | 11/6/2010 18:05:23 |
-      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01  | 12/6/2010 18:05:23 |
-      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 | 30/6/2010 18:05:23 |
-      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 | 30/6/2010 18:05:23 |
-      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 | 30/6/2010 18:05:23 |
-      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                   |                    |
+      | filename      | created_at       | uploaded_by               | start_time            | end_time               |
+      | datafile7.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC |
+      | datafile6.dat | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC |
+      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC |
+      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
+      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
+      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
+      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        |
 
   Scenario: Search for files that include a date
     When I do a date search for data files with date "2010-06-11"

@@ -40,13 +40,13 @@ describe DataFile do
 
   describe "Search by date" do
     it "should return files for which the date range covers the given date" do
-      f1 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-25 11:00") # starts before, ends after = IN
-      f2 = Factory(:data_file, :start_time => "2011-12-24 11:00", :end_time => "2011-12-25 11:00") # starts on, ends after = IN
-      f3 = Factory(:data_file, :start_time => "2011-12-24 23:59", :end_time => "2011-12-25 11:00") # starts on, ends after = IN
-      f4 = Factory(:data_file, :start_time => "2011-12-25 00:00", :end_time => "2011-12-25 11:00") # starts after, ends after = OUT
-      f5 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-23 23:59") # starts before, ends before = OUT
-      f6 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-24 00:00") # starts before, ends on = IN
-      f7 = Factory(:data_file, :start_time => "2011-12-20 11:00", :end_time => "2011-12-24 11:00") # starts before, end on = IN
+      f1 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts before, ends after = IN
+      f2 = Factory(:data_file, :start_time => "2011-12-24 11:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts on, ends after = IN
+      f3 = Factory(:data_file, :start_time => "2011-12-24 23:59 UTC", :end_time => "2011-12-25 11:00 UTC") # starts on, ends after = IN
+      f4 = Factory(:data_file, :start_time => "2011-12-25 00:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts after, ends after = OUT
+      f5 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-23 23:59 UTC") # starts before, ends before = OUT
+      f6 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-24 00:00 UTC") # starts before, ends on = IN
+      f7 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-24 11:00 UTC") # starts before, end on = IN
       f8 = Factory(:data_file, :start_time => nil, :end_time => nil)
 
       search_result = DataFile.search_by_date(Date.parse("2011-12-24"))
