@@ -4,10 +4,9 @@
 
     .searchbox
       = form_tag(search_data_files_path, :method => :get) do
-        = label_tag :date, "Date"
+        = label_tag :date, "Search by Date:"
         = text_field_tag :date, @date
-        .search.datasearchsubmit.bluebutton
-          = submit_tag "Search"
+        = submit_tag "Search", :class => "search bluebutton"
       .searchactions
         .close.searchclose.redbutton
           %span ×
