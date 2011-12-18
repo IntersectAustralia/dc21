@@ -3,7 +3,11 @@
 #content_container
   = render 'pages/contentnavigation'
 
-  %p= @search_status_line
+  %p
+    = @search_status_line
+    - if @searched
+      = link_to "Show all files", data_files_path
+
 
   - if (@data_files.empty? && !@searched)
     No files to display.
