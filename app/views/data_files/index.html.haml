@@ -12,9 +12,11 @@
   - if (@data_files.empty? && !@searched)
     No files to display.
   - else
-    %form
+    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles") do
+      Select <a href="javascript:selectToggle(false, 'datafiles');">All</a> | <a href="javascript:selectToggle(true, 'datafiles');">None</a>
       %table#exploredata
         %tr
+          %th= "Select"
           %th.view View
           %th= sortable "filename"
           %th= sortable "created_at", "Date added"
@@ -23,10 +25,11 @@
           %th= sortable "end_time", "End time"
         - @data_files.each do |data_file|
           %tr{:class => cycle('field_bg', 'field_nobg')}
+            %td= check_box_tag "ids[]",  "#{data_file.id}"
             %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
             %td= data_file.filename
             %td= data_file.created_at.to_s(:with_time)
             %td= data_file.created_by.email if data_file.created_by
             %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
             %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
-      %div= link_to "Download All", download_all_data_files_path, :class =>"bluebutton"
+      =submit_tag "Download selected", :class => "bluebutton" 

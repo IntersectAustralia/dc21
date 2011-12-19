@@ -36,7 +36,7 @@ Dc21app::Application.routes.draw do
       get :download
     end
     collection do
-      get :download_all
+      get :download_selected
       get :search
     end
   end

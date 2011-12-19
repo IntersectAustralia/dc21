@@ -8,8 +8,8 @@
       %th Column
       %th Unit
       %th Measurement Type
-    - @data_file.metadata[:column_headers].each do |col_info|
+    - @data_file.column_details.each do |column_details|
       %tr
-        %td= col_info[0]
-        %td= col_info[1]
-        %td= col_info[2]
+        %td= column_details.name
+        %td= column_details.unit
+        %td= column_details.data_type
