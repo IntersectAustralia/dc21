@@ -141,18 +141,29 @@ input.datasearchsubmit
 #exploredata th
   padding: 10px 25px 9px 0
 
-th span
-  margin: 2px 10px 0 5px
-  padding: 0
-  height: 14px
-  width: 20px
-  +inlineblock
-  cursor: pointer
-  background: url("../images/header-active.png") center center no-repeat
-  background-size: 12px
+th 
+  a
+    +m-p-w-h-p-t-b-l-r-f("", 0 20px 0 0, "", "")
+    +inlineblock
+    cursor: pointer
+    background: url("../images/icon_arrow_right_light.png") center right no-repeat
+    background-size: 6px
+    &:hover
+      background: url("../images/icon_arrow_down_dark.png") center right no-repeat
+      background-size: 12px
+  a.current.asc
+    background: url("../images/icon_arrow_up_blue.png") center right no-repeat
+    background-size: 12px
+    &:hover
+      background: url("../images/icon_arrow_down_dark.png") center right no-repeat
+      background-size: 12px
+  a.current.desc
+    background: url("../images/icon_arrow_down_blue.png") center right no-repeat
+    background-size: 12px
+    &:hover
+      background: url("../images/icon_arrow_up_dark.png") center right no-repeat
+      background-size: 12px
 
-th span:hover
-  background: url("../images/header-active-dark.png") center center no-repeat
 
 // TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
