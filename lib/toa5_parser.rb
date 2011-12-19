@@ -9,13 +9,13 @@ class Toa5Parser
 
     extract_header_line_info(data_file, interesting_lines[:line_1]) if interesting_lines[:line_1]
 
+    data_file.save!
     if interesting_lines[:line_2] && interesting_lines[:line_3] && interesting_lines[:line_4]
       headers = interesting_lines[:line_2].gsub("\n", "").split("\t")
       units = interesting_lines[:line_3].gsub("\n", "").split("\t")
       col_types = interesting_lines[:line_4].gsub("\n", "").split("\t")
-      data_file.add_metadata_item(:column_headers, extract_column_info(headers, units, col_types))
+      extract_column_info(headers, units, col_types, data_file)
     end
-    data_file.save!
   end
 
   def self.extract_header_line_info(data_file, header_line)
@@ -37,12 +37,14 @@ class Toa5Parser
     data_file.add_metadata_item(:table_name, table_name) unless table_name.blank?
   end
 
-  def self.extract_column_info(headers, units, col_types)
+  def self.extract_column_info(headers, units, col_types, data_file)
     col_info = []
     headers.each_with_index do |header, index|
-      col_info << [header, units[index], col_types[index]] unless header.blank?
+      col_info << {:name => header, :unit => units[index], :data_type => col_types[index], :position => index} unless header.blank?
     end
-    col_info
+    col_info.each do |column_attributes|
+      data_file.column_details.create!(column_attributes)
+    end
   end
 
   def self.extract_time_from_data_line(line)

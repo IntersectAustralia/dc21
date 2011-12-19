@@ -46,13 +46,27 @@ describe Toa5Parser do
       # reload to make sure it survives being persisted
       data_file.reload
 
-      headers = data_file.metadata[:column_headers]
-      headers.is_a?(Array).should be_true
+      headers = data_file.column_details
       headers.length.should eq(15)
-      headers[0].should eq(["TIMESTAMP", "TS", ""])
-      headers[1].should eq(["RECORD", "RN", ""])
-      headers[2].should eq(["PPFD_Avg", "mV", "Avg"])
-      headers[14].should eq(["LWMWet_Tot", "Minutes", "Tot"])
+      headers[0].name.should eq("TIMESTAMP")
+      headers[0].unit.should eq("TS")
+      headers[0].data_type.should eq("")
+      headers[0].position.should eq(0)
+
+      headers[1].name.should eq("RECORD")
+      headers[1].unit.should eq("RN")
+      headers[1].data_type.should eq("")
+      headers[1].position.should eq(1)
+
+      headers[2].name.should eq("PPFD_Avg")
+      headers[2].unit.should eq("mV")
+      headers[2].data_type.should eq("Avg")
+      headers[2].position.should eq(2)
+
+      headers[14].name.should eq("LWMWet_Tot")
+      headers[14].unit.should eq("Minutes")
+      headers[14].data_type.should eq("Tot")
+      headers[14].position.should eq(14)
     end
 
     it "should ignore blanks column header information" do
@@ -61,13 +75,27 @@ describe Toa5Parser do
       # reload to make sure it survives being persisted
       data_file.reload
 
-      headers = data_file.metadata[:column_headers]
-      headers.is_a?(Array).should be_true
+      headers = data_file.column_details
       headers.length.should eq(4)
-      headers[0].should eq(["TIMESTAMP", "TS", ""])
-      headers[1].should eq(["RECORD", "RN", ""])
-      headers[2].should eq(["BattV_Min", "Volts", "Min"])
-      headers[3].should eq(["PTemp_C_Max", "Deg C", "Max"])
+      headers[0].name.should eq("TIMESTAMP")
+      headers[0].unit.should eq("TS")
+      headers[0].data_type.should eq("")
+      headers[0].position.should eq(0)
+
+      headers[1].name.should eq("RECORD")
+      headers[1].unit.should eq("RN")
+      headers[1].data_type.should eq("")
+      headers[1].position.should eq(1)
+
+      headers[2].name.should eq("BattV_Min")
+      headers[2].unit.should eq("Volts")
+      headers[2].data_type.should eq("Min")
+      headers[2].position.should eq(2)
+
+      headers[3].name.should eq("PTemp_C_Max")
+      headers[3].unit.should eq("Deg C")
+      headers[3].data_type.should eq("Max")
+      headers[3].position.should eq(3)
     end
   end
 
