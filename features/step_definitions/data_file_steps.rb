@@ -49,7 +49,7 @@ Then /^the file should contain "([^"]*)"$/ do |expected|
 end
 
 Then /^I should get a download of all data files$/ do
-  page.response_headers['Content-Disposition'].should include("filename=\"download_all.zip\"")
+  page.response_headers['Content-Disposition'].should include("filename=\"download_selected.zip\"")
   page.response_headers['Content-Disposition'].should include("attachment")
 end
 

@@ -36,16 +36,22 @@ class DataFilesController < ApplicationController
     send_file @data_file.path, file_params
   end
  
-  def download_all
-    t= Tempfile.new("temp_file")
-    Zip::ZipOutputStream.open(t.path) do |zos|
-      @data_files.each do |dfile|
-        zos.put_next_entry("#{dfile.filename}")
-        zos << File.open(dfile.path,'rb'){|file|file.read}
+  def download_selected
+    ids=params[:ids]
+    if ids.nil?
+      redirect_to(data_files_path, :alert => "No files were selected for download")
+    elsif !ids.nil?
+      files = DataFile.find(ids)
+      t= Tempfile.new("temp_file")
+      Zip::ZipOutputStream.open(t.path) do |zos|
+        files.each do |dfile|
+          zos.put_next_entry("#{dfile.filename}")
+          zos << File.open(dfile.path,'rb'){|file|file.read}
+        end
       end
+      send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+      t.close
     end
-    send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_all.zip"
-    t.close
   end
 
   def search

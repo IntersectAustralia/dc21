@@ -114,10 +114,10 @@ function selectToggle(checked, form) {
      var dataForm = document.forms[form];
      for( var i=0; i < dataForm.length; i++ ) { 
           if(checked) {
-               dataForm.elements[i].checked = "";
+               dataForm.elements[i].checked = "checked";
           } 
           else {
-               dataForm.elements[i].checked = "checked";
+               dataForm.elements[i].checked = "";
           }
      }
 }
