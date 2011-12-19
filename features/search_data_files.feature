@@ -38,6 +38,12 @@ Feature: Search data files by date range
     And I should see "Showing files containing data for 2010-06-11"
     And the "date" field should contain "2010-06-11"
 
+  Scenario: Go back to showing all after searching
+    When I do a date search for data files with date "2010-06-11"
+    Then the "exploredata" table should have 4 rows
+    When I follow "Show all files"
+    Then the "exploredata" table should have 7 rows
+
   Scenario: Fail to enter a date
     When I do a date search for data files with date ""
     Then I should see "Please enter a date"

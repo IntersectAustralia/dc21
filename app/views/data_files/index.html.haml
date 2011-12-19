@@ -3,7 +3,11 @@
 #content_container
   = render 'pages/contentnavigation'
 
-  %p= @search_status_line
+  %p
+    = @search_status_line
+    - if @searched
+      = link_to "Show all files", data_files_path
+
 
   - if (@data_files.empty? && !@searched)
     No files to display.
@@ -14,7 +18,7 @@
         %tr
           %th= "Select"
           %th.view View
-          %th= sortable "filename" 
+          %th= sortable "filename"
           %th= sortable "created_at", "Date added"
           %th= sortable "users.email", "Added by"
           %th= sortable "start_time", "Start time"

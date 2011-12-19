@@ -3,6 +3,7 @@ class DataFile < ActiveRecord::Base
   serialize :metadata, Hash
 
   belongs_to :created_by, :class_name => "User"
+  has_many :column_details
 
   validates_presence_of :filename
   validates_presence_of :path
