@@ -30,14 +30,17 @@ describe Toa5Parser do
       Toa5Parser.extract_metadata(data_file)
       # reload to make sure it survives being persisted
       data_file.reload
+      # stick in a hash for easier assertions
+      metadata = Hash[*data_file.metadata_items.collect{|mi| [mi.key, mi.value]}.flatten]
+      metadata.size.should eq(7)
 
-      data_file.metadata[:datalogger_model].should eq("CR3000")
-      data_file.metadata[:station_name].should eq("ROS_WS")
-      data_file.metadata[:serial_number].should eq("4909")
-      data_file.metadata[:os_version].should eq("CR3000.Std.11")
-      data_file.metadata[:dld_name].should eq("CPU:weather_station_final.CR3")
-      data_file.metadata[:dld_signature].should eq("30238")
-      data_file.metadata[:table_name].should eq("Table05min")
+      metadata["datalogger_model"].should eq("CR3000")
+      metadata["station_name"].should eq("ROS_WS")
+      metadata["serial_number"].should eq("4909")
+      metadata["os_version"].should eq("CR3000.Std.11")
+      metadata["dld_name"].should eq("CPU:weather_station_final.CR3")
+      metadata["dld_signature"].should eq("30238")
+      metadata["table_name"].should eq("Table05min")
     end
 
     it "should extract column header information" do
@@ -105,7 +108,7 @@ describe Toa5Parser do
       Toa5Parser.extract_metadata(data_file)
       data_file.start_time.should be_nil
       data_file.end_time.should be_nil
-      data_file.metadata.should be_empty
+      data_file.metadata_items.should be_empty
     end
   end
 

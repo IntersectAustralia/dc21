@@ -10,6 +10,7 @@ describe DataFile do
   describe "Associations" do
     it { should belong_to(:created_by) }
     it { should have_many(:column_details) }
+    it { should have_many(:metadata_items) }
   end
 
   describe "Get file extension" do

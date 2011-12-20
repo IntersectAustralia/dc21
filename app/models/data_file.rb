@@ -4,6 +4,7 @@ class DataFile < ActiveRecord::Base
 
   belongs_to :created_by, :class_name => "User"
   has_many :column_details
+  has_many :metadata_items
 
   validates_presence_of :filename
   validates_presence_of :path
@@ -17,17 +18,12 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.search_by_date(date)
+    # search is using squeel - see ... for details of syntax
     where { (start_time < (date + 1.day)) & (end_time >= (date)) }
   end
 
   def add_metadata_item(key, value)
-    self.metadata ||= {}
-    self.metadata[key] = value
-  end
-
-  def metadata_key_value_pairs
-    #collect metadata items that are strings
-    metadata.reject { |k, v| !v.is_a?(String) }
+    self.metadata_items.create!(:key => key, :value => value)
   end
 
   def format_for_display

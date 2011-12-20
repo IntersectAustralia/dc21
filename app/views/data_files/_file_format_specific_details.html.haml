@@ -1,6 +1,6 @@
 - if @data_file.format == "TOA5"
-  - @data_file.metadata_key_value_pairs.each do |key, value|
-    = render_field key.to_s.humanize, value
+  - @data_file.metadata_items.each do |item|
+    = render_field item.key.humanize, item.value
 
   %h3 Data File Columns
   %table#column_info

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111219031722) do
+ActiveRecord::Schema.define(:version => 20111219224707) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -34,8 +34,17 @@ ActiveRecord::Schema.define(:version => 20111219031722) do
     t.integer  "created_by_id"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.text     "metadata"
   end
+
+  create_table "metadata_items", :force => true do |t|
+    t.string   "key"
+    t.string   "value"
+    t.integer  "data_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name"
