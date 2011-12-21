@@ -87,7 +87,7 @@ def create_facilities
   create_facility(:name => "test2", :code => "T2")
 end
 
-def create_facility(attrs)
+def create_facility
   facility = Facility.new(attrs)
   facility.save!
   facility
