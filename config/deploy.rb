@@ -2,6 +2,7 @@ $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require 'rvm/capistrano'
 require 'capistrano/ext/multistage'
 require 'bundler/capistrano'
+require 'capistrano_colors'
 
 set :application, 'dc21app'
 set :stages, %w(qa staging production)
@@ -144,7 +145,9 @@ end
 
 after 'deploy:update_code' do
   generate_database_yml
-  run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
+
+  #solved in Capfile
+  #run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
 end
 
 desc "After updating code we need to populate a new database.yml"
