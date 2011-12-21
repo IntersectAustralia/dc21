@@ -40,7 +40,7 @@ describe DataFile do
     end
   end
 
-  describe "Search by date" do
+  describe "Find files for date" do
     it "should return files for which the date range covers the given date" do
       f1 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts before, ends after = IN
       f2 = Factory(:data_file, :start_time => "2011-12-24 11:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts on, ends after = IN
@@ -51,9 +51,27 @@ describe DataFile do
       f7 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-24 11:00 UTC") # starts before, end on = IN
       f8 = Factory(:data_file, :start_time => nil, :end_time => nil)
 
-      search_result = DataFile.search_by_date(Date.parse("2011-12-24"))
+      search_result = DataFile.with_data_covering_date(Date.parse("2011-12-24"))
       search_result.size.should eq(5)
       search_result.collect(&:id).sort.should eq([f1.id, f2.id, f3.id, f6.id, f7.id])
+    end
+  end
+
+  describe "Find files for station name" do
+    it "should find only files with the matching metadata item" do
+      f1 = Factory(:data_file)
+      f2 = Factory(:data_file)
+      f3 = Factory(:data_file)
+      f4 = Factory(:data_file)
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => f1)
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "DEF", :data_file => f2)
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "GHI", :data_file => f3)
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => f4)
+      Factory(:metadata_item, :key => "other key", :value => "ABC", :data_file => f3)
+      DataFile.with_station_name_in(["ABC"]).collect(&:id).sort.should eq([f1.id, f4.id])
+      DataFile.with_station_name_in(["ABC", "DEF"]).collect(&:id).sort.should eq([f1.id, f2.id, f4.id])
+      DataFile.with_station_name_in(["ABC", "ASDF"]).collect(&:id).sort.should eq([f1.id, f4.id])
+      DataFile.with_station_name_in(["ASDF"]).collect(&:id).sort.should eq([])
     end
   end
 end
