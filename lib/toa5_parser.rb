@@ -4,7 +4,11 @@ class Toa5Parser
 
     interesting_lines = extract_interesting_lines(file)
 
-    data_file.start_time = extract_time_from_data_line(interesting_lines[:line_5]) if interesting_lines[:line_5]
+
+    if interesting_lines[:line_5]
+      data_file.start_time = extract_time_from_data_line(interesting_lines[:line_5])
+      data_file.interval = extract_time_from_data_line(interesting_lines[:line_6]) - data_file.start_time if interesting_lines[:line_6]
+    end
     data_file.end_time = extract_time_from_data_line(interesting_lines[:last_line]) if interesting_lines[:last_line]
 
     data_file.save!
@@ -73,6 +77,7 @@ class Toa5Parser
       lines[:line_3] = line if counter == 3
       lines[:line_4] = line if counter == 4
       lines[:line_5] = line if counter == 5
+      lines[:line_6] = line if counter == 6
       lines[:last_line] = line
       counter += 1
     end
