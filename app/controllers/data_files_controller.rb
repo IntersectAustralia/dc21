@@ -71,7 +71,7 @@ class DataFilesController < ApplicationController
       date = parse_date(@date)
       if date
         @searched = true
-        @data_files = DataFile.search_by_date(date).joins(:created_by).order(sort_column + ' ' + sort_direction)
+        @data_files = DataFile.with_data_covering_date(date).joins(:created_by).order(sort_column + ' ' + sort_direction)
         if @data_files.empty?
           @search_status_line = "No files found for #{date.to_s(:date_only)}."
         else
