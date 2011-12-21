@@ -8,14 +8,37 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build
-    dest_dir = @files_root
+  def verify_from_filenames
+    result = {}
+    filenames = gather_file_list
+
+    filenames.each do |filename|
+      #{"collections.json":{"status":"abort","message":"This file already exists."}}
+      if DataFile.where(:filename => filename.values.first).empty?
+        result[filename.values.first] = {:status => "proceed", :message => ""}
+      else
+        result[filename.values.first] = {:status => "abort", :message => "This file already exists."}
+      end
+    end
+    result
+  end
+
+  # Turn tree into some attributes ready to build files
+  def gather_file_list
+
     json_string = @post_params[:dirStruct]
     file_list = ActiveSupport::JSON.decode(json_string)
-    Rails.logger.debug("AttachmentBuilder.build file_list=#{file_list.inspect}")
+    Rails.logger.debug("AttachmentBuilder.gather_file_list file_list=#{file_list.inspect}")
 
-    # Turn tree into some attributes ready to build files
+    file_list
+  end
+
+  def build
+    dest_dir = @files_root
+
+    file_list = gather_file_list
     candidates = []
+
     file_list.each do |file_tree|
       attrs = process_file_or_folder(dest_dir, file_tree)
       candidates << attrs

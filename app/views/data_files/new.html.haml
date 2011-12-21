@@ -2,6 +2,8 @@
 #content_container
   = render :partial => 'applet', :locals => {:allow_multiselect => true,
                                                   :file_selection_mode => "files_only",
+                                                  :do_verify => true,
+                                                  :verify_url => verify_upload_data_files_url(:format => :json),
                                                   :upload_url => data_files_url(:format => :json)}
 
   #upload_notifications
