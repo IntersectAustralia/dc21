@@ -9,8 +9,8 @@
 
   <param name="destDir" value="/">
   <param name="uploadURL" value="<%= upload_url %>">
-  <param name="sendVerifyRequestFirst" value="false">
-  <param name="verifyRequestURL" value="false">
+  <param name="sendVerifyRequestFirst" value="<%= do_verify %>">
+  <param name="verifyRequestURL" value="<%= do_verify ? verify_url : "false" %>">
   <param name="allowMultiselect" value="<%= allow_multiselect %>">
   <param name="fileSelectionMode" value="<%= file_selection_mode %>">
   <param name="backgroundColour" value="#FFFFFF">

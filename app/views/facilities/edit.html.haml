@@ -1,0 +1,20 @@
+= render 'pages/pageactions'
+%h1 Edit Facility
+#content_container
+  .container
+    = form_for(@facility) do |f|
+      .formerror= render "shared/error_messages", :target => @facility
+      .rowfield
+        = "Name:"
+        = f.text_field :name
+        = required
+      .rowfield
+        = "Code:"
+        = f.text_field :code
+        = required
+      .actions
+        .cancelbutton
+          %span
+          = link_to 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
+        = f.submit "Update", :class => "floatleft"
+

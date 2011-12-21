@@ -10,6 +10,7 @@
   = render_field "File format", @data_file.format_for_display
   = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
   = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
+  = render_field "Sample Interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
   = render "file_format_specific_details"
   .cancelbutton
     %span

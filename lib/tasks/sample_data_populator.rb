@@ -1,6 +1,7 @@
 def populate_data
   create_test_users
   create_test_files
+  create_facilities
 end
 
 def create_test_files
@@ -11,6 +12,8 @@ def create_test_files
   create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
   create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
   create_data_file("sample3.txt", "kali@intersect.org.au")
+  create_data_file("WTC01_Table1.dat", "georgina@intersect.org.au")
+  create_data_file("WTC02_Table1.dat", "sean@intersect.org.au")
 end
 
 def create_test_users
@@ -81,3 +84,13 @@ def get_file_path
   config[env]['files_root']
 end
 
+def create_facilities
+  create_facility(:name => "test", :code => "T1")
+  create_facility(:name => "test2", :code => "T2")
+end
+
+def create_facility(attrs)
+  facility = Facility.new(attrs)
+  facility.save!
+  facility
+end
