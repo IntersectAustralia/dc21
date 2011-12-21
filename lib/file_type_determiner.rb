@@ -17,7 +17,7 @@ class FileTypeDeterminer
     File.open(data_file.path) do |file|
       header = file.read(10) # read just the first bit so we can check for the TOA5 in the header
       return false if header.blank?
-      !header.match(/^TOA5/).nil?
+      !header.match(/^"?TOA5/).nil?
     end
 
   end
