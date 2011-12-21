@@ -1,0 +1,22 @@
+= render 'pages/pageactions'
+%h1 Home / View Facilities
+#content_container
+  = render 'pages/contentnavigation'
+  - if @facilities.empty?
+  = link_to "New Facility", new_facility_path
+    No facilities to display.
+  - else
+    = link_to "New Facility", new_facility_path
+    %table#facilities
+      %tr
+        %th.view View
+        %th= "Name"
+        %th= "Code"
+        %th= "Actions"
+      - @facilities.each do |facility|
+        %tr{:class => cycle('field_bg', 'field_nobg')}
+          %td.view= link_to '', facility, :class => "view", :id => "view_#{facility.id}"
+          %td= facility.name
+          %td= facility.code
+          %td.actions
+            = link_to '', edit_facility_path, :id => "edit_#{facility.id}", :class => "edit"

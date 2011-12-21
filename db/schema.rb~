@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema.define(:version => 20111220021435) do
+=======
 ActiveRecord::Schema.define(:version => 20111221014948) do
+>>>>>>> ff46cb18d243dd8a2866989db0a78cbf32ce4bef
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -37,21 +41,25 @@ ActiveRecord::Schema.define(:version => 20111221014948) do
     t.integer  "interval"
   end
 
+<<<<<<< HEAD
   create_table "facilities", :force => true do |t|
     t.string   "name"
     t.string   "code"
-  end
-
+=======
   create_table "metadata_items", :force => true do |t|
     t.string   "key"
     t.string   "value"
     t.integer  "data_file_id"
+>>>>>>> ff46cb18d243dd8a2866989db0a78cbf32ce4bef
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+<<<<<<< HEAD
+=======
   add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
 
+>>>>>>> ff46cb18d243dd8a2866989db0a78cbf32ce4bef
   create_table "roles", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"

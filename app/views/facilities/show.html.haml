@@ -1,0 +1,11 @@
+= render 'pages/pageactions'
+%h1 Facility / View / #{@facility.name}
+
+#content_container
+  = render 'pages/contentnavigation'
+  = link_to "Edit Facility", edit_facility_path
+  = render_field "Name", @facility.name
+  = render_field "Code", @facility.code
+  .cancelbutton
+    %span
+    = link_to 'Back', facilities_path, :class => "cancelbutton"
