@@ -3,12 +3,12 @@ class DataFilesController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
   set_tab :home
-  helper_method :sort_column, :sort_direction  
+  helper_method :sort_column, :sort_direction
 
   def index
     set_tab :explore, :contentnavigation
     @data_files = DataFile.joins(:created_by).order(sort_column + ' ' + sort_direction)
-  end  
+  end
 
   def show
     set_tab :explore, :contentnavigation
@@ -26,6 +26,16 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def verify_upload
+    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], current_user, nil, nil)
+
+    result = attachment_builder.verify_from_filenames
+
+    respond_to do |format|
+      format.json { render :json => result }
+    end
+  end
+
   def download
     extname = File.extname(@data_file.filename)[1..-1]
     mime_type = Mime::Type.lookup_by_extension(extname)
@@ -35,7 +45,7 @@ class DataFilesController < ApplicationController
     file_params[:type] = content_type if content_type
     send_file @data_file.path, file_params
   end
- 
+
   def download_selected
     ids=params[:ids]
     if ids.nil?
@@ -61,7 +71,7 @@ class DataFilesController < ApplicationController
       date = parse_date(@date)
       if date
         @searched = true
-        @data_files = DataFile.search_by_date(date).joins(:created_by).order(sort_column + ' ' + sort_direction)
+        @data_files = DataFile.with_data_covering_date(date).joins(:created_by).order(sort_column + ' ' + sort_direction)
         if @data_files.empty?
           @search_status_line = "No files found for #{date.to_s(:date_only)}."
         else
@@ -89,17 +99,17 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def sort_column  
+  def sort_column
     if params[:sort] == "users.email"
       "users.email"
     else
       @data_files.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
-    end  
+    end
   end
 
-  def sort_direction  
-    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"  
-  end  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"
+  end
 
 
 end

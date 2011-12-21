@@ -39,6 +39,7 @@ Dc21app::Application.routes.draw do
     end
     collection do
       get :download_selected
+      post :verify_upload      
       get :search
     end
   end

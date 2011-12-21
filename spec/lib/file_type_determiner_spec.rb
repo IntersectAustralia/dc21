@@ -17,6 +17,11 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'toa5.dat')
   end
 
+  let(:toa5_dat_quoted) do
+    path = Rails.root.join('spec/samples', 'toa5_quoted.dat')
+    Factory(:data_file, :path => path, :filename => 'toa5.dat')
+  end
+
   let(:toa5_txt) do
     path = Rails.root.join('spec/samples', 'toa5.txt')
     Factory(:data_file, :path => path, :filename => 'toa5.txt')
@@ -40,6 +45,12 @@ describe FileTypeDeterminer do
 
     it "should identify TOA5 files with dat extension and correct header" do
       known, format = file_type_determiner.identify_file(toa5_dat)
+      known.should be_true
+      format.should eq(FileTypeDeterminer::TOA5)
+    end
+
+    it "should identify TOA5 files with dat extension and correct header with quotes" do
+      known, format = file_type_determiner.identify_file(toa5_dat_quoted)
       known.should be_true
       format.should eq(FileTypeDeterminer::TOA5)
     end

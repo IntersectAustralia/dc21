@@ -12,6 +12,8 @@ def create_test_files
   create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
   create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
   create_data_file("sample3.txt", "kali@intersect.org.au")
+  create_data_file("WTC01_Table1.dat", "georgina@intersect.org.au")
+  create_data_file("WTC02_Table1.dat", "sean@intersect.org.au")
 end
 
 def create_test_users
