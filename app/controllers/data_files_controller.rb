@@ -8,6 +8,24 @@ class DataFilesController < ApplicationController
   def index
     set_tab :explore, :contentnavigation
     @data_files = DataFile.joins(:created_by).order(sort_column + ' ' + sort_direction)
+
+    @searched = false
+    if params[:date]
+      @date = params[:date]
+      date = parse_date(@date)
+      if date
+        @searched = true
+        @data_files = @data_files.with_data_covering_date(date)
+        if @data_files.empty?
+          @search_status_line = "No files found for #{date.to_s(:date_only)}."
+        else
+          @search_status_line = "Showing files containing data for #{date.to_s(:date_only)}."
+        end
+
+      end
+    end
+
+
   end
 
   def show
@@ -62,25 +80,6 @@ class DataFilesController < ApplicationController
       send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
       t.close
     end
-  end
-
-  def search
-    @searched = false
-    if params[:date]
-      @date = params[:date]
-      date = parse_date(@date)
-      if date
-        @searched = true
-        @data_files = DataFile.with_data_covering_date(date).joins(:created_by).order(sort_column + ' ' + sort_direction)
-        if @data_files.empty?
-          @search_status_line = "No files found for #{date.to_s(:date_only)}."
-        else
-          @search_status_line = "Showing files containing data for #{date.to_s(:date_only)}."
-        end
-
-      end
-    end
-    render :index
   end
 
   private

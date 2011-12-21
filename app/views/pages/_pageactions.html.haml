@@ -3,7 +3,7 @@
   .searchcontainer
 
     .searchbox
-      = form_tag(search_data_files_path, :method => :get) do
+      = form_tag(data_files_path, :method => :get) do
         = label_tag :date, "Search by Date:"
         = text_field_tag :date, @date
         = submit_tag "Search", :class => "search bluebutton"

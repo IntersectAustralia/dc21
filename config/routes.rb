@@ -40,7 +40,6 @@ Dc21app::Application.routes.draw do
     collection do
       get :download_selected
       post :verify_upload      
-      get :search
     end
   end
 

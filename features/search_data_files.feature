@@ -56,6 +56,3 @@ Feature: Search data files by date range
     When I do a date search for data files with date "2011-10-10"
     Then I should see "No files found for 2011-10-10."
     And the "date" field should contain "2011-10-10"
-
-  Scenario: Must be logged in to search
-    Then users should be required to login on the search data files page

@@ -11,7 +11,7 @@ module NavigationHelpers
     when /^the home\s?page$/
       '/'
 
-        # User paths
+    # User paths
     when /the login page/
       new_user_session_path
 
@@ -36,13 +36,13 @@ module NavigationHelpers
     when /^the reset password page$/
       edit_user_password_path
 
-    # Users paths
     when /the access requests page/
       access_requests_users_path
 
     when /the list users page/
       users_path
 
+    # Data file paths
     when /the list data files page/
       data_files_path
 
@@ -53,7 +53,7 @@ module NavigationHelpers
       new_data_file_path
 
 
-# Add more mappings here.
+    # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i
