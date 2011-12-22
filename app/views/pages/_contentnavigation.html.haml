@@ -1,11 +1,12 @@
 .contentnavigation
   = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-    = tab.dashboard 'Dashboard', home_pages_path
-    = tab.explore 'Explore Data', data_files_path
+    = tab.dashboard 'Dashboard', home_pages_path, :id => "dashboard"
+    = tab.explore 'Explore Data', data_files_path, :id => "data"
     = tab.facilities 'Facilities', facilities_path
     -#= tab.myuploads 'My Data Uploads', data_files_path
     -#= tab.accessrequests 'Members', access_requests_users_path
-    = yield :special_action
+    = yield :facilities
+    = yield :exploredata
 
 
 

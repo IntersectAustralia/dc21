@@ -944,7 +944,7 @@ table.activity, table.activity tbody
     +inlineblock
 
     a
-      +m-p-w-h-p-t-b-l-r-f("", 10px 15px)
+      +m-p-w-h-p-t-b-l-r-f("", 10px 15px 10px 45px)
       +font("", normal, 1em, 20px, $dark3)
       +textshadow-2
       +inlineblock
@@ -952,6 +952,23 @@ table.activity, table.activity tbody
         color: $dark2
         text-decoration: none
         cursor: pointer
+  li#data
+    a
+      background: transparent url(../images/icon_data_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_data_dark.png) 15px center no-repeat
+  li#data.active
+    a
+      background: transparent url(../images/icon_data_dark.png) 15px center no-repeat
+
+  li#dashboard
+    a
+      background: transparent url(../images/icon_dashboard_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_dashboard_dark.png) 15px center no-repeat
+  li#dashboard.active
+    a
+      background: transparent url(../images/icon_dashboard_dark.png) 15px center no-repeat
 
   li.active
     background: #FFF
