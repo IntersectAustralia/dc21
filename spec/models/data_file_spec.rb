@@ -40,20 +40,78 @@ describe DataFile do
     end
   end
 
-  describe "Find files for date" do
-    it "should return files for which the date range covers the given date" do
-      f1 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts before, ends after = IN
-      f2 = Factory(:data_file, :start_time => "2011-12-24 11:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts on, ends after = IN
-      f3 = Factory(:data_file, :start_time => "2011-12-24 23:59 UTC", :end_time => "2011-12-25 11:00 UTC") # starts on, ends after = IN
-      f4 = Factory(:data_file, :start_time => "2011-12-25 00:00 UTC", :end_time => "2011-12-25 11:00 UTC") # starts after, ends after = OUT
-      f5 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-23 23:59 UTC") # starts before, ends before = OUT
-      f6 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-24 00:00 UTC") # starts before, ends on = IN
-      f7 = Factory(:data_file, :start_time => "2011-12-20 11:00 UTC", :end_time => "2011-12-24 11:00 UTC") # starts before, end on = IN
-      f8 = Factory(:data_file, :start_time => nil, :end_time => nil)
+  describe "Find files for date range" do
+    before do
+      @f1 = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC", :end_time => "2011-02-28 11:00 UTC").id # starts before, ends after = IN
+      @f2 = Factory(:data_file, :start_time => "2011-01-01 00:00 UTC", :end_time => "2011-04-30 22:59 UTC").id # starts on, ends after = IN
+      @f3 = Factory(:data_file, :start_time => "2011-02-01 11:00 UTC", :end_time => "2011-03-31 22:59 UTC").id # starts on, ends after = IN
+      @f4 = Factory(:data_file, :start_time => "2011-03-01 11:00 UTC", :end_time => "2011-04-30 11:00 UTC").id # starts after, ends after = OUT
+      @f5 = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC", :end_time => "2011-01-31 11:00 UTC").id # starts before, ends before = OUT
+      @f6 = Factory(:data_file, :start_time => "2011-04-01 00:00 UTC", :end_time => "2011-04-30 11:00 UTC").id # starts before, ends on = IN
+      @f8 = Factory(:data_file, :start_time => nil, :end_time => nil)
+    end
 
-      search_result = DataFile.with_data_covering_date(Date.parse("2011-12-24"))
+    it "when searching with start date only should return all files which end on or after the given date" do
+      search_result = DataFile.with_data_in_range(Date.parse("2011-03-01"), nil)
+      search_result.size.should eq(4)
+      search_result.collect(&:id).sort.should eq([@f2, @f3, @f4, @f6])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2011-04-30"), nil)
+      search_result.size.should eq(3)
+      search_result.collect(&:id).sort.should eq([@f2, @f4, @f6])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2011-05-01"), nil)
+      search_result.size.should eq(0)
+    end
+
+    it "when searching with end date only should return all files that start on or before the given date" do
+      search_result = DataFile.with_data_in_range(nil, Date.parse("2011-03-01"))
       search_result.size.should eq(5)
-      search_result.collect(&:id).sort.should eq([f1.id, f2.id, f3.id, f6.id, f7.id])
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f4, @f5])
+
+      search_result = DataFile.with_data_in_range(nil, Date.parse("2011-02-28"))
+      search_result.size.should eq(4)
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f5])
+
+      search_result = DataFile.with_data_in_range(nil, Date.parse("2011-01-01"))
+      search_result.size.should eq(3)
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f5])
+
+      search_result = DataFile.with_data_in_range(nil, Date.parse("2010-12-31"))
+      search_result.size.should eq(0)
+    end
+
+    it "when searching with both dates should only return files that have data falling in the range" do
+      search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2010-12-31"))
+      search_result.size.should eq(0)
+
+      search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2011-01-01"))
+      search_result.size.should eq(3)
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f5])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2011-02-01"))
+      search_result.size.should eq(4)
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f5])
+
+      #single day
+      search_result = DataFile.with_data_in_range(Date.parse("2011-02-01"), Date.parse("2011-02-01"))
+      search_result.size.should eq(3)
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2011-02-15"), Date.parse("2011-03-15"))
+      search_result.size.should eq(4)
+      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f4])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2011-04-01"), Date.parse("2011-12-12"))
+      search_result.size.should eq(3)
+      search_result.collect(&:id).sort.should eq([@f2, @f4, @f6])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2011-04-30"), Date.parse("2011-12-12"))
+      search_result.size.should eq(3)
+      search_result.collect(&:id).sort.should eq([@f2, @f4, @f6])
+
+      search_result = DataFile.with_data_in_range(Date.parse("2011-05-01"), Date.parse("2011-12-12"))
+      search_result.size.should eq(0)
     end
   end
 
