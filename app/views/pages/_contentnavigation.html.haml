@@ -5,5 +5,9 @@
     = tab.facilities 'Facilities', facilities_path
     -#= tab.myuploads 'My Data Uploads', data_files_path
     -#= tab.accessrequests 'Members', access_requests_users_path
-    %li.actions
-      #downloadtoggle.download Download
+    = yield :special_action
+
+
+
+
+
