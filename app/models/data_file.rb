@@ -15,6 +15,16 @@ class DataFile < ActiveRecord::Base
   scope :with_station_name_in, lambda {|station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array))}
   scope :with_data_covering_date, lambda {|date| where { (start_time < (date + 1.day)) & (end_time >= (date)) }}
 
+  def self.with_data_in_range(from, to)
+    if (from && to)
+      where{(start_time < (to + 1.day)) & (end_time >= from)}
+    elsif from
+      where{end_time >= from}
+    else
+      where{start_time < (to + 1.day)}
+    end
+  end 
+  
   def extension
     ext = File.extname(filename)[1..-1]
     ext ? ext.downcase : nil
