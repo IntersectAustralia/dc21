@@ -1,14 +1,13 @@
 class FacilitiesController < ApplicationController
 
   set_tab :home
+  set_tab :facilities, :contentnavigation
 
   def index
-    set_tab :facilitise, :contentnavigation
     @facilities = Facility.all
   end
 
   def show
-    set_tab :facilitise, :contentnavigation
     @facility = Facility.find(params[:id])
   end
 

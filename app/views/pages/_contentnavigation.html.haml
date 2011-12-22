@@ -2,8 +2,8 @@
   = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
     = tab.dashboard 'Dashboard', home_pages_path
     = tab.explore 'Explore Data', data_files_path
-    = tab.facilitise 'Facilities', facilities_path
+    = tab.facilities 'Facilities', facilities_path
     -#= tab.myuploads 'My Data Uploads', data_files_path
     -#= tab.accessrequests 'Members', access_requests_users_path
     %li.actions
-      #downloadtoggle Download
+      #downloadtoggle.download Download

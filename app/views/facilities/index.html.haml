@@ -1,12 +1,12 @@
 = render 'pages/pageactions'
-%h1 Home / View Facilities
+%h1 Home / Facilities
 #content_container
   = render 'pages/contentnavigation'
   - if @facilities.empty?
-  = link_to "New Facility", new_facility_path
-    No facilities to display.
+  = link_to "New Facility", new_facility_path, :class => "bluebutton"
+    <h3>Displaying 0 of 0 Facilities</h3>
   - else
-    = link_to "New Facility", new_facility_path
+    = link_to "New Facility", new_facility_path, :class => "bluebutton"
     %table#facilities
       %tr
         %th.view View
