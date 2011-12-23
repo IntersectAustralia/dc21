@@ -11,11 +11,31 @@
     - if @searched
       = link_to "Show all files", data_files_path
 
+  .facetedsearch
+    %h3 Search:
+    .date
+      %h4 Date:
+      %input{ :type => "text", :maxlength => "2"}
+      %input{ :type => "text", :maxlength => "2"}
+      %input{ :type => "text", :maxlength => "4", :class => "year"}
+    .time
+      %h4 Time:
+      %input{ :type => "text", :maxlength => "2"}
+      %input{ :type => "text", :maxlength => "2"}
+      %input{ :type => "text", :maxlength => "2"}
+    .facility
+      %h4 Facility:
+      %input{ :type => "checkbox"}
+      %input{ :type => "checkbox"}
+      %input{ :type => "checkbox"}
+      %input{ :type => "checkbox"}
+
+
 
   - if (@data_files.empty? && !@searched)
     No files to display.
   - else
-    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles") do
+    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "blahblah") do
       %table#exploredata
         %tr
           %th.view.select
@@ -24,8 +44,8 @@
           %th.sortable= sortable "filename"
           %th.sortable= sortable "created_at", "Date added"
           %th.sortable= sortable "users.email", "Added by"
-          %th.sortable= sortable "start_time", "Start time"
-          %th.sortable= sortable "end_time", "End time"
+          -#%th.sortable= sortable "start_time", "Start time"
+          -#%th.sortable= sortable "end_time", "End time"
         - @data_files.each do |data_file|
           %tr{:class => cycle('field_bg', 'field_nobg')}
             %td.view.select= check_box_tag "ids[]",  "#{data_file.id}"
@@ -33,7 +53,7 @@
             %td= data_file.filename
             %td= data_file.created_at.to_s(:with_time)
             %td= data_file.created_by.email if data_file.created_by
-            %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
-            %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
+            -#%td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
+            -#%td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
       .actions.select
         =submit_tag "Download Selected Files", :class => "bluebutton" 

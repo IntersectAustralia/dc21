@@ -244,6 +244,11 @@ h3
   +font("", bold, 1em, 30px, $dark2)
   padding: 0 0 10px 0
 
+h4
+  +font("", bold, 0.813em, 18px, $dark2)
+  padding: 0 0 10px 0
+
+
 p
 
 /* Paragraph style. Use for text, or for a libe break. </br> is for pebs, and you're not a pleb right?
@@ -969,6 +974,35 @@ table.activity, table.activity tbody
   li#dashboard.active
     a
       background: transparent url(../images/icon_dashboard_dark.png) 15px center no-repeat
+
+  li#facilities
+    a
+      background: transparent url(../images/icon_facility_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_facility_dark.png) 15px center no-repeat
+  li#facilities.active
+    a
+      background: transparent url(../images/icon_facility_dark.png) 15px center no-repeat
+
+  li#users
+    a
+      background: transparent url(../images/icon_user_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_user_dark.png) 15px center no-repeat
+  li#users.active
+    a
+      background: transparent url(../images/icon_user_dark.png) 15px center no-repeat
+
+  li#requests
+    a
+      background: transparent url(../images/icon_requests_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_requests_dark.png) 15px center no-repeat
+  li#requests.active
+    a
+      background: transparent url(../images/icon_requests_dark.png) 15px center no-repeat
+
+
 
   li.active
     background: #FFF
