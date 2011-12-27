@@ -1,10 +1,6 @@
 %h1 #{@user.email} / Overview
 #content_container
-  .contentnavigation
-    = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-      = tab.overview 'Overview', users_profile_path
-      = tab.editdetails 'Edit Details', edit_user_registration_path
-      = tab.changepassword 'Change Password', users_edit_password_path
+  = render 'user_registers/contentnavigation'
   .container
     = render_field "User Name", current_user.email
     = render_field "First Name", current_user.first_name
