@@ -7,8 +7,8 @@
   = render 'pages/contentnavigation'
 
   %p
-    = @search_status_line
-    - if @searched
+    = @search.status_message
+    - unless @search.showing_all?
       = link_to "Show all files", data_files_path
 
   .facetedsearch
@@ -32,7 +32,7 @@
 
 
 
-  - if (@data_files.empty? && !@searched)
+  - if (@data_files.empty?)
     No files to display.
   - else
     = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "blahblah") do

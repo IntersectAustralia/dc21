@@ -7,25 +7,15 @@ class DataFilesController < ApplicationController
 
   def index
     set_tab :explore, :contentnavigation
+    @search = DataFileSearch.new(params[:search])
+
     @data_files = DataFile.joins(:created_by).order(sort_column + ' ' + sort_direction)
-
-    @searched = false
-    if params[:date]
-      @date = params[:date]
-      date = parse_date(@date)
-      if date
-        @searched = true
-        @data_files = @data_files.with_data_covering_date(date)
-        if @data_files.empty?
-          @search_status_line = "No files found for #{date.to_s(:date_only)}."
-        else
-          @search_status_line = "Showing files containing data for #{date.to_s(:date_only)}."
-        end
-
-      end
+    @data_files = @search.do_search(@data_files)
+    @from_date = @search.search_params[:from_date]
+    @to_date = @search.search_params[:to_date]
+    if @search.error
+      flash.now[:alert] = @search.error
     end
-
-
   end
 
   def show
@@ -74,7 +64,7 @@ class DataFilesController < ApplicationController
       Zip::ZipOutputStream.open(t.path) do |zos|
         files.each do |dfile|
           zos.put_next_entry("#{dfile.filename}")
-          zos << File.open(dfile.path,'rb'){|file|file.read}
+          zos << File.open(dfile.path, 'rb') { |file| file.read }
         end
       end
       send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
@@ -83,20 +73,6 @@ class DataFilesController < ApplicationController
   end
 
   private
-
-  def parse_date(text)
-    if params[:date].blank?
-      flash.now[:alert] = "Please enter a date"
-      return nil
-    end
-
-    begin
-      Date.parse(text)
-    rescue Exception
-      flash.now[:alert] = "The date you entered was invalid. Please enter a valid date."
-      nil
-    end
-  end
 
   def sort_column
     if params[:sort] == "users.email"
@@ -107,7 +83,7 @@ class DataFilesController < ApplicationController
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 
 
