@@ -1,6 +1,7 @@
 - content_for :exploredata do
   %li.actions
     #downloadtoggle.download Download
+    #searchtoggle.search Search
 = render 'pages/pageactions'
 %h1 Home / Explore Data
 #content_container
@@ -12,25 +13,24 @@
       = link_to "Show all files", data_files_path
 
   .facetedsearch
-    %h3 Search:
-    .date
-      %h4 Date:
-      %input{ :type => "text", :maxlength => "2"}
-      %input{ :type => "text", :maxlength => "2"}
-      %input{ :type => "text", :maxlength => "4", :class => "year"}
-    .time
-      %h4 Time:
-      %input{ :type => "text", :maxlength => "2"}
-      %input{ :type => "text", :maxlength => "2"}
-      %input{ :type => "text", :maxlength => "2"}
-    .facility
-      %h4 Facility:
-      %input{ :type => "checkbox"}
-      %input{ :type => "checkbox"}
-      %input{ :type => "checkbox"}
-      %input{ :type => "checkbox"}
-
-
+    .searchbox
+      %h3 Refine results:
+      .date
+        %h4 Date:
+        %input{ :type => "text", :maxlength => "2"}
+        %input{ :type => "text", :maxlength => "2"}
+        %input{ :type => "text", :maxlength => "4", :class => "year"}
+      .time
+        %h4 Time:
+        %input{ :type => "text", :maxlength => "2"}
+        %input{ :type => "text", :maxlength => "2"}
+        %input{ :type => "text", :maxlength => "2"}
+      .facility
+        %h4 Facility:
+        %input{ :type => "checkbox"}
+        %input{ :type => "checkbox"}
+        %input{ :type => "checkbox"}
+        %input{ :type => "checkbox"}
 
   - if (@data_files.empty? && !@searched)
     No files to display.

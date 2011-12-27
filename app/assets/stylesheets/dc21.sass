@@ -126,28 +126,31 @@ th.actions, td.actions
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 .facetedsearch
-  +m-p-w-h-p-t-b-l-r-f(0 20px 20px 0, "", 260px)
+  +m-p-w-h-p-t-b-l-r-f(0 20px 20px 0, "", "", 100%)
+  min-width: 20px
   +inlineblock
   +border(1px, solid, #DCDCDC, "", 2px)
   background: #FAFAFA
+  .searchbox
+    +m-p-w-h-p-t-b-l-r-f("", "", 260px)
 
-  h3
-    +m-p-w-h-p-t-b-l-r-f("", 5px 10px 5px 15px)
-    +border(1px, solid, #E1E1E1, 0 0 1px 0)
-    color: $dark2
-    +gradient-light-1
+    h3
+      +m-p-w-h-p-t-b-l-r-f("", 5px 10px 5px 15px)
+      +border(1px, solid, #E1E1E1, 0 0 1px 0)
+      color: $dark2
+      +gradient-light-1
 
-  .date, .time, .facility
-    +m-p-w-h-p-t-b-l-r-f("", 0 15px)
+    .date, .time, .facility
+      +m-p-w-h-p-t-b-l-r-f("", 0 15px)
 
-    input[type=text]
-      +m-p-w-h-p-t-b-l-r-f("", "", 20px)
-      +font("", normal, 0.813em, 18px)
-    input[type=text].year
-      +m-p-w-h-p-t-b-l-r-f("", "", 30px)
+      input[type=text]
+        +m-p-w-h-p-t-b-l-r-f("", "", 20px)
+        +font("", normal, 0.813em, 18px)
+      input[type=text].year
+        +m-p-w-h-p-t-b-l-r-f("", "", 30px)
 
-    h4
-      +m-p-w-h-p-t-b-l-r-f("", 15px 0)
+      h4
+        +m-p-w-h-p-t-b-l-r-f("", 15px 0)
 
 .recentactivity
   margin: 0

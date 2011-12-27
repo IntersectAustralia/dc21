@@ -107,6 +107,10 @@ $(window).load(function() {
     $('.searchbox').toggle();
   });
 
+  $('#searchtoggle').click(function(event) {
+    $('.searchbox').animate({width:'toggle'}, 550);
+  });
+
   // DOWNLOAD MULTIPLE TOGGLE ///////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
   
