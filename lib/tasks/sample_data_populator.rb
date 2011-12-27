@@ -7,18 +7,18 @@ end
 def create_test_files
   DataFile.delete_all
   create_data_file("sample1.txt", "georgina@intersect.org.au")
-  create_data_file("sample2.txt", "sean@intersect.org.au")
-  create_data_file("weather_station_15_min.dat", "sean@intersect.org.au")
+  create_data_file("sample2.txt", "alexb@intersect.org.au")
+  create_data_file("weather_station_15_min.dat", "alexb@intersect.org.au")
   create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
   create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
   create_data_file("sample3.txt", "kali@intersect.org.au")
   create_data_file("WTC01_Table1.dat", "georgina@intersect.org.au")
-  create_data_file("WTC02_Table1.dat", "sean@intersect.org.au")
+  create_data_file("WTC02_Table1.dat", "alexb@intersect.org.au")
 end
 
 def create_test_users
   User.delete_all
-  create_user(:email => "sean@intersect.org.au", :first_name => "Sean", :last_name => "McCarthy")
+  create_user(:email => "alexb@intersect.org.au", :first_name => "Alex", :last_name => "Bradner")
   create_user(:email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")
   create_user(:email => "matthew@intersect.org.au", :first_name => "Matthew", :last_name => "Hillman")
   create_user(:email => "kali@intersect.org.au", :first_name => "Kali", :last_name => "Waterford")
@@ -28,7 +28,7 @@ def create_test_users
   create_rejected_user(:email => "rejected@intersect.org.au", :first_name => "Rejected", :last_name => "One")
   create_unapproved_user(:email => "unapproved1@intersect.org.au", :first_name => "Unapproved", :last_name => "One")
   create_unapproved_user(:email => "unapproved2@intersect.org.au", :first_name => "Unapproved", :last_name => "Two")
-  set_role("sean@intersect.org.au", "Administrator")
+  set_role("alexb@intersect.org.au", "Administrator")
   set_role("georgina@intersect.org.au", "Administrator")
   set_role("matthew@intersect.org.au", "Administrator")
   set_role("kali@intersect.org.au", "Administrator")

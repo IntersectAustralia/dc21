@@ -4,8 +4,8 @@ Then /^I should see "([^"]*)" table with$/ do |table_id, expected_table|
 end
 
 Then /^the "([^"]*)" table should have (\d+) rows$/ do |table_id, expected_rows|
-  actual = find("table##{table_id}").all('tr').size
-  expected_rows.to_i.should eq(actual - 1) #subtract off one for the header
+  actual = find("table##{table_id}").all('tr').size - 1 #subtract off one for the header
+  actual.should eq(expected_rows.to_i)
 end
 
 Then /^I should see field "([^"]*)" with value "([^"]*)"$/ do |field, value|
