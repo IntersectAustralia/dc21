@@ -1,6 +1,7 @@
 - content_for :facilities do
   %li.actions
-    = link_to "New Facility", new_facility_path
+    .facility.new.whitebutton
+      = link_to "New Facility", new_facility_path
 = render 'pages/pageactions'
 %h1 Home / Facilities
 #content_container
@@ -8,7 +9,6 @@
   - if @facilities.empty?
     <h3>Displaying 0 of 0 Facilities</h3>
   - else
-    = link_to "New Facility", new_facility_path, :class => "bluebutton"
     %table#facilities
       %tr
         %th.view View

@@ -465,14 +465,26 @@ a.edit
   &:hover
     background: url("../images/icon_edit_dark.png") center center no-repeat
 
-.download 
+.download.whitebutton
   cursor: pointer
-  +m-p-w-h-p-t-b-l-r-f("", 0 0 0 30px, "", 24px)
-  line-height: 18px
-  font-weight: normal
-  background: url("../images/icon_download_light.png") left top no-repeat
+  label, span
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 85px)
+    font-weight: normal
+    background: url("../images/icon_download_light.png") left top no-repeat
   &:hover
-    background: url("../images/icon_download_dark.png") left top no-repeat
+    label, span
+      background: url("../images/icon_download_dark.png") left top no-repeat
+
+.facility.new.whitebutton
+  cursor: pointer
+  label, span, a
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 85px)
+    font-weight: normal
+    background: url("../images/icon_facility_new_light.png") left center no-repeat
+  &:hover
+    label, span, a
+      background: url("../images/icon_facility_new_dark.png") left center no-repeat
+
 
 // BUTTONS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -957,6 +969,10 @@ table.activity, table.activity tbody
         color: $dark2
         text-decoration: none
         cursor: pointer
+
+  li.actions
+    background: #CCC
+
   li#data
     a
       background: transparent url(../images/icon_data_light.png) 15px center no-repeat
