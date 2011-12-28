@@ -65,3 +65,14 @@ When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do
   fill_in "To Date:", :with => to
   click_button "Search"
 end
+
+Given /^file "([^"]*)" has metadata item "([^"]*)" with value "([^"]*)"$/ do |name, key, value|
+  file = DataFile.find_by_filename(name)
+  file.metadata_items.create!(:key => key, :value => value)
+end
+
+Then /^I should see facility checkboxes$/ do |table|
+  labels = find(".facility").all("label").map { |label| label.text.strip }
+  expected_labels = table.raw.collect{|row| row[0]}
+  labels.should eq(expected_labels)
+end

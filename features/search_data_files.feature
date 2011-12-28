@@ -15,6 +15,15 @@ Feature: Search data files by date range
       | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
       | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
       | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        |
+    And file "datafile8.dat" has metadata item "station_name" with value "ROS_WS"
+    And file "datafile7.dat" has metadata item "station_name" with value "TC"
+    And file "datafile6.dat" has metadata item "station_name" with value "HFE_WS"
+    And file "datafile5.dat" has metadata item "station_name" with value "TC"
+    And file "datafile4.dat" has metadata item "station_name" with value "HFE_WS"
+    And I have facilities
+      | name                | code   |
+      | HFE Weather Station | HFE_WS |
+      | Tree Chambers       | TC     |
 
   Scenario: Search for files by date range - from date only
     When I do a date search for data files with dates "2010-06-11" and ""
@@ -53,6 +62,39 @@ Feature: Search data files by date range
     And I should see "Showing files containing data in the range 2010-06-03 to 2010-06-10"
     And the "from_date" field should contain "2010-06-03"
     And the "to_date" field should contain "2010-06-10"
+
+  Scenario: Search for files from specific facilities
+    When I am on the list data files page
+    Then I should see facility checkboxes
+      | HFE Weather Station |
+      | ROS_WS              |
+      | Tree Chambers       |
+    When I check "HFE Weather Station"
+    And I check "ROS_WS"
+    When I uncheck "Tree Chambers"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      | Date added       | Added by                  | Start time          | End time            |
+      | datafile6.dat | 2011-12-30 10:15 | kali@intersect.org.au     | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | datafile8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | datafile4.dat | 2011-11-01 10:15 | marc@intersect.org.au     | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
+    And the "ROS_WS" checkbox should be checked
+    And the "HFE Weather Station" checkbox should be checked
+    And the "Tree Chambers" checkbox should not be checked
+
+  Scenario: Search for files from specific facilities and by date range
+    When I am on the list data files page
+    And I check "HFE Weather Station"
+    And I check "ROS_WS"
+    And I uncheck "Tree Chambers"
+    And I fill in "2010-06-03" for "From Date:"
+    And I fill in "2010-06-10" for "To Date:"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      | Date added       | Added by                  | Start time          | End time            |
+      | datafile6.dat | 2011-12-30 10:15 | kali@intersect.org.au     | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | datafile4.dat | 2011-11-01 10:15 | marc@intersect.org.au     | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
+
 
   Scenario: Should be able to sort within search results
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"

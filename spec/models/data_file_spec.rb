@@ -132,4 +132,27 @@ describe DataFile do
       DataFile.with_station_name_in(["ASDF"]).collect(&:id).sort.should eq([])
     end
   end
+
+  describe "Getting set of facilities for searching" do
+
+    it "should exclude mapped facilities that don't have any records, and should include unmapped facilities" do
+      df1 = Factory(:data_file)
+      df1.metadata_items.create!(:key => "station_name", :value => "code2")
+
+      df1 = Factory(:data_file)
+      df1.metadata_items.create!(:key => "station_name", :value => "ROS_WS")
+
+      df1 = Factory(:data_file)
+      df1.metadata_items.create!(:key => "station_name", :value => "code2")
+
+      Factory(:facility, :name => "Name1", :code => "code1")
+      Factory(:facility, :name => "Name2", :code => "code2")
+      searchables = DataFile.searchable_facilities
+      searchables.size.should eq(2)
+      searchables[0][0].should eq("code2")
+      searchables[0][1].should eq("Name2")
+      searchables[1][0].should eq("ROS_WS")
+      searchables[1][1].should eq("ROS_WS")
+    end
+  end
 end

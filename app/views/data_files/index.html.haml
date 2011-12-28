@@ -27,10 +27,9 @@
         %input{ :type => "text", :maxlength => "2"}
       .facility
         %h4 Facility:
-        %input{ :type => "checkbox"}
-        %input{ :type => "checkbox"}
-        %input{ :type => "checkbox"}
-        %input{ :type => "checkbox"}
+        - @facilities.each_with_index do |facility, index|
+          = label_tag "search_facility_#{index}", facility[1]
+          = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
       = submit_tag "Search", :class => "search bluebutton"
 
 

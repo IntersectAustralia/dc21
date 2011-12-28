@@ -4,6 +4,7 @@ class DataFileSearch
   attr_accessor :error
   attr_accessor :from_date
   attr_accessor :to_date
+  attr_accessor :facilities
 
 
   def initialize(search_params)
@@ -12,6 +13,8 @@ class DataFileSearch
 
     self.from_date = parse_date(@search_params[:from_date])
     self.to_date = parse_date(@search_params[:to_date])
+    self.facilities = @search_params[:facilities]
+    self.facilities ||= []
 
     check_from_date_is_before_to_date
 
@@ -43,12 +46,14 @@ class DataFileSearch
   end
 
   def do_search(relation)
-    if from_date.nil? && to_date.nil?
-      # if no dates were entered or a validation error occurred with the search input, just show all
-      relation
-    else
-      relation.with_data_in_range(self.from_date, self.to_date)
+    search_result = relation
+    if from_date || to_date
+      search_result = search_result.with_data_in_range(self.from_date, self.to_date)
     end
+    unless facilities.nil? || facilities.empty?
+      search_result = search_result.with_station_name_in(self.facilities)
+    end
+    search_result
   end
 
   def check_from_date_is_before_to_date
