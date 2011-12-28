@@ -35,7 +35,7 @@ Feature: View the list of facilities
 
   Scenario: View the list when there's nothing to show
     When I am on the facilities page
-    Then I should see "No facilities to display."
+    Then I should see "Displaying 0 of 0 Facilities"
 
   Scenario: Must be logged in to view the facilities list
     Then users should be required to login on the facilities page
@@ -65,7 +65,7 @@ Feature: View the list of facilities
     When I fill in the following:
       | facility_name | Facility0 |
       | facility_code | f0        |
-    And I press "Add Facility"
+    And I press "Save Facility"
     Then I should see "Facility successfully added"
     And I should see details displayed
       | Name  | Facility0  |
@@ -77,7 +77,7 @@ Feature: View the list of facilities
     When I fill in the following:
       | facility_name | |
       | facility_code | |
-    And I press "Add Facility"
+    And I press "Save Facility"
     Then I should see "Name can't be blank"
     Then I should see "Code can't be blank"
 
@@ -90,7 +90,7 @@ Feature: View the list of facilities
     When I fill in the following:
       | facility_name | Facility0 |
       | facility_code | f0        |
-    And I press "Add Facility"
+    And I press "Save Facility"
     Then I should see "Name has already been taken"
     Then I should see "Code has already been taken"
 
