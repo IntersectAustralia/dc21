@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111221014948) do
+ActiveRecord::Schema.define(:version => 20111228232651) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -24,6 +24,13 @@ ActiveRecord::Schema.define(:version => 20111221014948) do
   end
 
   add_index "column_details", ["data_file_id"], :name => "index_column_details_on_data_file_id"
+
+  create_table "column_mappings", :force => true do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "data_files", :force => true do |t|
     t.string   "filename"
