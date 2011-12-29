@@ -529,7 +529,7 @@ input[type=disabled]:active
 // BUTTONS - WHITE / GREY
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-input.whitebutton, input[type=button], button.whitebutton, a.whitebutton, .whitebutton
+input.whitebutton, input[type=button], input[type=submit].whitebutton, button.whitebutton, a.whitebutton, .whitebutton
   +m-p-w-h-p-t-b-l-r-f("", 5px 10px, "", 18px)
   +font("", normal, 0.875em, 18px, $dark3, none, center)
   +gradient-light-1
@@ -541,6 +541,12 @@ input.whitebutton, input[type=button], button.whitebutton, a.whitebutton, .white
     +gradient-light-2
   &:active
     +boxshadow-2-inset
+input[type=submit].whitebutton
+  +m-p-w-h-p-t-b-l-r-f("", "", "", auto)
+  &:hover
+    color: $dark2
+    +border(#c6c6c6)
+
 
 // BUTTONS - BLUE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -727,8 +733,11 @@ table.activity, table.activity tbody
       +m-p-w-h-p-t-b-l-r-f(-48px 0 0 0)
       .logo
         +m-p-w-h-p-t-b-l-r-f(56px 0 0 0, "", "", 20px)
-        +font("", normal, 1.5em, 1em, $dark1)
         text-shadow: #EEE 0px 1px 0px
+        a
+          +m-p-w-h-p-t-b-l-r-f("", 0 0 0 40px)
+          +font("", normal, 1.5em, 1em, $dark1)
+          background: url("../images/icon_logo_small_dc21.png") 10px center no-repeat
   #content
     +m-p-w-h-p-t-b-l-r-f(0 auto, 97px 0 0 0)
 
@@ -801,11 +810,13 @@ table.activity, table.activity tbody
       min-height: 100%
 
       .logo
-        +m-p-w-h-p-t-b-l-r-f(20px 0 0 0, "", 300px, 48px)
+        +m-p-w-h-p-t-b-l-r-f(20px 0 0 0, "", 300px)
         float: left
-        +font("", bold, 3em, 1em, $dark2)
         +textshadow-2
         a
+          +m-p-w-h-p-t-b-l-r-f("", 0 0 0 60px)
+          background: url("../images/icon_logo_dc21.png") left top no-repeat
+          +font("", normal, 3em, 1em, $dark2)
           &:hover
             text-decoration: none
 

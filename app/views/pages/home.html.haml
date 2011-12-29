@@ -1,6 +1,6 @@
 - if !user_signed_in?
   #content_container
-    .container_centered
+    .container_home
       = form_for("user", :url => user_session_path) do |f|
         = render(:partial => 'devise/sessions/form', :locals => { :f => f })
 - else

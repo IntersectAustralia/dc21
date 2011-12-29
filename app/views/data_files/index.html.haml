@@ -15,26 +15,30 @@
 
   .facetedsearch
     .searchbox
-    %h3 Search:
-    = form_tag(data_files_path, :method => :get) do
-      .date
-        %h4 Date:
-        = label_tag :from_date, "From Date:"
-        = text_field_tag "search[from_date]", @from_date, :id => :from_date
-        = label_tag :to_date, "To Date:"
-        = text_field_tag "search[to_date]", @to_date, :id => :to_date
-      .time
-        %h4 Time:
-        %input{ :type => "text", :maxlength => "2"}
-        %input{ :type => "text", :maxlength => "2"}
-        %input{ :type => "text", :maxlength => "2"}
-      .facility
-        %h4 Facility:
-        %input{ :type => "checkbox"}
-        %input{ :type => "checkbox"}
-        %input{ :type => "checkbox"}
-        %input{ :type => "checkbox"}
-      = submit_tag "Search", :class => "search bluebutton"
+      = form_tag(data_files_path, :method => :get) do
+        .searchcategory
+          %h3.expand Date:
+          .date
+            = label_tag :from_date, "From Date:"
+            = text_field_tag "search[from_date]", @from_date, :id => :from_date
+            = label_tag :to_date, "To Date:"
+            = text_field_tag "search[to_date]", @to_date, :id => :to_date
+        .searchcategory
+          %h3.expand Time:
+          .time
+            %input{ :type => "text", :maxlength => "2"}
+            %input{ :type => "text", :maxlength => "2"}
+            %input{ :type => "text", :maxlength => "2"}
+        .searchcategory
+          %h3.expand Facility:
+          .facility
+            %input{ :type => "checkbox"}
+            %input{ :type => "checkbox"}
+            %input{ :type => "checkbox"}
+            %input{ :type => "checkbox"}
+        .actions
+          = submit_tag "Update Search Results", :class => "whitebutton"
+
   - if (@data_files.empty?)
     No files to display.
   - else

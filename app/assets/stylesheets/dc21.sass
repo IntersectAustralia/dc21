@@ -12,6 +12,9 @@
   +m-p-w-h-p-t-b-l-r-f(0 0 20 0)
   +border(1px, dashed, #B9B9B9, 0 0 1px 0)
 
+.container_home
+  
+
 // GENERAL ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,28 +132,47 @@ th.actions, td.actions
   +m-p-w-h-p-t-b-l-r-f(0 20px 20px 0, "", "", 100%)
   min-width: 20px
   +inlineblock
-  +border(1px, solid, #DCDCDC, "", 2px)
+  +border(1px, solid, #DCDCDC, 0px 1px 1px 1px, 2px)
   background: #FAFAFA
   .searchbox
     +m-p-w-h-p-t-b-l-r-f("", "", 260px)
 
-    h3
-      +m-p-w-h-p-t-b-l-r-f("", 5px 10px 5px 15px)
-      +border(1px, solid, #E1E1E1, 0 0 1px 0)
-      color: $dark2
-      +gradient-light-1
+    .searchcategory
+      +m-p-w-h-p-t-b-l-r-f(0, 0, auto)
+
+      h3
+        +m-p-w-h-p-t-b-l-r-f("", 5px 40px 5px 40px)
+        +border(1px, solid, #E1E1E1, 1px 0 1px 0)
+        color: $dark3
+        +gradient-light-1
+        cursor: pointer
+        background: url("../images/icon_arrow_down_dark.png") 15px center no-repeat
+        background-size: 14px
+        &:hover
+          background: url("../images/icon_arrow_right_light.png") 15px center no-repeat
+          background-size: 8px
+
 
     .date, .time, .facility
-      +m-p-w-h-p-t-b-l-r-f("", 0 15px)
+      +m-p-w-h-p-t-b-l-r-f(10px 0)
+
+      label
+        +m-p-w-h-p-t-b-l-r-f("", 10px 20px 10px 40px, 80px)
+        +font("", bold, 0.813em, 18px, $dark3, "", left)
+        
 
       input[type=text]
-        +m-p-w-h-p-t-b-l-r-f("", "", 20px)
+        +m-p-w-h-p-t-b-l-r-f("", "", 80px)
         +font("", normal, 0.813em, 18px)
       input[type=text].year
         +m-p-w-h-p-t-b-l-r-f("", "", 30px)
 
       h4
         +m-p-w-h-p-t-b-l-r-f("", 15px 0)
+    
+    .actions
+      +m-p-w-h-p-t-b-l-r-f("", 20px 0)
+      text-align: center
 
 .recentactivity
   margin: 0
