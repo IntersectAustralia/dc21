@@ -15,4 +15,27 @@ describe ColumnMapping do
       should validate_uniqueness_of(:code)
     end
   end
+
+  describe "Code to name map" do
+    it "should return a map containing all codes and names" do
+      Factory(:column_mapping, :code => "abc", :name => "def")
+      Factory(:column_mapping, :code => "def", :name => "def")
+      Factory(:column_mapping, :code => "ghi", :name => "jkl")
+      map = ColumnMapping.code_to_name_map
+      map.size.should eq(3)
+      map["abc"].should eq("def")
+      map["def"].should eq("def")
+      map["ghi"].should eq("jkl")
+    end
+  end
+
+  describe "Map names to codes" do
+    it "should map those that do exist and leave those that are missing" do
+      Factory(:column_mapping, :code => "abc", :name => "def")
+      Factory(:column_mapping, :code => "def", :name => "def")
+      Factory(:column_mapping, :code => "ghi", :name => "jkl")
+      Factory(:column_mapping, :code => "mno", :name => "pqr")
+      ColumnMapping.map_names_to_codes(["def", "pqr", "blah"]).sort.should eq(["abc", "blah", "def", "mno"])
+    end
+  end
 end

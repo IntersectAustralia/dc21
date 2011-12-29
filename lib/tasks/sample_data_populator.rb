@@ -6,6 +6,8 @@ end
 
 def create_test_files
   DataFile.delete_all
+  ColumnDetail.delete_all
+  MetadataItem.delete_all
   create_data_file("sample1.txt", "georgina@intersect.org.au")
   create_data_file("sample2.txt", "alexb@intersect.org.au")
   create_data_file("weather_station_15_min.dat", "alexb@intersect.org.au")
@@ -85,6 +87,7 @@ def get_file_path
 end
 
 def create_facilities
+  Facility.delete_all
   create_facility(:name => "test", :code => "T1")
   create_facility(:name => "test2", :code => "T2")
 end

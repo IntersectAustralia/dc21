@@ -136,17 +136,12 @@ describe DataFile do
   describe "Getting set of facilities for searching" do
 
     it "should exclude mapped facilities that don't have any records, and should include unmapped facilities" do
-      df1 = Factory(:data_file)
-      df1.metadata_items.create!(:key => "station_name", :value => "code2")
-
-      df1 = Factory(:data_file)
-      df1.metadata_items.create!(:key => "station_name", :value => "ROS_WS")
-
-      df1 = Factory(:data_file)
-      df1.metadata_items.create!(:key => "station_name", :value => "code2")
-
+      Factory(:data_file).metadata_items.create!(:key => "station_name", :value => "code2")
+      Factory(:data_file).metadata_items.create!(:key => "station_name", :value => "ROS_WS")
+      Factory(:data_file).metadata_items.create!(:key => "station_name", :value => "code2")
       Factory(:facility, :name => "Name1", :code => "code1")
       Factory(:facility, :name => "Name2", :code => "code2")
+
       searchables = DataFile.searchable_facilities
       searchables.size.should eq(2)
       searchables[0][0].should eq("code2")
@@ -155,4 +150,79 @@ describe DataFile do
       searchables[1][1].should eq("ROS_WS")
     end
   end
+
+  describe "Getting set of column headings for searching" do
+    it "Should include all mapped headers as well as unmapped headers from existing files" do
+      df1 = Factory(:data_file)
+      Factory(:column_detail, :name => "Rnfl", :data_file => df1)
+      Factory(:column_detail, :name => "Temp", :data_file => df1)
+      Factory(:column_detail, :name => "Humi", :data_file => df1)
+
+      df2 = Factory(:data_file)
+      Factory(:column_detail, :name => "Rnfll", :data_file => df2)
+      Factory(:column_detail, :name => "SoilTemp", :data_file => df2)
+      Factory(:column_detail, :name => "Humi", :data_file => df2)
+
+      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfl")
+      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfll")
+      Factory(:column_mapping, :name => "Temperature", :code => "Temp")
+      Factory(:column_mapping, :name => "Wind Speed", :code => "Wind")
+
+      searchables = DataFile.searchable_column_names
+      searchables.should eq(["Humi", "Rainfall", "SoilTemp", "Temperature", "Wind Speed"])
+    end
+  end
+
+  describe "Find files with variables" do
+    before(:each) do
+      @f1 = Factory(:data_file)
+      @f2 = Factory(:data_file)
+      @f3 = Factory(:data_file)
+      @f4 = Factory(:data_file)
+      @f5 = Factory(:data_file)
+      @f6 = Factory(:data_file)
+      Factory(:column_detail, :name => "Rnfll", :data_file => @f1)
+      Factory(:column_detail, :name => "Temp", :data_file => @f1)
+      Factory(:column_detail, :name => "Humi", :data_file => @f1)
+      Factory(:column_detail, :name => "Rnfl", :data_file => @f2)
+      Factory(:column_detail, :name => "Rnfll", :data_file => @f3)
+      Factory(:column_detail, :name => "Temp", :data_file => @f4)
+      Factory(:column_detail, :name => "Blah", :data_file => @f5)
+    end
+
+    it "when column name is unmapped, should find files with matching column name" do
+      DataFile.with_any_of_these_columns(["Rnfll"]).collect(&:id).sort.should eq([@f1.id, @f3.id])
+    end
+
+    it "should work with multiple column names" do
+      DataFile.with_any_of_these_columns(["Rnfll", "Temp"]).collect(&:id).sort.should eq([@f1.id, @f3.id, @f4.id])
+    end
+
+    it "should handle mapped column names" do
+      Factory(:column_mapping, :code => "Rnfl", :name => "Rainfall")
+      Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
+      DataFile.with_any_of_these_columns(["Rainfall"]).collect(&:id).sort.should eq([@f1.id, @f2.id, @f3.id])
+    end
+
+    it "should handle multiple mapped column names" do
+      Factory(:column_mapping, :code => "Rnfl", :name => "Rainfall")
+      Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
+      Factory(:column_mapping, :code => "Temp", :name => "Temperature")
+      DataFile.with_any_of_these_columns(["Rainfall", "Temperature"]).collect(&:id).sort.should eq([@f1.id, @f2.id, @f3.id, @f4.id])
+    end
+
+    it "should handle a mixture of mapped and unmapped column names" do
+      Factory(:column_mapping, :code => "Rnfl", :name => "Rainfall")
+      Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
+      DataFile.with_any_of_these_columns(["Rainfall", "Temp"]).collect(&:id).sort.should eq([@f1.id, @f2.id, @f3.id, @f4.id])
+    end
+
+    it "should handle case where a mapped name is also a raw name" do
+      pending("Not sure how this should work")
+      #Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
+      #Factory(:column_details, :name => "Rainfall", :data_file => @f5)
+      #DataFile.with_any_of_these_columns(["Rainfall"]).collect(&:id).sort.should eq([@f1.id, @f3.id, ??])
+    end
+  end
+
 end
