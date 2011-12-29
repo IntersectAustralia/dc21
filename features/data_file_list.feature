@@ -55,7 +55,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download"
+    And I click on "Download Files"
     And I press "Download Selected Files"
     Then I should see "No files were selected for download"
 
@@ -65,7 +65,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download"
+    And I click on "Download Files"
     And I check "ids[]"
     And I press "Download Selected Files"
     Then I should get a download of all data files

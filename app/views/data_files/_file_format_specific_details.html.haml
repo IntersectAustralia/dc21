@@ -14,10 +14,17 @@
   %table#column_info
     %tr
       %th Column
+      %th Column Mapping
       %th Unit
       %th Measurement Type
     - @data_file.column_details.each do |column_details|
       %tr
         %td= column_details.name
+        %td
+          - mapping = ColumnMapping.find_by_code(column_details.name.downcase)
+          - unless mapping.nil?
+            = mapping.name
+          - else
+            = ""
         %td= column_details.unit
         %td= column_details.data_type

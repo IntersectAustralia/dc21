@@ -2,6 +2,7 @@ def populate_data
   create_test_users
   create_test_files
   create_facilities
+  create_column_mappings
 end
 
 def create_test_files
@@ -96,4 +97,16 @@ def create_facility(attrs)
   facility = Facility.new(attrs)
   facility.save!
   facility
+end
+
+def create_column_mappings
+  create_mapping(:name => "Average Soil Temp (Probe1)", :code => "soiltempprobe_avg(1)")
+  create_mapping(:name => "Average Soil Temp (Probe4)", :code => "soiltempprobe_avg(4)")
+  create_mapping(:name => "Time", :code => "timestamp")
+end
+
+def create_mapping(attrs)
+  mapping = ColumnMapping.new(attrs)
+  mapping.save!
+  mapping
 end

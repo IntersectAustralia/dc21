@@ -67,6 +67,6 @@ Feature: View the list of data files
     When I am on the list data files page
     And I click on "Download"
     And I check "ids[]"
-    And I press "Download selected"
+    And I press "Download Selected Files"
     Then I should get a download of all data files
 
