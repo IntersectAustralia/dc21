@@ -26,9 +26,10 @@
         .searchcategory
           %h3.expand Time:
           .time
-            %input{ :type => "text", :maxlength => "2"}
-            %input{ :type => "text", :maxlength => "2"}
-            %input{ :type => "text", :maxlength => "2"}
+            = label_tag :from_date, "From Time:"
+            = text_field_tag "search[from_date]", @from_date, :id => :from_date
+            = label_tag :to_date, "To Time:"
+            = text_field_tag "search[to_date]", @to_date, :id => :to_date
         .searchcategory
           %h3.expand Facility:
           .facility
@@ -37,9 +38,6 @@
               = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
         .actions
           = submit_tag "Update Search Results", :class => "whitebutton"
-
-
->>>>>>> c704b7a143c481c551b66c0d84a96d7b6fba5433
 
   - if (@data_files.empty?)
     No files to display.
