@@ -59,6 +59,15 @@ When /^(?:|I )follow "([^"]*)"$/ do |link|
   click_link(link)
 end
 
+Capybara.add_selector(:element) do
+  xpath { |locator| "//*[normalize-space(text())=#{XPath::Expression::StringLiteral.new(locator)}]" }
+end
+
+When /^I click on "([^"]*)"$/ do |text|
+  msg = "No element found with the content of '#{text}'"
+  find(:element, text, :message => msg).click
+end
+
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
   fill_in(field, :with => value)
 end

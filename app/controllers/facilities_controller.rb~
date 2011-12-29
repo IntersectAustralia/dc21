@@ -1,14 +1,13 @@
 class FacilitiesController < ApplicationController
 
   set_tab :home
+  set_tab :facilities, :contentnavigation
 
   def index
-    set_tab :facilitise, :contentnavigation
     @facilities = Facility.all
   end
 
   def show
-    set_tab :facilitise, :contentnavigation
     @facility = Facility.find(params[:id])
   end
 
@@ -36,9 +35,14 @@ class FacilitiesController < ApplicationController
       redirect_to @facility
       flash[:success] = "Facility successfully updated."
     else
-      @title = "Edit user"
       render 'edit'
     end
+  end
+  
+  def find_by_code(codey)
+    @facilities.each do |fac|
+      if fac.code == codey
+        @facility = fac
   end
 
 end

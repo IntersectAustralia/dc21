@@ -8,7 +8,7 @@
         = render_field item.key.humanize, item.value
     - else
       = render_field item.key.humanize, item.value
-
+   
 
   %h3 Data File Columns
   %table#column_info

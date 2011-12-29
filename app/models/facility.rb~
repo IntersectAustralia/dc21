@@ -3,7 +3,7 @@ class Facility < ActiveRecord::Base
   before_validation :remove_white_spaces
 
   validates :name, :code,  :presence => true,
-                           :uniqueness => {:case_sensitive => true},
+                           :uniqueness => {:case_sensitive => false},
                            :length   => { :maximum => 50 }
 
   default_scope :order => 'name ASC'
@@ -15,6 +15,10 @@ class Facility < ActiveRecord::Base
   def remove_white_spaces
     self.name = self.name.strip
     self.code = self.code.strip
+  end
+
+  def find_by_code(codey)
+    #nothing
   end
 
 end

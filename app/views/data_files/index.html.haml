@@ -32,12 +32,14 @@
         .searchcategory
           %h3.expand Facility:
           .facility
-            %input{ :type => "checkbox"}
-            %input{ :type => "checkbox"}
-            %input{ :type => "checkbox"}
-            %input{ :type => "checkbox"}
+            - @facilities.each_with_index do |facility, index|
+              = label_tag "search_facility_#{index}", facility[1]
+              = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
         .actions
           = submit_tag "Update Search Results", :class => "whitebutton"
+
+
+>>>>>>> c704b7a143c481c551b66c0d84a96d7b6fba5433
 
   - if (@data_files.empty?)
     No files to display.

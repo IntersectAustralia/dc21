@@ -38,5 +38,5 @@ class FacilitiesController < ApplicationController
       render 'edit'
     end
   end
-
+  
 end

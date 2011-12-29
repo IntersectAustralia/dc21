@@ -9,13 +9,21 @@ class DataFilesController < ApplicationController
     set_tab :explore, :contentnavigation
     @search = DataFileSearch.new(params[:search])
 
-    @data_files = DataFile.joins(:created_by).order(sort_column + ' ' + sort_direction)
+    # prefix the sort column with the table name so we don't get ambiguity errors when doing joins
+    col = sort_column
+    col = "data_files.#{col}" unless col.index(".")
+    @data_files = DataFile.joins(:created_by).order(col + ' ' + sort_direction)
     @data_files = @search.do_search(@data_files)
+
     @from_date = @search.search_params[:from_date]
     @to_date = @search.search_params[:to_date]
+    @selected_facilities = @search.facilities
+
     if @search.error
       flash.now[:alert] = @search.error
     end
+
+    @facilities = DataFile.searchable_facilities
   end
 
   def show

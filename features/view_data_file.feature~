@@ -46,6 +46,7 @@ Feature: View the details of a data file
     And I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
       | Station name | WTC Station |
+    And I should not see "WTC01"
 
   Scenario: TOA5 file shows station code if no mapping to facility exists
     Given I upload "WTC01_Table1.dat" through the applet

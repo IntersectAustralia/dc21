@@ -65,7 +65,7 @@ Feature: View the list of facilities
     When I fill in the following:
       | facility_name | Facility0 |
       | facility_code | f0        |
-    And I press "Add Facility"
+    And I press "Save Facility"
     Then I should see "Facility successfully added"
     And I should see details displayed
       | Name  | Facility0  |
@@ -77,7 +77,7 @@ Feature: View the list of facilities
     When I fill in the following:
       | facility_name | |
       | facility_code | |
-    And I press "Add Facility"
+    And I press "Save Facility"
     Then I should see "Name can't be blank"
     Then I should see "Code can't be blank"
 
@@ -90,7 +90,7 @@ Feature: View the list of facilities
     When I fill in the following:
       | facility_name | Facility0 |
       | facility_code | f0        |
-    And I press "Add Facility"
+    And I press "Save Facility"
     Then I should see "Name has already been taken"
     Then I should see "Code has already been taken"
 
@@ -172,14 +172,3 @@ Feature: View the list of facilities
       | Name  | Facility0  |
       | Code  | f0         |
 
-  Scenario: Must be logged in to edit facilities
-    Given I have facilities
-      | name      | code | 
-      | Facility0 | f0   | 
-    Then users should be required to login on the edit facility page for facility "Facility0"
-
-  Scenario: Must be logged in to view facility
-    Given I have facilities
-      | name      | code | 
-      | Facility0 | f0   | 
-    Then users should be required to login on the facility details page for facility "Facility0"
