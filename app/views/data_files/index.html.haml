@@ -37,8 +37,8 @@
               = label_tag "search_facility_#{index}", facility[1]
               = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
         .searchcategory
-          %h3.expand Variable:
-          .variables
+          %h4#variable.expand.current Variable:
+          .variable
             - @variables.each_with_index do |variable, index|
               = label_tag "search_variable_#{index}", variable
               = check_box_tag "search[variables][]", variable, @selected_variables.include?(variable), :id => "search_variable_#{index}"

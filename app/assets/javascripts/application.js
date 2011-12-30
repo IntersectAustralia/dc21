@@ -126,6 +126,11 @@ $(window).load(function() {
     $(this).toggleClass('current');
   });
 
+  $('#variable').click(function(event) {
+    $('.variable').slideToggle();
+    $(this).toggleClass('current');
+  });
+
 
 
   // DOWNLOAD MULTIPLE TOGGLE ///////////////////////////////////////////////////
