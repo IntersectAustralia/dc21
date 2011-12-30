@@ -39,8 +39,8 @@ describe ColumnMapping do
     end
   end
 
-  describe "Check column mapping" do
-    it "should check whether column mapping is correct" do
+  describe "Check column mapping)" do
+    it "should check whether column mapping is correct) "do
       test = Factory(:column_mapping, :code => "abc", :name => "def")
       test.check_col_mapping("abc").should eq(test)
       test.check_col_mapping("def").should eq(nil)

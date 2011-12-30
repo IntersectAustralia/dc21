@@ -18,16 +18,19 @@ class DataFilesController < ApplicationController
     @from_date = @search.search_params[:from_date]
     @to_date = @search.search_params[:to_date]
     @selected_facilities = @search.facilities
+    @selected_variables = @search.variables
 
     if @search.error
       flash.now[:alert] = @search.error
     end
 
     @facilities = DataFile.searchable_facilities
+    @variables = DataFile.searchable_column_names
   end
 
   def show
     set_tab :explore, :contentnavigation
+    @column_mappings = ColumnMapping.all
   end
 
   def new

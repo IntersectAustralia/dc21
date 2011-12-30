@@ -54,3 +54,21 @@ Feature: View the details of a data file
     Then I should see details displayed
       | Station name | WTC01 |
 
+  Scenario: TOA5 file shows correctly mapped column names in file info table
+    Given I upload "Test_Column_Table.dat" through the applet
+    And I have column mappings
+      | name                         | code                 |
+      | Average Soil Temperature (1) | SoilTempProbe_Avg(1) |
+      | Average Soil Temperature (3) | soilTempprobe_Avg(3) |
+      | Average Soil Temperature (4) | Soiltempprobe_Avg(4) |
+    When I am on the list data files page
+    And I follow the view link for data file "Test_Column_Table.dat"
+    Then I should see "column_info" table with
+      | Column               | Column Mapping               | Unit  | Measurement Type | 
+      | SoilTempProbe_Avg(1) | Average Soil Temperature (1) | Deg C | Avg              |
+      | SoilTempProbe_Avg(2) |                              | Deg C | Avg              |
+      | SoilTempProbe_Avg(3) | Average Soil Temperature (3) | Deg C | Avg              |
+      | SoilTempProbe_Avg(4) | Average Soil Temperature (4) | Deg C | Avg              |
+      | SoilTempProbe_Avg(5) |                              | Deg C | Avg              |
+      | SoilTempProbe_Avg(6) |                              | Deg C | Avg              |
+

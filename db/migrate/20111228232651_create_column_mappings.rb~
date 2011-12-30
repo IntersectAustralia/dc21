@@ -1,0 +1,15 @@
+class CreateColumnMappings < ActiveRecord::Migration
+  def change
+    create_table :column_mappings do |t|
+      t.string :code
+      t.string :name
+
+      t.timestamps
+    end
+  end
+    
+  def before_save
+     self.code = self.code.downcase
+  end
+
+end
