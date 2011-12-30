@@ -1,0 +1,8 @@
+class ColumnMappingsController < ApplicationController
+
+  set_tab :admin
+
+  def new
+  end
+
+end

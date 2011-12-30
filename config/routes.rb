@@ -1,5 +1,7 @@
 Dc21app::Application.routes.draw do
 
+  get "column_mappings/new"
+
   get "facilities/new"
 
   devise_for :users, :controllers => {:registrations => "user_registers", :passwords => "user_passwords"} do
@@ -42,6 +44,8 @@ Dc21app::Application.routes.draw do
       post :verify_upload      
     end
   end
+
+  resources :column_mappings
 
   resources :facilities, :except => [:destroy]
 
