@@ -21,10 +21,10 @@
       %tr
         %td= column_details.name
         %td
-          - mapping = ColumnMapping.find_by_code(column_details.name.downcase)
-          - unless mapping.nil?
-            = mapping.name
-          - else
-            = ""
+          - @column_mappings.each do |map|
+            - unless map.check_col_mapping(column_details.name).nil?
+              = map.name
+            - else
+              = ""
         %td= column_details.unit
         %td= column_details.data_type

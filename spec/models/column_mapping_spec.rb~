@@ -39,11 +39,11 @@ describe ColumnMapping do
     end
   end
 
-  describe "Lowercase conversion of codes" do
-    it "should convert codes to lowercase" do
-      Factory(:column_mapping, :code => "abc", :name => "def").code.should eq("abc")
-      Factory(:column_mapping, :code => "ABC", :name => "def").code.should eq("abc")
-      Factory(:column_mapping, :code => "AbC", :name => "def").code.should eq("abc")
+  describe "Check column mapping)" do
+    it "should check whether column mapping is correct) "do
+      test = Factory(:column_mapping, :code => "abc", :name => "def")
+      test.check_col_mapping("abc").should eq(test)
+      test.check_col_mapping("def").should eq(nil)
     end
   end
 

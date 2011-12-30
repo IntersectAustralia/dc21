@@ -58,7 +58,7 @@ Feature: View the details of a data file
     Given I upload "Test_Column_Table.dat" through the applet
     And I have column mappings
       | name                         | code                 |
-      | Average Soil Temperature (1) | soiltempProbe_avg(1) |
+      | Average Soil Temperature (1) | soiltempprobe_avg(1) |
       | Average Soil Temperature (3) | soiltempprobe_avg(3) |
       | Average Soil Temperature (4) | soiltempprobe_avg(4) |
     When I am on the list data files page

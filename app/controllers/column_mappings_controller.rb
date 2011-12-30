@@ -8,5 +8,5 @@ class ColumnMappingsController < ApplicationController
 
   def new
   end
-
+  
 end

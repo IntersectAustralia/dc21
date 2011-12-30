@@ -4,7 +4,7 @@ class ColumnMapping < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :code
 
-  before_validation :code_lowercase
+  default_scope :order => 'name ASC'
 
   def self.code_to_name_map
     Hash[*all.collect { |cm| [cm.code, cm.name] }.flatten]
@@ -23,8 +23,10 @@ class ColumnMapping < ActiveRecord::Base
     codes
   end
 
-  def code_lowercase
-    self.code = self.code.to_s.downcase
+  def find_col_mapping(name)
+    if self.code.to_s.downcase == name.to_s.downcase
+      return self
+    end
   end
 
 end

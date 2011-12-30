@@ -28,22 +28,22 @@ Feature: View the list of data files
     Given I have data files
       | filename     | created_at       | uploaded_by               | start_time           | end_time                |
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC | 30/11/2011 18:05:23 UTC |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     |                      |                         |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 3/8/2010 6:42:01 UTC | 30/11/2011 18:05:23 UTC |
     When I am on the list data files page
-    When I follow "Date added"
+    When I follow "Start time"
     Then I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Start time          | End time            |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | 2010-06-01  6:42:01 | 2011-11-30 18:05:23 |
-      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     |                     |                     |
+      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | 2010-08-03  6:42:01 | 2011-11-30 18:05:23 |
 
-  Scenario: Sort the list of files by descending emails
+  Scenario: Sort the list of files by descending filenames
     Given I have data files
       | filename     | created_at       | uploaded_by               | start_time           | end_time                |
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC | 30/11/2011 18:05:23 UTC |
       | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     |                      |                         |
     When I am on the list data files page
-    And I follow "Added by"
-    And I follow "Added by"
+    And I follow "Filename"
+    And I follow "Filename"
     Then I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Start time          | End time            |
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     |                     |                     |

@@ -30,6 +30,7 @@ class DataFilesController < ApplicationController
 
   def show
     set_tab :explore, :contentnavigation
+    @column_mappings = ColumnMapping.all
   end
 
   def new
