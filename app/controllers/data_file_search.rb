@@ -5,6 +5,7 @@ class DataFileSearch
   attr_accessor :from_date
   attr_accessor :to_date
   attr_accessor :facilities
+  attr_accessor :variables
 
 
   def initialize(search_params)
@@ -15,6 +16,8 @@ class DataFileSearch
     self.to_date = parse_date(@search_params[:to_date])
     self.facilities = @search_params[:facilities]
     self.facilities ||= []
+    self.variables = @search_params[:variables]
+    self.variables ||= []
 
     check_from_date_is_before_to_date
 
@@ -25,21 +28,8 @@ class DataFileSearch
   end
 
   def showing_all?
-    from_date.nil? && to_date.nil?
+    from_date.nil? && to_date.nil? && (facilities.nil? || facilities.empty?) && (variables.nil? || variables.empty?)
   end
-
-  def status_message
-    if from_date && to_date
-      "Showing files containing data in the range #{from_date.to_s(:date_only)} to #{to_date.to_s(:date_only)}."
-    elsif from_date
-      "Showing files containing data for #{from_date.to_s(:date_only)} onwards."
-    elsif to_date
-      "Showing files containing data up to #{to_date.to_s(:date_only)}."
-    else
-      "Showing all files"
-    end
-  end
-
 
   def valid?
     self.error.blank?
@@ -52,6 +42,9 @@ class DataFileSearch
     end
     unless facilities.nil? || facilities.empty?
       search_result = search_result.with_station_name_in(self.facilities)
+    end
+    unless variables.nil? || variables.empty?
+      search_result = search_result.with_any_of_these_columns(self.variables)
     end
     search_result
   end

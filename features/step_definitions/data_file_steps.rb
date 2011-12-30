@@ -76,3 +76,9 @@ Then /^I should see facility checkboxes$/ do |table|
   expected_labels = table.raw.collect{|row| row[0]}
   labels.should eq(expected_labels)
 end
+
+Then /^I should see variable checkboxes$/ do |table|
+  labels = find(".variables").all("label").map { |label| label.text.strip }
+  expected_labels = table.raw.collect{|row| row[0]}
+  labels.should eq(expected_labels)
+end
