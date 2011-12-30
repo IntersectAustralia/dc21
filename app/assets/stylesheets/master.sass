@@ -648,12 +648,12 @@ tr
 
 th
   +m-p-w-h-p-t-b-l-r-f("", 10px 10px 9px 0)
-  +width(140px, 140px, 140px)
+  // +width(140px, 140px, 140px)
   +font("", bold, 1em, 18px, "", "", left)
 
 td
   +m-p-w-h-p-t-b-l-r-f("", 10px 10px 9px 0)
-  +width(140px, 140px, 140px)
+  // +width(140px, 140px, 140px)
   +truncate
 
 tbody tr.field_bg
@@ -1115,6 +1115,12 @@ table.activity, table.activity tbody
 .row
   span
     line-height: 38px
+
+.rowform
+  span
+    +m-p-w-h-p-t-b-l-r-f("", 10px 0 10px 0)
+    +inlineblock
+    line-height: 18px
 
 
 // LAYOUT - 404

@@ -95,21 +95,38 @@ $(window).load(function() {
     $('#content_wrapper').toggleClass('devinfo');
   });
 
-  // SEARCH /////////////////////////////////////////////////////////////////////
+  // SEARCH TOGGLE //////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-  $('#search').click(function(event) {
-    $('.searchbox').animate({width:'toggle'},550);
-    $('#search').toggle();
-  });
-  $('.searchclose').click(function(event) {
-    $('#search').fadeToggle();
-    $('.searchbox').toggle();
+  $('#searchtoggle').click(function(event) {
+    $('.facetedsearch').toggleClass('search');
   });
 
   $('#searchtoggle').click(function(event) {
-    $('.searchbox').animate({width:'toggle'}, 550);
+    $('#exploredata').toggleClass('search');
+    $('.exploredata').toggleClass('search');
+    $('.email').toggle();
   });
+
+  // FACETED SEARCH /////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+  $('#date').click(function(event) {
+    $('.date').slideToggle();
+    $(this).toggleClass('current');
+  });
+
+  $('#time').click(function(event) {
+    $('.time').slideToggle();
+    $(this).toggleClass('current');
+  });
+
+  $('#facility').click(function(event) {
+    $('.facility').slideToggle();
+    $(this).toggleClass('current');
+  });
+
+
 
   // DOWNLOAD MULTIPLE TOGGLE ///////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////

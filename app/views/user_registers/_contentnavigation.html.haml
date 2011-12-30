@@ -1,6 +1,5 @@
 .contentnavigation
   = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-    = tab.overview 'Overview', users_profile_path, :id => "dashboard"
+    = tab.overview 'Overview', users_profile_path, :id => "users"
     = tab.editdetails 'Edit Details', edit_user_registration_path, :id => "edit"
-    = tab.changepassword 'Change Password', users_edit_password_path
-
+    = tab.changepassword 'Change Password', users_edit_password_path, :id => "password"

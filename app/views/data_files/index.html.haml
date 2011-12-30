@@ -2,7 +2,8 @@
   %li.actions
     #downloadtoggle.download.whitebutton
       %span Download Files
-    -#searchtoggle.search Search
+    #searchtoggle.search.whitebutton
+      %span Search Files
 = render 'pages/pageactions'
 %h1 Home / Explore Data
 #content_container
@@ -17,21 +18,21 @@
     .searchbox
       = form_tag(data_files_path, :method => :get) do
         .searchcategory
-          %h3.expand Date:
+          %h4#date.expand.current Date:
           .date
             = label_tag :from_date, "From Date:"
             = text_field_tag "search[from_date]", @from_date, :id => :from_date
             = label_tag :to_date, "To Date:"
             = text_field_tag "search[to_date]", @to_date, :id => :to_date
         .searchcategory
-          %h3.expand Time:
+          %h4#time.expand.current Time:
           .time
             = label_tag :from_date, "From Time:"
             = text_field_tag "search[from_date]", @from_date, :id => :from_date
             = label_tag :to_date, "To Time:"
             = text_field_tag "search[to_date]", @to_date, :id => :to_date
         .searchcategory
-          %h3.expand Facility:
+          %h4#facility.expand.current Facility:
           .facility
             - @facilities.each_with_index do |facility, index|
               = label_tag "search_facility_#{index}", facility[1]
@@ -42,7 +43,7 @@
   - if (@data_files.empty?)
     No files to display.
   - else
-    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "blahblah") do
+    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata") do
       %table#exploredata
         %tr
           %th.view.select
@@ -50,7 +51,7 @@
           %th.view View
           %th.sortable= sortable "filename"
           %th.sortable= sortable "created_at", "Date added"
-          -#%th.sortable= sortable "users.email", "Added by"
+          %th.sortable.email= sortable "users.email", "Added by"
           %th.sortable= sortable "start_time", "Start time"
           %th.sortable= sortable "end_time", "End time"
         - @data_files.each do |data_file|
@@ -59,7 +60,7 @@
             %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
             %td= data_file.filename
             %td= data_file.created_at.to_s(:with_time)
-            -#%td= data_file.created_by.email if data_file.created_by
+            %td.email= data_file.created_by.email if data_file.created_by
             %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
             %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
       .actions.select
