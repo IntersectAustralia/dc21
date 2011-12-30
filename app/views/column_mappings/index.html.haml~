@@ -3,16 +3,16 @@
 #content_container
   = render 'users/contentnavigation'
   - if @column_mappings.empty?
-    <h3>Displaying 0 of 0 Column Mappings</h3>
+    <h3>No column mappings to display.</h3>
   -else
     %table#column_mappings
       %tr
-        %th.name
-          Name
-        %th.code
-          Code
+        %th.name Name
+        %th.code Code
+        %th.actions Actions
       - @column_mappings.each do |maps|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td.name= maps.name
           %td.code= maps.code
+          %td= link_to "delete", maps, :method => :delete, :confirm => "Are you sure you want to delete this column mapping?", :title => "delete_#{maps.id}"
 

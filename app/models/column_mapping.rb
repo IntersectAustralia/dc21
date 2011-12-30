@@ -2,7 +2,7 @@ class ColumnMapping < ActiveRecord::Base
 
   validates_presence_of :code
   validates_presence_of :name
-  validates_uniqueness_of :code
+  validates_uniqueness_of :code, :case_sensitive => false
 
   default_scope :order => 'name ASC'
 

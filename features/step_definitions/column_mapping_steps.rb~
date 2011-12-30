@@ -9,8 +9,8 @@ Given /^I have column mappings$/ do |table|
   end
 end
 
-When /^I follow "delete" for "([^"]*)"$/ do |name|
-  map = ColumnMapping.where(:name => name).first
-  click_link("delete_#{map.id}")
+When /^I follow "delete" for "([^"]*)"$/ do |link, mapping|
+  user = User.where(:email => email).first
+  click_link("approve_#{user.id}")
 end
 

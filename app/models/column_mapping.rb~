@@ -23,7 +23,7 @@ class ColumnMapping < ActiveRecord::Base
     codes
   end
 
-  def find_col_mapping(name)
+  def check_col_mapping(name)
     if self.code.to_s.downcase == name.to_s.downcase
       return self
     end

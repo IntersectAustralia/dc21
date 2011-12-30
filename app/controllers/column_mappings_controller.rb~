@@ -1,5 +1,7 @@
 class ColumnMappingsController < ApplicationController
 
+  before_filter :authenticate_user!
+  load_and_authorize_resource
   set_tab :admin
 
   def index
@@ -8,10 +10,11 @@ class ColumnMappingsController < ApplicationController
 
   def new
   end
-  
 
-  def find_col_mapping(name)
-    
+  def destroy
+    @column_mapping = ColumnMapping.find(params[:id])
+    @column_mapping.destroy
+    redirect_to column_mappings_path, :notice => "The file was successfully deleted"
   end
-
+  
 end
