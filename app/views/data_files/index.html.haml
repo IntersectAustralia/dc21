@@ -9,9 +9,8 @@
   = render 'pages/contentnavigation'
 
   %h3
-    = @search.status_message
     - unless @search.showing_all?
-      = link_to "Show all files", data_files_path
+      = link_to "Clear Search", data_files_path
 
   .facetedsearch
     .searchbox
@@ -24,18 +23,17 @@
             = label_tag :to_date, "To Date:"
             = text_field_tag "search[to_date]", @to_date, :id => :to_date
         .searchcategory
-          %h3.expand Time:
-          .time
-            = label_tag :from_date, "From Time:"
-            = text_field_tag "search[from_date]", @from_date, :id => :from_date
-            = label_tag :to_date, "To Time:"
-            = text_field_tag "search[to_date]", @to_date, :id => :to_date
-        .searchcategory
           %h3.expand Facility:
           .facility
             - @facilities.each_with_index do |facility, index|
               = label_tag "search_facility_#{index}", facility[1]
               = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
+        .searchcategory
+          %h3.expand Variable:
+          .variables
+            - @variables.each_with_index do |variable, index|
+              = label_tag "search_variable_#{index}", variable
+              = check_box_tag "search[variables][]", variable, @selected_variables.include?(variable), :id => "search_variable_#{index}"
         .actions
           = submit_tag "Update Search Results", :class => "whitebutton"
 
