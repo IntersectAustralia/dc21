@@ -54,8 +54,8 @@ def create_data_file(filename, uploader)
 end
 
 def set_role(email, role)
-  user = User.where(:email => email).first
-  role = Role.where(:name => role).first
+  user = User.find_by_email(email)
+  role = Role.find_by_name(role)
   user.role = role
   user.save!
 end
@@ -100,6 +100,7 @@ def create_facility(attrs)
 end
 
 def create_column_mappings
+  ColumnMapping.delete_all
   create_mapping(:name => "Average Soil Temp (Probe1)", :code => "soiltempprobe_avg(1)")
   create_mapping(:name => "Average Soil Temp (Probe4)", :code => "soiltempprobe_avg(4)")
   create_mapping(:name => "Time", :code => "timestamp")
