@@ -1,0 +1,26 @@
+= render 'users/pageactions'
+%h1 Admin / Column Mappings / Add
+#content_container
+  = render 'users/contentnavigation'
+  .container
+    = form_for(@column_mapping) do |f|
+      .formerror= render "shared/error_messages", :target => @column_mapping
+      %table#column_maps
+        %tr
+          %th.name Name
+          %th.code Code
+        - 5.times do |count|
+          %tr
+            %th.name
+              = :id => "test"
+              = f.text_field :name
+              = required 
+            %th.code
+              = f.text_field :code
+              = required 
+        %tr
+      .actions
+        .cancelbutton
+          %span
+          = link_to 'Cancel', column_mappings_path, :class => "cancelbutton"
+        = submit_tag "Submit Column Mappings", :class => "floatright"

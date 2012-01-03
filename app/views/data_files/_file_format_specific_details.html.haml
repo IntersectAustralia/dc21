@@ -3,7 +3,7 @@
     - if item.key == "station_name"
       - fac = Facility.find_by_code(item.value)
       - unless fac.nil?
-        = render_field item.key.humanize, fac.name
+        = render_field item.key.humanize, item.value + " (" + fac.name + ")"
       - else 
         = render_field item.key.humanize, item.value
     - else
