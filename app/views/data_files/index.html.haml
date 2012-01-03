@@ -24,13 +24,6 @@
             = label_tag :to_date, "To Date:"
             = text_field_tag "search[to_date]", @to_date, :id => :to_date
         .searchcategory
-          %h4#time.expand.current Time:
-          .time
-            = label_tag :from_date, "From Time:"
-            = text_field_tag "search[from_date]", @from_date, :id => :from_date
-            = label_tag :to_date, "To Time:"
-            = text_field_tag "search[to_date]", @to_date, :id => :to_date
-        .searchcategory
           %h4#facility.expand.current Facility:
           .facility
             - @facilities.each_with_index do |facility, index|
