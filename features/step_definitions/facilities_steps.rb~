@@ -1,5 +1,0 @@
-Given /^I have facilities$/ do |table|
-  table.hashes.each do |attributes|
-    Factory(:facility, attributes)
-  end
-end

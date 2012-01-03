@@ -1,4 +1,0 @@
-.contentnavigation
-  = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-    = tab.users 'Users', users_path, :id => "users"
-    = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests"
