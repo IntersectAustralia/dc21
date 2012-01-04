@@ -1,3 +1,5 @@
+require 'csv'
+
 class Toa5Utilities
 
   def self.extract_time_from_data_line(line, delimiter)

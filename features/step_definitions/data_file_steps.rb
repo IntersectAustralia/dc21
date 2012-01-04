@@ -51,19 +51,14 @@ end
 Then /^I should get a download of all data files$/ do
   page.response_headers['Content-Disposition'].should include("filename=\"download_selected.zip\"")
   page.response_headers['Content-Disposition'].should include("attachment")
-end
-
-When /^I do a date search for data files with date "([^"]*)"$/ do |date|
-  visit path_to("the list data files page")
-  fill_in "Date", :with => date
-  click_button "Search"
-end
+end 
 
 When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do |from, to|
   visit path_to("the list data files page")
+  click_link "Search Files"
   fill_in "From Date:", :with => from
   fill_in "To Date:", :with => to
-  click_button "Search"
+  click_button "Update Search Results"
 end
 
 Given /^file "([^"]*)" has metadata item "([^"]*)" with value "([^"]*)"$/ do |name, key, value|
@@ -73,12 +68,17 @@ end
 
 Then /^I should see facility checkboxes$/ do |table|
   labels = find(".facility").all("label").map { |label| label.text.strip }
-  expected_labels = table.raw.collect{|row| row[0]}
+  expected_labels = table.raw.collect { |row| row[0] }
   labels.should eq(expected_labels)
 end
 
 Then /^I should see variable checkboxes$/ do |table|
   labels = find(".variable").all("label").map { |label| label.text.strip }
-  expected_labels = table.raw.collect{|row| row[0]}
+  expected_labels = table.raw.collect { |row| row[0] }
   labels.should eq(expected_labels)
+end
+
+When /^I check the checkbox for "([^"]*)"$/ do |filename|
+  file = DataFile.find_by_filename(filename)
+  check("download_checkbox_#{file.id}")
 end

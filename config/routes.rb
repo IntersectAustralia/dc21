@@ -41,7 +41,9 @@ Dc21app::Application.routes.draw do
     end
     collection do
       get :download_selected
-      post :verify_upload      
+      get :build_download
+      get :custom_download
+      post :verify_upload
     end
   end
 

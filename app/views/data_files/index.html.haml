@@ -1,9 +1,9 @@
 - content_for :exploredata do
   %li.actions
     #downloadtoggle.download.whitebutton
-      %span Download Files
+      %span= link_to 'Download Files'
     #searchtoggle.search.whitebutton
-      %span Search Files
+      %span= link_to 'Search Files'
 = render 'pages/pageactions'
 %h1 Home / Explore Data
 #content_container
@@ -42,6 +42,8 @@
   - else
     = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => @search.showing_all? ? "exploredata" : "exploredata search") do
       %table#exploredata{ :class => @search.showing_all? ? "" : "search" }
+      = hidden_field_tag "searched_from_date", @from_date
+      = hidden_field_tag "searched_to_date", @to_date
         %tr
           %th.view.select
             <a href="javascript:selectToggle(false, 'datafiles');">All</a> / <a href="javascript:selectToggle(true, 'datafiles');">None</a>
@@ -53,7 +55,7 @@
           %th.sortable= sortable "end_time", "End time"
         - @data_files.each do |data_file|
           %tr{:class => cycle('field_bg', 'field_nobg')}
-            %td.view.select= check_box_tag "ids[]",  "#{data_file.id}"
+            %td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
             %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
             %td= data_file.filename
             %td= data_file.created_at.to_s(:with_time)
@@ -62,3 +64,4 @@
             %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
       .actions.select
         =submit_tag "Download Selected Files", :class => "bluebutton" 
+        =submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"

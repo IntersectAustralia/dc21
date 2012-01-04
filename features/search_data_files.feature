@@ -139,7 +139,7 @@ Feature: Search data files by date range
     Then the "exploredata" table should have 8 rows
 
   Scenario: Entering no date shows all
-    When I do a date search for data files with date ""
+    When I do a date search for data files with dates "" and ""
     Then the "exploredata" table should have 8 rows
 
   Scenario: Enter an invalid date

@@ -69,18 +69,42 @@ class DataFilesController < ApplicationController
     ids=params[:ids]
     if ids.nil?
       redirect_to(data_files_path, :alert => "No files were selected for download")
-    elsif !ids.nil?
-      files = DataFile.find(ids)
-      t= Tempfile.new("temp_file")
-      Zip::ZipOutputStream.open(t.path) do |zos|
-        files.each do |dfile|
-          zos.put_next_entry("#{dfile.filename}")
-          zos << File.open(dfile.path, 'rb') { |file| file.read }
-        end
+    else
+      if params[:build_custom]
+        redirect_to build_download_data_files_url(:ids => ids, :from_date => params[:searched_from_date], :to_date => params[:searched_to_date])
+        return
       end
-      send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
-      t.close
+      file_paths = DataFile.find(ids).collect(&:path)
+
+      zip_file = Tempfile.new("temp_file")
+      ZipBuilder.build_zip(zip_file, file_paths)
+      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+      zip_file.close
     end
+  end
+
+  def build_download
+    @ids = params[:ids]
+    @from_date = params[:from_date]
+    @to_date = params[:to_date]
+  end
+
+  def custom_download
+    ids = params[:ids]
+    from_date = params[:from_date]
+    to_date = params[:to_date]
+
+    temp_dir = Dir.mktmpdir
+    files = DataFile.find(ids)
+    paths = []
+    files.each do |file|
+      paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, from_date, to_date)
+    end
+
+    zip_file = Tempfile.new("temp_file")
+    ZipBuilder.build_zip(zip_file, paths)
+    send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "custom_download.zip"
+    zip_file.close
   end
 
   private

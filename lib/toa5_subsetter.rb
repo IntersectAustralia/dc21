@@ -9,6 +9,8 @@ class Toa5Subsetter
     outfile_name = File.join(temp_dir, data_file.filename)
     outfile = File.open(outfile_name, 'w')
 
+    ::Rails.logger.info "Subsetting #{data_file.path} to #{outfile_name} with range from:#{from_time} to:#{to_time}"\
+    
     counter = 1
     delimiter = "\t"
     file.each_line do |line|
@@ -26,10 +28,12 @@ class Toa5Subsetter
 
     file.close
     outfile.close
+    outfile_name
   end
 
   def self.data_line_in_range?(line, from_time, to_time, delimiter)
     time = Toa5Utilities.extract_time_from_data_line(line, delimiter)
+    return false if time.nil?
     if (from_time && to_time)
       time >= from_time && time < to_time
     elsif from_time

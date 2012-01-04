@@ -100,6 +100,7 @@ $(window).load(function() {
 
   $('#searchtoggle').click(function(event) {
     $('.facetedsearch').toggleClass('search');
+    return false;
   });
 
   $('#searchtoggle').click(function(event) {
@@ -138,6 +139,7 @@ $(window).load(function() {
   
   $('#downloadtoggle').click(function(event) {
     $('.select').toggle();
+    return false
   });
 
 
