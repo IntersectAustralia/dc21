@@ -27,6 +27,7 @@ class ColumnMappingsController < ApplicationController
             @messages << err_message
             errors << "#{a}"
           end
+          @column_mapping.save
         end
       else
         blank << "#{a}"
