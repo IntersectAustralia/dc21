@@ -139,7 +139,7 @@ $(window).load(function() {
   
   $('#downloadtoggle').click(function(event) {
     $('.select').toggle();
-    return false
+    return false;
   });
 
 

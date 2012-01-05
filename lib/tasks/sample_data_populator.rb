@@ -89,8 +89,8 @@ end
 
 def create_facilities
   Facility.delete_all
-  create_facility(:name => "test", :code => "T1")
-  create_facility(:name => "test2", :code => "T2")
+  create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS")
+  create_facility(:name => "Test Facility", :code => "T1")
 end
 
 def create_facility(attrs)
@@ -101,9 +101,15 @@ end
 
 def create_column_mappings
   ColumnMapping.delete_all
-  create_mapping(:name => "Average Soil Temp (Probe1)", :code => "soiltempprobe_avg(1)")
-  create_mapping(:name => "Average Soil Temp (Probe4)", :code => "soiltempprobe_avg(4)")
-  create_mapping(:name => "Time", :code => "timestamp")
+  create_mapping(:name => "Average Soil Temp (Probe1)", :code => "SoilTempProbe_Avg(1)")
+  create_mapping(:name => "Average Soil Temp (Probe2)", :code => "SoilTempProbe_Avg(2)")
+  create_mapping(:name => "Average Soil Temp (Probe3)", :code => "SoilTempProbe_Avg(3)")
+  create_mapping(:name => "Average Soil Temp (Probe4)", :code => "SoilTempProbe_Avg(4)")
+  create_mapping(:name => "Average Soil Temp (Probe5)", :code => "SoilTempProbe_Avg(5)")
+  create_mapping(:name => "Average Soil Temp (Probe6)", :code => "SoilTempProbe_Avg(6)")
+  create_mapping(:name => "Temperature", :code => "PTemp_C_Max")
+  create_mapping(:name => "Temperature", :code => "PTemp")
+  create_mapping(:name => "Wind Speed", :code => "WndSpd")
 end
 
 def create_mapping(attrs)

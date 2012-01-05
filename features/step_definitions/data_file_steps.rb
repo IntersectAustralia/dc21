@@ -55,7 +55,7 @@ end
 
 When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do |from, to|
   visit path_to("the list data files page")
-  click_link "Search Files"
+  #click_link "Search Files"
   fill_in "From Date:", :with => from
   fill_in "To Date:", :with => to
   click_button "Update Search Results"
