@@ -12,8 +12,7 @@
   %h3
     - unless @search.showing_all?
       = link_to "Clear Search", data_files_path
-
-  .facetedsearch
+  .facetedsearch{ :class => @search.showing_all? ? "" : "search" }
     .searchbox
       = form_tag(data_files_path, :method => :get) do
         .searchcategory
@@ -41,8 +40,8 @@
   - if (@data_files.empty?)
     No files to display.
   - else
-    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata") do
-      %table#exploredata
+    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => @search.showing_all? ? "exploredata" : "exploredata search") do
+      %table#exploredata{ :class => @search.showing_all? ? "" : "search" }
         %tr
           %th.view.select
             <a href="javascript:selectToggle(false, 'datafiles');">All</a> / <a href="javascript:selectToggle(true, 'datafiles');">None</a>
