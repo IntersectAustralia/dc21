@@ -732,6 +732,8 @@ table.activity, table.activity tbody
   #header
     position: fixed
     top: 0
+    left: 0
+    right: 0
 
     #header_wrapper
       +m-p-w-h-p-t-b-l-r-f(-48px 0 0 0)
@@ -739,9 +741,9 @@ table.activity, table.activity tbody
         +m-p-w-h-p-t-b-l-r-f(56px 0 0 0, "", "", 20px)
         text-shadow: #EEE 0px 1px 0px
         a
-          +m-p-w-h-p-t-b-l-r-f("", 0 0 0 40px)
-          +font("", normal, 1.5em, 1em, $dark1)
-          background: url("../images/icon_logo_small_dc21.png") 10px center no-repeat
+          +m-p-w-h-p-t-b-l-r-f("", 0 0 0 40px, "")
+          +font("", normal, 1.5em, 1.25em, $dark1)
+          background: url("../images/icon_logo_small_dc21.png") 10px top no-repeat
   #content
     +m-p-w-h-p-t-b-l-r-f(0 auto, 97px 20px 0 20px)
 
@@ -814,13 +816,16 @@ table.activity, table.activity tbody
       min-height: 100%
 
       .logo
-        +m-p-w-h-p-t-b-l-r-f(20px 0 0 0, "", 300px)
+        +m-p-w-h-p-t-b-l-r-f(15px 0 0 0, "", 300px, 60px)
         float: left
+        overflow: visible
+        +inlineblock
         +textshadow-2
         a
-          +m-p-w-h-p-t-b-l-r-f("", 0 0 0 60px)
+          +m-p-w-h-p-t-b-l-r-f("", 0 0 0 60px, "", 60px)
           background: url("../images/icon_logo_dc21.png") left top no-repeat
-          +font("", normal, 3em, 1em, $dark2)
+          +font("", normal, 3em, 1.35em, $dark2)
+          +inlineblock
           &:hover
             text-decoration: none
 
@@ -1058,8 +1063,9 @@ table.activity, table.activity tbody
     +m-p-w-h-p-t-b-l-r-f(0 0 -1px 0, 0 0 0 20px, "", 39px, "", "", "", "", "", right)
     background: #FFF
     +border(1px, solid, $light0)
+    +inlineblock
     a
-      +m-p-w-h-p-t-b-l-r-f("", 10px 0 10px 34px)
+      +m-p-w-h-p-t-b-l-r-f("", 0)
 
 
 // FOOTER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
