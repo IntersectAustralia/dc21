@@ -277,10 +277,10 @@ label
   cursor: pointer
 
 input[type=textarea], input[type=text], input[type=password], input[type=search], textarea
-  +m-p-w-h-p-t-b-l-r-f(3px 0, 0 10px, "", 30px)
+  +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, "", 18px)
   +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
   resize: none
-  +font("", "", 1em, 30px)
+  +font("", "", 1em, 18px)
   &:hover
     +border(1px, solid, #B9B9B9)
   &:focus
@@ -670,13 +670,14 @@ tbody tr.field_bg
     +width(300px, 300px, 300px)
   th.actions, td.actions
     +m-p-w-h-p-t-b-l-r-f("", 3px 0 0 0)
-    +width(160px, 160px, 160px)
+    +width(190px, 190px, 190px)
 
 // BUTTONS - TABLE WHITE RED BLUE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 a.approve, a.reject, a.spam
   +m-p-w-h-p-t-b-l-r-f("", 6px 10px)
+  +inlineblock
   cursor: pointer
   +font("", normal, 1em, 18px, "", none, center)
   &:hover
@@ -684,6 +685,7 @@ a.approve, a.reject, a.spam
 
 a.spam
   +m-p-w-h-p-t-b-l-r-f(0 -10px 0 0, 6px 20px 6px 10px)
+  margin-right: -10px
   color: $dark3
   +border(1px, solid, #dcdcdc, "", 5px 0 0 5px)
   +gradient-light-1
