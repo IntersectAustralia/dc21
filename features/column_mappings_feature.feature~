@@ -124,7 +124,8 @@ Feature: Column Mappings
     And I follow "Cancel"
     Then I should be on the column mappings page
 
-
+  Scenario: Must be logged in to add column mappings
+    Then users should be required to login on the new column mappings page
 
 
 

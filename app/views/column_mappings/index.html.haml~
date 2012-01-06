@@ -1,8 +1,8 @@
 = render 'users/pageactions'
 %h1 Admin / Column Mappings
 #content_container
-  = link_to "Add Column mappings", new_column_mapping_path
   = render 'users/contentnavigation'
+  = link_to "Add Column mappings", new_column_mapping_path
   - if @column_mappings.empty?
     <h3>No column mappings to display.</h3>
   -else

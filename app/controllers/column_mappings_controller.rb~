@@ -19,15 +19,18 @@ class ColumnMappingsController < ApplicationController
     a = 0
     @column_mappings = []
     params[:column_mappings].each_value do |map|
+      @column_mapping = ColumnMapping.new(map)
+      @column_mappings.push(@column_mapping)
       if !map.values.all?(&:blank?)
-        @column_mapping = ColumnMapping.new(map)
-        @column_mappings.push(@column_mapping)
         unless @column_mapping.valid?
           @column_mapping.errors.full_messages.each do |err_message|
             @messages << err_message
             errors << "#{a}"
           end
-          @column_mapping.save
+        end
+        if @column_mapping.check_code_exists?(@column_mappings)
+          @messages << "Can't add column mappings with the same code"
+          errors << "#{a}"
         end
       else
         blank << "#{a}"
@@ -38,14 +41,15 @@ class ColumnMappingsController < ApplicationController
       render :action => 'new'
       return
     elsif blank.size == a
-      flash[:notice] = "Enter column mapping info and try again"
-      redirect_to new_column_mapping_path
+      #flash[:alert] = "Enter column mapping info and try again"
+     @messages << "test"
+      render 'new'
       return
     end
     @column_mappings.each do |mapping|
-      mapping.save
+      mapping.save unless mapping.nil?
     end
-    flash[:notice] = "Column Mappings added successfully"
+    flash[:notice] = "Column mappings successfully added"
     redirect_to column_mappings_path
   end
 

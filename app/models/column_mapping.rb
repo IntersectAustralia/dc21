@@ -29,4 +29,13 @@ class ColumnMapping < ActiveRecord::Base
     end
   end
 
+  def check_code_exists?(mappings)
+    mappings.each do |existing_map|
+      if self.code.to_s.downcase == existing_map.code.to_s.downcase && existing_map.code!="" && self!=existing_map
+        return true
+      end
+    end
+    return false
+  end
+
 end

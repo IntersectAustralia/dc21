@@ -29,14 +29,13 @@ class ColumnMapping < ActiveRecord::Base
     end
   end
 
-  def self.collect_data_from_params(mapping_labels)
-    data = []
-    if !mapping_labels.nil?
-      mapping_labels.each do |label|
-        data << label
+  def check_code_exists?(mappings)
+    mappings.each do |existing_map|
+      if self.code.to_s.downcase == existing_map.code.to_s.downcase && existing_map.code!="" && existing_map!=self
+        return true
       end
     end
-    data
+    return false
   end
 
 end

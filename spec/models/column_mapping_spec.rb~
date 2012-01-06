@@ -49,11 +49,8 @@ describe ColumnMapping do
       test = ColumnMapping.new(:code => "abc", :name => "def")
       test2 = ColumnMapping.new(:code => "bcd", :name => "efg")
       test3 = ColumnMapping.new(:code => "abc", :name => "fgh") 
-      test4 = ColumnMapping.new(:code => "cde", :name => "ghi")
       mappings = [test2, test3]
       test.check_code_exists?(mappings).should eq(true)
-      mappings = [test2, test4]
-      test.check_code_exists?(mappings).should eq(false)
     end
   end
 

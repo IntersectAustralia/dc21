@@ -79,7 +79,7 @@ Feature: View the list of facilities
       | facility_code | |
     And I press "Save Facility"
     Then I should see "Name can't be blank"
-    And I should see "Code can't be blank"
+    Then I should see "Code can't be blank"
 
   Scenario: Create a duplicate facility
     Given I have facilities

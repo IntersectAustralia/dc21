@@ -9,8 +9,8 @@
         %tr
           %th Name
           %th Code
-      - @column_mappings.each_with_index do |mapping, index|
-        %table
+      %table#column_mappings
+        - @column_mappings.each_with_index do |mapping, index|
           %tr
             %th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
             %th= text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code
