@@ -5,11 +5,11 @@
   .container
     = form_tag(column_mappings_path, :method => :post) do 
       .formerror= render "shared/column_mapping_error_messages", :target => @messages
-      %table
+      %table#mappings
         %tr
           %th Name
           %th Code
-      %table#column_mappings
+      %table#mappings
         - @column_mappings.each_with_index do |mapping, index|
           %tr
             %th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name

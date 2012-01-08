@@ -41,8 +41,7 @@ class ColumnMappingsController < ApplicationController
       render :action => 'new'
       return
     elsif blank.size == a
-      #flash[:alert] = "Enter column mapping info and try again"
-     @messages << "test"
+     @messages << "No column mapping information provided"
       render 'new'
       return
     end
