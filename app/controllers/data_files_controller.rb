@@ -91,19 +91,30 @@ class DataFilesController < ApplicationController
   end
 
   def custom_download
-    ids = params[:ids]
-    from_date = params[:from_date]
-    to_date = params[:to_date]
-    #TODO: validate dates
+    @ids = params[:ids]
+    @files = DataFile.find(@ids)
+    @from_date = params[:from_date]
+    @to_date = params[:to_date]
 
+    date_range = DateRange.new(@from_date, @to_date, false)
+    unless date_range.valid?
+      flash.now[:alert] = date_range.error
+      render :build_download
+      return
+    end
 
     temp_dir = Dir.mktmpdir
-    files = DataFile.find(ids)
     paths = []
-    files.each do |file|
-      if file.has_data_in_range?(parse_date(from_date), parse_date(to_date))
-        paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, from_date, to_date)
+    @files.each do |file|
+      if file.has_data_in_range?(date_range.from_date, date_range.to_date)
+        paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, @from_date, @to_date)
       end
+    end
+
+    if paths.empty?
+      flash.now[:alert] = "There is no data available for the date range you entered."
+      render :build_download
+      return
     end
 
     zip_file = Tempfile.new("temp_file")
