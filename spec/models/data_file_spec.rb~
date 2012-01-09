@@ -255,6 +255,7 @@ describe DataFile do
     end
   end
 
+<<<<<<< Updated upstream
   describe "Is known format method" do
     it "should return true only if format attribute is set" do
       Factory(:data_file, :format => nil).known_format?.should be_false
@@ -268,9 +269,7 @@ describe DataFile do
       Factory(:data_file, :format => nil).known_format?.should be_false
       Factory(:data_file, :format => 'asdf').known_format?.should be_true
       Factory(:data_file, :format => "TOA5").known_format?.should be_true
-    end
-  end
-
+=======
   describe "Column Mappings" do
     it "should return true if there are columns which are unmapped" do
       @data_file = Factory(:data_file)
@@ -286,7 +285,7 @@ describe DataFile do
       Factory(:column_mapping, :code => "Rnfll")
       Factory(:column_mapping, :code => "Temp")
       @data_file.cols_unmapped?.should eq(false)
-
+>>>>>>> Stashed changes
     end
   end
 

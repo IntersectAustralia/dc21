@@ -7,12 +7,12 @@
       .formerror= render "shared/column_mapping_error_messages", :target => @messages
       %table#mappings
         %tr
-          %th Name
           %th Code
+          %th Name
         - @column_mappings.each_with_index do |mapping, index|
           %tr
-            %th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
             %th= text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code
+            %th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
       .actions
         .cancelbutton
           %span

@@ -27,7 +27,7 @@ describe ColumnDetail do
     end
     it "should return nil if no mapping exists" do
       column = Factory(:column_detail, :name => "test")
-      column.find_by_code_uncased.should eq(nil)
+      column.find_by_code_uncased.should eq(mapping)
     end
   end
 end

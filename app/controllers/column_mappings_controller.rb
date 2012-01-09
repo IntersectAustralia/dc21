@@ -53,6 +53,38 @@ class ColumnMappingsController < ApplicationController
     redirect_to column_mappings_path
   end
 
+  def connect
+    @column_mappings = []
+    @data_file = DataFile.find_by_id(params[:id])
+    @data_file.column_details.each do |col|
+      if col.find_by_code_uncased.nil?
+        @column_mappings << ColumnMapping.new(:code => col.name)
+      end
+    end
+    #flash[:notice] = "#{@data_file.column_details.first.find_by_code_uncased}"
+  end
+
+  def add_cols
+    @messages = []
+    @column_mappings = []
+    params[:column_mappings].each_value do |map|
+        @column_mapping = ColumnMapping.new(map)
+        @column_mappings.push(@column_mapping)
+        if @column_mapping.name == ""
+          @messages << "Name can't be blank"
+        end
+    end
+    if !@messages.empty?
+      render 'connect'
+      return
+    end
+    @column_mappings.each do |mapping|
+      mapping.save unless mapping.nil?
+    end
+    flash[:notice] = "Column mappings successfully added"
+    redirect_to data_file_path(params[:id])
+  end
+
   def destroy
     @column_mapping = ColumnMapping.find(params[:id])
     @column_mapping.destroy

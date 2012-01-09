@@ -49,14 +49,13 @@ module ApplicationHelper
     link_to title, params.merge(:sort => column, :direction => direction), { :class => css_class }
   end
 
-  def count_valid(mappings)
-    count = 0
-    mappings.each do |map|
-      if map.name!="" || map.code!=""
-        counr = count + 1
+  def cols_unmapped?(id)
+    data_file = Datafile.find_by_id(id)
+    data_file.column_details.each do |col|
+      if col.find_by_code_uncased.nil?
+        true
       end
     end
-    return count
   end
 
 end

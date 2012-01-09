@@ -54,6 +54,8 @@ Dc21app::Application.routes.draw do
     end
   end
 
+  match 'column_mappings/:id/connect' => 'connect#:id', :as => :connect
+
   resources :facilities, :except => [:destroy]
 
   root :to => "pages#home"

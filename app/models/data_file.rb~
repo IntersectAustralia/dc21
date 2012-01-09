@@ -64,7 +64,7 @@ class DataFile < ActiveRecord::Base
     self.format.nil? ? "Unknown" : self.format
   end
 
-
+<<<<<<< Updated upstream
   def known_format?
     !self.format.nil?
   end
@@ -79,7 +79,7 @@ class DataFile < ActiveRecord::Base
       self.start_time < (to + 1.day)
     end
   end
-
+=======
   def cols_unmapped?
     self.column_details.each do |col|
       if col.find_by_code_uncased.nil?
@@ -89,5 +89,5 @@ class DataFile < ActiveRecord::Base
     return false
   end
 
-
+>>>>>>> Stashed changes
 end
