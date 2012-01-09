@@ -4,6 +4,9 @@ RSpec::Matchers.define(:be_same_file_as) do |expected_file_path|
   end
 
   def md5_hash(file_path)
-    Digest::MD5.hexdigest(File.read(file_path))
+    contents = File.read(file_path)
+    #normalise line endings:
+    contents.gsub! /\r\n?/, "\n"
+    Digest::MD5.hexdigest(contents)
   end
 end

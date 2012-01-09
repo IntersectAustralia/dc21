@@ -64,4 +64,18 @@ class DataFile < ActiveRecord::Base
     self.format.nil? ? "Unknown" : self.format
   end
 
+  def known_format?
+    !self.format.nil?
+  end
+
+  def has_data_in_range?(from, to)
+    return false unless known_format?
+    if (from && to)
+      (self.start_time < (to + 1.day)) && (self.end_time >= from)
+    elsif from
+      self.end_time >= from
+    else
+      self.start_time < (to + 1.day)
+    end
+  end
 end

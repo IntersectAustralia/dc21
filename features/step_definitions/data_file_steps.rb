@@ -82,3 +82,10 @@ When /^I check the checkbox for "([^"]*)"$/ do |filename|
   file = DataFile.find_by_filename(filename)
   check("download_checkbox_#{file.id}")
 end
+
+Then /^I should see the build custom download page with dates populated with "([^"]*)" and "([^"]*)"$/ do |from, to|
+  'Then I should see "Include all data"'
+  'And I should see "Only include data in the following range"'
+  "And the \"From Date:\" field should contain \"#{from}\""
+  "And the \"To Date:\" field should contain \"#{to}\""
+end

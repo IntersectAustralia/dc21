@@ -11,6 +11,9 @@ module HtmlSelectorsHelpers
     when "the page"
       "html > body"
 
+    when "the list of files to download"
+      "#files_to_download"
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

@@ -1,4 +1,6 @@
 Then /^I should receive a zip file matching "([^"]*)"$/ do |directory|
+  #saves the latest response, unzips it, then compares with a pre-defined directory of files that match what you expect the zip to contain
+
   tempfile = Tempfile.new(["temp_file", ".zip"])
   tempfile.close
   zip = File.open(tempfile.path, "wb")

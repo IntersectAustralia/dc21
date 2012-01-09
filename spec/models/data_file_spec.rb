@@ -42,13 +42,43 @@ describe DataFile do
 
   describe "Find files for date range" do
     before do
-      @f1 = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC", :end_time => "2011-02-28 11:00 UTC").id # starts before, ends after = IN
-      @f2 = Factory(:data_file, :start_time => "2011-01-01 00:00 UTC", :end_time => "2011-04-30 22:59 UTC").id # starts on, ends after = IN
-      @f3 = Factory(:data_file, :start_time => "2011-02-01 11:00 UTC", :end_time => "2011-03-31 22:59 UTC").id # starts on, ends after = IN
-      @f4 = Factory(:data_file, :start_time => "2011-03-01 11:00 UTC", :end_time => "2011-04-30 11:00 UTC").id # starts after, ends after = OUT
-      @f5 = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC", :end_time => "2011-01-31 11:00 UTC").id # starts before, ends before = OUT
-      @f6 = Factory(:data_file, :start_time => "2011-04-01 00:00 UTC", :end_time => "2011-04-30 11:00 UTC").id # starts before, ends on = IN
-      @f8 = Factory(:data_file, :start_time => nil, :end_time => nil)
+      @f1 = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC", :end_time => "2011-02-28 11:00 UTC", :format => "TOA5").id # jan1 to feb28
+      @f2 = Factory(:data_file, :start_time => "2011-01-01 00:00 UTC", :end_time => "2011-04-30 22:59 UTC", :format => "TOA5").id # jan1 to apr30
+      @f3 = Factory(:data_file, :start_time => "2011-02-01 11:00 UTC", :end_time => "2011-03-31 22:59 UTC", :format => "TOA5").id # feb1 to mar31
+      @f4 = Factory(:data_file, :start_time => "2011-03-01 11:00 UTC", :end_time => "2011-04-30 11:00 UTC", :format => "TOA5").id # mar1 to apr30
+      @f5 = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC", :end_time => "2011-01-31 11:00 UTC", :format => "TOA5").id # jan1 to jan31
+      @f6 = Factory(:data_file, :start_time => "2011-04-01 00:00 UTC", :end_time => "2011-04-30 11:00 UTC", :format => "TOA5").id # apr1 to apr30
+      @f8 = Factory(:data_file, :start_time => nil, :end_time => nil, :format => nil)
+    end
+
+    describe "has data in range method should correctly identify if data falls in range" do
+      it "should work with start date only" do
+        DataFile.find(@f1).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_false
+        DataFile.find(@f2).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_true
+        DataFile.find(@f3).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_true
+        DataFile.find(@f4).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_true
+        DataFile.find(@f5).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_false
+        DataFile.find(@f6).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_true
+        DataFile.find(@f8).has_data_in_range?(Date.parse("2011-03-01"), nil).should be_false
+      end
+      it "should work with end date only" do
+        DataFile.find(@f1).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_true
+        DataFile.find(@f2).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_true
+        DataFile.find(@f3).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_true
+        DataFile.find(@f4).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_true
+        DataFile.find(@f5).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_true
+        DataFile.find(@f6).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_false
+        DataFile.find(@f8).has_data_in_range?(nil, Date.parse("2011-03-01")).should be_false
+      end
+      it "should work with range" do
+        DataFile.find(@f1).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_true
+        DataFile.find(@f2).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_true
+        DataFile.find(@f3).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_true
+        DataFile.find(@f4).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_false
+        DataFile.find(@f5).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_true
+        DataFile.find(@f6).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_false
+        DataFile.find(@f8).has_data_in_range?(Date.parse("2010-01-01"), Date.parse("2011-02-01")).should be_false
+      end
     end
 
     it "when searching with start date only should return all files which end on or after the given date" do
@@ -222,6 +252,22 @@ describe DataFile do
       #Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
       #Factory(:column_details, :name => "Rainfall", :data_file => @f5)
       #DataFile.with_any_of_these_columns(["Rainfall"]).collect(&:id).sort.should eq([@f1.id, @f3.id, ??])
+    end
+  end
+
+  describe "Is known format method" do
+    it "should return true only if format attribute is set" do
+      Factory(:data_file, :format => nil).known_format?.should be_false
+      Factory(:data_file, :format => 'asdf').known_format?.should be_true
+      Factory(:data_file, :format => "TOA5").known_format?.should be_true
+    end
+  end
+
+  describe "Is known format method" do
+    it "should return true only if format attribute is set" do
+      Factory(:data_file, :format => nil).known_format?.should be_false
+      Factory(:data_file, :format => 'asdf').known_format?.should be_true
+      Factory(:data_file, :format => "TOA5").known_format?.should be_true
     end
   end
 

@@ -85,6 +85,7 @@ class DataFilesController < ApplicationController
 
   def build_download
     @ids = params[:ids]
+    @files = DataFile.find(@ids)
     @from_date = params[:from_date]
     @to_date = params[:to_date]
   end
@@ -93,12 +94,16 @@ class DataFilesController < ApplicationController
     ids = params[:ids]
     from_date = params[:from_date]
     to_date = params[:to_date]
+    #TODO: validate dates
+
 
     temp_dir = Dir.mktmpdir
     files = DataFile.find(ids)
     paths = []
     files.each do |file|
-      paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, from_date, to_date)
+      if file.has_data_in_range?(parse_date(from_date), parse_date(to_date))
+        paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, from_date, to_date)
+      end
     end
 
     zip_file = Tempfile.new("temp_file")
@@ -121,5 +126,9 @@ class DataFilesController < ApplicationController
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 
+  def parse_date(string)
+    return nil if string.blank?
+    Date.parse(string)
+  end
 
 end

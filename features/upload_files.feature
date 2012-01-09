@@ -15,9 +15,10 @@ Feature: Upload files
       | Filename    | Added by                  | Start time | End time |
       | sample1.txt | georgina@intersect.org.au |            |          |
 
-    
-    #until we can use cucumber with the applet
-@wip
+
+#until we can use cucumber with the applet
+
+  @wip
   Scenario: Upload the same file twice
     Given I am on the upload page
     When I upload "sample1.txt" through the applet

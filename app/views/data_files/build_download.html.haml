@@ -1,18 +1,30 @@
-= form_tag(custom_download_data_files_path, :method => :get) do
-  - @ids.each do |id|
-    = hidden_field_tag "ids[]", id
+%h1 Data / Build Download
 
-  = radio_button_tag :type, :all, false
-  = label_tag :type_all,  "Include all data"
+#content_container
+
+  %h3 Building Custom Download For:
+  %ul#files_to_download
+    - @files.each do |data_file|
+      %li= data_file.filename
+
   %br/
-  = radio_button_tag :type, :date, true
-  = label_tag :type_date, "Only include data in the following range"
-  %br/
+  
+  = form_tag(custom_download_data_files_path, :method => :get) do
+    - @ids.each do |id|
+      = hidden_field_tag "ids[]", id
 
-  = label_tag :from_date, "From Date:"
-  = text_field_tag :from_date, @from_date, :id => :from_date
-  = label_tag :to_date, "To Date:"
-  = text_field_tag :to_date, @to_date, :id => :to_date
+    = radio_button_tag :type, :all, false
+    = label_tag :type_all,  "Include all data"
+    %br/
 
-  .actions
-    = submit_tag "Download", :class => "bluebutton"
+    = radio_button_tag :type, :date, true
+    = label_tag :type_date, "Only include data in the following range"
+    %br/
+
+    = label_tag :from_date, "From Date:"
+    = text_field_tag :from_date, @from_date, :id => :from_date
+    = label_tag :to_date, "To Date:"
+    = text_field_tag :to_date, @to_date, :id => :to_date
+
+    .actions
+      = submit_tag "Download", :class => "bluebutton"
