@@ -9,9 +9,9 @@
     - else
       = render_field item.key.humanize, item.value
 
-  - if !@data_file.cols_unmapped?
-    = link_to "Fill in column mappings", connect_column_mapping_path(:id => @data_file.id)
   %h3 Data File Columns
+  - if @data_file.cols_unmapped?
+    = link_to "Fill in column mappings", connect_column_mapping_path(:id => @data_file.id), :class => "bluebutton", :ruby-align => right
   %table#column_info
     %tr
       %th Column
