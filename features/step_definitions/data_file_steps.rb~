@@ -64,6 +64,7 @@ end
 When /^I fill in date search details between "([^"]*)" and "([^"]*)"$/ do |from, to|
   fill_in "From Date:", :with => from
   fill_in "To Date:", :with => to
+  click_button "Update Search Results"
 end
 
 

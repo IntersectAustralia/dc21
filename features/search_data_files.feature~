@@ -170,3 +170,7 @@ Feature: Search data files by date range
     And I press "Update Search Results"
     Then the "exploredata" table should have 8 rows
 
+  @javascript
+  Scenario: Clicking download files makes checkboxes and buttons appear
+    When I am on the list data files page
+    And I follow "Download Files"
