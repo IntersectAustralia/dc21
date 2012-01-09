@@ -17,8 +17,11 @@
 
 $(window).load(function() {
 
+  var hidden_selects = true;
+
   // NOTIFICATIONS //////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
+
 
   $('#accountmenu_container').hide();
 
@@ -138,24 +141,49 @@ $(window).load(function() {
   //////////////////////////////////////////////////////////////////////////////
   
   $('#downloadtoggle').click(function(event) {
-    $('.select').toggle();
+    if (hidden_selects == true) {
+      hidden_selects = false;
+      $('.select').show();
+      display_actions();
+    } else {
+      hidden_selects = true;
+      $('.select').hide();
+      $('#download_actions').hide();
+    }
     return false;
   });
 
+  // SHOW DOWNLOAD BUTTONS ON SELECTION ////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  $('input:checkbox', '#exploredata').click(function () {
+    display_actions();
+  });
 
 });
 
   // SELECT ALL / NONE - DOWNLOAD MULTIPLE //////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
+function display_actions() {
+  var buttonsChecked = $('#exploredata').find('input:checkbox:checked');
+  if (buttonsChecked.length) {
+    $('#download_actions').show();
+  } else {
+    $('#download_actions').hide();
+  }
+}
+
 function selectToggle(checked, form) {
      var dataForm = document.forms[form];
      for( var i=0; i < dataForm.length; i++ ) { 
           if(checked) {
                dataForm.elements[i].checked = "";
-          } 
+               $('#download_actions').hide();
+          }
           else {
                dataForm.elements[i].checked = "checked";
+               $('#download_actions').show();
+
           }
      }
 }

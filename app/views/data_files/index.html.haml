@@ -62,6 +62,8 @@
             %td.email= data_file.created_by.email if data_file.created_by
             %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
             %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
-      .actions.select
+      #helper_text.select
+        Select one or more files to download
+      #download_actions.actions.hidden
         = submit_tag "Download Selected Files", :class => "bluebutton"
         = submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"
