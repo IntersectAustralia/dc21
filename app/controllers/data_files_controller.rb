@@ -73,13 +73,9 @@ class DataFilesController < ApplicationController
       if params[:build_custom]
         redirect_to build_download_data_files_url(:ids => ids, :from_date => params[:searched_from_date], :to_date => params[:searched_to_date])
         return
+      else
+        send_zip(ids)
       end
-      file_paths = DataFile.find(ids).collect(&:path)
-
-      zip_file = Tempfile.new("temp_file")
-      ZipBuilder.build_zip(zip_file, file_paths)
-      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
-      zip_file.close
     end
   end
 
@@ -91,10 +87,16 @@ class DataFilesController < ApplicationController
   end
 
   def custom_download
+    type = params[:type]
     @ids = params[:ids]
     @files = DataFile.find(@ids)
     @from_date = params[:from_date]
     @to_date = params[:to_date]
+
+    if type == "all"
+      send_zip(@ids)
+      return
+    end
 
     date_range = DateRange.new(@from_date, @to_date, false)
     unless date_range.valid?
@@ -142,4 +144,12 @@ class DataFilesController < ApplicationController
     Date.parse(string)
   end
 
+  def send_zip(ids)
+    file_paths = DataFile.find(ids).collect(&:path)
+
+    zip_file = Tempfile.new("temp_file")
+    ZipBuilder.build_zip(zip_file, file_paths)
+    send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+    zip_file.close
+  end
 end

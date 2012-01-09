@@ -98,5 +98,16 @@ Feature: Download a file
     And I press "Download"
     Then I should see "There is no data available for the date range you entered."
 
+  Scenario: Elect to download all data instead
+    When I do a date search for data files with dates "2011-10-10" and "2011-10-15"
+    When I check the checkbox for "weather_station_05_min.dat"
+    And I check the checkbox for "weather_station_15_min.dat"
+    And I press "Build Custom Download"
+    Then I should see the build custom download page with dates populated with "2011-10-10" and "2011-10-15"
+    When I choose "Include all data"
+    And I press "Download"
+    Then I should receive a zip file matching "samples/full_files/weather_station"
+
+
 # TODO: elect to just download all data
 # TODO: coming from search but changing dates
