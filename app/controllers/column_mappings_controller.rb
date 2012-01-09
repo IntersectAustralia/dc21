@@ -2,6 +2,7 @@ class ColumnMappingsController < ApplicationController
 
   before_filter :authenticate_user!
   set_tab :admin
+  set_tab :columnmappings, :contentnavigation
 
   def index
     @column_mappings = ColumnMapping.all

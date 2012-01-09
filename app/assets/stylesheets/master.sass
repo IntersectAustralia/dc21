@@ -875,21 +875,21 @@ table.activity, table.activity tbody
 #header
   span#accountmenu
     +m-p-w-h-p-t-b-l-r-f(10px, 0 25px 0 0)
-    background: url("../images/icon_options_light.png") right center no-repeat
+    background: url("../images/icon_security_light.png") right center no-repeat
     -moz-background-size: 16px
     background-size: 16px
     &:hover, .active
       color: $dark1
-      background: url("../images/icon_options_dark.png") right center no-repeat
+      background: url("../images/icon_security_dark.png") right center no-repeat
       -moz-background-size: 16px
   span#accountmenu.active
     color: $dark1
-    background: url("../images/icon_options_dark.png") right center no-repeat
+    background: url("../images/icon_security_dark.png") right center no-repeat
     -moz-background-size: 16px
 
   li.active #accountmenu
     color: $dark1
-    background: url("../images/icon_options_dark.png") right center no-repeat
+    background: url("../images/icon_security_dark.png") right center no-repeat
     -moz-background-size: 16px
     background-size: 16px
 
@@ -915,6 +915,10 @@ table.activity, table.activity tbody
         text-shadow: none
         &:hover
           color: #F1F1F1
+    li.settings
+      a
+        +m-p-w-h-p-t-b-l-r-f("", 10px 0 10px 33px)
+        background: url("../images/icon_options_light.png") 10px center no-repeat
 
 // HEADER - MENU - SIGNUP
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -1050,6 +1054,25 @@ table.activity, table.activity tbody
   li#edit.active
     a
       background: transparent url(../images/icon_edit_dark.png) 15px center no-repeat
+
+  li#mappings
+    a
+      background: transparent url(../images/icon_columnmapping_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_columnmapping_dark.png) 15px center no-repeat
+  li#mappings.active
+    a
+      background: transparent url(../images/icon_columnmapping_dark.png) 15px center no-repeat
+
+  li#password
+    a
+      background: transparent url(../images/icon_password_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_password_dark.png) 15px center no-repeat
+  li#password.active
+    a
+      background: transparent url(../images/icon_password_dark.png) 15px center no-repeat
+
 
 
 

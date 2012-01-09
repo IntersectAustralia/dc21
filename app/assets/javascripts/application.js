@@ -33,7 +33,7 @@ $(window).load(function() {
         alert.slideUp();
         $('#content_wrapper').removeClass('notification');
         $('#footer').removeClass('notification');
-      }, 900000);
+      }, 10000);
       $("#alert").click(function () {
         window.clearTimeout(alerttimer);
         alert.slideUp();
@@ -54,7 +54,7 @@ $(window).load(function() {
         notice.slideUp();
         $('#content_wrapper').removeClass('notification');
         $('#footer').removeClass('notification');
-      }, 9000000);
+      }, 10000);
       $("#notice").click(function () {
         window.clearTimeout(noticetimer);
         notice.slideUp();
