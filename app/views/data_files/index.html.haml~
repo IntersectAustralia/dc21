@@ -49,6 +49,7 @@
             = link_to "All", "javascript:selectToggle(false, 'datafiles');"
             = "/"
             = link_to "None", "javascript:selectToggle(true, 'datafiles');"
+            -#<a href="javascript:selectToggle(false, 'datafiles');">All</a> / <a href="javascript:selectToggle(true, 'datafiles');">None</a>
           %th.view View
           %th.sortable= sortable "filename"
           %th.sortable= sortable "created_at", "Date added"

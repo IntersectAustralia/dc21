@@ -4,7 +4,7 @@
   = render 'users/contentnavigation'
   = link_to "Add column mappings", new_column_mapping_path
   - if @column_mappings.empty?
-    <h3>No column mappings to display.</h3>
+    %h3 No column mappings to display.
   -else
     %table#column_mappings
       %tr
