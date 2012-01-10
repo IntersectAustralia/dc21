@@ -11,7 +11,7 @@
 
   %h3 Data File Columns
   - if @data_file.cols_unmapped?
-    = link_to "Fill in column mappings", connect_column_mapping_path(:id => @data_file.id), :class => "bluebutton", :ruby-align => right
+    = link_to "Fill in column mappings", connect_column_mapping_path(:id => @data_file.id), :class => "bluebutton"
   %table#column_info
     %tr
       %th Column
@@ -25,7 +25,6 @@
           - @column_mappings.each do |map|
             - unless map.check_col_mapping(column_details.name).nil?
               = map.name
-            - else
-              = ""
+
         %td= column_details.unit
         %td= column_details.data_type

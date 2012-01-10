@@ -61,7 +61,6 @@ class ColumnMappingsController < ApplicationController
         @column_mappings << ColumnMapping.new(:code => col.name)
       end
     end
-    #flash[:notice] = "#{@data_file.column_details.first.find_by_code_uncased}"
   end
 
   def add_cols

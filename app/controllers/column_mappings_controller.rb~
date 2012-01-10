@@ -2,6 +2,7 @@ class ColumnMappingsController < ApplicationController
 
   before_filter :authenticate_user!
   set_tab :admin
+  set_tab :columnmappings, :contentnavigation
 
   def index
     @column_mappings = ColumnMapping.all
@@ -56,7 +57,7 @@ class ColumnMappingsController < ApplicationController
     @column_mappings = []
     @data_file = DataFile.find_by_id(params[:id])
     @data_file.column_details.each do |col|
-      if col.find_by_code_uncased==false
+      if col.find_by_code_uncased.nil?
         @column_mappings << ColumnMapping.new(:code => col.name)
       end
     end

@@ -61,3 +61,39 @@ Feature: Navigation between pages across the site
     Given I am on the home page
     When I follow "Admin"
     Then I should be on the users page
+
+  Scenario: There should be tabs for overview, edit details and change password under own user settings
+    Given I am on the users profile page
+    Then I should see link "Overview"
+    And I should see link "Edit Details"
+    And I should see link "Change Password"
+
+  Scenario: Clicking tabs direct to correct page - edit details tab
+    Given I am on the users profile page
+    When I follow "Edit Details"
+    Then I should be on the edit user registration page
+
+  Scenario: Clicking tabs direct to correct page - change password tab
+    Given I am on the users profile page
+    When I follow "Change Password"
+    Then I should be on the users edit password page
+
+  Scenario: Clicking tabs direct to correct page - users profile page
+    Given I am on the users profile page
+    When I follow "Change Password"
+    And I follow "Overview"
+    Then I should be on the users profile page
+
+  @javascript
+  Scenario: Editing own user details
+    Given I am on the home page
+    When I click on "georgina@intersect.org.au"
+    And I follow "Settings"
+    Then I should be on the users profile page
+
+  @javascript
+  Scenario: Logging out through dropdown
+    Given I am on the home page
+    When I click on "georgina@intersect.org.au"
+    And I follow "Sign out"
+    Then I should see "Logged out successfully."

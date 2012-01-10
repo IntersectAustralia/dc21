@@ -25,7 +25,5 @@
           - @column_mappings.each do |map|
             - unless map.check_col_mapping(column_details.name).nil?
               = map.name
-            - else
-              = ""
         %td= column_details.unit
         %td= column_details.data_type
