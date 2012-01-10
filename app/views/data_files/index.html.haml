@@ -46,7 +46,9 @@
       %table#exploredata{ :class => (@search.showing_all? ? "" : "search") }
         %tr
           %th.view.select
-            <a href="javascript:selectToggle(false, 'datafiles');">All</a> / <a href="javascript:selectToggle(true, 'datafiles');">None</a>
+            = link_to "All", "javascript:selectToggle(false, 'datafiles');"
+            = "/"
+            = link_to "None", "javascript:selectToggle(true, 'datafiles');"
           %th.view View
           %th.sortable= sortable "filename"
           %th.sortable= sortable "created_at", "Date added"

@@ -97,19 +97,18 @@ Feature: View the details of a data file
     When I am on the list data files page
     And I follow the view link for data file "Test_Column_Table.dat"
     And I follow "Fill in column mappings"
-    And I fill in the following:
-      | column_mappings_0_name | Test Mapping 1 |
-      | column_mappings_1_name | Test Mapping 2 |
-      | column_mappings_2_name | Test Mapping 3 |
+    And I select "Rainfall" from "column_mappings_0_name"
+    And I select "Wind Speed" from "column_mappings_1_name"
+    And I select "Sample" from "column_mappings_2_name"
     And I press "Submit Column Mappings"    
     Then I should see "column_info" table with
       | Column               | Column Mapping               | Unit  | Measurement Type | 
       | SoilTempProbe_Avg(1) | Average Soil Temperature (1) | Deg C | Avg              |
-      | SoilTempProbe_Avg(2) | Test Mapping 1               | Deg C | Avg              |
+      | SoilTempProbe_Avg(2) | Rainfall                     | Deg C | Avg              |
       | SoilTempProbe_Avg(3) | Average Soil Temperature (3) | Deg C | Avg              |
       | SoilTempProbe_Avg(4) | Average Soil Temperature (4) | Deg C | Avg              |
-      | SoilTempProbe_Avg(5) | Test Mapping 2               | Deg C | Avg              |
-      | SoilTempProbe_Avg(6) | Test Mapping 3               | Deg C | Avg              |
+      | SoilTempProbe_Avg(5) | Wind Speed                   | Deg C | Avg              |
+      | SoilTempProbe_Avg(6) | Sample                       | Deg C | Avg              |
 
   Scenario: Fill in missing column mappings button should not be visible if none are missing
     Given I upload "Test_Column_Table.dat" through the applet

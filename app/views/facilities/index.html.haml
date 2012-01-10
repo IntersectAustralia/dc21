@@ -7,7 +7,7 @@
 #content_container
   = render 'pages/contentnavigation'
   - if @facilities.empty?
-    <h3>Displaying 0 of 0 Facilities</h3>
+    %h3 Displaying 0 of 0 Facilities
   - else
     %table#facilities
       %tr
