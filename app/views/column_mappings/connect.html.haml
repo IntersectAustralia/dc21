@@ -13,7 +13,8 @@
           %tr
             %th= @column_mappings[index].code
             = text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code, :readonly => true, :type => "hidden"
-            %th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
+            %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'], @column_mappings[index].name), :include_blank => true
+            -#%th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
       .actions
         .cancelbutton
           %span

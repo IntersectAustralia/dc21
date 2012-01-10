@@ -20,9 +20,9 @@ class ColumnMappingsController < ApplicationController
     a = 0
     @column_mappings = []
     params[:column_mappings].each_value do |map|
+      @column_mapping = ColumnMapping.new(map)
+      @column_mappings.push(@column_mapping)
       if !map.values.all?(&:blank?)
-        @column_mapping = ColumnMapping.new(map)
-        @column_mappings.push(@column_mapping)
         unless @column_mapping.valid?
           @column_mapping.errors.full_messages.each do |err_message|
             @messages << err_message
