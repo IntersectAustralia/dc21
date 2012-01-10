@@ -3,6 +3,17 @@ defaults: &defaults
   account_request_user_status_email_sender: account-status@intersect.org.au
   account_request_admin_notification_sender: account-request@intersect.org.au
   files_root: /data/dc21-data
+  column_mappings: &column_mappings
+    - Average Soil Temp (Probe1)
+    - Average Soil Temp (Probe2)
+    - Average Soil Temp (Probe3)
+    - Average Soil Temp (Probe4)
+    - Average Soil Temp (Probe5)
+    - Average Soil Temp (Probe6)
+    - Temperature
+    - Wind Speed
+    - Sample
+    - Rainfall
 
 development:
   <<: *defaults

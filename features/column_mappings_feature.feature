@@ -7,16 +7,16 @@ Feature: Column Mappings
 
   Scenario: View the list
     Given I have column mappings
-      | name    | code | 
+      | name    | code |
       | Sample  | smp  |
       | Average | avg  |
       | Count   | no.  |
     When I am on the column mappings page
     Then I should see "column_mappings" table with
-      | Name    | Code | 
+      | Name    | Code |
       | Average | avg  |
-      | Count   | no.  | 
-      | Sample  | smp  | 
+      | Count   | no.  |
+      | Sample  | smp  |
 
   Scenario: View the list when there's nothing to show
     When I am on the column mappings page
@@ -50,10 +50,10 @@ Feature: Column Mappings
     Given I am on the column mappings page
     And I follow "Add column mappings"
     And I fill in the following:
-      | column_mappings_0_name | Rainfall    |
       | column_mappings_0_code | rainMM      |
-      | column_mappings_1_name | Temperature |
       | column_mappings_1_code | pTemp       |
+    And I select "Rainfall" from "column_mappings_0_name"
+    And I select "Temperature" from "column_mappings_1_name"
     And I press "Submit Column Mappings"
     Then I should see "Column mappings successfully added"
     And I should see "column_mappings" table with
@@ -65,10 +65,9 @@ Feature: Column Mappings
     Given I am on the column mappings page
     And I follow "Add column mappings"
     And I fill in the following:
-      | column_mappings_0_name | Rainfall |
       | column_mappings_0_code |          |
-      | column_mappings_1_name |          |
       | column_mappings_1_code | pTemp    |
+    And I select "Rainfall" from "column_mappings_0_name"
     And I press "Submit Column Mappings"
     Then I should see "Name can't be blank"
     And I should see "Code can't be blank"
@@ -84,10 +83,10 @@ Feature: Column Mappings
     Given I am on the column mappings page
     And I follow "Add column mappings"
     And I fill in the following:
-      | column_mappings_1_name | Rainfall    |
       | column_mappings_1_code | rainMM      |
-      | column_mappings_4_name | Temperature |
       | column_mappings_4_code | pTemp       |
+    And I select "Rainfall" from "column_mappings_1_name"
+    And I select "Temperature" from "column_mappings_4_name"
     And I press "Submit Column Mappings"
     Then I should see "Column mappings successfully added"
     And I should see "column_mappings" table with
@@ -102,8 +101,8 @@ Feature: Column Mappings
     When I am on the column mappings page
     And I follow "Add column mappings"
     And I fill in the following:
-      | column_mappings_1_name | Sample |
-      | column_mappings_1_code | smp    |  
+      | column_mappings_1_code | smp    |
+    And I select "Sample" from "column_mappings_1_name"
     And I press "Submit Column Mappings"
     Then I should see "Code has already been taken"
 
@@ -111,10 +110,10 @@ Feature: Column Mappings
     Given I am on the column mappings page
     And I follow "Add column mappings"
     And I fill in the following:
-      | column_mappings_2_name | Rainfall    |
       | column_mappings_2_code | rainMM      |
-      | column_mappings_3_name | Rainfall(2) |
       | column_mappings_3_code | rainMM      |
+    And I select "Rainfall" from "column_mappings_2_name"
+    And I select "Temperature" from "column_mappings_3_name"
     And I press "Submit Column Mappings"
     Then I should see "Can't add column mappings with the same code"
 
