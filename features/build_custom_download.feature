@@ -22,6 +22,17 @@ Feature: Download a file
     And I press "Download"
     Then I should receive a zip file matching "samples/subsetted/range_oct_10_oct_15"
 
+  Scenario: Build a custom download by date range (but change the dates)
+    When I do a date search for data files with dates "2011-10-10" and "2011-10-15"
+    When I check the checkbox for "weather_station_05_min.dat"
+    And I check the checkbox for "weather_station_15_min.dat"
+    And I press "Build Custom Download"
+    Then I should see the build custom download page with dates populated with "2011-10-10" and "2011-10-15"
+    When I choose "Only include data in the following range"
+    And I fill in "To Date:" with "2011-10-12"
+    And I press "Download"
+    Then I should receive a zip file matching "samples/subsetted/range_oct_10_oct_12"
+
   Scenario: Build a custom download with from date only
     When I do a date search for data files with dates "2011-10-10" and ""
     When I check the checkbox for "weather_station_05_min.dat"
@@ -107,7 +118,3 @@ Feature: Download a file
     When I choose "Include all data"
     And I press "Download"
     Then I should receive a zip file matching "samples/full_files/weather_station"
-
-
-# TODO: elect to just download all data
-# TODO: coming from search but changing dates
