@@ -107,3 +107,26 @@ Then /^pause$/ do
   STDIN.getc
 end
 
+#Then /^"([^\"]*)" should be visible$/ do |locator|
+#  selenium.is_visible(locator).should be_true
+#end
+#
+#Then /^"([^\"]*)" should not be visible$/ do |locator|
+#  selenium.is_visible(locator).should_not be_true
+#end
+
+##http://makandra.com/notes/1049-check-that-a-page-element-is-not-visible-with-selenium
+#Then /^"([^\"]+)" should not be visible$/ do |text|
+#  paths = [
+#    "//*[@class='hidden']/*[contains(.,'#{text}')]",
+#    "//*[@class='invisible']/*[contains(.,'#{text}')]",
+#    "//*[@style='display: none;']/*[contains(.,'#{text}')]"
+#  ]
+#  xpath = paths.join '|'
+#  page.should have_xpath(xpath)
+#end
+#Then /^All checkboxes in "([^"]*)" are checked$/ do |form|
+#  within(:xpath, "//form[@name='#{form}']") do
+#    page.should have_xpath('//input[@type="checkbox"]/@Checked')
+#  end
+#end

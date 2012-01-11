@@ -1,22 +1,21 @@
+- content_for :breadcrumb  do
+  %h1 Home / Dashboard
+
 - if !user_signed_in?
   #content_container
     .container_home
       = form_for("user", :url => user_session_path) do |f|
         = render(:partial => 'devise/sessions/form', :locals => { :f => f })
 - else
-  = render 'pages/pageactions'
-  %h1 Home / Dashboard
-  #content_container
-    = render 'pages/contentnavigation'
-    .recentactivity
-      %h3 Recent Activity
-      %table#exploredata
-        %tr
-          %th= "Filename"
-          %th= "Date added"
-          %th= "Added by"
-        - @data_files.each do |data_file|
-          %tr{:class => cycle('field_bg', 'field_nobg')}
-            %td= data_file.filename
-            %td= data_file.created_at.to_s(:with_time)
-            %td= data_file.created_by.email if data_file.created_by
+  .recentactivity
+    %h3 Recent Activity
+    %table#exploredata
+      %tr
+        %th= "Filename"
+        %th= "Date added"
+        %th= "Added by"
+      - @data_files.each do |data_file|
+        %tr{:class => cycle('field_bg', 'field_nobg')}
+          %td= data_file.filename
+          %td= data_file.created_at.to_s(:with_time)
+          %td= data_file.created_by.email if data_file.created_by

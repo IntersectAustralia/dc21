@@ -169,4 +169,3 @@ Feature: Search data files by date range
     And I fill in date search details between "2010-06-11" and "2010-06-10"
     And I press "Update Search Results"
     Then the "exploredata" table should have 8 rows
-

@@ -1,69 +1,73 @@
-- content_for :exploredata do
+- content_for :actions do
   %li.actions
     #downloadtoggle.download.whitebutton
       %span= link_to 'Download Files'
     #searchtoggle.search.whitebutton
       %span= link_to 'Search Files'
-= render 'pages/pageactions'
-%h1 Home / Explore Data
-#content_container
-  = render 'pages/contentnavigation'
 
-  %h3
-    - unless @search.showing_all?
-      = link_to "Clear Search", data_files_path
-  .facetedsearch{ :class => @search.showing_all? ? "" : "search" }
-    .searchbox
-      = form_tag(data_files_path, :method => :get) do
-        .searchcategory
-          %h4#date.expand.current Date:
-          .date
-            = label_tag :from_date, "From Date:"
-            = text_field_tag "search[from_date]", @from_date, :id => :from_date
-            = label_tag :to_date, "To Date:"
-            = text_field_tag "search[to_date]", @to_date, :id => :to_date
-        .searchcategory
-          %h4#facility.expand.current Facility:
-          .facility
-            - @facilities.each_with_index do |facility, index|
-              = label_tag "search_facility_#{index}", facility[1]
-              = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
-        .searchcategory
-          %h4#variable.expand.current Variable:
-          .variable
-            - @variables.each_with_index do |variable, index|
-              = label_tag "search_variable_#{index}", variable
-              = check_box_tag "search[variables][]", variable, @selected_variables.include?(variable), :id => "search_variable_#{index}"
-        .actions
-          = submit_tag "Update Search Results", :class => "whitebutton"
+- content_for :breadcrumb  do
+  %h1 Home / Explore Data
 
-  - if (@data_files.empty?)
-    No files to display.
-  - else
-    = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => @search.showing_all? ? "exploredata" : "exploredata search") do
-      = hidden_field_tag "searched_from_date", @from_date
-      = hidden_field_tag "searched_to_date", @to_date
-      %table#exploredata{ :class => (@search.showing_all? ? "" : "search") }
-        %tr
-          %th.view.select
-            = (link_to "All", "javascript:selectToggle(false, 'datafiles');") + "/" + (link_to "None", "javascript:selectToggle(true, 'datafiles');")
-          %th.view View
-          %th.sortable= sortable "filename"
-          %th.sortable= sortable "created_at", "Date added"
-          %th.sortable.email= sortable "users.email", "Added by"
-          %th.sortable= sortable "start_time", "Start time"
-          %th.sortable= sortable "end_time", "End time"
-        - @data_files.each do |data_file|
-          %tr{:class => cycle('field_bg', 'field_nobg')}
-            %td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
-            %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
-            %td= data_file.filename
-            %td= data_file.created_at.to_s(:with_time)
-            %td.email= data_file.created_by.email if data_file.created_by
-            %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
-            %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
-      #helper_text.select
-        Select one or more files to download
-      #download_actions.actions.hidden
-        = submit_tag "Download Selected Files", :class => "bluebutton"
-        = submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"
+- content_for :pageactions do
+  .pageactions
+    = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
+
+%h3
+  - unless @search.showing_all?
+    = link_to "Clear Search", data_files_path
+.facetedsearch{ :class => @search.showing_all? ? "" : "search" }
+  .searchbox
+    = form_tag(data_files_path, :method => :get) do
+      .searchcategory
+        %h4#date.expand.current Date:
+        .date
+          = label_tag :from_date, "From Date:"
+          = text_field_tag "search[from_date]", @from_date, :id => :from_date
+          = label_tag :to_date, "To Date:"
+          = text_field_tag "search[to_date]", @to_date, :id => :to_date
+      .searchcategory
+        %h4#facility.expand.current Facility:
+        .facility
+          - @facilities.each_with_index do |facility, index|
+            = label_tag "search_facility_#{index}", facility[1]
+            = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
+      .searchcategory
+        %h4#variable.expand.current Variable:
+        .variable
+          - @variables.each_with_index do |variable, index|
+            = label_tag "search_variable_#{index}", variable
+            = check_box_tag "search[variables][]", variable, @selected_variables.include?(variable), :id => "search_variable_#{index}"
+      .actions
+        = submit_tag "Update Search Results", :class => "whitebutton"
+
+- if (@data_files.empty?)
+  No files to display.
+- else
+  = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => @search.showing_all? ? "exploredata" : "exploredata search") do
+    = hidden_field_tag "searched_from_date", @from_date
+    = hidden_field_tag "searched_to_date", @to_date
+    %table#exploredata{ :class => (@search.showing_all? ? "" : "search") }
+      %tr
+        %th.view.select
+          = (link_to "All", "javascript:selectToggle(false, 'datafiles');") + "/" + (link_to "None", "javascript:selectToggle(true, 'datafiles');")
+        %th.view View
+        %th.sortable= sortable "filename"
+        %th.sortable= sortable "created_at", "Date added"
+        %th.sortable.email= sortable "users.email", "Added by"
+        %th.sortable= sortable "start_time", "Start time"
+        %th.sortable= sortable "end_time", "End time"
+      - @data_files.each do |data_file|
+        %tr{:class => cycle('field_bg', 'field_nobg')}
+          %td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
+          %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
+          %td= data_file.filename
+          %td= data_file.created_at.to_s(:with_time)
+          %td.email= data_file.created_by.email if data_file.created_by
+          %td= data_file.start_time.utc.to_s(:with_seconds) if data_file.start_time
+          %td= data_file.end_time.utc.to_s(:with_seconds) if data_file.end_time
+    #helper_text.select
+      Select one or more files to download
+    #download_actions.actions.hidden
+      = submit_tag "Download Selected Files", :class => "bluebutton"
+      = submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"
+
