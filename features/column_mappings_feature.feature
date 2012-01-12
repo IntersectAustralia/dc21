@@ -48,7 +48,7 @@ Feature: Column Mappings
 
   Scenario: Add valid column mappings
     Given I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I fill in the following:
       | column_mappings_0_code | rainMM      |
       | column_mappings_1_code | pTemp       |
@@ -63,7 +63,7 @@ Feature: Column Mappings
 
   Scenario: Add invalid column mappings
     Given I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I fill in the following:
       | column_mappings_0_code |          |
       | column_mappings_1_code | pTemp    |
@@ -74,14 +74,14 @@ Feature: Column Mappings
 
   Scenario: Add blank column mappings
     Given I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I press "Submit Column Mappings"
     Then I should see "No column mapping information provided"
 
 
-  Scenario: Add column mappings on different lines
+  Scenario: Add Mapping on different lines
     Given I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I fill in the following:
       | column_mappings_1_code | rainMM      |
       | column_mappings_4_code | pTemp       |
@@ -99,7 +99,7 @@ Feature: Column Mappings
       | name    | code | 
       | Sample  | smp  |
     When I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I fill in the following:
       | column_mappings_1_code | smp    |
     And I select "Sample" from "column_mappings_1_name"
@@ -108,7 +108,7 @@ Feature: Column Mappings
 
   Scenario: Add two column mappings with same code at same time
     Given I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I fill in the following:
       | column_mappings_2_code | rainMM      |
       | column_mappings_3_code | rainMM      |
@@ -119,7 +119,7 @@ Feature: Column Mappings
 
   Scenario: Pressing cancel on add screen redirects to view column mappings page
     Given I am on the column mappings page
-    And I follow "Add column mappings"
+    And I follow "Add Mapping"
     And I follow "Cancel"
     Then I should be on the column mappings page
 

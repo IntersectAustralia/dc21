@@ -1,22 +1,21 @@
-= render 'users/pageactions'
-%h1 Data File / Column Mappings / Add
-#content_container
-  = render 'users/contentnavigation'
-  .container
-    = form_tag(connect_column_mapping_path, :method => :post, ) do 
-      .formerror= render "shared/column_mapping_error_messages", :target => @messages
-      %table#mappings
+- content_for :breadcrumb do
+  %h1 Data File / Column Mappings / Add
+
+.container
+  = form_tag(connect_column_mapping_path, :method => :post, ) do
+    .formerror= render "shared/column_mapping_error_messages", :target => @messages
+    %table#mappings
+      %tr
+        %th Code
+        %th Name
+      - @column_mappings.each_with_index do |mapping, index|
         %tr
-          %th Code
-          %th Name
-        - @column_mappings.each_with_index do |mapping, index|
-          %tr
-            %th= @column_mappings[index].code
-            = text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code, :readonly => true, :type => "hidden"
-            %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'], @column_mappings[index].name), :include_blank => true
-            -#%th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
-      .actions
-        .cancelbutton
-          %span
-          = link_to 'Cancel', data_file_path(params[:id]), :class => "cancelbutton"
-        = submit_tag "Submit Column Mappings", :class => "floatright"
+          %th= @column_mappings[index].code
+          = text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code, :readonly => true, :type => "hidden"
+          %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'], @column_mappings[index].name), :include_blank => true
+          -#%th= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
+    .actions
+      .cancelbutton
+        %span
+        = link_to 'Cancel', data_file_path(params[:id]), :class => "cancelbutton"
+      = submit_tag "Submit Column Mappings", :class => "floatright"

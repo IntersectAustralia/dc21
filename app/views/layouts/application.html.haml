@@ -2,26 +2,12 @@
 %html
   %head
     = render 'layouts/head'
-    <!--[if lt IE 7]>
-    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE7.js"></script>
-    <![endif]-->
-    
   %body
     #content_wrapper
       = render 'layouts/banner'
       #content
-        .pageactions
-          = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
         = yield :breadcrumb
         #content_container
-          .contentnavigation
-            = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-              = tab.dashboard 'Dashboard', home_pages_path, :id => "dashboard"
-              = tab.explore 'Explore Data', data_files_path, :id => "data"
-              = tab.facilities 'Facilities', facilities_path, :id => "facilities"
-              -#= tab.myuploads 'My Data Uploads', data_files_path
-              -#= tab.accessrequests 'Members', access_requests_users_path
-              = yield :actions
           = yield
     = render 'layouts/footer'
 

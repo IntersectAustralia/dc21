@@ -35,7 +35,7 @@ Feature: View the list of facilities
 
   Scenario: View the list when there's nothing to show
     When I am on the facilities page
-    Then I should see "Displaying 0 of 0 Facilities"
+    Then I should see "There are no facilities to display"
 
   Scenario: Must be logged in to view the facilities list
     Then users should be required to login on the facilities page

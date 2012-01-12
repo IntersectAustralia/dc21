@@ -34,6 +34,7 @@ class DataFilesController < ApplicationController
   end
 
   def new
+    render :layout => 'guest'
   end
 
   def create
@@ -84,6 +85,8 @@ class DataFilesController < ApplicationController
     @files = DataFile.find(@ids)
     @from_date = params[:from_date]
     @to_date = params[:to_date]
+    render :layout => 'guest'
+
   end
 
   def custom_download
@@ -126,6 +129,10 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def default_layout
+    "main"
+  end
 
   def sort_column
     if params[:sort] == "users.email"

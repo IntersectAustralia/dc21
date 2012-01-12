@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < AdminPagesController
 
   before_filter :authenticate_user!
   load_and_authorize_resource
@@ -17,9 +17,9 @@ class UsersController < ApplicationController
     end
   end
 
-  def admin
-
-  end
+  #def admin
+  #
+  #end
 
   def access_requests
     @users = User.pending_approval

@@ -1,13 +1,9 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
 
-  # if there's some other layout that's better for these pages
-  #layout 'overview' 
-
   def routing_error
     render :file => "#{Rails.root}/public/404.html", :status => 404
   end
-
 
   def home
     if !user_signed_in?
@@ -17,11 +13,13 @@ class PagesController < ApplicationController
       set_tab :home
       set_tab :dashboard, :contentnavigation
       @data_files = DataFile.most_recent_first.limit(5)
+      render :layout => 'main'
     end
   end
 
   def about
       set_tab :about
+      render :layout => 'application'
   end
 
 end

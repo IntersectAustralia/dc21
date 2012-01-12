@@ -1,26 +1,28 @@
-= render 'users/pageactions'
-%h1 Admin / Access Requests
-#content_container
-  = render 'users/contentnavigation'
-  %table#access_requests
-    %tr
-      %th.view
-      %th.firstname
-        First name
-      %th.lastname
-        Last name
-      %th.email
-        Email
-      %th.actions Actions
-    - @users.each do |user|
-      %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}"
-        %td.firstname= user.first_name
-        %td.lastname= user.last_name
-        %td.email= user.email
-        %td.actions
-          - if can?(:reject, user) then
-            = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "spam floatleft"
-            = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "reject floatleft"
-          - if can?(:approve, user) then
-            = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "approve floatleft"
+- content_for :actions do
+  -# nothing
+
+- content_for :breadcrumb do
+  %h1 Admin / Access Requests
+
+%table#access_requests
+  %tr
+    %th.view
+    %th.firstname
+      First name
+    %th.lastname
+      Last name
+    %th.email
+      Email
+    %th.actions Actions
+  - @users.each do |user|
+    %tr{:class => cycle('field_bg', 'field_nobg')}
+      %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}"
+      %td.firstname= user.first_name
+      %td.lastname= user.last_name
+      %td.email= user.email
+      %td.actions
+        - if can?(:reject, user) then
+          = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "spam floatleft"
+          = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "reject floatleft"
+        - if can?(:approve, user) then
+          = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "approve floatleft"

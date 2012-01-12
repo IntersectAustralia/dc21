@@ -1,21 +1,20 @@
-= render 'users/pageactions'
-%h1 Admin / Column Mappings / Add
-#content_container
-  = render 'users/contentnavigation'
-  .container
-    = form_tag(column_mappings_path, :method => :post) do 
-      .formerror= render "shared/column_mapping_error_messages", :target => @messages
-      %table#mappings
+- content_for :breadcrumb do
+  %h1 Admin / Column Mappings / Add
+
+.container
+  = form_tag(column_mappings_path, :method => :post) do
+    .formerror= render "shared/column_mapping_error_messages", :target => @messages
+    %table#mappings
+      %tr
+        %th Code
+        %th Name
+      - @column_mappings.each_with_index do |mapping, index|
         %tr
-          %th Code
-          %th Name
-        - @column_mappings.each_with_index do |mapping, index|
-          %tr
-            %td= text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code
-            %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'], @column_mappings[index].name), :include_blank => true
-            -#%td= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
-      .actions
-        .cancelbutton
-          %span
-          = link_to 'Cancel', column_mappings_path, :class => "cancelbutton"
-        = submit_tag "Submit Column Mappings", :class => "floatright"
+          %td= text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code
+          %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'], @column_mappings[index].name), :include_blank => true
+          -#%td= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
+    .actions
+      .cancelbutton
+        %span
+        = link_to 'Cancel', column_mappings_path, :class => "cancelbutton"
+      = submit_tag "Submit Column Mappings", :class => "floatright"

@@ -1,4 +1,4 @@
-class ColumnMappingsController < ApplicationController
+class ColumnMappingsController < AdminPagesController
 
   before_filter :authenticate_user!
   set_tab :admin

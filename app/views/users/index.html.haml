@@ -1,35 +1,37 @@
-= render 'users/pageactions'
-%h1 Admin / Users
-#content_container
-  = render 'users/contentnavigation'
-  %table.data_table.margin_top_small#users
-    %tr.header
-      %th.view View
-      %th
-        First name
-      %th
-        Last name
-      %th.email
-        Email
-      %th.role Role
-      %th.status Status
-      %th.date 
-        Last signed in
-      %th.actions
+- content_for :actions do
+  -# nothing
 
-    - @users.each do |user|
-      %tr{ :class => cycle('field_bg', 'field_nobg')}
-        %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}"
-        %td= user.first_name
-        %td= user.last_name
-        %td.email= user.email
-        %td.role= user.role.name if user.role
-        %td.status= user.status_description
-        %td.date
-          - if user.last_sign_in_at.nil?
-            Never logged in
-          - else
-            = user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
-        %td.actions
-          - if can?(:update_role, User)
-            = link_to '', edit_role_user_path(user), :id => "edit_role_#{user.id}", :class => "edit"
+- content_for :breadcrumb do
+  %h1 Admin / Users
+
+%table.data_table.margin_top_small#users
+  %tr.header
+    %th.view View
+    %th
+      First name
+    %th
+      Last name
+    %th.email
+      Email
+    %th.role Role
+    %th.status Status
+    %th.date
+      Last signed in
+    %th.actions
+
+  - @users.each do |user|
+    %tr{ :class => cycle('field_bg', 'field_nobg')}
+      %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}"
+      %td= user.first_name
+      %td= user.last_name
+      %td.email= user.email
+      %td.role= user.role.name if user.role
+      %td.status= user.status_description
+      %td.date
+        - if user.last_sign_in_at.nil?
+          Never logged in
+        - else
+          = user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
+      %td.actions
+        - if can?(:update_role, User)
+          = link_to '', edit_role_user_path(user), :id => "edit_role_#{user.id}", :class => "edit"

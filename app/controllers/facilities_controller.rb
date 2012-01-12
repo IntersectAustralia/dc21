@@ -38,5 +38,9 @@ class FacilitiesController < ApplicationController
       render 'edit'
     end
   end
-  
+
+  private
+  def default_layout
+    "main"
+  end
 end

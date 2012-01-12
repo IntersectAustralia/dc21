@@ -1,7 +1,8 @@
 -#.pageactions
 -#  = link_to "Contact Us", root_url, :class => "bluebutton"
 -#  = link_to "Contact Intersect", root_url, :class => "whitebutton floatright"
-%h1 About /
-#content_container
-  %h2 About DC21
-  %p Built by Intersect Australia Ltd using Ruby on Rails.
+- content_for :breadcrumb  do
+  %h1 About /
+
+%h2 About DC21
+%p Built by Intersect Australia Ltd using Ruby on Rails.
