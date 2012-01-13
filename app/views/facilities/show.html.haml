@@ -1,12 +1,10 @@
-= render 'pages/pageactions'
-%h1 Facility / View / #{@facility.name}
+- content_for :breadcrumb  do
+  %h1 Facility / View / #{@facility.name}
 
-#content_container
-  = render 'pages/contentnavigation'
-  .container
-    = render_field "Name", @facility.name
-    = render_field "Code", @facility.code
-    .cancelbutton
-      %span
-      = link_to 'Back', facilities_path, :class => "cancelbutton"
-    = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
+.container
+  = render_field "Name", @facility.name
+  = render_field "Code", @facility.code
+  .cancelbutton
+    %span
+    = link_to 'Back', facilities_path, :class => "cancelbutton"
+  = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
