@@ -83,6 +83,7 @@ after 'deploy:update' do
   server_setup.logging.rotation
   server_setup.config.apache
   deploy.restart
+  deploy.additional_symlinks
 end
 
 namespace :deploy do
@@ -109,6 +110,12 @@ namespace :deploy do
     restart
   end
 
+  desc "Additional Symlinks to shared_path"
+  task :additional_symlinks do
+    run "rm -rf #{release_path}/tmp/shared_config"
+    run "ln -nfs #{shared_path}/env_config #{release_path}/tmp/env_config"
+  end
+
   # Load the schema
   desc "Load the schema into the database (WARNING: destructive!)"
   task :schema_load, :roles => :db do
@@ -118,6 +125,7 @@ namespace :deploy do
   # Run the sample data populator
   desc "Run the test data populator script to load test data into the db (WARNING: destructive!)"
   task :populate, :roles => :db do
+    generate_populate_yml
     run("cd #{current_path} && rake db:populate", :env => {'RAILS_ENV' => "#{stage}"})
   end
 
@@ -136,12 +144,26 @@ namespace :deploy do
 
   # Helper task which re-creates the database
   task :refresh_db, :roles => :db do
-    schema_load
-    seed
-    populate
-  end
+    require 'colorize'
 
+    # Prompt to refresh_db on unless we're in QA
+    if stage.eql?(:qa)
+      input = "yes"
+    else
+      puts "This step (deploy:refresh_db) will erase all data and start from scratch.\nYou probably don't want to do it. Are you sure?' [NO/yes]".colorize(:red)
+      input = STDIN.gets.chomp
+    end
+
+    if input.match(/^yes/)
+      schema_load
+      seed
+      populate
+    else
+      puts "Skipping database nuke"
+    end
+  end
 end
+
 
 after 'deploy:update_code' do
   generate_database_yml
@@ -150,9 +172,29 @@ after 'deploy:update_code' do
   #run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
 end
 
+desc "Give sample users a custom password"
+task :generate_populate_yml, :roles => :app do
+  require "yaml"
+  require 'colorize'
+
+  puts "Set sample user password? (required on initial deploy) [NO/yes]".colorize(:red)
+  input = STDIN.gets.chomp
+  do_set_password if input.match(/^yes/)
+end
+
+desc "Helper method that actually sets the sample user password"
+task :do_set_password, :roles => :app do
+  set :custom_sample_password, proc { Capistrano::CLI.password_prompt("Sample User password: ") }
+  buffer = Hash[:password => custom_sample_password]
+  put YAML::dump(buffer), "#{shared_path}/env_config/sample_password.yml", :mode => 0664
+end
+
+
 desc "After updating code we need to populate a new database.yml"
 task :generate_database_yml, :roles => :app do
   require "yaml"
+  require 'colorize'
+
   set :production_database_password, proc { Capistrano::CLI.password_prompt("Database password: ") }
 
   buffer = YAML::load_file('config/database.yml')
@@ -167,3 +209,4 @@ task :generate_database_yml, :roles => :app do
 
   put YAML::dump(buffer), "#{release_path}/config/database.yml", :mode => 0664
 end
+
