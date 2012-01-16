@@ -15,7 +15,8 @@ set :rvm_type, :user
 
 # Deploy using copy for now
 set :scm, 'git'
-set :repository, 'ssh://git.intersect.org.au/git/dc21'
+#set :repository, 'ssh://git.intersect.org.au/git/dc21'
+set :repository, 'git://github.com/IntersectAustralia/dc21.git'
 set :deploy_via, :copy
 set :copy_exclude, [".git/*"]
 
