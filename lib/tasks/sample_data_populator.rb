@@ -108,8 +108,7 @@ def load_password
           end
     @password = input
   else
-    require 'colorize'
-    raise "No sample password file provided, and it is required for any environment that isn't development\n".color(:red) +
+    raise "No sample password file provided, and it is required for any environment that isn't development\n" +
               "Use capistrano's deploy:populate task to generate one'"
   end
 
