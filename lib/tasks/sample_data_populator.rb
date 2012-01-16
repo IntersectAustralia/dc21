@@ -109,7 +109,7 @@ def load_password
     @password = input
   else
     raise "No sample password file provided, and it is required for any environment that isn't development\n" +
-              "Use capistrano's deploy:populate task to generate one'"
+              "Use capistrano's deploy:populate task to generate one"
   end
 
 end
