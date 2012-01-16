@@ -86,6 +86,13 @@ after 'deploy:update' do
   deploy.additional_symlinks
 end
 
+after 'deploy:finalize_update' do
+  generate_database_yml
+
+  #solved in Capfile
+  #run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
+end
+
 namespace :deploy do
 
   # Passenger specifics: restart by touching the restart.txt file
@@ -164,13 +171,6 @@ namespace :deploy do
   end
 end
 
-
-after 'deploy:update_code' do
-  generate_database_yml
-
-  #solved in Capfile
-  #run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
-end
 
 desc "Give sample users a custom password"
 task :generate_populate_yml, :roles => :app do
