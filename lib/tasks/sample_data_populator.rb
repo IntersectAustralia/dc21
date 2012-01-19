@@ -102,6 +102,7 @@ def load_password
          "Set sample user password:"
           input = STDIN.gets.chomp
           buffer = Hash[:password => input]
+          Dir.mkdir("#{Rails.root}/tmp", 0755) unless Dir.exists?("#{Rails.root}/tmp")
           Dir.mkdir("#{Rails.root}/tmp/env_config", 0755) unless Dir.exists?("#{Rails.root}/tmp/env_config")
           File.open(password_file, 'w') do |out|
             YAML::dump(buffer, out)
