@@ -11,7 +11,7 @@
 
   %h3 Data File Columns
   - if @data_file.cols_unmapped?
-    = link_to "Fill in column mappings", connect_column_mapping_path(:id => @data_file.id), :class => "bluebutton"
+    = link_to "Fill in column mappings", map_column_mapping_path(:id => @data_file.id), :class => "bluebutton"
   %table#column_info
     %tr
       %th Column

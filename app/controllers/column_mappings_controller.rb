@@ -1,5 +1,17 @@
 class ColumnMappingsController < AdminPagesController
 
+  #New/Create:
+    #This is the manual / admin way to define a mapping. Builds a column mapping by
+    #-specifying the name of the column in the data file (code)
+    #-selecting a preconfigured name from a dropdown
+
+  #Map/Connect:
+    #This is the auto / user way to define a mapping from a data file. Builds a column mapping by:
+      #-selecting an unmapped column from that file
+      #-selecting a preconfigured name from a dropdown
+
+
+
   before_filter :authenticate_user!
   set_tab :admin
   set_tab :columnmappings, :contentnavigation
@@ -10,7 +22,7 @@ class ColumnMappingsController < AdminPagesController
 
   def new
     @column_mappings = []
-    5.times { @column_mappings << ColumnMapping.new }
+    10.times { @column_mappings << ColumnMapping.new }
   end
 
   def create
@@ -19,10 +31,10 @@ class ColumnMappingsController < AdminPagesController
     blank = []
     a = 0
     @column_mappings = []
-    params[:column_mappings].each_value do |map|
-      @column_mapping = ColumnMapping.new(map)
+    params[:column_mappings].each_value do |mapping|
+      @column_mapping = ColumnMapping.new(mapping)
       @column_mappings.push(@column_mapping)
-      if !map.values.all?(&:blank?)
+      if !mapping.values.all?(&:blank?)
         unless @column_mapping.valid?
           @column_mapping.errors.full_messages.each do |err_message|
             @messages << err_message
@@ -53,7 +65,7 @@ class ColumnMappingsController < AdminPagesController
     redirect_to column_mappings_path
   end
 
-  def connect
+  def map
     @column_mappings = []
     @data_file = DataFile.find_by_id(params[:id])
     @data_file.column_details.each do |col|
@@ -63,31 +75,28 @@ class ColumnMappingsController < AdminPagesController
     end
   end
 
-  def add_cols
+  def connect
     @messages = []
     @column_mappings = []
-    params[:column_mappings].each_value do |map|
-        @column_mapping = ColumnMapping.new(map)
+    params[:column_mappings].each_value do |mapping|
+        @column_mapping = ColumnMapping.new(mapping)
         @column_mappings.push(@column_mapping)
-        if @column_mapping.name == ""
-          @messages << "Name can't be blank"
-        end
     end
     if !@messages.empty?
-      render 'connect'
+      render 'map'
       return
     end
     @column_mappings.each do |mapping|
       mapping.save unless mapping.nil?
     end
-    flash[:notice] = "Column mappings successfully added"
+    flash[:notice] = "Column mappings successfully updated."
     redirect_to data_file_path(params[:id])
   end
 
   def destroy
     @column_mapping = ColumnMapping.find(params[:id])
     @column_mapping.destroy
-    redirect_to column_mappings_path, :notice => "The file was successfully deleted"
+    redirect_to column_mappings_path, :notice => "The mapping was successfully deleted."
   end
   
 end

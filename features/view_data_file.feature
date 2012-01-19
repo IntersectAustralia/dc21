@@ -124,13 +124,15 @@ Feature: View the details of a data file
     And I follow the view link for data file "Test_Column_Table.dat"
     Then I should not see "Fill in column mappings"
 
-  Scenario: Fill in missing column mappings with invalid information
-    Given I upload "Test_Column_Table.dat" through the applet
-    When I am on the list data files page
-    And I follow the view link for data file "Test_Column_Table.dat"
-    And I follow "Fill in column mappings"
-    And I press "Submit Column Mappings"
-    Then I should see "Name can't be blank"
+# This scenario no longer possible, but it may become relevant soon.
+# TODO Delete in sprint 4
+#  Scenario: Fill in missing column mappings with invalid information
+#    Given I upload "Test_Column_Table.dat" through the applet
+#    When I am on the list data files page
+#    And I follow the view link for data file "Test_Column_Table.dat"
+#    And I follow "Fill in column mappings"
+#    And I press "Submit Column Mappings"
+#    Then I should see "Name can't be blank"
 
 
 

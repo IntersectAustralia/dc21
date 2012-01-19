@@ -49,8 +49,8 @@ Dc21app::Application.routes.draw do
 
   resources :column_mappings do
     member do
-      get :connect
-      post :connect, :action => :add_cols
+      get :map
+      post :connect
     end
   end
 

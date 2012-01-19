@@ -4,6 +4,8 @@ defaults: &defaults
   account_request_admin_notification_sender: account-request@intersect.org.au
   files_root: /data/dc21-data
   column_mappings: &column_mappings
+    - Timestamp
+    - Record
     - Average Soil Temp (Probe1)
     - Average Soil Temp (Probe2)
     - Average Soil Temp (Probe3)
