@@ -131,7 +131,12 @@ class DataFilesController < ApplicationController
   def destroy
     file = DataFile.find(params[:id])
     if file.destroy
-      redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully deleted.")
+      if File.delete @data_file.path
+        redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully deleted.")
+      else
+        #This should never happen unless someone's messing with the fs/permissions
+        redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
+      end
     else
       redirect_to(show_data_file_path(file), :alert => "Could not delete this file (Do you have permission to delete it?)")
     end
