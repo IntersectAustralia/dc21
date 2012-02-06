@@ -17,16 +17,14 @@ And /^I follow the view link for data file "([^"]*)"$/ do |filename|
   click_link("view_#{file.id}")
 end
 
+#post to the upload controller just like the applet would
 When /^I upload "([^"]*)" through the applet$/ do |filename|
-  #post to the upload controller just like the applet would
   user = User.first
-  user.reset_authentication_token!
-  token = user.authentication_token
-  post_path = data_files_url(:format => :json, :auth_token => token)
-  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
-  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
-  response.status.should eq(200)
-  DataFile.count.should_not eq(0)
+  do_upload filename, user
+end
+When /^I upload "([^"]*)" through the applet as "([^"]*)"$/ do |filename, user_email|
+  user = User.find_by_email user_email
+  do_upload filename, user
 end
 
 When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|
@@ -94,4 +92,27 @@ Then /^I should see the build custom download page with dates populated with "([
   'And I should see "Only include data in the following range"'
   "And the \"From Date:\" field should contain \"#{from}\""
   "And the \"To Date:\" field should contain \"#{to}\""
+end
+
+When /^I delete the file "([^"]*)" added by "([^"]*)"$/ do |filename, email|
+  user = User.find_by_email email
+  file = DataFile.find_by_filename_and_created_by_id filename, user.id
+  file.destroy
+end
+
+private
+
+def do_upload(filename, user)
+  user.reset_authentication_token!
+  token = user.authentication_token
+  post_path = data_files_url(:format => :json, :auth_token => token)
+  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
+  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response.status.should eq(200)
+  DataFile.count.should_not eq(0)
+end
+
+When /^I visit the delete url for "([^"]*)"$/ do |filename|
+  file = DataFile.find_by_filename filename
+  visit_path data_file_path(file), :delete
 end

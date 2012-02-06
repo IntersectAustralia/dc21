@@ -41,8 +41,11 @@ class Ability
 
     return unless user && user.role
 
-    # all users can do stuff with data files
-    can :manage, DataFile
+    # all users can read and add data files, and can delete their own
+    can :read, DataFile
+    can :create, DataFile
+    can :destroy, DataFile, :created_by_id => user.id
+
 
     if user.role.admin?
       # only admins can manage users
@@ -52,6 +55,8 @@ class Ability
       can :admin, User
       can :reject, User
       can :approve, User
+
+      can :manage, DataFile
     end
 
   end

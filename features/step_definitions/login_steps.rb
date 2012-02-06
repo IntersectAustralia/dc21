@@ -42,7 +42,6 @@ Given /^I am logged in as "([^"]*)"$/ do |email|
     user = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
     set_user_role(user, "Administrator")
   end
-
   visit path_to("the login page")
   fill_in("user_email", :with => email)
   fill_in("user_password", :with => "Pas$w0rd")
@@ -64,6 +63,10 @@ When /^I attempt to login with "([^"]*)" and "([^"]*)"$/ do |email, password|
   fill_in("user_email", :with => email)
   fill_in("user_password", :with => password)
   click_button("Log in")
+end
+
+When /^I logout$/ do
+  visit path_to("the logout page")
 end
 
 Then /^the failed attempt count for "([^"]*)" should be "([^"]*)"$/ do |email, count|

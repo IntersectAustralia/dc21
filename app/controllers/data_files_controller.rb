@@ -128,6 +128,15 @@ class DataFilesController < ApplicationController
     zip_file.close
   end
 
+  def destroy
+    file = DataFile.find(params[:id])
+    if file.destroy
+      redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully deleted.")
+    else
+      redirect_to(show_data_file_path(file), :alert => "Could not delete this file (Do you have permission to delete it?)")
+    end
+  end
+
   private
 
   def default_layout

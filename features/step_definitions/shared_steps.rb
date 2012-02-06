@@ -3,6 +3,11 @@ Then /^I should see "([^"]*)" table with$/ do |table_id, expected_table|
   expected_table.diff!(actual)
 end
 
+Then /^I should see only these rows in "([^"]*)" table$/ do |table_id, expected_table|
+  actual = find("table##{table_id}").all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
+  expected_table.diff!(actual, {:missing_col => false})
+end
+
 Then /^the "([^"]*)" table should have (\d+) rows$/ do |table_id, expected_rows|
   actual = find("table##{table_id}").all('tr').size - 1 #subtract off one for the header
   actual.should eq(expected_rows.to_i)

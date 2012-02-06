@@ -290,4 +290,58 @@ describe DataFile do
     end
   end
 
+  describe "Deleting Files/data" do
+    it "should not leave the deleted file behind" do
+      pending
+      #cuke steps exist to handle uploading a real file, so this test will exist in cuke
+    end
+    it "should remove only/all column details associated with a file from the database" do
+      df1 = Factory(:data_file)
+      df1_cols = []
+      df1_cols << Factory(:column_detail, :name => "Rnfl", :data_file => df1)
+      df1_cols << Factory(:column_detail, :name => "Temp", :data_file => df1)
+
+      df2 = Factory(:data_file)
+      Factory(:column_detail, :name => "Rnfl", :data_file => df2)
+      Factory(:column_detail, :name => "SoilTemp", :data_file => df2)
+
+      all_cols = ColumnDetail.all
+      df1.destroy
+      ColumnDetail.all.should eq  (all_cols - df1_cols)
+    end
+
+    it "should not remove any column mappings defined from columns in a deleted file" do
+      df1 = Factory(:data_file)
+      Factory(:column_detail, :name => "Rnfl", :data_file => df1)
+      Factory(:column_detail, :name => "Temp", :data_file => df1)
+      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfl")
+      Factory(:column_mapping, :name => "Temperature", :code => "Temp")
+
+      searchables = DataFile.searchable_column_names
+      searchables.should eq(["Rainfall","Temperature"])
+
+      df1.destroy
+
+      searchables = DataFile.searchable_column_names
+      searchables.should eq(["Rainfall","Temperature"])
+    end
+
+    it "should remove all metadata records associated with a file from the database" do
+      df1 = Factory(:data_file)
+      df2 = Factory(:data_file)
+      df3 = Factory(:data_file)
+
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => df1)
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => df2)
+      Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => df3)
+
+
+      DataFile.with_station_name_in(["ABC"]).collect(&:id).sort.should eq([df1.id, df2.id, df3.id])
+      df1.destroy
+      DataFile.with_station_name_in(["ABC"]).collect(&:id).sort.should eq([df2.id, df3.id])
+      MetadataItem.find_by_data_file_id(df1).should eq nil
+    end
+
+  end
+
 end
