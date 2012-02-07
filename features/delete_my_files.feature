@@ -51,7 +51,7 @@ Feature: Delete files containing erroneous data
     And I am on the data file details page for datafile.dat
     And I follow "Delete"
     Then I should be on the list data files page
-    And I should see "'datafile.dat' was successfully deleted"
+    And I should see "The file 'datafile.dat' was successfully removed"
     And I should see only these rows in "exploredata" table
       | Filename      | Added by                  |
       | datafile1.dat | georgina@intersect.org.au |
@@ -84,7 +84,7 @@ Feature: Delete files containing erroneous data
     And I am on the data file details page for datafile.dat
     And I follow "Delete"
     Then I should be on the list data files page
-    And I should see "'datafile.dat' was successfully deleted"
+    And I should see "The file 'datafile.dat' was successfully removed"
     And I should see only these rows in "exploredata" table
       | Filename      | Added by                  |
       | datafile1.dat | kali@intersect.org.au |
