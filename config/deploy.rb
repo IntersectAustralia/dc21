@@ -179,6 +179,25 @@ namespace :deploy do
       puts "Skipping database nuke"
     end
   end
+
+  desc "Safe redeployment"
+  task :safe do # TODO roles?
+    require 'colorize'
+    update
+
+    cat_migrations_output = capture("cd #{current_path} && rake db:cat_migrations 2>&1").chomp
+    puts cat_migrations_output
+
+    if cat_migrations_output != '0 pending migration(s)'
+      print "There are pending migrations. Are you sure you want to continue? [NO/yes] ".colorize(:red)
+      raise "Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
+    end
+
+    rebundle
+    migrate
+    restart
+  end
+
 end
 
 
