@@ -40,6 +40,11 @@ namespace :server_setup do
       run "#{try_sudo} chown -R #{user}.#{group} #{deploy_to}"
       run "#{try_sudo} chmod 0711 #{user_home}"
     end
+
+    task :mkdir_db_dumps, :roles => :app do
+      run "#{try_sudo} mkdir -p #{shared_path}/db_dumps"
+      run "#{try_sudo} chown -R #{user}.#{group} #{shared_path}/db_dumps"
+    end
   end
   namespace :rvm do
     task :trust_rvmrc do
@@ -79,6 +84,7 @@ before 'deploy:setup' do
 end
 after 'deploy:setup' do
   server_setup.filesystem.dir_perms
+  server_setup.filesystem.mkdir_db_dumps
 end
 after 'deploy:update' do
   server_setup.logging.rotation
@@ -122,6 +128,9 @@ namespace :deploy do
   task :additional_symlinks do
     run "rm -rf #{release_path}/tmp/shared_config"
     run "ln -nfs #{shared_path}/env_config #{release_path}/tmp/env_config"
+
+    run "rm -f #{release_path}/db_dumps"
+    run "ln -s #{shared_path}/db_dumps"
   end
 
   # Load the schema

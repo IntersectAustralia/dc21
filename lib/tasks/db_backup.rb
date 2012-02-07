@@ -21,7 +21,7 @@ def db_backup(output_dir)
   File.delete pgpass_filename
 end
 
-def trim_backups(log_dir, limit=3)
+def trim_backups(log_dir, limit)
   # Deletes oldest logs leaving (at most) _limit_ backups
 
   lognames = Dir.entries(log_dir).find_all {|name| name =~ /^\d{8}-\d{6}.dump$/}
