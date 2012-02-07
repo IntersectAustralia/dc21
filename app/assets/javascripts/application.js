@@ -32,13 +32,13 @@ $(window).load(function() {
       $('#content_wrapper').addClass('notification');
       $('#footer').addClass('notification');
 
-      var alerttimer = window.setTimeout(function() {
-        alert.slideUp();
-        $('#content_wrapper').removeClass('notification');
-        $('#footer').removeClass('notification');
-      }, 10000);
-      $("#alert").click(function () {
-        window.clearTimeout(alerttimer);
+//      var alerttimer = window.setTimeout(function() {
+//        alert.slideUp();
+//        $('#content_wrapper').removeClass('notification');
+//        $('#footer').removeClass('notification');
+//      }, 10000);
+      $("#close_alert").click(function () {
+//        window.clearTimeout(alerttimer);
         alert.slideUp();
         $('#content_wrapper').removeClass('notification');
         $('#footer').removeClass('notification');
@@ -53,13 +53,13 @@ $(window).load(function() {
       $('#content_wrapper').addClass('notification');
       $('#footer').addClass('notification');
 
-      var noticetimer = window.setTimeout(function() {
-        notice.slideUp();
-        $('#content_wrapper').removeClass('notification');
-        $('#footer').removeClass('notification');
-      }, 10000);
-      $("#notice").click(function () {
-        window.clearTimeout(noticetimer);
+//      var noticetimer = window.setTimeout(function() {
+//        notice.slideUp();
+//        $('#content_wrapper').removeClass('notification');
+//        $('#footer').removeClass('notification');
+//      }, 10000);
+      $("#close_notice").click(function () {
+//        window.clearTimeout(noticetimer);
         notice.slideUp();
         $('#content_wrapper').removeClass('notification');
         $('#footer').removeClass('notification');
