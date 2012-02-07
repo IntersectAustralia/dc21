@@ -184,6 +184,7 @@ namespace :deploy do
   task :safe do # TODO roles?
     require 'colorize'
     update
+    rebundle
 
     cat_migrations_output = capture("cd #{current_path} && rake db:cat_migrations 2>&1").chomp
     puts cat_migrations_output
@@ -193,13 +194,27 @@ namespace :deploy do
       raise "Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
     end
 
-    rebundle
+    backup.db.dump
+    backup.db.trim
     migrate
     restart
   end
 
 end
 
+namespace :backup do
+  namespace :db do
+    desc "make a database backup"
+    task :dump do
+      run "cd #{current_path} && rake db:backup"
+    end
+
+    desc "trim database backups"
+    task :trim do
+      run "cd #{current_path} && rake db:trim_backups"
+    end
+  end
+end
 
 desc "Give sample users a custom password"
 task :generate_populate_yml, :roles => :app do
