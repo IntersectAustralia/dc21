@@ -10,10 +10,6 @@ def cat_pending_migrations
   filenames = migrations.map(&:filename)
 end
 
-def any_pending_migrations?
-  pending_migrations.length > 0
-end
-
 def pending_migrations
   ActiveRecord::Migrator.new(:up, 'db/migrate').pending_migrations
 end
