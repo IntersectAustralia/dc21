@@ -191,7 +191,7 @@ namespace :deploy do
 
     if cat_migrations_output != '0 pending migration(s)'
       print "There are pending migrations. Are you sure you want to continue? [NO/yes] ".colorize(:red)
-      raise "Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
+      abort "Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
     end
 
     backup.db.dump
@@ -249,8 +249,11 @@ task :generate_database_yml, :roles => :app do
   buffer.delete('spec')
 
   # Populate production password
-  buffer['production']['password'] = production_database_password
+  buffer[rails_env]['password'] = production_database_password
 
   put YAML::dump(buffer), "#{release_path}/config/database.yml", :mode => 0664
 end
 
+after 'multistage:ensure' do
+  set (:rails_env) {"#{defined?(rails_env) ? rails_env : stage.to_s}" }
+end
