@@ -130,7 +130,7 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/env_config #{release_path}/tmp/env_config"
 
     run "rm -f #{release_path}/db_dumps"
-    run "ln -s #{shared_path}/db_dumps"
+    run "ln -s #{shared_path}/db_dumps #{release_path}/db_dumps"
   end
 
   # Load the schema
@@ -186,7 +186,7 @@ namespace :deploy do
     update
     rebundle
 
-    cat_migrations_output = capture("cd #{current_path} && rake db:cat_migrations 2>&1").chomp
+    cat_migrations_output = capture("cd #{current_path} && rake db:cat_pending_migrations 2>&1", :env => {'RAILS_ENV' => stage}).chomp
     puts cat_migrations_output
 
     if cat_migrations_output != '0 pending migration(s)'
@@ -206,12 +206,12 @@ namespace :backup do
   namespace :db do
     desc "make a database backup"
     task :dump do
-      run "cd #{current_path} && rake db:backup"
+      run "cd #{current_path} && rake db:backup", :env => {'RAILS_ENV' => stage}
     end
 
     desc "trim database backups"
     task :trim do
-      run "cd #{current_path} && rake db:trim_backups"
+      run "cd #{current_path} && rake db:trim_backups", :env => {'RAILS_ENV' => stage}
     end
   end
 end
