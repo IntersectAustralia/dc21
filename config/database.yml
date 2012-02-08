@@ -20,7 +20,7 @@ test: &test
   timeout: 5000
 
 
-production:
+production: &production
   adapter: postgresql
   host: localhost
   database: dc21
@@ -30,10 +30,10 @@ production:
   timeout: 5000
 
 staging:
-  production # same configuration, but on different server
+  <<: *production
 
 qa:
-  production # same configuration, but on different server
+  <<: *production
 
 cucumber:
   <<: *test
