@@ -9,39 +9,35 @@ class AttachmentBuilder
   end
 
   def verify_from_filenames
-    result = {}
-    filenames = gather_file_list
+    keys_to_filenames.reduce({}) do |result, key_and_filename|
+      key, filename = key_and_filename
 
-    filenames.each do |filename|
       #{"collections.json":{"status":"abort","message":"This file already exists."}}
-      if DataFile.where(:filename => filename.values.first).empty?
-        result[filename.values.first] = {:status => "proceed", :message => ""}
+      if DataFile.where(:filename => filename).empty?
+        result.merge filename => {:status => "proceed", :message => ""}
       else
-        result[filename.values.first] = {:status => "abort", :message => "This file already exists."}
+        result.merge filename => {:status => "abort", :message => "This file already exists."}
       end
     end
-    result
   end
 
   def build
-    file_list = gather_file_list
+    keys_to_filenames.reduce({}) do |result, key_and_filename|
+      key, filename = key_and_filename
+      file = @post_params[key.to_sym]
 
-    file_list.reduce({}) do |result, file_info|
-      filename, path = process_file(file_info)
+      path = store_file(file)
       result.merge(filename => create_data_file(path, filename))
     end
   end
 
   private
 
-  # Turn tree into some attributes ready to build files
-  def gather_file_list
+  def keys_to_filenames
 
     json_string = @post_params[:dirStruct]
-    file_list = ActiveSupport::JSON.decode(json_string)
-    Rails.logger.debug("AttachmentBuilder.gather_file_list file_list=#{file_list.inspect}")
-
-    file_list
+    dir_struct = ActiveSupport::JSON.decode(json_string)
+    dir_struct.reduce({}) {|hash, key_to_filename| hash.merge Hash[*key_to_filename.flatten]}
   end
 
   def create_data_file(path, filename)
@@ -66,16 +62,13 @@ class AttachmentBuilder
     end
   end
 
-  def process_file(file_info)
-    file_key = file_info.keys.find { |key| key.starts_with? "file_" }
-    file = @post_params[file_key.to_sym]
-
+  def store_file(file)
     filename = file.original_filename
-    upload_path = File.join(@files_root, filename)
+    store_path = File.join(@files_root, filename)
 
-    FileUtils.cp(file.path, upload_path)
+    FileUtils.cp(file.path, store_path)
 
-    [filename, upload_path]
+    store_path
   end
 
 end
