@@ -23,16 +23,6 @@ class AttachmentBuilder
     result
   end
 
-  # Turn tree into some attributes ready to build files
-  def gather_file_list
-
-    json_string = @post_params[:dirStruct]
-    file_list = ActiveSupport::JSON.decode(json_string)
-    Rails.logger.debug("AttachmentBuilder.gather_file_list file_list=#{file_list.inspect}")
-
-    file_list
-  end
-
   def build
     dest_dir = @files_root
 
@@ -45,6 +35,18 @@ class AttachmentBuilder
     end
 
     process_files(candidates, dest_dir)
+  end
+
+  private
+
+  # Turn tree into some attributes ready to build files
+  def gather_file_list
+
+    json_string = @post_params[:dirStruct]
+    file_list = ActiveSupport::JSON.decode(json_string)
+    Rails.logger.debug("AttachmentBuilder.gather_file_list file_list=#{file_list.inspect}")
+
+    file_list
   end
 
   def process_files(candidates, dest_dir)
