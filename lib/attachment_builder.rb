@@ -34,7 +34,7 @@ class AttachmentBuilder
       candidates << attrs
     end
 
-    process_files(candidates, dest_dir)
+    create_data_files(candidates)
   end
 
   private
@@ -47,15 +47,6 @@ class AttachmentBuilder
     Rails.logger.debug("AttachmentBuilder.gather_file_list file_list=#{file_list.inspect}")
 
     file_list
-  end
-
-  def process_files(candidates, dest_dir)
-    if !Dir.exist? dest_dir
-      Rails.logger.debug("Creating folder #{dest_dir}")
-      FileUtils.mkdir_p(dest_dir)
-    end
-
-    create_data_files(candidates)
   end
 
   def create_data_files(new_files)
