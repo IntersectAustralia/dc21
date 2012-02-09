@@ -29,7 +29,7 @@ class AttachmentBuilder
     file_list = gather_file_list
 
     file_list.reduce({}) do |result, file_tree|
-      attrs = process_file_or_folder(dest_dir, file_tree)
+      attrs = process_file(dest_dir, file_tree)
       result.merge(attrs[:filename] => create_data_file(attrs))
     end
   end
@@ -68,31 +68,21 @@ class AttachmentBuilder
     end
   end
 
-  def process_file_or_folder(dest_dir, file_tree)
-    filename = get_filename(file_tree)
-    create_all_files(file_tree, dest_dir)
+  def process_file(dest_dir, file_tree)
+    file_key = file_tree.keys.find { |key| key.starts_with? "file_" }
+    filename = file_tree[file_key]
 
-    path = File.join(dest_dir, filename)
+    hash = create_file(file_key, filename, dest_dir)
+  end
+
+  def create_file(file_key, filename, dest_dir)
+    file = @post_params[file_key.to_sym]
+    upload_path = File.join(dest_dir, filename)
+
+    FileUtils.cp(file.path, upload_path)
 
     {:filename => filename,
-     :path => path}
-  end
-
-  def get_filename(file_tree)
-    file_key = file_tree.keys.find { |key| key.starts_with? "file_" }
-    file_tree[file_key]
-  end
-
-  def create_all_files(file_tree, dest_dir)
-    file_list = file_tree.find_all { |type, val| type.starts_with? "file_" }
-    file_list.each do |key, path|
-      file = @post_params[key.to_sym]
-      upload_path = File.join(dest_dir, path.gsub(/\\+/, "/"))
-      if !Dir.exist? dest_dir
-        FileUtils.mkdir_p(dest_dir)
-      end
-      FileUtils.cp_r(file.path, upload_path)
-    end
+     :path => upload_path}
   end
 
 end
