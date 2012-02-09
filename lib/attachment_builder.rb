@@ -26,9 +26,9 @@ class AttachmentBuilder
   def build
     file_list = gather_file_list
 
-    file_list.reduce({}) do |result, file_tree|
-      attrs = process_file(file_tree)
-      result.merge(attrs[:filename] => create_data_file(attrs))
+    file_list.reduce({}) do |result, file_info|
+      filename, path = process_file(file_info)
+      result.merge(filename => create_data_file(path, filename))
     end
   end
 
@@ -44,10 +44,10 @@ class AttachmentBuilder
     file_list
   end
 
-  def create_data_file(attributes)
-    Rails.logger.info("Processing: #{attributes}")
+  def create_data_file(path, filename)
+    Rails.logger.info("Processing: #{path} - #{filename}")
 
-    data_file = DataFile.create(attributes.merge({:created_by => @current_user}))
+    data_file = DataFile.create :path => path, :filename => filename, :created_by => @current_user
     if data_file.save
       process_metadata(data_file)
       {:status => "success", :message => ""}
@@ -66,8 +66,8 @@ class AttachmentBuilder
     end
   end
 
-  def process_file(file_tree)
-    file_key = file_tree.keys.find { |key| key.starts_with? "file_" }
+  def process_file(file_info)
+    file_key = file_info.keys.find { |key| key.starts_with? "file_" }
     file = @post_params[file_key.to_sym]
 
     filename = file.original_filename
@@ -75,8 +75,7 @@ class AttachmentBuilder
 
     FileUtils.cp(file.path, upload_path)
 
-    {:filename => filename,
-     :path => upload_path}
+    [filename, upload_path]
   end
 
 end
