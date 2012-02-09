@@ -47,7 +47,7 @@ class AttachmentBuilder
   def create_data_file(path, filename)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
-    data_file = DataFile.create :path => path, :filename => filename, :created_by => @current_user
+    data_file = DataFile.new :path => path, :filename => filename, :created_by => @current_user
     if data_file.save
       process_metadata(data_file)
       {:status => "success", :message => ""}
