@@ -27,14 +27,11 @@ class AttachmentBuilder
     dest_dir = @files_root
 
     file_list = gather_file_list
-    candidates = []
 
-    file_list.each do |file_tree|
+    file_list.reduce({}) do |result, file_tree|
       attrs = process_file_or_folder(dest_dir, file_tree)
-      candidates << attrs
+      result.merge(attrs[:filename] => create_data_file(attrs))
     end
-
-    create_data_files(candidates)
   end
 
   private
@@ -49,21 +46,17 @@ class AttachmentBuilder
     file_list
   end
 
-  def create_data_files(new_files)
-    result = {}
-    new_files.each do |attributes|
-      Rails.logger.info("Processing: #{attributes}")
+  def create_data_file(attributes)
+    Rails.logger.info("Processing: #{attributes}")
 
-      data_file = DataFile.create(attributes.merge({:created_by => @current_user}))
-      if data_file.save
-        result[attributes[:filename]] = {:status => "success", :message => ""}
-        process_metadata(data_file)
-      else
-        Rails.logger.info("Failed: #{data_file.errors}")
-        result[attributes[:filename]] = {:status => "failure", :message => data_file.errors}
-      end
+    data_file = DataFile.create(attributes.merge({:created_by => @current_user}))
+    if data_file.save
+      process_metadata(data_file)
+      {:status => "success", :message => ""}
+    else
+      Rails.logger.info("Failed: #{data_file.errors}")
+      {:status => "failure", :message => data_file.errors}
     end
-    result
   end
 
   def process_metadata(data_file)
