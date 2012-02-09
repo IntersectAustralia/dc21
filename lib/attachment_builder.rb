@@ -27,7 +27,9 @@ class AttachmentBuilder
       file = @post_params[key.to_sym]
 
       path = store_file(file)
-      result.merge(filename => create_data_file(path, filename))
+      status = create_data_file(path, filename)
+
+      result.merge(filename => status)
     end
   end
 
