@@ -84,14 +84,10 @@ class AttachmentBuilder
     end
   end
 
-  def write_files(dest_dir, file_tree)
+  def process_file_or_folder(dest_dir, file_tree)
     filename = get_filename(file_tree)
     create_all_files(file_tree, dest_dir)
-    filename
-  end
 
-  def process_file_or_folder(dest_dir, file_tree)
-    filename = write_files(dest_dir, file_tree)
     path = File.join(dest_dir, filename)
 
     {:filename => filename,
