@@ -50,17 +50,16 @@ class AttachmentBuilder
   end
 
   def process_files(candidates, dest_dir)
-    result = {}
-
     if !Dir.exist? dest_dir
       Rails.logger.debug("Creating folder #{dest_dir}")
       FileUtils.mkdir_p(dest_dir)
     end
 
-    create_data_files(candidates, dest_dir, result)
+    create_data_files(candidates)
   end
 
-  def create_data_files(new_files, dest_dir, result)
+  def create_data_files(new_files)
+    result = {}
     new_files.each do |attributes|
       Rails.logger.info("Processing: #{attributes}")
 
