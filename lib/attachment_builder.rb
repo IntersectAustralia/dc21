@@ -24,12 +24,10 @@ class AttachmentBuilder
   end
 
   def build
-    dest_dir = @files_root
-
     file_list = gather_file_list
 
     file_list.reduce({}) do |result, file_tree|
-      attrs = process_file(dest_dir, file_tree)
+      attrs = process_file(file_tree)
       result.merge(attrs[:filename] => create_data_file(attrs))
     end
   end
@@ -68,12 +66,12 @@ class AttachmentBuilder
     end
   end
 
-  def process_file(dest_dir, file_tree)
+  def process_file(file_tree)
     file_key = file_tree.keys.find { |key| key.starts_with? "file_" }
     file = @post_params[file_key.to_sym]
 
     filename = file.original_filename
-    upload_path = File.join(dest_dir, filename)
+    upload_path = File.join(@files_root, filename)
 
     FileUtils.cp(file.path, upload_path)
 
