@@ -70,13 +70,9 @@ class AttachmentBuilder
 
   def process_file(dest_dir, file_tree)
     file_key = file_tree.keys.find { |key| key.starts_with? "file_" }
-    filename = file_tree[file_key]
-
-    hash = create_file(file_key, filename, dest_dir)
-  end
-
-  def create_file(file_key, filename, dest_dir)
     file = @post_params[file_key.to_sym]
+
+    filename = file.original_filename
     upload_path = File.join(dest_dir, filename)
 
     FileUtils.cp(file.path, upload_path)
