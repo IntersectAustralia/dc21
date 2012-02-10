@@ -7,6 +7,11 @@ describe Toa5Parser do
     Factory(:data_file, :path => path, :filename => 'toa5.dat')
   end
 
+  let(:unsaved_toa5_dat) do
+    path = Rails.root.join('spec/samples', 'toa5.dat')
+    Factory.build(:data_file, :path => path, :filename => 'toa5.dat')
+  end
+
   let(:toa5_quoted_dat) do
     path = Rails.root.join('spec/samples', 'toa5_quoted.dat')
     Factory(:data_file, :path => path, :filename => 'toa5_quoted.dat')
@@ -28,6 +33,7 @@ describe Toa5Parser do
       Toa5Parser.extract_metadata(data_file)
       data_file.start_time.should eq("6/10/2011 0:40")
       data_file.end_time.should eq("3/11/2011 11:55")
+      data_file.interval.should eq 300
     end
 
     it "should extract datalogger info from first line" do
@@ -161,6 +167,21 @@ describe Toa5Parser do
       data_file.start_time.should be_nil
       #data_file.end_time.should be_nil
       data_file.metadata_items.should be_empty
+    end
+  end
+
+  describe "assign time metadata" do
+    it "doesn't persist the DataFile" do
+      data_file = unsaved_toa5_dat
+      Toa5Parser.assign_time_metadata(data_file)
+      data_file.should_not be_persisted
+    end
+    it "assigns the right metadata" do
+      data_file = unsaved_toa5_dat
+      Toa5Parser.assign_time_metadata(data_file)
+      data_file.start_time.should eq("6/10/2011 0:40")
+      data_file.end_time.should eq("3/11/2011 11:55")
+      data_file.interval.should eq 300
     end
   end
 

@@ -15,6 +15,13 @@ class Toa5Parser
     end
   end
 
+  def self.assign_time_metadata(data_file)
+    # intentionally doesn't save data_file
+    data_file_attrs, metadata_items_as_hash, _ = read_metadata(data_file)
+
+    data_file.assign_attributes data_file_attrs
+  end
+
   private
 
   def self.read_metadata(data_file)
