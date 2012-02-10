@@ -1,0 +1,21 @@
+= form_for @experiment do |f|
+  .formerror= render "shared/error_messages", :target => @experiment
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :description
+    = f.text_area :description
+  .field
+    = f.label :start_date
+    = f.date_select :start_date
+  .field
+    = f.label :end_date
+    = f.date_select :end_date
+  .field
+    = f.label :subject
+    = f.text_field :subject
+  .actions
+    = f.submit 'Save'
+    = link_to 'Cancel', experiments_path

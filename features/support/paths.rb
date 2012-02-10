@@ -52,6 +52,10 @@ module NavigationHelpers
     when /the upload page/
       new_data_file_path
 
+    # Experiment paths
+    when /the experiments page/
+      experiments_path
+
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

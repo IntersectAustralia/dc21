@@ -1,5 +1,7 @@
 Dc21app::Application.routes.draw do
 
+  resources :experiments
+
   get "column_mappings/new"
 
   get "facilities/new"

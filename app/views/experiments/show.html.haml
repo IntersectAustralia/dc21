@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @experiment.name
+%p
+  %b Description:
+  = @experiment.description
+%p
+  %b Start date:
+  = @experiment.start_date
+%p
+  %b End date:
+  = @experiment.end_date
+%p
+  %b Subject:
+  = @experiment.subject
+%p
+  %b Access rights:
+  = @experiment.access_rights
+
+= link_to 'Edit', edit_experiment_path(@experiment)
+\|
+= link_to 'Back', experiments_path
