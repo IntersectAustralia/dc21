@@ -8,70 +8,71 @@ module NavigationHelpers
   def path_to(page_name)
     case page_name
 
-    when /^the home\s?page$/
-      '/'
+      when /^the home\s?page$/
+        '/'
 
-    # User paths
-    when /the login page/
-      new_user_session_path
+      # User paths
+      when /the login page/
+        new_user_session_path
 
-    when /the logout page/
-      destroy_user_session_path
+      when /the logout page/
+        destroy_user_session_path
 
-    when /the user profile page/
-      users_profile_path
+      when /the user profile page/
+        users_profile_path
 
-    when /the request account page/
-      new_user_registration_path
+      when /the request account page/
+        new_user_registration_path
 
-    when /the edit my details page/
-      edit_user_registration_path
+      when /the edit my details page/
+        edit_user_registration_path
 
-    when /^the user details page for (.*)$/
-      user_path(User.where(:email => $1).first)
+      when /^the user details page for (.*)$/
+        user_path(User.where(:email => $1).first)
 
-    when /^the edit role page for (.*)$/
-      edit_role_user_path(User.where(:email => $1).first)
+      when /^the edit role page for (.*)$/
+        edit_role_user_path(User.where(:email => $1).first)
 
-    when /^the reset password page$/
-      edit_user_password_path
+      when /^the reset password page$/
+        edit_user_password_path
 
-    when /the access requests page/
-      access_requests_users_path
+      when /the access requests page/
+        access_requests_users_path
 
-    when /the list users page/
-      users_path
+      when /the list users page/
+        users_path
 
-    # Data file paths
-    when /the list data files page/
-      data_files_path
+      # Data file paths
+      when /the list data files page/
+        data_files_path
 
-    when /the data file details page for (.*)$/
-      data_file_path(DataFile.find_by_filename($1))
+      when /the data file details page for (.*)$/
+        data_file_path(DataFile.find_by_filename($1))
 
-    when /the upload page/
-      new_data_file_path
+      when /the upload page/
+        new_data_file_path
 
-    # Experiment paths
-    when /the experiments page/
-      experiments_path
+      when /the view experiment page for '(.*)'/
+        experiment_path(Experiment.find_by_name($1))
 
+      when /the edit experiment page for '(.*)'/
+        edit_experiment_path(Experiment.find_by_name($1))
 
-    # Add more mappings here.
-    # Here is an example that pulls values out of the Regexp:
-    #
-    #   when /^(.*)'s profile page$/i
-    #     user_profile_path(User.find_by_login($1))
+        # Add more mappings here.
+        # Here is an example that pulls values out of the Regexp:
+        #
+        #   when /^(.*)'s profile page$/i
+        #     user_profile_path(User.find_by_login($1))
 
-    else
-      begin
-        page_name =~ /^the (.*) page$/
-        path_components = $1.split(/\s+/)
-        self.send(path_components.push('path').join('_').to_sym)
-      rescue NoMethodError, ArgumentError
-        raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
-          "Now, go and add a mapping in #{__FILE__}"
-      end
+      else
+        begin
+          page_name =~ /^the (.*) page$/
+          path_components = $1.split(/\s+/)
+          self.send(path_components.push('path').join('_').to_sym)
+        rescue NoMethodError, ArgumentError
+          raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
+                    "Now, go and add a mapping in #{__FILE__}"
+        end
     end
   end
 end

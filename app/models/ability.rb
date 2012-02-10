@@ -41,11 +41,15 @@ class Ability
 
     return unless user && user.role
 
+    #TODO: we have no rules about permissions for these yet
+    can :manage, Experiment
+    can :manage, Facility
+    can :manage, ColumnMapping
+
     # all users can read and add data files, and can delete their own
     can :read, DataFile
     can :create, DataFile
     can :destroy, DataFile, :created_by_id => user.id
-
 
     if user.role.admin?
       # only admins can manage users

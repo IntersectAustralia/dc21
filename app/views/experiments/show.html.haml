@@ -1,24 +1,14 @@
-%p#notice= notice
+- content_for :breadcrumb  do
+  %h1 Experiment / View / #{@experiment.name}
 
-%p
-  %b Name:
-  = @experiment.name
-%p
-  %b Description:
-  = @experiment.description
-%p
-  %b Start date:
-  = @experiment.start_date
-%p
-  %b End date:
-  = @experiment.end_date
-%p
-  %b Subject:
-  = @experiment.subject
-%p
-  %b Access rights:
-  = @experiment.access_rights
+.container
+  = render_field "Name", @experiment.name
+  = render_field "Description", @experiment.description
+  = render_field "Start date", @experiment.start_date.to_s(:date_only) if @experiment.start_date
+  = render_field "End date", @experiment.end_date.to_s(:date_only) if @experiment.end_date
+  = render_field "Subject", @experiment.subject
+  .cancelbutton
+    %span
+    = link_to 'Back', experiments_path, :class => "cancelbutton"
+  = link_to "Edit Experiment", edit_experiment_path, :class => "bluebutton floatright"
 
-= link_to 'Edit', edit_experiment_path(@experiment)
-\|
-= link_to 'Back', experiments_path
