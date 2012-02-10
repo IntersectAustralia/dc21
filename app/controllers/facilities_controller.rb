@@ -1,39 +1,33 @@
 class FacilitiesController < ApplicationController
 
+  load_and_authorize_resource
+
   set_tab :home
   set_tab :facilities, :contentnavigation
 
   def index
-    @facilities = Facility.all
   end
 
   def show
-    @facility = Facility.find(params[:id])
   end
 
   def new
-    @facility = Facility.new
   end
 
   def create
-    @facility = Facility.new(params[:facility])
     if @facility.save
-      redirect_to @facility
-      flash[:success] = "Facility successfully added"
-    else 
+      redirect_to @facility, :notice => "Facility successfully added"
+    else
       render 'new'
     end
   end
 
   def edit
-    @facility = Facility.find(params[:id])
   end
 
   def update
-    @facility = Facility.find(params[:id])
     if @facility.update_attributes(params[:facility])
-      redirect_to @facility
-      flash[:success] = "Facility successfully updated."
+      redirect_to @facility, :notice => "Facility successfully updated."
     else
       render 'edit'
     end
