@@ -1,5 +1,6 @@
 class ExperimentsController < ApplicationController
 
+  SAVE_MESSAGE = 'The experiment was saved successfully.'
   load_and_authorize_resource
 
   def index
@@ -17,7 +18,7 @@ class ExperimentsController < ApplicationController
 
   def create
     if @experiment.save
-      redirect_to @experiment, notice: 'Experiment was successfully created.'
+      redirect_to @experiment, notice: SAVE_MESSAGE
     else
       render action: "new"
     end
@@ -25,7 +26,7 @@ class ExperimentsController < ApplicationController
 
   def update
     if @experiment.update_attributes(params[:experiment])
-      redirect_to @experiment, notice: 'Experiment was successfully updated.'
+      redirect_to @experiment, notice: SAVE_MESSAGE
     else
       render action: "edit"
     end

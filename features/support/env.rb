@@ -4,14 +4,14 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+require 'simplecov'
+SimpleCov.start 'rails'
 require 'rubygems'
 require 'spork'
 ENV["RAILS_ENV"] ||= "test"
 
 
 Spork.prefork do
-  require 'simplecov'
-  SimpleCov.start 'rails'
   require 'cucumber/rails'
 
   # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In

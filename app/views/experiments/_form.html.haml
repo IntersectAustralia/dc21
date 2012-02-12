@@ -1,21 +1,27 @@
+
 = form_for @experiment do |f|
   .formerror= render "shared/error_messages", :target => @experiment
 
-  .field
+  .rowform
     = f.label :name
     = f.text_field :name
-  .field
+    = required
+  .rowform
     = f.label :description
     = f.text_area :description
-  .field
+  .rowform
     = f.label :start_date
-    = f.date_select :start_date
-  .field
+    = f.text_field :start_date
+    = required
+  .rowform
     = f.label :end_date
-    = f.date_select :end_date
-  .field
+    = f.text_field :end_date
+  .rowform
     = f.label :subject
     = f.text_field :subject
+    = required
   .actions
-    = f.submit 'Save'
-    = link_to 'Cancel', experiments_path
+    .cancelbutton
+      %span
+      = link_to 'Cancel', (@experiment.new_record? ? experiments_path : @experiment), :class => "cancelbutton"
+    = f.submit 'Save Experiment', :class => "floatright"
