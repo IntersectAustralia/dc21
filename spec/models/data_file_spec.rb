@@ -376,22 +376,33 @@ describe DataFile do
         changed_toa5.mismatched_overlap(station_b, table_b).should be_empty
       end
 
-      it "recognises TOA5 files as mismatched overlapping if the content is different (times identical)" do
+      it "recognises TOA5 files as mismatched overlapping if the times are identical" do
         times = {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC")}
-
         station_name = "Station"
         table_name = "Table"
 
-        toa5 = Factory(:data_file, times.merge(:format => "TOA5", :path => Rails.root.join('spec/samples', 'toa5.dat').to_s))
+        toa5 = Factory(:data_file, times.merge(:format => "TOA5"))
         MetadataItem.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name, :data_file => toa5)
         MetadataItem.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name, :data_file => toa5)
 
-        changed_toa5 = Factory.build(:data_file, times.merge(:format => "TOA5", :path => Rails.root.join('spec/samples', 'toa5_small_change.dat')))
-
-        File.new(toa5.path)
-        File.new(changed_toa5.path)
+        changed_toa5 = Factory.build(:data_file, times.merge(:format => "TOA5"))
 
         changed_toa5.mismatched_overlap(station_name, table_name).should eq [toa5]
+      end
+
+      it "recognises TOA5 files as mismatched overlapping if the times overlap but the content is different" do
+        pending
+      end
+    end
+    describe "safe" do
+      it "doesn't pick files with different content" do
+        pending
+      end
+      it "picks files with smaller content" do
+        pending
+      end
+      it "doesn't pick files with the same content" do
+        pending
       end
     end
   end

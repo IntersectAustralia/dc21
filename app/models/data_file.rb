@@ -126,8 +126,14 @@ class DataFile < ActiveRecord::Base
     end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
     end_time_overlaps = end_time_overlaps.where('end_time <= ?', end_time)
 
-    candidate_overlaps = toa5_files.where('? <= start_time', start_time)
-    candidate_overlaps = candidate_overlaps.where('? >= end_time', end_time)
+    exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
+
+    left_overlaps = toa5_files.where('start_time <= ?', start_time)
+    left_overlaps = left_overlaps.where('end_time < ?', end_time)
+    right_overlaps = toa5_files.where('start_time < ?', start_time)
+    right_overlaps = left_overlaps.where('end_time <= ?', end_time)
+
+    candidate_overlaps = left_overlaps | right_overlaps
 
     content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
       start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
@@ -149,7 +155,7 @@ class DataFile < ActiveRecord::Base
       end
     end
 
-    start_time_overlaps | middle_overlaps | end_time_overlaps | content_mismatch
+    exact_overlaps | start_time_overlaps | middle_overlaps | end_time_overlaps | content_mismatch
   end
 
   def safe_overlap(station_name, table_name)
