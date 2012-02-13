@@ -170,18 +170,30 @@ describe Toa5Parser do
     end
   end
 
-  describe "assign time metadata" do
+  describe "assign time metadata returning other metadata" do
     it "doesn't persist the DataFile" do
       data_file = unsaved_toa5_dat
-      Toa5Parser.assign_time_metadata(data_file)
+
+      expected = {"datalogger_model"=>"CR3000", "station_name"=>"ROS_WS", "serial_number"=>"4909", "os_version"=>"CR3000.Std.11", "dld_name"=>"CPU:weather_station_final.CR3", "dld_signature"=>"30238", "table_name"=>"Table05min"}
+
+      actual = Toa5Parser.assign_time_metadata_returning_other_metadata(data_file)
+
+      actual.should eq expected
+
       data_file.should_not be_persisted
     end
     it "assigns the right metadata" do
       data_file = unsaved_toa5_dat
-      Toa5Parser.assign_time_metadata(data_file)
+
+      expected = {"datalogger_model"=>"CR3000", "station_name"=>"ROS_WS", "serial_number"=>"4909", "os_version"=>"CR3000.Std.11", "dld_name"=>"CPU:weather_station_final.CR3", "dld_signature"=>"30238", "table_name"=>"Table05min"}
+
+      actual = Toa5Parser.assign_time_metadata_returning_other_metadata(data_file)
+
       data_file.start_time.should eq("6/10/2011 0:40")
       data_file.end_time.should eq("3/11/2011 11:55")
       data_file.interval.should eq 300
+
+      actual.should eq expected
     end
   end
 

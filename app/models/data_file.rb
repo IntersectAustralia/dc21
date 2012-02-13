@@ -1,3 +1,5 @@
+require 'tempfile'
+
 class DataFile < ActiveRecord::Base
 
   serialize :metadata, Hash
@@ -89,5 +91,98 @@ class DataFile < ActiveRecord::Base
     return false
   end
 
+  def mismatched_overlap(station_name, table_name)
+    # This method is intended to be called for files which aren't yet persisted
+    # Thus, they will not have associated MetadataItem records
+    # That is why they are listed as parameters here.
+    # This method assumes TOA5 files all have start_times and end_times populated
+
+    return [] if self.format != FileTypeDeterminer::TOA5
+
+    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5)
+    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
+
+    by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
+
+    toa5_files = DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
+
+    start_time_overlaps = toa5_files.where('start_time > ?', start_time)
+    start_time_overlaps = start_time_overlaps.where('start_time <= ?', end_time)
+    start_time_overlaps = start_time_overlaps.where('end_time >= ?', end_time)
+
+    middle_overlaps = toa5_files.where('start_time <= ?', start_time)
+    middle_overlaps = middle_overlaps.where('end_time >= ?', end_time)
+
+    end_time_overlaps = toa5_files.where('start_time < ?', start_time)
+    end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
+    end_time_overlaps = end_time_overlaps.where('end_time <= ?', end_time)
+
+    candidate_overlaps = toa5_files.where('? <= start_time', start_time)
+    candidate_overlaps = candidate_overlaps.where('? >= end_time', end_time)
+
+    content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
+      start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
+      end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
+
+      candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
+        self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
+          loop do
+            line_a = readline_or_nil(candidate_overlap_file)
+            line_b = readline_or_nil(my_overlap_file)
+
+            if line_a == nil and line_b == nil
+              break false
+            elsif line_a == nil or line_b == nil or line_a != line_b
+              break true
+            end
+          end
+        end
+      end
+    end
+
+    start_time_overlaps | middle_overlaps | end_time_overlaps | content_mismatch
+  end
+
+  def safe_overlap(station_name, table_name)
+    []
+  end
+
+  protected
+
+  def with_filtered_data_in_date_range_in_temp_file(from_time, to_time, &block)
+    # from_date and to_date are inclusive
+    # block takes one argument, the Tempfile with the filtered data
+    raise "unsupported format: #{self.format}" unless self.format == FileTypeDeterminer::TOA5
+    file = Tempfile.new('filtered_datafile')
+    begin
+      delimiter = nil
+      File.new(self.path).each_line.with_index do |line, idx|
+        delimiter = Toa5Utilities.detect_delimiter(line) if idx == 0
+        next unless idx > 3 # skip header lines
+
+        time = Toa5Utilities.extract_time_from_data_line(line, delimiter)
+
+        next if time < from_time
+        break if time > to_time
+
+        file.write(line)
+      end
+      file.seek 0
+      block.call(file)
+    ensure
+      file.close
+      file.unlink
+    end
+  end
+
+  private
+
+  def readline_or_nil(file)
+    begin
+      file.readline
+    rescue EOFError
+      nil
+    end
+  end
 
 end

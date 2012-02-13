@@ -6,10 +6,10 @@ class MetadataExtractor
     end
   end
 
-  def assign_time_metadata(data_file, type)
+  def assign_time_metadata_returning_other_metadata(data_file, type)
     case type
       when FileTypeDeterminer::TOA5
-        Toa5Parser.assign_time_metadata(data_file)
+        Toa5Parser.assign_time_metadata_returning_other_metadata(data_file)
     end
   end
 end

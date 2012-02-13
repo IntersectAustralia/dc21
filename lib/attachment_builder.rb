@@ -46,21 +46,30 @@ class AttachmentBuilder
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new :path => path, :filename => filename, :created_by => @current_user
-    if data_file.save
-      process_metadata(data_file)
+
+    _, format = @file_type_determiner.identify_file(data_file)
+    data_file.format = format
+
+    station_name = nil
+    table_name = nil
+    mismatched_overlap = data_file.mismatched_overlap(station_name, table_name)
+    safe_overlap = data_file.safe_overlap(station_name, table_name)
+
+    if mismatched_overlap.any?
+      filenames = data_file.mismatched_overlap.select(:filename).map(&:filename).join ','
+      message = "overlaps with #{filenames}"
+      {:status => "failure", :message => message}
+    elsif safe_overlap.any?
+      data_file.save!
+      safe_overlap.destroy
+      filenames = data_file.safe_overlap.select(:filename).map(&:filename).join ','
+      {:status => "success", :message => "overwrote #{filenames}"}
+    elsif data_file.save
+      @metadata_extractor.extract_metadata(data_file, format) if format
       {:status => "success", :message => ""}
     else
       Rails.logger.info("Failed: #{data_file.errors}")
       {:status => "failure", :message => data_file.errors}
-    end
-  end
-
-  def process_metadata(data_file)
-    known, type = @file_type_determiner.identify_file(data_file)
-    if known
-      @metadata_extractor.extract_metadata(data_file, type)
-      data_file.format = type
-      data_file.save
     end
   end
 
