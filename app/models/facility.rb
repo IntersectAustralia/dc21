@@ -11,6 +11,13 @@ class Facility < ActiveRecord::Base
   has_many :column_details
   has_many :experiments, :order => 'name'
 
+
+  def experiments_excluding_me(experiment)
+    exps = Array.new(self.experiments)
+    exps.delete(experiment)
+    exps
+  end
+
   private
 
   def remove_white_spaces

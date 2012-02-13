@@ -84,12 +84,16 @@ end
 #     | Note           | Nice guy   |
 #     | Wants Email?   |            |
 #
-# TODO: Add support for checkbox, select or option
-# based on naming conventions.
+# TODO: Add support for checkbox or option
 #
 When /^(?:|I )fill in the following:$/ do |fields|
   fields.rows_hash.each do |name, value|
-    fill_in(name, :with => value)
+    field = find_field(name)
+    if field.tag_name.downcase == "select"
+      select(value, :from => name)
+    else
+      fill_in(name, :with => value)
+    end
   end
 end
 

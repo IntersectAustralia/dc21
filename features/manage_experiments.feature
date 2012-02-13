@@ -44,9 +44,14 @@ Feature: Manage experiment metadata
     When I follow "Back"
     Then I should be on the view facility page for 'Tree Chambers'
 
-  Scenario: Create a new experiment
+  Scenario: Create a new experiment with facility as the parent
     Given I am on the view facility page for 'Tree Chambers'
     When I follow "New Experiment"
+    Then the "Parent" select should contain
+      | Facility - Tree Chambers     |
+      | Experiment - Tree Chamber 01 |
+      | Experiment - Tree Chamber 02 |
+    And nothing should be selected in the "Parent" select
     And I fill in the following:
       | Name        | My Experiment              |
       | Description | Some description blah blah |
@@ -57,10 +62,31 @@ Feature: Manage experiment metadata
     Then I should see "The experiment was saved successfully"
     And I should see details displayed
       | Name        | My Experiment              |
+      | Parent      | Facility - Tree Chambers   |
       | Description | Some description blah blah |
       | Start date  | 2011-12-12                 |
       | End date    | 2012-01-31                 |
       | Subject     | Trees                      |
+
+  Scenario: Create a new experiment with another experiment as the parent
+    Given I am on the view facility page for 'Tree Chambers'
+    When I follow "New Experiment"
+    And I fill in the following:
+      | Name        | My Experiment                |
+      | Description | Some description blah blah   |
+      | Start date  | 2011-12-12                   |
+      | End date    | 2012-01-31                   |
+      | Subject     | Trees                        |
+      | Parent      | Experiment - Tree Chamber 02 |
+    And I press "Save Experiment"
+    Then I should see "The experiment was saved successfully"
+    And I should see details displayed
+      | Name        | My Experiment                |
+      | Parent      | Experiment - Tree Chamber 02 |
+      | Description | Some description blah blah   |
+      | Start date  | 2011-12-12                   |
+      | End date    | 2012-01-31                   |
+      | Subject     | Trees                        |
 
   Scenario: Create a new experiment with a validation error
     Given I am on the view facility page for 'Tree Chambers'
@@ -81,9 +107,38 @@ Feature: Manage experiment metadata
     Then I should be on the view facility page for 'Tree Chambers'
 
   Scenario: Edit an experiment
-    Given I edit experiment "Weather Station"
+    Given I edit experiment "Tree Chamber 01"
+    Then the "Parent" select should contain
+      | Facility - Tree Chambers     |
+      | Experiment - Tree Chamber 02 |
+    And nothing should be selected in the "Parent" select
+    When I fill in the following:
+      | Name        | My Experiment                |
+      | Parent      | Experiment - Tree Chamber 02 |
+      | Description | Some description blah blah   |
+      | Start date  | 2011-12-12                   |
+      | End date    | 2012-01-31                   |
+      | Subject     | Trees                        |
+    And I press "Save Experiment"
+    Then I should see "The experiment was saved successfully"
+    And I should see details displayed
+      | Name        | My Experiment                |
+      | Parent      | Experiment - Tree Chamber 02 |
+      | Description | Some description blah blah   |
+      | Start date  | 2011-12-12                   |
+      | End date    | 2012-01-31                   |
+      | Subject     | Trees                        |
+
+  Scenario: Edit an experiment that has an experiment as the parent
+    Given the experiment "Tree Chamber 01" has parent "Tree Chamber 02"
+    When I edit experiment "Tree Chamber 01"
+    Then the "Parent" select should contain
+      | Facility - Tree Chambers     |
+      | Experiment - Tree Chamber 02 |
+    And "Experiment - Tree Chamber 02" should be selected in the "Parent" select
     When I fill in the following:
       | Name        | My Experiment              |
+      | Parent      | Facility - Tree Chambers   |
       | Description | Some description blah blah |
       | Start date  | 2011-12-12                 |
       | End date    | 2012-01-31                 |
@@ -92,6 +147,7 @@ Feature: Manage experiment metadata
     Then I should see "The experiment was saved successfully"
     And I should see details displayed
       | Name        | My Experiment              |
+      | Parent      | Facility - Tree Chambers   |
       | Description | Some description blah blah |
       | Start date  | 2011-12-12                 |
       | End date    | 2012-01-31                 |

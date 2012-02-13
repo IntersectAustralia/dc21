@@ -21,6 +21,14 @@ Given /^I edit experiment "([^"]*)"$/ do |name|
   click_link "Edit Experiment"
 end
 
+Given /^the experiment "([^"]*)" has parent "([^"]*)"$/ do |experiment_name, parent_name|
+  experiment = Experiment.find_by_name(experiment_name)
+  parent = Experiment.find_by_name(parent_name)
+  experiment.parent_experiment = parent
+  experiment.save!
+end
+
+
 def click_view_experiment_link(name)
   experiment = Experiment.find_by_name(name)
   click_link "view_#{experiment.id}"

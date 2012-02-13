@@ -2,6 +2,7 @@
   %h1 Experiment / View / #{@experiment.name}
 
 .container
+  = render_field "Parent", @experiment.parent_name
   = render_field "Name", @experiment.name
   = render_field "Description", @experiment.description
   = render_field "Start date", @experiment.start_date.to_s(:date_only) if @experiment.start_date

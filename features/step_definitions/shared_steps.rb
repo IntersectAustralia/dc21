@@ -100,12 +100,6 @@ When /^I select$/ do |table|
   end
 end
 
-When /^I fill in$/ do |table|
-  table.hashes.each do |hash|
-    When "I fill in \"#{hash[:field]}\" with \"#{hash[:value]}\""
-  end
-end
-
 # can be helpful for @javascript features in lieu of "show me the page
 Then /^pause$/ do
   puts "Press Enter to continue"
@@ -135,3 +129,22 @@ end
 #    page.should have_xpath('//input[@type="checkbox"]/@Checked')
 #  end
 #end
+
+Then /^the "([^"]*)" select should contain$/ do |label, table|
+  field = find_field(label)
+  options = field.all("option")
+  actual_options = options.collect(&:text)
+  expected_options = table.raw.collect { |row| row[0] }
+  actual_options.should eq(expected_options)
+end
+
+Then /^"([^"]*)" should be selected in the "([^"]*)" select$/ do |expected_option, select_label|
+  field = find_field(select_label)
+  option = field.find("option[selected]")
+  option.text.should eq(expected_option)
+end
+
+Then /^nothing should be selected in the "([^"]*)" select$/ do |select_label|
+  field = find_field(select_label)
+  option = field.should_not have_css("option[selected]")
+end
