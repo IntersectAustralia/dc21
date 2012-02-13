@@ -1,5 +1,5 @@
 
-= form_for @experiment do |f|
+= form_for [@facility, @experiment] do |f|
   .formerror= render "shared/error_messages", :target => @experiment
 
   .rowform
@@ -23,5 +23,5 @@
   .actions
     .cancelbutton
       %span
-      = link_to 'Cancel', (@experiment.new_record? ? experiments_path : @experiment), :class => "cancelbutton"
+      = link_to 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment)), :class => "cancelbutton"
     = f.submit 'Save Experiment', :class => "floatright"

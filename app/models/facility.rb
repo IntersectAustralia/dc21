@@ -9,6 +9,7 @@ class Facility < ActiveRecord::Base
   default_scope :order => 'name ASC'
 
   has_many :column_details
+  has_many :experiments, :order => 'name'
 
   private
 

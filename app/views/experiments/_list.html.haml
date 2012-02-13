@@ -1,12 +1,8 @@
-
-- content_for :breadcrumb  do
-  %h1 Home / Experiments
-
 .experiment.new.whitebutton
-  = link_to 'New Experiment', new_experiment_path
+  = link_to 'New Experiment', new_facility_experiment_path(@facility)
 %br/
 
-- if @experiments.empty?
+- if experiments.empty?
   There are no experiments to display.
 - else
   %table#experiments
@@ -18,9 +14,9 @@
       %th End date
       %th Subject
 
-    - @experiments.each do |experiment|
+    - experiments.each do |experiment|
       %tr
-        %td.view= link_to '', experiment, :class => "view", :id => "view_#{experiment.id}"
+        %td.view= link_to '', facility_experiment_path(@facility, experiment), :class => "view", :id => "view_#{experiment.id}"
         %td= experiment.name
         %td= experiment.description
         %td= experiment.start_date.to_s(:date_only) if experiment.start_date

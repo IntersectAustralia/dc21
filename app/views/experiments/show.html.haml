@@ -9,6 +9,6 @@
   = render_field "Subject", @experiment.subject
   .cancelbutton
     %span
-    = link_to 'Back', experiments_path, :class => "cancelbutton"
-  = link_to "Edit Experiment", edit_experiment_path, :class => "bluebutton floatright"
+    = link_to 'Back', facility_path(@facility), :class => "cancelbutton"
+  = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton floatright"
 

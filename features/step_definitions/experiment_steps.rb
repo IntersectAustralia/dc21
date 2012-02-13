@@ -1,6 +1,8 @@
 Given /^I have experiments$/ do |table|
   table.hashes.each do |exp|
-    Factory(:experiment, exp)
+    facility_name = exp.delete("facility")
+    facility = Facility.find_by_name(facility_name)
+    Factory(:experiment, exp.merge(:facility => facility))
   end
 end
 
@@ -13,7 +15,8 @@ Given /^I have no experiments$/ do
 end
 
 Given /^I edit experiment "([^"]*)"$/ do |name|
-  visit path_to("the experiments page")
+  experiment = Experiment.find_by_name(name)
+  visit facility_path(experiment.facility)
   click_view_experiment_link(name)
   click_link "Edit Experiment"
 end

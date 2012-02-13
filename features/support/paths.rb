@@ -52,17 +52,28 @@ module NavigationHelpers
       when /the upload page/
         new_data_file_path
 
+      # Facility paths
+      when /the view facility page for '(.*)'/
+        facility_path(Facility.find_by_name($1))
+
+      # Experiment paths
       when /the view experiment page for '(.*)'/
-        experiment_path(Experiment.find_by_name($1))
+        exp = Experiment.find_by_name($1)
+        facility_experiment_path(exp.facility, exp)
 
       when /the edit experiment page for '(.*)'/
-        edit_experiment_path(Experiment.find_by_name($1))
+        exp = Experiment.find_by_name($1)
+        edit_facility_experiment_path(exp.facility, exp)
 
-        # Add more mappings here.
-        # Here is an example that pulls values out of the Regexp:
-        #
-        #   when /^(.*)'s profile page$/i
-        #     user_profile_path(User.find_by_login($1))
+      when /the new experiment page for facility '(.*)'/
+        facility = Facility.find_by_name($1)
+        new_facility_experiment_path(facility)
+
+      # Add more mappings here.
+      # Here is an example that pulls values out of the Regexp:
+      #
+      #   when /^(.*)'s profile page$/i
+      #     user_profile_path(User.find_by_login($1))
 
       else
         begin
