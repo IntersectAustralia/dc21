@@ -6,6 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
 //= require_tree .
 
 //LiveReload is causing 30s delays on windows machines. disabled until this can be unbroken
@@ -157,6 +158,17 @@ $(window).load(function() {
   //////////////////////////////////////////////////////////////////////////////
   $('input:checkbox', '#exploredata').click(function () {
     display_actions();
+  });
+
+
+  $('input[datepicker="true"]').datepicker({
+    dateFormat: 'yy-mm-dd',
+    showOn: 'both',
+    changeMonth: true,
+    changeYear: true,
+    currentText: 'Today',
+    showButtonPanel: true,
+    autoSize: true
   });
 
 });

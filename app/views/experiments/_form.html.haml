@@ -11,11 +11,11 @@
     = f.text_area :description
   .rowform
     = f.label :start_date
-    = f.text_field :start_date
+    = f.text_field :start_date, :datepicker => true
     = required
   .rowform
     = f.label :end_date
-    = f.text_field :end_date
+    = f.text_field :end_date, :datepicker => true
   .rowform
     = f.label :subject
     = f.text_field :subject
