@@ -16,6 +16,7 @@ defaults: &defaults
     - Wind Speed
     - Sample
     - Rainfall
+  for_codes_lookup_base_url: http://jp-dc21-misc.intersect.org.au:9001
 
 development:
   <<: *defaults
