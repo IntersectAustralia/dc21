@@ -17,6 +17,7 @@ defaults: &defaults
     - Sample
     - Rainfall
   for_codes_lookup_base_url: http://jp-dc21-misc.intersect.org.au:9001
+  for_codes_path: /mint/ANZSRC_FOR/opensearch/lookup
 
 development:
   <<: *defaults
