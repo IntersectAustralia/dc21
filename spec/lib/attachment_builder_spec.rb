@@ -5,12 +5,6 @@ describe AttachmentBuilder do
   let(:file1) {
     Rack::Test::UploadedFile.new(Rails.root.join("spec/samples", 'file.a'), 'text/plain')
   }
-  let(:file2) {
-    Rack::Test::UploadedFile.new(Rails.root.join("spec/samples", 'file.b'), 'text/plain')
-  }
-  let(:file3) {
-    Rack::Test::UploadedFile.new(Rails.root.join("spec/samples", 'file.c'), 'text/plain')
-  }
 
   let(:files_root) {
     Rails.root.join('tmp')
