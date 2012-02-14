@@ -1,6 +1,6 @@
 - if target.errors.any?
   .alert-message.block-message.error
-    %h3.error_header The record could not be saved for the following reasons:
+    %h3.error_header The record could not be saved for these reasons:
     %p.notification{:id => "*.errors"}
       - target.errors.full_messages.each do |msg|
         %li

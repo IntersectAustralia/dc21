@@ -1,27 +1,29 @@
 
 = form_for [@facility, @experiment] do |f|
-  .formerror= render "shared/error_messages", :target => @experiment
+  .rowform
+    .formerror= render "shared/error_messages", :target => @experiment
 
   .rowform
-    = f.label :parent_experiment_id, "Parent"
-    = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "Facility - #{@facility.name}"}
+    = f.label :parent_experiment_id, "Parent:"
+    %span.input
+      = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "Facility - #{@facility.name}"}
     = required
   .rowform
-    = f.label :name
+    = f.label :name, "Name:"
     = f.text_field :name
     = required
   .rowform
-    = f.label :description
+    = f.label :description, "Description:"
     = f.text_area :description
   .rowform
-    = f.label :start_date
+    = f.label :start_date, "Start date:"
     = f.text_field :start_date, :datepicker => true
     = required
   .rowform
-    = f.label :end_date
+    = f.label :end_date, "End date:"
     = f.text_field :end_date, :datepicker => true
   .rowform
-    = f.label :subject
+    = f.label :subject, "Subject:"
     = f.text_field :subject
     = required
   .actions
