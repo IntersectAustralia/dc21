@@ -9,7 +9,7 @@
       %th="Date Added"
       %th="Added By"
       %th="Status"
-      %th="Description (Optional, ignored if status unset)"
+      %th="Description (Optional)"
       - @data_files.each do |df|
         = fields_for "data_files[]", df do |f|
           %tr{:class => cycle('field_bg', 'field_nobg')}

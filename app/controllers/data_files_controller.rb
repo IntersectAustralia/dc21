@@ -50,9 +50,15 @@ class DataFilesController < ApplicationController
     redirect_to data_files_path unless params[:data_files].present?
 
     params[:data_files].each do |df_id, values|
-      next unless values[:file_processing_status].present?
+
+      #Skip if they left it blank
+      next if values[:file_processing_status].blank? && values[:file_processing_description].blank?
+
+      #remove "" entries - we don't want them be set as "" if they are actually nil
+      cleaned_values = values.delete_if { |k, v| v.blank? }
+
       data_file = DataFile.find(df_id)
-      data_file.update_attributes(values)
+      data_file.update_attributes(cleaned_values)
     end
       redirect_to data_files_path
   end

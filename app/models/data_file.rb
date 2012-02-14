@@ -15,7 +15,6 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :filename
   validates_presence_of :path
   validates_presence_of :created_by_id
-  validates_presence_of :file_processing_status, :if => Proc.new { |f| f.file_processing_description.present?}
 
   scope :most_recent_first, order("created_at DESC")
   scope :unprocessed, where(file_processing_status: nil)

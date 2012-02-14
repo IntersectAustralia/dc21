@@ -20,6 +20,35 @@ Feature: Upload files
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
       | Processing Status | UNDEFINED |
+    And I should not see "Description"
+
+  Scenario: Assign a status only to a newly uploaded file
+      Given I follow "Next"
+      And I am on the set data file status page
+      When I select "RAW" from the select box for "sample1.txt"
+      And I press "Done"
+      Then I should be on the list data files page
+      And I should see "exploredata" table with
+        | Filename    | Added by                  | Start time | End time | Processing Status |
+        | sample1.txt | georgina@intersect.org.au |            |          | RAW               |
+      And I follow the view link for data file "sample1.txt"
+      Then I should see details displayed
+        | Processing Status      | RAW             |
+    And I should not see "Description"
+
+  Scenario: Assign a status and description to a newly uploaded file
+    Given I follow "Next"
+    And I am on the set data file status page
+    When I fill in "file_processing_description" with "I don't understand why I uploaded this file" for "sample1.txt"
+    And I press "Done"
+    Then I should be on the list data files page
+    And I should see "exploredata" table with
+      | Filename    | Added by                  | Start time | End time | Processing Status |
+      | sample1.txt | georgina@intersect.org.au |            |          | UNDEFINED               |
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Processing Status      | UNDEFINED             |
+      | Description | I don't understand why I uploaded this file |
 
   Scenario: Assign a status and description to a newly uploaded file
     Given I follow "Next"
@@ -34,7 +63,7 @@ Feature: Upload files
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
       | Processing Status      | RAW             |
-      | Processing Description | Raw sample file |
+      | Description | Raw sample file |
 
   Scenario: Assign a status and description to only one of two newly uploaded files
     Given I upload "sample2.txt" through the applet
@@ -51,12 +80,12 @@ Feature: Upload files
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
       | Processing Status      | RAW             |
-      | Processing Description | Raw sample file |
+      | Description | Raw sample file |
     And I follow "Explore Data"
     And I follow the view link for data file "sample2.txt"
     Then I should see details displayed
       | Processing Status | UNDEFINED |
-    And I should not see "Processing Description"
+    And I should not see "Description"
 
   @wip
   Scenario: Assign a status and description to multiple existing uploaded files
