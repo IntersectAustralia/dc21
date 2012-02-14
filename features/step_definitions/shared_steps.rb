@@ -1,6 +1,14 @@
 Then /^I should see "([^"]*)" table with$/ do |table_id, expected_table|
   actual = find("table##{table_id}").all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
-  expected_table.diff!(actual)
+
+  begin
+    expected_table.diff!(actual)
+  rescue Cucumber::Ast::Table::Different
+    puts "Tables were as follows:"
+    puts expected_table
+    raise
+  end
+
 end
 
 Then /^I should see only these rows in "([^"]*)" table$/ do |table_id, expected_table|

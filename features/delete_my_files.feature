@@ -6,6 +6,48 @@ Feature: Delete files containing erroneous data
   Background:
     And I am logged in as "georgina@intersect.org.au"
 
+  @javascript
+  Scenario: Cancelling the alert does not delete the file
+    And I upload "toa5.dat" through the applet as "georgina@intersect.org.au"
+    Given I am on the list data files page
+    And I should see only these rows in "exploredata" table
+      | Filename | Added by                  |
+      | toa5.dat | georgina@intersect.org.au |
+    And I follow the view link for data file "toa5.dat"
+    And I follow "Delete This File"
+    And I dismiss popup
+    And I am on the list data files page
+    Then I should see only these rows in "exploredata" table
+      | Filename | Added by                  |
+      | toa5.dat | georgina@intersect.org.au |
+
+
+  @javascript
+  Scenario: I see an informative alert for files with metadata
+    And I upload "toa5.dat" through the applet as "georgina@intersect.org.au"
+    And The processing metadata is set for files as follows:
+      | filename | status | description   |
+      | toa5.dat | RAW    | something set |
+    And I should see "exploredata" table with
+      | Filename | Added by                  | Start time          | End time            | Processing Status |
+      | toa5.dat | georgina@intersect.org.au | 2011-10-06 0:40:00 | 2011-11-03 11:55:00 | RAW               |
+    Given I am on the list data files page
+    And I follow the view link for data file "toa5.dat"
+    And I follow "Delete This File"
+    Then The popup text is contains "toa5.dat"
+    And The popup text is contains "RAW"
+  #The Following fields are generated from the file itself.
+  #NB: the hour and day have been left off to account for running the tests in different timezones.
+  #NBB: Sydney has two timezones (AEST/AEDST)
+    And The popup text is contains "2011-10-0"
+    And The popup text is contains ":40:00"
+    And The popup text is contains "2011-11-0"
+    And The popup text is contains ":55:00"
+    And The popup text is contains "ROS_WS"
+
+    Then I dismiss popup
+
+
   Scenario: Deleting a file removes it from the list of files in Explore Data
     And I upload "toa5.dat" through the applet as "georgina@intersect.org.au"
     And I upload "weather_station_15_min.dat" through the applet as "georgina@intersect.org.au"
@@ -86,5 +128,5 @@ Feature: Delete files containing erroneous data
     Then I should be on the list data files page
     And I should see "The file 'datafile.dat' was successfully removed"
     And I should see only these rows in "exploredata" table
-      | Filename      | Added by                  |
+      | Filename      | Added by              |
       | datafile1.dat | kali@intersect.org.au |

@@ -267,3 +267,16 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+When /^I confirm popup$/ do
+  page.driver.browser.switch_to.alert.accept
+end
+
+Then /^The popup text is contains "([^"]*)"$/ do |text|
+  alert_text = page.driver.browser.switch_to.alert.text
+  assert (alert_text.include? text), "Alert text did not include '#{text}' - \n#{alert_text}"
+end
+
+When /^I dismiss popup$/ do
+ page.driver.browser.switch_to.alert.dismiss
+end

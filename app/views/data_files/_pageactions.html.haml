@@ -1,6 +1,22 @@
+- #Stuff for preparing the 'delete file' message. Arguably this can go in the controller, but it may eventually be
+- #moved to a separate confirmation page, so here will suffice for now.
+
+- station = @data_file.metadata_items.find_by_key("station_name")
+- if station.present?
+  - fac = Facility.find_by_code(station.value)
+  - station_text = fac.nil? ? station.value : station.value + "\n (" + fac.name + ")"
+- delete_warning_beginning = "Do you really want to remove the file #{@data_file.filename}"
+- delete_warning_contents = @data_file.file_processing_status.present? ? "\n* containing #{@data_file.status_as_string} data" : " whose content is unspecified"
+- delete_warning_station = station.present? ? "\n* sourced from #{station_text}" : ""
+- delete_warning_time = (@data_file.start_time.present? && @data_file.end_time.present?) ? "\n* from #{@data_file.start_time} \n* to #{@data_file.end_time}" : ""
+- delete_warning_tail = "? \nThis action cannot be undone."
+- delete_warning = delete_warning_beginning << delete_warning_contents << delete_warning_station << delete_warning_time << delete_warning_tail
+
+
 .pageactions
   = link_to "Download Data", download_data_file_path(@data_file), :class => "bluebutton"
   - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
-    = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton", :confirm => "Do you really want to remove this file from the dataset?", :method => :delete
+    = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton",
+     :confirm => delete_warning, :method => :delete
   .searchcontainer
 

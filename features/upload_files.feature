@@ -23,17 +23,17 @@ Feature: Upload files
     And I should not see "Description"
 
   Scenario: Assign a status only to a newly uploaded file
-      Given I follow "Next"
-      And I am on the set data file status page
-      When I select "RAW" from the select box for "sample1.txt"
-      And I press "Done"
-      Then I should be on the list data files page
-      And I should see "exploredata" table with
-        | Filename    | Added by                  | Start time | End time | Processing Status |
-        | sample1.txt | georgina@intersect.org.au |            |          | RAW               |
-      And I follow the view link for data file "sample1.txt"
-      Then I should see details displayed
-        | Processing Status      | RAW             |
+    Given I follow "Next"
+    And I am on the set data file status page
+    When I select "RAW" from the select box for "sample1.txt"
+    And I press "Done"
+    Then I should be on the list data files page
+    And I should see "exploredata" table with
+      | Filename    | Added by                  | Start time | End time | Processing Status |
+      | sample1.txt | georgina@intersect.org.au |            |          | RAW               |
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Processing Status | RAW |
     And I should not see "Description"
 
   Scenario: Assign a status and description to a newly uploaded file
@@ -44,11 +44,11 @@ Feature: Upload files
     Then I should be on the list data files page
     And I should see "exploredata" table with
       | Filename    | Added by                  | Start time | End time | Processing Status |
-      | sample1.txt | georgina@intersect.org.au |            |          | UNDEFINED               |
+      | sample1.txt | georgina@intersect.org.au |            |          | UNDEFINED         |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status      | UNDEFINED             |
-      | Description | I don't understand why I uploaded this file |
+      | Processing Status | UNDEFINED                                   |
+      | Description       | I don't understand why I uploaded this file |
 
   Scenario: Assign a status and description to a newly uploaded file
     Given I follow "Next"
@@ -62,8 +62,8 @@ Feature: Upload files
       | sample1.txt | georgina@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status      | RAW             |
-      | Description | Raw sample file |
+      | Processing Status | RAW             |
+      | Description       | Raw sample file |
 
   Scenario: Assign a status and description to only one of two newly uploaded files
     Given I upload "sample2.txt" through the applet
@@ -79,13 +79,31 @@ Feature: Upload files
       | sample1.txt | georgina@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status      | RAW             |
-      | Description | Raw sample file |
+      | Processing Status | RAW             |
+      | Description       | Raw sample file |
     And I follow "Explore Data"
     And I follow the view link for data file "sample2.txt"
     Then I should see details displayed
       | Processing Status | UNDEFINED |
     And I should not see "Description"
+
+
+  Scenario: Ensure the 'processing metadata is set for files as follows:' meta step definition works
+    Given I have data files
+      | filename     | created_at       | uploaded_by               | start_time | end_time |
+      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |            |          |
+    And The processing metadata is set for files as follows:
+      | filename     | status | description   |
+      | datafile.dat | RAW    | something set |
+    And I should see "exploredata" table with
+      | Filename     | Added by                  | Start time | End time | Processing Status |
+      | sample1.txt  | georgina@intersect.org.au |            |          | UNDEFINED         |
+      | datafile.dat | georgina@intersect.org.au |            |          | RAW               |
+    And I follow the view link for data file "datafile.dat"
+    Then I should see details displayed
+      | Processing Status | RAW           |
+      | Description       | something set |
+
 
   @wip
   Scenario: Assign a status and description to multiple existing uploaded files

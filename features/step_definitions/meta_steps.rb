@@ -1,12 +1,20 @@
 Given /^I upload "([^"]*)"$/ do |filename|
- step "I am on the upload page"
- step "I upload \"#{filename}\" through the applet"
- step "I follow \"Next\""
+  step "I am on the upload page"
+  step "I upload \"#{filename}\" through the applet"
+  step "I follow \"Next\""
 end
 
 Given /^I fill in the processing metadata fields for the following files$/ do |table|
 
-  step "select \"RAW\" from the select box for \"sample1.txt\""
-  step "\"description\" with \"Raw sample file\" for \"sample1.txt\""
+  table.hashes.each do |hash|
+    step "I select \"#{hash['status']}\" from the select box for \"#{hash['filename']}\""
+    step "I fill in \"file_processing_description\" with \"#{hash['description']}\" for \"#{hash['filename']}\""
+  end
 
+end
+
+Given /^The processing metadata is set for files as follows:$/ do |table|
+  step 'I am on the set data file status page'
+  step 'I fill in the processing metadata fields for the following files', table
+  step 'I press "Done"'
 end
