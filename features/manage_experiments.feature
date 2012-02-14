@@ -10,17 +10,19 @@ Feature: Manage experiment metadata
       | ROS Weather Station |
       | Tree Chambers       |
     And I have experiments
-      | name            | description    | start_date | end_date   | subject | facility            |
-      | Weather Station | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |
-      | Tree Chamber 02 | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |
-      | Tree Chamber 01 | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |
+      | name             | description    | start_date | end_date   | subject | facility            | parent           |
+      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                  |
+      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                  |
+      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                  |
+      | Tree Chamber 01A | Another        | 2012-01-15 |            | Trees   | Tree Chambers       | Tree Chamber 01 |
 
   Scenario: View the list of experiments under a facility
     When I am on the view facility page for 'Tree Chambers'
     Then I should see "experiments" table with
-      | Name            | Start date | End date   | Subject |
-      | Tree Chamber 01 | 2012-01-15 | 2013-01-01 | Trees   |
-      | Tree Chamber 02 | 2012-01-01 | 2013-01-31 | Trees   |
+      | Name             | Parent                       | Description |
+      | Tree Chamber 01  | Facility - Tree Chambers     | Whatever    |
+      | Tree Chamber 01A | Experiment - Tree Chamber 01 | Another     |
+      | Tree Chamber 02  | Facility - Tree Chambers     | Whatever 2  |
 
   Scenario: View the list when there's nothing to show
     Given I have no experiments
@@ -48,9 +50,10 @@ Feature: Manage experiment metadata
     Given I am on the view facility page for 'Tree Chambers'
     When I follow "New Experiment"
     Then the "Parent" select should contain
-      | Facility - Tree Chambers     |
-      | Experiment - Tree Chamber 01 |
-      | Experiment - Tree Chamber 02 |
+      | Facility - Tree Chambers      |
+      | Experiment - Tree Chamber 01  |
+      | Experiment - Tree Chamber 01A |
+      | Experiment - Tree Chamber 02  |
     And nothing should be selected in the "Parent" select
     And I fill in the following:
       | Name        | My Experiment              |
@@ -109,8 +112,9 @@ Feature: Manage experiment metadata
   Scenario: Edit an experiment
     Given I edit experiment "Tree Chamber 01"
     Then the "Parent" select should contain
-      | Facility - Tree Chambers     |
-      | Experiment - Tree Chamber 02 |
+      | Facility - Tree Chambers      |
+      | Experiment - Tree Chamber 01A |
+      | Experiment - Tree Chamber 02  |
     And nothing should be selected in the "Parent" select
     When I fill in the following:
       | Name        | My Experiment                |
@@ -133,8 +137,9 @@ Feature: Manage experiment metadata
     Given the experiment "Tree Chamber 01" has parent "Tree Chamber 02"
     When I edit experiment "Tree Chamber 01"
     Then the "Parent" select should contain
-      | Facility - Tree Chambers     |
-      | Experiment - Tree Chamber 02 |
+      | Facility - Tree Chambers      |
+      | Experiment - Tree Chamber 01A |
+      | Experiment - Tree Chamber 02  |
     And "Experiment - Tree Chamber 02" should be selected in the "Parent" select
     When I fill in the following:
       | Name        | My Experiment              |

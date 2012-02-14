@@ -9,16 +9,12 @@
     %tr
       %th.view View
       %th Name
+      %th Parent
       %th Description
-      %th Start date
-      %th End date
-      %th Subject
 
     - experiments.each do |experiment|
       %tr
         %td.view= link_to '', facility_experiment_path(@facility, experiment), :class => "view", :id => "view_#{experiment.id}"
         %td= experiment.name
+        %td= experiment.parent_name
         %td= experiment.description
-        %td= experiment.start_date.to_s(:date_only) if experiment.start_date
-        %td= experiment.end_date.to_s(:date_only) if experiment.end_date
-        %td= experiment.subject
