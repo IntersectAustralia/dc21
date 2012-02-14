@@ -7,6 +7,7 @@
     %tr
       %th="File name"
       %th="Date Added"
+      %th="Added By"
       %th="Status"
       %th="Description (Optional, ignored if status unset)"
       - @data_files.each do |df|
@@ -14,6 +15,7 @@
           %tr{:class => cycle('field_bg', 'field_nobg')}
             %td= df.filename
             %td= df.created_at.to_s(:with_time)
+            %td.email= df.created_by.email if df.created_by
             %td= f.select :file_processing_status, %w(UNKNOWN RAW CLEANSED PROCESSED), :include_blank => true
             %td= f.text_field :file_processing_description
 
