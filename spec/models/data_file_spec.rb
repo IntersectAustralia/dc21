@@ -365,11 +365,13 @@ describe DataFile do
         station_b = "Station B"
         table_b = "Table B"
 
-        toa5 = Factory(:data_file, times.merge(:format => "TOA5", :path => Rails.root.join('spec/samples', 'toa5.dat')))
+        path = Rails.root.join('spec/samples', 'toa5.dat')
+
+        toa5 = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
         MetadataItem.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_a, :data_file => toa5)
         MetadataItem.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_a, :data_file => toa5)
 
-        changed_toa5 = Factory.build(:data_file, times.merge(:format => "TOA5", :path => Rails.root.join('spec/samples', 'toa5_small_change.dat')))
+        changed_toa5 = Factory.build(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
 
         changed_toa5.mismatched_overlap(station_b, table_a).should be_empty
         changed_toa5.mismatched_overlap(station_a, table_b).should be_empty
@@ -380,18 +382,48 @@ describe DataFile do
         times = {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC")}
         station_name = "Station"
         table_name = "Table"
+        path = 'some path that is not important'
 
-        toa5 = Factory(:data_file, times.merge(:format => "TOA5"))
-        MetadataItem.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name, :data_file => toa5)
-        MetadataItem.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name, :data_file => toa5)
+        toa5 = make_data_file!(times[:start_time], times[:end_time], path, station_name, table_name)
 
-        changed_toa5 = Factory.build(:data_file, times.merge(:format => "TOA5"))
+        another_toa5 = Factory.build(:data_file, times.merge(:format => FileTypeDeterminer::TOA5))
 
-        changed_toa5.mismatched_overlap(station_name, table_name).should eq [toa5]
+        another_toa5.mismatched_overlap(station_name, table_name).should eq [toa5]
       end
 
-      it "recognises TOA5 files as mismatched overlapping if the times overlap but the content is different" do
-        pending
+      it "doesn't recognise TOA5 files as mismatched overlapping if the times overlap but the content is the same" do
+        start_time = Time.parse '2011/10/6 0:00 UTC'
+        end_time = Time.parse '2011/11/3 11:55 UTC'
+        station_name = "Station"
+        table_name = "Table"
+
+        path = Rails.root.join('spec/samples', 'toa5.dat')
+
+        toa5 = make_data_file!(start_time, end_time, path, station_name, table_name)
+
+        truncated_end = Time.parse '2011/10/14 23:55 UTC'
+        truncated_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat')
+        different_toa5 = Factory.build(:data_file, :path => truncated_path, :start_time => start_time, :end_time => truncated_end, :format => FileTypeDeterminer::TOA5)
+
+        different_toa5.mismatched_overlap(station_name, table_name).should eq []
+      end
+      it "recognises A > B where B's content is different than A's subset" do
+        start_time = Time.parse '2011/10/6 0:00 UTC'
+        end_time = Time.parse '2011/11/3 11:55 UTC'
+        station_name = "Station"
+        table_name = "Table"
+
+        path = Rails.root.join('spec/samples', 'toa5.dat')
+
+        toa5 = Factory.build(:data_file, :path => path.to_s, :start_time => start_time, :end_time => end_time, :format => FileTypeDeterminer::TOA5)
+
+        subset_start = Time.parse '2011/10/9 0:00 UTC'
+        subset_end = Time.parse '2011/10/14 23:55 UTC'
+        subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range_different.dat').to_s
+
+        subset_diff_toa5 = make_data_file!(subset_start, subset_end, subset_path, station_name, table_name)
+
+        toa5.mismatched_overlap(station_name, table_name).should eq [subset_diff_toa5]
       end
     end
     describe "safe" do
@@ -401,10 +433,19 @@ describe DataFile do
       it "picks files with smaller content" do
         pending
       end
-      it "doesn't pick files with the same content" do
+      it "doesn't pick exact-match files" do
         pending
       end
     end
   end
 
+end
+
+def make_data_file!(start_time, end_time, path, station_name, table_name)
+  data_file = Factory(:data_file, :start_time => start_time, :end_time => end_time, :format => FileTypeDeterminer::TOA5, :path => path)
+
+  data_file.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
+  data_file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
+
+  data_file
 end
