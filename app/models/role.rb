@@ -1,7 +1,7 @@
 class Role < ActiveRecord::Base
 
   ADMIN_ROLE = 'Administrator'
-  has_many :users
+  has_many :users, :dependent => :nullify
 
   validates :name, :presence => true, :uniqueness => {:case_sensitive => false}
 

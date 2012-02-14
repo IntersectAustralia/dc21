@@ -37,6 +37,26 @@ class DataFilesController < ApplicationController
     render :layout => 'guest'
   end
 
+  def edit;  end
+  def update; end
+
+  def list_for_post_processing
+
+    @data_files = DataFile.unprocessed.most_recent_first
+    redirect_to data_files_path unless @data_files.present?
+  end
+
+  def post_process
+    redirect_to data_files_path unless params[:data_files].present?
+
+    params[:data_files].each do |df_id, values|
+      next unless values[:file_processing_status].present?
+      data_file = DataFile.find(df_id)
+      data_file.update_attributes(values)
+    end
+      redirect_to data_files_path
+  end
+
   def create
     attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
     result = attachment_builder.build()

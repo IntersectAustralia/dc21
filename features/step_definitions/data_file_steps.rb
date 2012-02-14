@@ -100,6 +100,24 @@ When /^I delete the file "([^"]*)" added by "([^"]*)"$/ do |filename, email|
   file.destroy
 end
 
+When /^I select "([^"]*)" from the select box for "([^"]*)"$/ do |option, filename|
+  file = DataFile.find_by_filename(filename)
+  field = "data_files_#{file.id}_file_processing_status"
+  select(option, :from => field)
+end
+
+When /^I fill in "([^"]*)" with "([^"]*)" for "([^"]*)"$/ do |field, value, filename|
+  file = DataFile.find_by_filename(filename)
+
+  augmented_field = "data_files_#{file.id}_#{field}"
+  fill_in(augmented_field, :with => value)
+end
+
+When /^I visit the delete url for "([^"]*)"$/ do |filename|
+  file = DataFile.find_by_filename filename
+  visit_path data_file_path(file), :delete
+end
+
 private
 
 def do_upload(filename, user)
@@ -112,7 +130,3 @@ def do_upload(filename, user)
   DataFile.count.should_not eq(0)
 end
 
-When /^I visit the delete url for "([^"]*)"$/ do |filename|
-  file = DataFile.find_by_filename filename
-  visit_path data_file_path(file), :delete
-end

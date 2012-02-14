@@ -3,6 +3,7 @@ def create_roles
 
   Role.create!(:name => "Administrator")
   Role.create!(:name => "Researcher")
+  Role.create!(:name => "API Uploader")
 
 end
 

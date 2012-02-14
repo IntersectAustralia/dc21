@@ -7,6 +7,13 @@
       = form_for("user", :url => user_session_path) do |f|
         = render(:partial => 'devise/sessions/form', :locals => { :f => f })
 - else
+  - if @action_items.present?
+    .need_action
+      %h3 Items requiring action
+      %ul
+        - @action_items.each do |ai|
+          %li #{ai[:text]}, click #{link_to "here", ai[:link]} to resolve.
+
   .recentactivity
     %h3 Recent Activity
     %table#exploredata

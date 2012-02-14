@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(:version => 20120213043808) do
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "interval"
+    t.string   "file_processing_status"
+    t.string   "file_processing_description"
   end
 
   create_table "experiments", :force => true do |t|

@@ -1,6 +1,10 @@
-require 'tempfile'
-
 class DataFile < ActiveRecord::Base
+
+  STATUS_UNDEFINED = nil
+  STATUS_UNKNOWN = 'UNKNOWN'
+  STATUS_RAW = 'RAW'
+  STATUS_CLEANSED = 'CLEANSED'
+  STATUS_PROCESSED = 'PROCESSED'
 
   serialize :metadata, Hash
 
@@ -11,8 +15,10 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :filename
   validates_presence_of :path
   validates_presence_of :created_by_id
+  validates_presence_of :file_processing_status, :if => Proc.new { |f| f.file_processing_description.present?}
 
   scope :most_recent_first, order("created_at DESC")
+  scope :unprocessed, where(file_processing_status: nil)
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
@@ -89,6 +95,10 @@ class DataFile < ActiveRecord::Base
       end
     end
     return false
+  end
+
+  def status_as_string
+    self.file_processing_status.present? ? self.file_processing_status.upcase : "UNDEFINED"
   end
 
   def mismatched_overlap(station_name, table_name)
