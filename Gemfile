@@ -47,6 +47,7 @@ group :development, :test do
   gem "database_cleaner"
   gem 'spork', '~> 0.9.0.rc'
   gem "launchy"    # So you can do Then show me the page
+  gem "ruby-debug19"
 end
 
 group :development do
