@@ -2,7 +2,10 @@ Given /^I have experiments$/ do |table|
   table.hashes.each do |exp|
     facility_name = exp.delete("facility")
     facility = Facility.find_by_name(facility_name)
-    Factory(:experiment, exp.merge(:facility => facility))
+
+    parent = exp.delete("parent")
+    parent_exp = parent.blank? ? nil : Experiment.find_by_name(parent)
+    Factory(:experiment, exp.merge(:facility => facility, :parent_experiment => parent_exp))
   end
 end
 
