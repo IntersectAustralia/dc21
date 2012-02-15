@@ -1,5 +1,6 @@
-class DataFile < ActiveRecord::Base
+require 'tempfile'
 
+class DataFile < ActiveRecord::Base
   STATUS_UNDEFINED = nil
   STATUS_UNKNOWN = 'UNKNOWN'
   STATUS_RAW = 'RAW'
@@ -109,8 +110,9 @@ class DataFile < ActiveRecord::Base
     return [] if self.format != FileTypeDeterminer::TOA5
 
     toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5)
-    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
+    toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
 
+    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
     by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
 
     toa5_files = DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
@@ -128,14 +130,14 @@ class DataFile < ActiveRecord::Base
 
     exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
 
-    left_overlaps = toa5_files.where('start_time <= ?', start_time)
+    left_overlaps = toa5_files.where('start_time = ?', start_time)
     left_overlaps = left_overlaps.where('end_time < ?', end_time)
 
     middle_overlaps = toa5_files.where('start_time > ?', start_time)
     middle_overlaps = middle_overlaps.where('end_time < ?', end_time)
 
     right_overlaps = toa5_files.where('start_time < ?', start_time)
-    right_overlaps = left_overlaps.where('end_time <= ?', end_time)
+    right_overlaps = left_overlaps.where('end_time = ?', end_time)
 
     candidate_overlaps = left_overlaps | right_overlaps | middle_overlaps
 

@@ -346,36 +346,94 @@ describe DataFile do
 
   describe "overlaps" do
     describe "mismatched" do
-      it "doesn't recognise TOA5 files as overlapping other formats" do
-        times = {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC")}
-        txt = Factory(:data_file, times.merge(:format => nil))
-        jpg = Factory(:data_file, times.merge(:format => nil))
-        toa = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5))
+      describe "misses" do
+        it "Toa5 versus other formats" do
+          times = {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC")}
+          txt = Factory(:data_file, times.merge(:format => nil))
+          jpg = Factory(:data_file, times.merge(:format => nil))
+          toa = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5))
 
-        toa.mismatched_overlap('station_name', 'table_name').should be_empty
-        jpg.mismatched_overlap('station_name', 'table_name').should be_empty
-        txt.mismatched_overlap('station_name', 'table_name').should be_empty
+          station_name = 'station_name'
+          table_name = 'table_name'
+
+          [txt,jpg,toa].each do |file|
+            file.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
+            file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
+          end
+
+          toa.mismatched_overlap(station_name, table_name).should be_empty
+          jpg.mismatched_overlap(station_name, table_name).should be_empty
+          txt.mismatched_overlap(station_name, table_name).should be_empty
+        end
+        it "different station/table name combinations" do
+          times = {:start_time => "2012-02-01 03:45 UTC", :end_time => "2012-04-03 14:44 UTC"}
+
+          station_a = "Station A"
+          table_a = "Table A"
+          station_b = "Station B"
+          table_b = "Table B"
+
+          path = Rails.root.join('spec/samples', 'toa5.dat')
+
+          toa5 = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
+          MetadataItem.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_a, :data_file => toa5)
+          MetadataItem.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_a, :data_file => toa5)
+
+          changed_toa5 = Factory.build(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
+
+          changed_toa5.mismatched_overlap(station_b, table_a).should be_empty
+          changed_toa5.mismatched_overlap(station_a, table_b).should be_empty
+          changed_toa5.mismatched_overlap(station_b, table_b).should be_empty
+        end
       end
+      describe "obvious overlap" do
+        before :each do
+          @start_time = Time.new(2011, 5, 20)
+          @end_time = Time.new(2011, 8, 22)
+          @toa5_file = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :format => FileTypeDeterminer::TOA5)
+          @some_path = 'arbitary_path'
 
-      it "doesn't consider toa files with different content and different station/table name combinations" do
-        times = {:start_time => "2012-02-01 03:45 UTC", :end_time => "2012-04-03 14:44 UTC"}
+          @station_name = 'stn'
+          @table_name = 'tbl'
+        end
+        it "start time" do
+          early_start = @start_time - 2.day
+          early_end = @end_time - 1.day
+          start_time_overlap = make_data_file!(early_start, early_end, @some_path, @station_name, @table_name)
 
-        station_a = "Station A"
-        table_a = "Table A"
-        station_b = "Station B"
-        table_b = "Table B"
+          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [start_time_overlap]
+        end
+        it "total overlap" do
+          early_start = @start_time - 1.day
+          late_end = @end_time + 1.day
+          total_overlap = make_data_file!(early_start, late_end, @some_path, @station_name, @table_name)
 
-        path = Rails.root.join('spec/samples', 'toa5.dat')
+          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [total_overlap]
+        end
+        it "end overlap" do
+          late_start = @start_time + 1.day
+          late_end = @end_time + 1.day
+          end_overlap = make_data_file!(late_start, late_end, @some_path, @station_name, @table_name)
 
-        toa5 = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
-        MetadataItem.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_a, :data_file => toa5)
-        MetadataItem.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_a, :data_file => toa5)
+          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [end_overlap]
+        end
+        it "exact overlap" do
+          same_time = make_data_file!(@start_time, @end_time, @some_path, @station_name, @table_name)
 
-        changed_toa5 = Factory.build(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
+          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [same_time]
+        end
+        it "overlaps touching start" do
+          early_start = @start_time - 2.day
+          touching_start = make_data_file!(early_start, @start_time, @some_path, @station_name, @table_name)
 
-        changed_toa5.mismatched_overlap(station_b, table_a).should be_empty
-        changed_toa5.mismatched_overlap(station_a, table_b).should be_empty
-        changed_toa5.mismatched_overlap(station_b, table_b).should be_empty
+          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [touching_start]
+        end
+        it "overlaps touching end" do
+          late_end = @end_time + 1.day
+          touching_end = make_data_file!(@end_time, late_end, @some_path, @station_name, @table_name)
+
+          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [touching_end]
+        end
       end
 
       it "recognises TOA5 files as mismatched overlapping if the times are identical" do
@@ -405,8 +463,9 @@ describe DataFile do
         truncated_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat')
         different_toa5 = Factory.build(:data_file, :path => truncated_path, :start_time => start_time, :end_time => truncated_end, :format => FileTypeDeterminer::TOA5)
 
-        different_toa5.mismatched_overlap(station_name, table_name).should eq []
+        different_toa5.mismatched_overlap(station_name, table_name).should be_empty
       end
+
       it "recognises A > B where B's content is different than A's subset" do
         start_time = Time.parse '2011/10/6 0:00 UTC'
         end_time = Time.parse '2011/11/3 11:55 UTC'
