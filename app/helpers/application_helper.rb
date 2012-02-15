@@ -5,7 +5,7 @@ module ApplicationHelper
 
   #shorthand for the required asterisk
   def required
-    "<a class='asterisk_icon' title='Required'></a>".html_safe
+    "<span class='asterisk' title='Required'>*</span>".html_safe
   end
 
   # convenience method to render a field on a view screen - saves repeating the div/span etc each time

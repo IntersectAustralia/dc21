@@ -5,27 +5,27 @@
 
   .rowform
     = f.label :parent_experiment_id, "Parent:"
+    = required
     %span.input
       = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "Facility - #{@facility.name}"}
-    = required
   .rowform
     = f.label :name, "Name:"
-    = f.text_field :name
     = required
+    = f.text_field :name
   .rowform
     = f.label :description, "Description:"
     = f.text_area :description
   .rowform
     = f.label :start_date, "Start date:"
-    = f.text_field :start_date, :datepicker => true
     = required
+    = f.text_field :start_date, :datepicker => true
   .rowform
     = f.label :end_date, "End date:"
     = f.text_field :end_date, :datepicker => true
   .rowform
     = f.label :subject, "Subject:"
-    = f.text_field :subject
     = required
+    = f.text_field :subject
   .actions
     .cancelbutton
       %span

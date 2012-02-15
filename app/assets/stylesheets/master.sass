@@ -346,6 +346,10 @@ textarea
 .formerror
   +m-p-w-h-p-t-b-l-r-f("", "", 430px)
 
+.asterisk
+  +m-p-w-h-p-t-b-l-r-f( 0 0 0 -14px, 0, 10px)
+  color: $red4
+
 
 // MODULES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -498,6 +502,16 @@ a.edit
   &:hover
     label, span, a
       background: url("../images/icon_facility_new_dark.png") left center no-repeat
+
+.experiment.new.whitebutton
+  cursor: pointer
+  label, span, a
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px)
+    font-weight: normal
+    background: url("../images/icon_experiment_new_light.png") left center no-repeat
+  &:hover
+    label, span, a
+      background: url("../images/icon_experiment_new_dark.png") left center no-repeat
 
 
 // BUTTONS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
