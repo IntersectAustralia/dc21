@@ -474,10 +474,11 @@ describe DataFile do
           end
 
           it "subset_to same" do
-            truncated_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
-            subset_same = Factory.build(:data_file, :path => truncated_path, :start_time => @start_time, :end_time => @subset_end, :format => FileTypeDeterminer::TOA5)
+            subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
+            subset_same = make_data_file!(@start_time, @subset_end, subset_path, @station_name, @table_name)
 
-            subset_same.mismatched_overlap(@station_name, @table_name).should be_empty
+            subset_same.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
+            @toa5.mismatched_overlap(@station_name, @table_name).should be_empty
           end
 
           it "subset_to different" do
@@ -496,9 +497,9 @@ describe DataFile do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only.dat').to_s
             subset_same = make_data_file!(@subset_start, @end_time, subset_path, @station_name, @table_name)
 
-            subset_same.mismatched_overlap(@station_name, @table_name).should be_empty
+            #subset_same.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
 
-            @toa5.mismatched_overlap(@station_name, @table_name).should eq [subset_same]
+            @toa5.mismatched_overlap(@station_name, @table_name).should be_empty
           end
           it "subset_from different" do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only_different.dat').to_s
@@ -540,14 +541,98 @@ describe DataFile do
     end
 
     describe "safe" do
-      it "doesn't pick files with different content" do
-        pending
+      before :each do
+        @start_time = Time.parse '2011/10/6 0:00 UTC'
+        @end_time = Time.parse '2011/11/3 11:55 UTC'
+        @station_name = "Station"
+        @table_name = "Table"
+        @path = Rails.root.join('spec/samples', 'toa5.dat').to_s
+
+        @toa5 = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
       end
-      it "picks files with smaller content" do
-        pending
+      describe "obvious misses" do
+        it "before" do
+          make_data_file!(@start_time - 2.days, @end_time - 1.day, @path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "after" do
+          make_data_file!(@end_time + 1.day, @end_time + 2.days, @path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "total" do
+          make_data_file!(@start_time - 1.day, @end_time + 1.day, @path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "start_time" do
+          make_data_file!(@start_time + 1.day, @end_time + 1.day, @path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "end_time" do
+          make_data_file!(@start_time - 1.day, @end_time - 1.day, @path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "exact time match" do
+          same_toa5 = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :path => @path)
+
+          same_toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
       end
-      it "doesn't pick exact-match files" do
-        pending
+      describe "doesn't pick files with different content" do
+        it "subset_to" do
+          subset_end = Time.parse '2011/10/14 23:55 UTC'
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only_different.dat').to_s
+
+          subset_to = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "subset_from" do
+          subset_start = Time.parse '2011/10/9 0:00 UTC'
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only_different.dat').to_s
+          subset_from = make_data_file!(subset_start, @end_time, subset_path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+        it "subset_range" do
+          subset_start = Time.parse '2011/10/9 0:00 UTC'
+          subset_end = Time.parse '2011/10/14 23:55 UTC'
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range_different.dat').to_s
+
+          subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+        end
+      end
+      describe "picks files with smaller content" do
+        it "subset_to" do
+          subset_end = Time.parse '2011/10/14 23:55 UTC'
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
+
+          subset_to = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should eq [subset_to]
+        end
+        it "subset_from" do
+          subset_start = Time.parse '2011/10/9 0:00 UTC'
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only.dat').to_s
+          subset_from = make_data_file!(subset_start, @end_time, subset_path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should eq [subset_from]
+        end
+        it "subset_range" do
+          subset_start = Time.parse '2011/10/9 0:00 UTC'
+          subset_end = Time.parse '2011/10/14 23:55 UTC'
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range.dat').to_s
+
+          subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
+
+          @toa5.safe_overlap(@station_name, @table_name).should eq [subset_range]
+        end
       end
     end
   end

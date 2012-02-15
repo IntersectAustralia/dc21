@@ -109,20 +109,16 @@ class DataFile < ActiveRecord::Base
 
     return [] if self.format != FileTypeDeterminer::TOA5
 
-    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5)
-    toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
-
-    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
-    by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
-
-    toa5_files = DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
+    toa5_files = relevant_overlap_files(station_name, table_name)
 
     start_time_overlaps = toa5_files.where('start_time > ?', start_time)
     start_time_overlaps = start_time_overlaps.where('start_time <= ?', end_time)
-    start_time_overlaps = start_time_overlaps.where('end_time >= ?', end_time)
+    start_time_overlaps = start_time_overlaps.where('end_time > ?', end_time)
 
     total_overlaps = toa5_files.where('start_time < ?', start_time)
     total_overlaps = total_overlaps.where('end_time > ?', end_time)
+    total_overlaps |= toa5_files.where('start_time = ?', start_time).where('end_time > ?', end_time)
+    total_overlaps |= toa5_files.where('start_time < ?', start_time).where('end_time = ?', end_time)
 
     end_time_overlaps = toa5_files.where('start_time < ?', start_time)
     end_time_overlaps = end_time_overlaps.where('end_time < ?', end_time)
@@ -130,16 +126,7 @@ class DataFile < ActiveRecord::Base
 
     exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
 
-    left_overlaps = toa5_files.where('start_time = ?', start_time)
-    left_overlaps = left_overlaps.where('end_time > ?', end_time)
-
-    middle_overlaps = toa5_files.where('start_time > ?', start_time)
-    middle_overlaps = middle_overlaps.where('end_time < ?', end_time)
-
-    right_overlaps = toa5_files.where('start_time < ?', start_time)
-    right_overlaps = right_overlaps.where('end_time = ?', end_time)
-
-    candidate_overlaps = left_overlaps | right_overlaps | middle_overlaps
+    candidate_overlaps = candidate_overlaps(toa5_files)
 
     content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
       start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
@@ -147,16 +134,7 @@ class DataFile < ActiveRecord::Base
 
       candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
         self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
-          loop do
-            line_a = readline_or_nil(candidate_overlap_file)
-            line_b = readline_or_nil(my_overlap_file)
-
-            if line_a == nil and line_b == nil
-              break false
-            elsif line_a == nil or line_b == nil or line_a != line_b
-              break true
-            end
-          end
+          !files_match? candidate_overlap_file, my_overlap_file
         end
       end
     end
@@ -165,7 +143,22 @@ class DataFile < ActiveRecord::Base
   end
 
   def safe_overlap(station_name, table_name)
-    []
+    return [] if self.format != FileTypeDeterminer::TOA5
+
+    toa5_files = relevant_overlap_files(station_name, table_name)
+
+    candidate_overlaps = candidate_overlaps(toa5_files)
+
+    candidate_overlaps.find_all do |candidate_overlap_data_file|
+      start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
+      end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
+
+      candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
+        self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
+          files_match? candidate_overlap_file, my_overlap_file
+        end
+      end
+    end
   end
 
   protected
@@ -198,12 +191,50 @@ class DataFile < ActiveRecord::Base
 
   private
 
+  def candidate_overlaps(files)
+    # filters given files for files which might be "overwritable"
+    left_overlaps = files.where('start_time = ?', start_time)
+    left_overlaps = left_overlaps.where('end_time < ?', end_time)
+
+    middle_overlaps = files.where('start_time > ?', start_time)
+    middle_overlaps = middle_overlaps.where('end_time < ?', end_time)
+
+    right_overlaps = files.where('start_time > ?', start_time)
+    right_overlaps = right_overlaps.where('end_time = ?', end_time)
+
+    left_overlaps | right_overlaps | middle_overlaps
+  end
+
+  def files_match?(file_a, file_b)
+    # It is assumed that any cleanup is handled outside this method
+    loop do
+      line_a = readline_or_nil(file_a)
+      line_b = readline_or_nil(file_b)
+
+      if line_a == nil and line_b == nil
+        break true
+      elsif line_a == nil or line_b == nil or line_a != line_b
+        break false
+      end
+    end
+  end
+
   def readline_or_nil(file)
     begin
       file.readline
     rescue EOFError
       nil
     end
+  end
+
+  def relevant_overlap_files(station_name, table_name)
+    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5)
+    toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
+
+    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
+    by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
+
+    toa5_files = DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
   end
 
 end
