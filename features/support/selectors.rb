@@ -14,6 +14,9 @@ module HtmlSelectorsHelpers
     when "the list of files to download"
       "#files_to_download"
 
+    when "the list of for codes"
+      "#selected_for_codes"
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

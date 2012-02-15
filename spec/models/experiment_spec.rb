@@ -4,7 +4,9 @@ describe Experiment do
   describe "Associations" do
     it { should belong_to(:facility) }
     it { should belong_to(:parent_experiment) }
+    it { should have_many(:experiment_for_codes) }
   end
+
   describe "Validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:start_date) }

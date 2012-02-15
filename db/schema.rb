@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120213043808) do
+ActiveRecord::Schema.define(:version => 20120215040304) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -45,6 +45,16 @@ ActiveRecord::Schema.define(:version => 20120213043808) do
     t.string   "file_processing_status"
     t.string   "file_processing_description"
   end
+
+  create_table "experiment_for_codes", :force => true do |t|
+    t.integer  "experiment_id"
+    t.string   "url"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "experiment_for_codes", ["experiment_id"], :name => "index_experiment_for_codes_on_experiment_id"
 
   create_table "experiments", :force => true do |t|
     t.string   "name"

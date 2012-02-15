@@ -32,6 +32,7 @@ gem "metrical", :group => :test
 gem "simplecov", ">=0.3.8", :require => false, :group => :test
 gem "squeel"
 gem "httparty"
+gem "decent_exposure"
 
 group :development, :test do
   gem "rspec-rails"

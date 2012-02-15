@@ -10,10 +10,10 @@ Feature: Manage experiment metadata
       | ROS Weather Station |
       | Tree Chambers       |
     And I have experiments
-      | name             | description    | start_date | end_date   | subject | facility            | parent           |
-      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                  |
-      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                  |
-      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                  |
+      | name             | description    | start_date | end_date   | subject | facility            | parent          |
+      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 |
+      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                 |
+      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                 |
       | Tree Chamber 01A | Another        | 2012-01-15 |            | Trees   | Tree Chambers       | Tree Chamber 01 |
 
   Scenario: View the list of experiments under a facility
@@ -174,3 +174,27 @@ Feature: Manage experiment metadata
     And I follow "Cancel"
     Then I should be on the view experiment page for 'Weather Station'
 
+  @javascript
+  Scenario: Selecting FOR codes while creating an experiment
+    Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
+    Then the "FOR Code" select should contain
+      | Please select               |
+      | 01 - MATHEMATICAL SCIENCES  |
+      | 02 - PHYSICAL SCIENCES      |
+      | 03 - CHEMICAL SCIENCES      |
+      | 04 - EARTH SCIENCES         |
+      | 05 - ENVIRONMENTAL SCIENCES |
+      | 06 - BIOLOGICAL SCIENCES    |
+  #TODO: second, third level codes
+    When I add for code "02 - PHYSICAL SCIENCES"
+    And I add for code "05 - ENVIRONMENTAL SCIENCES"
+    And I press "Save Experiment"
+    Then I should see for codes
+      | 02 - PHYSICAL SCIENCES      |
+      | 05 - ENVIRONMENTAL SCIENCES |
+
+#Scenario: FOR codes chosen so far aren't lost on validation error
+#Scenario: FOR codes already chosen are retained on edit
+#Scenario: Can delete FOR codes during create
+#Scenario: Can delete FOR codes during edit (already saved code)
+#Scenario: Can delete FOR codes during edit (not yet saved code)

@@ -4,6 +4,8 @@ class ExperimentsController < ApplicationController
   load_and_authorize_resource :facility
   load_and_authorize_resource :through => :facility
 
+  expose(:for_codes) { ForCodesLookup.get_instance.top_level_codes }
+
   def show
   end
 
@@ -14,6 +16,7 @@ class ExperimentsController < ApplicationController
   end
 
   def create
+    @experiment.set_for_codes(params[:for_codes])
     if @experiment.save
       redirect_to facility_experiment_path(@facility, @experiment), notice: SAVE_MESSAGE
     else
