@@ -125,19 +125,19 @@ class DataFile < ActiveRecord::Base
     total_overlaps = total_overlaps.where('end_time > ?', end_time)
 
     end_time_overlaps = toa5_files.where('start_time < ?', start_time)
+    end_time_overlaps = end_time_overlaps.where('end_time < ?', end_time)
     end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
-    end_time_overlaps = end_time_overlaps.where('end_time <= ?', end_time)
 
     exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
 
     left_overlaps = toa5_files.where('start_time = ?', start_time)
-    left_overlaps = left_overlaps.where('end_time < ?', end_time)
+    left_overlaps = left_overlaps.where('end_time > ?', end_time)
 
     middle_overlaps = toa5_files.where('start_time > ?', start_time)
     middle_overlaps = middle_overlaps.where('end_time < ?', end_time)
 
     right_overlaps = toa5_files.where('start_time < ?', start_time)
-    right_overlaps = left_overlaps.where('end_time = ?', end_time)
+    right_overlaps = right_overlaps.where('end_time = ?', end_time)
 
     candidate_overlaps = left_overlaps | right_overlaps | middle_overlaps
 
