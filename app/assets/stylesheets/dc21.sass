@@ -459,3 +459,62 @@ button.ui-datepicker-trigger
   +font("", bold, "")
   +border("", "", "", 0 0 0 1px)
 
+
+// FORMS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+
+#ui-datepicker-div.ui-datepicker
+  +m-p-w-h-p-t-b-l-r-f("", 5px)
+  +boxshadow-2
+  background: #333
+  +border(0px, solid, #D9D9D9)
+  .ui-widget-header
+    +border(0px, solid, #D9D9D9)
+    background: none
+    .ui-datepicker-next, .ui-date-picker-prev
+      &:hover
+        background: none
+        border: none
+    span.ui-icon-circle-triangle-w
+      background: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings-white.png)
+      background-position: -240px -96px
+      &:hover
+        background: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings-white.png)
+        
+    span.ui-icon-circle-triangle-e
+      background: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings-white.png)
+      background-position: -264px -96px
+
+  .ui-state-default
+    background: none
+    color: #EEE
+    +border(0px, solid, #D9D9D9)
+  .ui-widget-content
+    +border(0px, solid, #D9D9D9)
+  button
+    +m-p-w-h-p-t-b-l-r-f(0, 5px 10px)
+    cursor: pointer
+    +inlineblock
+    +font("", "", 0.875em, 20px, $dark3, none, center)
+    +gradient-light-1
+    +border(1px, solid, #dcdcdc, "", 2px)
+    &:hover
+      +font("", bold, "", "", #FFF)
+      color: #FFF
+  .ui-datepicker-calendar
+    th
+      +font("", "", "", "", "", "", right)
+      span
+        +font("", normal, 0.75em, "", "", "", right)
+        font-weight: normal 
+        color: #666
+    td
+      color: #999
+      &:hover
+        a
+          +font("", bold)
+          color: #FFF
+
