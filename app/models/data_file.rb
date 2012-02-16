@@ -204,8 +204,10 @@ class DataFile < ActiveRecord::Base
     table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
     if station_item and table_item
       overlap = safe_overlap(station_item.value, table_item.value)
-      #overlap_descriptions = overlap.map(&:description)
+
+      overlap_descriptions = overlap.map(&:file_processing_description)
       overlap.each {|df| df.destroy}
+      self.file_processing_description = overlap_descriptions.join ', ' unless file_processing_description
     end
   end
 
