@@ -134,7 +134,7 @@ class DataFile < ActiveRecord::Base
 
       candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
         self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
-          !files_match? candidate_overlap_file, my_overlap_file
+          !FileUtils.identical? candidate_overlap_file, my_overlap_file
         end
       end
     end
@@ -155,7 +155,7 @@ class DataFile < ActiveRecord::Base
 
       candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
         self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
-          files_match? candidate_overlap_file, my_overlap_file
+          FileUtils.identical? candidate_overlap_file, my_overlap_file
         end
       end
     end
@@ -203,28 +203,6 @@ class DataFile < ActiveRecord::Base
     right_overlaps = right_overlaps.where('end_time = ?', end_time)
 
     left_overlaps | right_overlaps | middle_overlaps
-  end
-
-  def files_match?(file_a, file_b)
-    # It is assumed that any cleanup is handled outside this method
-    loop do
-      line_a = readline_or_nil(file_a)
-      line_b = readline_or_nil(file_b)
-
-      if line_a == nil and line_b == nil
-        break true
-      elsif line_a == nil or line_b == nil or line_a != line_b
-        break false
-      end
-    end
-  end
-
-  def readline_or_nil(file)
-    begin
-      file.readline
-    rescue EOFError
-      nil
-    end
   end
 
   def relevant_overlap_files(station_name, table_name)
