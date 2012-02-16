@@ -30,4 +30,23 @@ describe Experiment do
       exp.parent_name.should eq("Experiment - My Parent")
     end
   end
+
+  describe "Setting FOR codes" do
+    it "should remove any existing codes" do
+      experiment = Factory(:experiment)
+      experiment.experiment_for_codes.create!(:name => "A", :url => "myurl")
+      experiment.set_for_codes({"1" => {"name" => "B", "url" => "burl"}, "2" => {"name" => "C", "url" => "curl"}})
+      experiment.experiment_for_codes.collect{ |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+      #check its still ok after reload
+      experiment.save
+      experiment.reload
+      experiment.experiment_for_codes.collect{ |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+    end
+
+    it "should ignore duplicates" do
+      experiment = Factory(:experiment)
+      experiment.set_for_codes({"1" => {"name" => "B", "url" => "burl"}, "2" => {"name" => "C", "url" => "curl"}, "3" => {"name" => "C", "url" => "curl"}})
+      experiment.experiment_for_codes.collect{ |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+    end
+  end
 end

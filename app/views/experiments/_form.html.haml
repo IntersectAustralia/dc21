@@ -26,11 +26,18 @@
     = f.label :subject, "Subject:"
     = required
     = f.text_field :subject
+  .rowform
     = label_tag :for_code_select_1, "FOR Code"
     = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
     = link_to "Add", "#", :id => :add_for_code_link
     #selected_for_codes
-      %ul#selected_for_codes_list
+      %ul#for_codes_list
+        - @experiment.experiment_for_codes.each_with_index do |code, index|
+          %li
+            = code.name
+            = hidden_field_tag "for_codes[#{index}][url]", code.url
+            = hidden_field_tag "for_codes[#{index}][name]", code.name
+            = link_to "Delete", "#", :class => "delete_for_code"
   .actions
     .cancelbutton
       %span
@@ -47,8 +54,14 @@
       new_element += for_code_text;
       new_element += "<input type='hidden' name='for_codes[" + new_id + "][url]', value='" + for_code + "'/>";
       new_element += "<input type='hidden' name='for_codes[" + new_id + "][name]', value='" + for_code_text + "'/>";
+      new_element += "<a href='#' class='delete_for_code'>Delete</a>";
       new_element += "</li>";
-      $('#selected_for_codes_list').append(new_element);
+      $('#for_codes_list').append(new_element);
+      return false;
+    });
+
+    $('.delete_for_code').live('click', function(){
+      $(this).parent().remove();
       return false;
     });
   });

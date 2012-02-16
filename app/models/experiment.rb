@@ -3,7 +3,7 @@ class Experiment < ActiveRecord::Base
   belongs_to :facility
   belongs_to :parent_experiment, :class_name => "Experiment"
   has_many :experiment_for_codes, :order => "name ASC"
-  
+
   validates_presence_of :name
   validates_presence_of :start_date
   validates_presence_of :subject
@@ -22,10 +22,15 @@ class Experiment < ActiveRecord::Base
   end
 
   def set_for_codes(codes)
+    experiment_for_codes.delete_all
     return if codes.nil? || codes.empty?
+    urls = []
     codes.each_value do |code_attrs|
-      experiment_for_codes.build(code_attrs)
+      url = code_attrs["url"]
+      unless urls.include?(url)
+        experiment_for_codes.build(code_attrs)
+        urls << url
+      end
     end
-
   end
 end

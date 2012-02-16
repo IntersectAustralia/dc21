@@ -9,7 +9,7 @@
   = render_field "End date", @experiment.end_date.to_s(:date_only) if @experiment.end_date
   = render_field "Subject", @experiment.subject
   = render_field_with_block "FOR Codes" do
-    %ul#for_codes
+    %ul#for_codes_list
       - @experiment.experiment_for_codes.each do |code|
         %li= code.name
   .cancelbutton
