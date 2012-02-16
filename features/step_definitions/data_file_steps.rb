@@ -70,6 +70,17 @@ Given /^file "([^"]*)" has metadata item "([^"]*)" with value "([^"]*)"$/ do |na
   file.metadata_items.create!(:key => key, :value => value)
 end
 
+Given /^file "(.*)" has the following metadata$/ do |filename, table|
+  file = DataFile.find_by_filename!(filename)
+
+  table.hashes.each do |hsh|
+    key = hsh['key']
+    value = hsh['value']
+
+    file.metadata_items.create!(:key => key, :value => value)
+  end
+end
+
 Then /^I should see facility checkboxes$/ do |table|
   labels = find(".facility").all("label").map { |label| label.text.strip }
   expected_labels = table.raw.collect { |row| row[0] }

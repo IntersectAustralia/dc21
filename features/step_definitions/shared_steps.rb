@@ -1,19 +1,12 @@
 Then /^I should see "([^"]*)" table with$/ do |table_id, expected_table|
   actual = find("table##{table_id}").all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
 
-  begin
-    expected_table.diff!(actual)
-  rescue Cucumber::Ast::Table::Different
-    puts "Tables were as follows:"
-    puts expected_table
-    raise
-  end
-
+  chatty_diff_table!(expected, actual)
 end
 
 Then /^I should see only these rows in "([^"]*)" table$/ do |table_id, expected_table|
   actual = find("table##{table_id}").all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
-  expected_table.diff!(actual, {:missing_col => false})
+  chatty_diff_table!(expected_table, actual, :missing_col => false)
 end
 
 Then /^the "([^"]*)" table should have (\d+) rows$/ do |table_id, expected_rows|
@@ -155,4 +148,14 @@ end
 Then /^nothing should be selected in the "([^"]*)" select$/ do |select_label|
   field = find_field(select_label)
   option = field.should_not have_css("option[selected]")
+end
+
+def chatty_diff_table!(expected_table, actual, opts={})
+  begin
+    expected_table.diff!(actual, opts)
+  rescue Cucumber::Ast::Table::Different
+    puts "Tables were as follows:"
+    puts expected_table
+    raise
+  end
 end

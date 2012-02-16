@@ -554,32 +554,32 @@ describe DataFile do
         it "before" do
           make_data_file!(@start_time - 2.days, @end_time - 1.day, @path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "after" do
           make_data_file!(@end_time + 1.day, @end_time + 2.days, @path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "total" do
           make_data_file!(@start_time - 1.day, @end_time + 1.day, @path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "start_time" do
           make_data_file!(@start_time + 1.day, @end_time + 1.day, @path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "end_time" do
           make_data_file!(@start_time - 1.day, @end_time - 1.day, @path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "exact time match" do
           same_toa5 = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :path => @path)
 
-          same_toa5.safe_overlap(@station_name, @table_name).should be_empty
+          same_toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
       end
       describe "doesn't pick files with different content" do
@@ -589,14 +589,14 @@ describe DataFile do
 
           subset_to = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "subset_from" do
           subset_start = Time.parse '2011/10/9 0:00 UTC'
           subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only_different.dat').to_s
           subset_from = make_data_file!(subset_start, @end_time, subset_path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
         it "subset_range" do
           subset_start = Time.parse '2011/10/9 0:00 UTC'
@@ -605,7 +605,7 @@ describe DataFile do
 
           subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should be_empty
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
       end
       describe "picks files with smaller content" do
@@ -615,14 +615,14 @@ describe DataFile do
 
           subset_to = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should eq [subset_to]
+          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_to]
         end
         it "subset_from" do
           subset_start = Time.parse '2011/10/9 0:00 UTC'
           subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only.dat').to_s
           subset_from = make_data_file!(subset_start, @end_time, subset_path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should eq [subset_from]
+          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_from]
         end
         it "subset_range" do
           subset_start = Time.parse '2011/10/9 0:00 UTC'
@@ -631,7 +631,7 @@ describe DataFile do
 
           subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
 
-          @toa5.safe_overlap(@station_name, @table_name).should eq [subset_range]
+          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_range]
         end
       end
     end
