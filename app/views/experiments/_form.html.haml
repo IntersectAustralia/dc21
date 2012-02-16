@@ -29,7 +29,12 @@
   .rowform
     = label_tag :for_code_select_1, "FOR Code"
     = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
+    #second_level
+      = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
+    #third_level
+      = select_tag :for_code_level3, options_for_select([]), :prompt => "Please select", :id => :for_code_select_3
     = link_to "Add", "#", :id => :add_for_code_link
+
     #selected_for_codes
       %ul#for_codes_list
         - @experiment.experiment_for_codes.each_with_index do |code, index|
@@ -46,9 +51,74 @@
 
 :javascript
   $(function(){
+    $('#second_level').hide();
+    $('#third_level').hide();
+
+    $('select#for_code_select_1').change(function(e){
+      var new_value = $(this).val();
+      if (new_value != "")
+      {
+        $.getJSON('/for_codes/second_level',{top_level : $(this).val()},function(result){
+          $('select#for_code_select_2').html("<option value=''>Please select</option>");
+          $.each(result,function(item, value){
+            $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_2");
+          });
+        });
+        $('#second_level').show();
+      }
+      else
+      {
+        $('select#for_code_select_2').html("<option value=''>Please select</option>");
+        $('#second_level').hide();
+      }
+      $('select#for_code_select_3').html("<option value=''>Please select</option>");
+      $('#third_level').hide();
+    });
+
+    $('select#for_code_select_2').change(function(e){
+      var new_value = $(this).val();
+      if (new_value != "")
+      {
+        $.getJSON('/for_codes/third_level',{second_level : $(this).val()},function(result){
+          $('select#for_code_select_3').html("<option value=''>Please select</option>");
+          $.each(result,function(item, value){
+            $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_3");
+          });
+        });
+        $('#third_level').show();
+      }
+      else
+      {
+        $('select#for_code_select_3').html("<option value=''>Please select</option>");
+        $('#third_level').hide();
+      }
+    });
+
     $('#add_for_code_link').live('click', function(){
-      var for_code = $('#for_code_select_1').val();
-      var for_code_text = $('#for_code_select_1 option:selected').text();
+      var for_code_1 = $('#for_code_select_1').val();
+      var for_code_2 = $('#for_code_select_2').val();
+      var for_code_3 = $('#for_code_select_3').val();
+      var for_code_1_text = $('#for_code_select_1 option:selected').text();
+      var for_code_2_text = $('#for_code_select_2 option:selected').text();
+      var for_code_3_text = $('#for_code_select_3 option:selected').text();
+
+      var for_code;
+      var for_code_text;
+      if (for_code_3 != "")
+      {
+        for_code = for_code_3;
+        for_code_text = for_code_3_text;
+      }
+      else if (for_code_2 != "")
+      {
+        for_code = for_code_2;
+        for_code_text = for_code_2_text;
+      }
+      else
+      {
+        for_code = for_code_1;
+        for_code_text = for_code_1_text;
+      }
       var new_element = "<li>";
       var new_id  = new Date().getTime();
       new_element += for_code_text;
@@ -57,6 +127,13 @@
       new_element += "<a href='#' class='delete_for_code'>Delete</a>";
       new_element += "</li>";
       $('#for_codes_list').append(new_element);
+
+      $('select#for_code_select_1').val("");
+      $('select#for_code_select_2').html("<option value=''>Please select</option>");
+      $('#second_level').hide();
+      $('select#for_code_select_3').html("<option value=''>Please select</option>");
+      $('#third_level').hide();
+
       return false;
     });
 

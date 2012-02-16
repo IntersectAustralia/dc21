@@ -13,21 +13,20 @@ class MockForCodesLookup
   end
 
   def second_level_codes(top_level_code)
-    number = top_level_code[top_level_code.rindex("/")..-1]
-    result = []
-
-    (1..9).each do |i|
-      result << [top_level_code + "0" + i, "#{number}0#{i} - ITEM #{i}"]
-    end
-    result
+    mock_codes(top_level_code)
   end
 
   def third_level_codes(second_level_code)
-    number = top_level_code[top_level_code.rindex("/")..-1]
+    mock_codes(second_level_code)
+  end
+
+  private
+  def mock_codes(code)
+    number = code[(code.rindex("/") + 1)..-1]
     result = []
 
     (1..9).each do |i|
-      result << [top_level_code + "0" + i, "#{number}0#{i} - ITEM #{i}"]
+      result << ["#{number}0#{i} - ITEM #{i}", "#{code}0#{i}"]
     end
     result
   end

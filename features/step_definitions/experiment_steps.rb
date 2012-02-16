@@ -37,6 +37,21 @@ When /^I add for code "([^"]*)"$/ do |code|
   within("#selected_for_codes") { page.should have_content(code) }
 end
 
+When /^I add for code "([^"]*)", "([^"]*)"$/ do |code1, code2|
+  select code1, :from => "FOR Code"
+  select code2, :from => "for_code_select_2"
+  click_link "Add"
+  within("#selected_for_codes") { page.should have_content(code2) }
+end
+
+When /^I add for code "([^"]*)", "([^"]*)", "([^"]*)"$/ do |code1, code2, code3|
+  select code1, :from => "FOR Code"
+  select code2, :from => "for_code_select_2"
+  select code3, :from => "for_code_select_3"
+  click_link "Add"
+  within("#selected_for_codes") { page.should have_content(code3) }
+end
+
 Then /^I should see for codes$/ do |table|
   expected_codes = table.raw.collect { |row| row[0] }
   actual_codes = all("ul#for_codes_list li").collect { |item| item.text.gsub("Delete", "").strip }
