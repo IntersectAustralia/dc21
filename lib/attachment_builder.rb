@@ -9,9 +9,7 @@ class AttachmentBuilder
   end
 
   def verify_from_filenames
-    keys_to_filenames.reduce({}) do |result, key_and_filename|
-      key, filename = key_and_filename
-
+    keys_to_filenames.reduce({}) do |result, (key, filename)|
       #{"collections.json":{"status":"abort","message":"This file already exists."}}
       if DataFile.where(:filename => filename).empty?
         result.merge filename => {:status => "proceed", :message => ""}
@@ -22,8 +20,7 @@ class AttachmentBuilder
   end
 
   def build
-    keys_to_filenames.reduce({}) do |result, key_and_filename|
-      key, filename = key_and_filename
+    keys_to_filenames.reduce({}) do |result, (key, filename)|
       file = @post_params[key.to_sym]
 
       path = store_file(file)
@@ -50,21 +47,7 @@ class AttachmentBuilder
     _, format = @file_type_determiner.identify_file(data_file)
     data_file.format = format
 
-    station_name = nil
-    table_name = nil
-    mismatched_overlap = data_file.mismatched_overlap(station_name, table_name)
-    safe_overlap = data_file.safe_overlap(station_name, table_name)
-
-    if mismatched_overlap.any?
-      filenames = data_file.mismatched_overlap.select(:filename).map(&:filename).join ','
-      message = "overlaps with #{filenames}"
-      {:status => "failure", :message => message}
-    elsif safe_overlap.any?
-      data_file.save!
-      safe_overlap.destroy
-      filenames = data_file.safe_overlap.select(:filename).map(&:filename).join ','
-      {:status => "success", :message => "overwrote #{filenames}"}
-    elsif data_file.save
+    if data_file.save
       @metadata_extractor.extract_metadata(data_file, format) if format
       {:status => "success", :message => ""}
     else
