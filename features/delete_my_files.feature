@@ -39,10 +39,8 @@ Feature: Delete files containing erroneous data
   #The Following fields are generated from the file itself.
   #NB: the hour and day have been left off to account for running the tests in different timezones.
   #NBB: Sydney has two timezones (AEST/AEDST)
-    And The popup text is contains "2011-10-0"
-    And The popup text is contains ":40:00"
-    And The popup text is contains "2011-11-0"
-    And The popup text is contains ":55:00"
+    And The popup text is contains "2011-10-06  0:40:00"
+    And The popup text is contains "2011-11-03 11:55:00"
     And The popup text is contains "ROS_WS"
 
     Then I dismiss popup
