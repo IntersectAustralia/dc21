@@ -37,7 +37,7 @@
             = link_to "Deactivate", deactivate_user_path(@user), :method => :put, :class => "redbutton"
       .cancelbutton
         %span
-        = link_to 'Back', users_path, :class => "whitebutton"
+        = link_to 'Back', users_path, :class => "cancelbutton"
 
     - if @user.deactivated?
       .floatright

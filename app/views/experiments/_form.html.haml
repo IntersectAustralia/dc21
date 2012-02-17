@@ -31,10 +31,13 @@
     %span.input
       = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
     #second_level
-      = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
+      %span.input
+        = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
     #third_level
-      = select_tag :for_code_level3, options_for_select([]), :prompt => "Please select", :id => :for_code_select_3
-    = link_to "Add", "#", :id => :add_for_code_link
+      %span.input
+        = select_tag :for_code_level3, options_for_select([]), :prompt => "Please select", :id => :for_code_select_3
+    .for.add
+      = link_to "Add", "#", :id => :add_for_code_link, :class => "whitebutton"
 
     #selected_for_codes
       %ul#for_codes_list
