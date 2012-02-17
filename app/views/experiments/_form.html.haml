@@ -27,7 +27,12 @@
     = required
     = f.text_field :subject
   .rowform
-    = label_tag :for_code_select_1, "FOR Code:"
+    = f.label :access_rights
+    = required
+    %span.input
+      = f.select :access_rights, options_for_select(access_rights, @experiment.access_rights), {:include_blank => "Please select"}
+  .rowform
+    = label_tag :for_code_select_1, "FOR codes:"
     %span.input
       = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
     #second_level
@@ -102,41 +107,40 @@
       var for_code_1 = $('#for_code_select_1').val();
       var for_code_2 = $('#for_code_select_2').val();
       var for_code_3 = $('#for_code_select_3').val();
-      var for_code_1_text = $('#for_code_select_1 option:selected').text();
-      var for_code_2_text = $('#for_code_select_2 option:selected').text();
-      var for_code_3_text = $('#for_code_select_3 option:selected').text();
-
-      var for_code;
-      var for_code_text;
+      var for_code = "";
+      var for_code_text = "";
       if (for_code_3 != "")
       {
         for_code = for_code_3;
-        for_code_text = for_code_3_text;
+        for_code_text = $('#for_code_select_3 option:selected').text();
       }
       else if (for_code_2 != "")
       {
         for_code = for_code_2;
-        for_code_text = for_code_2_text;
+        for_code_text = $('#for_code_select_2 option:selected').text();
       }
-      else
+      else if (for_code_1 != "")
       {
         for_code = for_code_1;
-        for_code_text = for_code_1_text;
+        for_code_text = $('#for_code_select_1 option:selected').text();
       }
-      var new_element = "<li>";
-      var new_id  = new Date().getTime();
-      new_element += for_code_text;
-      new_element += "<input type='hidden' name='for_codes[" + new_id + "][url]', value='" + for_code + "'/>";
-      new_element += "<input type='hidden' name='for_codes[" + new_id + "][name]', value='" + for_code_text + "'/>";
-      new_element += "<a href='#' class='delete_for_code'>Delete</a>";
-      new_element += "</li>";
-      $('#for_codes_list').append(new_element);
+      if (for_code != "")
+      {
+        var new_element = "<li>";
+        var new_id  = new Date().getTime();
+        new_element += for_code_text;
+        new_element += "<input type='hidden' name='for_codes[" + new_id + "][url]', value='" + for_code + "'/>";
+        new_element += "<input type='hidden' name='for_codes[" + new_id + "][name]', value='" + for_code_text + "'/>";
+        new_element += "<a href='#' class='delete_for_code'>Delete</a>";
+        new_element += "</li>";
+        $('#for_codes_list').append(new_element);
 
-      $('select#for_code_select_1').val("");
-      $('select#for_code_select_2').html("<option value=''>Please select</option>");
-      $('#second_level').hide();
-      $('select#for_code_select_3').html("<option value=''>Please select</option>");
-      $('#third_level').hide();
+        $('select#for_code_select_1').val("");
+        $('select#for_code_select_2').html("<option value=''>Please select</option>");
+        $('#second_level').hide();
+        $('select#for_code_select_3').html("<option value=''>Please select</option>");
+        $('#third_level').hide();
+      }
 
       return false;
     });

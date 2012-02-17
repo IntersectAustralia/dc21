@@ -8,6 +8,7 @@ class Experiment < ActiveRecord::Base
   validates_presence_of :start_date
   validates_presence_of :subject
   validates_presence_of :facility_id
+  validates_presence_of :access_rights
 
   validate :validate_start_before_end
 
@@ -41,5 +42,9 @@ class Experiment < ActiveRecord::Base
         urls << url
       end
     end
+  end
+
+  def access_rights_description
+    AccessRightsLookup.new.get_name(self.access_rights)
   end
 end

@@ -5,6 +5,7 @@ class ExperimentsController < ApplicationController
   load_and_authorize_resource :through => :facility
 
   expose(:for_codes) { ForCodesLookup.get_instance.top_level_codes }
+  expose(:access_rights) { AccessRightsLookup.new.access_rights }
 
   def show
   end

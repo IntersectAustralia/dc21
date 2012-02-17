@@ -32,20 +32,20 @@ Given /^the experiment "([^"]*)" has parent "([^"]*)"$/ do |experiment_name, par
 end
 
 When /^I add for code "([^"]*)"$/ do |code|
-  select code, :from => "FOR Code"
+  select code, :from => "FOR codes"
   click_link "Add"
   within("#selected_for_codes") { page.should have_content(code) }
 end
 
 When /^I add for code "([^"]*)", "([^"]*)"$/ do |code1, code2|
-  select code1, :from => "FOR Code"
+  select code1, :from => "FOR codes"
   select code2, :from => "for_code_select_2"
   click_link "Add"
   within("#selected_for_codes") { page.should have_content(code2) }
 end
 
 When /^I add for code "([^"]*)", "([^"]*)", "([^"]*)"$/ do |code1, code2, code3|
-  select code1, :from => "FOR Code"
+  select code1, :from => "FOR codes"
   select code2, :from => "for_code_select_2"
   select code3, :from => "for_code_select_3"
   click_link "Add"
@@ -54,8 +54,12 @@ end
 
 Then /^I should see for codes$/ do |table|
   expected_codes = table.raw.collect { |row| row[0] }
-  actual_codes = all("ul#for_codes_list li").collect { |item| item.text.gsub("Delete", "").strip }
+  actual_codes = get_for_codes_on_page
   actual_codes.should eq(expected_codes)
+end
+
+Then /^I should see no for codes$/ do
+  get_for_codes_on_page.should be_empty
 end
 
 Given /^I have filled in the basic fields on the new experiment page under facility "([^"]*)"$/ do |facility|
@@ -64,6 +68,7 @@ Given /^I have filled in the basic fields on the new experiment page under facil
   fill_in "Name", :with => "My experiment"
   fill_in "Start date", :with => "2012-01-01"
   fill_in "Subject", :with => "My subject"
+  select "CC BY: Attribution", :from => "Access rights"
 end
 
 Given /^experiment "([^"]*)" has for code "([^"]*)"$/ do |exp, code|
@@ -87,3 +92,6 @@ def click_view_experiment_link(name)
   click_link "view_#{experiment.id}"
 end
 
+def get_for_codes_on_page
+  all("ul#for_codes_list li").collect { |item| item.text.gsub("Delete", "").strip }
+end
