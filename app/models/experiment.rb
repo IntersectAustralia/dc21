@@ -9,6 +9,15 @@ class Experiment < ActiveRecord::Base
   validates_presence_of :subject
   validates_presence_of :facility_id
 
+  validate :validate_start_before_end
+
+  def validate_start_before_end
+    if end_date && start_date
+      errors.add(:end_date, "cannot be before start date") if end_date < start_date
+    end
+  end
+
+
   def name_with_prefix
     "Experiment - #{name}"
   end

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :facility do
-    name "a-name"
+    sequence(:name) { |n| "name-#{n}" }
     sequence(:code) { |n| "code-#{n}" }
   end
 end

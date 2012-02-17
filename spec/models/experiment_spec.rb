@@ -12,6 +12,21 @@ describe Experiment do
     it { should validate_presence_of(:start_date) }
     it { should validate_presence_of(:subject) }
     it { should validate_presence_of(:facility_id) }
+
+    describe "should validate that end date is on or after start date (unless end date blank)" do
+      it "should allow end date on or after start date, or nil end date" do
+        Factory.build(:experiment, :start_date => "2011-12-01", :end_date => "2011-12-01").should be_valid
+        Factory.build(:experiment, :start_date => "2011-12-01", :end_date => "2011-12-02").should be_valid
+        Factory.build(:experiment, :start_date => "2011-12-01", :end_date => nil).should be_valid
+      end
+
+      it "should reject end dates before start date" do
+        exp = Factory.build(:experiment, :start_date => "2011-12-01", :end_date => "2011-11-30")
+        exp.should_not be_valid
+        exp.errors.size.should eq(1)
+        exp.errors[:end_date].should eq(["cannot be before start date"])
+      end
+    end
   end
 
   describe "Name with prefix method" do
@@ -36,17 +51,17 @@ describe Experiment do
       experiment = Factory(:experiment)
       experiment.experiment_for_codes.create!(:name => "A", :url => "myurl")
       experiment.set_for_codes({"1" => {"name" => "B", "url" => "burl"}, "2" => {"name" => "C", "url" => "curl"}})
-      experiment.experiment_for_codes.collect{ |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+      experiment.experiment_for_codes.collect { |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
       #check its still ok after reload
       experiment.save
       experiment.reload
-      experiment.experiment_for_codes.collect{ |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+      experiment.experiment_for_codes.collect { |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
     end
 
     it "should ignore duplicates" do
       experiment = Factory(:experiment)
       experiment.set_for_codes({"1" => {"name" => "B", "url" => "burl"}, "2" => {"name" => "C", "url" => "curl"}, "3" => {"name" => "C", "url" => "curl"}})
-      experiment.experiment_for_codes.collect{ |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+      experiment.experiment_for_codes.collect { |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
     end
   end
 end
