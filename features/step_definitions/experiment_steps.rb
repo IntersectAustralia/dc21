@@ -1,10 +1,10 @@
 Given /^I have experiments$/ do |table|
   table.hashes.each do |exp|
     facility_name = exp.delete("facility")
-    facility = Facility.find_by_name(facility_name)
+    facility = Facility.find_by_name!(facility_name)
 
     parent = exp.delete("parent")
-    parent_exp = parent.blank? ? nil : Experiment.find_by_name(parent)
+    parent_exp = parent.blank? ? nil : Experiment.find_by_name!(parent)
     Factory(:experiment, exp.merge(:facility => facility, :parent_experiment => parent_exp))
   end
 end
@@ -18,15 +18,15 @@ Given /^I have no experiments$/ do
 end
 
 Given /^I edit experiment "([^"]*)"$/ do |name|
-  experiment = Experiment.find_by_name(name)
+  experiment = Experiment.find_by_name!(name)
   visit facility_path(experiment.facility)
   click_view_experiment_link(name)
   click_link "Edit Experiment"
 end
 
 Given /^the experiment "([^"]*)" has parent "([^"]*)"$/ do |experiment_name, parent_name|
-  experiment = Experiment.find_by_name(experiment_name)
-  parent = Experiment.find_by_name(parent_name)
+  experiment = Experiment.find_by_name!(experiment_name)
+  parent = Experiment.find_by_name!(parent_name)
   experiment.parent_experiment = parent
   experiment.save!
 end
@@ -37,9 +37,24 @@ When /^I add for code "([^"]*)"$/ do |code|
   within("#selected_for_codes") { page.should have_content(code) }
 end
 
+When /^I add for code "([^"]*)", "([^"]*)"$/ do |code1, code2|
+  select code1, :from => "FOR Code"
+  select code2, :from => "for_code_select_2"
+  click_link "Add"
+  within("#selected_for_codes") { page.should have_content(code2) }
+end
+
+When /^I add for code "([^"]*)", "([^"]*)", "([^"]*)"$/ do |code1, code2, code3|
+  select code1, :from => "FOR Code"
+  select code2, :from => "for_code_select_2"
+  select code3, :from => "for_code_select_3"
+  click_link "Add"
+  within("#selected_for_codes") { page.should have_content(code3) }
+end
+
 Then /^I should see for codes$/ do |table|
   expected_codes = table.raw.collect { |row| row[0] }
-  actual_codes = all("ul#for_codes li").collect(&:text)
+  actual_codes = all("ul#for_codes_list li").collect { |item| item.text.gsub("Delete", "").strip }
   actual_codes.should eq(expected_codes)
 end
 
@@ -51,8 +66,24 @@ Given /^I have filled in the basic fields on the new experiment page under facil
   fill_in "Subject", :with => "My subject"
 end
 
+Given /^experiment "([^"]*)" has for code "([^"]*)"$/ do |exp, code|
+  experiment = Experiment.find_by_name!(exp)
+  experiment.experiment_for_codes.create!(:name => code, :url => "blah")
+end
+
+When /^I delete for code "([^"]*)"$/ do |code|
+  ok = false
+  all("ul#for_codes_list li").each do |item|
+    if item.text =~ /#{code}/
+      item.find("a").click
+      ok = true
+    end
+  end
+  raise "Didn't find FOR code #{code}" unless ok
+end
+
 def click_view_experiment_link(name)
-  experiment = Experiment.find_by_name(name)
+  experiment = Experiment.find_by_name!(name)
   click_link "view_#{experiment.id}"
 end
 

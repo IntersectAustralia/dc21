@@ -53,6 +53,13 @@ Dc21app::Application.routes.draw do
     end
   end
 
+  resources :for_codes, :only => [] do
+    collection do
+      get :second_level
+      get :third_level
+    end
+  end
+
   resources :facilities, :except => [:destroy] do
     resources :experiments, :except => [:destroy]
   end

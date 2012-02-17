@@ -6,7 +6,7 @@ class ForCodesLookup
   format :json
 
   def self.get_instance
-    # if we're in dev or test, use the mock lookup, so we don't depend on external services
+    #if we 're in dev or test, use the mock lookup, so we don't depend on external services
     env = ENV["RAILS_ENV"] || "development"
     if env == "development" || env == "test"
       MockForCodesLookup.new
@@ -35,7 +35,7 @@ class ForCodesLookup
   end
 
   def filter_codes(response)
-    codes = response["results"].collect { |result| [result["rdf:about"], result["skos:prefLabel"]] }
+    codes = response["results"].collect { |result| [result["skos:prefLabel"], result["rdf:about"]] }
     codes.sort { |x, y| x[1] <=> y[1] }
   end
 end

@@ -25,6 +25,7 @@ class ExperimentsController < ApplicationController
   end
 
   def update
+    @experiment.set_for_codes(params[:for_codes])
     if @experiment.update_attributes(params[:experiment])
       redirect_to facility_experiment_path(@facility, @experiment), notice: SAVE_MESSAGE
     else
