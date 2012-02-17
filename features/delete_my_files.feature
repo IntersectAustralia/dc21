@@ -4,41 +4,42 @@ Feature: Delete files containing erroneous data
   I want to remove my files that are invalid or that I have uploaded erroneously
 
   Background:
-    And I am logged in as "georgina@intersect.org.au"
+    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "other_user@intersect.org.au" with role "Researcher"
+    Given I have a user "administrator@intersect.org.au" with role "Administrator"
+    
+    And I am logged in as "researcher@intersect.org.au"
 
   @javascript
   Scenario: Cancelling the alert does not delete the file
-    And I upload "toa5.dat" through the applet as "georgina@intersect.org.au"
+    And I upload "toa5.dat" through the applet as "researcher@intersect.org.au"
     Given I am on the list data files page
     And I should see only these rows in "exploredata" table
       | Filename | Added by                  |
-      | toa5.dat | georgina@intersect.org.au |
+      | toa5.dat | researcher@intersect.org.au |
     And I follow the view link for data file "toa5.dat"
     And I follow "Delete This File"
     And I dismiss popup
     And I am on the list data files page
     Then I should see only these rows in "exploredata" table
       | Filename | Added by                  |
-      | toa5.dat | georgina@intersect.org.au |
+      | toa5.dat | researcher@intersect.org.au |
 
 
   @javascript
   Scenario: I see an informative alert for files with metadata
-    And I upload "toa5.dat" through the applet as "georgina@intersect.org.au"
+    And I upload "toa5.dat" through the applet as "researcher@intersect.org.au"
     And The processing metadata is set for files as follows:
       | filename | status | description   |
       | toa5.dat | RAW    | something set |
     And I should see "exploredata" table with
       | Filename | Added by                  | Start time          | End time            | Processing Status |
-      | toa5.dat | georgina@intersect.org.au | 2011-10-06 0:40:00 | 2011-11-03 11:55:00 | RAW               |
+      | toa5.dat | researcher@intersect.org.au | 2011-10-06 0:40:00 | 2011-11-03 11:55:00 | RAW               |
     Given I am on the list data files page
     And I follow the view link for data file "toa5.dat"
     And I follow "Delete This File"
     Then The popup text is contains "toa5.dat"
     And The popup text is contains "RAW"
-  #The Following fields are generated from the file itself.
-  #NB: the hour and day have been left off to account for running the tests in different timezones.
-  #NBB: Sydney has two timezones (AEST/AEDST)
     And The popup text is contains "2011-10-06  0:40:00"
     And The popup text is contains "2011-11-03 11:55:00"
     And The popup text is contains "ROS_WS"
@@ -47,18 +48,18 @@ Feature: Delete files containing erroneous data
 
 
   Scenario: Deleting a file removes it from the list of files in Explore Data
-    And I upload "toa5.dat" through the applet as "georgina@intersect.org.au"
-    And I upload "weather_station_15_min.dat" through the applet as "georgina@intersect.org.au"
+    And I upload "toa5.dat" through the applet as "researcher@intersect.org.au"
+    And I upload "weather_station_15_min.dat" through the applet as "researcher@intersect.org.au"
     Given I am on the list data files page
     And I should see only these rows in "exploredata" table
       | Filename                   | Added by                  |
-      | weather_station_15_min.dat | georgina@intersect.org.au |
-      | toa5.dat                   | georgina@intersect.org.au |
-    When I delete the file "weather_station_15_min.dat" added by "georgina@intersect.org.au"
+      | weather_station_15_min.dat | researcher@intersect.org.au |
+      | toa5.dat                   | researcher@intersect.org.au |
+    When I delete the file "weather_station_15_min.dat" added by "researcher@intersect.org.au"
     And I am on the list data files page
     Then I should see only these rows in "exploredata" table
       | Filename | Added by                  |
-      | toa5.dat | georgina@intersect.org.au |
+      | toa5.dat | researcher@intersect.org.au |
 
 
   @wip
@@ -68,15 +69,15 @@ Feature: Delete files containing erroneous data
   Scenario: Deleting a file causes it to no longer appear in search results
     Given I have data files
       | filename      | created_at       | uploaded_by               | start_time           | end_time               |
-      | datafile7.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
-      | datafile6.dat | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC | 11/6/2010 18:05:23 UTC |
+      | datafile7.dat | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile6.dat | 30/12/2011 10:15 | other_user@intersect.org.au     | 1/6/2010 6:42:01 UTC | 11/6/2010 18:05:23 UTC |
     And I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     And I follow "Filename"
     And I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
       | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
-    When I delete the file "datafile7.dat" added by "georgina@intersect.org.au"
+    When I delete the file "datafile7.dat" added by "researcher@intersect.org.au"
     And I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     And I follow "Filename"
     Then I should see "exploredata" table with
@@ -86,24 +87,21 @@ Feature: Delete files containing erroneous data
   Scenario: Files can be deleted from the details page
     Given I have data files
       | filename      | created_at       | uploaded_by               | start_time           | end_time               |
-      | datafile.dat  | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
-      | datafile1.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile.dat  | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile1.dat | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
     And I am on the data file details page for datafile.dat
     And I follow "Delete"
     Then I should be on the list data files page
     And I should see "The file 'datafile.dat' was successfully removed"
     And I should see only these rows in "exploredata" table
       | Filename      | Added by                  |
-      | datafile1.dat | georgina@intersect.org.au |
+      | datafile1.dat | researcher@intersect.org.au |
 
 
   Scenario: Normal cannot delete others' files because they don't have a link
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
-    And I logout
-    And I am logged in as "researcher@intersect.org.au"
     And I have data files
       | filename     | created_at       | uploaded_by           | start_time           | end_time               |
-      | datafile.dat | 30/11/2011 10:15 | kali@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile.dat | 30/11/2011 10:15 | other_user@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
     And I am on the data file details page for datafile.dat
     Then I should not see link "Delete"
 
@@ -111,20 +109,22 @@ Feature: Delete files containing erroneous data
   Scenario: Normal cannot delete others' files via less scrupulous means
     Given I have data files
       | filename     | created_at       | uploaded_by           | start_time           | end_time               |
-      | datafile.dat | 30/11/2011 10:15 | kali@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile.dat | 30/11/2011 10:15 | other_user@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
     And I visit the delete url for "datafile.dat"
     Then I should be on the list data files page
     And I should see "Could not delete this file (Do you have permission to delete it?)"
 
   Scenario: Super users can delete any file regardless of user
-    Given I have data files
+    Given I logout
+    And I am logged in as "administrator@intersect.org.au"
+    And I have data files
       | filename      | created_at       | uploaded_by           | start_time           | end_time               |
-      | datafile.dat  | 30/11/2011 10:15 | kali@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
-      | datafile1.dat | 30/11/2011 10:15 | kali@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile.dat  | 30/11/2011 10:15 | other_user@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile1.dat | 30/11/2011 10:15 | other_user@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
     And I am on the data file details page for datafile.dat
     And I follow "Delete"
     Then I should be on the list data files page
     And I should see "The file 'datafile.dat' was successfully removed"
     And I should see only these rows in "exploredata" table
       | Filename      | Added by              |
-      | datafile1.dat | kali@intersect.org.au |
+      | datafile1.dat | other_user@intersect.org.au |

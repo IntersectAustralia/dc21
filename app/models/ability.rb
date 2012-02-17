@@ -46,9 +46,18 @@ class Ability
     can :manage, Facility
     can :manage, ColumnMapping
 
-    # all users can read and add data files, and can delete their own
-    can :read, DataFile
-    can :create, DataFile
+    # all users can read and add data files, and can delete their own. This *could* be expressed more simply,
+    #   but shouldn't until we actually have explicitly defined permissions and roles
+    can [
+            :read, #index, show
+            :create, #new, create
+            :build_download,
+            :custom_download,
+            :download,
+            :download_selected,
+            :list_for_post_processing,
+            :post_process,
+            :verify_upload], DataFile
     can :destroy, DataFile, :created_by_id => user.id
 
     if user.role.admin?
