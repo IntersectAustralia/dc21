@@ -9,13 +9,13 @@ Feature: Manage experiment metadata
       | name                |
       | ROS Weather Station |
     And I have experiments
-      | name            | description    | start_date | end_date | subject | facility            | parent |
-      | Weather Station | Blah Blah Blah | 2011-10-30 |          | Rain    | ROS Weather Station |        |
+      | name            | facility            |
+      | Weather Station | ROS Weather Station |
 
   @javascript
   Scenario: Second and third level dropdowns populate based on selection in the previous one
     Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
-    When I select "03 - CHEMICAL SCIENCES" from "FOR Code"
+    When I select "03 - CHEMICAL SCIENCES" from "FOR codes"
     Then the "for_code_level2" select should contain
       | Please select |
       | 0301 - ITEM 1 |
@@ -44,7 +44,7 @@ Feature: Manage experiment metadata
   @javascript
   Scenario: Selecting FOR codes while creating an experiment
     Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
-    Then the "FOR Code" select should contain
+    Then the "FOR codes" select should contain
       | Please select               |
       | 01 - MATHEMATICAL SCIENCES  |
       | 02 - PHYSICAL SCIENCES      |
@@ -60,6 +60,12 @@ Feature: Manage experiment metadata
       | 02 - PHYSICAL SCIENCES |
       | 030302 - ITEM 2        |
       | 0502 - ITEM 2          |
+
+  @javascript
+  Scenario: Blank cannot be added
+    Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
+    When I follow "Add"
+    Then I should see no for codes
 
   @javascript
   Scenario: FOR codes chosen so far aren't lost on validation error
@@ -80,7 +86,6 @@ Feature: Manage experiment metadata
     When I edit experiment "Weather Station"
     Then I should see for codes
       | 02 - PHYSICAL SCIENCES |
-  #TODO: second, third level codes
     And I add for code "05 - ENVIRONMENTAL SCIENCES"
     And I press "Save Experiment"
     And I should see for codes
@@ -91,7 +96,6 @@ Feature: Manage experiment metadata
   Scenario: Additional FOR codes chosen so far aren't lost on validation error during edit
     Given experiment "Weather Station" has for code "02 - PHYSICAL SCIENCES"
     When I edit experiment "Weather Station"
-  #TODO: second, third level codes
     And I add for code "05 - ENVIRONMENTAL SCIENCES"
     And I fill in "Name" with ""
     And I press "Save Experiment"
@@ -103,7 +107,6 @@ Feature: Manage experiment metadata
   @javascript
   Scenario: Can delete FOR codes during create
     Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
-  #TODO: second, third level codes
     When I add for code "02 - PHYSICAL SCIENCES"
     And I add for code "05 - ENVIRONMENTAL SCIENCES"
     And I delete for code "02 - PHYSICAL SCIENCES"
@@ -116,13 +119,12 @@ Feature: Manage experiment metadata
     Given experiment "Weather Station" has for code "02 - PHYSICAL SCIENCES"
     Given experiment "Weather Station" has for code "05 - ENVIRONMENTAL SCIENCES"
     When I edit experiment "Weather Station"
-  #TODO: second, third level codes
     And I add for code "01 - MATHEMATICAL SCIENCES"
-    And I add for code "06 - BIOLOGICAL SCIENCES"
+    And I add for code "03 - CHEMICAL SCIENCES", "0303 - ITEM 3", "030302 - ITEM 2"
     And I delete for code "02 - PHYSICAL SCIENCES"
-    And I delete for code "06 - BIOLOGICAL SCIENCES"
+    And I delete for code "01 - MATHEMATICAL SCIENCES"
     And I press "Save Experiment"
     And I should see for codes
-      | 01 - MATHEMATICAL SCIENCES  |
+      | 030302 - ITEM 2             |
       | 05 - ENVIRONMENTAL SCIENCES |
 

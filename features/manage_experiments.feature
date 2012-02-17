@@ -10,11 +10,11 @@ Feature: Manage experiment metadata
       | ROS Weather Station |
       | Tree Chambers       |
     And I have experiments
-      | name             | description    | start_date | end_date   | subject | facility            | parent          |
-      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 |
-      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                 |
-      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                 |
-      | Tree Chamber 01A | Another        | 2012-01-15 |            | Trees   | Tree Chambers       | Tree Chamber 01 |
+      | name             | description    | start_date | end_date   | subject | facility            | parent          | access_rights                                       |
+      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
+      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
+      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
+      | Tree Chamber 01A | Another        | 2012-01-15 |            | Trees   | Tree Chambers       | Tree Chamber 01 | http://creativecommons.org/licenses/by-nc-nd/3.0/au |
 
   Scenario: View the list of experiments under a facility
     When I am on the view facility page for 'Tree Chambers'
@@ -38,11 +38,12 @@ Feature: Manage experiment metadata
     Given I am on the view facility page for 'Tree Chambers'
     And I follow the view link for experiment "Tree Chamber 01"
     Then I should see details displayed
-      | Name        | Tree Chamber 01 |
-      | Description | Whatever        |
-      | Start date  | 2012-01-15      |
-      | End date    | 2013-01-01      |
-      | Subject     | Trees           |
+      | Name          | Tree Chamber 01                   |
+      | Description   | Whatever                          |
+      | Start date    | 2012-01-15                        |
+      | End date      | 2013-01-01                        |
+      | Subject       | Trees                             |
+      | Access rights | CC BY-SA: Attribution-Share Alike |
     When I follow "Back"
     Then I should be on the view facility page for 'Tree Chambers'
 
@@ -56,40 +57,44 @@ Feature: Manage experiment metadata
       | Experiment - Tree Chamber 02  |
     And nothing should be selected in the "Parent" select
     And I fill in the following:
-      | Name        | My Experiment              |
-      | Description | Some description blah blah |
-      | Start date  | 2011-12-12                 |
-      | End date    | 2012-01-31                 |
-      | Subject     | Trees                      |
+      | Name          | My Experiment                     |
+      | Description   | Some description blah blah        |
+      | Start date    | 2011-12-12                        |
+      | End date      | 2012-01-31                        |
+      | Subject       | Trees                             |
+      | Access rights | CC BY-SA: Attribution-Share Alike |
     And I press "Save Experiment"
     Then I should see "The experiment was saved successfully"
     And I should see details displayed
-      | Name        | My Experiment              |
-      | Parent      | Facility - Tree Chambers   |
-      | Description | Some description blah blah |
-      | Start date  | 2011-12-12                 |
-      | End date    | 2012-01-31                 |
-      | Subject     | Trees                      |
+      | Name          | My Experiment                     |
+      | Parent        | Facility - Tree Chambers          |
+      | Description   | Some description blah blah        |
+      | Start date    | 2011-12-12                        |
+      | End date      | 2012-01-31                        |
+      | Subject       | Trees                             |
+      | Access rights | CC BY-SA: Attribution-Share Alike |
 
   Scenario: Create a new experiment with another experiment as the parent
     Given I am on the view facility page for 'Tree Chambers'
     When I follow "New Experiment"
     And I fill in the following:
-      | Name        | My Experiment                |
-      | Description | Some description blah blah   |
-      | Start date  | 2011-12-12                   |
-      | End date    | 2012-01-31                   |
-      | Subject     | Trees                        |
-      | Parent      | Experiment - Tree Chamber 02 |
+      | Name          | My Experiment                     |
+      | Description   | Some description blah blah        |
+      | Start date    | 2011-12-12                        |
+      | End date      | 2012-01-31                        |
+      | Subject       | Trees                             |
+      | Parent        | Experiment - Tree Chamber 02      |
+      | Access rights | CC BY-SA: Attribution-Share Alike |
     And I press "Save Experiment"
     Then I should see "The experiment was saved successfully"
     And I should see details displayed
-      | Name        | My Experiment                |
-      | Parent      | Experiment - Tree Chamber 02 |
-      | Description | Some description blah blah   |
-      | Start date  | 2011-12-12                   |
-      | End date    | 2012-01-31                   |
-      | Subject     | Trees                        |
+      | Name          | My Experiment                     |
+      | Parent        | Experiment - Tree Chamber 02      |
+      | Description   | Some description blah blah        |
+      | Start date    | 2011-12-12                        |
+      | End date      | 2012-01-31                        |
+      | Subject       | Trees                             |
+      | Access rights | CC BY-SA: Attribution-Share Alike |
 
   Scenario: Create a new experiment with a validation error
     Given I am on the view facility page for 'Tree Chambers'
@@ -102,6 +107,7 @@ Feature: Manage experiment metadata
       | Subject     | Trees                      |
     And I press "Save Experiment"
     Then I should see "Name can't be blank"
+    Then I should see "Access rights can't be blank"
 
   Scenario: Cancel out of create
     Given I am on the view facility page for 'Tree Chambers'
@@ -117,21 +123,23 @@ Feature: Manage experiment metadata
       | Experiment - Tree Chamber 02  |
     And nothing should be selected in the "Parent" select
     When I fill in the following:
-      | Name        | My Experiment                |
-      | Parent      | Experiment - Tree Chamber 02 |
-      | Description | Some description blah blah   |
-      | Start date  | 2011-12-12                   |
-      | End date    | 2012-01-31                   |
-      | Subject     | Trees                        |
+      | Name          | My Experiment                             |
+      | Parent        | Experiment - Tree Chamber 02              |
+      | Description   | Some description blah blah                |
+      | Start date    | 2011-12-12                                |
+      | End date      | 2012-01-31                                |
+      | Subject       | Trees                                     |
+      | Access rights | CC BY-ND: Attribution-No Derivative Works |
     And I press "Save Experiment"
     Then I should see "The experiment was saved successfully"
     And I should see details displayed
-      | Name        | My Experiment                |
-      | Parent      | Experiment - Tree Chamber 02 |
-      | Description | Some description blah blah   |
-      | Start date  | 2011-12-12                   |
-      | End date    | 2012-01-31                   |
-      | Subject     | Trees                        |
+      | Name          | My Experiment                             |
+      | Parent        | Experiment - Tree Chamber 02              |
+      | Description   | Some description blah blah                |
+      | Start date    | 2011-12-12                                |
+      | End date      | 2012-01-31                                |
+      | Subject       | Trees                                     |
+      | Access rights | CC BY-ND: Attribution-No Derivative Works |
 
   Scenario: Edit an experiment that has an experiment as the parent
     Given the experiment "Tree Chamber 01" has parent "Tree Chamber 02"
@@ -142,21 +150,23 @@ Feature: Manage experiment metadata
       | Experiment - Tree Chamber 02  |
     And "Experiment - Tree Chamber 02" should be selected in the "Parent" select
     When I fill in the following:
-      | Name        | My Experiment              |
-      | Parent      | Facility - Tree Chambers   |
-      | Description | Some description blah blah |
-      | Start date  | 2011-12-12                 |
-      | End date    | 2012-01-31                 |
-      | Subject     | Trees                      |
+      | Name          | My Experiment                             |
+      | Parent        | Facility - Tree Chambers                  |
+      | Description   | Some description blah blah                |
+      | Start date    | 2011-12-12                                |
+      | End date      | 2012-01-31                                |
+      | Subject       | Trees                                     |
+      | Access rights | CC BY-ND: Attribution-No Derivative Works |
     And I press "Save Experiment"
     Then I should see "The experiment was saved successfully"
     And I should see details displayed
-      | Name        | My Experiment              |
-      | Parent      | Facility - Tree Chambers   |
-      | Description | Some description blah blah |
-      | Start date  | 2011-12-12                 |
-      | End date    | 2012-01-31                 |
-      | Subject     | Trees                      |
+      | Name          | My Experiment                             |
+      | Parent        | Facility - Tree Chambers                  |
+      | Description   | Some description blah blah                |
+      | Start date    | 2011-12-12                                |
+      | End date      | 2012-01-31                                |
+      | Subject       | Trees                                     |
+      | Access rights | CC BY-ND: Attribution-No Derivative Works |
 
   Scenario: Edit with a validation error
     Given I edit experiment "Weather Station"

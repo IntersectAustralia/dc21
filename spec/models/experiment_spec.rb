@@ -12,6 +12,7 @@ describe Experiment do
     it { should validate_presence_of(:start_date) }
     it { should validate_presence_of(:subject) }
     it { should validate_presence_of(:facility_id) }
+    it { should validate_presence_of(:access_rights) }
 
     describe "should validate that end date is on or after start date (unless end date blank)" do
       it "should allow end date on or after start date, or nil end date" do
@@ -62,6 +63,16 @@ describe Experiment do
       experiment = Factory(:experiment)
       experiment.set_for_codes({"1" => {"name" => "B", "url" => "burl"}, "2" => {"name" => "C", "url" => "curl"}, "3" => {"name" => "C", "url" => "curl"}})
       experiment.experiment_for_codes.collect { |efc| [efc.name, efc.url] }.should eq([["B", "burl"], ["C", "curl"]])
+    end
+  end
+
+  describe "Get access right name" do
+    it "should look it up in the access rights lookup" do
+      Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au").access_rights_description.should eq("CC BY: Attribution")
+    end
+
+    it "should return nil if not found" do
+      Factory(:experiment, :access_rights => "blah").access_rights_description.should be_nil
     end
   end
 end
