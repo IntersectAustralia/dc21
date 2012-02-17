@@ -5,11 +5,11 @@
   = render "shared/error_messages", :target => @user
   .field
     = f.label :password
-    = f.password_field :password
     = required
+    = f.password_field :password
   .field
     = f.label :password_confirmation
-    = f.password_field :password_confirmation
     = required
+    = f.password_field :password_confirmation
   .actions
     = f.submit "Change Your Password"

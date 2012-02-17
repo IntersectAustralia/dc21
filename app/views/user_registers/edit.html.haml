@@ -8,4 +8,6 @@
       = render :partial => 'personal_details', :locals => {:f => f}
       .actions
         = f.submit "Update", :class => "floatright"
-        = link_to 'Cancel', users_profile_path, :class => "whitebutton"
+        .cancelbutton
+          %span
+          = link_to 'Cancel', users_profile_path, :class => "whitebutton"

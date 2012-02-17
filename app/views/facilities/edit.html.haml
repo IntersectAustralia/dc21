@@ -6,12 +6,12 @@
     .formerror= render "shared/error_messages", :target => @facility
     .rowfield
       %label{ :for => :name } Name:
-      = f.text_field :name
       = required
+      = f.text_field :name
     .rowfield
       %label Code:
-      = f.text_field :code
       = required
+      = f.text_field :code
     .actions
       .cancelbutton
         %span

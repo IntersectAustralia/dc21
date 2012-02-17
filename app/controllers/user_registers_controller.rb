@@ -61,6 +61,8 @@ class UserRegistersController < Devise::RegistrationsController
 
   # Mostly the same as the devise 'update' method, just call a different method on the model
   def update_password
+    set_tab :account
+    set_tab :changepassword, :contentnavigation
     if resource.update_password(params[resource_name])
       set_flash_message :notice, :password_updated if is_navigational_format?
       sign_in resource_name, resource, :bypass => true

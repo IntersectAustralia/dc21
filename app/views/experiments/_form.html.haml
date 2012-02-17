@@ -27,8 +27,9 @@
     = required
     = f.text_field :subject
   .rowform
-    = label_tag :for_code_select_1, "FOR Code"
-    = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
+    = label_tag :for_code_select_1, "FOR Code:"
+    %span.input
+      = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
     #second_level
       = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
     #third_level
