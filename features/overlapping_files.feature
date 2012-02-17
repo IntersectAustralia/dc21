@@ -58,5 +58,23 @@ Feature: Overlapping Files
       | Processing Status | RAW                    |
       | Description       | orig wtc01_table1.dat  |
 
-  @wip
   Scenario: Bad overlap does not save
+    Given I have data files
+      | filename              | uploaded_by               | path                                                 | file_processing_status | file_processing_description | start_time          | end_time            | format |
+      | full_WTC01_Table1.dat | georgina@intersect.org.au | samples/WTC01_Table1.dat                             | RAW                    | original wtc01_table1.dat   | 2011-08-11 19:30:00 | 2011-08-31 23:45:00 | TOA5   |
+      | WTC01_Table1_part.dat | georgina@intersect.org.au | subsetted/range_aug_1_aug_31/subset_WTC01_Table1.dat |                        |                             | 2011-08-11 19:30:00 | 2011-08-31 23:45:00 | TOA5   |
+    And file "full_WTC01_Table1.dat" has the following metadata
+      | key          | value  |
+      | station_name | WTC01  |
+      | table_name   | Table1 |
+    And file "WTC01_Table1_part.dat" has the following metadata
+      | key          | value  |
+      | station_name | WTC01  |
+      | table_name   | Table1 |
+
+    When I am on the list for post processing data files page
+    And I select "RAW" from the select box for "WTC01_Table1_part.dat"
+    And I press "Done"
+
+    Then show me the page
+    Then I should see postprocess error "overlapped full_WTC01_Table1.dat" for "WTC01_Table1_part.dat"

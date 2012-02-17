@@ -17,6 +17,8 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :path
   validates_presence_of :created_by_id
 
+  validate :no_bad_overlap
+
   before_save :destroy_safe_overlap
 
   scope :most_recent_first, order("created_at DESC")
@@ -103,46 +105,6 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.present? ? self.file_processing_status.upcase : "UNDEFINED"
   end
 
-  def mismatched_overlap(station_name, table_name)
-    # This method is intended to be called for files which aren't yet persisted
-    # Thus, they will not have associated MetadataItem records
-    # That is why they are listed as parameters here.
-    # This method assumes TOA5 files all have start_times and end_times populated
-
-    return [] if self.format != FileTypeDeterminer::TOA5
-
-    toa5_files = relevant_overlap_files(station_name, table_name)
-
-    start_time_overlaps = toa5_files.where('start_time > ?', start_time)
-    start_time_overlaps = start_time_overlaps.where('start_time <= ?', end_time)
-    start_time_overlaps = start_time_overlaps.where('end_time > ?', end_time)
-
-    total_overlaps = toa5_files.where('start_time < ?', start_time)
-    total_overlaps = total_overlaps.where('end_time > ?', end_time)
-    total_overlaps |= toa5_files.where('start_time = ?', start_time).where('end_time > ?', end_time)
-    total_overlaps |= toa5_files.where('start_time < ?', start_time).where('end_time = ?', end_time)
-
-    end_time_overlaps = toa5_files.where('start_time < ?', start_time)
-    end_time_overlaps = end_time_overlaps.where('end_time < ?', end_time)
-    end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
-
-    exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
-
-    candidate_overlaps = candidate_overlaps(toa5_files)
-
-    content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
-      start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
-      end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
-
-      candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
-        self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
-          !FileUtils.identical? candidate_overlap_file, my_overlap_file
-        end
-      end
-    end
-
-    exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch 
-  end
 
 
   protected
@@ -226,6 +188,59 @@ class DataFile < ActiveRecord::Base
         self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
           FileUtils.identical? candidate_overlap_file, my_overlap_file
         end
+      end
+    end
+  end
+
+  def mismatched_overlap(station_name, table_name)
+    # This method is intended to be called for files which aren't yet persisted
+    # Thus, they will not have associated MetadataItem records
+    # That is why they are listed as parameters here.
+    # This method assumes TOA5 files all have start_times and end_times populated
+
+    return [] if self.format != FileTypeDeterminer::TOA5
+
+    toa5_files = relevant_overlap_files(station_name, table_name)
+
+    start_time_overlaps = toa5_files.where('start_time > ?', start_time)
+    start_time_overlaps = start_time_overlaps.where('start_time <= ?', end_time)
+    start_time_overlaps = start_time_overlaps.where('end_time > ?', end_time)
+
+    total_overlaps = toa5_files.where('start_time < ?', start_time)
+    total_overlaps = total_overlaps.where('end_time > ?', end_time)
+    total_overlaps |= toa5_files.where('start_time = ?', start_time).where('end_time > ?', end_time)
+    total_overlaps |= toa5_files.where('start_time < ?', start_time).where('end_time = ?', end_time)
+
+    end_time_overlaps = toa5_files.where('start_time < ?', start_time)
+    end_time_overlaps = end_time_overlaps.where('end_time < ?', end_time)
+    end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
+
+    exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
+
+    candidate_overlaps = candidate_overlaps(toa5_files)
+
+    content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
+      start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
+      end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
+
+      candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
+        self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
+          !FileUtils.identical? candidate_overlap_file, my_overlap_file
+        end
+      end
+    end
+
+    exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch 
+  end
+
+  def no_bad_overlap
+    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
+    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
+    if station_item and table_item
+      overlap = mismatched_overlap(station_item.value, table_item.value)
+
+      if overlap.any?
+        self.errors[:base] << 'overlapped ' + overlap.map(&:filename).join(', ')
       end
     end
   end

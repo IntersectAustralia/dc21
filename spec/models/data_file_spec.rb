@@ -361,9 +361,9 @@ describe DataFile do
             file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
           end
 
-          toa.mismatched_overlap(station_name, table_name).should be_empty
-          jpg.mismatched_overlap(station_name, table_name).should be_empty
-          txt.mismatched_overlap(station_name, table_name).should be_empty
+          toa.send(:mismatched_overlap, station_name, table_name).should be_empty
+          jpg.send(:mismatched_overlap, station_name, table_name).should be_empty
+          txt.send(:mismatched_overlap, station_name, table_name).should be_empty
         end
         it "different station/table name combinations" do
           times = {:start_time => "2012-02-01 03:45 UTC", :end_time => "2012-04-03 14:44 UTC"}
@@ -381,9 +381,9 @@ describe DataFile do
 
           changed_toa5 = Factory.build(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
 
-          changed_toa5.mismatched_overlap(station_b, table_a).should be_empty
-          changed_toa5.mismatched_overlap(station_a, table_b).should be_empty
-          changed_toa5.mismatched_overlap(station_b, table_b).should be_empty
+          changed_toa5.send(:mismatched_overlap, station_b, table_a).should be_empty
+          changed_toa5.send(:mismatched_overlap, station_a, table_b).should be_empty
+          changed_toa5.send(:mismatched_overlap, station_b, table_b).should be_empty
         end
       end
 
@@ -399,12 +399,12 @@ describe DataFile do
         it "earlier files" do
           earlier = make_data_file!(@start_time - 2.days, @start_time - 1.day, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should be_empty
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should be_empty
         end
         it "later files" do
           later = make_data_file!(@end_time + 1.day, @end_time + 2.days, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should be_empty
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should be_empty
         end
 
       end
@@ -423,38 +423,38 @@ describe DataFile do
           early_end = @end_time - 1.day
           start_time_overlap = make_data_file!(early_start, early_end, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [start_time_overlap]
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [start_time_overlap]
         end
         it "total overlap" do
           early_start = @start_time - 1.day
           late_end = @end_time + 1.day
           total_overlap = make_data_file!(early_start, late_end, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [total_overlap]
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [total_overlap]
         end
         it "end overlap" do
           late_start = @start_time + 1.day
           late_end = @end_time + 1.day
           end_overlap = make_data_file!(late_start, late_end, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [end_overlap]
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [end_overlap]
         end
         it "exact overlap" do
           same_time = make_data_file!(@start_time, @end_time, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [same_time]
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [same_time]
         end
         it "overlaps touching start" do
           early_start = @start_time - 2.day
           touching_start = make_data_file!(early_start, @start_time, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [touching_start]
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [touching_start]
         end
         it "overlaps touching end" do
           late_end = @end_time + 1.day
           touching_end = make_data_file!(@end_time, late_end, @some_path, @station_name, @table_name)
 
-          @toa5_file.mismatched_overlap(@station_name, @table_name).should eq [touching_end]
+          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [touching_end]
         end
       end
 
@@ -477,15 +477,15 @@ describe DataFile do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
             subset_same = make_data_file!(@start_time, @subset_end, subset_path, @station_name, @table_name)
 
-            subset_same.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
-            @toa5.mismatched_overlap(@station_name, @table_name).should be_empty
+            subset_same.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should be_empty
           end
 
           it "subset_to different" do
             truncated_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only_different.dat').to_s
             subset_different = Factory.build(:data_file, :path => truncated_path, :start_time => @start_time, :end_time => @subset_end, :format => FileTypeDeterminer::TOA5)
 
-            subset_different.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
+            subset_different.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
           end
         end
 
@@ -497,18 +497,18 @@ describe DataFile do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only.dat').to_s
             subset_same = make_data_file!(@subset_start, @end_time, subset_path, @station_name, @table_name)
 
-            #subset_same.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
+            #subset_same.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
 
-            @toa5.mismatched_overlap(@station_name, @table_name).should be_empty
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should be_empty
           end
           it "subset_from different" do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only_different.dat').to_s
 
             subset_diff = make_data_file!(@subset_start, @end_time, subset_path, @station_name, @table_name)
 
-            subset_diff.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
+            subset_diff.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
 
-            @toa5.mismatched_overlap(@station_name, @table_name).should eq [subset_diff]
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [subset_diff]
           end
         end
 
@@ -522,18 +522,18 @@ describe DataFile do
 
             subset_same_toa5 = make_data_file!(@subset_start, @subset_end, subset_path, @station_name, @table_name)
 
-            subset_same_toa5.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
+            subset_same_toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
 
-            @toa5.mismatched_overlap(@station_name, @table_name).should be_empty
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should be_empty
           end
           it "subset_range different" do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range_different.dat').to_s
 
             subset_diff_toa5 = make_data_file!(@subset_start, @subset_end, subset_path, @station_name, @table_name)
 
-            subset_diff_toa5.mismatched_overlap(@station_name, @table_name).should eq [@toa5]
+            subset_diff_toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
 
-            @toa5.mismatched_overlap(@station_name, @table_name).should eq [subset_diff_toa5]
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [subset_diff_toa5]
           end
         end
       end

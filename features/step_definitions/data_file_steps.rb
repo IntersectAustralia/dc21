@@ -1,6 +1,9 @@
 Given /^I have data files$/ do |table|
   table.hashes.each do |attributes|
     email = attributes.delete('uploaded_by')
+    if attributes['file_processing_status'] == ''
+      attributes['file_processing_status'] = nil
+    end
     if email
       user = User.find_by_email(email)
       unless user
@@ -129,13 +132,25 @@ When /^I visit the delete url for "([^"]*)"$/ do |filename|
   visit_path data_file_path(file), :delete
 end
 
+Then /^I should see postprocess error "(.*)" for "(.*)"$/ do |error_message, filename|
+  df = DataFile.find_by_filename!(filename)
+  selector = "#datafile_#{df.id}>td.formerror"
+  field = find(selector)
+  field.should have_content error_message
+end
+
 private
 
-def do_upload(filename, user)
+def do_upload(filename, user, path=nil)
   user.reset_authentication_token!
   token = user.authentication_token
   post_path = data_files_url(:format => :json, :auth_token => token)
-  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
+  if path
+    path = Rails.root.join('samples', path, filename).to_s
+  else
+    path = Rails.root.join('samples', filename).to_s
+  end
+  file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
   response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
   response.status.should eq(200)
   DataFile.count.should_not eq(0)

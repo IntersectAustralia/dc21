@@ -49,6 +49,7 @@ class DataFilesController < ApplicationController
   def post_process
     redirect_to data_files_path unless params[:data_files].present?
 
+    failures = []
     params[:data_files].each do |df_id, values|
 
       #Skip if they left it blank
@@ -58,9 +59,17 @@ class DataFilesController < ApplicationController
       cleaned_values = values.delete_if { |k, v| v.blank? }
 
       data_file = DataFile.find(df_id)
-      data_file.update_attributes(cleaned_values)
+      if not data_file.update_attributes(cleaned_values)
+        failures << data_file
+      end
     end
+    if failures.empty?
       redirect_to data_files_path
+    else
+      @data_files = failures
+      @errors_present = true
+      render :list_for_post_processing
+    end
   end
 
   def create
