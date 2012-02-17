@@ -150,7 +150,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def relevant_overlap_files(station_name, table_name)
-    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5)
+    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5, :file_processing_status => STATUS_RAW)
     toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
 
     by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
@@ -172,11 +172,12 @@ class DataFile < ActiveRecord::Base
   end
 
   def safe_overlap(station_name, table_name)
-    return [] if self.format != FileTypeDeterminer::TOA5
+    return [] if self.format != FileTypeDeterminer::TOA5 or self.file_processing_status != STATUS_RAW
 
     toa5_files = relevant_overlap_files(station_name, table_name)
 
     candidate_overlaps = candidate_overlaps(toa5_files)
+
 
     candidate_overlaps.find_all do |candidate_overlap_data_file|
       start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
@@ -196,7 +197,7 @@ class DataFile < ActiveRecord::Base
     # That is why they are listed as parameters here.
     # This method assumes TOA5 files all have start_times and end_times populated
 
-    return [] if self.format != FileTypeDeterminer::TOA5
+    return [] if self.format != FileTypeDeterminer::TOA5 or self.file_processing_status != STATUS_RAW
 
     toa5_files = relevant_overlap_files(station_name, table_name)
 

@@ -412,7 +412,7 @@ describe DataFile do
         before :each do
           @start_time = Time.new(2011, 5, 20)
           @end_time = Time.new(2011, 8, 22)
-          @toa5_file = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :format => FileTypeDeterminer::TOA5)
+          @toa5_file = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :format => FileTypeDeterminer::TOA5, :file_processing_status => DataFile::STATUS_RAW)
           @some_path = 'arbitary_path'
 
           @station_name = 'stn'
@@ -457,6 +457,27 @@ describe DataFile do
           @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [touching_end]
         end
       end
+      describe "raw" do
+        before :each do
+          @start_time = Time.parse '2011/10/6 0:00 UTC'
+          @end_time = Time.parse '2011/11/3 11:55 UTC'
+          @station_name = "Station"
+          @table_name = "Table"
+          @path = Rails.root.join('spec/samples', 'toa5.dat').to_s
+        end
+        it "only looks at raw" do
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
+          subset_end = Time.parse '2011/10/14 23:55 UTC'
+          statii = [DataFile::STATUS_UNDEFINED, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
+
+          statii.each do |status|
+            make_data_file!(@start_time, @end_time, @path, @station_name, @table_name, status)
+          end
+          it = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
+
+          it.send(:mismatched_overlap, @station_name, @table_name).should be_empty
+        end
+      end
 
       describe "content comparisons" do
         before :each do
@@ -483,7 +504,7 @@ describe DataFile do
 
           it "subset_to different" do
             truncated_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only_different.dat').to_s
-            subset_different = Factory.build(:data_file, :path => truncated_path, :start_time => @start_time, :end_time => @subset_end, :format => FileTypeDeterminer::TOA5)
+            subset_different = Factory.build(:data_file, :path => truncated_path, :start_time => @start_time, :end_time => @subset_end, :format => FileTypeDeterminer::TOA5, :file_processing_status => DataFile::STATUS_RAW)
 
             subset_different.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
           end
@@ -608,6 +629,17 @@ describe DataFile do
           @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
       end
+      describe "RAW only" do
+        it "only looks at raw" do
+          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
+          subset_end = Time.parse '2011/10/14 23:55 UTC'
+          statii = [DataFile::STATUS_UNDEFINED, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
+          statii.each do |status|
+            make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name, status)
+          end
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+        end
+      end
       describe "picks files with smaller content" do
         it "subset_to" do
           subset_end = Time.parse '2011/10/14 23:55 UTC'
@@ -639,8 +671,8 @@ describe DataFile do
 
 end
 
-def make_data_file!(start_time, end_time, path, station_name, table_name)
-  data_file = Factory(:data_file, :start_time => start_time, :end_time => end_time, :format => FileTypeDeterminer::TOA5, :path => path)
+def make_data_file!(start_time, end_time, path, station_name, table_name, status=DataFile::STATUS_RAW)
+  data_file = Factory(:data_file, :start_time => start_time, :end_time => end_time, :format => FileTypeDeterminer::TOA5, :path => path, :file_processing_status => status)
 
   data_file.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
   data_file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
