@@ -32,8 +32,11 @@
   .rowform
     %label Contacts:
     = required
-    = select_tag :contacts_select,  options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
+    %span.input
+      = select_tag :contacts_select,  options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
     = link_to 'Add', '#', :class => "bluebutton", :id => 'add_contact'
+    %p.details
+      Choose from the list above, and select via radio button the primary contact. 
     %ul#contacts_list
 
 
