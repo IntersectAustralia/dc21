@@ -9,10 +9,11 @@
 .container
   = render_field "Name", @facility.name
   = render_field "Code", @facility.code
-  .cancelbutton
-    %span
-    = link_to 'Back', facilities_path, :class => "cancelbutton"
-  = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
+  .actions
+    .cancelbutton
+      %span
+      = link_to 'Back', facilities_path, :class => "cancelbutton"
+    = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
 
   %h3 Experiments
   = render 'experiments/list', :experiments => @facility.experiments

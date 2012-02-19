@@ -243,7 +243,3 @@ $(window).scroll(function(e){
 });
 
 
-
-
-
-
