@@ -117,8 +117,9 @@ end
 
 def create_facilities
   Facility.delete_all
-  create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS")
-  create_facility(:name => "Test Facility", :code => "T1")
+  user = User.first
+  create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS", :primary_contact => user)
+  create_facility(:name => "Test Facility", :code => "T1", :primary_contact => user)
 end
 
 def create_facility(attrs)

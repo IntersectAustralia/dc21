@@ -2,19 +2,4 @@
   %h1 Home / Facilities / Edit #{@facility.name}
 
 .container
-  = form_for(@facility) do |f|
-    .formerror= render "shared/error_messages", :target => @facility
-    .rowfield
-      %label{ :for => :name } Name:
-      = required
-      = f.text_field :name
-    .rowfield
-      %label Code:
-      = required
-      = f.text_field :code
-    .actions
-      .cancelbutton
-        %span
-        = link_to 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
-      = f.submit "Update", :class => "floatright"
-
+  = render :partial => 'facilities/form', :locals => {:edit_mode => true}

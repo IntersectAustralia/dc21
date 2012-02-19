@@ -1,0 +1,50 @@
+= form_for(@facility) do |f|
+  .formerror= render "shared/error_messages", :target => @facility
+  .rowform
+    %label{ :for => :name } Name:
+    = required
+    = f.text_field :name
+  .rowform
+    %label Code:
+    = required
+    = f.text_field :code
+  .rowform
+    %label Description:
+    = f.text_area :description
+  .rowform
+    %label Location of Facility
+    %label Point location or Top Left Corner of rectangle:
+  .rowform
+    %label Latitude:
+    = f.text_field :a_lat
+  .rowform
+    %label Longitude:
+    = f.text_field :a_long
+  .rowform
+    %label Location of Facility
+    %label Bottom Right Corner of rectangle:
+  .rowform
+    %label Latitude:
+    = f.text_field :b_lat
+  .rowform
+    %label Longitude:
+    = f.text_field :b_long
+  .rowform
+    %label Contacts:
+    = required
+    = select_tag :contacts_select,  options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
+    = link_to 'Add', '#', :class => "bluebutton", :id => 'add_contact'
+    %ul#contacts_list
+
+
+  .actions
+    - if edit_mode
+      .cancelbutton
+        %span
+        = link_to 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
+      = f.submit "Update", :class => "floatright"
+    -else
+      .cancelbutton
+        %span
+        = link_to 'Cancel', facilities_path, :class => "cancelbutton"
+      = f.submit "Save Facility", :class => "floatright"

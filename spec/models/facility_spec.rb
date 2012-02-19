@@ -9,11 +9,14 @@ describe Facility do
 
   describe "Associations" do
     it { should have_many(:experiments) }
+    it { should have_one(:primary_contact) }
+    it { should have_many(:contacts) }
   end
 
   describe "Validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:code) }
+    it { should validate_presence_of(:primary_contact) }
     it "should validate uniqueness of name" do
       Factory(:facility)
       should validate_uniqueness_of(:name)
@@ -22,6 +25,19 @@ describe Facility do
       Factory(:facility)
       should validate_uniqueness_of(:code)
     end
+    it "should, validate that lat/long are a pair" do
+      pending
+      #f1 = Factory(:facility, :a_lat => 5)
+      #f1.
+    end
+
+    it "should validate sane latitudes/longitudes" do
+      should ensure_inclusion_of(:a_lat).in_range -90..90
+      should ensure_inclusion_of(:a_long).in_range -180..180
+      should ensure_inclusion_of(:b_lat).in_range -90..90
+      should ensure_inclusion_of(:b_long).in_range -180..180
+    end
+
   end
 
   describe "White space removal" do

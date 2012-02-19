@@ -74,6 +74,19 @@ ActiveRecord::Schema.define(:version => 20120215040304) do
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "description"
+    t.float    "a_lat"
+    t.float    "a_long"
+    t.float    "b_lat"
+    t.float    "b_long"
+  end
+
+  create_table "facility_contacts", :force => true do |t|
+    t.integer  "facility_id"
+    t.integer  "user_id"
+    t.boolean  "primary",     :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "metadata_items", :force => true do |t|

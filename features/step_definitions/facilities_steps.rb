@@ -8,3 +8,15 @@ When /^I follow the view link for facility "([^"]*)"$/ do |facility_name|
   facility = Facility.find_by_name(facility_name)
   click_link("view_#{facility.id}")
 end
+When /^I add the following contacts:$/ do |table|
+  # table is a  | email (string)   | primary (bool)   |
+  table.hashes.each do | contact |
+    step "'I select \"#{contact['email']}\" from \"contacts\""
+    step "I follow \"Add\""
+    if contact['primary']
+      user = User.find_by_email contact['email']
+      step "I follow \"make_contact_primary_#{user.id}\""
+    end
+  end
+
+end
