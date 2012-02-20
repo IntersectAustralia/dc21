@@ -18,10 +18,11 @@
     - @facility.contacts.each_with_index do |c, i|
       = render_field "Other Contact #{i+1}", "#{c.full_name} (#{c.email})"
 
-  .cancelbutton
-    %span
-    = link_to 'Back', facilities_path, :class => "cancelbutton"
-  = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
+  .actions
+    .cancelbutton
+      %span
+      = link_to 'Back', facilities_path, :class => "cancelbutton"
+    = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
 
   %h3 Experiments
   = render 'experiments/list', :experiments => @facility.experiments

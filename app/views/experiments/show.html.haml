@@ -13,8 +13,9 @@
     %ul#for_codes_list
       - @experiment.experiment_for_codes.each do |code|
         %li= code.name
-  .cancelbutton
-    %span
-    = link_to 'Back', facility_path(@facility), :class => "cancelbutton"
-  = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton floatright"
+  .actions
+    .cancelbutton
+      %span
+      = link_to 'Back', facility_path(@facility), :class => "cancelbutton"
+    = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton floatright"
 
