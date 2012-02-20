@@ -5,32 +5,45 @@
 jQuery ->
   $("#add_contact").click (e) ->
       contact_id = $("#contacts_select").val()
-      contact_email = $("#contacts_select option:selected").text()
-      selector = $("li#contact_" + contact_id)
-      if selector.length is 0
-        $('<li>').attr('id','contact_' + contact_id).appendTo("ul#contacts_list")
+      if contact_id
+        contact_email = $("#contacts_select option:selected").text()
+        selector = $("li#contact_" + contact_id)
+        mark_primary = ($("li[id^=contact_]").length == 0)
 
-        $('<input type=hidden>').attr(
-          name: 'contact_ids[]'
-          value: ''
-          id:   'blah'
-        ).appendTo('li#contact_' + contact_id)
+        if selector.length is 0
+          $('<li>').attr('id','contact_' + contact_id).appendTo("ul#contacts_list")
 
-        mark_primary = ($("li[id^=contact_]").length > 0)
-        $('<input type=radio>').attr(
-          name: 'contact_primary'
-          value: contact_id
-          checked: mark_primary
-        ).appendTo('li#contact_' + contact_id)
+          $('<input type=hidden>').attr(
+            name: 'contact_ids[]'
+            value: contact_id
+          ).appendTo('li#contact_' + contact_id)
 
-        $('li#contact_' + contact_id).append(contact_email)
+          $('<input type=radio>').attr(
+            name: 'contact_primary'
+            value: contact_id
+            id: 'contact_primary_' + contact_id
+            checked: mark_primary
+          ).appendTo('li#contact_' + contact_id)
 
-        $('<span>').attr(
-          name: 'remove_contact'
-          class: 'remove_button'
-        ).appendTo('li#contact_' + contact_id)
+
+          $('li#contact_' + contact_id).append(contact_email)
+          $('li#contact_' + contact_id).append("<a href='#' class='delete_contact delete_link'>Delete</a>")
+
+          $('<span>').attr(
+            name: 'remove_contact'
+            class: 'remove_button'
+          ).appendTo('li#contact_' + contact_id)
 
       e.preventDefault()
+
+  $(".delete_contact").live "click", ->
+    $(this).parent().remove()
+    if $("form :radio[name=contact_primary]:checked").length == 0
+      $('form :radio[name=contact_primary]:first').attr(
+        checked: true
+      )
+    false
+
 
 #      $("ul#contacts_list").append "<li id='contact_" + contact_id + "'>"+
 #          "<input type='hidden' name='contact_ids[]' value='" + contact_id + "'>" +

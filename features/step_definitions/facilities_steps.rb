@@ -11,11 +11,11 @@ end
 When /^I add the following contacts:$/ do |table|
   # table is a  | email (string)   | primary (bool)   |
   table.hashes.each do | contact |
-    step "'I select \"#{contact['email']}\" from \"contacts\""
+    step "I select \"#{contact['email']}\" from \"contacts_select\""
     step "I follow \"Add\""
-    if contact['primary']
+    if contact['primary'].to_bool
       user = User.find_by_email contact['email']
-      step "I follow \"make_contact_primary_#{user.id}\""
+      step "I choose \"contact_primary_#{user.id}\""
     end
   end
 

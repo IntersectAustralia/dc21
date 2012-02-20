@@ -13,6 +13,10 @@
   = render_field "Location", @facility.location if @facility.location
   = render_field "Top Left Corner", @facility.loc_tl if @facility.loc_tl
   = render_field "Bottom Right Corner", @facility.loc_br if @facility.loc_br
+  = render_field "Primary Contact", "#{@facility.primary_contact.full_name} (#{@facility.primary_contact.email})" if @facility.primary_contact
+  - if @facility.contacts.present?
+    - @facility.contacts.each_with_index do |c, i|
+      = render_field "Other Contact #{i+1}", "#{c.full_name} (#{c.email})"
 
   .cancelbutton
     %span

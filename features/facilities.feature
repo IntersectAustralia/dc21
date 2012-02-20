@@ -63,6 +63,7 @@ Feature: View the list of facilities
     And I follow "Back"
     Then I should be on the facilities page
 
+  @javascript
   Scenario: Create a new facility
     Given I am on the facilities page
     And I have users
@@ -88,13 +89,47 @@ Feature: View the list of facilities
     And I press "Save Facility"
     Then I should see "Facility successfully added"
     And I should see details displayed
-      | Name                | Facility0                                                            |
-      | Code                | f0                                                                   |
-      | Description         | blah                                                                 |
-      | Top Left Corner     | -10.1 , 20.2                                                         |
-      | Bottom Right Corner | -30.3 , 40.4                                                         |
-      | Primary Contact     | User Two (two@intersect.org.au)                                      |
-      | Other Contacts      | User One (one@intersect.org.au), User Three (three@intersect.org.au) |
+      | Name                | Facility0                           |
+      | Code                | f0                                  |
+      | Description         | blah                                |
+      | Top Left Corner     | -10.1 , 20.2                        |
+      | Bottom Right Corner | -30.3 , 40.4                        |
+      | Primary Contact     | User Two (two@intersect.org.au)     |
+      | Other Contact 1     | User One (one@intersect.org.au)     |
+      | Other Contact 2     | User Three (three@intersect.org.au) |
+
+  @javascript
+  Scenario: Editing a facility should correctly show and update contacts
+    Given I am on the facilities page
+    And I have users
+      | email                  | first_name | last_name |
+      | one@intersect.org.au   | User       | One       |
+      | two@intersect.org.au   | User       | Two       |
+      | three@intersect.org.au | User       | Three     |
+      | four@intersect.org.au  | User       | Four      |
+
+  #TODO refactor into just using a factory
+    And I follow "New Facility"
+    When I fill in the following:
+      | facility_name        | Facility0 |
+      | facility_code        | f0        |
+    And I add the following contacts:
+      | email                  | primary |
+      | one@intersect.org.au   | false   |
+      | two@intersect.org.au   | true    |
+      | three@intersect.org.au | false   |
+    And I press "Save Facility"
+    And I follow "Edit Facility"
+    And I add the following contacts:
+      | email                 | primary |
+      | four@intersect.org.au | true    |
+    And I press "Update"
+    Then I should see "Facility successfully updated"
+    And I should see details displayed
+      | Primary Contact | User Four (four@intersect.org.au)   |
+      | Other Contact 1 | User One (one@intersect.org.au)     |
+      | Other Contact 2 | User Three (three@intersect.org.au) |
+      | Other Contact 3 | User Two (two@intersect.org.au)     |
 
 
   Scenario: Create a new facility with invalid details

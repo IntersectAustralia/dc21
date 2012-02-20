@@ -38,6 +38,27 @@
     %p.details
       Choose from the list above, and select via radio button the primary contact. 
     %ul#contacts_list
+      - if @facility.primary_contact.present?
+        - contact = @facility.primary_contact
+        - #TODO refactor this out into a helper
+        -#= build_contact_fields(contact)
+        %li{:id => "contact_#{contact.id}"}
+          = hidden_field_tag "contact_ids[]", contact.id
+          = radio_button_tag "contact_primary", contact.id, :checked => true
+          = contact.email
+          = link_to "Delete", '#', :class => 'delete_contact delete_link'
+
+      - if @facility.contacts.present?
+        - @facility.contacts.each do |contact|
+          - #TODO refactor this out into a helper
+          -#= build_contact_fields(contact)
+          %li{:id => "contact_#{contact.id}"}
+            = hidden_field_tag "contact_ids[]", contact.id
+            = radio_button_tag "contact_primary", contact.id, :checked => false
+            = contact.email
+            = link_to "Delete", '#', :class => 'delete_contact delete_link'
+
+
 
 
   .actions

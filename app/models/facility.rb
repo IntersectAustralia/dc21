@@ -17,6 +17,11 @@ class Facility < ActiveRecord::Base
            :class_name => 'User',
            :source => :user
 
+  #accepts_nested_attributes_for :primary_contactable
+  accepts_nested_attributes_for :primary_contact
+  accepts_nested_attributes_for :contactables
+  accepts_nested_attributes_for :contacts
+
   #Hooks
   before_validation :pigeonhole_location
   before_validation :remove_white_spaces
@@ -38,7 +43,7 @@ class Facility < ActiveRecord::Base
   validates_presence_of :b_lat, :if => :b_long?
   validates_presence_of :b_long, :if => :b_lat?
 
-  validates_presence_of :primary_contact
+  #validates_presence_of :primary_contact
 
   #Scopes
   default_scope :order => 'name ASC'
@@ -82,8 +87,8 @@ class Facility < ActiveRecord::Base
 
   def swap_ab_ll
     #Simple method, but will be used multiple times
-    self.a_lat, self.b_lat = b_lat,a_lat
-    self.a_long, self.b_long = b_long,a_long
+    self.a_lat, self.b_lat = b_lat, a_lat
+    self.a_long, self.b_long = b_long, a_long
   end
 
   def pigeonhole_location

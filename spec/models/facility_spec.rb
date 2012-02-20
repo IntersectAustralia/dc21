@@ -16,7 +16,7 @@ describe Facility do
   describe "Validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:code) }
-    it { should validate_presence_of(:primary_contact) }
+    #it { should validate_presence_of(:primary_contact) }
     it "should validate uniqueness of name" do
       Factory(:facility)
       should validate_uniqueness_of(:name)

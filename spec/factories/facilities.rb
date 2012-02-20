@@ -4,6 +4,6 @@ FactoryGirl.define do
   factory :facility do
     sequence(:name) { |n| "name-#{n}" }
     sequence(:code) { |n| "code-#{n}" }
-    association :primary_contact, :factory => :user
+    #association :primary_contactable, :factory => :user
   end
 end

@@ -15,6 +15,18 @@ class FacilitiesController < ApplicationController
   end
 
   def create
+    contacts = params.delete(:contact_ids)
+    primary = params.delete(:contact_primary)
+    contacts.delete(primary) unless contacts.blank?
+
+    params[:facility][:contact_ids] = contacts
+    if primary.present?
+      u = User.find(primary)
+      params[:facility][:primary_contact] = u
+    end
+
+    @facility = Facility.new(params[:facility])
+
     if @facility.save
       redirect_to @facility, :notice => "Facility successfully added"
     else
@@ -26,6 +38,14 @@ class FacilitiesController < ApplicationController
   end
 
   def update
+    contacts = params.delete(:contact_ids)
+    primary = params.delete(:contact_primary)
+    contacts.delete(primary) unless contacts.blank?
+
+    params[:facility][:contact_ids] = contacts
+    params[:facility][:primary_contact] = (primary.present? ? User.find(primary) : nil)
+
+
     if @facility.update_attributes(params[:facility])
       redirect_to @facility, :notice => "Facility successfully updated."
     else
