@@ -99,14 +99,14 @@ def load_password
 
   if Rails.env.development?
     puts "#{password_file} missing.\n" +
-         "Set sample user password:"
-          input = STDIN.gets.chomp
-          buffer = Hash[:password => input]
-          Dir.mkdir("#{Rails.root}/tmp", 0755) unless Dir.exists?("#{Rails.root}/tmp")
-          Dir.mkdir("#{Rails.root}/tmp/env_config", 0755) unless Dir.exists?("#{Rails.root}/tmp/env_config")
-          File.open(password_file, 'w') do |out|
-            YAML::dump(buffer, out)
-          end
+             "Set sample user password:"
+    input = STDIN.gets.chomp
+    buffer = Hash[:password => input]
+    Dir.mkdir("#{Rails.root}/tmp", 0755) unless Dir.exists?("#{Rails.root}/tmp")
+    Dir.mkdir("#{Rails.root}/tmp/env_config", 0755) unless Dir.exists?("#{Rails.root}/tmp/env_config")
+    File.open(password_file, 'w') do |out|
+      YAML::dump(buffer, out)
+    end
     @password = input
   else
     raise "No sample password file provided, and it is required for any environment that isn't development\n" +
@@ -118,8 +118,14 @@ end
 def create_facilities
   Facility.delete_all
   user = User.first
-  create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS", :primary_contact => user)
-  create_facility(:name => "Test Facility", :code => "T1", :primary_contact => user)
+  ws = create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS", :primary_contact => user)
+  ws.experiments.create!(:name => "The Rain Experiment", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Rain")
+  ws.experiments.create!(:name => "The Wind Experiment", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au", :subject => "Wind")
+
+  test = create_facility(:name => "Test Facility", :code => "T1", :primary_contact => user)
+  test.experiments.create(:name => "Test Experiment 1", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Test1")
+  test.experiments.create(:name => "Test Experiment 2", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au", :subject => "Test2")
+  test.experiments.create(:name => "Test Experiment 3", :start_date => "2012-06-01", :access_rights => "http://creativecommons.org/licenses/by-nc-nd/3.0/au", :subject => "Test3")
 end
 
 def create_facility(attrs)
