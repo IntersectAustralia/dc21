@@ -13,6 +13,55 @@ describe DataFile do
     it { should have_many(:metadata_items) }
   end
 
+  describe "Scopes" do
+    describe "Unprocessed scope" do
+      it "should include files that are missing either processing status or experiment id" do
+        m1 = Factory(:data_file, :experiment_id => nil, :file_processing_status => nil)
+        m2 = Factory(:data_file, :experiment_id => 1, :file_processing_status => nil)
+        m3 = Factory(:data_file, :experiment_id => nil, :file_processing_status => DataFile::STATUS_RAW)
+        ok = Factory(:data_file, :experiment_id => -1, :file_processing_status => DataFile::STATUS_RAW)
+        unprocessed = DataFile.unprocessed
+        unprocessed.size.should eq(3)
+        unprocessed.collect(&:id).sort.should eq([m1.id, m2.id, m3.id])
+      end
+    end
+  end
+
+  describe "Get facility" do
+    it "returns nil if no station name metadata item" do
+      Factory(:data_file).facility.should be_nil
+    end
+
+    it "returns nil if station name metadata item exists but no facility matches the value" do
+      df = Factory(:data_file)
+      df.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => "ASDF")
+      df.facility.should be_nil
+    end
+
+    it "returns the facility object if station name matches a facility" do
+      df = Factory(:data_file)
+      df.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => "ASDF")
+      df.facility.should be_nil
+      facility = Factory(:facility, :code => "ASDF", :name => "Fred's Facility")
+      df.facility.should eq(facility)
+    end
+  end
+
+  describe "Get experiment name" do
+    it "returns blank if no experiment id set" do
+      Factory(:data_file, :experiment_id => nil).experiment_name.should eq("")
+    end
+
+    it "returns 'Other' if set to -1" do
+      Factory(:data_file, :experiment_id => -1).experiment_name.should eq("Other")
+    end
+
+    it "returns the experiment name if set to anything other than -1" do
+      exp = Factory(:experiment, :name => "Fred")
+      Factory(:data_file, :experiment_id => exp.id).experiment_name.should eq("Fred")
+    end
+  end
+
   describe "Get file extension" do
     it "should return the correct extension" do
       Factory(:data_file, :filename => "abc.csv").extension.should eq("csv")
@@ -307,7 +356,7 @@ describe DataFile do
 
       all_cols = ColumnDetail.all
       df1.destroy
-      ColumnDetail.all.should eq  (all_cols - df1_cols)
+      ColumnDetail.all.should eq (all_cols - df1_cols)
     end
 
     it "should not remove any column mappings defined from columns in a deleted file" do
@@ -318,12 +367,12 @@ describe DataFile do
       Factory(:column_mapping, :name => "Temperature", :code => "Temp")
 
       searchables = DataFile.searchable_column_names
-      searchables.should eq(["Rainfall","Temperature"])
+      searchables.should eq(["Rainfall", "Temperature"])
 
       df1.destroy
 
       searchables = DataFile.searchable_column_names
-      searchables.should eq(["Rainfall","Temperature"])
+      searchables.should eq(["Rainfall", "Temperature"])
     end
 
     it "should remove all metadata records associated with a file from the database" do
@@ -356,7 +405,7 @@ describe DataFile do
           station_name = 'station_name'
           table_name = 'table_name'
 
-          [txt,jpg,toa].each do |file|
+          [txt, jpg, toa].each do |file|
             file.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
             file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
           end
@@ -389,8 +438,8 @@ describe DataFile do
 
       describe "obvious misses" do
         before :each do
-          @start_time = Time.new(2011,5,30)
-          @end_time = Time.new(2011,6,20)
+          @start_time = Time.new(2011, 5, 30)
+          @end_time = Time.new(2011, 6, 20)
           @some_path = "blah"
           @toa5_file = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :format => FileTypeDeterminer::TOA5)
           @station_name = 'stn'
@@ -536,7 +585,7 @@ describe DataFile do
         describe "subset_range" do
           before :each do
             @subset_start = Time.parse '2011/10/9 0:00 UTC'
-            @subset_end = Time.parse '2011/10/14 23:55 UTC' 
+            @subset_end = Time.parse '2011/10/14 23:55 UTC'
           end
           it "subset_range same" do
             subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range.dat').to_s

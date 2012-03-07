@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120215040304) do
+ActiveRecord::Schema.define(:version => 20120304234604) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20120215040304) do
     t.integer  "interval"
     t.string   "file_processing_status"
     t.string   "file_processing_description"
+    t.integer  "experiment_id"
   end
 
   create_table "experiment_for_codes", :force => true do |t|

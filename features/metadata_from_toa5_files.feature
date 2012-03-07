@@ -22,7 +22,7 @@ Feature: Viewing metadata from toa5 files
       | End time         | 2011-11-03 11:55:00           |
       | File format      | TOA5                          |
       | Datalogger model | CR3000                        |
-      | Station name     | ROS_WS                        |
+      | Facility     | ROS_WS                        |
       | Serial number    | 4909                          |
       | Os version       | CR3000.Std.11                 |
       | Dld name         | CPU:weather_station_final.CR3 |

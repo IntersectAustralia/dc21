@@ -45,14 +45,14 @@ Feature: View the details of a data file
     When I am on the list data files page
     And I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Station name | WTC Station |
+      | Facility | WTC01 (WTC Station) |
 
   Scenario: TOA5 file shows station code if no mapping to facility exists
     Given I upload "WTC01_Table1.dat" through the applet
     When I am on the list data files page
     And I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Station name | WTC01 |
+      | Facility | WTC01 |
 
   Scenario: TOA5 file shows correctly mapped column names in file info table
     Given I upload "Test_Column_Table.dat" through the applet

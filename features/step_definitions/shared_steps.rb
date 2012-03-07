@@ -21,7 +21,7 @@ end
 
 Then /^I should see details displayed$/ do |table|
   # as above, this assumes you're using the helper to render the field and therefore have the usual div/label/span setup
-  table.rows.each do |row|
+  table.raw.each do |row|
     check_displayed_field(row[0], row[1])
   end
 end

@@ -9,6 +9,7 @@
       %th="Date Added"
       %th="Added By"
       %th="Status"
+      %th="Experiment"
       %th="Description (Optional)"
       %th="Errors" if @errors_present
       - @data_files.each do |df|
@@ -18,6 +19,7 @@
             %td= df.created_at.to_s(:with_time)
             %td.email= df.created_by.email if df.created_by
             %td= f.select :file_processing_status, %w(UNKNOWN RAW CLEANSED PROCESSED), :include_blank => true
+            %td= f.grouped_collection_select :experiment_id, grouped_experiments_for_select(df), :experiments, :name, :id, :name, :include_blank => true
             %td= f.text_field :file_processing_description
             %td.formerror= df.errors.full_messages.join(', ') if @errors_present
 

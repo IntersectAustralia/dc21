@@ -1,11 +1,10 @@
 - if @data_file.format == "TOA5"
   - @data_file.metadata_items.each do |item|
     - if item.key == "station_name"
-      - fac = Facility.find_by_code(item.value)
-      - unless fac.nil?
-        = render_field item.key.humanize, item.value + " (" + fac.name + ")"
+      - if @data_file.facility
+        = render_field "Facility", item.value + " (" + @data_file.facility.name + ")"
       - else 
-        = render_field item.key.humanize, item.value
+        = render_field "Facility", item.value
     - else
       = render_field item.key.humanize, item.value
 

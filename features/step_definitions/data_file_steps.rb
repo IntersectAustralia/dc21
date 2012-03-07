@@ -4,6 +4,16 @@ Given /^I have data files$/ do |table|
     if attributes['file_processing_status'] == ''
       attributes['file_processing_status'] = nil
     end
+    exp = attributes.delete('experiment')
+    unless exp.blank?
+      if exp == "Other"
+        attributes["experiment_id"] = "-1"
+      else
+        experiment = Experiment.find_by_name(exp)
+        experiment = Factory(:experiment) unless experiment
+        attributes["experiment_id"] = experiment.id
+      end
+    end
     if email
       user = User.find_by_email(email)
       unless user
@@ -34,7 +44,7 @@ When /^I attempt to upload "([^"]*)" through the applet without an auth token I 
   #post to the upload controller just like the applet would
   post_path = data_files_url(:format => :json, :auth_token => "blah")
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
-  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir" => "/"}
   response.status.should eq(401)
 end
 
@@ -52,7 +62,7 @@ end
 Then /^I should get a download of all data files$/ do
   page.response_headers['Content-Disposition'].should include("filename=\"download_selected.zip\"")
   page.response_headers['Content-Disposition'].should include("attachment")
-end 
+end
 
 When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do |from, to|
   visit path_to("the list data files page")
@@ -139,6 +149,39 @@ Then /^I should see postprocess error "(.*)" for "(.*)"$/ do |error_message, fil
   field.should have_content error_message
 end
 
+Then /^the experiment select for "([^"]*)" should contain$/ do |file, table|
+  data_file = DataFile.find_by_filename!(file)
+  select_id = "data_files_#{data_file.id}_experiment_id"
+
+  field = find_field(select_id)
+  groups = field.all("optgroup")
+
+  actual_options = []
+  groups.each do |group|
+    options = group.all("option").collect(&:text)
+    actual_options << [group[:label], options]
+  end
+
+  expected_options = table.raw.collect { |row| [row[0], row[1].split(",").collect{|i| i.strip}] }
+  actual_options.should eq(expected_options)
+end
+
+When /^I select "([^"]*)" as the experiment for "([^"]*)"$/ do |experiment, file|
+  data_file = DataFile.find_by_filename!(file)
+  select_id = "data_files_#{data_file.id}_experiment_id"
+  select experiment, :from => select_id
+end
+
+
+Then /^"([^"]*)" should be selected in the experiment select for "([^"]*)"$/ do |expected_option, file|
+  data_file = DataFile.find_by_filename!(file)
+  select_id = "data_files_#{data_file.id}_experiment_id"
+
+  field = find_field(select_id)
+  option = field.find("option[selected]")
+  option.text.should eq(expected_option)
+end
+
 private
 
 def do_upload(filename, user, path=nil)
@@ -151,7 +194,7 @@ def do_upload(filename, user, path=nil)
     path = Rails.root.join('samples', filename).to_s
   end
   file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
-  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir"=>"/"}
+  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir" => "/"}
   response.status.should eq(200)
   DataFile.count.should_not eq(0)
 end

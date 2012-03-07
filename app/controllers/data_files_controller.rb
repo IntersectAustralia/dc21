@@ -37,12 +37,20 @@ class DataFilesController < ApplicationController
     render :layout => 'guest'
   end
 
-  def edit;  end
-  def update; end
+  def edit
+  end
+
+  def update
+  end
 
   def list_for_post_processing
-
     @data_files = DataFile.unprocessed.most_recent_first
+    #pre-set the experiment if there's  only one likely candidate
+    @data_files.each do |df|
+      if df.facility && df.facility.experiments.size == 1
+        df.experiment_id = df.facility.experiments.first.id
+      end
+    end
     redirect_to data_files_path unless @data_files.present?
   end
 
@@ -53,7 +61,7 @@ class DataFilesController < ApplicationController
     params[:data_files].each do |df_id, values|
 
       #Skip if they left it blank
-      next if values[:file_processing_status].blank? && values[:file_processing_description].blank?
+      next if values[:file_processing_status].blank? && values[:file_processing_description].blank? && values[:experiment_id].blank?
 
       #remove "" entries - we don't want them be set as "" if they are actually nil
       cleaned_values = values.delete_if { |k, v| v.blank? }

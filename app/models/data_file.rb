@@ -21,6 +21,8 @@ class DataFile < ActiveRecord::Base
 
   scope :most_recent_first, order("created_at DESC")
   scope :unprocessed, where(file_processing_status: nil)
+  #scope :unprocessed, where("file_processing_status IS NULL OR experiment_id IS NULL")
+  #  scope :unprocessed, where{((file_processing_status.eq nil) | (experiment_id.eq nil))}
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
@@ -103,7 +105,17 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.present? ? self.file_processing_status.upcase : "UNDEFINED"
   end
 
+  def experiment_name
+    return "Other" if experiment_id == -1
+    return "" if experiment_id.nil?
+    Experiment.find(experiment_id).name
+  end
 
+  def facility
+    station_name_item = metadata_items.where(:key => MetadataKeys::STATION_NAME_KEY).first
+    return nil unless station_name_item
+    Facility.find_by_code(station_name_item.value)
+  end
 
   protected
 
@@ -166,7 +178,7 @@ class DataFile < ActiveRecord::Base
       overlap = safe_overlap(station_item.value, table_item.value)
 
       overlap_descriptions = overlap.map(&:file_processing_description)
-      overlap.each {|df| df.destroy}
+      overlap.each { |df| df.destroy }
       self.file_processing_description = overlap_descriptions.join ', ' unless file_processing_description
     end
   end
@@ -229,7 +241,7 @@ class DataFile < ActiveRecord::Base
       end
     end
 
-    exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch 
+    exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
   end
 
   def no_bad_overlap
