@@ -20,9 +20,7 @@ class DataFile < ActiveRecord::Base
   before_save :destroy_safe_overlap
 
   scope :most_recent_first, order("created_at DESC")
-  scope :unprocessed, where(file_processing_status: nil)
-  #scope :unprocessed, where("file_processing_status IS NULL OR experiment_id IS NULL")
-  #  scope :unprocessed, where{((file_processing_status.eq nil) | (experiment_id.eq nil))}
+  scope :unprocessed, where{((file_processing_status.eq nil) | (experiment_id.eq nil))}
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
