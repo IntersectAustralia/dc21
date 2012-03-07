@@ -18,12 +18,12 @@ Feature: Upload files
     When I press "Done"
     Then I should be on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing Status |
+      | Filename    | Added by                    | Start time | End time | Processing status |
       | sample1.txt | researcher@intersect.org.au |            |          | UNDEFINED         |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status | UNDEFINED |
-    And I should not see "Description"
+      | Processing status | UNDEFINED |
+      | Description       |           |
 
   Scenario: Assign a status only to a newly uploaded file
     Given I follow "Next"
@@ -32,12 +32,12 @@ Feature: Upload files
     And I press "Done"
     Then I should be on the list data files page
     And I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing Status |
+      | Filename    | Added by                    | Start time | End time | Processing status |
       | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status | RAW |
-    And I should not see "Description"
+      | Processing status | RAW |
+      | Description       |     |
 
   Scenario: Assign a description only to a newly uploaded file
     Given I follow "Next"
@@ -46,11 +46,11 @@ Feature: Upload files
     And I press "Done"
     Then I should be on the list data files page
     And I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing Status |
+      | Filename    | Added by                    | Start time | End time | Processing status |
       | sample1.txt | researcher@intersect.org.au |            |          | UNDEFINED         |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status | UNDEFINED                                   |
+      | Processing status | UNDEFINED                                   |
       | Description       | I don't understand why I uploaded this file |
 
   Scenario: Assign a status and description to a newly uploaded file
@@ -61,11 +61,11 @@ Feature: Upload files
     And I press "Done"
     Then I should be on the list data files page
     And I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing Status |
+      | Filename    | Added by                    | Start time | End time | Processing status |
       | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status | RAW             |
+      | Processing status | RAW             |
       | Description       | Raw sample file |
       | Experiment        |                 |
 
@@ -125,18 +125,18 @@ Feature: Upload files
     And I press "Done"
     Then I should be on the list data files page
     And I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing Status |
+      | Filename    | Added by                    | Start time | End time | Processing status |
       | sample2.txt | researcher@intersect.org.au |            |          | UNDEFINED         |
       | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing Status | RAW             |
+      | Processing status | RAW             |
       | Description       | Raw sample file |
     And I follow "Explore Data"
     And I follow the view link for data file "sample2.txt"
     Then I should see details displayed
-      | Processing Status | UNDEFINED |
-    And I should not see "Description"
+      | Processing status | UNDEFINED |
+      | Description       |           |
 
 
   Scenario: Ensure the 'processing metadata is set for files as follows:' meta step definition works
@@ -147,12 +147,12 @@ Feature: Upload files
       | filename     | status | description   |
       | datafile.dat | RAW    | something set |
     And I should see "exploredata" table with
-      | Filename     | Added by                    | Start time | End time | Processing Status |
+      | Filename     | Added by                    | Start time | End time | Processing status |
       | sample1.txt  | researcher@intersect.org.au |            |          | UNDEFINED         |
       | datafile.dat | researcher@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "datafile.dat"
     Then I should see details displayed
-      | Processing Status | RAW           |
+      | Processing status | RAW           |
       | Description       | something set |
 
 
@@ -161,7 +161,7 @@ Feature: Upload files
     When I press "Done"
     Then I should be on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing Status | Description |
+      | Filename    | Added by                    | Start time | End time | Processing status | Description |
       | sample1.txt | researcher@intersect.org.au |            |          |                   |             |
 
 

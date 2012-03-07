@@ -56,7 +56,7 @@
         %th.sortable.email= sortable "users.email", "Added by"
         %th.sortable= sortable "start_time", "Start time"
         %th.sortable= sortable "end_time", "End time"
-        %th.sortable= sortable "processing_status", "Processing Status"
+        %th.sortable= sortable "processing_status", "Processing status"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"

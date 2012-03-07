@@ -27,11 +27,11 @@ Feature: Overlapping Files
 
     Then I should be on the list data files page
     And I should see only these rows in "exploredata" table
-      | Filename         | Added by                    | Start time          | End time            | Processing Status |
+      | Filename         | Added by                    | Start time          | End time            | Processing status |
       | WTC01_Table1.dat | researcher@intersect.org.au | 2011-08-11  9:30:00 | 2011-11-02 13:00:00 | RAW               |
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Processing Status | RAW             |
+      | Processing status | RAW             |
       | Description       | new description |
 
   Scenario: Safe overlap one file inherits description
@@ -52,11 +52,11 @@ Feature: Overlapping Files
 
     Then I should be on the list data files page
     And I should see only these rows in "exploredata" table
-      | Filename         | Added by                    | Start time          | End time            | Processing Status |
+      | Filename         | Added by                    | Start time          | End time            | Processing status |
       | WTC01_Table1.dat | researcher@intersect.org.au | 2011-08-11  9:30:00 | 2011-11-02 13:00:00 | RAW               |
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Processing Status | RAW                   |
+      | Processing status | RAW                   |
       | Description       | orig wtc01_table1.dat |
 
   Scenario: Bad overlap does not save
@@ -79,7 +79,7 @@ Feature: Overlapping Files
 
     Then I should see postprocess error "overlapped full_WTC01_Table1.dat" for "WTC01_Table1_part.dat"
 
-    @wip
+  @wip
   Scenario: Safe overlap where original file still appears on files pending page because it doesn't have an experiment yet
     Given I have data files
       | filename              | uploaded_by                 | path                                                  | file_processing_status | experiment | file_processing_description | start_time          | end_time            | format |
@@ -99,10 +99,10 @@ Feature: Overlapping Files
 
     Then I should be on the list data files page
     And I should see only these rows in "exploredata" table
-      | Filename         | Added by                    | Start time          | End time            | Processing Status |
+      | Filename         | Added by                    | Start time          | End time            | Processing status |
       | WTC01_Table1.dat | researcher@intersect.org.au | 2011-08-11  9:30:00 | 2011-11-02 13:00:00 | RAW               |
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Processing Status | RAW             |
+      | Processing status | RAW             |
       | Description       | new description |
 

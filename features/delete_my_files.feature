@@ -33,7 +33,7 @@ Feature: Delete files containing erroneous data
       | filename | status | description   |
       | toa5.dat | RAW    | something set |
     And I should see "exploredata" table with
-      | Filename | Added by                  | Start time          | End time            | Processing Status |
+      | Filename | Added by                  | Start time          | End time            | Processing status |
       | toa5.dat | researcher@intersect.org.au | 2011-10-06 0:40:00 | 2011-11-03 11:55:00 | RAW               |
     Given I am on the list data files page
     And I follow the view link for data file "toa5.dat"

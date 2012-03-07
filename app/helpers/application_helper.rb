@@ -27,6 +27,10 @@ module ApplicationHelper
     render_field_content(label, content)
   end
 
+  def cancel_button(link_text, path, options = {})
+    ("<div class='cancelbutton'><span></span>" + link_to(h(link_text), path, options.merge(:class => "cancelbutton")) + "</div>").html_safe
+  end
+
   private
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
@@ -42,11 +46,11 @@ module ApplicationHelper
     html.html_safe
   end
 
-  def sortable(column, title = nil)  
+  def sortable(column, title = nil)
     title ||= column.titleize
     css_class = (column == sort_column) ? "current #{sort_direction}" : nil
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
-    link_to title, params.merge(:sort => column, :direction => direction), { :class => css_class }
+    link_to title, params.merge(:sort => column, :direction => direction), {:class => css_class}
   end
 
 end

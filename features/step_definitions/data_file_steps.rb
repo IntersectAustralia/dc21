@@ -10,7 +10,7 @@ Given /^I have data files$/ do |table|
         attributes["experiment_id"] = "-1"
       else
         experiment = Experiment.find_by_name(exp)
-        experiment = Factory(:experiment) unless experiment
+        experiment = Factory(:experiment, :name => exp) unless experiment
         attributes["experiment_id"] = experiment.id
       end
     end
