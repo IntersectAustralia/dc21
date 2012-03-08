@@ -4,6 +4,7 @@
 - content_for :pageactions do
   =render :partial => 'data_files/pageactions'
 
+= cancel_button "Back", data_files_path
 #file_details
   = render_field "Name", @data_file.filename
   = render_field "Date added", @data_file.created_at.to_s(:with_time)

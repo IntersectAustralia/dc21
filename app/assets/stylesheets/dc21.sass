@@ -217,6 +217,23 @@ input.datasearchsubmit
 // EXPLORE - DATA TABLE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
+.datacontroll
+
+  h3.filter
+    +m-p-w-h-p-t-b-l-r-f("", 0 20px 0 0, 265px)
+    +font("", normal, 13px)
+    float: left
+  h3.results
+    +m-p-w-h-p-t-b-l-r-f("")
+    +inlineblock
+    +font("", normal, 13px)
+
+  #downloadtoggle
+    float: right
+    a
+      font-weight: normal
+
+
 #exploredata, .exploredata
 .exploredata.search, #exploredata.search, #exploredata.search tbody
   +inlineblock
@@ -454,7 +471,7 @@ h3.upload
 //
 
 .formerror
-  margin: 0 0 20px 170px
+  margin: 0 0 20px 0
 
 button.ui-datepicker-trigger
   +m-p-w-h-p-t-b-l-r-f(4px 0 4px -31px)

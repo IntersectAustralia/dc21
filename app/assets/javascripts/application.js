@@ -116,6 +116,11 @@ $(window).load(function() {
   // FACETED SEARCH /////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
+  //$('.date').hide();
+  //$('.time').hide();
+  //$('.facility').hide();
+  //$('.variable').hide();
+    
   $('#date').click(function(event) {
     $('.date').slideToggle();
     $(this).toggleClass('current');

@@ -1,14 +1,13 @@
-- content_for :actions do
-  %li.actions
-    .facility.new.whitebutton
-      = link_to "New Facility", new_facility_path
-
 - content_for :breadcrumb  do
   %h1 Home / Facilities
 
 - content_for :pageactions do
   .pageactions
     = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
+
+.datacontroll
+  .facility.new.whitebutton
+    = link_to "New Facility", new_facility_path
 
 - if @facilities.empty?
   %h3 There are no facilities to display

@@ -1,9 +1,5 @@
-- content_for :actions do
-  %li.actions
-    #downloadtoggle.download.whitebutton
-      %span= link_to 'Download Files'
-    #searchtoggle.search.whitebutton
-      %span= link_to 'Search Files'
+-##searchtoggle.search.whitebutton
+  -#%span= link_to 'Search Files'
 
 - content_for :breadcrumb  do
   %h1 Home / Explore Data
@@ -12,27 +8,34 @@
   .pageactions
     = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
 
-%h3
-  - unless @search.showing_all?
+- unless @search.showing_all?
+  %h3
     = link_to "Clear Search", data_files_path
-.facetedsearch{ :class => @search.showing_all? ? "" : "search" }
+
+.datacontroll
+  %h3.filter No filters set
+  %h3.results Displaying 8 of 8 results...
+  #downloadtoggle.download.whitebutton
+    %span= link_to 'Download Files'
+
+.facetedsearch.search
   .searchbox
     = form_tag(data_files_path, :method => :get) do
       .searchcategory
-        %h4#date.expand.current Date:
+        %h4#date.expand Date:
         .date
           = label_tag :from_date, "From Date:"
           = text_field_tag "search[from_date]", @from_date, :id => :from_date
           = label_tag :to_date, "To Date:"
           = text_field_tag "search[to_date]", @to_date, :id => :to_date
       .searchcategory
-        %h4#facility.expand.current Facility:
+        %h4#facility.expand Facility:
         .facility
           - @facilities.each_with_index do |facility, index|
             = label_tag "search_facility_#{index}", facility[1]
             = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
       .searchcategory
-        %h4#variable.expand.current Variable:
+        %h4#variable.expand Variable:
         .variable
           - @variables.each_with_index do |variable, index|
             = label_tag "search_variable_#{index}", variable
@@ -43,10 +46,10 @@
 - if (@data_files.empty?)
   No files to display.
 - else
-  = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => @search.showing_all? ? "exploredata" : "exploredata search") do
+  = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
     = hidden_field_tag "searched_from_date", @from_date
     = hidden_field_tag "searched_to_date", @to_date
-    %table#exploredata{ :class => (@search.showing_all? ? "" : "search") }
+    %table#exploredata.search
       %tr
         %th.view.select
           = (link_to "All", "javascript:selectToggle(false, 'datafiles');") + "/" + (link_to "None", "javascript:selectToggle(true, 'datafiles');")

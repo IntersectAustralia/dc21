@@ -161,11 +161,3 @@ Feature: Search data files by date range
     Then I should see "No files to display."
     Then the "from_date" field should contain "2012-06-12"
     And the "to_date" field should contain "2012-06-13"
-
-  @javascript
-  Scenario: Clicking search button makes search column appear
-    When I am on the list data files page
-    And I follow "Search Files"
-    And I fill in date search details between "2010-06-11" and "2010-06-10"
-    And I press "Update Search Results"
-    Then the "exploredata" table should have 8 rows
