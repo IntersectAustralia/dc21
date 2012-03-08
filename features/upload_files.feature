@@ -85,8 +85,6 @@ Feature: Upload files
       | Other               | Other                                                   |
     And the experiment select for "toa5.dat" should contain
       | ROS Weather Station | Rain Experiment,  Wind Experiment                       |
-      | Flux Tower          | Flux Experiment 1, Flux Experiment 2, Flux Experiment 3 |
-      | Other               | Other                                                   |
     When I select "Wind Experiment" as the experiment for "toa5.dat"
     When I press "Done"
     And I follow the view link for data file "toa5.dat"
