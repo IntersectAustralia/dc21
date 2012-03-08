@@ -26,8 +26,14 @@ class ExperimentsController < ApplicationController
   end
 
   def update
-    @experiment.set_for_codes(params[:for_codes])
-    if @experiment.update_attributes(params[:experiment])
+    success = false
+    Experiment.transaction do
+      @experiment.set_for_codes(params[:for_codes])
+      success = @experiment.update_attributes(params[:experiment])
+      raise ActiveRecord::Rollback unless success #tell AR to rollback the transaction but not pass on the error
+    end
+
+    if success
       redirect_to facility_experiment_path(@facility, @experiment), notice: SAVE_MESSAGE
     else
       render action: "edit"

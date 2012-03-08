@@ -87,6 +87,20 @@ When /^I delete for code "([^"]*)"$/ do |code|
   raise "Didn't find FOR code #{code}" unless ok
 end
 
+Then /^experiment "([^"]*)" should have for codes$/ do |experiment_name, table|
+  experiment = Experiment.find_by_name!(experiment_name)
+  expected_codes = table.raw.collect{ |row| row[0] }
+  actual_codes = experiment.experiment_for_codes.collect(&:name)
+  actual_codes.should eq(expected_codes)
+end
+
+Then /^experiment "([^"]*)" should have (\d+) for codes$/ do |experiment_name, count|
+  experiment = Experiment.find_by_name!(experiment_name)
+  actual_count = experiment.experiment_for_codes.count
+  actual_count.should eq(count.to_i), "Expected experiment #{experiment_name} to have #{count} FOR codes, found #{actual_count}"
+  ExperimentForCode.where("experiment_id is NULL").count.should eq(0) #check that there's no orphans
+end
+
 def click_view_experiment_link(name)
   experiment = Experiment.find_by_name!(name)
   click_link "view_#{experiment.id}"

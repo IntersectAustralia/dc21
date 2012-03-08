@@ -32,7 +32,7 @@ class PagesController < ApplicationController
     #Missing processing status
     unprocessed_files = DataFile.unprocessed.count
     if unprocessed_files  > 0
-      list_of_items << {text: "There are #{unprocessed_files} files missing status or experiment information, click here to resolve.", link: list_for_post_processing_data_files_path}
+      list_of_items << {text: "There are #{unprocessed_files} files missing status or experiment information", link: list_for_post_processing_data_files_path}
     end
 
 

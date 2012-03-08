@@ -93,16 +93,29 @@ Feature: Manage experiment metadata
       | 05 - ENVIRONMENTAL SCIENCES |
 
   @javascript
-  Scenario: Additional FOR codes chosen so far aren't lost on validation error during edit
+  Scenario: Added/deleted FOR codes aren't lost on validation error during edit (but are not yet persisted)
     Given experiment "Weather Station" has for code "02 - PHYSICAL SCIENCES"
+    And experiment "Weather Station" has for code "05 - ENVIRONMENTAL SCIENCES"
     When I edit experiment "Weather Station"
-    And I add for code "05 - ENVIRONMENTAL SCIENCES"
+    And I add for code "01 - MATHEMATICAL SCIENCES"
+    And I delete for code "02 - PHYSICAL SCIENCES"
     And I fill in "Name" with ""
     And I press "Save Experiment"
     Then I should see "Name can't be blank"
     And I should see for codes
+      | 05 - ENVIRONMENTAL SCIENCES |
+      | 01 - MATHEMATICAL SCIENCES  |
+  # changes should not be persisted yet
+    And experiment "Weather Station" should have for codes
       | 02 - PHYSICAL SCIENCES      |
       | 05 - ENVIRONMENTAL SCIENCES |
+  # fix the problem and save
+    When I fill in "Name" with "New name"
+    And I press "Save Experiment"
+    Then I should see for codes
+      | 01 - MATHEMATICAL SCIENCES  |
+      | 05 - ENVIRONMENTAL SCIENCES |
+    And experiment "New name" should have 2 for codes
 
   @javascript
   Scenario: Can delete FOR codes during create
@@ -127,4 +140,5 @@ Feature: Manage experiment metadata
     And I should see for codes
       | 030302 - ITEM 2             |
       | 05 - ENVIRONMENTAL SCIENCES |
+    And experiment "Weather Station" should have 2 for codes
 

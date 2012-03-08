@@ -32,7 +32,7 @@ class Experiment < ActiveRecord::Base
   end
 
   def set_for_codes(codes)
-    experiment_for_codes.delete_all
+    experiment_for_codes.destroy_all
     return if codes.nil? || codes.empty?
     urls = []
     codes.each_value do |code_attrs|
