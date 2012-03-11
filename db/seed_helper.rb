@@ -8,6 +8,10 @@ def create_roles
 end
 
 def create_parameter_categories
+  ParameterCategory.delete_all
+  ParameterSubCategory.delete_all
+  ParameterModification.delete_all
+
   light = ParameterCategory.create!(name: "Light")
   atmosphere = ParameterCategory.create!(name: "Atmosphere")
   temperature = ParameterCategory.create!(name: "Temperature")
@@ -22,4 +26,9 @@ def create_parameter_categories
 
   temperature.parameter_sub_categories.create!(name: "Air temperature")
   temperature.parameter_sub_categories.create!(name: "Soil temperature")
+
+  ParameterModification.create!(name: "Above ambient")
+  ParameterModification.create!(name: "Below ambient")
+  ParameterModification.create!(name: "Absolute target")
+  ParameterModification.create!(name: "Excluded")
 end

@@ -16,5 +16,3 @@ describe ParameterSubCategory do
   end
 
 end
-
-- 
