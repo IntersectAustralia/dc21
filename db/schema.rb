@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120304234604) do
+ActiveRecord::Schema.define(:version => 20120309021253) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -99,6 +99,21 @@ ActiveRecord::Schema.define(:version => 20120304234604) do
   end
 
   add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
+
+  create_table "parameter_categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "parameter_sub_categories", :force => true do |t|
+    t.string   "name"
+    t.integer  "parameter_category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "parameter_sub_categories", ["parameter_category_id"], :name => "index_parameter_sub_categories_on_parameter_category_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name"

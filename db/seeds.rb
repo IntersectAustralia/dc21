@@ -8,3 +8,5 @@
 require File.dirname(__FILE__) + '/seed_helper.rb'
 
 create_roles
+
+create_parameter_categories
