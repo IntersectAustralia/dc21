@@ -5,6 +5,7 @@ describe Experiment do
     it { should belong_to(:facility) }
     it { should belong_to(:parent_experiment) }
     it { should have_many(:experiment_for_codes) }
+    it { should have_many(:experiment_parameters) }
   end
 
   describe "Validations" do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120309032002) do
+ActiveRecord::Schema.define(:version => 20120312023616) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -56,6 +56,22 @@ ActiveRecord::Schema.define(:version => 20120309032002) do
   end
 
   add_index "experiment_for_codes", ["experiment_id"], :name => "index_experiment_for_codes_on_experiment_id"
+
+  create_table "experiment_parameters", :force => true do |t|
+    t.integer  "experiment_id"
+    t.integer  "parameter_category_id"
+    t.integer  "parameter_sub_category_id"
+    t.integer  "parameter_modification_id"
+    t.decimal  "amount"
+    t.string   "units"
+    t.string   "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "experiment_parameters", ["parameter_category_id"], :name => "index_experiment_parameters_on_parameter_category_id"
+  add_index "experiment_parameters", ["parameter_modification_id"], :name => "index_experiment_parameters_on_parameter_modification_id"
+  add_index "experiment_parameters", ["parameter_sub_category_id"], :name => "index_experiment_parameters_on_parameter_sub_category_id"
 
   create_table "experiments", :force => true do |t|
     t.string   "name"
