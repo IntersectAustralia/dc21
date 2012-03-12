@@ -116,14 +116,16 @@ $(window).load(function() {
   // FACETED SEARCH /////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-  //$('.date').hide();
-  //$('.time').hide();
-  //$('.facility').hide();
-  //$('.variable').hide();
+  $('.searchcategory .date').hide();
+  $('.searchcategory .time').hide();
+  $('.searchcategory .facility').hide();
+  $('.searchcategory .variable').hide();
+  $('.searchbox .actions').hide();
     
   $('#date').click(function(event) {
     $('.date').slideToggle();
     $(this).toggleClass('current');
+    $('.searchbox .actions').show();
   });
 
   $('#time').click(function(event) {

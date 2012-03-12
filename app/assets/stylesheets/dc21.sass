@@ -118,7 +118,7 @@ th.role, td.role, th.status, td.status
   +width(60px, 60px, 60px)
 
 th.email, td.email
-  +width(220px, 220px, 220px)
+  +width(160px, 160px, 160px)
 
 th.date, td.date
   +width(140px, 140px, 140px)
@@ -175,9 +175,8 @@ th.actions, td.actions
       +m-p-w-h-p-t-b-l-r-f(10px 0)
 
       label
-        +m-p-w-h-p-t-b-l-r-f("", 10px 20px 10px 40px, 80px)
+        +m-p-w-h-p-t-b-l-r-f("", 10px 10px 10px 20px, 100px)
         +font("", bold, 0.813em, 18px, $dark3, "", left)
-        
 
       input[type=text]
         +m-p-w-h-p-t-b-l-r-f("", "", 80px)
@@ -190,7 +189,15 @@ th.actions, td.actions
 
       h4
         +m-p-w-h-p-t-b-l-r-f("", 15px 0)
-    
+
+    .variable, .facility
+      label
+        +m-p-w-h-p-t-b-l-r-f("", 5px 10px 0 20px, 190px)
+        +inlineblock
+      input[type=checkbox]
+        +m-p-w-h-p-t-b-l-r-f(7px 0)
+        +inlineblock
+
     .actions
       +m-p-w-h-p-t-b-l-r-f("", 0 0 10px 0)
       text-align: center
@@ -218,6 +225,7 @@ input.datasearchsubmit
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 .datacontroll
+  +m-p-w-h-p-t-b-l-r-f("", "", "", 40px)
 
   h3.filter
     +m-p-w-h-p-t-b-l-r-f("", 0 20px 0 0, 265px)
@@ -228,7 +236,7 @@ input.datasearchsubmit
     +inlineblock
     +font("", normal, 13px)
 
-  #downloadtoggle
+  #downloadtoggle, .facility.new.whitebutton
     float: right
     a
       font-weight: normal
@@ -272,6 +280,22 @@ form
   .select
     display: none
 
+
+// SHOW DATA /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+
+
+.description
+  .rowform
+    white-space: normal
+    overflow: visible
+    text-overflow: ellipsis
+
+    span
+      width: 880px
 
 // TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
