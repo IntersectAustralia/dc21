@@ -21,7 +21,7 @@ class DataFile < ActiveRecord::Base
   before_save :destroy_safe_overlap
 
   scope :most_recent_first, order("created_at DESC")
-  scope :unprocessed, where{((file_processing_status.eq nil) | (experiment_id.eq nil))}
+  scope :unprocessed, where { ((file_processing_status.eq nil) | (experiment_id.eq nil)) }
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
@@ -179,6 +179,12 @@ class DataFile < ActiveRecord::Base
       overlap_descriptions = overlap.map(&:file_processing_description)
       overlap.each { |df| df.destroy }
       self.file_processing_description = overlap_descriptions.join ', ' unless file_processing_description
+
+      unless overlap.empty? || experiment_id
+        by_created_date = overlap.sort { |a| [a.created_at] }
+        most_recent_experiment = by_created_date.first.experiment_id
+        self.experiment_id = most_recent_experiment
+      end
     end
   end
 

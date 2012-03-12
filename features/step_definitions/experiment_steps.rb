@@ -109,3 +109,7 @@ end
 def get_for_codes_on_page
   all("ul#for_codes_list li").collect { |item| item.text.gsub("Delete", "").strip }
 end
+
+Given /^I have experiment "([^"]*)"$/ do |name|
+  Factory(:experiment, name: name)
+end

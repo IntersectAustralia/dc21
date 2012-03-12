@@ -66,9 +66,11 @@ class DataFilesController < ApplicationController
       #remove "" entries - we don't want them be set as "" if they are actually nil
       cleaned_values = values.delete_if { |k, v| v.blank? }
 
-      data_file = DataFile.find(df_id)
-      if not data_file.update_attributes(cleaned_values)
-        failures << data_file
+      if DataFile.exists?(df_id) #its possible that it won't exist, as it could have been an overlap of a file we already processed and therefore be deleted already
+        data_file = DataFile.find(df_id)
+        if not data_file.update_attributes(cleaned_values)
+          failures << data_file
+        end
       end
     end
     if failures.empty?
