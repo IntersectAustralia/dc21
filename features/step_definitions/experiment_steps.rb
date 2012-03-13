@@ -89,7 +89,7 @@ end
 
 Then /^experiment "([^"]*)" should have for codes$/ do |experiment_name, table|
   experiment = Experiment.find_by_name!(experiment_name)
-  expected_codes = table.raw.collect{ |row| row[0] }
+  expected_codes = table.raw.collect { |row| row[0] }
   actual_codes = experiment.experiment_for_codes.collect(&:name)
   actual_codes.should eq(expected_codes)
 end
@@ -100,6 +100,35 @@ Then /^experiment "([^"]*)" should have (\d+) for codes$/ do |experiment_name, c
   actual_count.should eq(count.to_i), "Expected experiment #{experiment_name} to have #{count} FOR codes, found #{actual_count}"
   ExperimentForCode.where("experiment_id is NULL").count.should eq(0) #check that there's no orphans
 end
+
+Given /^I have the standard set of experiment parameter categories and subcategories$/ do
+  light = ParameterCategory.create!(name: "Light")
+  atmosphere = ParameterCategory.create!(name: "Atmosphere")
+  temperature = ParameterCategory.create!(name: "Temperature")
+
+  atmosphere.parameter_sub_categories.create!(name: "Carbon Dioxide")
+  atmosphere.parameter_sub_categories.create!(name: "Nitrogen")
+  atmosphere.parameter_sub_categories.create!(name: "Oxygen")
+
+  light.parameter_sub_categories.create!(name: "Natural")
+  light.parameter_sub_categories.create!(name: "Infrared")
+  light.parameter_sub_categories.create!(name: "Ultraviolet")
+
+  temperature.parameter_sub_categories.create!(name: "Air Temperature")
+  temperature.parameter_sub_categories.create!(name: "Soil Temperature")
+
+  ParameterModification.create!(name: "Above ambient")
+  ParameterModification.create!(name: "Below ambient")
+  ParameterModification.create!(name: "Absolute target")
+  ParameterModification.create!(name: "Excluded")
+
+end
+
+When /^I add experiment parameter$/ do |table|
+  # table is a Cucumber::Ast::Table
+  pending # express the regexp above with the code you wish you had
+end
+
 
 def click_view_experiment_link(name)
   experiment = Experiment.find_by_name!(name)

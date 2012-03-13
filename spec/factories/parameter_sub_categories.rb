@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :parameter_sub_category do
-      name "MyString"
-      parameter_category nil
-    end
+    name "MyString"
+    association :parameter_category
+  end
 end

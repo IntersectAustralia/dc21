@@ -61,7 +61,9 @@ Dc21app::Application.routes.draw do
   end
 
   resources :facilities, :except => [:destroy] do
-    resources :experiments, :except => [:destroy]
+    resources :experiments, :except => [:destroy] do
+      resources :experiment_parameters, :except => [:show, :index]
+    end
   end
 
   root :to => "pages#home"

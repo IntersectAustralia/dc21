@@ -28,10 +28,10 @@ module NavigationHelpers
         edit_user_registration_path
 
       when /^the user details page for (.*)$/
-        user_path(User.where(:email => $1).first)
+        user_path(User.find_by_email!($1))
 
       when /^the edit role page for (.*)$/
-        edit_role_user_path(User.where(:email => $1).first)
+        edit_role_user_path(User.find_by_email!($1))
 
       when /^the reset password page$/
         edit_user_password_path
@@ -61,22 +61,22 @@ module NavigationHelpers
 
       # Experiment paths
       when /the view experiment page for '(.*)'/
-        exp = Experiment.find_by_name($1)
+        exp = Experiment.find_by_name!($1)
         facility_experiment_path(exp.facility, exp)
 
       when /the edit experiment page for '(.*)'/
-        exp = Experiment.find_by_name($1)
+        exp = Experiment.find_by_name!($1)
         edit_facility_experiment_path(exp.facility, exp)
 
       when /the new experiment page for facility '(.*)'/
-        facility = Facility.find_by_name($1)
+        facility = Facility.find_by_name!($1)
         new_facility_experiment_path(facility)
 
-      # Add more mappings here.
-      # Here is an example that pulls values out of the Regexp:
-      #
-      #   when /^(.*)'s profile page$/i
-      #     user_profile_path(User.find_by_login($1))
+      # Parameter paths
+      when /the create experiment parameter page for '(.*)'/
+        exp = Experiment.find_by_name!($1)
+        new_facility_experiment_experiment_parameter_path(exp.facility, exp)
+
 
       else
         begin

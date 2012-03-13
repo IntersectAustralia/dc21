@@ -1,0 +1,25 @@
+= link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment)
+
+- if experiment.experiment_parameters.empty?
+  There are no parameters to display
+- else
+  %table#experiment_parameters
+    %thead
+      %tr
+        %th Category
+        %th Subcategory
+        %th Modification
+        %th Amount
+        %th Units
+        %th Comments
+        %th
+    %tbody
+      - experiment.experiment_parameters.each do |param|
+        %tr
+          %td= param.parameter_category.name
+          %td= param.parameter_sub_category.name
+          %td= param.parameter_modification.name
+          %td= param.amount
+          %td= param.units
+          %td= param.comments
+          %td= link_to "Edit", edit_facility_experiment_experiment_parameter_path(facility, experiment, param), :id => "edit_experiment_parameter_#{param.id}"

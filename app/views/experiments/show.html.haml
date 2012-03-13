@@ -13,6 +13,9 @@
     %ul#for_codes_list
       - @experiment.experiment_for_codes.each do |code|
         %li= code.name
+
+  = render 'experiment_parameters/list', experiment: @experiment, facility: @facility
+
   .actions
     .cancelbutton
       %span

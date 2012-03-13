@@ -42,8 +42,9 @@ class Ability
     return unless user && user.role
 
     #TODO: we have no rules about permissions for these yet
-    can :manage, Experiment
     can :manage, Facility
+    can :manage, Experiment
+    can :manage, ExperimentParameter
     can :manage, ColumnMapping
 
     # all users can read and add data files, and can delete their own. This *could* be expressed more simply,
