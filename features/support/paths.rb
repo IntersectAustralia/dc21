@@ -77,6 +77,10 @@ module NavigationHelpers
         exp = Experiment.find_by_name!($1)
         new_facility_experiment_experiment_parameter_path(exp.facility, exp)
 
+      when /the edit experiment parameter page for '(.*)'/
+        param = ExperimentParameter.find_by_parameter_category_id!(ParameterCategory.find_by_name!($1))
+        edit_facility_experiment_experiment_parameter_path(param.experiment.facility, param.experiment, param)
+
 
       else
         begin

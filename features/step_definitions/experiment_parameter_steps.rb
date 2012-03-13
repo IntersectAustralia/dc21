@@ -17,9 +17,18 @@ Then /^I should have (\d+) experiment parameters$/ do |count|
 end
 
 Given /^I follow the edit link for the experiment parameter for "([^"]*)"$/ do |category|
+  experiment_parameter = find_experiment_parameter(category)
+  click_link("edit_experiment_parameter_#{experiment_parameter.id}")
+end
+
+When /^I follow the delete link for experiment parameter "([^"]*)"$/ do |category|
+  experiment_parameter = find_experiment_parameter(category)
+  click_link("delete_experiment_parameter_#{experiment_parameter.id}")
+end
+
+def find_experiment_parameter(category)
   matching = ExperimentParameter.where(:parameter_category_id => ParameterCategory.find_by_name(category))
   raise "Found more than one experiment parameter for category #{category}. You might need to write a more specific step to handle this." if matching.size > 1
   raise "Didn't find any experiment parameter for category #{category}" if matching.size == 0
-
-  click_link("edit_experiment_parameter_#{matching.first.id}")
+  matching.first
 end

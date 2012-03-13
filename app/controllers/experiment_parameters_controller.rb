@@ -29,15 +29,9 @@ class ExperimentParametersController < ApplicationController
     end
   end
 
-  ## DELETE /experiment_parameters/1
-  ## DELETE /experiment_parameters/1.json
-  #def destroy
-  #  @experiment_parameter = ExperimentParameter.find(params[:id])
-  #  @experiment_parameter.destroy
-  #
-  #  respond_to do |format|
-  #    format.html { redirect_to experiment_parameters_url }
-  #    format.json { head :ok }
-  #  end
-  #end
+  def destroy
+    @experiment_parameter.destroy
+    redirect_to facility_experiment_url(@facility, @experiment), notice: 'The experiment parameter has been deleted.'
+  end
+
 end

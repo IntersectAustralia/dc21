@@ -138,9 +138,26 @@ Feature: Manage experiment parameter metadata
     And I follow "Cancel"
     Then I should be on the view experiment page for 'Weather Station Experiment'
 
-# Scenario: Delete
+  Scenario: Delete
+    Given I am on the view experiment page for 'Weather Station Experiment'
+    When I follow the delete link for experiment parameter "Temperature"
+    And I confirm popup
+    Then I should see "The experiment parameter has been deleted."
+    Then I should see "experiment_parameters" table with
+      | Category    | Subcategory     | Modification  | Amount | Units | Comments                   |
+      | Atmosphere  | Carbon Dioxide  | Above ambient | 20.0   | PPM   | A comment about atmosphere |
+      | Light       | Natural         | Excluded      |        |       | A comment about the light  |
 
-#
-#  Scenario: Must be logged in to view the, create, edit pages
-#    Then users should be required to login on the create experiment parameter page for 'Weather Station Experiment'
-# edit page
+  Scenario: Cancel out of delete
+    Given I am on the view experiment page for 'Weather Station Experiment'
+    When I follow the delete link for experiment parameter "Temperature"
+    And I dismiss popup
+    Then I should see "experiment_parameters" table with
+      | Category    | Subcategory     | Modification  | Amount | Units | Comments                   |
+      | Atmosphere  | Carbon Dioxide  | Above ambient | 20.0   | PPM   | A comment about atmosphere |
+      | Temperature | Air Temperature | Below ambient | 25.0   | Deg C |                            |
+      | Light       | Natural         | Excluded      |        |       | A comment about the light  |
+
+  Scenario: Must be logged in to view the create, edit pages
+    Then users should be required to login on the create experiment parameter page for 'Weather Station Experiment'
+    Then users should be required to login on the edit experiment parameter page for 'Atmosphere'
