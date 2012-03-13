@@ -10,7 +10,7 @@
         %th Name
       - @column_mappings.each_with_index do |mapping, index|
         %tr
-          %td= text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code
+          %td= text_field "column_mappings[#{index}]", :code, :value => @column_mappings[index].code, :size => '20', :maxlength => '255'
           %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'], @column_mappings[index].name), :include_blank => true
           -#%td= text_field "column_mappings[#{index}]", :name, :value => @column_mappings[index].name
     .actions
