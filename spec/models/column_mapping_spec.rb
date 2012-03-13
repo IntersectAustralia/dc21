@@ -9,6 +9,7 @@ describe ColumnMapping do
 
   describe "Validations" do
     it { should validate_presence_of(:code) }
+    it { should ensure_length_of(:code).is_at_most(255) }
     it { should validate_presence_of(:name) }
     it "should validate uniqueness of code" do
       Factory(:column_mapping)
