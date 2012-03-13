@@ -14,11 +14,10 @@
       - @experiment.experiment_for_codes.each do |code|
         %li= code.name
 
-  = render 'experiment_parameters/list', experiment: @experiment, facility: @facility
-
   .actions
-    .cancelbutton
-      %span
-      = link_to 'Back', facility_path(@facility), :class => "cancelbutton"
+    = cancel_button 'Back', facility_path(@facility)
     = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton floatright"
 
+
+  %h3 Parameters
+  = render 'experiment_parameters/list', experiment: @experiment, facility: @facility

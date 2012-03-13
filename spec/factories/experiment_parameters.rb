@@ -5,6 +5,7 @@ FactoryGirl.define do
       association :parameter_category
       association :parameter_sub_category
       association :parameter_modification
+      association :experiment
       amount "9.99"
       units "MyString"
       comments "MyString"

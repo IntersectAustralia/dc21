@@ -1,4 +1,6 @@
-= link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment)
+.new.whitebutton
+  = link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment)
+%br/
 
 - if experiment.experiment_parameters.empty?
   There are no parameters to display
@@ -14,7 +16,7 @@
         %th Comments
         %th
     %tbody
-      - experiment.experiment_parameters.each do |param|
+      - experiment.experiment_parameters.in_order.each do |param|
         %tr
           %td= param.parameter_category.name
           %td= param.parameter_sub_category.name
@@ -23,6 +25,6 @@
           %td= param.units
           %td= param.comments
           %td
-            = link_to 'Edit', edit_facility_experiment_experiment_parameter_path(facility, experiment, param), :id => "edit_experiment_parameter_#{param.id}"
-            = link_to 'Delete', facility_experiment_experiment_parameter_path(facility, experiment, param), :confirm => 'Are you sure you want to delete this parameter?', :method => :delete, :id => "delete_experiment_parameter_#{param.id}"
+            = link_to 'Edit', edit_facility_experiment_experiment_parameter_path(facility, experiment, param), :id => "edit_experiment_parameter_#{param.id}", :class => "whitebutton"
+            = link_to 'Delete', facility_experiment_experiment_parameter_path(facility, experiment, param), :confirm => 'Are you sure you want to delete this parameter?', :method => :delete, :id => "delete_experiment_parameter_#{param.id}", :class => "whitebutton"
 

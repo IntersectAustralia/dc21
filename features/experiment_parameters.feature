@@ -21,8 +21,8 @@ Feature: Manage experiment parameter metadata
     Then I should see "experiment_parameters" table with
       | Category    | Subcategory     | Modification  | Amount | Units | Comments                   |
       | Atmosphere  | Carbon Dioxide  | Above ambient | 20.0   | PPM   | A comment about atmosphere |
-      | Temperature | Air Temperature | Below ambient | 25.0   | Deg C |                            |
       | Light       | Natural         | Excluded      |        |       | A comment about the light  |
+      | Temperature | Air Temperature | Below ambient | 25.0   | Deg C |                            |
 
   Scenario: View the list when there's nothing to show
     Given I have no experiment parameters
@@ -63,9 +63,9 @@ Feature: Manage experiment parameter metadata
     And I should see "experiment_parameters" table with
       | Category    | Subcategory     | Modification    | Amount | Units  | Comments                   |
       | Atmosphere  | Carbon Dioxide  | Above ambient   | 20.0   | PPM    | A comment about atmosphere |
-      | Temperature | Air Temperature | Below ambient   | 25.0   | Deg C  |                            |
       | Light       | Natural         | Excluded        |        |        | A comment about the light  |
       | Light       | Ultraviolet     | Absolute target | 10.22  | Lumens | My comment                 |
+      | Temperature | Air Temperature | Below ambient   | 25.0   | Deg C  |                            |
 
   Scenario: Create a parameter with a validation error
     Given I am on the create experiment parameter page for 'Weather Station Experiment'
@@ -155,8 +155,8 @@ Feature: Manage experiment parameter metadata
     Then I should see "experiment_parameters" table with
       | Category    | Subcategory     | Modification  | Amount | Units | Comments                   |
       | Atmosphere  | Carbon Dioxide  | Above ambient | 20.0   | PPM   | A comment about atmosphere |
-      | Temperature | Air Temperature | Below ambient | 25.0   | Deg C |                            |
       | Light       | Natural         | Excluded      |        |       | A comment about the light  |
+      | Temperature | Air Temperature | Below ambient | 25.0   | Deg C |                            |
 
   Scenario: Must be logged in to view the create, edit pages
     Then users should be required to login on the create experiment parameter page for 'Weather Station Experiment'
