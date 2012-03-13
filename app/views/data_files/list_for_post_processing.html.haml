@@ -20,7 +20,7 @@
             %td.email= df.created_by.email if df.created_by
             %td= f.select :file_processing_status, %w(UNKNOWN RAW CLEANSED PROCESSED), :include_blank => true
             %td= f.grouped_collection_select :experiment_id, grouped_experiments_for_select(df), :experiments, :name, :id, :name, :include_blank => true
-            %td= f.text_field :file_processing_description
+            %td= f.text_field :file_processing_description, {:size => '20', :maxlength => '255'}
             %td.formerror= df.errors.full_messages.join(', ') if @errors_present
 
   .actions

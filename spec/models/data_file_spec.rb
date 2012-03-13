@@ -5,6 +5,7 @@ describe DataFile do
     it { should validate_presence_of(:filename) }
     it { should validate_presence_of(:path) }
     it { should validate_presence_of(:created_by_id) }
+    it { should ensure_length_of(:file_processing_description).is_at_most(255) }
   end
 
   describe "Associations" do

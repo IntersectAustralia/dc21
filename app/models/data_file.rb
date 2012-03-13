@@ -14,6 +14,7 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :filename
   validates_presence_of :path
   validates_presence_of :created_by_id
+  validates_length_of :file_processing_description, :maximum => 255
 
   validate :no_bad_overlap
 
