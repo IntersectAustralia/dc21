@@ -11,6 +11,7 @@ def create_parameter_categories
   ParameterCategory.delete_all
   ParameterSubCategory.delete_all
   ParameterModification.delete_all
+  ParameterUnit.delete_all
 
   light = ParameterCategory.create!(name: "Light")
   atmosphere = ParameterCategory.create!(name: "Atmosphere")
@@ -31,4 +32,11 @@ def create_parameter_categories
   ParameterModification.create!(name: "Below ambient")
   ParameterModification.create!(name: "Absolute target")
   ParameterModification.create!(name: "Excluded")
+
+  ParameterUnit.create!(:name => "PPM")
+  ParameterUnit.create!(:name => "Degrees C")
+  ParameterUnit.create!(:name => "Lumens")
+  ParameterUnit.create!(:name => "Litres")
+  ParameterUnit.create!(:name => "Millilitres")
+
 end
