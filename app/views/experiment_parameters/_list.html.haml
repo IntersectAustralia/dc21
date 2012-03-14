@@ -1,5 +1,4 @@
-.new.whitebutton
-  = link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment)
+= link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment), :class => :whitebutton
 %br/
 
 - if experiment.experiment_parameters.empty?
@@ -14,7 +13,7 @@
         %th Amount
         %th Units
         %th Comments
-        %th
+        %th Actions
     %tbody
       - experiment.experiment_parameters.in_order.each do |param|
         %tr
