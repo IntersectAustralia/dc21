@@ -21,7 +21,7 @@
           %td= param.parameter_sub_category.name
           %td= param.parameter_modification.name
           %td= param.amount
-          %td= param.units
+          %td= param.parameter_unit ? param.parameter_unit.name : ""
           %td= param.comments
           %td
             = link_to 'Edit', edit_facility_experiment_experiment_parameter_path(facility, experiment, param), :id => "edit_experiment_parameter_#{param.id}", :class => "whitebutton"

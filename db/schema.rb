@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120313223533) do
+ActiveRecord::Schema.define(:version => 20120314011257) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -63,10 +63,10 @@ ActiveRecord::Schema.define(:version => 20120313223533) do
     t.integer  "parameter_sub_category_id"
     t.integer  "parameter_modification_id"
     t.decimal  "amount"
-    t.string   "units"
     t.string   "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "parameter_unit_id"
   end
 
   add_index "experiment_parameters", ["parameter_category_id"], :name => "index_experiment_parameters_on_parameter_category_id"

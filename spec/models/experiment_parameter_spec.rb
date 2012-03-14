@@ -6,6 +6,7 @@ describe ExperimentParameter do
     it { should belong_to(:parameter_category) }
     it { should belong_to(:parameter_sub_category) }
     it { should belong_to(:parameter_modification) }
+    it { should belong_to(:parameter_unit) }
   end
 
   describe "Validations" do

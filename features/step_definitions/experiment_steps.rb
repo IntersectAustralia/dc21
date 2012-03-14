@@ -101,7 +101,7 @@ Then /^experiment "([^"]*)" should have (\d+) for codes$/ do |experiment_name, c
   ExperimentForCode.where("experiment_id is NULL").count.should eq(0) #check that there's no orphans
 end
 
-Given /^I have the standard set of experiment parameter categories and subcategories$/ do
+Given /^I have the standard set of experiment parameter lookup values$/ do
   light = ParameterCategory.create!(name: "Light")
   atmosphere = ParameterCategory.create!(name: "Atmosphere")
   temperature = ParameterCategory.create!(name: "Temperature")
@@ -121,6 +121,12 @@ Given /^I have the standard set of experiment parameter categories and subcatego
   ParameterModification.create!(name: "Below ambient")
   ParameterModification.create!(name: "Absolute target")
   ParameterModification.create!(name: "Excluded")
+
+  ParameterUnit.create!(:name => "PPM")
+  ParameterUnit.create!(:name => "Degrees C")
+  ParameterUnit.create!(:name => "Lumens")
+  ParameterUnit.create!(:name => "Litres")
+  ParameterUnit.create!(:name => "Millilitres")
 
 end
 

@@ -3,6 +3,7 @@ class ExperimentParameter < ActiveRecord::Base
   belongs_to :parameter_category
   belongs_to :parameter_sub_category
   belongs_to :parameter_modification
+  belongs_to :parameter_unit
 
   validates_presence_of :experiment
   validates_presence_of :parameter_category

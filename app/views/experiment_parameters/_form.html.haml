@@ -17,8 +17,9 @@
     = f.label :amount
     = f.text_field :amount
   .rowform
-    = f.label :units
-    = f.text_field :units
+    = f.label :parameter_unit_id, "Units"
+    %span.input
+      = f.collection_select :parameter_unit_id, parameter_units, :id, :name, {:prompt => "Please select"}
   .rowform
     = f.label :comments
     = f.text_field :comments

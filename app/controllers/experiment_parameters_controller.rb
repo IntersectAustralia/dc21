@@ -6,6 +6,7 @@ class ExperimentParametersController < ApplicationController
 
   expose(:parameter_categories) { ParameterCategory.by_name }
   expose(:parameter_modifications) { ParameterModification.by_name }
+  expose(:parameter_units) { ParameterUnit.by_name }
 
   def new
   end

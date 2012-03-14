@@ -3,8 +3,10 @@ Given /^I have experiment parameters$/ do |table|
     category = ParameterCategory.find_by_name!(attributes.delete("category"))
     sub_category = ParameterSubCategory.find_by_name!(attributes.delete("sub_category"))
     modification = ParameterModification.find_by_name!(attributes.delete("modification"))
+    unit_name = attributes.delete("units")
+    units = unit_name.blank? ? nil : ParameterUnit.find_by_name!(unit_name)
     experiment = Experiment.find_by_name!(attributes.delete("experiment"))
-    Factory(:experiment_parameter, attributes.merge(parameter_category: category, parameter_sub_category: sub_category, parameter_modification: modification, experiment: experiment))
+    Factory(:experiment_parameter, attributes.merge(parameter_category: category, parameter_sub_category: sub_category, parameter_modification: modification, experiment: experiment, parameter_unit: units))
   end
 end
 
