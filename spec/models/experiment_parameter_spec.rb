@@ -21,6 +21,7 @@ describe ExperimentParameter do
     it { should validate_presence_of(:parameter_category) }
     it { should validate_presence_of(:parameter_sub_category) }
     it { should validate_presence_of(:parameter_modification) }
+    it { should validate_numericality_of(:amount) }
   end
 
   describe "Scopes" do
