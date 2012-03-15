@@ -105,6 +105,7 @@ Given /^I have the standard set of experiment parameter lookup values$/ do
   light = ParameterCategory.create!(name: "Light")
   atmosphere = ParameterCategory.create!(name: "Atmosphere")
   temperature = ParameterCategory.create!(name: "Temperature")
+  humidity = ParameterCategory.create!(name: "Humidity")
 
   atmosphere.parameter_sub_categories.create!(name: "Carbon Dioxide")
   atmosphere.parameter_sub_categories.create!(name: "Nitrogen")
@@ -116,6 +117,8 @@ Given /^I have the standard set of experiment parameter lookup values$/ do
 
   temperature.parameter_sub_categories.create!(name: "Air Temperature")
   temperature.parameter_sub_categories.create!(name: "Soil Temperature")
+
+  humidity.parameter_sub_categories.create!(name: "Normal")
 
   ParameterModification.create!(name: "Above ambient")
   ParameterModification.create!(name: "Below ambient")

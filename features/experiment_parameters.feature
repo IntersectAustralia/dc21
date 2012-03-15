@@ -34,6 +34,7 @@ Feature: Manage experiment parameter metadata
     Then the "Category" select should contain
       | Please select a category |
       | Atmosphere               |
+      | Humidity                 |
       | Light                    |
       | Temperature              |
     And the "Subcategory" select should contain
@@ -48,6 +49,12 @@ Feature: Manage experiment parameter metadata
     When I select "Please select a category" from "Category"
     Then the "Subcategory" select should contain
       | Please select a category first |
+
+  Scenario: Subcategory select doesn't contain 'please select' prompt if there's only one possibility
+    Given I am on the create experiment parameter page for 'Weather Station Experiment'
+    When I select "Humidity" from "Category"
+    Then the "Subcategory" select should contain
+      | Normal |
 
   Scenario: Modification and units dropdowns are populated from the lookup tables
     Given I am on the create experiment parameter page for 'Weather Station Experiment'
