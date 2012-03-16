@@ -3,14 +3,17 @@
 
   .rowform
     = label_tag :parameter_category_select, "Category"
+    = required
     %span.input
       = f.collection_select :parameter_category_id, parameter_categories, :id, :name, {:prompt => "Please select a category"}, {:id => :parameter_category_select}
   .rowform
     = label_tag :parameter_sub_category_select, "Subcategory"
+    = required
     %span.input
       = f.select :parameter_sub_category_id, option_groups_from_collection_for_select(parameter_categories, :parameter_sub_categories, :name, :id, :name, @experiment_parameter.parameter_sub_category_id), {:prompt => "Please select a category first"}, {:id => :parameter_sub_category_select}
   .rowform
     = f.label :parameter_modification_id, "Modification"
+    = required
     %span.input
       = f.collection_select :parameter_modification_id, parameter_modifications, :id, :name, {:prompt => "Please select"}
   .rowform
