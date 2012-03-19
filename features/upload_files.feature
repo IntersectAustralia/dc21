@@ -10,7 +10,7 @@ Feature: Upload files
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
     And I am on the upload page
-    And I upload "sample1.txt" through the applet as "researcher@intersect.org.au"
+    And I have uploaded "sample1.txt" as "researcher@intersect.org.au"
 
   Scenario: Upload a single file and ignore post processing
     Given I follow "Next"
@@ -77,7 +77,7 @@ Feature: Upload files
       | Flux Experiment 1 | Flux Tower          |
       | Flux Experiment 2 | Flux Tower          |
       | Flux Experiment 3 | Flux Tower          |
-    When I upload "toa5.dat" through the applet
+    When I have uploaded "toa5.dat"
     And I follow "Next"
     Then the experiment select for "sample1.txt" should contain
       | Flux Tower          | Flux Experiment 1, Flux Experiment 2, Flux Experiment 3 |
@@ -110,12 +110,12 @@ Feature: Upload files
       | Flux Experiment 1 | Flux Tower          |
       | Flux Experiment 2 | Flux Tower          |
       | Flux Experiment 3 | Flux Tower          |
-    When I upload "toa5.dat" through the applet
+    When I have uploaded "toa5.dat"
     And I follow "Next"
     Then "Wind Experiment" should be selected in the experiment select for "toa5.dat"
 
   Scenario: Assign a status and description to only one of two newly uploaded files
-    Given I upload "sample2.txt" through the applet as "researcher@intersect.org.au"
+    Given I have uploaded "sample2.txt" as "researcher@intersect.org.au"
     Given I follow "Next"
     And I am on the set data file status page
     When I select "RAW" from the select box for "sample1.txt"
@@ -168,8 +168,8 @@ Feature: Upload files
   @wip
   Scenario: Upload the same file twice
     Given I am on the upload page
-    When I upload "sample1.txt" through the applet
-    When I upload "sample1.txt" through the applet
+    When I have uploaded "sample1.txt"
+    When I have uploaded "sample1.txt"
     Then I should see "sample1.txt - This file already exists."
 
   Scenario: Must be logged in to view the upload page

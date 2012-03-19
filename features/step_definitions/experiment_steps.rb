@@ -151,3 +151,7 @@ end
 Given /^I have experiment "([^"]*)"$/ do |name|
   Factory(:experiment, name: name)
 end
+
+Given /^I have experiment "([^"]*)" which belongs to facility "([^"]*)"$/ do |name, facility|
+  Factory(:experiment, name: name, facility: Facility.find_by_code(facility))
+end

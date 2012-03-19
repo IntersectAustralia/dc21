@@ -3,10 +3,7 @@ class FileTypeDeterminer
   TOA5 = "TOA5"
 
   def identify_file(data_file)
-    if is_toa5?(data_file)
-      return [true, TOA5]
-    end
-    [false, nil]
+    is_toa5?(data_file) ? TOA5 : nil
   end
 
   private

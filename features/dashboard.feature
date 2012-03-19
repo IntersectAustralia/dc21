@@ -4,8 +4,8 @@ Feature: View the dashboard main page
     Given I am logged in as "georgina@intersect.org.au"
 
   Scenario: Dashboard shows recent uploaded files
-    Given I upload "sample1.txt" through the applet
-    And I upload "WTC01_Table1.dat" through the applet
+    Given I have uploaded "sample1.txt"
+    And I have uploaded "WTC01_Table1.dat"
     When I am on the home page
     Then I should see "exploredata" table with
       | Filename         | Added by                  |
@@ -30,27 +30,3 @@ Feature: View the dashboard main page
       | sample2.txt | georgina@intersect.org.au |
       | sample5.txt | georgina@intersect.org.au |
       | sample1.txt | sean@intersect.org.au     |
-
-  Scenario: Alert about files missing processing status/experiment shows if there's files awaiting this info
-    Given I have data files
-      | filename    | file_processing_status | experiment        |
-      | sample1.txt | RAW                    | Other             |
-      | sample2.txt | PROCESSED              |                   |
-      | sample3.txt |                        | Fred's Experiment |
-      | sample4.txt |                        |                   |
-    When I am on the home page
-    Then I should see "Items requiring action"
-    And I should see "There are 3 files missing status or experiment information, click here to resolve."
-    When I follow "here"
-    Then I should see "sample2.txt"
-    And I should see "sample3.txt"
-    And I should see "sample4.txt"
-    But I should not see "sample1.txt"
-
-  Scenario: Alert about files missing processing status/experiment does NOT show if all files have the info
-    Given I have data files
-      | filename    | file_processing_status | experiment        |
-      | sample1.txt | RAW                    | Other             |
-      | sample2.txt | PROCESSED              | Fred's Experiment |
-    When I am on the home page
-    Then I should not see "Items requiring action"

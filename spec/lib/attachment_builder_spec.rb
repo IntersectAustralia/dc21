@@ -10,45 +10,35 @@ describe AttachmentBuilder do
     Rails.root.join('tmp')
   }
 
-  let(:applet_params) {
-    {
-        :dirStruct => '[{"file_1":"file.a"}]',
-        :destDir => "/",
-        :file_1 => file1
-    }
-  }
-
   describe "Building attachments" do
 
-    it "should create new data file objects" do
+    it "should create new data file object with correct experiment and type" do
       file_type_determiner = mock(FileTypeDeterminer)
-      file_type_determiner.should_receive(:identify_file).and_return([false, nil])
+      file_type_determiner.should_receive(:identify_file).and_return(nil)
       user = Factory(:user)
-      ab = AttachmentBuilder.new(applet_params, files_root, user, file_type_determiner, nil)
-      result = ab.build
-      result.include?("file.a").should be_true
-      result["file.a"][:status].should == "success"
+      ab = AttachmentBuilder.new(files_root, user, file_type_determiner, nil)
+      data_file = ab.build(file1, 23, DataFile::STATUS_RAW)
 
       DataFile.count.should eq(1)
-      data_file = DataFile.first
+      data_file.messages.should eq(["File uploaded successfully"])
       data_file.filename.should == "file.a"
       data_file.created_by.should eq(user)
+      data_file.experiment_id.should eq(23)
+      data_file.file_processing_status.should eq(DataFile::RAW)
     end
 
     it "should extract metadata if file type is recognised" do
       file_type_determiner = mock(FileTypeDeterminer)
       metadata_extractor = mock(MetadataExtractor)
-      file_type_determiner.should_receive(:identify_file).and_return([true, FileTypeDeterminer::TOA5])
+      file_type_determiner.should_receive(:identify_file).and_return(FileTypeDeterminer::TOA5)
       metadata_extractor.should_receive(:extract_metadata)
 
       file_type_determiner
-      ab = AttachmentBuilder.new(applet_params, files_root, Factory(:user), file_type_determiner, metadata_extractor)
-      result = ab.build
-      result.include?("file.a").should be_true
-      result["file.a"][:status].should == "success"
+      ab = AttachmentBuilder.new(files_root, Factory(:user), file_type_determiner, metadata_extractor)
+      data_file = ab.build(file1, 23, DataFile::STATUS_RAW)
 
       DataFile.count.should eq(1)
-      data_file = DataFile.first
+      data_file.messages.should eq(["File uploaded successfully"])
       data_file.filename.should == "file.a"
       data_file.format.should == "TOA5"
     end
@@ -56,17 +46,15 @@ describe AttachmentBuilder do
     it "should not extract metadata if file type is unknown" do
       file_type_determiner = mock(FileTypeDeterminer)
       metadata_extractor = mock(MetadataExtractor)
-      file_type_determiner.should_receive(:identify_file).and_return([false, nil])
+      file_type_determiner.should_receive(:identify_file).and_return(nil)
       metadata_extractor.should_not_receive(:extract_metadata)
 
       file_type_determiner
-      ab = AttachmentBuilder.new(applet_params, files_root, Factory(:user), file_type_determiner, metadata_extractor)
-      result = ab.build
-      result.include?("file.a").should be_true
-      result["file.a"][:status].should == "success"
+      ab = AttachmentBuilder.new(files_root, Factory(:user), file_type_determiner, metadata_extractor)
+      data_file = ab.build(file1, 23, DataFile::STATUS_RAW)
 
       DataFile.count.should eq(1)
-      data_file = DataFile.first
+      data_file.messages.should eq(["File uploaded successfully"])
       data_file.filename.should == "file.a"
       data_file.format.should be_nil
     end

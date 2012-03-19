@@ -1,6 +1,6 @@
 Given /^I upload "([^"]*)"$/ do |filename|
   step "I am on the upload page"
-  step "I upload \"#{filename}\" through the applet"
+  step "I have uploaded \"#{filename}\""
   step "I follow \"Next\""
 end
 

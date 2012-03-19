@@ -5,7 +5,7 @@ Feature: Viewing metadata from toa5 files
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
-    And I upload "toa5.dat" through the applet
+    And I have uploaded "toa5.dat"
 
   Scenario: View on list page
     When I am on the list data files page

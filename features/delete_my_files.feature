@@ -12,7 +12,7 @@ Feature: Delete files containing erroneous data
 
   @javascript
   Scenario: Cancelling the alert does not delete the file
-    And I upload "toa5.dat" through the applet as "researcher@intersect.org.au"
+    And I have uploaded "toa5.dat" as "researcher@intersect.org.au"
     Given I am on the list data files page
     And I should see only these rows in "exploredata" table
       | Filename | Added by                  |
@@ -28,28 +28,26 @@ Feature: Delete files containing erroneous data
 
   @javascript
   Scenario: I see an informative alert for files with metadata
-    And I upload "toa5.dat" through the applet as "researcher@intersect.org.au"
+    Given I have uploaded "toa5.dat" as "researcher@intersect.org.au"
     And The processing metadata is set for files as follows:
       | filename | status | description   |
       | toa5.dat | RAW    | something set |
-    And I should see "exploredata" table with
+    When I am on the list data files page
+    Then I should see "exploredata" table with
       | Filename | Added by                  | Start time          | End time            | Processing status |
       | toa5.dat | researcher@intersect.org.au | 2011-10-06 0:40:00 | 2011-11-03 11:55:00 | RAW               |
-    Given I am on the list data files page
-    And I follow the view link for data file "toa5.dat"
+    When I follow the view link for data file "toa5.dat"
     And I follow "Delete This File"
     Then The popup text is contains "toa5.dat"
     And The popup text is contains "RAW"
     And The popup text is contains "2011-10-06  0:40:00"
     And The popup text is contains "2011-11-03 11:55:00"
     And The popup text is contains "ROS_WS"
-
     Then I dismiss popup
 
-
   Scenario: Deleting a file removes it from the list of files in Explore Data
-    And I upload "toa5.dat" through the applet as "researcher@intersect.org.au"
-    And I upload "weather_station_15_min.dat" through the applet as "researcher@intersect.org.au"
+    And I have uploaded "toa5.dat" as "researcher@intersect.org.au"
+    And I have uploaded "weather_station_15_min.dat" as "researcher@intersect.org.au"
     Given I am on the list data files page
     And I should see only these rows in "exploredata" table
       | Filename                   | Added by                  |
@@ -60,11 +58,6 @@ Feature: Delete files containing erroneous data
     Then I should see only these rows in "exploredata" table
       | Filename | Added by                  |
       | toa5.dat | researcher@intersect.org.au |
-
-
-  @wip
-  Scenario: Deleting a file shows the change in recent activity
-
 
   Scenario: Deleting a file causes it to no longer appear in search results
     Given I have data files

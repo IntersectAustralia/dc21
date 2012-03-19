@@ -19,7 +19,7 @@ Feature: Overlapping Files
       | table_name   | Table1 |
 
     And I am on the upload page
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "WTC01_Table1.dat"
     And I follow "Next"
 
     When I select "RAW" from the select box for "WTC01_Table1.dat"
@@ -45,7 +45,7 @@ Feature: Overlapping Files
       | table_name   | Table1 |
 
     And I am on the upload page
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "WTC01_Table1.dat"
     And I follow "Next"
 
     When I select "RAW" from the select box for "WTC01_Table1.dat"
@@ -88,7 +88,7 @@ Feature: Overlapping Files
       | station_name | WTC01  |
       | table_name   | Table1 |
     And I am on the upload page
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "WTC01_Table1.dat"
     And I follow "Next"
     When I select "RAW" from the select box for "WTC01_Table1.dat"
     And I fill in "file_processing_description" with "new description" for "WTC01_Table1.dat"
@@ -111,7 +111,7 @@ Feature: Overlapping Files
       | station_name | WTC01  |
       | table_name   | Table1 |
     And I am on the upload page
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "WTC01_Table1.dat"
     And I follow "Next"
     When I select "RAW" from the select box for "WTC01_Table1.dat"
     And I fill in "file_processing_description" with "new description" for "WTC01_Table1.dat"
@@ -136,7 +136,7 @@ Feature: Overlapping Files
       | station_name | WTC01  |
       | table_name   | Table1 |
     And I am on the upload page
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "WTC01_Table1.dat"
     And I follow "Next"
     When I select "RAW" from the select box for "WTC01_Table1.dat"
     And I fill in "file_processing_description" with "new description" for "WTC01_Table1.dat"

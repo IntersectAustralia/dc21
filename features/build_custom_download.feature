@@ -5,10 +5,10 @@ Feature: Download a file
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
-    And I upload "sample1.txt" through the applet
-    And I upload "weather_station_05_min.dat" through the applet
-    And I upload "weather_station_15_min.dat" through the applet
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "sample1.txt"
+    And I have uploaded "weather_station_05_min.dat"
+    And I have uploaded "weather_station_15_min.dat"
+    And I have uploaded "WTC01_Table1.dat"
 
   Scenario: Build a custom download by date range
     When I do a date search for data files with dates "2011-10-10" and "2011-10-15"

@@ -34,6 +34,7 @@ class DataFilesController < ApplicationController
   end
 
   def new
+    @uploaded_files = []
     render :layout => 'guest'
   end
 
@@ -43,62 +44,17 @@ class DataFilesController < ApplicationController
   def update
   end
 
-  def list_for_post_processing
-    @data_files = DataFile.unprocessed.most_recent_first
-    #pre-set the experiment if there's  only one likely candidate
-    @data_files.each do |df|
-      if df.facility && df.facility.experiments.size == 1
-        df.experiment_id = df.facility.experiments.first.id
-      end
-    end
-    redirect_to data_files_path unless @data_files.present?
-  end
-
-  def post_process
-    redirect_to data_files_path unless params[:data_files].present?
-
-    failures = []
-    params[:data_files].each do |df_id, values|
-
-      #Skip if they left it blank
-      next if values[:file_processing_status].blank? && values[:file_processing_description].blank? && values[:experiment_id].blank?
-
-      #remove "" entries - we don't want them be set as "" if they are actually nil
-      cleaned_values = values.delete_if { |k, v| v.blank? }
-
-      if DataFile.exists?(df_id) #its possible that it won't exist, as it could have been an overlap of a file we already processed and therefore be deleted already
-        data_file = DataFile.find(df_id)
-        if not data_file.update_attributes(cleaned_values)
-          failures << data_file
-        end
-      end
-    end
-    if failures.empty?
-      redirect_to data_files_path
-    else
-      @data_files = failures
-      @errors_present = true
-      render :list_for_post_processing
-    end
-  end
-
   def create
-    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-    result = attachment_builder.build()
-
-    respond_to do |format|
-      format.json { render :json => result }
+    files = params["files"]
+    experiment_id = params["experiment_id"]
+    type = params["file_processing_status"]
+    created = []
+    files.each do |file|
+      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+      created << attachment_builder.build(file, experiment_id, type)
     end
-  end
-
-  def verify_upload
-    attachment_builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], current_user, nil, nil)
-
-    result = attachment_builder.verify_from_filenames
-
-    respond_to do |format|
-      format.json { render :json => result }
-    end
+    @uploaded_files = created
+    render :new
   end
 
   def download

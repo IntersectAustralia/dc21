@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FileTypeDeterminer do
+describe MetadataExtractor do
 
   let(:toa5_dat) do
     path = Rails.root.join('spec/samples', 'toa5.dat')

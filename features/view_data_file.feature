@@ -52,19 +52,19 @@ Feature: View the details of a data file
 
   Scenario: TOA5 file shows mapped station name where it has been mapped to a facility
     Given I have facility "WTC Station" with code "WTC01"
-    And I upload "WTC01_Table1.dat" through the applet
+    And I have uploaded "WTC01_Table1.dat"
     And I am on the list data files page
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see field "Facility" with value "WTC01 (WTC Station)"
 
   Scenario: TOA5 file shows station code only if no mapping to facility exists
-    Given I upload "WTC01_Table1.dat" through the applet
+    Given I have uploaded "WTC01_Table1.dat"
     When I am on the list data files page
     And I follow the view link for data file "WTC01_Table1.dat"
     Then I should see field "Facility" with value "WTC01"
 
   Scenario: TOA5 file shows correctly mapped column names in file info table
-    Given I upload "Test_Column_Table.dat" through the applet
+    Given I have uploaded "Test_Column_Table.dat"
     And I have column mappings
       | name                         | code                 |
       | Average Soil Temperature (1) | SoilTempProbe_Avg(1) |
@@ -82,7 +82,7 @@ Feature: View the details of a data file
       | SoilTempProbe_Avg(6) |                              | Deg C | Avg              |
 
   Scenario: Filling in missing column mappings - only missing mappings should be shown
-    Given I upload "Test_Column_Table.dat" through the applet
+    Given I have uploaded "Test_Column_Table.dat"
     And I have column mappings
       | name                         | code                 |
       | Average Soil Temperature (1) | SoilTempProbe_Avg(1) |
@@ -97,7 +97,7 @@ Feature: View the details of a data file
     And I should not see "SoilTempProbe_Avg(4)"
 
   Scenario: Fill in missing column mappings with valid information
-    Given I upload "Test_Column_Table.dat" through the applet
+    Given I have uploaded "Test_Column_Table.dat"
     And I have column mappings
       | name                         | code                 |
       | Average Soil Temperature (1) | SoilTempProbe_Avg(1) |
@@ -120,7 +120,7 @@ Feature: View the details of a data file
       | SoilTempProbe_Avg(6) | Sample                       | Deg C | Avg              |
 
   Scenario: Fill in missing column mappings button should not be visible if none are missing
-    Given I upload "Test_Column_Table.dat" through the applet
+    Given I have uploaded "Test_Column_Table.dat"
     And I have column mappings
       | name                         | code                 |
       | Average Soil Temperature (1) | SoilTempProbe_Avg(1) |
@@ -136,7 +136,7 @@ Feature: View the details of a data file
 # This scenario no longer possible, but it may become relevant soon.
 # TODO Delete in sprint 4
 #  Scenario: Fill in missing column mappings with invalid information
-#    Given I upload "Test_Column_Table.dat" through the applet
+#    Given I have uploaded "Test_Column_Table.dat"
 #    When I am on the list data files page
 #    And I follow the view link for data file "Test_Column_Table.dat"
 #    And I follow "Fill in column mappings"

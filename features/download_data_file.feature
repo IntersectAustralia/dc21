@@ -5,7 +5,7 @@ Feature: Download a file
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
-    And I upload "sample1.txt" through the applet
+    And I have uploaded "sample1.txt"
 
   Scenario: Download
     When I am on the data file details page for sample1.txt

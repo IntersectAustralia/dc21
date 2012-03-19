@@ -44,26 +44,22 @@ describe FileTypeDeterminer do
   describe "Should identify valid TOA5 files regardless of file extension" do
 
     it "should identify TOA5 files with dat extension and correct header" do
-      known, format = file_type_determiner.identify_file(toa5_dat)
-      known.should be_true
+      format = file_type_determiner.identify_file(toa5_dat)
       format.should eq(FileTypeDeterminer::TOA5)
     end
 
     it "should identify TOA5 files with dat extension and correct header with quotes" do
-      known, format = file_type_determiner.identify_file(toa5_dat_quoted)
-      known.should be_true
+      format = file_type_determiner.identify_file(toa5_dat_quoted)
       format.should eq(FileTypeDeterminer::TOA5)
     end
 
     it "should identify TOA5 files with txt extension and correct header" do
-      known, format = file_type_determiner.identify_file(toa5_txt)
-      known.should be_true
+      format = file_type_determiner.identify_file(toa5_txt)
       format.should eq(FileTypeDeterminer::TOA5)
     end
 
     it "should identify TOA5 files with csv extension and correct header" do
-      known, format = file_type_determiner.identify_file(toa5_csv)
-      known.should be_true
+      format = file_type_determiner.identify_file(toa5_csv)
       format.should eq(FileTypeDeterminer::TOA5)
     end
   end
@@ -71,20 +67,17 @@ describe FileTypeDeterminer do
   describe "Unidentifiable files" do
 
     it "should NOT identify files with DAT extension but no TOA5 header" do
-      known, format = file_type_determiner.identify_file(unknown_dat)
-      known.should be_false
+      format = file_type_determiner.identify_file(unknown_dat)
       format.should be_nil
     end
 
     it "should NOT identify files with DAT extension but which are empty" do
-      known, format = file_type_determiner.identify_file(empty_dat)
-      known.should be_false
+      format = file_type_determiner.identify_file(empty_dat)
       format.should be_nil
     end
 
     it "should NOT identify files with DAT extension but no TOA5 header - binary format" do
-      known, format = file_type_determiner.identify_file(jpg)
-      known.should be_false
+      format = file_type_determiner.identify_file(jpg)
       format.should be_nil
     end
   end

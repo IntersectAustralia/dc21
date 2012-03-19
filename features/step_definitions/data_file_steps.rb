@@ -25,17 +25,22 @@ Given /^I have data files$/ do |table|
   end
 end
 
+Given /^I have uploaded "([^"]*)" with type "([^"]*)"$/ do |file, type|
+  Factory(:data_file, :file_processing_status => type)
+end
+
 And /^I follow the view link for data file "([^"]*)"$/ do |filename|
   file = DataFile.find_by_filename(filename)
   click_link("view_#{file.id}")
 end
 
 #post to the upload controller just like the applet would
-When /^I upload "([^"]*)" through the applet$/ do |filename|
+When /^I have uploaded "([^"]*)"$/ do |filename|
   user = User.first
   do_upload filename, user
 end
-When /^I upload "([^"]*)" through the applet as "([^"]*)"$/ do |filename, user_email|
+
+When /^I have uploaded "([^"]*)" as "([^"]*)"$/ do |filename, user_email|
   user = User.find_by_email user_email
   do_upload filename, user
 end
@@ -182,20 +187,50 @@ Then /^"([^"]*)" should be selected in the experiment select for "([^"]*)"$/ do 
   option.text.should eq(expected_option)
 end
 
+When /^(?:|I )select "([^"]*)" to upload$/ do |path|
+  attach_file("Select file(s)", File.expand_path(path))
+end
+
+Then /^the uploaded files display should include "([^"]*)" with details$/ do |filename, table|
+  div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
+  with_scope(div) do
+    page.should have_content(filename)
+    expected_details = table.hashes.first
+    page.should have_content("Type: #{expected_details["File type"]}")
+    page.should have_content(expected_details["Messages"])
+    page.should have_content("Experiment: #{expected_details["Experiment"]}")
+  end
+end
+
+Then /^the most recent file should have name "([^"]*)"$/ do |name|
+  DataFile.last.filename.should eq(name)
+end
+
+Then /^the "([^"]*)" should have type "([^"]*)"$/ do |filename, type|
+  DataFile.find_by_filename!(filename).file_processing_status.should eq(type)
+end
+
+Then /^the "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
+  DataFile.find_by_filename!(filename).experiment_id.should eq(Experiment.find_by_name!(experiment).id)
+end
+
 private
 
 def do_upload(filename, user, path=nil)
-  user.reset_authentication_token!
-  token = user.authentication_token
-  post_path = data_files_url(:format => :json, :auth_token => token)
+  attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
+
   if path
     path = Rails.root.join('samples', path, filename).to_s
   else
     path = Rails.root.join('samples', filename).to_s
   end
   file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
-  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir" => "/"}
-  response.status.should eq(200)
-  DataFile.count.should_not eq(0)
+  experiment = Experiment.first
+  experiment = Factory(:experiment) unless experiment
+  attachment_builder.build(file, experiment.id, DataFile::STATUS_RAW)
 end
 
+
+Then /^there should be (.*) files in the system$/ do |resulting_file_count|
+  DataFile.count.should eq(resulting_file_count.to_i)
+end

@@ -6,6 +6,7 @@ class DataFile < ActiveRecord::Base
   STATUS_RAW = 'RAW'
   STATUS_CLEANSED = 'CLEANSED'
   STATUS_PROCESSED = 'PROCESSED'
+  STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED]
 
   belongs_to :created_by, :class_name => "User"
   has_many :column_details, :dependent => :destroy
@@ -25,6 +26,8 @@ class DataFile < ActiveRecord::Base
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
+
+  attr_accessor :messages
 
   def self.with_data_in_range(from, to)
     if (from && to)

@@ -39,10 +39,6 @@ Dc21app::Application.routes.draw do
       get :download_selected
       get :build_download
       get :custom_download
-      post :verify_upload
-
-      get :list_for_post_processing
-      post :post_process
     end
   end
 
