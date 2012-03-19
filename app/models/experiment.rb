@@ -11,6 +11,8 @@ class Experiment < ActiveRecord::Base
   validates_presence_of :facility_id
   validates_presence_of :access_rights
 
+  validates_length_of :name, :description, :subject, {:maximum => 255}
+
   validate :validate_start_before_end
 
   def validate_start_before_end
