@@ -25,7 +25,6 @@
         %br/
         = "Experiment: #{file.experiment_name}"
         %br/
-        .messages
+        %ul.messages
           - file.messages.each do |message|
-            = message
-            %br/
+            %li= message

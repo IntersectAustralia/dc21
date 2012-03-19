@@ -24,7 +24,7 @@ describe AttachmentBuilder do
       data_file = ab.build(file1, 23, DataFile::STATUS_RAW)
 
       DataFile.count.should eq(1)
-      data_file.messages.should eq(["File uploaded successfully"])
+      data_file.messages.should eq(["File uploaded successfully."])
       data_file.filename.should == "toa5.dat"
       data_file.created_by.should eq(user)
       data_file.experiment_id.should eq(23)
@@ -42,7 +42,7 @@ describe AttachmentBuilder do
       data_file = ab.build(file1, 23, DataFile::STATUS_RAW)
 
       DataFile.count.should eq(1)
-      data_file.messages.should eq(["File uploaded successfully"])
+      data_file.messages.should eq(["File uploaded successfully."])
       data_file.filename.should == "toa5.dat"
       data_file.format.should == "TOA5"
     end
@@ -58,7 +58,7 @@ describe AttachmentBuilder do
       data_file = ab.build(file1, 23, DataFile::STATUS_RAW)
 
       DataFile.count.should eq(1)
-      data_file.messages.should eq(["File uploaded successfully"])
+      data_file.messages.should eq(["File uploaded successfully."])
       data_file.filename.should == "toa5.dat"
       data_file.format.should be_nil
     end

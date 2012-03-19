@@ -45,6 +45,11 @@ Given /^I have uploaded "([^"]*)" with type "([^"]*)"$/ do |filename, type|
   do_upload(filename, User.first, type)
 end
 
+When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)"$/ do |filename, user_email, type|
+  user = User.find_by_email user_email
+  do_upload filename, user, type
+end
+
 
 
 When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|
@@ -169,7 +174,7 @@ Then /^the experiment select for "([^"]*)" should contain$/ do |file, table|
     actual_options << [group[:label], options]
   end
 
-  expected_options = table.raw.collect { |row| [row[0], row[1].split(",").collect{|i| i.strip}] }
+  expected_options = table.raw.collect { |row| [row[0], row[1].split(",").collect { |i| i.strip }] }
   actual_options.should eq(expected_options)
 end
 
@@ -193,34 +198,53 @@ When /^(?:|I )select "([^"]*)" to upload$/ do |path|
   attach_file("Select file(s)", File.expand_path(path))
 end
 
-Then /^the uploaded files display should include "([^"]*)" with details$/ do |filename, table|
+Then /^the uploaded files display should include "([^"]*)" with file type "([^"]*)"$/ do |filename, type|
   div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
   with_scope(div) do
     page.should have_content(filename)
-    expected_details = table.hashes.first
-    page.should have_content("Type: #{expected_details["File type"]}")
-    with_scope('".messages"') do
-      expected = expected_details["Messages"].split(",")
-      if expected.include?("success")
-        page.should have_content("File uploaded successfully")
-      end
-      if expected.include?("renamed")
-        page.should have_content("A file already existed with the same name. File has been renamed.")
-      end
-    end
-    page.should have_content("Experiment: #{expected_details["Experiment"]}")
+    page.should have_content("Type: #{type}")
   end
 end
+
+Then /^the uploaded files display should include "([^"]*)" with experiment "([^"]*)"$/ do |filename, experiment|
+  div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
+  with_scope(div) do
+    page.should have_content(filename)
+    page.should have_content("Experiment: #{experiment}")
+  end
+end
+
+Then /^the uploaded files display should include "([^"]*)" with messages "([^"]*)"$/ do |filename, message_codes|
+  div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
+  with_scope(div) do
+    page.should have_content(filename)
+    messages = all("ul.messages li").collect(&:text)
+    expected_messages = message_codes.split(",")
+
+    messages.size.should eq(expected_messages.size), "Expected #{expected_messages.size} messages, found #{messages.size}. Messages were #{messages}."
+
+    if expected_messages.include?("success")
+      page.should have_content("File uploaded successfully")
+    end
+    if expected_messages.include?("renamed")
+      page.should have_content("A file already existed with the same name. File has been renamed.")
+    end
+    if expected_messages.include?("badoverlap")
+      page.should have_content("File cannot safely replace existing files. File has been saved with type ERROR.")
+    end
+  end
+end
+
 
 Then /^the most recent file should have name "([^"]*)"$/ do |name|
   DataFile.last.filename.should eq(name)
 end
 
-Then /^the "([^"]*)" should have type "([^"]*)"$/ do |filename, type|
+Then /^file "([^"]*)" should have type "([^"]*)"$/ do |filename, type|
   DataFile.find_by_filename!(filename).file_processing_status.should eq(type)
 end
 
-Then /^the "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
+Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
   DataFile.find_by_filename!(filename).experiment_id.should eq(Experiment.find_by_name!(experiment).id)
 end
 

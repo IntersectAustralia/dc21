@@ -28,10 +28,7 @@ Feature: Delete files containing erroneous data
 
   @javascript
   Scenario: I see an informative alert for files with metadata
-    Given I have uploaded "toa5.dat" as "researcher@intersect.org.au"
-    And The processing metadata is set for files as follows:
-      | filename | status | description   |
-      | toa5.dat | RAW    | something set |
+    Given I have uploaded "toa5.dat" as "researcher@intersect.org.au" with type "RAW"
     When I am on the list data files page
     Then I should see "exploredata" table with
       | Filename | Added by                  | Start time          | End time            | Processing status |

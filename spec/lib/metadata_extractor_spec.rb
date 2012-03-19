@@ -28,37 +28,4 @@ describe MetadataExtractor do
     end
   end
 
-  describe "assign time metadata" do
-    it "should call the Toa5Parser.assign_time_metadata on the datafile" do
-      expected = 'something'
-
-      toa5_parser = mock(Toa5Parser)
-      dat = unsaved_toa5_dat
-      toa5_parser.should_receive(:assign_time_metadata_returning_other_metadata).with(dat).and_return(expected)
-
-      MetadataExtractor.const_set(:Toa5Parser, toa5_parser) # This is a bit of a hack.
-
-      actual = metadata_extractor.assign_time_metadata_returning_other_metadata(dat, FileTypeDeterminer::TOA5)
-
-      actual.should eq expected
-
-      dat.should_not be_persisted
-    end
-    it "doesn't call Toa5Parser if it's not a TOA5" do
-      toa5_parser = mock(Toa5Parser)
-      MetadataExtractor.const_set(:Toa5Parser, toa5_parser) # This is a bit of a hack.
-
-      dat = unsaved_toa5_dat
-
-      actual = metadata_extractor.assign_time_metadata_returning_other_metadata(dat, "garbage")
-
-      actual.should_not be
-
-      dat.should_not be_persisted
-    end
-    after(:each) do
-      MetadataExtractor.send(:remove_const, :Toa5Parser) # This is a companion hack to the previous hacks
-    end
-  end
-
 end

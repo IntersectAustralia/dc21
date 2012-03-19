@@ -11,7 +11,10 @@ class AttachmentBuilder
     path, new_filename = store_file(file)
     data_file = create_data_file(path, new_filename, experiment_id, type)
     if new_filename != file.original_filename
-      data_file.messages = ["A file already existed with the same name. File has been renamed."]
+      data_file.add_message("A file already existed with the same name. File has been renamed.")
+    end
+    if data_file.messages.blank?
+      data_file.add_message("File uploaded successfully.")
     end
     data_file
   end
@@ -22,13 +25,15 @@ class AttachmentBuilder
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path, :filename => filename, :created_by => @current_user, :file_processing_status => type, :experiment_id => experiment_id)
-    data_file.messages = ["File uploaded successfully"]
+
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format
 
     data_file.save!
     @metadata_extractor.extract_metadata(data_file, format) if format
+    data_file.reload
+    data_file.check_for_bad_overlap
     data_file
   end
 

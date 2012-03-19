@@ -21,12 +21,12 @@ Feature: Upload files
     And I select "My Experiment" from "Experiment"
     And I select "samples/sample1.txt" to upload
     And I press "Upload"
-    Then the uploaded files display should include "sample1.txt" with details
-      | File type | Experiment    | Messages                   |
-      | RAW       | My Experiment | File uploaded successfully |
-    And the most recent file should have name "sample1.txt"
-    And the "sample1.txt" should have type "RAW"
-    And the "sample1.txt" should have experiment "My Experiment"
+    Then the most recent file should have name "sample1.txt"
+    And the uploaded files display should include "sample1.txt" with file type "RAW"
+    And the uploaded files display should include "sample1.txt" with experiment "My Experiment"
+    And the uploaded files display should include "sample1.txt" with messages "success"
+    And file "sample1.txt" should have type "RAW"
+    And file "sample1.txt" should have experiment "My Experiment"
 
   Scenario: Upload multiple files
 
@@ -42,28 +42,28 @@ Feature: Upload files
     And I select "My Experiment" from "Experiment"
     And I select "<file path>" to upload
     And I press "Upload"
-    Then the uploaded files display should include "<resulting name>" with details
-      | File type | Experiment    | Messages   |
-      | <type>    | My Experiment | <messages> |
-    And the most recent file should have name "<resulting name>"
-    And the "<resulting name>" should have type "<resulting type>"
-    And the "<resulting name>" should have experiment "My Experiment"
+    Then the most recent file should have name "<resulting name>"
+    And the uploaded files display should include "<resulting name>" with file type "<resulting type>"
+    And the uploaded files display should include "<resulting name>" with experiment "My Experiment"
+    And the uploaded files display should include "<resulting name>" with messages "<messages>"
+    And file "<resulting name>" should have type "<resulting type>"
+    And file "<resulting name>" should have experiment "My Experiment"
     And there should be <resulting file count> files in the system
 
 
   Examples:
-    | type      | messages | resulting name                            | resulting type | resulting file count | description                                         | file path                                                                                |
-    | RAW       | success  | weather_station_15_min_oct_13_15.dat      | RAW            | 3                    | no overlap, different file name                     | samples/subsetted/range_oct_13_oct_15_renamed/weather_station_15_min_oct_13_15.dat       |
-    | RAW       | renamed  | weather_station_15_min_1.dat              | RAW            | 3                    | no overlap, clashing file name                      | samples/subsetted/range_oct_13_oct_15/weather_station_15_min.dat                         |
-    | RAW       | success  | weather_station_15_min_oct_10_onwards.dat | RAW            | 2                    | safe overlap, different file name                   | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
-    | RAW       | success  | weather_station_15_min.dat                | RAW            | 2                    | safe overlap, replacing file of same name           | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
-    | RAW       | renamed  | sample1_1.txt                             | RAW            | 2                    | safe overlap, clashing file name                    | samples/subsetted/range_oct_10_onwards_renamed/sample1.txt                               |
-    | RAW       | success  | weather_station_15_min_oct_14_16.dat      | ERROR          | 3                    | bad overlap, different file name                    | samples/subsetted/range_oct_14_oct_16/weather_station_15_min_oct_14_16.dat               |
-    | RAW       | renamed  | weather_station_15_min_1.dat              | ERROR          | 3                    | bad overlap, clashing file name                     | samples/subsetted/range_oct_14_oct_16/weather_station_15_min.dat                         |
-    | RAW       | success  | sample2.txt                               | RAW            | 3                    | non-TOA5, different file name                       | samples/sample2.txt                                                                      |
-    | RAW       | renamed  | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
-    | PROCESSED | success  | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
-    | PROCESSED | renamed  | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+    | type      | messages            | resulting name                            | resulting type | resulting file count | description                                         | file path                                                                                |
+    | RAW       | success             | weather_station_15_min_oct_13_15.dat      | RAW            | 3                    | no overlap, different file name                     | samples/subsetted/range_oct_13_oct_15_renamed/weather_station_15_min_oct_13_15.dat       |
+    | RAW       | renamed             | weather_station_15_min_1.dat              | RAW            | 3                    | no overlap, clashing file name                      | samples/subsetted/range_oct_13_oct_15/weather_station_15_min.dat                         |
+#    | RAW       | success             | weather_station_15_min_oct_10_onwards.dat | RAW            | 2                    | safe overlap, different file name                   | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
+#    | RAW       | success             | weather_station_15_min.dat                | RAW            | 2                    | safe overlap, replacing file of same name           | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+#    | RAW       | renamed             | sample1_1.txt                             | RAW            | 2                    | safe overlap, clashing file name                    | samples/subsetted/range_oct_10_onwards_renamed/sample1.txt                               |
+    | RAW       | badoverlap          | weather_station_15_min_oct_11_13.dat      | ERROR          | 3                    | bad overlap, different file name                    | samples/subsetted/range_oct_11_oct_13/weather_station_15_min_oct_11_13.dat               |
+    | RAW       | renamed, badoverlap | weather_station_15_min_1.dat              | ERROR          | 3                    | bad overlap, clashing file name                     | samples/subsetted/range_oct_11_oct_13/weather_station_15_min.dat                         |
+    | RAW       | success             | sample2.txt                               | RAW            | 3                    | non-TOA5, different file name                       | samples/sample2.txt                                                                      |
+    | RAW       | renamed             | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
+    | PROCESSED | success             | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
+    | PROCESSED | renamed             | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
 
   Scenario: Must be logged in to view the upload page

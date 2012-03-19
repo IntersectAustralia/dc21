@@ -7,6 +7,7 @@ class DataFile < ActiveRecord::Base
   STATUS_CLEANSED = 'CLEANSED'
   STATUS_PROCESSED = 'PROCESSED'
   STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED]
+  STATUS_ERROR = 'ERROR'
 
   belongs_to :created_by, :class_name => "User"
   has_many :column_details, :dependent => :destroy
@@ -17,9 +18,7 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :created_by_id
   validates_length_of :file_processing_description, :maximum => 255
 
-  validate :no_bad_overlap
-
-  before_save :destroy_safe_overlap
+#  before_save :destroy_safe_overlap
 
   scope :most_recent_first, order("created_at DESC")
   scope :unprocessed, where { ((file_processing_status.eq nil) | (experiment_id.eq nil)) }
@@ -117,6 +116,25 @@ class DataFile < ActiveRecord::Base
     station_name_item = metadata_items.where(:key => MetadataKeys::STATION_NAME_KEY).first
     return nil unless station_name_item
     Facility.find_by_code(station_name_item.value)
+  end
+
+  def check_for_bad_overlap
+    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
+    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
+    if station_item and table_item
+      overlap = mismatched_overlap(station_item.value, table_item.value)
+
+      if overlap.any?
+        add_message('File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with ' + overlap.map(&:filename).join(', '))
+        self.file_processing_status = DataFile::STATUS_ERROR
+        self.save!
+      end
+    end
+  end
+
+  def add_message(message)
+    self.messages ||= []
+    self.messages << message
   end
 
   protected
@@ -252,16 +270,5 @@ class DataFile < ActiveRecord::Base
     exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
   end
 
-  def no_bad_overlap
-    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
-    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
-    if station_item and table_item
-      overlap = mismatched_overlap(station_item.value, table_item.value)
-
-      if overlap.any?
-        self.errors[:base] << 'overlapped ' + overlap.map(&:filename).join(', ')
-      end
-    end
-  end
 
 end
