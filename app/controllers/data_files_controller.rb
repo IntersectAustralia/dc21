@@ -48,12 +48,13 @@ class DataFilesController < ApplicationController
     files = params["files"]
     experiment_id = params["experiment_id"]
     type = params["file_processing_status"]
-    created = []
+    @uploaded_files = []
+    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+
     files.each do |file|
-      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-      created << attachment_builder.build(file, experiment_id, type)
+      @uploaded_files << attachment_builder.build(file, experiment_id, type)
     end
-    @uploaded_files = created
+
     render :new
   end
 

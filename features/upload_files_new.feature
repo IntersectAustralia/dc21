@@ -35,8 +35,8 @@ Feature: Upload files
   Scenario: Modify and save metadata after uploading
 
   Scenario Outline: Possible outcomes for uploaded files
-    Given I have uploaded "samples/subsetted/range_oct_10_oct_12/weather_stations_15_min.dat" with type "RAW"
-    Given I have uploaded "samples/sample1.txt" with type "RAW"
+    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_15_min.dat" with type "RAW"
+    Given I have uploaded "sample1.txt" with type "RAW"
     Given I am on the upload page
     When I select "<type>" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -54,16 +54,16 @@ Feature: Upload files
   Examples:
     | type      | messages | resulting name                            | resulting type | resulting file count | description                                         | file path                                                                                |
     | RAW       | success  | weather_station_15_min_oct_13_15.dat      | RAW            | 3                    | no overlap, different file name                     | samples/subsetted/range_oct_13_oct_15_renamed/weather_station_15_min_oct_13_15.dat       |
-    | RAW       | success  | weather_station_15_min_1.dat              | RAW            | 3                    | no overlap, clashing file name                      | samples/subsetted/range_oct_13_oct_15/weather_station_15_min.dat                         |
+    | RAW       | renamed  | weather_station_15_min_1.dat              | RAW            | 3                    | no overlap, clashing file name                      | samples/subsetted/range_oct_13_oct_15/weather_station_15_min.dat                         |
     | RAW       | success  | weather_station_15_min_oct_10_onwards.dat | RAW            | 2                    | safe overlap, different file name                   | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
-    | RAW       | success  | weather_station_15_min_1.dat              | RAW            | 2                    | safe overlap, replacing file of same name           | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
-    | RAW       | success  | sample1_1.txt                             | RAW            | 2                    | safe overlap, clashing file name                    | samples/subsetted/range_oct_10_onwards_renamed/sample1.txt                               |
+    | RAW       | success  | weather_station_15_min.dat                | RAW            | 2                    | safe overlap, replacing file of same name           | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+    | RAW       | renamed  | sample1_1.txt                             | RAW            | 2                    | safe overlap, clashing file name                    | samples/subsetted/range_oct_10_onwards_renamed/sample1.txt                               |
     | RAW       | success  | weather_station_15_min_oct_14_16.dat      | ERROR          | 3                    | bad overlap, different file name                    | samples/subsetted/range_oct_14_oct_16/weather_station_15_min_oct_14_16.dat               |
-    | RAW       | success  | weather_station_15_min_1.dat              | ERROR          | 3                    | bad overlap, clashing file name                     | samples/subsetted/range_oct_14_oct_16/weather_station_15_min.dat                         |
+    | RAW       | renamed  | weather_station_15_min_1.dat              | ERROR          | 3                    | bad overlap, clashing file name                     | samples/subsetted/range_oct_14_oct_16/weather_station_15_min.dat                         |
     | RAW       | success  | sample2.txt                               | RAW            | 3                    | non-TOA5, different file name                       | samples/sample2.txt                                                                      |
-    | RAW       | success  | sample1_1.dat                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
+    | RAW       | renamed  | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
     | PROCESSED | success  | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
-    | PROCESSED | success  | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+    | PROCESSED | renamed  | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
 
   Scenario: Must be logged in to view the upload page

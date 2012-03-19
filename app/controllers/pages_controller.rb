@@ -10,7 +10,6 @@ class PagesController < ApplicationController
       set_tab :login
       render :layout => 'guest' and return
     else
-      @action_items = build_action_items
       set_tab :home
       set_tab :dashboard, :contentnavigation
       @data_files = DataFile.most_recent_first.limit(5)
@@ -24,19 +23,5 @@ class PagesController < ApplicationController
   end
 
   private
-
-  #Anythng that we need to alert the user about on the home page
-  def build_action_items
-    list_of_items = Array.new
-
-    #Missing processing status
-    unprocessed_files = DataFile.unprocessed.count
-    if unprocessed_files  > 0
-      list_of_items << {text: "There are #{unprocessed_files} files missing status or experiment information", link: list_for_post_processing_data_files_path}
-    end
-
-
-    list_of_items
-  end
 
 end

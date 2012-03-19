@@ -25,10 +25,6 @@ Given /^I have data files$/ do |table|
   end
 end
 
-Given /^I have uploaded "([^"]*)" with type "([^"]*)"$/ do |file, type|
-  Factory(:data_file, :file_processing_status => type)
-end
-
 And /^I follow the view link for data file "([^"]*)"$/ do |filename|
   file = DataFile.find_by_filename(filename)
   click_link("view_#{file.id}")
@@ -44,6 +40,12 @@ When /^I have uploaded "([^"]*)" as "([^"]*)"$/ do |filename, user_email|
   user = User.find_by_email user_email
   do_upload filename, user
 end
+
+Given /^I have uploaded "([^"]*)" with type "([^"]*)"$/ do |filename, type|
+  do_upload(filename, User.first, type)
+end
+
+
 
 When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|
   #post to the upload controller just like the applet would
@@ -197,7 +199,15 @@ Then /^the uploaded files display should include "([^"]*)" with details$/ do |fi
     page.should have_content(filename)
     expected_details = table.hashes.first
     page.should have_content("Type: #{expected_details["File type"]}")
-    page.should have_content(expected_details["Messages"])
+    with_scope('".messages"') do
+      expected = expected_details["Messages"].split(",")
+      if expected.include?("success")
+        page.should have_content("File uploaded successfully")
+      end
+      if expected.include?("renamed")
+        page.should have_content("A file already existed with the same name. File has been renamed.")
+      end
+    end
     page.should have_content("Experiment: #{expected_details["Experiment"]}")
   end
 end
@@ -216,18 +226,14 @@ end
 
 private
 
-def do_upload(filename, user, path=nil)
+def do_upload(filename, user, type=DataFile::STATUS_RAW)
   attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
 
-  if path
-    path = Rails.root.join('samples', path, filename).to_s
-  else
-    path = Rails.root.join('samples', filename).to_s
-  end
+  path = Rails.root.join('samples', filename).to_s
   file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
   experiment = Experiment.first
   experiment = Factory(:experiment) unless experiment
-  attachment_builder.build(file, experiment.id, DataFile::STATUS_RAW)
+  attachment_builder.build(file, experiment.id, type)
 end
 
 

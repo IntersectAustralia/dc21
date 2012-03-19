@@ -17,14 +17,15 @@
       = f.submit "Upload"
 
   - unless @uploaded_files.empty?
-    - @uploaded_files.each do |f|
-      .file-panel{:id => "file_panel_#{f.id}"}
-        = f.filename
+    - @uploaded_files.each do |file|
+      .file-panel{:id => "file_panel_#{file.id}"}
+        = file.filename
         %br/
-        = "Type: #{f.file_processing_status}"
+        = "Type: #{file.file_processing_status}"
         %br/
-        = "Experiment: #{f.experiment_name}"
+        = "Experiment: #{file.experiment_name}"
         %br/
-        - f.messages.each do |message|
-          = message
-          %br/
+        .messages
+          - file.messages.each do |message|
+            = message
+            %br/

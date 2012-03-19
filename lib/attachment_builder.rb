@@ -8,8 +8,12 @@ class AttachmentBuilder
   end
 
   def build(file, experiment_id, type)
-    path = store_file(file)
-    create_data_file(path, file.original_filename, experiment_id, type)
+    path, new_filename = store_file(file)
+    data_file = create_data_file(path, new_filename, experiment_id, type)
+    if new_filename != file.original_filename
+      data_file.messages = ["A file already existed with the same name. File has been renamed."]
+    end
+    data_file
   end
 
   private
@@ -29,12 +33,39 @@ class AttachmentBuilder
   end
 
   def store_file(file)
-    filename = file.original_filename
+    filename = calculate_filename(file.original_filename)
     store_path = File.join(@files_root, filename)
 
     FileUtils.cp(file.path, store_path)
 
-    store_path
+    [store_path, filename]
+  end
+
+  def calculate_filename(original)
+    return original unless DataFile.find_by_filename(original)
+
+    ext = File.extname(original)
+
+    regex = if ext.blank?
+              /\A#{Regexp.escape(original)}_(\d+)\Z/
+            else
+              name = original[0..(original.rindex(".") - 1)]
+                  /\A#{Regexp.escape(name)}_(\d+)\.#{Regexp.escape(ext[1..-1])}\Z/
+            end
+
+
+    matching = DataFile.all.collect do |s|
+      match = s.filename.match(regex)
+      match ? match[1].to_i : nil
+    end
+    numbers = matching.compact.sort
+    next_number = numbers.empty? ? 1 : (numbers.last + 1)
+
+    if ext.blank?
+      original + "_#{next_number}"
+    else
+      "#{name}_#{next_number}.#{ext[1..-1]}"
+    end
   end
 
 end
