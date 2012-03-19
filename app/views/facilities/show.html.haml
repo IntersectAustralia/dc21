@@ -9,7 +9,8 @@
 .container
   = render_field "Name", @facility.name
   = render_field "Code", @facility.code
-  = render_field "Description", @facility.description if @facility.description
+  .description
+    = render_field "Description", @facility.description if @facility.description
   = render_field "Location", @facility.location if @facility.location
   = render_field "Top Left Corner", @facility.loc_tl if @facility.loc_tl
   = render_field "Bottom Right Corner", @facility.loc_br if @facility.loc_br

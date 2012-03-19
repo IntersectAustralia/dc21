@@ -4,22 +4,31 @@ class Facility < ActiveRecord::Base
   has_many :column_details
   has_many :experiments, :order => 'name'
 
+  has_many :aggregated_contactables, :class_name => "FacilityContact"
   has_one :primary_contactable, :class_name => "FacilityContact", :conditions => {:primary => true}, :dependent => :destroy
   has_many :contactables, :class_name => "FacilityContact", :conditions => {:primary => false}, :dependent => :destroy
+  
 
   has_one :primary_contact,
           :through => :primary_contactable,
           :class_name => 'User',
           :source => :user
 
+  # has_many  :aggregated_contacts,
+  #           :through => :aggregated_contactables,
+  #           :class_name => 'User',
+  #           :source => :user
+
   has_many :contacts,
            :through => :contactables,
            :class_name => 'User',
-           :source => :user
+           :source => :user,
+           :order => 'users.last_name, users.first_name'
 
   #accepts_nested_attributes_for :primary_contactable
   accepts_nested_attributes_for :primary_contact
-  accepts_nested_attributes_for :contactables
+  accepts_nested_attributes_for :aggregated_contactables
+  # accepts_nested_attributes_for :contactables
   accepts_nested_attributes_for :contacts
 
   #Hooks
@@ -43,7 +52,7 @@ class Facility < ActiveRecord::Base
   validates_presence_of :b_lat, :if => :b_long?
   validates_presence_of :b_long, :if => :b_lat?
 
-  #validates_presence_of :primary_contact
+  validates_presence_of :primary_contact
 
   #Scopes
   default_scope :order => 'name ASC'

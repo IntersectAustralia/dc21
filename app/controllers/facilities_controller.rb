@@ -43,10 +43,23 @@ class FacilitiesController < ApplicationController
     contacts.delete(primary) unless contacts.blank?
 
     params[:facility][:contact_ids] = contacts
-    params[:facility][:primary_contact] = (primary.present? ? User.find(primary) : nil)
+    @facility = Facility.find(params[:id])
 
+    result = false
+    ActiveRecord::Base.transaction do
+      #Nested associations are misbehaving, so manually replace the contacts on update
+      @facility.aggregated_contactables.each do |ag_cont|
+        ag_cont.delete
+      end
+      @facility.assign_attributes(params[:facility])
 
-    if @facility.update_attributes(params[:facility])
+      unless primary.blank?
+        @facility.primary_contactable = FacilityContact.new({:facility_id => @facility.id, :user_id => primary, :primary => true})
+      end
+      result = @facility.save
+    end
+
+    if result
       redirect_to @facility, :notice => "Facility successfully updated."
     else
       render 'edit'

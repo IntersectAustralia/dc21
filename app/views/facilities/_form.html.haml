@@ -16,19 +16,19 @@
     %label Point location or Top Left Corner of rectangle:
   .rowform
     %label Latitude:
-    = f.text_field :a_lat
+    = f.text_field :a_lat, :placeholder => "Decimal, -90.0 to 90.0"
   .rowform
     %label Longitude:
-    = f.text_field :a_long
+    = f.text_field :a_long, :placeholder => "Decimal, -180 to 180"
   .rowform
     %label Location of Facility
     %label Bottom Right Corner of rectangle:
   .rowform
     %label Latitude:
-    = f.text_field :b_lat
+    = f.text_field :b_lat, :placeholder => "Decimal, -90.0 to 90.0"
   .rowform
     %label Longitude:
-    = f.text_field :b_long
+    = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
   .rowform
     %label Contacts:
     = required
@@ -54,7 +54,7 @@
           -#= build_contact_fields(contact)
           %li{:id => "contact_#{contact.id}"}
             = hidden_field_tag "contact_ids[]", contact.id
-            = radio_button_tag "contact_primary", contact.id, :checked => false
+            = radio_button_tag "contact_primary", contact.id
             = contact.email
             = link_to "Delete", '#', :class => 'delete_contact delete_link'
 
