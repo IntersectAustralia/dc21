@@ -232,6 +232,9 @@ Then /^the uploaded files display should include "([^"]*)" with messages "([^"]*
     if expected_messages.include?("badoverlap")
       page.should have_content("File cannot safely replace existing files. File has been saved with type ERROR.")
     end
+    if expected_messages.include?("goodoverlap")
+      page.should have_content("The file replaced one or more other files with similar data. Replaced files: ")
+    end
   end
 end
 

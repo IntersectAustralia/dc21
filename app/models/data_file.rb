@@ -18,11 +18,9 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :created_by_id
   validates_length_of :file_processing_description, :maximum => 255
 
-#  before_save :destroy_safe_overlap
-
   scope :most_recent_first, order("created_at DESC")
   scope :unprocessed, where { ((file_processing_status.eq nil) | (experiment_id.eq nil)) }
-  # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
+# search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
 
@@ -128,13 +126,48 @@ class DataFile < ActiveRecord::Base
         add_message('File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with ' + overlap.map(&:filename).join(', '))
         self.file_processing_status = DataFile::STATUS_ERROR
         self.save!
+        return true
       end
+
     end
+    false
   end
 
   def add_message(message)
     self.messages ||= []
     self.messages << message
+  end
+
+  def destroy_safe_overlap
+    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
+    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
+    if station_item and table_item
+      overlap = safe_overlap(station_item.value, table_item.value)
+
+      overlap_descriptions = overlap.map(&:file_processing_description)
+      overlap.each { |df| df.destroy }
+      self.file_processing_description = overlap_descriptions.join ', ' unless file_processing_description
+
+      unless overlap.empty?
+        add_message("The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}")
+      end
+
+      unless overlap.empty? || experiment_id
+        by_created_date = overlap.sort { |a| [a.created_at] }
+        most_recent_experiment = by_created_date.first.experiment_id
+        self.experiment_id = most_recent_experiment
+      end
+      return overlap.collect(&:filename)
+    end
+    []
+  end
+
+  def rename_to(new_path, new_name)
+    require 'fileutils'
+    FileUtils.mv(path, new_path)
+    self.path = new_path
+    self.filename = new_name
+    save!
   end
 
   protected
@@ -189,24 +222,6 @@ class DataFile < ActiveRecord::Base
     by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
 
     toa5_files = DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
-  end
-
-  def destroy_safe_overlap
-    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
-    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
-    if station_item and table_item
-      overlap = safe_overlap(station_item.value, table_item.value)
-
-      overlap_descriptions = overlap.map(&:file_processing_description)
-      overlap.each { |df| df.destroy }
-      self.file_processing_description = overlap_descriptions.join ', ' unless file_processing_description
-
-      unless overlap.empty? || experiment_id
-        by_created_date = overlap.sort { |a| [a.created_at] }
-        most_recent_experiment = by_created_date.first.experiment_id
-        self.experiment_id = most_recent_experiment
-      end
-    end
   end
 
   def safe_overlap(station_name, table_name)

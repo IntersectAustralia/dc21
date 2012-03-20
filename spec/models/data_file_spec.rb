@@ -340,6 +340,24 @@ describe DataFile do
     end
   end
 
+  describe "Renaming files" do
+    it "should move the file and update path and filename" do
+      old_path = Rails.root.join("tmp", "blah.txt")
+      FileUtils.cp(Rails.root.join("samples/sample1.txt"), old_path)
+      old_path.should exist
+
+      data_file = Factory(:data_file, :path => old_path, :filename => "blah.txt")
+
+      new_path = Rails.root.join("tmp", "another.txt")
+      data_file.rename_to(new_path.to_s, "another.txt")
+      data_file.reload
+      data_file.path.should eq(new_path.to_s)
+      data_file.filename.should eq("another.txt")
+      old_path.should_not exist
+      new_path.should exist
+    end
+  end
+
   describe "Deleting Files/data" do
     it "should not leave the deleted file behind" do
       pending

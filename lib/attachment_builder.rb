@@ -9,10 +9,7 @@ class AttachmentBuilder
 
   def build(file, experiment_id, type)
     path, new_filename = store_file(file)
-    data_file = create_data_file(path, new_filename, experiment_id, type)
-    if new_filename != file.original_filename
-      data_file.add_message("A file already existed with the same name. File has been renamed.")
-    end
+    data_file = create_data_file(path, new_filename, experiment_id, type, file.original_filename)
     if data_file.messages.blank?
       data_file.add_message("File uploaded successfully.")
     end
@@ -21,11 +18,10 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type)
+  def create_data_file(path, filename, experiment_id, type, original_filename)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path, :filename => filename, :created_by => @current_user, :file_processing_status => type, :experiment_id => experiment_id)
-
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format
@@ -33,7 +29,19 @@ class AttachmentBuilder
     data_file.save!
     @metadata_extractor.extract_metadata(data_file, format) if format
     data_file.reload
-    data_file.check_for_bad_overlap
+    bad_overlap = data_file.check_for_bad_overlap
+    unless bad_overlap
+      replaced_filenames = data_file.destroy_safe_overlap
+      # if we renamed the file, but then deleted the file it clashed with, rename it back
+      if replaced_filenames.include?(original_filename) and (filename != original_filename)
+        data_file.rename_to(File.join(@files_root, original_filename), original_filename)
+      end
+    end
+
+    if data_file.filename != original_filename
+      data_file.add_message("A file already existed with the same name. File has been renamed.")
+    end
+
     data_file
   end
 
@@ -55,7 +63,7 @@ class AttachmentBuilder
               /\A#{Regexp.escape(original)}_(\d+)\Z/
             else
               name = original[0..(original.rindex(".") - 1)]
-                  /\A#{Regexp.escape(name)}_(\d+)\.#{Regexp.escape(ext[1..-1])}\Z/
+              /\A#{Regexp.escape(name)}_(\d+)\.#{Regexp.escape(ext[1..-1])}\Z/
             end
 
 
