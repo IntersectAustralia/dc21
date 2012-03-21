@@ -2,19 +2,23 @@
   %h1 Data / Upload
 
 .container
+  %p Begin by entering the following information about the files to be uploaded. You can override this for individual files at the next step.
   = form_for(@data_file, :html => {:multipart => true}) do |f|
     .formerror= render "shared/error_messages", :target => @data_file
     .rowform
       = label_tag :file_processing_status, "File type"
-      = select_tag :file_processing_status, options_for_select(DataFile::STATI), :include_blank => true
+      = required
+      = select_tag :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
     .rowform
       = label_tag :experiment_id
-      = select_tag   :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name), :include_blank => true
+      = required
+      = select_tag :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
     .rowform
       = label_tag :description
-      = text_area_tag   :description
+      = text_area_tag :description, @data_file.file_processing_description
     .rowform#files_input
       = label_tag "files_field", "Select file(s)"
+      = required
       = file_field_tag "files[]", {:id => "files_field", :multiple => "multiple"}
     .actions
       = f.submit "Upload"

@@ -9,8 +9,8 @@ describe DataFilesHelper do
 
       output = helper.grouped_experiments_for_select
       output.collect(&:name).should eq(["Alice", "Fred", "Joe", "Other"])
-      output.last.id.should eq(-1)
       output.last.experiments.size.should eq(1)
+      output.last.experiments.first.id.should eq(-1)
       output.last.experiments.first.name.should eq("Other")
     end
   end

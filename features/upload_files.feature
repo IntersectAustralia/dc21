@@ -16,17 +16,33 @@ Feature: Upload files
       | Flux Experiment 2 | Flux Tower          |
       | Flux Experiment 3 | Flux Tower          |
 
-  Scenario: Browse widget doesn't appear until a type and experiment are selected
-    Given pending
-
-  Scenario: Browse widget goes away if type or experiment are unselected
-    Given pending
-
   Scenario: Additional file select box appears after previous one is used
     Given pending
 
   Scenario: Try to upload without selecting any files
-    Given pending
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I press "Upload"
+    Then I should see "Please select at least one file to upload"
+    And "RAW" should be selected in the "File type" select
+    And "My Experiment" should be selected in the "Experiment" select
+
+  Scenario: Try to upload without selecting an experiment
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    Then I should see "Please select an experiment"
+    And "RAW" should be selected in the "File type" select
+
+  Scenario: Try to upload without selecting a file type
+    Given I am on the upload page
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    Then I should see "Please select the file type"
+    And "My Experiment" should be selected in the "Experiment" select
 
   Scenario: Experiment select contains the appropriate items
     Given I am on the upload page

@@ -35,7 +35,6 @@ class DataFilesController < ApplicationController
 
   def new
     @uploaded_files = []
-    render :layout => 'guest'
   end
 
   def edit
@@ -49,9 +48,14 @@ class DataFilesController < ApplicationController
     experiment_id = params[:experiment_id]
     description = params[:description]
     type = params[:file_processing_status]
+
+    unless validate_inputs(files, experiment_id, type, description)
+      render :new
+      return
+    end
+
     @uploaded_files = []
     attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-
     files.each do |file|
       @uploaded_files << attachment_builder.build(file, experiment_id, type, description)
     end
@@ -154,6 +158,18 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def validate_inputs(files, experiment_id, type, description)
+    # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
+    @data_file = DataFile.new
+    @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
+    @data_file.errors.add(:base, "Please select the file type") if type.blank?
+    @data_file.errors.add(:base, "Please select at least one file to upload") if files.blank?
+    @data_file.experiment_id = experiment_id
+    @data_file.file_processing_status = type
+    @data_file.file_processing_description = description
+    !@data_file.errors.any?
+  end
 
   def default_layout
     "main"
