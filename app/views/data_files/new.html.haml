@@ -10,6 +10,9 @@
     .rowform
       = label_tag :experiment_id
       = select_tag   :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select(@data_file), :experiments, :name, :id, :name), :include_blank => true
+    .rowform
+      = label_tag :description
+      = text_area_tag   :description
     .rowform#files_input
       = label_tag "files_field", "Select file(s)"
       = file_field_tag "files[]", {:id => "files_field", :multiple => "multiple"}

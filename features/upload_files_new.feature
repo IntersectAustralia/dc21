@@ -7,18 +7,31 @@ Feature: Upload files
     Given I have a user "researcher@intersect.org.au" with role "Researcher"
     And I am logged in as "researcher@intersect.org.au"
     And I have facility "ROS Weather Station" with code "ROS_WS"
-    And I have experiment "My Experiment" which belongs to facility "ROS_WS"
+    And I have facility "Flux Tower" with code "FLUX"
+    Given I have experiments
+      | name              | facility            |
+      | My Experiment   | ROS Weather Station |
+      | Rain Experiment   | ROS Weather Station |
+      | Flux Experiment 1 | Flux Tower          |
+      | Flux Experiment 2 | Flux Tower          |
+      | Flux Experiment 3 | Flux Tower          |
 
   Scenario: Browse widget doesn't appear until a type and experiment are selected
 
   Scenario: Browse widget goes away if type or experiment are unselected
 
-#@javascript
+  Scenario: Experiment select contains the appropriate items
+    Given I am on the upload page
+    Then the experiment select should contain
+      | Flux Tower          | Flux Experiment 1, Flux Experiment 2, Flux Experiment 3 |
+      | ROS Weather Station | Rain Experiment,  Wind Experiment                       |
+      | Other               | Other                                                   |
 
   Scenario: Upload a single file
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
     And I select "samples/sample1.txt" to upload
     And I press "Upload"
     Then the most recent file should have name "sample1.txt"
@@ -27,10 +40,17 @@ Feature: Upload files
     And the uploaded files display should include "sample1.txt" with messages "success"
     And file "sample1.txt" should have type "RAW"
     And file "sample1.txt" should have experiment "My Experiment"
+    When I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename    | Added by                    | Start time | End time | Processing status |
+      | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Processing status | RAW                        |
+      | Description       | My descriptive description |
+      | Experiment        | My Experiment              |
 
-  Scenario: Upload multiple files
-
-  Scenario: Upload more files after a first set (retains all file info and entered form values)
+  Scenario: Upload more files after a first set (retains all file info and entered form values from first set)
 
   Scenario: Modify and save metadata after uploading
 
@@ -40,6 +60,7 @@ Feature: Upload files
     Given I am on the upload page
     When I select "<type>" from "File type"
     And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
     And I select "<file path>" to upload
     And I press "Upload"
     Then the most recent file should have name "<resulting name>"
@@ -48,6 +69,7 @@ Feature: Upload files
     And the uploaded files display should include "<resulting name>" with messages "<messages>"
     And file "<resulting name>" should have type "<resulting type>"
     And file "<resulting name>" should have experiment "My Experiment"
+    And file "<resulting name>" should have description "My descriptive description"
     And there should be <resulting file count> files in the system
 
   Examples:
@@ -64,10 +86,27 @@ Feature: Upload files
     | PROCESSED | success              | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
     | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
-
   Scenario: Must be logged in to view the upload page
     Then users should be required to login on the upload page
 
   Scenario: Must be logged in to upload
     Given I am on the upload page
-    When I attempt to upload "sample1.txt" through the applet without an auth token I should get an error
+    When I attempt to upload "sample1.txt" directly I should get an error
+
+  Scenario: Can assign the "Other" experiment to a file
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "Other" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    Then the most recent file should have name "sample1.txt"
+    And the uploaded files display should include "sample1.txt" with file type "RAW"
+    And the uploaded files display should include "sample1.txt" with experiment "My Experiment"
+    And the uploaded files display should include "sample1.txt" with messages "success"
+    And file "sample1.txt" should have type "RAW"
+    And file "sample1.txt" should have experiment "My Experiment"
+    When I am on the list data files page
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Experiment | Other |

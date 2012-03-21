@@ -144,19 +144,15 @@ class DataFile < ActiveRecord::Base
     if station_item and table_item
       overlap = safe_overlap(station_item.value, table_item.value)
 
-      overlap_descriptions = overlap.map(&:file_processing_description)
-      overlap.each { |df| df.destroy }
-      self.file_processing_description = overlap_descriptions.join ', ' unless file_processing_description
-
       unless overlap.empty?
         add_message("The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}")
+
+        overlap_descriptions = overlap.map(&:file_processing_description)
+        overlap.each { |df| df.destroy }
+        self.file_processing_description = overlap_descriptions.join(', ') if file_processing_description.blank?
+        save!
       end
 
-      unless overlap.empty? || experiment_id
-        by_created_date = overlap.sort { |a| [a.created_at] }
-        most_recent_experiment = by_created_date.first.experiment_id
-        self.experiment_id = most_recent_experiment
-      end
       return overlap.collect(&:filename)
     end
     []

@@ -30,7 +30,6 @@ And /^I follow the view link for data file "([^"]*)"$/ do |filename|
   click_link("view_#{file.id}")
 end
 
-#post to the upload controller just like the applet would
 When /^I have uploaded "([^"]*)"$/ do |filename|
   user = User.first
   do_upload filename, user
@@ -50,14 +49,8 @@ When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)"$/ do |filename
   do_upload filename, user, type
 end
 
-
-
-When /^I attempt to upload "([^"]*)" through the applet without an auth token I should get an error$/ do |filename|
-  #post to the upload controller just like the applet would
-  post_path = data_files_url(:format => :json, :auth_token => "blah")
-  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
-  response = post post_path, {"file_1" => file, "dirStruct" => "[{\"file_1\":\"#{filename}\"}]", "destDir" => "/"}
-  response.status.should eq(401)
+When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
 end
 
 Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|
@@ -161,11 +154,8 @@ Then /^I should see postprocess error "(.*)" for "(.*)"$/ do |error_message, fil
   field.should have_content error_message
 end
 
-Then /^the experiment select for "([^"]*)" should contain$/ do |file, table|
-  data_file = DataFile.find_by_filename!(file)
-  select_id = "data_files_#{data_file.id}_experiment_id"
-
-  field = find_field(select_id)
+Then /^the experiment select should contain$/ do |table|
+  field = find_field("Experiment")
   groups = field.all("optgroup")
 
   actual_options = []
@@ -195,7 +185,10 @@ Then /^"([^"]*)" should be selected in the experiment select for "([^"]*)"$/ do 
 end
 
 When /^(?:|I )select "([^"]*)" to upload$/ do |path|
-  attach_file("Select file(s)", File.expand_path(path))
+  files = path.split(",").collect { |filename| File.expand_path(filename.strip) }.join(",")
+  locator = "Select file(s)"
+  msg = "cannot attach file, no file field with id, name, or label '#{locator}' found"
+  find(:xpath, XPath::HTML.file_field(locator), :message => msg).set(files)
 end
 
 Then /^the uploaded files display should include "([^"]*)" with file type "([^"]*)"$/ do |filename, type|
@@ -247,9 +240,24 @@ Then /^file "([^"]*)" should have type "([^"]*)"$/ do |filename, type|
   DataFile.find_by_filename!(filename).file_processing_status.should eq(type)
 end
 
+Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
+  DataFile.find_by_filename!(filename).file_processing_description.should eq(desc)
+end
+
 Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
   DataFile.find_by_filename!(filename).experiment_id.should eq(Experiment.find_by_name!(experiment).id)
 end
+
+Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |file, type, description, experiment|
+  Given 'I am on the upload page'
+  select type, :from => "File type"
+  select experiment, :from => "Experiment"
+  fill_in "Description", :with => description
+  attach_file("Select file(s)", File.expand_path(file))
+  click_button "Upload"
+  Then "the most recent file should have name \"#{file.split("/").last}\""
+end
+
 
 private
 
@@ -260,7 +268,7 @@ def do_upload(filename, user, type=DataFile::STATUS_RAW)
   file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
   experiment = Experiment.first
   experiment = Factory(:experiment) unless experiment
-  attachment_builder.build(file, experiment.id, type)
+  attachment_builder.build(file, experiment.id, type, "desc")
 end
 
 

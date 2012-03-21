@@ -7,9 +7,9 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type)
+  def build(file, experiment_id, type, description)
     path, new_filename = store_file(file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, file.original_filename)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, file.original_filename)
     if data_file.messages.blank?
       data_file.add_message("File uploaded successfully.")
     end
@@ -18,10 +18,15 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, original_filename)
+  def create_data_file(path, filename, experiment_id, type, description, original_filename)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
-    data_file = DataFile.new(:path => path, :filename => filename, :created_by => @current_user, :file_processing_status => type, :experiment_id => experiment_id)
+    data_file = DataFile.new(:path => path,
+                             :filename => filename,
+                             :created_by => @current_user,
+                             :file_processing_status => type,
+                             :experiment_id => experiment_id,
+                             :file_processing_description => description)
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format
@@ -29,6 +34,7 @@ class AttachmentBuilder
     data_file.save!
     @metadata_extractor.extract_metadata(data_file, format) if format
     data_file.reload
+
     bad_overlap = data_file.check_for_bad_overlap
     unless bad_overlap
       replaced_filenames = data_file.destroy_safe_overlap
