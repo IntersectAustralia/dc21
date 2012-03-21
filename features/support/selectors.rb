@@ -19,6 +19,9 @@ module HtmlSelectorsHelpers
 
       when "the file details area"
         "#file_details"
+
+      when /^the file area for '(.*)'$/
+        "#file_panel_#{DataFile.find_by_filename!($1).id}"
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:
       #

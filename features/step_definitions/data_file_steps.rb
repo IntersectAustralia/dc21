@@ -192,24 +192,30 @@ When /^(?:|I )select "([^"]*)" to upload$/ do |path|
 end
 
 Then /^the uploaded files display should include "([^"]*)" with file type "([^"]*)"$/ do |filename, type|
-  div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
-  with_scope(div) do
+  with_scope("the file area for '#{filename}'") do
     page.should have_content(filename)
     page.should have_content("Type: #{type}")
   end
 end
 
-Then /^the uploaded files display should include "([^"]*)" with experiment "([^"]*)"$/ do |filename, experiment|
-  div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
-  with_scope(div) do
+Then /^the uploaded files display should include "([^"]*)" with description "([^"]*)"$/ do |filename, desc|
+  with_scope("the file area for '#{filename}'") do
     page.should have_content(filename)
-    page.should have_content("Experiment: #{experiment}")
+    field = find_field("Description")
+    field.text.should eq(desc)
+  end
+end
+
+Then /^the uploaded files display should include "([^"]*)" with experiment "([^"]*)"$/ do |filename, experiment|
+  with_scope("the file area for '#{filename}'") do
+    page.should have_content(filename)
+    field = find_field("Experiment")
+    field.find("option[selected]").text.should eq(experiment)
   end
 end
 
 Then /^the uploaded files display should include "([^"]*)" with messages "([^"]*)"$/ do |filename, message_codes|
-  div = "\"#file_panel_#{DataFile.find_by_filename!(filename).id}\""
-  with_scope(div) do
+  with_scope("the file area for '#{filename}'") do
     page.should have_content(filename)
     messages = all("ul.messages li").collect(&:text)
     expected_messages = message_codes.split(",")
@@ -245,17 +251,16 @@ Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
 end
 
 Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
-  DataFile.find_by_filename!(filename).experiment_id.should eq(Experiment.find_by_name!(experiment).id)
+  DataFile.find_by_filename!(filename).experiment_name.should eq(experiment)
 end
 
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |file, type, description, experiment|
-  Given 'I am on the upload page'
+  visit(path_to("the upload page"))
   select type, :from => "File type"
   select experiment, :from => "Experiment"
   fill_in "Description", :with => description
   attach_file("Select file(s)", File.expand_path(file))
   click_button "Upload"
-  Then "the most recent file should have name \"#{file.split("/").last}\""
 end
 
 

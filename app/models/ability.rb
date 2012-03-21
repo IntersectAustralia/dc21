@@ -56,6 +56,7 @@ class Ability
             :custom_download,
             :download,
             :download_selected,
+            :bulk_update,
             :list_for_post_processing,
             :post_process,
             :verify_upload], DataFile

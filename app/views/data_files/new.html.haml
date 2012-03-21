@@ -9,7 +9,7 @@
       = select_tag :file_processing_status, options_for_select(DataFile::STATI), :include_blank => true
     .rowform
       = label_tag :experiment_id
-      = select_tag   :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select(@data_file), :experiments, :name, :id, :name), :include_blank => true
+      = select_tag   :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name), :include_blank => true
     .rowform
       = label_tag :description
       = text_area_tag   :description
@@ -19,15 +19,3 @@
     .actions
       = f.submit "Upload"
 
-  - unless @uploaded_files.empty?
-    - @uploaded_files.each do |file|
-      .file-panel{:id => "file_panel_#{file.id}"}
-        = file.filename
-        %br/
-        = "Type: #{file.file_processing_status}"
-        %br/
-        = "Experiment: #{file.experiment_name}"
-        %br/
-        %ul.messages
-          - file.messages.each do |message|
-            %li= message

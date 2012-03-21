@@ -56,7 +56,15 @@ class DataFilesController < ApplicationController
       @uploaded_files << attachment_builder.build(file, experiment_id, type, description)
     end
 
-    render :new
+  end
+
+  def bulk_update
+    params[:files].each do |id, attrs|
+      file = DataFile.find(id)
+      file.update_attributes(attrs)
+    end
+
+    redirect_to root_path, :notice => "File metadata updated successfully"
   end
 
   def download
@@ -176,4 +184,5 @@ class DataFilesController < ApplicationController
     send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
     zip_file.close
   end
+
 end
