@@ -5,6 +5,8 @@ class DataFilesController < ApplicationController
   set_tab :home
   helper_method :sort_column, :sort_direction
 
+  expose(:tags) { Tag.order(:name) }
+
   def index
     set_tab :explore, :contentnavigation
     @search = DataFileSearch.new(params[:search])
@@ -48,8 +50,9 @@ class DataFilesController < ApplicationController
     experiment_id = params[:experiment_id]
     description = params[:description]
     type = params[:file_processing_status]
+    tags = params[:tags]
 
-    unless validate_inputs(files, experiment_id, type, description)
+    unless validate_inputs(files, experiment_id, type, description, tags)
       render :new
       return
     end
@@ -57,7 +60,7 @@ class DataFilesController < ApplicationController
     @uploaded_files = []
     attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
     files.each do |file|
-      @uploaded_files << attachment_builder.build(file, experiment_id, type, description)
+      @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
     end
 
   end
@@ -159,7 +162,7 @@ class DataFilesController < ApplicationController
 
   private
 
-  def validate_inputs(files, experiment_id, type, description)
+  def validate_inputs(files, experiment_id, type, description, tags)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -168,6 +171,7 @@ class DataFilesController < ApplicationController
     @data_file.experiment_id = experiment_id
     @data_file.file_processing_status = type
     @data_file.file_processing_description = description
+    @data_file.tag_ids = tags
     !@data_file.errors.any?
   end
 

@@ -13,6 +13,10 @@
   = render_field "Processing status", @data_file.status_as_string
   .description
     = render_field "Description", @data_file.file_processing_description
+  = render_field_with_block "Tags" do
+    - @data_file.tags.each do |tag|
+      = tag.name
+      %br/
   = render_field "Experiment", @data_file.experiment_name
   = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
   = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time

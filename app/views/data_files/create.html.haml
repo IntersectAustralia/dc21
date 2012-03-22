@@ -18,5 +18,11 @@
         .rowform
           = label_tag "file_#{file.id}_description", "Description"
           = text_area_tag "files[#{file.id}][file_processing_description]", file.file_processing_description, :id => "file_#{file.id}_description"
+        .rowform#tags
+          = label_tag :tags
+          - tags.each do |tag|
+            = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
+            = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name
+            %br/
 
     = submit_tag "Update"

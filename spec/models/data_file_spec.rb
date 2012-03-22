@@ -12,6 +12,7 @@ describe DataFile do
     it { should belong_to(:created_by) }
     it { should have_many(:column_details) }
     it { should have_many(:metadata_items) }
+    it { should have_and_belong_to_many(:tags) }
   end
 
   describe "Scopes" do

@@ -7,6 +7,13 @@ def create_roles
 
 end
 
+def create_tags
+  Tag.delete_all
+  Tag.create!(:name => "Photo")
+  Tag.create!(:name => "Video")
+  Tag.create!(:name => "Gap Filled")
+end
+
 def create_parameter_categories
   ParameterCategory.delete_all
   ParameterSubCategory.delete_all

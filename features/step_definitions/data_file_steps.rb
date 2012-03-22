@@ -32,21 +32,21 @@ end
 
 When /^I have uploaded "([^"]*)"$/ do |filename|
   user = User.first
-  do_upload filename, user
+  create_data_file filename, user
 end
 
 When /^I have uploaded "([^"]*)" as "([^"]*)"$/ do |filename, user_email|
   user = User.find_by_email user_email
-  do_upload filename, user
+  create_data_file filename, user
 end
 
 Given /^I have uploaded "([^"]*)" with type "([^"]*)"$/ do |filename, type|
-  do_upload(filename, User.first, type)
+  create_data_file(filename, User.first, type)
 end
 
 When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)"$/ do |filename, user_email, type|
   user = User.find_by_email user_email
-  do_upload filename, user, type
+  create_data_file filename, user, type
 end
 
 When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |arg1|
@@ -206,6 +206,15 @@ Then /^the uploaded files display should include "([^"]*)" with description "([^
   end
 end
 
+Then /^the uploaded files display should include "([^"]*)" with tags "([^"]*)"$/ do |filename, tags|
+  with_scope("the file area for '#{filename}'") do
+    tags.split(",").each do |tag|
+      field_checked = find_field(tag.strip)['checked']
+      field_checked.should be_true
+    end
+  end
+end
+
 Then /^the uploaded files display should include "([^"]*)" with experiment "([^"]*)"$/ do |filename, experiment|
   with_scope("the file area for '#{filename}'") do
     page.should have_content(filename)
@@ -255,18 +264,28 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
 end
 
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |file, type, description, experiment|
-  visit(path_to("the upload page"))
-  select type, :from => "File type"
-  select experiment, :from => "Experiment"
-  fill_in "Description", :with => description
-  attach_file("Select file(s)", File.expand_path(file))
-  click_button "Upload"
+  upload(file, type, description, experiment, "")
+end
+
+Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and tags "([^"]*)"$/ do |file, type, description, experiment, tags|
+  upload(file, type, description, experiment, tags)
+end
+
+Then /^I should see tag checkboxes$/ do |table|
+  expected = table.raw.collect { |row| row[0] }
+  actual = find("#tags").all("input")
+  actual.count.should eq(expected.size)
+  expected.each do |expected_tag|
+    with_scope('"#tags"') do
+      page.should have_content(expected_tag)
+    end
+  end
 end
 
 
 private
 
-def do_upload(filename, user, type=DataFile::STATUS_RAW)
+def create_data_file(filename, user, type=DataFile::STATUS_RAW)
   attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
 
   path = Rails.root.join('samples', filename).to_s
@@ -279,4 +298,17 @@ end
 
 Then /^there should be (.*) files in the system$/ do |resulting_file_count|
   DataFile.count.should eq(resulting_file_count.to_i)
+end
+
+def upload(file, type, description, experiment, tags)
+  visit(path_to("the upload page"))
+  select type, :from => "File type"
+  select experiment, :from => "Experiment"
+  fill_in "Description", :with => description
+  attach_file("Select file(s)", File.expand_path(file))
+  tags.split(",").each do |tag|
+    check(tag) unless tag.blank?
+  end
+  click_button "Upload"
+
 end

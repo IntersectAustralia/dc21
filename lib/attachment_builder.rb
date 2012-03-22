@@ -7,9 +7,9 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type, description)
+  def build(file, experiment_id, type, description, tags=[])
     path, new_filename = store_file(file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, description, file.original_filename)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, file.original_filename)
     if data_file.messages.blank?
       data_file.add_message(:success, "File uploaded successfully.")
     end
@@ -18,7 +18,7 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, description, original_filename)
+  def create_data_file(path, filename, experiment_id, type, description, tags, original_filename)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path,
@@ -27,6 +27,7 @@ class AttachmentBuilder
                              :file_processing_status => type,
                              :experiment_id => experiment_id,
                              :file_processing_description => description)
+    data_file.tag_ids = tags
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format

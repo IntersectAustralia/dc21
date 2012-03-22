@@ -16,6 +16,12 @@
     .rowform
       = label_tag :description
       = text_area_tag :description, @data_file.file_processing_description
+    .rowform#tags
+      = label_tag :tags
+      - tags.each do |tag|
+        = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
+        = label_tag "tag_#{tag.id}", tag.name
+        %br/
     .rowform#files_input
       = label_tag "files_field", "Select file(s)"
       = required

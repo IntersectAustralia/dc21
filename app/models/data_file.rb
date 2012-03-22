@@ -12,6 +12,7 @@ class DataFile < ActiveRecord::Base
   belongs_to :created_by, :class_name => "User"
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
+  has_and_belongs_to_many :tags
 
   validates_presence_of :filename
   validates_presence_of :path
