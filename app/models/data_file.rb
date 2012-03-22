@@ -123,7 +123,7 @@ class DataFile < ActiveRecord::Base
       overlap = mismatched_overlap(station_item.value, table_item.value)
 
       if overlap.any?
-        add_message('File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with ' + overlap.map(&:filename).join(', '))
+        add_message(:error, 'File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with ' + overlap.map(&:filename).join(', '))
         self.file_processing_status = DataFile::STATUS_ERROR
         self.save!
         return true
@@ -133,9 +133,9 @@ class DataFile < ActiveRecord::Base
     false
   end
 
-  def add_message(message)
+  def add_message(type, message)
     self.messages ||= []
-    self.messages << message
+    self.messages << {:type => type, :message => message}
   end
 
   def destroy_safe_overlap
@@ -145,7 +145,7 @@ class DataFile < ActiveRecord::Base
       overlap = safe_overlap(station_item.value, table_item.value)
 
       unless overlap.empty?
-        add_message("The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}")
+        add_message(:info, "The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}")
 
         overlap_descriptions = overlap.map(&:file_processing_description)
         overlap.each { |df| df.destroy }

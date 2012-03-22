@@ -11,7 +11,7 @@ class AttachmentBuilder
     path, new_filename = store_file(file)
     data_file = create_data_file(path, new_filename, experiment_id, type, description, file.original_filename)
     if data_file.messages.blank?
-      data_file.add_message("File uploaded successfully.")
+      data_file.add_message(:success, "File uploaded successfully.")
     end
     data_file
   end
@@ -45,7 +45,7 @@ class AttachmentBuilder
     end
 
     if data_file.filename != original_filename
-      data_file.add_message("A file already existed with the same name. File has been renamed.")
+      data_file.add_message(:info, "A file already existed with the same name. File has been renamed.")
     end
 
     data_file

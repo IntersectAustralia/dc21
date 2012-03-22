@@ -24,7 +24,7 @@ describe AttachmentBuilder do
       data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
 
       DataFile.count.should eq(1)
-      data_file.messages.should eq(["File uploaded successfully."])
+      data_file.messages.should eq([{:type => :success, :message => "File uploaded successfully."}])
       data_file.filename.should == "toa5.dat"
       data_file.created_by.should eq(user)
       data_file.experiment_id.should eq(23)
@@ -43,7 +43,7 @@ describe AttachmentBuilder do
       data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
 
       DataFile.count.should eq(1)
-      data_file.messages.should eq(["File uploaded successfully."])
+      data_file.messages.should eq([{:type => :success, :message => "File uploaded successfully."}])
       data_file.filename.should == "toa5.dat"
       data_file.format.should == "TOA5"
     end
@@ -59,7 +59,7 @@ describe AttachmentBuilder do
       data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
 
       DataFile.count.should eq(1)
-      data_file.messages.should eq(["File uploaded successfully."])
+      data_file.messages.should eq([{:type => :success, :message => "File uploaded successfully."}])
       data_file.filename.should == "toa5.dat"
       data_file.format.should be_nil
     end
@@ -77,21 +77,21 @@ describe AttachmentBuilder do
         Factory(:data_file, :filename => "toa5.dat")
         data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
         data_file.filename.should eq("toa5_1.dat")
-        data_file.messages.should eq(["A file already existed with the same name. File has been renamed."])
+        data_file.messages.should eq([{:type => :info, :message => "A file already existed with the same name. File has been renamed."}])
       end
 
       it "should add a numeric suffix if name already exists and file has no extension" do
         Factory(:data_file, :filename => "sample")
         data_file = ab.build(file2, 23, DataFile::STATUS_RAW, "my desc")
         data_file.filename.should eq("sample_1")
-        data_file.messages.should eq(["A file already existed with the same name. File has been renamed."])
+        data_file.messages.should eq([{:type => :info, :message => "A file already existed with the same name. File has been renamed."}])
       end
 
       it "should allow 2 files with same name but different extension" do
         Factory(:data_file, :filename => "toa5.txt")
         data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
         data_file.filename.should eq("toa5.dat")
-        data_file.messages.should eq(["File uploaded successfully."])
+        data_file.messages.should eq([{:type => :success, :message => "File uploaded successfully."}])
       end
 
       it "should increment the number if name exists and other numbered ones also exist" do
@@ -99,7 +99,7 @@ describe AttachmentBuilder do
         Factory(:data_file, :filename => "toa5_1.dat")
         data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
         data_file.filename.should eq("toa5_2.dat")
-        data_file.messages.should eq(["A file already existed with the same name. File has been renamed."])
+        data_file.messages.should eq([{:type => :info, :message => "A file already existed with the same name. File has been renamed."}])
       end
 
       it "should picker a higher number if name exists and other numbered ones also exist" do
@@ -109,7 +109,7 @@ describe AttachmentBuilder do
         Factory(:data_file, :filename => "toa5_11.dat")
         data_file = ab.build(file1, 23, DataFile::STATUS_RAW, "my desc")
         data_file.filename.should eq("toa5_12.dat")
-        data_file.messages.should eq(["A file already existed with the same name. File has been renamed."])
+        data_file.messages.should eq([{:type => :info, :message => "A file already existed with the same name. File has been renamed."}])
       end
 
     end

@@ -10,8 +10,8 @@
         %br/
         = "Type: #{file.file_processing_status}"
         %ul.messages
-          - file.messages.each do |message|
-            %li= message
+          - file.messages.each do |message_attrs|
+            %li{:class => message_attrs[:type]}= message_attrs[:message]
         .rowform
           = label_tag "file_#{file.id}_experiment", "Experiment"
           = select_tag "files[#{file.id}][experiment_id]", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), :id => "file_#{file.id}_experiment"
