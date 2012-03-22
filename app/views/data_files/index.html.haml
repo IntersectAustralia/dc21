@@ -29,9 +29,9 @@
         %h4#date.expand Date:
         .date
           = label_tag :from_date, "From Date:"
-          = text_field_tag "search[from_date]", @from_date, :id => :from_date
+          = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true
           = label_tag :to_date, "To Date:"
-          = text_field_tag "search[to_date]", @to_date, :id => :to_date
+          = text_field_tag "search[to_date]", @to_date, :id => :to_date, :datepicker => true
       .searchcategory
         %h4#filename_category.expand Filename:
         .filename
