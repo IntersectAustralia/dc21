@@ -44,9 +44,10 @@ end
 def create_data_file(filename, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
-  params = {:file_1 => file, :dirStruct => "[{\"file_1\":\"#{filename}\"}]"}
-  builder = AttachmentBuilder.new(params, APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
-  builder.build
+  builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
+  experiment_id = Experiment.first ? Experiment.first.id : Factory(:experiment).id
+
+  builder.build(file, experiment_id, DataFile::STATUS_RAW, "")
   df = DataFile.last
   rand_mins = rand(10000)
   # make the created at semi-random
