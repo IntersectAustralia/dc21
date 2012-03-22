@@ -2,27 +2,32 @@ Feature: Search data files by date range
   In order to find what I need
   As a user
   I want to search for files by a variety of criteria
-  
+
   Background:
     Given I am logged in as "georgina@intersect.org.au"
+    And I have tags
+      | name  |
+      | Photo |
+      | Video |
+      | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by               | start_time            | end_time               |
-      | datafile8.dat | 08/11/2011 10:15 | georgina@intersect.org.au | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC |
-      | datafile7.dat | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC |
-      | datafile6.dat | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC |
-      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC |
-      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
-      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
-      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC |
-      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        |
-    And file "datafile8.dat" has metadata item "station_name" with value "ROS_WS"
-    And file "datafile7.dat" has metadata item "station_name" with value "TC"
-    And file "datafile6.dat" has metadata item "station_name" with value "HFE_WS"
+      | filename      | created_at       | uploaded_by               | start_time            | end_time               | file_processing_status | file_processing_description | tags         |
+      | mydata8.dat   | 08/11/2011 10:15 | georgina@intersect.org.au | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video |
+      | mydata7.dat   | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              |
+      | mydata6.dat   | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        |
+      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        |
+      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        |
+      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |
+      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |
+      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        | UNKNOWN                |                             |              |
+    And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
+    And file "mydata7.dat" has metadata item "station_name" with value "TC"
+    And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
     And file "datafile5.dat" has metadata item "station_name" with value "TC"
     And file "datafile4.dat" has metadata item "station_name" with value "HFE_WS"
-    And file "datafile8.dat" has column info "Rnfll", "Millilitres", "Tot"
-    And file "datafile6.dat" has column info "Rnfll", "Millilitres", "Tot"
-    And file "datafile6.dat" has column info "Temp", "DegC", "Avg"
+    And file "mydata8.dat" has column info "Rnfll", "Millilitres", "Tot"
+    And file "mydata6.dat" has column info "Rnfll", "Millilitres", "Tot"
+    And file "mydata6.dat" has column info "Temp", "DegC", "Avg"
     And file "datafile5.dat" has column info "Rnfl", "Millilitres", "Tot"
     And file "datafile4.dat" has column info "Humi", "Percemt", "Avg"
     And I have facilities
@@ -39,7 +44,7 @@ Feature: Search data files by date range
     When I do a date search for data files with dates "2010-06-11" and ""
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
       | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
@@ -51,10 +56,10 @@ Feature: Search data files by date range
     When I do a date search for data files with dates "" and "2010-06-10"
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | datafile7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
-      | datafile8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
+      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
     And the "from_date" field should contain ""
     And the "to_date" field should contain "2010-06-10"
@@ -63,9 +68,9 @@ Feature: Search data files by date range
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | datafile7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
+      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
     And the "from_date" field should contain "2010-06-03"
     And the "to_date" field should contain "2010-06-10"
@@ -82,8 +87,8 @@ Feature: Search data files by date range
     And I press "Search"
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
     And the "ROS_WS" checkbox should be checked
     And the "HFE Weather Station" checkbox should be checked
@@ -99,7 +104,7 @@ Feature: Search data files by date range
     And I press "Search"
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
 
   Scenario: Search for files with certain columns
@@ -114,13 +119,80 @@ Feature: Search data files by date range
     And I press "Search"
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | datafile8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
     And the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
     And the "Temperature" checkbox should not be checked
+
+  Scenario: Search for files by processing status
+    Given I am on the list data files page
+    When I check "RAW"
+    And I check "PROCESSED"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      | Date added       | Start time          | End time            |
+      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
+      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
+      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
+      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+    And the "RAW" checkbox should be checked
+    And the "PROCESSED" checkbox should be checked
+    And the "CLEANSED" checkbox should not be checked
+
+  Scenario: Search for files by description
+    Given I am on the list data files page
+    When I fill in "Description" with "word"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      | Date added       | Start time          | End time            |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
+      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+    And the "Description" field should contain "word"
+
+  Scenario: Search for files by tags
+    Given I am on the list data files page
+    When I check "Photo"
+    And I check "Video"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      | Date added       | Start time          | End time            |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
+      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
+      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+    And the "Photo" checkbox should be checked
+    And the "Video" checkbox should be checked
+    And the "Audio" checkbox should not be checked
+
+  Scenario: Search for files by filename
+    Given I am on the list data files page
+    When I fill in "Filename" with "my"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename    | Date added       | Start time          | End time            |
+      | mydata6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
+      | mydata8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+    And the "Filename" field should contain "my"
+
+  Scenario: Search for files by a lot of different things at once
+    Given I am on the list data files page
+    When I fill in "Filename" with "my"
+    And I check "Photo"
+    And I check "Video"
+    And I fill in "Description" with "word"
+    And I check "Humi"
+    And I check "Rainfall"
+    And I check "RAW"
+    And I check "PROCESSED"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename    | Date added       | Start time          | End time            |
+      | mydata8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
 
   Scenario: Should be able to sort within search results
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
@@ -129,8 +201,8 @@ Feature: Search data files by date range
       | Filename      | Date added       | Start time          | End time            |
       | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
       | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
+      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
+      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
 
   Scenario: Go back to showing all after searching
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"

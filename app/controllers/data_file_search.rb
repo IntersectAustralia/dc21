@@ -5,6 +5,10 @@ class DataFileSearch
   attr_accessor :date_range
   attr_accessor :facilities
   attr_accessor :variables
+  attr_accessor :filename
+  attr_accessor :description
+  attr_accessor :stati
+  attr_accessor :tags
 
 
   def initialize(search_params)
@@ -18,6 +22,13 @@ class DataFileSearch
     self.facilities ||= []
     self.variables = @search_params[:variables]
     self.variables ||= []
+    self.stati = @search_params[:stati]
+    self.stati ||= []
+    self.tags = @search_params[:tags]
+    self.tags ||= []
+
+    self.filename = @search_params[:filename]
+    self.description = @search_params[:description]
 
     if !valid?
       self.date_range = DateRange.new(nil, nil, true)
@@ -42,6 +53,18 @@ class DataFileSearch
     end
     unless variables.nil? || variables.empty?
       search_result = search_result.with_any_of_these_columns(variables)
+    end
+    unless stati.nil? || stati.empty?
+      search_result = search_result.with_status_in(stati)
+    end
+    unless tags.nil? || tags.empty?
+      search_result = search_result.with_any_of_these_tags(tags.collect{|tag| tag.to_i })
+    end
+    unless filename.blank?
+      search_result = search_result.with_filename_containing(filename)
+    end
+    unless description.blank?
+      search_result = search_result.with_description_containing(description)
     end
     search_result
   end

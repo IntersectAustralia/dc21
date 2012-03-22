@@ -120,12 +120,14 @@ $(window).load(function() {
   $('.searchcategory .time').hide();
   $('.searchcategory .facility').hide();
   $('.searchcategory .variable').hide();
-  $('.searchbox .actions').hide();
-    
+  $('.searchcategory .description').hide();
+  $('.searchcategory .filename').hide();
+  $('.searchcategory .tags').hide();
+  $('.searchcategory .type').hide();
+
   $('#date').click(function(event) {
     $('.date').slideToggle();
     $(this).toggleClass('current');
-    $('.searchbox .actions').show();
   });
 
   $('#time').click(function(event) {
@@ -143,6 +145,25 @@ $(window).load(function() {
     $(this).toggleClass('current');
   });
 
+  $('#filename_category').click(function(event) {
+    $('.filename').slideToggle();
+    $(this).toggleClass('current');
+  });
+
+  $('#description_category').click(function(event) {
+    $('.description').slideToggle();
+    $(this).toggleClass('current');
+  });
+
+  $('#type_category').click(function(event) {
+    $('.type').slideToggle();
+    $(this).toggleClass('current');
+  });
+
+  $('#tags_category').click(function(event) {
+    $('.tags').slideToggle();
+    $(this).toggleClass('current');
+  });
 
 
   // DOWNLOAD MULTIPLE TOGGLE ///////////////////////////////////////////////////

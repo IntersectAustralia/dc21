@@ -15,20 +15,6 @@ describe DataFile do
     it { should have_and_belong_to_many(:tags) }
   end
 
-  describe "Scopes" do
-    describe "Unprocessed scope" do
-      it "should include files that are missing either processing status or experiment id" do
-        m1 = Factory(:data_file, :experiment_id => nil, :file_processing_status => nil)
-        m2 = Factory(:data_file, :experiment_id => 1, :file_processing_status => nil)
-        m3 = Factory(:data_file, :experiment_id => nil, :file_processing_status => DataFile::STATUS_RAW)
-        ok = Factory(:data_file, :experiment_id => -1, :file_processing_status => DataFile::STATUS_RAW)
-        unprocessed = DataFile.unprocessed
-        unprocessed.size.should eq(3)
-        unprocessed.collect(&:id).sort.should eq([m1.id, m2.id, m3.id])
-      end
-    end
-  end
-
   describe "Get facility" do
     it "returns nil if no station name metadata item" do
       Factory(:data_file).facility.should be_nil
@@ -88,6 +74,73 @@ describe DataFile do
 
     it "should return the format if set" do
       Factory(:data_file, :format => "TOA5").format_for_display.should eq("TOA5")
+    end
+  end
+
+  describe "Search scopes" do
+    describe "Find files with matching filename" do
+      it "should support partial and case-insensitive matches" do
+        f1 = Factory(:data_file, :filename => "blah.txt").id
+        f2 = Factory(:data_file, :filename => "BLAH.txt").id
+        f3 = Factory(:data_file, :filename => "Blah.txt").id
+        f4 = Factory(:data_file, :filename => "AblahABC.txt").id
+        f5 = Factory(:data_file, :filename => "ABC.txt").id
+        f6 = Factory(:data_file, :filename => "AB.bl").id
+
+        DataFile.with_filename_containing("blAH").order(:id).collect(&:id).should eq([f1, f2, f3, f4])
+        DataFile.with_filename_containing("BL").order(:id).collect(&:id).should eq([f1, f2, f3, f4, f6])
+        DataFile.with_filename_containing("ABC").order(:id).collect(&:id).should eq([f4, f5])
+        DataFile.with_filename_containing("DEF").should be_empty
+      end
+    end
+
+    describe "Find files with matching description" do
+      it "should support partial and case-insensitive matches" do
+        f1 = Factory(:data_file, :file_processing_description => "blah").id
+        f2 = Factory(:data_file, :file_processing_description => "BLAH").id
+        f3 = Factory(:data_file, :file_processing_description => "Blah").id
+        f4 = Factory(:data_file, :file_processing_description => "A blahABC de").id
+        f5 = Factory(:data_file, :file_processing_description => "ABC").id
+        f6 = Factory(:data_file, :file_processing_description => "AB.bl").id
+
+        DataFile.with_description_containing("blAH").order(:id).collect(&:id).should eq([f1, f2, f3, f4])
+        DataFile.with_description_containing("BL").order(:id).collect(&:id).should eq([f1, f2, f3, f4, f6])
+        DataFile.with_description_containing("ABC").order(:id).collect(&:id).should eq([f4, f5])
+        DataFile.with_description_containing("DEF").should be_empty
+      end
+    end
+
+    describe "Find files with processing status in" do
+      it "should find matching files" do
+        f1 = Factory(:data_file, :file_processing_status => DataFile::STATUS_ERROR).id
+        f2 = Factory(:data_file, :file_processing_status => DataFile::STATUS_PROCESSED).id
+        f3 = Factory(:data_file, :file_processing_status => DataFile::STATUS_RAW).id
+        f4 = Factory(:data_file, :file_processing_status => DataFile::STATUS_UNKNOWN).id
+        f5 = Factory(:data_file, :file_processing_status =>DataFile::STATUS_CLEANSED).id
+        f6 = Factory(:data_file, :file_processing_status => DataFile::STATUS_RAW).id
+
+        DataFile.with_status_in([DataFile::STATUS_RAW, DataFile::STATUS_CLEANSED]).order(:id).collect(&:id).should eq([f3, f5, f6])
+        DataFile.with_status_in([DataFile::STATUS_ERROR]).order(:id).collect(&:id).should eq([f1])
+      end
+    end
+
+    describe "Find files with tags" do
+      it "should find matching files" do
+        t1 = Factory(:tag, :name => "Photo").id
+        t2 = Factory(:tag, :name => "Video").id
+        t3 = Factory(:tag, :name => "Audit").id
+
+        f1 = Factory(:data_file, :tag_ids => []).id
+        f2 = Factory(:data_file, :tag_ids => [t1, t2]).id
+        f3 = Factory(:data_file, :tag_ids => [t1]).id
+        f4 = Factory(:data_file, :tag_ids => [t2]).id
+        f5 = Factory(:data_file, :tag_ids => [t1, t2, t3]).id
+        f6 = Factory(:data_file, :tag_ids => [t3]).id
+
+        DataFile.with_any_of_these_tags([t1]).order(:id).collect(&:id).should eq([f2, f3, f5])
+        DataFile.with_any_of_these_tags([t2]).order(:id).collect(&:id).should eq([f2, f4, f5])
+        DataFile.with_any_of_these_tags([t1, t2]).order(:id).collect(&:id).should eq([f2, f3, f4, f5])
+      end
     end
   end
 
@@ -537,7 +590,7 @@ describe DataFile do
         it "only looks at raw" do
           subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
           subset_end = Time.parse '2011/10/14 23:55 UTC'
-          statii = [DataFile::STATUS_UNDEFINED, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
+          statii = [DataFile::STATUS_ERROR, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
 
           statii.each do |status|
             make_data_file!(@start_time, @end_time, @path, @station_name, @table_name, status)
@@ -702,7 +755,7 @@ describe DataFile do
         it "only looks at raw" do
           subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
           subset_end = Time.parse '2011/10/14 23:55 UTC'
-          statii = [DataFile::STATUS_UNDEFINED, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
+          statii = [DataFile::STATUS_ERROR, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
           statii.each do |status|
             make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name, status)
           end

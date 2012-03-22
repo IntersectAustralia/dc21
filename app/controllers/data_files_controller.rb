@@ -21,6 +21,10 @@ class DataFilesController < ApplicationController
     @to_date = @search.search_params[:to_date]
     @selected_facilities = @search.facilities
     @selected_variables = @search.variables
+    @filename = @search.filename
+    @description = @search.description
+    @selected_stati = @search.stati
+    @selected_tags = @search.tags
 
     if @search.error
       flash.now[:alert] = @search.error

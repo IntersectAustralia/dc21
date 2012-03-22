@@ -21,7 +21,16 @@ Given /^I have data files$/ do |table|
       end
       attributes[:created_by] = user
     end
-    Factory(:data_file, attributes)
+    tag_csv = attributes.delete('tags')
+
+    df = Factory(:data_file, attributes)
+
+    unless tag_csv.blank?
+      tags = tag_csv.split(",").collect { |tag| tag.strip }
+      tag_ids = Tag.where(:name => tags).collect(&:id)
+      df.tag_ids = tag_ids
+    end
+
   end
 end
 

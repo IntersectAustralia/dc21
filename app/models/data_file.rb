@@ -1,13 +1,13 @@
 require 'tempfile'
 
 class DataFile < ActiveRecord::Base
-  STATUS_UNDEFINED = nil
   STATUS_UNKNOWN = 'UNKNOWN'
   STATUS_RAW = 'RAW'
   STATUS_CLEANSED = 'CLEANSED'
   STATUS_PROCESSED = 'PROCESSED'
   STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED]
   STATUS_ERROR = 'ERROR'
+  ALL_STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED, STATUS_ERROR]
 
   belongs_to :created_by, :class_name => "User"
   has_many :column_details, :dependent => :destroy
@@ -20,10 +20,13 @@ class DataFile < ActiveRecord::Base
   validates_length_of :file_processing_description, :maximum => 255
 
   scope :most_recent_first, order("created_at DESC")
-  scope :unprocessed, where { ((file_processing_status.eq nil) | (experiment_id.eq nil)) }
 # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
+  scope :with_filename_containing, lambda { |name| where("data_files.filename ILIKE ?", "%#{name}%") }
+  scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
+  scope :with_status_in, lambda { |stati| where {file_processing_status.in stati} }
+  #scope :with_any_of_these_tags, lambda { |tags| joins(:tags).where("data_files_tags.tag_id" => tags)}
 
   attr_accessor :messages
 
@@ -35,6 +38,11 @@ class DataFile < ActiveRecord::Base
     else
       where { start_time < (to + 1.day) }
     end
+  end
+
+  def self.with_any_of_these_tags(tags)
+    data_file_ids = DataFile.unscoped.select("DISTINCT(data_files.id)").joins(:tags).where("data_files_tags.tag_id" => tags).collect(&:id)
+    where(:id => data_file_ids)
   end
 
   def self.with_any_of_these_columns(column_names)
