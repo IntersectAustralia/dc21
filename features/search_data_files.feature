@@ -51,6 +51,7 @@ Feature: Search data files by date range
       | datafile3.dat | 2010-01-30 10:15 | 2010-06-11  6:42:01 | 2010-06-30 18:05:23 |
     And the "from_date" field should contain "2010-06-11"
     And the "to_date" field should contain ""
+    And I should see "Showing 5 matching files"
 
   Scenario: Search for files by date range - to date only
     When I do a date search for data files with dates "" and "2010-06-10"
@@ -193,6 +194,7 @@ Feature: Search data files by date range
     Then I should see "exploredata" table with
       | Filename    | Date added       | Start time          | End time            |
       | mydata8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+    And I should see "Showing 1 matching file"
 
   Scenario: Should be able to sort within search results
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
@@ -230,6 +232,7 @@ Feature: Search data files by date range
 
   Scenario: No results
     When I do a date search for data files with dates "2012-06-12" and "2012-06-13"
-    Then I should see "No files to display."
+    Then I should see "No matching files"
     Then the "from_date" field should contain "2012-06-12"
     And the "to_date" field should contain "2012-06-13"
+

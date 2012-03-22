@@ -14,7 +14,11 @@
 
 .datacontroll
   -#%h3.filter No filters set
-  -#%h3.results Displaying 8 of 8 results...
+  %h3.results
+    - if @data_files.empty?
+      No matching files
+    - else
+      = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
   #downloadtoggle.download.whitebutton
     %span= link_to 'Download Files'
 
@@ -65,9 +69,7 @@
       .actions
         = submit_tag "Update Search Results", :class => "whitebutton"
 
-- if (@data_files.empty?)
-  No files to display.
-- else
+- unless @data_files.empty?
   = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
     = hidden_field_tag "searched_from_date", @from_date
     = hidden_field_tag "searched_to_date", @to_date
