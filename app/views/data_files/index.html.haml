@@ -32,42 +32,47 @@
           = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true
           = label_tag :to_date, "To Date:"
           = text_field_tag "search[to_date]", @to_date, :id => :to_date, :datepicker => true
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#filename_category.expand Filename:
         .filename
           = label_tag :filename, "Filename:"
           = text_field_tag "search[filename]", @filename, :id => :filename
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#description_category.expand Description:
         .description
           = label_tag :description, "Description:"
           = text_field_tag "search[description]", @description, :id => :description
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#type_category.expand Type:
         .type
           - DataFile::ALL_STATI.each_with_index do |status, index|
             = label_tag "search_status_#{index}", status
             = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}"
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#tags_category.expand Tags:
         .tags
           - tags.each_with_index do |tag, index|
             = label_tag "search_tag_#{index}", tag.name
             = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#facility.expand Facility:
         .facility
           - @facilities.each_with_index do |facility, index|
             = label_tag "search_facility_#{index}", facility[1]
             = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#variable.expand Variable:
         .variable
           - @variables.each_with_index do |variable, index|
             = label_tag "search_variable_#{index}", variable
             = check_box_tag "search[variables][]", variable, @selected_variables.include?(variable), :id => "search_variable_#{index}"
-      .actions
-        = submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
 
 - unless @data_files.empty?
   = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
