@@ -36,7 +36,15 @@ class DataFileSearch
   end
 
   def showing_all?
-    date_range.from_date.nil? && date_range.to_date.nil? && (facilities.nil? || facilities.empty?) && (variables.nil? || variables.empty?)
+    date_range.from_date.nil? &&
+        date_range.to_date.nil? &&
+        facilities.empty? &&
+        variables.empty? &&
+        stati.empty? &&
+        tags.empty? &&
+        filename.blank? &&
+        description.blank?
+
   end
 
   def valid?
@@ -58,7 +66,7 @@ class DataFileSearch
       search_result = search_result.with_status_in(stati)
     end
     unless tags.nil? || tags.empty?
-      search_result = search_result.with_any_of_these_tags(tags.collect{|tag| tag.to_i })
+      search_result = search_result.with_any_of_these_tags(tags.collect { |tag| tag.to_i })
     end
     unless filename.blank?
       search_result = search_result.with_filename_containing(filename)
