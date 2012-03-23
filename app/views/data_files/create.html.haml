@@ -15,6 +15,7 @@
             .record= "#{file.file_processing_status}"
             %ul.alert
               - file.messages.each do |message_attrs|
+                %i.icon-info-sign
                 %li{:class => message_attrs[:type]}= message_attrs[:message]
 
         .control-group
