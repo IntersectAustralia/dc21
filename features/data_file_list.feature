@@ -16,10 +16,11 @@ Feature: View the list of data files
       | Filename     | Date added       | Added by                  | Start time          | End time            |
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     |                     |                     |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | 2010-06-01  6:42:01 | 2011-11-30 18:05:23 |
+    And I should see "Showing all 2 files"
 
   Scenario: View the list when there's nothing to show
     When I am on the list data files page
-    Then I should see "No files to display."
+    Then I should see "No matching files"
 
   Scenario: Must be logged in to view the list
     Then users should be required to login on the list data files page

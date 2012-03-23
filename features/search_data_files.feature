@@ -209,7 +209,7 @@ Feature: Search data files by date range
   Scenario: Go back to showing all after searching
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     Then the "exploredata" table should have 4 rows
-    When I follow "Clear Search"
+    When I follow "clear search"
     Then the "exploredata" table should have 8 rows
 
   Scenario: Entering no date shows all
