@@ -293,6 +293,262 @@ input[type=password]
 textarea
   +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, "", 66px)
 
+input, textarea, select, .uneditable-input
+  +m-p-w-h-p-t-b-l-r-f(0 0 9px 0, 4px 9px, auto, 18px)
+  +inlineblock
+  +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
+  resize: none
+  //+font("", "", 1.25rem, 1)
+  //line-height: 18px
+  &:hover
+    +border(1px, solid, #B9B9B9)
+  &:focus
+    +border(1px, solid, #3079ED)
+    outline: none
+
+input[type=password]
+  //+font("", "", 1.25em, 28px, $dark1)
+
+textarea
+  +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, 618px, 66px)
+
+
+
+input[type="search"]
+  -webkit-appearance: textfield
+  -webkit-box-sizing: content-box
+  -moz-box-sizing: content-box
+  box-sizing: content-box
+
+input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button
+  -webkit-appearance: none
+
+
+
+.uneditable-textarea
+  width: auto
+  height: auto
+
+
+input[type="image"], input[type="checkbox"], input[type="radio"]
+  +m-p-w-h-p-t-b-l-r-f(3px 0, 0, auto, auto)
+  *margin-top: 0 /* IE7 */
+  +border("", "", "", "", 0)
+  +font("", "", "", normal)
+  border: 0 \9
+  /* IE9 and down */
+  cursor: pointer
+
+
+
+input[type="image"]
+  +border(0)
+
+input[type="file"]
+  +m-p-w-h-p-t-b-l-r-f(initial, "", auto, auto)
+  +border(initial)
+  +boxshadow(none)
+  +font("", "", 1.25rem, initial)
+
+input[type="button"], input[type="reset"], input[type="submit"]
+  +m-p-w-h-p-t-b-l-r-f("", "", auto, auto)
+
+select, input[type="file"]
+  +m-p-w-h-p-t-b-l-r-f("", "", "", 28px)
+  /* In IE7, the height of the select element cannot be changed by height, only font-size */
+  *margin-top: 4px
+  /* For IE7, add top margin to align select with labels */
+  +font("", "", "", 28px)
+
+input[type="file"]
+  line-height: 18px \9
+
+select
+  +m-p-w-h-p-t-b-l-r-f("", "", 220px)
+  background: #FFF
+
+select[multiple], select[size]
+  +m-p-w-h-p-t-b-l-r-f("", "", "", auto)
+
+input[type="image"]
+  +boxshadow(none)
+
+textarea
+  //+m-p-w-h-p-t-b-l-r-f("", "", "", auto)
+
+input[type="hidden"]
+  display: none
+
+.radio, .checkbox
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 18px)
+
+.radio input[type="radio"], .checkbox input[type="checkbox"]
+  +m-p-w-h-p-t-b-l-r-f("", 0 0 0 -18px)
+  float: left
+
+.controls > .radio:first-child, .controls > .checkbox:first-child
+  +m-p-w-h-p-t-b-l-r-f("", 0 5px 0 0)
+
+.radio.inline, .checkbox.inline
+  +m-p-w-h-p-t-b-l-r-f(0, 0 5px 0 0)
+  +inlineblock
+  vertical-align: middle
+
+.radio.inline + .radio.inline, .checkbox.inline + .checkbox.inline
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 10px)
+
+input, textarea
+  +boxshadow(inset 0 1px 1px rgba(0, 0, 0, 0.075))
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s
+  -ms-transition: border linear 0.2s, box-shadow linear 0.2s
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s
+  transition: border linear 0.2s, box-shadow linear 0.2s
+
+//input:focus, textarea:focus
+  //border-color: rgba(82, 168, 236, 0.8)
+  //+boxshadow( inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6))
+  //outline: 0
+  //outline: thin dotted \9
+  /* IE6-9 */
+
+
+//input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus, select:focus
+  //+boxshadow(none)
+  //outline: thin dotted #333
+  //outline: 5px auto -webkit-focus-ring-color
+  //outline-offset: -2px
+
+.input-mini
+  width: 60px
+.input-small
+  width: 90px
+.input-medium
+  width: 150px
+.input-large
+  width: 210px
+.input-xlarge
+  width: 270px
+.input-xxlarge
+  width: 530px
+
+input[class*="span"], select[class*="span"], textarea[class*="span"], .uneditable-input 
+  float: none
+  margin-left: 0
+
+input, textarea, .uneditable-input
+  margin-left: 0
+
+input.span12, textarea.span12, .uneditable-input.span12
+  width: 930px
+input.span11, textarea.span11, .uneditable-input.span11
+  width: 850px
+input.span10, textarea.span10, .uneditable-input.span10
+  width: 770px
+input.span9, textarea.span9, .uneditable-input.span9
+  width: 690px
+input.span8, textarea.span8, .uneditable-input.span8
+  width: 610px
+input.span7, textarea.span7, .uneditable-input.span7
+  width: 530px
+input.span6, textarea.span6, .uneditable-input.span6
+  width: 450px
+input.span5, textarea.span5, .uneditable-input.span5
+  width: 370px
+input.span4, textarea.span4, .uneditable-input.span4
+  width: 290px
+input.span3, textarea.span3, .uneditable-input.span3
+  width: 210px
+input.span2, textarea.span2, .uneditable-input.span2
+  width: 130px
+input.span1, textarea.span1, .uneditable-input.span1
+  width: 50px
+
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly]
+  background: #EEE
+  border-color: #DDD
+  cursor: not-allowed
+
+.control-group.warning > label, .control-group.warning .help-block, .control-group.warning .help-inline
+  color: #C09853
+
+.control-group.warning input, .control-group.warning select, .control-group.warning textarea
+  color: #C09853
+  border-color: #C09853
+
+.control-group.warning input:focus, .control-group.warning select:focus, .control-group.warning textarea:focus
+  border-color: #a47e3c
+  +boxshadow(0 0 6px #dbc59e)
+
+.control-group.warning .input-prepend .add-on, .control-group.warning .input-append .add-on
+  color: #c09853
+  background-color: #fcf8e3
+  border-color: #c09853
+
+.control-group.error > label, .control-group.error .help-block, .control-group.error .help-inline
+  color: #b94a48
+
+.control-group.error input, .control-group.error select, .control-group.error textarea
+  color: #b94a48
+  border-color: #b94a48
+
+.control-group.error input:focus, .control-group.error select:focus, .control-group.error textarea:focus
+  border-color: #953b39
+  -webkit-box-shadow: 0 0 6px #d59392
+  -moz-box-shadow: 0 0 6px #d59392
+  box-shadow: 0 0 6px #d59392
+
+.control-group.error .input-prepend .add-on, .control-group.error .input-append .add-on
+  color: #b94a48
+  background-color: #f2dede
+  border-color: #b94a48
+
+.control-group.success > label, .control-group.success .help-block, .control-group.success .help-inline
+  color: #468847
+
+.control-group.success input, .control-group.success select, .control-group.success textarea
+  color: #468847
+  border-color: #468847
+
+.control-group.success input:focus, .control-group.success select:focus, .control-group.success textarea:focus
+  border-color: #356635
+  -webkit-box-shadow: 0 0 6px #7aba7b
+  -moz-box-shadow: 0 0 6px #7aba7b
+  box-shadow: 0 0 6px #7aba7b
+
+.control-group.success .input-prepend .add-on, .control-group.success .input-append .add-on
+  color: #468847
+  background-color: #dff0d8
+  border-color: #468847
+
+input:focus:required:invalid, textarea:focus:required:invalid, select:focus:required:invalid
+  color: #b94a48
+  border-color: #ee5f5b
+
+input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, select:focus:required:invalid:focus
+  border-color: #e9322d
+  -webkit-box-shadow: 0 0 6px #f8b9b7
+  -moz-box-shadow: 0 0 6px #f8b9b7
+  box-shadow: 0 0 6px #f8b9b7
+
+
+.uneditable-input
+  display: block
+  background-color: #ffffff
+  border-color: #eee
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025)
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025)
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025)
+  cursor: not-allowed
+
+\:-moz-placeholder
+  color: #999999
+
+\::-webkit-input-placeholder
+  color: #999999
+
+
+
 // NOTIFICATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -349,6 +605,61 @@ textarea
 .asterisk
   +m-p-w-h-p-t-b-l-r-f( 0 0 0 -14px, 0, 10px)
   color: $red4
+
+// !NOTIFICATIONS - ALERTS
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+.container
+  .alert
+    +m-p-w-h-p-t-b-l-r-f(0 0 18px 160px)
+    h3
+      +m-p-w-h-p-t-b-l-r-f(0, 0 0 10px 0)
+      +border(0, solid, $red5)
+
+.alert
+  +m-p-w-h-p-t-b-l-r-f(0 0 18px 0, 8px 35px 8px 14px)
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
+  background: #FCF8E3
+  +border(1px, solid, #FBEED5, "", 4px)
+  color: #C09853
+
+.alert-heading
+  color: inherit
+
+.alert .close
+  position: relative
+  top: -2px
+  right: -21px
+  line-height: 18px
+
+.alert-success
+  background-color: #DFF0D8
+  border-color: #D6E9C6
+  color: #468847
+
+.alert-danger, .alert-error
+  background-color: #F2DEDE
+  border-color: #EED3D7
+  color: #B94A48
+  h3
+    color: #B94A48
+
+.alert-info
+  background-color: #D9EDF7
+  border-color: #BCE8F1
+  color: #3A87AD
+
+.alert-block
+  padding-top: 14px
+  padding-bottom: 14px
+
+.alert-block > p,
+.alert-block > ul
+  margin-bottom: 0
+
+.alert-block p + p
+  margin-top: 5px
+
 
 
 // MODULES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1000,11 +1311,11 @@ table.activity, table.activity tbody
 
 #content 
   .container
-    +m-p-w-h-p-t-b-l-r-f(20px 0, "", 600px)
+    +m-p-w-h-p-t-b-l-r-f(20px 0, "", 800px)
     +clearfix
 
   .container_centered
-    +m-p-w-h-p-t-b-l-r-f(20px auto, "", 600px)
+    +m-p-w-h-p-t-b-l-r-f(20px auto, "", 800px)
     +clearfix
 
 // BODY - TABBED CONTENT NAVIGATION
@@ -1175,6 +1486,35 @@ table.activity, table.activity tbody
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+
+// !LAYOUT - FORMS
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+form h3
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 160px, 18px 0 10px 0)
+  +border(1px, solid, #D9D9D9, 1px 0 0 0, 2px)
+  
+.control-group
+  +m-p-w-h-p-t-b-l-r-f(0 0 9px 0)
+  .control-label
+    float: left
+    width: 140px
+    padding-top: 5px
+    text-align: right
+  .controls
+    +m-p-w-h-p-t-b-l-r-f(0 0 0 160px)
+    .record
+      +m-p-w-h-p-t-b-l-r-f("", 5px 0 0 0)
+    .alert
+      +m-p-w-h-p-t-b-l-r-f(0 0 18px 0)
+
+.form-actions
+  +m-p-w-h-p-t-b-l-r-f(18px 0, 18px 20px 18px 160px)
+  \:before, .form-actions:after
+    display: table
+    content: ""
+  \form-actions:after
+    clear: both
 
 .row
   span

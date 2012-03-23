@@ -2,27 +2,40 @@
   %h1 Data / Upload
 
 .container
-  %p Your files have been uploaded. Below you can modify the information about individual files if you wish.
+  .alert.alert-success 
+    Your files have been uploaded. Below you can modify the information about individual files if you wish.
   = form_tag(bulk_update_data_files_path, :method => :put) do
     - @uploaded_files.each do |file|
       .file-panel{:id => "file_panel_#{file.id}"}
-        = file.filename
-        %br/
-        = "Type: #{file.file_processing_status}"
-        %ul.messages
-          - file.messages.each do |message_attrs|
-            %li{:class => message_attrs[:type]}= message_attrs[:message]
-        .rowform
-          = label_tag "file_#{file.id}_experiment", "Experiment"
-          = select_tag "files[#{file.id}][experiment_id]", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), :id => "file_#{file.id}_experiment"
-        .rowform
-          = label_tag "file_#{file.id}_description", "Description"
-          = text_area_tag "files[#{file.id}][file_processing_description]", file.file_processing_description, :id => "file_#{file.id}_description"
-        .rowform#tags
-          = label_tag :tags
-          - tags.each do |tag|
-            = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
-            = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name
-            %br/
+        %h3
+          = file.filename
+        .control-group
+          %label.control-label Type
+          .controls
+            .record= "#{file.file_processing_status}"
+            %ul.alert
+              - file.messages.each do |message_attrs|
+                %li{:class => message_attrs[:type]}= message_attrs[:message]
 
-    = submit_tag "Update"
+        .control-group
+          = label_tag "file_#{file.id}_experiment", "Experiment", class: "control-label"
+          .controls
+            = select_tag "files[#{file.id}][experiment_id]", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), :id => "file_#{file.id}_experiment"
+
+        .control-group
+          = label_tag "file_#{file.id}_description", "Description", class: "control-label"
+          .controls
+            = text_area_tag "files[#{file.id}][file_processing_description]", file.file_processing_description, :id => "file_#{file.id}_description"
+
+        .control-group#tags
+          = label_tag :tags, "Tags", class: "control-label"
+          .controls
+            - if tags.empty?
+              .record None
+            - tags.each do |tag|
+              = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
+              = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name
+              %br/
+
+    .form-actions
+      = submit_tag "Update"

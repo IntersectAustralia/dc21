@@ -2,30 +2,36 @@
   %h1 Data / Upload
 
 .container
-  %p Begin by entering the following information about the files to be uploaded. You can override this for individual files at the next step.
+  .alert.alert-info Begin by entering the following information about the files to be uploaded. You can override this for individual files at the next step.
   = form_for(@data_file, :html => {:multipart => true}) do |f|
-    .formerror= render "shared/error_messages", :target => @data_file
-    .rowform
-      = label_tag :file_processing_status, "File type"
-      = required
-      = select_tag :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
-    .rowform
-      = label_tag :experiment_id
-      = required
-      = select_tag :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
-    .rowform
-      = label_tag :description
-      = text_area_tag :description, @data_file.file_processing_description
-    .rowform#tags
-      = label_tag :tags
-      - tags.each do |tag|
-        = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
-        = label_tag "tag_#{tag.id}", tag.name
-        %br/
-    .rowform#files_input
-      = label_tag "files_field", "Select file(s)"
-      = required
-      = file_field_tag "files[]", {:id => "files_field", :multiple => "multiple"}
-    .actions
+    = render "shared/error_messages", :target => @data_file
+    .control-group
+      = label_tag :file_processing_status, "File type", class: "control-label"
+      .controls
+        = required
+        = select_tag :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
+    .control-group
+      = label_tag :experiment_id, "Experiment", class: "control-label"
+      .controls
+        = required
+        = select_tag :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
+    .control-group
+      = label_tag :description, "Description", class: "control-label"
+      .controls
+        = text_area_tag :description, @data_file.file_processing_description
+    .control-group#tags
+      = label_tag :tags, "Tags", class: "control-label"
+      .controls
+        - if tags.empty?
+          .record None
+        - tags.each do |tag|
+          = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
+          = label_tag "tag_#{tag.id}", tag.name
+    .control-group#files_input
+      = label_tag "files_field", "Select file(s)", class: "control-label"
+      .controls
+        = required
+        = file_field_tag "files[]", {:id => "files_field", :multiple => "multiple"}
+    .form-actions
       = f.submit "Upload"
 
