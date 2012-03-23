@@ -1,8 +1,8 @@
 def populate_data
   load_password
   create_test_users
+  create_facilities_and_experiments
   create_test_files
-  create_facilities
   create_column_mappings
 end
 
@@ -45,7 +45,7 @@ def create_data_file(filename, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
   builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
-  experiment_id = Experiment.first ? Experiment.first.id : Factory(:experiment).id
+  experiment_id = Experiment.first
 
   builder.build(file, experiment_id, DataFile::STATUS_RAW, "")
   df = DataFile.last
@@ -116,8 +116,10 @@ def load_password
 
 end
 
-def create_facilities
+def create_facilities_and_experiments
   Facility.delete_all
+  Experiment.delete_all
+
   user = User.first
   ws = create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS", :primary_contact => user)
   ws.experiments.create!(:name => "The Rain Experiment", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Rain")
