@@ -74,6 +74,7 @@
           -# variables contains something like [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
           - variables.each_with_index do |variable_info, index|
             .variable_group
+              = link_to "+", "#", :id => "expand_#{variable_info[0].parameterize("_")}", :class => "expand_variable"
               = label_tag "search_variable_#{index}", variable_info[0], :class => :variable_parent
               = check_box_tag "search[variable_parents][]", variable_info[0], @selected_parent_variables.include?(variable_info[0]), :id => "search_variable_#{index}", :class => :variable_parent
               .variable_children

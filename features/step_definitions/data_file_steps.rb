@@ -295,6 +295,18 @@ Then /^I should see tag checkboxes$/ do |table|
   end
 end
 
+When /^I expand "([^"]*)"$/ do |variable|
+  click_link("expand_#{variable.parameterize("_")}")
+end
+
+When /^I collapse "([^"]*)"$/ do |variable|
+  click_link("expand_#{variable.parameterize("_")}")
+end
+
+
+When /^I expand all the mapped variables$/ do
+  all(".expand_variable").each { |link| link.click }
+end
 
 private
 
@@ -325,6 +337,4 @@ def upload(file, type, description, experiment, tags)
   click_button "Upload"
 
 end
-When /^I expand the "([^"]*)" search$/ do |search|
-  find(:xpath, XPath::HTML.content(search), :message => "Cannot find expander #{search}").click
-end
+

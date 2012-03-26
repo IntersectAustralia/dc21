@@ -116,6 +116,7 @@ Feature: Search data files by date range
   Scenario: Search for files with certain columns (checking mapped variable name)
     When I am on the list data files page
     And I click on "Variable:"
+    And I expand all the mapped variables
     Then I should see variable checkboxes
       | Rainfall    | Rnfl, Rnfll         |
       | Temperature | Temp, Temp_2, temp2 |
@@ -130,6 +131,7 @@ Feature: Search data files by date range
       | mydata8.dat   |
       | datafile4.dat |
     When I click on "Variable:"
+    And I expand all the mapped variables
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
     And the "Temp" checkbox should not be checked
@@ -138,6 +140,7 @@ Feature: Search data files by date range
   Scenario: Search for files with certain columns (checking raw variable names)
     When I am on the list data files page
     And I click on "Variable:"
+    And I expand all the mapped variables
     When I check "Humi"
     And I check "Rnfll"
     And I press "Search"
@@ -147,6 +150,7 @@ Feature: Search data files by date range
       | mydata8.dat   |
       | datafile4.dat |
     When I click on "Variable:"
+    And I expand all the mapped variables
     And the "Humi" checkbox should be checked
     And the "Rnfll" checkbox should be checked
     Then the "Rainfall" checkbox should not be checked
@@ -208,6 +212,7 @@ Feature: Search data files by date range
   Scenario: Search for files by a lot of different things at once
     Given I am on the list data files page
     And I click on "Variable:"
+    And I expand all the mapped variables
     And I click on "Filename:"
     And I click on "Tags:"
     And I click on "Description:"
@@ -270,6 +275,7 @@ Feature: Search data files by date range
   Scenario: Checking and unchecking parent variable names check/unchecks the children
     Given I am on the list data files page
     And I click on "Variable:"
+    And I expand all the mapped variables
     Then I should see variable checkboxes
       | Rainfall    | Rnfl, Rnfll         |
       | Temperature | Temp, Temp_2, temp2 |
@@ -287,6 +293,7 @@ Feature: Search data files by date range
   Scenario: Unchecking child variable name unchecks the parent
     Given I am on the list data files page
     And I click on "Variable:"
+    And I expand all the mapped variables
     When I check "Rainfall"
     And I uncheck "Rnfl"
     Then the "Rainfall" checkbox should not be checked
@@ -295,7 +302,22 @@ Feature: Search data files by date range
   Scenario: Checking child variable name checks the parent if it completes the set
     Given I am on the list data files page
     And I click on "Variable:"
+    And I expand all the mapped variables
     When I check "Rnfll"
     Then the "Rainfall" checkbox should not be checked
     When I check "Rnfl"
     Then the "Rainfall" checkbox should be checked
+
+  @javascript @wip
+  Scenario: Expanding a parent variable name should show the children
+    Given I am on the list data files page
+    And I click on "Variable:"
+    Then I should not see "Rnfl"
+    Then I should not see "Rnfll"
+    When I expand "Rainfall"
+    Then I should see "Rnfl"
+    Then I should see "Rnfll"
+    When I collapse "Rainfall"
+    Then I should not see "Rnfl"
+    Then I should not see "Rnfll"
+

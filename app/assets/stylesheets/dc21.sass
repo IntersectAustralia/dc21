@@ -109,7 +109,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-/* Specific cell types to balance width - List Users
+/* Specific cell types to balance width - List Users */
 th.view, td.view
   +width(60px, 60px, 60px)
   text-align: center
@@ -197,10 +197,17 @@ th.actions, td.actions
       input[type=checkbox]
         +m-p-w-h-p-t-b-l-r-f(7px 0)
         +inlineblock
+      label.variable_child
+        +m-p-w-h-p-t-b-l-r-f("", 5px 10px 0 40px, 170px)
+        +inlineblock
+      label.variable_parent
+        +m-p-w-h-p-t-b-l-r-f("", 5px 10px 0 10px, 190px)
+        +inlineblock
 
     .actions
       +m-p-w-h-p-t-b-l-r-f(20px 0 15px, 0 0 10px 0)
       text-align: center
+
 
 .recentactivity
   margin: 0
@@ -220,6 +227,9 @@ input#datasearch
 
 input.datasearchsubmit
   +m-p-w-h-p-t-b-l-r-f(0 0 0 -144px, "", "", 32px, "", "", "", "", "", right)
+
+a.expand_variable
+  padding-left: 5px
 
 // EXPLORE - DATA TABLE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
