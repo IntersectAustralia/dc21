@@ -1,3 +1,10 @@
+- content_for :breadcrumb  do
+  %h1 Facilities / Experiments / Paramaters / New
 
-= render 'form'
+- content_for :pageactions do
+  .pageactions
+    = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
+
+.container
+  = render 'form'
 

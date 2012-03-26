@@ -3,60 +3,77 @@
   .rowform
     .formerror= render "shared/error_messages", :target => @experiment
 
-  .rowform
-    = f.label :parent_experiment_id, "Parent:"
-    = required
-    %span.input
-      = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "Facility - #{@facility.name}"}
-  .rowform
-    = f.label :name, "Name:"
-    = required
-    = f.text_field :name
-  .rowform
-    = f.label :description, "Description:"
-    = f.text_area :description
-  .rowform
-    = f.label :start_date, "Start date:"
-    = required
-    = f.text_field :start_date, :datepicker => true
-  .rowform
-    = f.label :end_date, "End date:"
-    = f.text_field :end_date, :datepicker => true
-  .rowform
-    = f.label :subject, "Subject:"
-    = required
-    = f.text_field :subject
-  .rowform
-    = f.label :access_rights
-    = required
-    %span.input
-      = f.select :access_rights, options_for_select(access_rights, @experiment.access_rights), {:include_blank => "Please select"}
-  .rowform
-    = label_tag :for_code_select_1, "FOR codes:"
-    %span.input
-      = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
-    #second_level
+  .control-group
+    = f.label :parent_experiment_id, "Parent", class: "control-label"
+    .controls
+      = required
       %span.input
-        = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
-    #third_level
-      %span.input
-        = select_tag :for_code_level3, options_for_select([]), :prompt => "Please select", :id => :for_code_select_3
-    .for.add
-      = link_to "Add", "#", :id => :add_for_code_link, :class => "whitebutton"
+        = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "Facility - #{@facility.name}"}
 
-    #selected_for_codes
-      %ul#for_codes_list
-        - @experiment.experiment_for_codes.each_with_index do |code, index|
-          %li
-            = code.name
-            = hidden_field_tag "for_codes[#{index}][url]", code.url
-            = hidden_field_tag "for_codes[#{index}][name]", code.name
-            = link_to "Delete", "#", :class => "delete_for_code"
-  .actions
-    .cancelbutton
-      %span
-      = link_to 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment)), :class => "cancelbutton"
-    = f.submit 'Save Experiment', :class => "floatright"
+  .control-group
+    = f.label :name, "Name", class: "control-label"
+    .controls
+      = required
+      = f.text_field :name
+  
+  .control-group
+    = f.label :description, "Description", class: "control-label"
+    .controls
+      = f.text_area :description
+
+  .control-group
+    = f.label :start_date, "Start date", class: "control-label"
+    .controls
+      = required
+      = f.text_field :start_date, :datepicker => true
+
+  .control-group
+    = f.label :end_date, "End date", class: "control-label"
+    .controls
+      = f.text_field :end_date, :datepicker => true
+
+  .control-group
+    = f.label :subject, "Subject", class: "control-label"
+    .controls
+      = required
+      = f.text_field :subject
+
+  .control-group
+    = f.label :access_rights, class: "control-label"
+    .controls
+      = required
+      %span.input
+        = f.select :access_rights, options_for_select(access_rights, @experiment.access_rights), {:include_blank => "Please select"}
+
+  .control-group
+    = label_tag :for_code_select_1, "FOR codes", class: "control-label"
+    .controls
+      %span.input
+        = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
+      #second_level
+        %span.input
+          = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
+      #third_level
+        %span.input
+          = select_tag :for_code_level3, options_for_select([]), :prompt => "Please select", :id => :for_code_select_3
+      .for.add
+        = link_to "Add", "#", :id => :add_for_code_link, :class => "whitebutton"
+
+      #selected_for_codes
+        %ul#for_codes_list
+          - @experiment.experiment_for_codes.each_with_index do |code, index|
+            %li
+              = code.name
+              = hidden_field_tag "for_codes[#{index}][url]", code.url
+              = hidden_field_tag "for_codes[#{index}][name]", code.name
+              = link_to "Delete", "#", :class => "delete_for_code"
+  .form-actions
+    .actions-pre
+      .cancelbutton
+        %span
+        = link_to 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment)), :class => "cancelbutton"
+    .actions
+      = f.submit 'Save Experiment', :class => ""
 
 :javascript
   $(function(){

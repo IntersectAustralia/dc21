@@ -9,8 +9,9 @@
 //
 
 .container h2, .container_centered h2
-  +m-p-w-h-p-t-b-l-r-f(0 0 20 0)
-  +border(1px, dashed, #B9B9B9, 0 0 1px 0)
+  +m-p-w-h-p-t-b-l-r-f(0 0 20px 170px, 10px 0 0 0)
+  +border(1px, solid, #D9D9D9, 1px 0 0 0)
+  +font("", normal, 1.5em, 30px)
 
 .container_home
   
@@ -223,6 +224,11 @@ input.datasearchsubmit
 
 // EXPLORE - DATA TABLE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
+.searchcontroll
+  float: left
+
+h3.upload
+  +m-p-w-h-p-t-b-l-r-f("", 20px 0 10px 0)
 
 .datacontroll
   +m-p-w-h-p-t-b-l-r-f("", "", "", 40px)
@@ -231,10 +237,11 @@ input.datasearchsubmit
     +m-p-w-h-p-t-b-l-r-f("", 0 20px 0 0, 265px)
     +font("", normal, 13px)
     float: left
-  h3.results
-    +m-p-w-h-p-t-b-l-r-f("")
-    +inlineblock
-    +font("", normal, 13px)
+  .data-results
+    +m-p-w-h-p-t-b-l-r-f(0 0 0 287px)
+    h3.results
+      +inlineblock
+      +font("", normal, 13px)
 
   #downloadtoggle, .facility.new.whitebutton
     float: right
@@ -303,8 +310,7 @@ form
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-h3.upload
-  +m-p-w-h-p-t-b-l-r-f("", 20px 0 10px 0)
+
 
 .failedexistance
   margin: 0
@@ -502,18 +508,22 @@ ul.alert
   margin: 0 0 20px 0
 
 button.ui-datepicker-trigger
-  +m-p-w-h-p-t-b-l-r-f(4px 0 4px -31px)
+  +m-p-w-h-p-t-b-l-r-f(1px 0 1px -34px)
   +font("", bold, "")
   +border("", "", "", 0 0 0 1px)
 
 #second_level, #third_level
-  +m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 0px)
 
 #selected_for_codes, #contacts_list
-  +m-p-w-h-p-t-b-l-r-f(10px 0 0 170px, 10px 0 0 0)
+  +m-p-w-h-p-t-b-l-r-f(10px 0 0 0px, 10px 0 0 0)
   +border(1px, solid, #D9D9D9, 1px 0 0 0)
   input[type="radio"]
     +m-p-w-h-p-t-b-l-r-f(0 10px 0 0)
+
+#contacts_list, #for_codes_list
+  li
+    display: block
 
 .delete_for_code
   float: right
@@ -522,7 +532,7 @@ button.ui-datepicker-trigger
   float: right
 
 .for.add
-  +m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
+  //+m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
 
 // DATEPICKER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

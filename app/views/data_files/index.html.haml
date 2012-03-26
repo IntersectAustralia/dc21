@@ -10,19 +10,24 @@
 
 .datacontroll
   -#%h3.filter No filters set
-  %h3.results
-    - if @data_files.empty?
-      No matching files
-      = link_to "Clear Search", data_files_path, :class => "whitebutton"
+  - if @data_files.empty?
+  - else
+    - if @search.showing_all?
     - else
-      - if @search.showing_all?
-        = "Showing all #{@data_files.size} files"
+      = link_to "clear search", data_files_path, class: "btn pull-left"
+  .data-results
+    %h3.results
+      - if @data_files.empty?
+        No matching files
       - else
-        = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
-        = link_to "Clear Search", data_files_path, :class => "whitebutton"
+        - if @search.showing_all?
+          = "Showing all #{@data_files.size} files"
+        - else
+          = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
+          -#= link_to "clear search", data_files_path
 
-  #downloadtoggle.download.whitebutton
-    %span= link_to 'Download Files'
+    #downloadtoggle.download.whitebutton
+      %span= link_to 'Download Files'
 
 .facetedsearch.search
   .searchbox
@@ -97,7 +102,7 @@
         %th.sortable.email= sortable "users.email", "Added by"
         %th.sortable= sortable "start_time", "Start time"
         %th.sortable= sortable "end_time", "End time"
-        %th.sortable= sortable "processing_status", "Type"
+        %th.sortable= sortable "processing_status", "Processing status"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"

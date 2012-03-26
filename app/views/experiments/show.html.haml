@@ -1,5 +1,9 @@
 - content_for :breadcrumb  do
-  %h1 Experiment / View / #{@experiment.name}
+  %h1 Facilities / Experiments / #{@experiment.name}
+
+- content_for :pageactions do
+  .pageactions
+    = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
 
 .container
   = render_field "Parent", @experiment.parent_name
@@ -14,9 +18,11 @@
       - @experiment.experiment_for_codes.each do |code|
         %li= code.name
 
-  .actions
-    = cancel_button 'Back', facility_path(@facility)
-    = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton floatright"
+  .form-actions
+    .actions-pre
+      = cancel_button 'Back', facility_path(@facility)
+    .actions
+      = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton"
 
 
   %h2 Parameters
