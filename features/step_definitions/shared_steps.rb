@@ -27,7 +27,7 @@ Then /^I should see details displayed$/ do |table|
 end
 
 def check_displayed_field(label, value)
-  fields = all(".rowform").map { |div| div.all('label, span').map { |cell| cell.text.strip } }
+  fields = all(".control-group").map { |div| div.all('label, div').map { |cell| cell.text.strip } }
   found = false
   fields.each do |row|
     if row[0] == (label + ":")

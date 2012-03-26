@@ -41,11 +41,7 @@ module ApplicationHelper
     html << '</label>'
     html << "<div class='controls'>"
     html << "<div class='record'>"
-    if content.empty?
-      html << "None"
-    else
-      html << content
-    end
+    html << content
     html << '</div>'
     html << '</div>'
     html << '</div>'
