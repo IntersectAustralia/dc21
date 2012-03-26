@@ -13,12 +13,13 @@
   %h3.results
     - if @data_files.empty?
       No matching files
+      = link_to "Clear Search", data_files_path, :class => "whitebutton"
     - else
       - if @search.showing_all?
         = "Showing all #{@data_files.size} files"
       - else
         = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
-        = link_to "clear search", data_files_path
+        = link_to "Clear Search", data_files_path, :class => "whitebutton"
 
   #downloadtoggle.download.whitebutton
     %span= link_to 'Download Files'
@@ -63,16 +64,22 @@
       .searchcategory
         %h4#facility.expand Facility:
         .facility
-          - @facilities.each_with_index do |facility, index|
+          - facilities.each_with_index do |facility, index|
             = label_tag "search_facility_#{index}", facility[1]
             = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#variable.expand Variable:
         .variable
-          - @variables.each_with_index do |variable, index|
-            = label_tag "search_variable_#{index}", variable
-            = check_box_tag "search[variables][]", variable, @selected_variables.include?(variable), :id => "search_variable_#{index}"
+          -# variables contains something like [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
+          - variables.each_with_index do |variable_info, index|
+            .variable_group
+              = label_tag "search_variable_#{index}", variable_info[0], :class => :variable_parent
+              = check_box_tag "search[variable_parents][]", variable_info[0], @selected_parent_variables.include?(variable_info[0]), :id => "search_variable_#{index}", :class => :variable_parent
+              .variable_children
+                - variable_info[1].each_with_index do |child_variable, index2|
+                  = label_tag "search_variable_#{index}_#{index2}", child_variable, :class => :variable_child
+                  = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
 
 

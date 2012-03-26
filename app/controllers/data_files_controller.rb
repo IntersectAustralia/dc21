@@ -7,31 +7,11 @@ class DataFilesController < ApplicationController
 
   expose(:tags) { Tag.order(:name) }
   expose(:facilities) { DataFile.searchable_facilities }
-  expose(:variables) { DataFile.searchable_column_names }
+  expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 
   def index
     set_tab :explore, :contentnavigation
-    @search = DataFileSearch.new(params[:search])
-
-    # prefix the sort column with the table name so we don't get ambiguity errors when doing joins
-    col = sort_column
-    col = "data_files.#{col}" unless col.index(".")
-    @data_files = DataFile.joins(:created_by).order(col + ' ' + sort_direction)
-    @data_files = @search.do_search(@data_files)
-
-    @from_date = @search.search_params[:from_date]
-    @to_date = @search.search_params[:to_date]
-    @selected_facilities = @search.facilities
-    @selected_variables = @search.variables
-    @filename = @search.filename
-    @description = @search.description
-    @selected_stati = @search.stati
-    @selected_tags = @search.tags
-
-    if @search.error
-      flash.now[:alert] = @search.error
-    end
-
+    do_search(params[:search])
   end
 
   def show
@@ -165,6 +145,30 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def do_search(search_params)
+    @search = DataFileSearch.new(search_params)
+
+    # prefix the sort column with the table name so we don't get ambiguity errors when doing joins
+    col = sort_column
+    col = "data_files.#{col}" unless col.index(".")
+    @data_files = DataFile.joins(:created_by).order(col + ' ' + sort_direction)
+    @data_files = @search.do_search(@data_files)
+
+    @from_date = @search.search_params[:from_date]
+    @to_date = @search.search_params[:to_date]
+    @selected_facilities = @search.facilities
+    @selected_variables = @search.variables
+    @selected_parent_variables = @search.variable_parents
+    @filename = @search.filename
+    @description = @search.description
+    @selected_stati = @search.stati
+    @selected_tags = @search.tags
+
+    if @search.error
+      flash.now[:alert] = @search.error
+    end
+  end
 
   def validate_inputs(files, experiment_id, type, description, tags)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already

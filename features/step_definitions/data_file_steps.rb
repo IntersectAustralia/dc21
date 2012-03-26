@@ -115,9 +115,13 @@ Then /^I should see facility checkboxes$/ do |table|
 end
 
 Then /^I should see variable checkboxes$/ do |table|
-  labels = find(".variable").all("label").map { |label| label.text.strip }
-  expected_labels = table.raw.collect { |row| row[0] }
-  labels.should eq(expected_labels)
+  labels = all(".variable_group").collect do |group|
+    parent = group.find("label.variable_parent").text.strip
+    children = group.all("label.variable_child").map { |label| label.text.strip }
+    [parent, children]
+  end
+  expected_parents_and_children = table.raw.collect { |row| [row[0], row[1].split(",").collect(&:strip)] }
+  labels.should eq(expected_parents_and_children)
 end
 
 When /^I check the checkbox for "([^"]*)"$/ do |filename|
@@ -320,4 +324,7 @@ def upload(file, type, description, experiment, tags)
   end
   click_button "Upload"
 
+end
+When /^I expand the "([^"]*)" search$/ do |search|
+  find(:xpath, XPath::HTML.content(search), :message => "Cannot find expander #{search}").click
 end

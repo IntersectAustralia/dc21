@@ -322,7 +322,7 @@ describe DataFile do
       Factory(:column_detail, :name => "Blah", :data_file => @f5)
     end
 
-    it "when column name is unmapped, should find files with matching column name" do
+    it "should work with single column name" do
       DataFile.with_any_of_these_columns(["Rnfll"]).collect(&:id).sort.should eq([@f1.id, @f3.id])
     end
 
@@ -330,31 +330,10 @@ describe DataFile do
       DataFile.with_any_of_these_columns(["Rnfll", "Temp"]).collect(&:id).sort.should eq([@f1.id, @f3.id, @f4.id])
     end
 
-    it "should handle mapped column names" do
-      Factory(:column_mapping, :code => "Rnfl", :name => "Rainfall")
-      Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
-      DataFile.with_any_of_these_columns(["Rainfall"]).collect(&:id).sort.should eq([@f1.id, @f2.id, @f3.id])
+    it "should be empty if no matches" do
+      DataFile.with_any_of_these_columns(["asdf", "dfg"]).should be_empty
     end
 
-    it "should handle multiple mapped column names" do
-      Factory(:column_mapping, :code => "Rnfl", :name => "Rainfall")
-      Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
-      Factory(:column_mapping, :code => "Temp", :name => "Temperature")
-      DataFile.with_any_of_these_columns(["Rainfall", "Temperature"]).collect(&:id).sort.should eq([@f1.id, @f2.id, @f3.id, @f4.id])
-    end
-
-    it "should handle a mixture of mapped and unmapped column names" do
-      Factory(:column_mapping, :code => "Rnfl", :name => "Rainfall")
-      Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
-      DataFile.with_any_of_these_columns(["Rainfall", "Temp"]).collect(&:id).sort.should eq([@f1.id, @f2.id, @f3.id, @f4.id])
-    end
-
-    it "should handle case where a mapped name is also a raw name" do
-      pending("Not sure how this should work")
-      #Factory(:column_mapping, :code => "Rnfll", :name => "Rainfall")
-      #Factory(:column_details, :name => "Rainfall", :data_file => @f5)
-      #DataFile.with_any_of_these_columns(["Rainfall"]).collect(&:id).sort.should eq([@f1.id, @f3.id, ??])
-    end
   end
 
   describe "Is known format method" do

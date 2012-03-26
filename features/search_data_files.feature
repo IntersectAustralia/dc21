@@ -29,16 +29,20 @@ Feature: Search data files by date range
     And file "mydata6.dat" has column info "Rnfll", "Millilitres", "Tot"
     And file "mydata6.dat" has column info "Temp", "DegC", "Avg"
     And file "datafile5.dat" has column info "Rnfl", "Millilitres", "Tot"
-    And file "datafile4.dat" has column info "Humi", "Percemt", "Avg"
+    And file "datafile4.dat" has column info "Humi", "Percent", "Avg"
+    And file "datafile1.dat" has column info "Temp_2", "DegC", "Avg"
+    And file "datafile1.dat" has column info "humidity", "DegC", "Avg"
     And I have facilities
       | name                | code   |
       | HFE Weather Station | HFE_WS |
       | Tree Chambers       | TC     |
     And I have column mappings
-      | code  | name        |
-      | Rnfll | Rainfall    |
-      | Rnfl  | Rainfall    |
-      | Temp  | Temperature |
+      | code   | name        |
+      | Rnfll  | Rainfall    |
+      | Rnfl   | Rainfall    |
+      | Temp   | Temperature |
+      | temp2  | Temperature |
+      | Temp_2 | Temperature |
 
   Scenario: Search for files by date range - from date only
     When I do a date search for data files with dates "2010-06-11" and ""
@@ -87,10 +91,10 @@ Feature: Search data files by date range
     When I uncheck "Tree Chambers"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
+      | Filename      |
+      | mydata6.dat   |
+      | mydata8.dat   |
+      | datafile4.dat |
     And the "ROS_WS" checkbox should be checked
     And the "HFE Weather Station" checkbox should be checked
     And the "Tree Chambers" checkbox should not be checked
@@ -104,41 +108,61 @@ Feature: Search data files by date range
     And I fill in "2010-06-10" for "To Date:"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
+      | Filename      |
+      | mydata6.dat   |
+      | datafile4.dat |
 
-  Scenario: Search for files with certain columns
+  @javascript
+  Scenario: Search for files with certain columns (checking mapped variable name)
     When I am on the list data files page
+    And I click on "Variable:"
     Then I should see variable checkboxes
-      | Humi        |
-      | Rainfall    |
-      | Temperature |
+      | Rainfall    | Rnfl, Rnfll         |
+      | Temperature | Temp, Temp_2, temp2 |
+      | Unmapped    | Humi, humidity      |
     When I check "Humi"
     And I check "Rainfall"
-    When I uncheck "Temperature"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
-    And the "Rainfall" checkbox should be checked
+      | Filename      |
+      | mydata6.dat   |
+      | datafile5.dat |
+      | mydata8.dat   |
+      | datafile4.dat |
+    When I click on "Variable:"
+    Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
-    And the "Temperature" checkbox should not be checked
+    And the "Temp" checkbox should not be checked
 
-  Scenario: Search for files by processing status
+  @javascript
+  Scenario: Search for files with certain columns (checking raw variable names)
+    When I am on the list data files page
+    And I click on "Variable:"
+    When I check "Humi"
+    And I check "Rnfll"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      |
+      | mydata6.dat   |
+      | mydata8.dat   |
+      | datafile4.dat |
+    When I click on "Variable:"
+    And the "Humi" checkbox should be checked
+    And the "Rnfll" checkbox should be checked
+    Then the "Rainfall" checkbox should not be checked
+    And the "Rnfl" checkbox should not be checked
+
+  Scenario: Search for files by type
     Given I am on the list data files page
     When I check "RAW"
     And I check "PROCESSED"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
-      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
-      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | Filename      |
+      | datafile5.dat |
+      | mydata7.dat   |
+      | datafile2.dat |
+      | mydata8.dat   |
     And the "RAW" checkbox should be checked
     And the "PROCESSED" checkbox should be checked
     And the "CLEANSED" checkbox should not be checked
@@ -148,10 +172,10 @@ Feature: Search data files by date range
     When I fill in "Description" with "word"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
-      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | Filename      |
+      | mydata6.dat   |
+      | datafile2.dat |
+      | mydata8.dat   |
     And the "Description" field should contain "word"
 
   Scenario: Search for files by tags
@@ -160,11 +184,11 @@ Feature: Search data files by date range
     And I check "Video"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
-      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | Filename      |
+      | mydata6.dat   |
+      | datafile5.dat |
+      | datafile2.dat |
+      | mydata8.dat   |
     And the "Photo" checkbox should be checked
     And the "Video" checkbox should be checked
     And the "Audio" checkbox should not be checked
@@ -174,14 +198,20 @@ Feature: Search data files by date range
     When I fill in "Filename" with "my"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename    | Date added       | Start time          | End time            |
-      | mydata6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | mydata7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
-      | mydata8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | Filename    |
+      | mydata6.dat |
+      | mydata7.dat |
+      | mydata8.dat |
     And the "Filename" field should contain "my"
 
+  @javascript
   Scenario: Search for files by a lot of different things at once
     Given I am on the list data files page
+    And I click on "Variable:"
+    And I click on "Filename:"
+    And I click on "Tags:"
+    And I click on "Description:"
+    And I click on "Type:"
     When I fill in "Filename" with "my"
     And I check "Photo"
     And I check "Video"
@@ -192,24 +222,24 @@ Feature: Search data files by date range
     And I check "PROCESSED"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename    | Date added       | Start time          | End time            |
-      | mydata8.dat | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
+      | Filename    | Date added       | Added by                  | Start time         | End time            | Type |
+      | mydata8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | 2010-05-01 6:42:01 | 2010-05-30 18:05:23 | RAW  |
     And I should see "Showing 1 matching file"
 
   Scenario: Should be able to sort within search results
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     And I follow "Filename"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
+      | Filename      |
+      | datafile4.dat |
+      | datafile5.dat |
+      | mydata6.dat   |
+      | mydata7.dat   |
 
   Scenario: Go back to showing all after searching
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     Then the "exploredata" table should have 4 rows
-    When I follow "clear search"
+    When I follow "Clear Search"
     Then the "exploredata" table should have 8 rows
 
   Scenario: Entering no date shows all
@@ -236,3 +266,36 @@ Feature: Search data files by date range
     Then the "from_date" field should contain "2012-06-12"
     And the "to_date" field should contain "2012-06-13"
 
+  @javascript
+  Scenario: Checking and unchecking parent variable names check/unchecks the children
+    Given I am on the list data files page
+    And I click on "Variable:"
+    Then I should see variable checkboxes
+      | Rainfall    | Rnfl, Rnfll         |
+      | Temperature | Temp, Temp_2, temp2 |
+      | Unmapped    | Humi, humidity      |
+    When I check "Rainfall"
+    Then the "Rnfll" checkbox should be checked
+    And the "Rnfl" checkbox should be checked
+    But the "Temp" checkbox should not be checked
+    And the "Humi" checkbox should not be checked
+    When I uncheck "Rainfall"
+    Then the "Rnfll" checkbox should not be checked
+    And the "Rnfl" checkbox should not be checked
+
+  @javascript
+  Scenario: Unchecking child variable name unchecks the parent
+    Given I am on the list data files page
+    And I click on "Variable:"
+    When I check "Rainfall"
+    And I uncheck "Rnfl"
+    Then the "Rainfall" checkbox should not be checked
+
+  @javascript
+  Scenario: Checking child variable name checks the parent if it completes the set
+    Given I am on the list data files page
+    And I click on "Variable:"
+    When I check "Rnfll"
+    Then the "Rainfall" checkbox should not be checked
+    When I check "Rnfl"
+    Then the "Rainfall" checkbox should be checked

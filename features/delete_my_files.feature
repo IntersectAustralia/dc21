@@ -61,15 +61,13 @@ Feature: Delete files containing erroneous data
       | filename      | created_at       | uploaded_by               | start_time           | end_time               |
       | datafile7.dat | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
       | datafile6.dat | 30/12/2011 10:15 | other_user@intersect.org.au     | 1/6/2010 6:42:01 UTC | 11/6/2010 18:05:23 UTC |
-    And I do a date search for data files with dates "2010-06-03" and "2010-06-10"
-    And I follow "Filename"
-    And I should see "exploredata" table with
+    When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
+    Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
       | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
       | datafile7.dat | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
     When I delete the file "datafile7.dat" added by "researcher@intersect.org.au"
     And I do a date search for data files with dates "2010-06-03" and "2010-06-10"
-    And I follow "Filename"
     Then I should see "exploredata" table with
       | Filename      | Date added       | Start time          | End time            |
       | datafile6.dat | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |

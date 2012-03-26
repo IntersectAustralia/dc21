@@ -11,18 +11,22 @@ class ColumnMapping < ActiveRecord::Base
     Hash[*all.collect { |cm| [cm.code, cm.name] }.flatten]
   end
 
-  def self.map_names_to_codes(names)
-    codes = []
-    names.each do |name|
-      mappings = ColumnMapping.find_all_by_name(name)
-      if mappings.empty?
-        codes << name
-      else
-        mappings.each { |mapping| codes << mapping.code }
-      end
-    end
-    codes
+  # Returns an array of arrays for displaying the column name search checkboxes
+  # The elements of the outer array are a 2-element array containing the mapped name,
+  # followed by an array of the raw codes that are mapped to that name
+  # e.g. [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
+  def self.mapped_column_names_for_search
+    mapped_codes = select("code").collect(&:code)
+
+    unmapped_columns = ColumnDetail.unscoped.select("DISTINCT(name)").collect(&:name)
+    unmapped_columns.delete_if { |name| mapped_codes.include?(name) }
+
+    grouped = order(:code).group_by(&:name)
+    mapped = grouped.collect { |name, mappings| [name, mappings.collect(&:code)] }
+    mapped << ["Unmapped", unmapped_columns.sort] unless unmapped_columns.empty?
+    mapped
   end
+
 
   def check_col_mapping(name)
     if self.code.to_s.downcase == name.to_s.downcase

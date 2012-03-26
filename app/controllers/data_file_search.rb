@@ -5,6 +5,7 @@ class DataFileSearch
   attr_accessor :date_range
   attr_accessor :facilities
   attr_accessor :variables
+  attr_accessor :variable_parents
   attr_accessor :filename
   attr_accessor :description
   attr_accessor :stati
@@ -22,6 +23,8 @@ class DataFileSearch
     self.facilities ||= []
     self.variables = @search_params[:variables]
     self.variables ||= []
+    self.variable_parents = @search_params[:variable_parents]
+    self.variable_parents ||= []
     self.stati = @search_params[:stati]
     self.stati ||= []
     self.tags = @search_params[:tags]

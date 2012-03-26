@@ -48,8 +48,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.with_any_of_these_columns(column_names)
-    raw_column_names = ColumnMapping.map_names_to_codes(column_names)
-    data_file_ids = ColumnDetail.unscoped.select("DISTINCT(data_file_id)").where(:name => raw_column_names).collect(&:data_file_id)
+    data_file_ids = ColumnDetail.unscoped.select("DISTINCT(data_file_id)").where(:name => column_names).collect(&:data_file_id)
     where(:id => data_file_ids)
   end
 
