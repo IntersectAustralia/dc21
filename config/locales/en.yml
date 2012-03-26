@@ -2,4 +2,30 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      facility:
+        a_lat: 'Latitude'
+        a_long: 'Longitude'
+        b_lat: 'Latitude (bottom right)'
+        b_long: 'Longitude (bottom right)'
+    errors:
+      models:
+        facility:
+          attributes:
+            a_lat:
+              blank: 'and longitude must both be filled in'
+              not_a_number: 'must be a number between -90 and 90'
+              inclusion: 'must be a number between -90 and 90'
+            a_long:
+              blank: 'and latitude must both be filled in'
+              not_a_number: 'must be a number between -180 and 180'
+              inclusion: 'must be a number between -180 and 180'
+            b_lat:
+              blank: 'and longitude (bottom right) must both be filled in'
+              not_a_number: 'must be a number between -90 and 90'
+              inclusion: 'must be a number between -90 and 90'
+            b_long:
+              blank: 'and latitude (bottom right) must both be filled in'
+              not_a_number: 'must be a number between -180 and 180'
+              inclusion: 'must be a number between -180 and 180'

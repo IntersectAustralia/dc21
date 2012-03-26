@@ -31,11 +31,18 @@ describe Facility do
       #f1.
     end
 
+    it "should validate that lat/longs are numbers" do
+      should validate_numericality_of(:a_lat).with_message("must be a number between -90 and 90")
+      should validate_numericality_of(:b_lat).with_message("must be a number between -90 and 90")
+      should validate_numericality_of(:a_long).with_message("must be a number between -180 and 180")
+      should validate_numericality_of(:b_long).with_message("must be a number between -180 and 180")
+    end
+
     it "should validate sane latitudes/longitudes" do
-      should ensure_inclusion_of(:a_lat).in_range -90..90
-      should ensure_inclusion_of(:a_long).in_range -180..180
-      should ensure_inclusion_of(:b_lat).in_range -90..90
-      should ensure_inclusion_of(:b_long).in_range -180..180
+      should ensure_inclusion_of(:a_lat).in_range(-90..90).with_message("must be a number between -90 and 90")
+      should ensure_inclusion_of(:a_long).in_range(-180..180).with_message("must be a number between -180 and 180")
+      should ensure_inclusion_of(:b_lat).in_range(-90..90).with_message("must be a number between -90 and 90")
+      should ensure_inclusion_of(:b_long).in_range(-180..180).with_message("must be a number between -180 and 180")
     end
 
   end

@@ -52,6 +52,11 @@ class Facility < ActiveRecord::Base
   validates_presence_of :b_lat, :if => :b_long?
   validates_presence_of :b_long, :if => :b_lat?
 
+  validates_numericality_of :a_lat, :allow_blank => true
+  validates_numericality_of :a_long, :allow_blank => true
+  validates_numericality_of :b_lat, :allow_blank => true
+  validates_numericality_of :b_long, :allow_blank => true
+
   validates_presence_of :primary_contact
 
   #Scopes
