@@ -17,6 +17,8 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :filename
   validates_presence_of :path
   validates_presence_of :created_by_id
+  validates_presence_of :file_processing_status
+  validates_presence_of :experiment_id
   validates_length_of :file_processing_description, :maximum => 255
 
   scope :most_recent_first, order("created_at DESC")

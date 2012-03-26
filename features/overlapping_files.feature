@@ -20,11 +20,11 @@ Feature: Overlapping Files
     And I upload "samples/WTC01_Table1.dat" with type "RAW" and description "new description" and experiment "My Experiment"
     When I am on the list data files page
     Then I should see only these rows in "exploredata" table
-      | Filename         | Added by                    | Start time          | End time            | Processing status |
+      | Filename         | Added by                    | Start time          | End time            | Type |
       | WTC01_Table1.dat | researcher@intersect.org.au | 2011-08-11  9:30:00 | 2011-11-02 13:00:00 | RAW               |
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Processing status | RAW             |
+      | Type | RAW             |
       | Description       | new description |
       | Experiment        | My Experiment   |
 
@@ -39,9 +39,9 @@ Feature: Overlapping Files
     And I upload "samples/WTC01_Table1.dat" with type "RAW" and description "" and experiment "My Experiment"
     When I am on the list data files page
     Then I should see only these rows in "exploredata" table
-      | Filename         | Added by                    | Start time          | End time            | Processing status |
+      | Filename         | Added by                    | Start time          | End time            | Type |
       | WTC01_Table1.dat | researcher@intersect.org.au | 2011-08-11  9:30:00 | 2011-11-02 13:00:00 | RAW               |
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
-      | Processing status | RAW                   |
+      | Type | RAW                   |
       | Description       | orig wtc01_table1.dat |

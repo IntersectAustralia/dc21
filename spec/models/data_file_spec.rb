@@ -5,6 +5,8 @@ describe DataFile do
     it { should validate_presence_of(:filename) }
     it { should validate_presence_of(:path) }
     it { should validate_presence_of(:created_by_id) }
+    it { should validate_presence_of(:file_processing_status) }
+    it { should validate_presence_of(:experiment_id) }
     it { should ensure_length_of(:file_processing_description).is_at_most(255) }
   end
 
@@ -36,10 +38,6 @@ describe DataFile do
   end
 
   describe "Get experiment name" do
-    it "returns blank if no experiment id set" do
-      Factory(:data_file, :experiment_id => nil).experiment_name.should eq("")
-    end
-
     it "returns 'Other' if set to -1" do
       Factory(:data_file, :experiment_id => -1).experiment_name.should eq("Other")
     end

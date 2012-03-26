@@ -6,6 +6,8 @@ class DataFilesController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   expose(:tags) { Tag.order(:name) }
+  expose(:facilities) { DataFile.searchable_facilities }
+  expose(:variables) { DataFile.searchable_column_names }
 
   def index
     set_tab :explore, :contentnavigation
@@ -30,8 +32,6 @@ class DataFilesController < ApplicationController
       flash.now[:alert] = @search.error
     end
 
-    @facilities = DataFile.searchable_facilities
-    @variables = DataFile.searchable_column_names
   end
 
   def show

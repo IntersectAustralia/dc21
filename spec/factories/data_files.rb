@@ -5,5 +5,7 @@ FactoryGirl.define do
     filename "a-filename"
     path "a-path"
     association :created_by, :factory => :user
+    experiment_id -1
+    file_processing_status "RAW"
   end
 end

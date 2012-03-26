@@ -31,7 +31,7 @@ Feature: Delete files containing erroneous data
     Given I have uploaded "toa5.dat" as "researcher@intersect.org.au" with type "RAW"
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename | Added by                  | Start time          | End time            | Processing status |
+      | Filename | Added by                  | Start time          | End time            | Type |
       | toa5.dat | researcher@intersect.org.au | 2011-10-06 0:40:00 | 2011-11-03 11:55:00 | RAW               |
     When I follow the view link for data file "toa5.dat"
     And I follow "Delete This File"

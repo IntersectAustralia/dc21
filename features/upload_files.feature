@@ -86,11 +86,11 @@ Feature: Upload files
     And file "sample1.txt" should have description "My descriptive description"
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing status |
+      | Filename    | Added by                    | Start time | End time | Type |
       | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing status | RAW                        |
+      | Type | RAW                        |
       | Description       | My descriptive description |
       | Experiment        | My Experiment              |
       | Tags              | Gap-Filled\n\nPhoto        |
@@ -111,11 +111,11 @@ Feature: Upload files
     And file "sample1.txt" should have experiment "My Experiment"
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Processing status |
+      | Filename    | Added by                    | Start time | End time | Type |
       | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Processing status | RAW           |
+      | Type | RAW           |
       | Description       |               |
       | Experiment        | My Experiment |
       | Tags              |               |
@@ -134,11 +134,11 @@ Feature: Upload files
     Then I should be on the home page
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename                   | Added by                    | Start time          | End time            | Processing status |
+      | Filename                   | Added by                    | Start time          | End time            | Type |
       | weather_station_15_min.dat | researcher@intersect.org.au | 2011-10-10  0:00:00 | 2011-10-12 23:45:00 | RAW               |
     And I follow the view link for data file "weather_station_15_min.dat"
     Then I should see details displayed
-      | Processing status | RAW                          |
+      | Type | RAW                          |
       | Description       | I'm changing the description |
       | Experiment        | Flux Experiment 1            |
       | Tags              | Gap-Filled\n\nPhoto          |

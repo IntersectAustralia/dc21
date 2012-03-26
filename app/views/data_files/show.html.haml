@@ -10,7 +10,7 @@
   = render_field "Date added", @data_file.created_at.to_s(:with_time)
   = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
   = render_field "File format", @data_file.format_for_display
-  = render_field "Processing status", @data_file.status_as_string
+  = render_field "Type", @data_file.status_as_string
   .description
     = render_field "Description", @data_file.file_processing_description
   = render_field_with_block "Tags" do

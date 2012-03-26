@@ -8,7 +8,7 @@ Feature: View the details of a data file
     And I have data files
       | filename     | created_at       | uploaded_by               | start_time           | end_time                | interval | experiment         | file_processing_description | file_processing_status |
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |                      |                         |          | My Nice Experiment | Description of my file      | RAW                    |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 UTC | 30/11/2011 18:05:23 UTC | 300      |                    |                             |                        |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 UTC | 30/11/2011 18:05:23 UTC | 300      | Other              |                             | UNKNOWN                |
 
   Scenario: Navigate from list and view a data file with start and end times
     When I am on the list data files page
@@ -38,9 +38,9 @@ Feature: View the details of a data file
   Scenario: View a file with NO status/description experiment info
     When I am on the data file details page for sample.txt
     Then I should see details displayed
-      | Experiment        |           |
-      | Processing status | UNDEFINED |
-      | Description       |           |
+      | Experiment        | Other   |
+      | Processing status | UNKNOWN |
+      | Description       |         |
 
   Scenario: Navigate back to the list
     When I am on the data file details page for sample.txt

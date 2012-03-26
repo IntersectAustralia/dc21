@@ -8,7 +8,8 @@
     - else
       = render_field item.key.humanize, item.value
 
-  %h3 Data File Columns
+  %hr/
+  %h3 Columns
   - if @data_file.cols_unmapped?
     = link_to "Fill in column mappings", map_column_mapping_path(:id => @data_file.id), :class => "bluebutton"
   %table#column_info
