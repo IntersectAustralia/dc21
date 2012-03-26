@@ -10,18 +10,24 @@
 
 .datacontroll
   -#%h3.filter No filters set
-  %h3.results
-    - if @data_files.empty?
-      No matching files
+  - if @data_files.empty?
+  - else
+    - if @search.showing_all?
     - else
-      - if @search.showing_all?
-        = "Showing all #{@data_files.size} files"
+      = link_to "clear search", data_files_path, class: "btn pull-left"
+  .data-results
+    %h3.results
+      - if @data_files.empty?
+        No matching files
       - else
-        = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
-        = link_to "clear search", data_files_path
+        - if @search.showing_all?
+          = "Showing all #{@data_files.size} files"
+        - else
+          = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
+          -#= link_to "clear search", data_files_path
 
-  #downloadtoggle.download.whitebutton
-    %span= link_to 'Download Files'
+    #downloadtoggle.download.whitebutton
+      %span= link_to 'Download Files'
 
 .facetedsearch.search
   .searchbox

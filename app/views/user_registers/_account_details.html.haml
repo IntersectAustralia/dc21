@@ -1,12 +1,17 @@
-.rowform
-  = f.label :email, "Email Address:"
-  = required
-  = f.text_field :email
-.rowform
-  = f.label :password, "Password:"
-  = required
-  = f.password_field :password
-.rowform
-  = f.label :password_confirmation, "Confirm Password:"
-  = required
-  = f.password_field :password_confirmation
+.control-group
+  = f.label :email, "Email Address", class: "control-label"
+  .controls
+    = required
+    = f.text_field :email
+
+.control-group
+  = f.label :password, "Password", class: "control-label"
+  .controls
+    = required
+    = f.password_field :password
+
+.control-group
+  = f.label :password_confirmation, "Confirm Password", class: "control-label"
+  .controls
+    = required
+    = f.password_field :password_confirmation

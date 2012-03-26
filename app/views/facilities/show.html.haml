@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Facility / View / #{@facility.name}
+  %h1 Facilities / #{@facility.name}
 
 .container
   = render_field "Name", @facility.name
@@ -14,11 +14,13 @@
     - @facility.contacts.each_with_index do |c, i|
       = render_field "Other Contact #{i+1}", "#{c.full_name} (#{c.email})"
 
-  .actions
-    .cancelbutton
-      %span
-      = link_to 'Back', facilities_path, :class => "cancelbutton"
-    = link_to "Edit Facility", edit_facility_path, :class => "bluebutton floatright"
+  .form-actions
+    .actions-pre
+      .cancelbutton
+        %span
+        = link_to 'Back', facilities_path, :class => "cancelbutton"
+    .actions
+      = link_to "Edit Facility", edit_facility_path, :class => "bluebutton"
 
   %h3 Experiments
   = render 'experiments/list', :experiments => @facility.experiments

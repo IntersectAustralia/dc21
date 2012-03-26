@@ -1,74 +1,88 @@
 = form_for(@facility) do |f|
   .formerror= render "shared/error_messages", :target => @facility
-  .rowform
-    %label{ :for => :name } Name:
-    = required
-    = f.text_field :name
-  .rowform
-    %label Code:
-    = required
-    = f.text_field :code
-  .rowform
-    %label Description:
-    = f.text_area :description
-  .rowform
-    %label Location of Facility
-    %label Point location or Top Left Corner of rectangle:
-  .rowform
-    %label Latitude:
-    = f.text_field :a_lat, :placeholder => "Decimal, -90.0 to 90.0"
-  .rowform
-    %label Longitude:
-    = f.text_field :a_long, :placeholder => "Decimal, -180 to 180"
-  .rowform
-    %label Location of Facility
-    %label Bottom Right Corner of rectangle:
-  .rowform
-    %label Latitude:
-    = f.text_field :b_lat, :placeholder => "Decimal, -90.0 to 90.0"
-  .rowform
-    %label Longitude:
-    = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
-  .rowform
-    %label Contacts:
-    = required
-    %span.input
+  .control-group
+    %label.control-label{ :for => :name } Name:
+    .controls
+      = required
+      = f.text_field :name
+  .control-group
+    %label.control-label Code:
+    .controls
+      = required
+      = f.text_field :code
+  .control-group
+    %label.control-label Description:
+    .controls
+      = f.text_area :description
+  .control-group
+    %label.control-label Location of Facility
+    .controls
+      .record Point location or Top Left Corner of rectangle:
+  .control-group
+    %label.control-label Latitude:
+    .controls
+      = f.text_field :a_lat, :placeholder => "Decimal, -90.0 to 90.0"
+  .control-group
+    %label.control-label Longitude:
+    .controls
+      = f.text_field :a_long, :placeholder => "Decimal, -180 to 180"
+  .control-group
+    %label.control-label Location of Facility
+    .controls
+      .record Bottom Right Corner of rectangle:
+  .control-group
+    %label.control-label Latitude:
+    .controls
+      = f.text_field :b_lat, :placeholder => "Decimal, -90.0 to 90.0"
+  .control-group
+    %label.control-label Longitude:
+    .controls
+      = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
+  .control-group
+    %label.control-label Contacts:
+    .controls
+      = required
+      %span.input
       = select_tag :contacts_select,  options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
-    = link_to 'Add', '#', :class => "bluebutton", :id => 'add_contact'
-    %p.details
-      Choose from the list above, and select via radio button the primary contact. 
-    %ul#contacts_list
-      - if @facility.primary_contact.present?
-        - contact = @facility.primary_contact
-        - #TODO refactor this out into a helper
-        -#= build_contact_fields(contact)
-        %li{:id => "contact_#{contact.id}"}
-          = hidden_field_tag "contact_ids[]", contact.id
-          = radio_button_tag "contact_primary", contact.id, :checked => true
-          = contact.email
-          = link_to "Delete", '#', :class => 'delete_contact delete_link'
-
-      - if @facility.contacts.present?
-        - @facility.contacts.each do |contact|
+      = link_to 'Add', '#', :class => "bluebutton", :id => 'add_contact'
+      %p.details
+        Choose from the list above, and select via radio button the primary contact. 
+      %ul#contacts_list
+        - if @facility.primary_contact.present?
+          - contact = @facility.primary_contact
           - #TODO refactor this out into a helper
           -#= build_contact_fields(contact)
           %li{:id => "contact_#{contact.id}"}
             = hidden_field_tag "contact_ids[]", contact.id
-            = radio_button_tag "contact_primary", contact.id
+            = radio_button_tag "contact_primary", contact.id, :checked => true
             = contact.email
-            = link_to "Delete", '#', :class => 'delete_contact delete_link'
+            = link_to "Delete", '#', :class => 'delete_contact delete_link pull-right'
+
+        - if @facility.contacts.present?
+          - @facility.contacts.each do |contact|
+            - #TODO refactor this out into a helper
+            -#= build_contact_fields(contact)
+            %li{:id => "contact_#{contact.id}"}
+              = hidden_field_tag "contact_ids[]", contact.id
+              = radio_button_tag "contact_primary", contact.id
+              = contact.email
+              = link_to "Delete", '#', :class => 'delete_contact delete_link pull-right'
 
 
 
 
-  .actions
+  .form-actions
     - if edit_mode
-      .cancelbutton
-        %span
-        = link_to 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
-      = f.submit "Update", :class => "floatright"
+      .actions-pre
+        .cancelbutton
+          %span
+          = link_to 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
+      .actions
+        = f.submit "Update", :class => ""
     -else
-      .cancelbutton
-        %span
-        = link_to 'Cancel', facilities_path, :class => "cancelbutton"
-      = f.submit "Save Facility", :class => "floatright"
+      .actions-pre
+        .cancelbutton
+          %span
+          = link_to 'Cancel', facilities_path, :class => "cancelbutton"
+      .actions
+        = f.submit "Save Facility", :class => ""

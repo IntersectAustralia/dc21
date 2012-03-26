@@ -7,6 +7,9 @@ class ExperimentsController < ApplicationController
   expose(:for_codes) { ForCodesLookup.get_instance.top_level_codes }
   expose(:access_rights) { AccessRightsLookup.new.access_rights }
 
+  set_tab :home
+  set_tab :facilities, :contentnavigation
+
   def show
   end
 
@@ -40,4 +43,8 @@ class ExperimentsController < ApplicationController
     end
   end
 
+  private
+  def default_layout
+    "main"
+  end
 end

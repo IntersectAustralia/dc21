@@ -278,7 +278,7 @@ label
   cursor: pointer
 
 input[type=textarea], input[type=text], input[type=password], input[type=search], textarea
-  +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, "", 18px)
+  +m-p-w-h-p-t-b-l-r-f(0, 7px 10px 5px 10px, "", 18px)
   +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
   resize: none
   +font("", "", 1em, 18px)
@@ -311,7 +311,7 @@ input[type=password]
   //+font("", "", 1.25em, 28px, $dark1)
 
 textarea
-  +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, 618px, 66px)
+  +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, 608px, 66px)
 
 
 
@@ -365,7 +365,7 @@ input[type="file"]
   line-height: 18px \9
 
 select
-  +m-p-w-h-p-t-b-l-r-f("", "", 220px)
+  +m-p-w-h-p-t-b-l-r-f("", "", auto)
   background: #FFF
 
 select[multiple], select[size]
@@ -604,7 +604,7 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
   +m-p-w-h-p-t-b-l-r-f("", "", 598px)
 
 .asterisk
-  +m-p-w-h-p-t-b-l-r-f( 0 0 0 -14px, 0, 10px)
+  +m-p-w-h-p-t-b-l-r-f( 0 0 0 -11px, 0, 10px)
   color: $red4
 
 // !NOTIFICATIONS - ALERTS
@@ -612,7 +612,7 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
 
 .container
   .alert
-    +m-p-w-h-p-t-b-l-r-f(0 0 18px 160px)
+    +m-p-w-h-p-t-b-l-r-f(0 0 18px 170px)
     h3
       +m-p-w-h-p-t-b-l-r-f(0, 0 0 10px 0)
       +border(0, solid, $red5)
@@ -674,14 +674,18 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
 
 /* Apply these class modules to elements. Any more than 3 modules per element is overkill and you should probably have a specific container.
 
+/* Float an element to the left
 .floatleft
   float: left
-
-/* Float an element to the left
-.floatright
-  float: right
+.pull-left
+  float: left
 
 /* Float an element to the right
+.floatright
+  float: right
+.pull-right
+  float: right
+
 
 .row
   margin: 0
@@ -707,7 +711,7 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
   +font("", "", 0.75em, 18px, $dark3)
 
 p.details
-  +m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
+  //+m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
 
 .required
   color: #E25358
@@ -842,8 +846,8 @@ a.delete
 // BUTTONS - DEFAULT BUTTON STYLE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-input[type=button], button
-  +m-p-w-h-p-t-b-l-r-f("", 5px 10px, 30px)
+input[type=button], button, .btn
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px)
   cursor: pointer
   +inlineblock
   +font("", "", 0.875em, 20px, $dark3, none, center)
@@ -853,6 +857,7 @@ input[type=button], button
     color: $dark2
     +border(1px, solid, #c6c6c6)
     +gradient-light-2
+    text-decoration: none
   &:active
     +boxshadow-2-inset
 
@@ -876,7 +881,7 @@ input[type=disabled]:active
 // BUTTONS - WHITE / GREY
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-input.whitebutton, input[type=button], input[type=submit].whitebutton, button.whitebutton, a.whitebutton, .whitebutton
+input.whitebutton, input[type=button], input[type=submit].whitebutton, button.whitebutton, a.whitebutton, .whitebutton, .btn
   +m-p-w-h-p-t-b-l-r-f("", 5px 10px, "", 18px)
   +font("", normal, 0.875em, 18px, $dark3, none, center)
   +gradient-light-1
@@ -886,6 +891,7 @@ input.whitebutton, input[type=button], input[type=submit].whitebutton, button.wh
     color: $dark2
     +border(#c6c6c6)
     +gradient-light-2
+    text-decoration: none
   &:active
     +boxshadow-2-inset
 input[type=submit].whitebutton
@@ -1492,30 +1498,38 @@ table.activity, table.activity tbody
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 form h3
-  +m-p-w-h-p-t-b-l-r-f(0 0 0 160px, 18px 0 10px 0)
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 170px, 18px 0 10px 0)
   +border(1px, solid, #D9D9D9, 1px 0 0 0, 2px)
+
   
 .control-group
   +m-p-w-h-p-t-b-l-r-f(0 0 9px 0)
   .control-label
     float: left
-    width: 140px
+    width: 150px
     padding-top: 5px
     text-align: right
   .controls
-    +m-p-w-h-p-t-b-l-r-f(0 0 0 160px)
+    +m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
     .record
       +m-p-w-h-p-t-b-l-r-f("", 5px 0 0 0)
     .alert
       +m-p-w-h-p-t-b-l-r-f(0 0 18px 0)
 
 .form-actions
-  +m-p-w-h-p-t-b-l-r-f(18px 0, 18px 20px 18px 160px)
+  //+m-p-w-h-p-t-b-l-r-f(18px 0, 18px 20px 18px 170px)
+  +m-p-w-h-p-t-b-l-r-f(18px 0, 18px 20px 18px 0)
   \:before, .form-actions:after
     display: table
     content: ""
   \form-actions:after
     clear: both
+  .actions
+    +m-p-w-h-p-t-b-l-r-f(0 0 0 170px, 0)
+  .actions-pre
+    +m-p-w-h-p-t-b-l-r-f("", "", 150px)
+    float: left
+    text-align: right
 
 .row
   span

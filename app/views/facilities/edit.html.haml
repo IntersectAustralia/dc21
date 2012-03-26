@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Home / Facilities / Edit #{@facility.name}
+  %h1 Facilities / #{@facility.name} / Edit
 
 .container
   = render :partial => 'facilities/form', :locals => {:edit_mode => true}

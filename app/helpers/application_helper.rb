@@ -34,14 +34,20 @@ module ApplicationHelper
   private
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
-    html = "<div class='rowform'>"
-    html << '<label>'
+    html = "<div class='control-group'>"
+    html << "<label class='control-label'>"
     html << (h label)
     html << ":"
     html << '</label>'
-    html << '<span>'
-    html << content
-    html << '</span>'
+    html << "<div class='controls'>"
+    html << "<div class='record'>"
+    if content.empty?
+      html << "None"
+    else
+      html << content
+    end
+    html << '</div>'
+    html << '</div>'
     html << '</div>'
     html.html_safe
   end

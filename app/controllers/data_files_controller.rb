@@ -41,6 +41,7 @@ class DataFilesController < ApplicationController
 
   def new
     @uploaded_files = []
+    set_tab :dashboard, :contentnavigation
   end
 
   def edit
