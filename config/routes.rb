@@ -4,7 +4,6 @@ Dc21app::Application.routes.draw do
     get "/users/profile", :to => "user_registers#profile" #page which gives options to edit details or change password
     get "/users/edit_password", :to => "user_registers#edit_password" #allow users to edit their own password
     put "/users/update_password", :to => "user_registers#update_password" #allow users to edit their own password
-    get "/users/get_authentication_token", :to => "user_registers#get_authentication_token"
   end
 
   resources :users, :only => [:show] do
