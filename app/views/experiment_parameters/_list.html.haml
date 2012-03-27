@@ -1,5 +1,6 @@
-= link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment), :class => :whitebutton
-%br/
+.datacontroll
+  .parameters.btn
+    = link_to "New Parameter", new_facility_experiment_experiment_parameter_path(facility, experiment)
 
 - if experiment.experiment_parameters.empty?
   There are no parameters to display

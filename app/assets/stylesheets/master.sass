@@ -237,8 +237,9 @@ h1
   +font("", normal, 1.5em, 40px)
 
 h2
-  +m-p-w-h-p-t-b-l-r-f(0 0 20px 0, 0 0 10px 0)
-  +font("", bold, 1.25em, 30px)
+  +m-p-w-h-p-t-b-l-r-f(0 0 20px 0, 10px 0 0 0)
+  +font("", normal, 1.5em, 30px)
+  +border(1px, solid, #D9D9D9, 1px 0 0 0)
 
 h3
   +font("", bold, 1em, 30px, $dark2)
@@ -836,6 +837,27 @@ a.delete
     label, span, a
       background: url("../images/icon_experiment_new_dark.png") left center no-repeat
 
+.mapping.btn
+  cursor: pointer
+  label, span, a
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 85px)
+    font-weight: normal
+    background: url("../images/icon_columnmapping_add_light.png") left center no-repeat
+  &:hover
+    label, span, a
+      background: url("../images/icon_columnmapping_add_dark.png") left center no-repeat
+
+
+.parameters.btn
+  cursor: pointer
+  label, span, a
+    +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 85px)
+    font-weight: normal
+    background: url("../images/icon_parameters_new_light.png") left center no-repeat
+  &:hover
+    label, span, a
+      background: url("../images/icon_parameters_new_dark.png") left center no-repeat
+
 
 // BUTTONS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -892,6 +914,9 @@ input.whitebutton, input[type=button], input[type=submit].whitebutton, button.wh
     +border(#c6c6c6)
     +gradient-light-2
     text-decoration: none
+  a
+    &:hover
+      text-decoration: none
   &:active
     +boxshadow-2-inset
 input[type=submit].whitebutton
@@ -1504,6 +1529,7 @@ form h3
   
 .control-group
   +m-p-w-h-p-t-b-l-r-f(0 0 9px 0)
+  +clearfix
   .control-label
     float: left
     width: 150px

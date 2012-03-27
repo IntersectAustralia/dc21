@@ -25,7 +25,6 @@ Feature: Delete files containing erroneous data
       | Filename | Added by                    |
       | toa5.dat | researcher@intersect.org.au |
 
-
   @javascript
   Scenario: I see an informative alert for files with metadata
     Given I have uploaded "toa5.dat" as "researcher@intersect.org.au" with type "RAW"
