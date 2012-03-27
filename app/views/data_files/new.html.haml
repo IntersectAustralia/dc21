@@ -4,6 +4,7 @@
 .container
   .alert.alert-info Begin by entering the following information about the files to be uploaded. You can override this for individual files at the next step.
   = form_for(@data_file, :html => {:multipart => true}) do |f|
+    %h2 New Data Files
     = render "shared/error_messages", :target => @data_file
     .control-group
       = label_tag :file_processing_status, "File type", class: "control-label"
