@@ -7,16 +7,15 @@
   = form_tag(bulk_update_data_files_path, :method => :put) do
     - @uploaded_files.each do |file|
       .file-panel{:id => "file_panel_#{file.id}"}
-        %h3
-          = file.filename
+        %h2= file.filename
+        %ul
+          - file.messages.each do |message_attrs|
+            -#%i.icon-info-sign
+            %li.alert{:class => message_attrs[:type]}= message_attrs[:message]
         .control-group
           %label.control-label Type:
           .controls
             .record= "#{file.file_processing_status}"
-            %ul.alert
-              - file.messages.each do |message_attrs|
-                %i.icon-info-sign
-                %li{:class => message_attrs[:type]}= message_attrs[:message]
 
         .control-group
           = label_tag "file_#{file.id}_experiment", "Experiment", class: "control-label"
@@ -39,4 +38,5 @@
               %br/
 
     .form-actions
-      = submit_tag "Update"
+      .actions
+        = submit_tag "Update"
