@@ -1,5 +1,10 @@
 
 = form_for [@facility, @experiment] do |f|
+  - if @experiment.new_record?
+    %h2 New Experiment
+  - else
+    %h2 Edit Experiment
+
   .rowform
     .formerror= render "shared/error_messages", :target => @experiment
 

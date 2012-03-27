@@ -590,19 +590,16 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
   color: $red4
   h3, li
     color: #B94A48
+    display: block
   h3
     overflow: hidden
     word-wrap: break-word
 
 .field_with_errors
-  +m-p-w-h-p-t-b-l-r-f("", "")
-  +inlineblock
+  display: inline
 
-.field_with_errors input
+.field_with_errors input, .field_with_errors select, .field_with_errors textarea
   +border(1px, solid, $red4)
-
-.formerror
-  +m-p-w-h-p-t-b-l-r-f("", "", 598px)
 
 .asterisk
   +m-p-w-h-p-t-b-l-r-f( 0 0 0 -11px, 0, 10px)
@@ -1021,6 +1018,8 @@ th, td
   +border(1px, solid, #DDD, 1px 0 0 0)
 
 tr
+  +width(1060px, 1060px, 1060px)
+  overflow: hidden
 
 th
   +m-p-w-h-p-t-b-l-r-f("", 10px 10px 9px 0)
@@ -1033,11 +1032,11 @@ td
   +truncate
 
 tbody tr.field_bg
-  background-color: #f9f9f9
+  background-color: #F9F9F9
 
 /* Specific cell types to balance width - View Access Requests
 
-#access_requests
+#access_requests, #experiments
   th.firstname, td.firstname
     +width(140px, 140px, 140px)
   th.lastname, td.lastname
@@ -1047,6 +1046,8 @@ tbody tr.field_bg
   th.actions, td.actions
     +m-p-w-h-p-t-b-l-r-f("", 3px 0 0 0)
     +width(190px, 190px, 190px)
+  th.description, td.description
+    +width(520px, 520px, 520px)
 
 // BUTTONS - TABLE WHITE RED BLUE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -1088,12 +1089,18 @@ a.approve
     +border(1px, solid, $blue5)
     +gradient-blue-2
 
-// TABLES - ACTIVITY
+// !TABLES - ACTIVITY
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 table.activity, table.activity tbody
   +width(770px, 770px, 770px)
   overflow: hidden
+
+// !TABLES - EXPERIMENTS
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 // SCROLLING /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

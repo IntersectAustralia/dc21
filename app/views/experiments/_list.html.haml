@@ -9,13 +9,13 @@
   %table#experiments
     %tr
       %th.view View
-      %th Name
-      %th Parent
-      %th Description
+      %th.lastname Name
+      %th.lastname Parent
+      %th.description Description
 
     - experiments.each do |experiment|
       %tr
         %td.view= link_to '', facility_experiment_path(@facility, experiment), :class => "view", :id => "view_#{experiment.id}"
-        %td= experiment.name
-        %td= experiment.parent_name
-        %td= experiment.description
+        %td.lastname= experiment.name
+        %td.lastname= experiment.parent_name
+        %td.description= experiment.description
