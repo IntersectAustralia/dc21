@@ -289,8 +289,9 @@ input[type=textarea], input[type=text], input[type=password], input[type=search]
     +border(1px, solid, #3079ED)
     outline: none
 
-input[type=password]
-  +font("", "", 1.25em, 28px, $dark1)
+input[type=password], input[type=text]
+  //+m-p-w-h-p-t-b-l-r-f("", "", 400px)
+  +font("", "", 1rem, 28px, $dark1)
 
 textarea
   +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, "", 66px)

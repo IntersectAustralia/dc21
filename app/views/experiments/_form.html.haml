@@ -68,7 +68,7 @@
         %ul#for_codes_list
           - @experiment.experiment_for_codes.each_with_index do |code, index|
             %li
-              = code.name
+              %span= code.name
               = hidden_field_tag "for_codes[#{index}][url]", code.url
               = hidden_field_tag "for_codes[#{index}][name]", code.name
               = link_to "Delete", "#", :class => "delete_for_code"
@@ -150,10 +150,10 @@
       {
         var new_element = "<li>";
         var new_id  = new Date().getTime();
-        new_element += for_code_text;
+        new_element += "<span>" + for_code_text + "</span>";
         new_element += "<input type='hidden' name='for_codes[" + new_id + "][url]', value='" + for_code + "'/>";
         new_element += "<input type='hidden' name='for_codes[" + new_id + "][name]', value='" + for_code_text + "'/>";
-        new_element += "<a href='#' class='delete_for_code'>Delete</a>";
+        new_element += "<a href='#' class='delete_for_code'> Delete</a>";
         new_element += "</li>";
         $('#for_codes_list').append(new_element);
 

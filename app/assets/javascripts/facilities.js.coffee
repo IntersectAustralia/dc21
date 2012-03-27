@@ -26,8 +26,8 @@ jQuery ->
           ).appendTo('li#contact_' + contact_id)
 
 
-          $('li#contact_' + contact_id).append(contact_email)
-          $('li#contact_' + contact_id).append("<a href='#' class='delete_contact delete_link'>Delete</a>")
+          $('li#contact_' + contact_id).append('<span>' + contact_email + '</span>')
+          $('li#contact_' + contact_id).append("<a href='#' class='delete_contact delete_link'> Delete</a>")
 
           $('<span>').attr(
             name: 'remove_contact'

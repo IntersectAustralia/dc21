@@ -1,45 +1,50 @@
 = form_for(@facility) do |f|
+  - if edit_mode
+    %h2 Edit Facility
+  - else
+    %h2 New Facility
+
   .formerror= render "shared/error_messages", :target => @facility
   .control-group
-    %label.control-label{ :for => :name } Name:
+    %label.control-label{ :for => :name } Name
     .controls
       = required
       = f.text_field :name
   .control-group
-    %label.control-label Code:
+    %label.control-label Code
     .controls
       = required
       = f.text_field :code
   .control-group
-    %label.control-label Description:
+    %label.control-label Description
     .controls
       = f.text_area :description
   .control-group
     %label.control-label Location of Facility
     .controls
-      .record Point location or Top Left Corner of rectangle:
+      .record Point location or Top Left Corner of rectangle
   .control-group
-    %label.control-label Latitude:
+    %label.control-label Latitude
     .controls
       = f.text_field :a_lat, :placeholder => "Decimal, -90.0 to 90.0"
   .control-group
-    %label.control-label Longitude:
+    %label.control-label Longitude
     .controls
       = f.text_field :a_long, :placeholder => "Decimal, -180 to 180"
   .control-group
     %label.control-label Location of Facility
     .controls
-      .record Bottom Right Corner of rectangle:
+      .record Bottom Right Corner of rectangle
   .control-group
-    %label.control-label Latitude:
+    %label.control-label Latitude
     .controls
       = f.text_field :b_lat, :placeholder => "Decimal, -90.0 to 90.0"
   .control-group
-    %label.control-label Longitude:
+    %label.control-label Longitude
     .controls
       = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
   .control-group
-    %label.control-label Contacts:
+    %label.control-label Contacts
     .controls
       = required
       %span.input
@@ -55,8 +60,8 @@
           %li{:id => "contact_#{contact.id}"}
             = hidden_field_tag "contact_ids[]", contact.id
             = radio_button_tag "contact_primary", contact.id, :checked => true
-            = contact.email
-            = link_to "Delete", '#', :class => 'delete_contact delete_link pull-right'
+            %span= contact.email
+            = link_to "Delete", '#', :class => 'delete_contact delete_link'
 
         - if @facility.contacts.present?
           - @facility.contacts.each do |contact|
@@ -65,8 +70,8 @@
             %li{:id => "contact_#{contact.id}"}
               = hidden_field_tag "contact_ids[]", contact.id
               = radio_button_tag "contact_primary", contact.id
-              = contact.email
-              = link_to "Delete", '#', :class => 'delete_contact delete_link pull-right'
+              %span= contact.email
+              = link_to "Delete", '#', :class => 'delete_contact delete_link'
 
 
 
