@@ -7,12 +7,6 @@ Feature: Viewing metadata from toa5 files
     Given I am logged in as "georgina@intersect.org.au"
     And I have uploaded "toa5.dat"
 
-  Scenario: View on list page
-    When I am on the list data files page
-    Then I should see "exploredata" table with
-      | Filename | Added by                  | Start time          | End time            |
-      | toa5.dat | georgina@intersect.org.au | 2011-10-06  0:40:00 | 2011-11-03 11:55:00 |
-
   Scenario: View details
     When I am on the data file details page for toa5.dat
     Then I should see details displayed

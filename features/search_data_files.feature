@@ -11,15 +11,15 @@ Feature: Search data files by date range
       | Video |
       | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by               | start_time            | end_time               | file_processing_status | file_processing_description | tags         |
-      | mydata8.dat   | 08/11/2011 10:15 | georgina@intersect.org.au | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video |
-      | mydata7.dat   | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              |
-      | mydata6.dat   | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        |
-      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        |
-      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        |
-      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |
-      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |
-      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        | UNKNOWN                |                             |              |
+      | filename      | created_at       | uploaded_by               | start_time            | end_time               | file_processing_status | file_processing_description | tags         | experiment    |
+      | mydata8.dat   | 08/11/2011 10:15 | georgina@intersect.org.au | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | My Experiment |
+      | mydata7.dat   | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | My Experiment |
+      | mydata6.dat   | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | My Experiment |
+      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | My Experiment |
+      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | Other         |
+      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              | Experiment 2  |
+      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        | My Experiment |
+      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        | UNKNOWN                |                             |              | Experiment 2  |
     And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
     And file "mydata7.dat" has metadata item "station_name" with value "TC"
     And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
@@ -47,12 +47,12 @@ Feature: Search data files by date range
   Scenario: Search for files by date range - from date only
     When I do a date search for data files with dates "2010-06-11" and ""
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | datafile2.dat | 2011-11-30  8:45 | 2010-06-12  6:42:01 | 2010-06-30 18:05:23 |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
-      | datafile3.dat | 2010-01-30 10:15 | 2010-06-11  6:42:01 | 2010-06-30 18:05:23 |
+      | Filename      | Date added       | Experiment    |
+      | mydata6.dat   | 2011-12-30 10:15 | My Experiment |
+      | datafile5.dat | 2011-11-30 19:00 | My Experiment |
+      | datafile2.dat | 2011-11-30  8:45 | My Experiment |
+      | datafile4.dat | 2011-11-01 10:15 | Other         |
+      | datafile3.dat | 2010-01-30 10:15 | Experiment 2  |
     And the "from_date" field should contain "2010-06-11"
     And the "to_date" field should contain ""
     And I should see "Showing 5 matching files"
@@ -60,23 +60,23 @@ Feature: Search data files by date range
   Scenario: Search for files by date range - to date only
     When I do a date search for data files with dates "" and "2010-06-10"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
-      | mydata8.dat   | 2011-11-08 10:15 | 2010-05-01  6:42:01 | 2010-05-30 18:05:23 |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
+      | Filename      |
+      | mydata6.dat   |
+      | datafile5.dat |
+      | mydata7.dat   |
+      | mydata8.dat   |
+      | datafile4.dat |
     And the "from_date" field should contain ""
     And the "to_date" field should contain "2010-06-10"
 
   Scenario: Search for files by date range - from and to date
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     Then I should see "exploredata" table with
-      | Filename      | Date added       | Start time          | End time            |
-      | mydata6.dat   | 2011-12-30 10:15 | 2010-06-01  6:42:01 | 2010-06-11 18:05:23 |
-      | datafile5.dat | 2011-11-30 19:00 | 2010-06-01  6:42:01 | 2010-06-12 18:05:23 |
-      | mydata7.dat   | 2011-11-30 10:15 | 2010-06-01  6:42:01 | 2010-06-10 18:05:23 |
-      | datafile4.dat | 2011-11-01 10:15 | 2010-06-10  6:42:01 | 2010-06-30 18:05:23 |
+      | Filename      |
+      | mydata6.dat   |
+      | datafile5.dat |
+      | mydata7.dat   |
+      | datafile4.dat |
     And the "from_date" field should contain "2010-06-03"
     And the "to_date" field should contain "2010-06-10"
 
@@ -227,8 +227,8 @@ Feature: Search data files by date range
     And I check "PROCESSED"
     And I press "Search"
     Then I should see "exploredata" table with
-      | Filename    | Date added       | Added by                  | Start time         | End time            | Type |
-      | mydata8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | 2010-05-01 6:42:01 | 2010-05-30 18:05:23 | RAW  |
+      | Filename    | Date added       | Added by                  | Type | Experiment    |
+      | mydata8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | RAW  | My Experiment |
     And I should see "Showing 1 matching file"
 
   Scenario: Should be able to sort within search results
@@ -309,6 +309,7 @@ Feature: Search data files by date range
     Then the "Rainfall" checkbox should be checked
 
   @javascript @wip
+
   Scenario: Expanding a parent variable name should show the children
     Given I am on the list data files page
     And I click on "Variable:"

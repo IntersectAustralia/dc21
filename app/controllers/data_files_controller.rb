@@ -1,5 +1,7 @@
 class DataFilesController < ApplicationController
 
+  ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id)
+
   before_filter :authenticate_user!
   load_and_authorize_resource
   set_tab :home
@@ -150,10 +152,6 @@ class DataFilesController < ApplicationController
   def do_search(search_params)
     @search = DataFileSearch.new(search_params)
 
-    # prefix the sort column with the table name so we don't get ambiguity errors when doing joins
-    col = sort_column
-    col = "data_files.#{col}" unless col.index(".")
-    @data_files = DataFile.joins(:created_by).order(col + ' ' + sort_direction)
     @data_files = @search.do_search(@data_files)
 
     @from_date = @search.search_params[:from_date]
@@ -165,6 +163,20 @@ class DataFilesController < ApplicationController
     @description = @search.description
     @selected_stati = @search.stati
     @selected_tags = @search.tags
+
+    # apply any sorting to the scope we've built up so far
+    # prefix the sort column with the table name so we don't get ambiguity errors when doing joins
+    col = sort_column
+    col = "data_files.#{col}" unless col.index(".")
+    if col == "users.email"
+      @data_files = @data_files.joins(:created_by).order(col + ' ' + sort_direction)
+    elsif col == "data_files.experiment_id"
+      # do experiment sorting in memory, since its too hard to do in the database with "Other" being -1
+      @data_files = @data_files.sort_by(&:experiment_name)
+      @data_files = @data_files.reverse if sort_direction == "desc"
+    else
+      @data_files = @data_files.order(col + ' ' + sort_direction)
+    end
 
     if @search.error
       flash.now[:alert] = @search.error
@@ -189,11 +201,7 @@ class DataFilesController < ApplicationController
   end
 
   def sort_column
-    if params[:sort] == "users.email"
-      "users.email"
-    else
-      @data_files.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
-    end
+    ALLOWED_SORT_PARAMS.include?(params[:sort]) ? params[:sort] : "data_files.created_at"
   end
 
   def sort_direction

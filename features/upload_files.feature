@@ -86,14 +86,14 @@ Feature: Upload files
     And file "sample1.txt" should have description "My descriptive description"
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Type |
-      | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
+      | Filename    | Added by                    | Type |
+      | sample1.txt | researcher@intersect.org.au | RAW  |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Type | RAW                        |
-      | Description       | My descriptive description |
-      | Experiment        | My Experiment              |
-      | Tags              | Gap-Filled\n\nPhoto        |
+      | Type        | RAW                        |
+      | Description | My descriptive description |
+      | Experiment  | My Experiment              |
+      | Tags        | Gap-Filled\n\nPhoto        |
 
   Scenario: Upload a single file with no tags or description
     Given I am on the upload page
@@ -111,14 +111,14 @@ Feature: Upload files
     And file "sample1.txt" should have experiment "My Experiment"
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Start time | End time | Type |
-      | sample1.txt | researcher@intersect.org.au |            |          | RAW               |
+      | Filename    | Added by                    | Type |
+      | sample1.txt | researcher@intersect.org.au | RAW  |
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Type | RAW           |
-      | Description       |               |
-      | Experiment        | My Experiment |
-      | Tags              |               |
+      | Type        | RAW           |
+      | Description |               |
+      | Experiment  | My Experiment |
+      | Tags        |               |
 
   Scenario: Upload multiple files
     Given pending
@@ -134,14 +134,14 @@ Feature: Upload files
     Then I should be on the home page
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename                   | Added by                    | Start time          | End time            | Type |
-      | weather_station_15_min.dat | researcher@intersect.org.au | 2011-10-10  0:00:00 | 2011-10-12 23:45:00 | RAW               |
+      | Filename                   | Added by                    | Type |
+      | weather_station_15_min.dat | researcher@intersect.org.au | RAW  |
     And I follow the view link for data file "weather_station_15_min.dat"
     Then I should see details displayed
-      | Type | RAW                          |
-      | Description       | I'm changing the description |
-      | Experiment        | Flux Experiment 1            |
-      | Tags              | Gap-Filled\n\nPhoto          |
+      | Type        | RAW                          |
+      | Description | I'm changing the description |
+      | Experiment  | Flux Experiment 1            |
+      | Tags        | Gap-Filled\n\nPhoto          |
 
 
   Scenario: Modify and save metadata after uploading (multiple files)
