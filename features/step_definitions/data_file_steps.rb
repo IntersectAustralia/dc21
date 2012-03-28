@@ -239,7 +239,7 @@ end
 Then /^the uploaded files display should include "([^"]*)" with messages "([^"]*)"$/ do |filename, message_codes|
   with_scope("the file area for '#{filename}'") do
     page.should have_content(filename)
-    messages = all("ul.alert li").collect(&:text)
+    messages = all("ul li.alert").collect(&:text)
     expected_messages = message_codes.split(",")
 
     messages.size.should eq(expected_messages.size), "Expected #{expected_messages.size} messages, found #{messages.size}. Messages were #{messages}."

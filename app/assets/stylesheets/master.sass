@@ -271,7 +271,7 @@ li
   +inlineblock
 
 label
-  +m-p-w-h-p-t-b-l-r-f(0 0 0 0, 10px 16px 10px 10px, 150px)
+  +m-p-w-h-p-t-b-l-r-f(0 0 0 0, 10px 16px 10px 0, 150px)
   +inlineblock
   +font("", bold, 1em, 18px)
   text-align: right
@@ -383,14 +383,18 @@ input[type="hidden"]
   display: none
 
 .radio, .checkbox
-  +m-p-w-h-p-t-b-l-r-f(0 0 0 18px)
+  +m-p-w-h-p-t-b-l-r-f(0 0 5px 0, 5px 0 0 0, auto)
+  text-align: left
+  display: block
+  label
+    +m-p-w-h-p-t-b-l-r-f(0, 3px 0 0 18px, auto)
+    +font("", normal, "", "", "", "", left)
 
 .radio input[type="radio"], .checkbox input[type="checkbox"]
-  +m-p-w-h-p-t-b-l-r-f("", 0 0 0 -18px)
   float: left
 
 .controls > .radio:first-child, .controls > .checkbox:first-child
-  +m-p-w-h-p-t-b-l-r-f("", 0 5px 0 0)
+  +m-p-w-h-p-t-b-l-r-f("", 5px 5px 0 0)
 
 .radio.inline, .checkbox.inline
   +m-p-w-h-p-t-b-l-r-f(0, 0 5px 0 0)
@@ -638,7 +642,7 @@ ul
   right: -21px
   line-height: 18px
 
-.alert-success
+.alert-success, alert.success
   background-color: #DFF0D8
   border-color: #D6E9C6
   color: #468847
