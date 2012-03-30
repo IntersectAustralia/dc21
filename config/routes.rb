@@ -6,6 +6,9 @@ Dc21app::Application.routes.draw do
     put "/users/update_password", :to => "user_registers#update_password" #allow users to edit their own password
   end
 
+  get "/data_files/search" => "data_files#index" #to stop weird errors when visiting via get
+
+
   resources :users, :only => [:show] do
     collection do
       get :access_requests
@@ -39,6 +42,7 @@ Dc21app::Application.routes.draw do
       get :build_download
       get :custom_download
       put :bulk_update
+      post :search
     end
   end
 

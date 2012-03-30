@@ -30,3 +30,16 @@ jQuery ->
     else
       $(this).text("+")
     false
+
+  $(".sort_link").click (e) ->
+        direction = $(this).data("direction")
+        sort = $(this).data("sort")
+
+        if $("#sort").val() != sort
+          direction = "asc"
+
+        $("input#direction").val(direction)
+        $("input#sort").val(sort)
+        $("form#search_form").submit()
+
+        e.preventDefault()

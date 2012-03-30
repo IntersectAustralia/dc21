@@ -27,7 +27,9 @@
 
 .facetedsearch.search
   .searchbox
-    = form_tag(data_files_path, :method => :get) do
+    = form_tag(search_data_files_path, :id => "search_form") do
+      =hidden_field_tag "direction", sort_direction
+      =hidden_field_tag "sort", sort_column
       .searchcategory
         %h4#date.expand Date:
         .date

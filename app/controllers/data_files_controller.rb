@@ -16,6 +16,12 @@ class DataFilesController < ApplicationController
     do_search(params[:search])
   end
 
+  def search
+    set_tab :explore, :contentnavigation
+    do_search(params[:search])
+    render :index
+  end
+
   def show
     set_tab :explore, :contentnavigation
     @column_mappings = ColumnMapping.all
