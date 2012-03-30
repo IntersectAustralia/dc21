@@ -25,6 +25,7 @@ Feature: View the list of data files
   Scenario: Must be logged in to view the list
     Then users should be required to login on the list data files page
 
+  @javascript
   Scenario: Sort the list of files by filename
     Given I have data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |
@@ -42,6 +43,7 @@ Feature: View the list of data files
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | UNKNOWN | Other         |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW     | My Experiment |
 
+  @javascript
   Scenario: Sort the list of files by created at
     Given I have data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |
@@ -59,6 +61,7 @@ Feature: View the list of data files
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
 
+  @javascript
   Scenario: Sort the list of files by uploader
     Given I have data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |
@@ -76,6 +79,7 @@ Feature: View the list of data files
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
 
+  @javascript
   Scenario: Sort the list of files by status
     Given I have data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |
@@ -93,6 +97,7 @@ Feature: View the list of data files
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
       | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
 
+  @javascript
   Scenario: Sort the list of files by experiment
     Given I have data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |

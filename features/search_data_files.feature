@@ -225,14 +225,20 @@ Feature: Search data files by date range
     And I check "Rainfall"
     And I check "RAW"
     And I check "PROCESSED"
-    And I press "Search"
+    And I press "Update Search Results"
+
+#    And I press "Search"
     Then I should see "exploredata" table with
       | Filename    | Date added       | Added by                  | Type | Experiment    |
       | mydata8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | RAW  | My Experiment |
     And I should see "Showing 1 matching file"
 
+  @javascript
   Scenario: Should be able to sort within search results
-    When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
+    Given I am on the list data files page
+    When I click on "Date:"
+    And I fill in date search details between "2010-06-03" and "2010-06-10"
+    And I press "Update Search Results"
     And I follow "Filename"
     Then I should see "exploredata" table with
       | Filename      |
