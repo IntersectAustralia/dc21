@@ -204,6 +204,15 @@ When /^(?:|I )select "([^"]*)" to upload$/ do |path|
   find(:xpath, XPath::HTML.file_field(locator), :message => msg).set(files)
 end
 
+When /^(?:|I )select "([^"]*)" to upload with "([^"]*)"$/ do |path, locator|
+  files = path.split(",").collect { |filename| File.expand_path(filename.strip) }.join(",")
+
+  #msg = "cannot attach file, no file field with id, name, or label '#{locator}' found"
+  #find(:xpath, XPath::HTML.file_field(locator), :message => msg).set(files)
+
+  page.attach_file(locator, files.first)
+end
+
 Then /^the uploaded files display should include "([^"]*)" with file type "([^"]*)"$/ do |filename, type|
   with_scope("the file area for '#{filename}'") do
     page.should have_content(filename)

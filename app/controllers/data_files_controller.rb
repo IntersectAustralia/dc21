@@ -39,7 +39,18 @@ class DataFilesController < ApplicationController
   end
 
   def create
-    files = params[:files]
+
+
+    params[:files].each do |file_group|
+      all_files << file_group
+    end
+
+    # collect all files
+    #concat to one array
+    # continue as normal
+
+    files = all_files
+
     experiment_id = params[:experiment_id]
     description = params[:description]
     type = params[:file_processing_status]

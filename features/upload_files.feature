@@ -21,8 +21,14 @@ Feature: Upload files
       | Video      |
       | Gap-Filled |
 
+  @javascript
   Scenario: Additional file select box appears after previous one is used
-    Given pending
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    And I select "samples/sample1.txt" to upload with "files_field"
+    Then I should see "files_field_2"
 
   Scenario: Try to upload without selecting any files
     Given I am on the upload page
