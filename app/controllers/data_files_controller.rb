@@ -41,6 +41,7 @@ class DataFilesController < ApplicationController
   def create
 
 
+    all_files = []
     params[:files].each do |file_group|
       all_files << file_group
     end
