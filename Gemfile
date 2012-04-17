@@ -37,7 +37,7 @@ gem "decent_exposure"
 group :development, :test do
   gem "rspec-rails"
   gem "factory_girl_rails", :require => false
-  gem "shoulda"
+  gem "shoulda-matchers"
 
   # cucumber gems
   gem "email_spec"
@@ -47,7 +47,7 @@ group :development, :test do
   gem "database_cleaner"
   gem 'spork', '~> 0.9.0.rc'
   gem "launchy"    # So you can do Then show me the page
-  gem "ruby-debug19"
+  gem "debugger"
 end
 
 group :development do
