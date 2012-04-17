@@ -8,8 +8,6 @@
       = render :partial => 'account_details', :locals  => {:f => f}
       .form-actions
         .actions-pre
-          .cancelbutton
-            %span
-            = link_to 'Cancel', root_path, :class => "cancelbutton"
+          = cancel_button 'Cancel', root_path
         .actions
           = f.submit "Submit Request", :class => ""

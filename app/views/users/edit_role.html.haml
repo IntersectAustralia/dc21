@@ -8,8 +8,8 @@
       = f.label :role_id, "Role:"
       %span.input
         = f.collection_select(:role_id, @roles, :id, :name, {:include_blank => ""})
-    .actions
-      .cancelbutton
-        %span
-        = link_to 'Back', @user, :class => "cancelbutton"
-      = f.submit "Save", :class => "floatright"
+    .form-actions
+      .actions-pre
+        = cancel_button 'Back', @user
+      .actions
+        = f.submit "Save"

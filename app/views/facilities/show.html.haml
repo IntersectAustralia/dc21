@@ -16,9 +16,7 @@
 
   .form-actions
     .actions-pre
-      .cancelbutton
-        %span
-        = link_to 'Back', facilities_path, :class => "cancelbutton"
+      = cancel_button 'Back', facilities_path
     .actions
       = link_to "Edit Facility", edit_facility_path, :class => "bluebutton"
 

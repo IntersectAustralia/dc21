@@ -22,9 +22,7 @@
           = link_to "Reject", reject_user_path(@user), :method => :put, :class => "redbutton"
         - if can?(:approve, @user) then
           = link_to "Approve", edit_approval_user_path(@user), :method => :get, :class => "bluebutton"
-      .cancelbutton
-        %span
-        = link_to 'Back', access_requests_users_path, :class => "cancelbutton"
+      = cancel_button 'Back', access_requests_users_path
 
     - if @user.approved?
       .floatright
@@ -35,9 +33,7 @@
             = link_to "Deactivate", deactivate_user_path(@user), :confirm => "This is the user you are currently logged in as. Are you sure you want to deactivate it?" , :method => :put, :class => "redbutton"
           - else
             = link_to "Deactivate", deactivate_user_path(@user), :method => :put, :class => "redbutton"
-      .cancelbutton
-        %span
-        = link_to 'Back', users_path, :class => "cancelbutton"
+      = cancel_button 'Back', users_path
 
     - if @user.deactivated?
       .floatright
@@ -45,7 +41,5 @@
           = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
         - if can?(:activate, User)
           = link_to "Activate", activate_user_path(@user), :method => :put, :class => "bluebutton"
-      .cancelbutton
-        %span
-        = link_to 'Back', users_path, :class => "cancelbutton"
+      = cancel_button 'Back', users_path
 

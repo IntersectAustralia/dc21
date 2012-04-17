@@ -1,4 +1,3 @@
-
 = form_for [@facility, @experiment] do |f|
   - if @experiment.new_record?
     %h2 New Experiment
@@ -74,9 +73,7 @@
               = link_to "Delete", "#", :class => "delete_for_code"
   .form-actions
     .actions-pre
-      .cancelbutton
-        %span
-        = link_to 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment)), :class => "cancelbutton"
+      = cancel_button 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment))
     .actions
       = f.submit 'Save Experiment', :class => ""
 

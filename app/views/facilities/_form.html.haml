@@ -79,15 +79,11 @@
   .form-actions
     - if edit_mode
       .actions-pre
-        .cancelbutton
-          %span
-          = link_to 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
+        = cancel_button 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
       .actions
         = f.submit "Update", :class => ""
     -else
       .actions-pre
-        .cancelbutton
-          %span
-          = link_to 'Cancel', facilities_path, :class => "cancelbutton"
+        = cancel_button 'Cancel', facilities_path, :class => "cancelbutton"
       .actions
         = f.submit "Save Facility", :class => ""

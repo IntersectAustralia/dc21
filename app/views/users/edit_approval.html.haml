@@ -7,8 +7,8 @@
     .rowfield
       = f.label :role_id, "Role"
       = f.collection_select(:role_id, @roles, :id, :name, {:include_blank => ""})
-    .actions
-      .cancelbutton
-        %span
-        = link_to 'Back', access_requests_users_path, :class => "cancelbutton"
-      = f.submit("Approve")
+    .form-actions
+      .actions-pre
+        = cancel_button 'Back', access_requests_users_path
+      .actions
+        = f.submit("Approve")
