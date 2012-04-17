@@ -22,6 +22,7 @@ Feature: Upload files
       | Gap-Filled |
 
   @wip @javascript
+
   Scenario: Additional file select box appears after previous one is used
     Given I am on the upload page
     When I select "RAW" from "File type"
@@ -212,3 +213,7 @@ Feature: Upload files
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
       | Experiment | Other |
+
+
+  Scenario: Provide Metadata for uploaded non-toa5 files
+  pending
