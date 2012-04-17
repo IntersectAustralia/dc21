@@ -81,6 +81,9 @@ module NavigationHelpers
         param = ExperimentParameter.find_by_parameter_category_id!(ParameterCategory.find_by_name!($1))
         edit_facility_experiment_experiment_parameter_path(param.experiment.facility, param.experiment, param)
 
+      # Publish paths
+      when /the publish page/
+        new_from_search_published_collections_path
 
       else
         begin

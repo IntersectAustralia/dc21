@@ -9,7 +9,6 @@
     = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
 
 .datacontroll
-  -#%h3.filter No filters set
   - if @data_files.empty? || !@search.showing_all?
     = link_to "Clear Search", data_files_path, class: "btn pull-left"
   .data-results
@@ -24,6 +23,8 @@
 
     #downloadtoggle.download.whitebutton
       %span= link_to 'Download Files'
+    .whitebutton
+      %span= link_to 'Publish', '#', id: :publish_button
 
 .facetedsearch.search
   .searchbox

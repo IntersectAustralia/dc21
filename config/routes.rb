@@ -66,6 +66,13 @@ Dc21app::Application.routes.draw do
     end
   end
 
+  resources :published_collections, :only => [:create] do
+    collection do
+      post :new_from_search
+    end
+  end
+
+
   root :to => "pages#home"
 
   # The priority is based upon order of creation:

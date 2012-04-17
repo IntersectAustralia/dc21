@@ -46,6 +46,7 @@ class Ability
     can :manage, Experiment
     can :manage, ExperimentParameter
     can :manage, ColumnMapping
+    can :manage, PublishedCollection
 
     # all users can read and add data files, and can delete their own. This *could* be expressed more simply,
     #   but shouldn't until we actually have explicitly defined permissions and roles

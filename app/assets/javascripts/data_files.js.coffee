@@ -59,3 +59,8 @@ jQuery ->
       "</div>"
 
       $("#files_input").append(html)
+
+  $('#publish_button').click (e) ->
+    $("#search_form").attr("action", "/published_collections/new_from_search");
+    $('#search_form').submit()
+    e.preventDefault();

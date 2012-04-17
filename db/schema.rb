@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120322011344) do
+ActiveRecord::Schema.define(:version => 20120417020505) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -144,6 +144,15 @@ ActiveRecord::Schema.define(:version => 20120322011344) do
 
   create_table "parameter_units", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "published_collections", :force => true do |t|
+    t.string   "name"
+    t.integer  "created_by_id"
+    t.string   "rif_cs_file_path"
+    t.string   "zip_file_path"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
