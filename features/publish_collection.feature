@@ -20,9 +20,9 @@ Feature: Publish a collection
     Then I should be on the home page
     And there should be a published collection record named "My Collection Of Stuff" with creator "georgina@intersect.org.au"
     And I should see "Your collection has been successfully submitted for publishing."
-    #And the RIF-CS file for the latest published collection should match "samples/rif-cs/range_oct_10_oct_15.xml"
-    When I perform a GET for the zip file for the latest published collection
-    Then I should receive a zip file matching "samples/subsetted/range_oct_10_oct_15"
+    And the RIF-CS file for the latest published collection should match "samples/rif-cs/range_oct_10_oct_15.xml"
+    #When I perform a GET for the zip file for the latest published collection
+    #Then I should receive a zip file matching "samples/subsetted/range_oct_10_oct_15"
 
   Scenario: RIF-CS and zip file are snapshots at the point in time where the collection was published
     # TODO: publish a collection, then change some metadata / add more files, check that RIFCS and zip doesn't change
