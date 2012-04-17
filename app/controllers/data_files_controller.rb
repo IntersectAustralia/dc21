@@ -41,16 +41,8 @@ class DataFilesController < ApplicationController
   def create
 
 
-    all_files = []
-    params[:files].each do |file_group|
-      all_files << file_group
-    end
-
-    # collect all files
-    #concat to one array
-    # continue as normal
-
-    files = all_files
+    files = []
+    params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
 
     experiment_id = params[:experiment_id]
     description = params[:description]

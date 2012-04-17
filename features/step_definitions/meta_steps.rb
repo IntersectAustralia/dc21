@@ -18,3 +18,8 @@ Given /^The processing metadata is set for files as follows:$/ do |table|
   step 'I fill in the processing metadata fields for the following files', table
   step 'I press "Done"'
 end
+
+
+Given /^pending$/ do
+  pending # express the regexp above with the code you wish you had
+end
