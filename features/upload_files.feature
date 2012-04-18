@@ -216,4 +216,36 @@ Feature: Upload files
 
 
   Scenario: Provide Metadata for uploaded non-toa5 files
-  pending
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    Then I should be on the data files page
+    And I should see "Experiment" for file "sample1.txt"
+    And I should see "Description" for file "sample1.txt"
+    And I should see "Start Time" for file "sample1.txt"
+    And I should see "End Time" for file "sample1.txt"
+
+  Scenario: Provide Metadata for uploaded non-toa5 files
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    Then I should be on the data files page
+
+    And I fill in "2010-06-03" for "Start Time"
+    And I fill in "2010-06-10" for "End Time"
+    And I press "Update"
+    Then I should be on the home page
+    And the most recent file should have name "sample1.txt"
+
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Start Time | 2010-06-03 |
+      | End Time | 2010-06-10 |
