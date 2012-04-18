@@ -1,20 +1,10 @@
 Then /^I should receive a zip file matching "([^"]*)"$/ do |directory|
   #saves the latest response, unzips it, then compares with a pre-defined directory of files that match what you expect the zip to contain
+  compare_zip_to_expected_files(page.source, directory)
+end
 
-  tempfile = Tempfile.new(["temp_file", ".zip"])
-  tempfile.close
-  zip = File.open(tempfile.path, "wb")
-  zip.write(page.source)
-
-  temp_dir = Dir.mktmpdir
-
-  downloaded_files = {}
-  Zip::ZipFile.foreach(zip.path) do |file|
-    path = File.join(temp_dir, file.name)
-    file.extract(path)
-    downloaded_files[file.name] = path
-  end
-
+def compare_zip_to_expected_files(response_source, directory)
+  downloaded_files = save_response_as_zip_and_unpack(response_source)
   expected_files = Dir.glob(File.join(Rails.root, directory, "/*"))
 
   downloaded_files.size.should eq(expected_files.size)
@@ -27,4 +17,21 @@ Then /^I should receive a zip file matching "([^"]*)"$/ do |directory|
     end
   end
 
+end
+def save_response_as_zip_and_unpack(response_source)
+  tempfile = Tempfile.new(["temp_file", ".zip"])
+  tempfile.close
+  zip = File.open(tempfile.path, "wb")
+  zip.write(response_source)
+  zip.close
+  temp_dir = Dir.mktmpdir
+
+  downloaded_files = {}
+  Zip::ZipFile.foreach(zip.path) do |file|
+    path = File.join(temp_dir, file.name)
+    file.extract(path)
+    downloaded_files[file.name] = path
+  end
+
+  downloaded_files
 end

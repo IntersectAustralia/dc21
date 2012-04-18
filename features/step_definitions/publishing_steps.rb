@@ -31,3 +31,12 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
   end
   diff.should == {}
 end
+
+When /^I perform a GET for the zip file for the latest published collection I should get a zip matching "([^"]*)"$/ do |directory_to_match|
+  pc = PublishedCollection.last
+
+  url = published_collection_path(pc, format: :zip)
+  response = get url
+
+  compare_zip_to_expected_files(response.body, directory_to_match)
+end

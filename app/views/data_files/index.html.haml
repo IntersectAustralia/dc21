@@ -23,8 +23,9 @@
 
     #downloadtoggle.download.whitebutton
       %span= link_to 'Download Files'
-    .whitebutton
-      %span= link_to 'Publish', '#', id: :publish_button
+    - unless @data_files.empty?
+      .whitebutton
+        %span= link_to 'Publish', '#', id: :publish_button
 
 .facetedsearch.search
   .searchbox

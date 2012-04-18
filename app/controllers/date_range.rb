@@ -20,6 +20,10 @@ class DateRange
     check_from_date_is_before_to_date
   end
 
+  def blank?
+    self.from_date.nil? && self.to_date.nil?
+  end
+
   def valid?
     self.error.nil?
   end

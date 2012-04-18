@@ -66,7 +66,7 @@ Dc21app::Application.routes.draw do
     end
   end
 
-  resources :published_collections, :only => [:create] do
+  resources :published_collections, :only => [:create, :show] do
     collection do
       post :new_from_search
     end

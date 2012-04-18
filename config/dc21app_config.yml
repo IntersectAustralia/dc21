@@ -3,6 +3,8 @@ defaults: &defaults
   account_request_user_status_email_sender: account-status@intersect.org.au
   account_request_admin_notification_sender: account-request@intersect.org.au
   files_root: /data/dc21-data
+  published_zip_files_directory: /data/dc21-data/published_zip_files
+  published_rif_cs_directory: /data/dc21-data/published_rif_cs
   column_mappings: &column_mappings
     - Timestamp
     - Record
@@ -25,6 +27,8 @@ development:
 test:
   <<: *defaults
   files_root: /tmp
+  published_zip_files_directory: /tmp/published_zip_files
+  published_rif_cs_directory: /tmp/published_rif_cs
 
 production:
   <<: *defaults
