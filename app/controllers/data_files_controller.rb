@@ -39,8 +39,6 @@ class DataFilesController < ApplicationController
   end
 
   def create
-
-
     files = []
     params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
 
@@ -123,24 +121,14 @@ class DataFilesController < ApplicationController
       return
     end
 
-    temp_dir = Dir.mktmpdir
-    paths = []
-    @files.each do |file|
-      if file.has_data_in_range?(date_range.from_date, date_range.to_date)
-        paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, @from_date, @to_date)
-      end
+    success = CustomDownloadBuilder.subsetted_zip_for_files(@files, date_range, @from_date, @to_date) do |zip_file|
+      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "custom_download.zip"
     end
 
-    if paths.empty?
+    unless success
       flash.now[:alert] = "There is no data available for the date range you entered."
       render :build_download
-      return
     end
-
-    zip_file = Tempfile.new("temp_file")
-    ZipBuilder.build_zip(zip_file, paths)
-    send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "custom_download.zip"
-    zip_file.close
   end
 
   def destroy
@@ -224,12 +212,9 @@ class DataFilesController < ApplicationController
   end
 
   def send_zip(ids)
-    file_paths = DataFile.find(ids).collect(&:path)
-
-    zip_file = Tempfile.new("temp_file")
-    ZipBuilder.build_zip(zip_file, file_paths)
-    send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
-    zip_file.close
+    CustomDownloadBuilder.zip_for_files_with_ids(ids) do |zip_file|
+      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+    end
   end
 
 end
