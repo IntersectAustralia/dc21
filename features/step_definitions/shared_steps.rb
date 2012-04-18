@@ -77,6 +77,18 @@ Then /^I should not see link "([^"]*)"$/ do |text|
   page.should_not have_link(text)
 end
 
+
+Then /^I should see element with id "([^"]*)"$/ do |arg1|
+  field = find_by_id(arg1)
+  field.should_not be_nil
+end
+
+Then /^I should not see element with id "([^"]*)"$/ do |arg1|
+  field = find_by_id(arg1)
+  field.should be_nil
+end
+
+
 Then /^I should see link "([^\"]*)" within "([^\"]*)"$/ do |text, scope|
   with_scope(scope) do
     page.should have_link(text)

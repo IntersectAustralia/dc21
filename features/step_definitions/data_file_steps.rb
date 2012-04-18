@@ -341,12 +341,12 @@ Then /^I should see "([^"]*)" for file "([^"]*)"$/ do |field, file|
 
 end
 
+Then /^I should not see "([^"]*)" for file "([^"]*)"$/ do |field, file|
+  file_obj = DataFile.find_by_filename(file)
+  field_id = "file_#{file_obj.id}_#{field.downcase.gsub(/\s/, '_')}"
+  step "I should not see element with id \"#{field_id}\""
 
-Then /^I should see element with id "([^"]*)"$/ do |arg1|
-  field = find_by_id(arg1)
-  field.should_not be_nil
 end
-
 
 def upload(file, type, description, experiment, tags)
   visit(path_to("the upload page"))
