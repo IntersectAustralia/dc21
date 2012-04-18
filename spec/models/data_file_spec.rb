@@ -8,6 +8,24 @@ describe DataFile do
     it { should validate_presence_of(:file_processing_status) }
     it { should validate_presence_of(:experiment_id) }
     it { should ensure_length_of(:file_processing_description).is_at_most(255) }
+    it 'ensures a start time, but only if end_time specified' do
+      now = DateTime.now
+      file = Factory(:data_file)
+      file.end_time = now
+      file.should_not be_valid
+
+      file.start_time = now
+      file.should be_valid
+    end
+    it 'ensures end time is >= start time' do
+      now = DateTime.now
+      file = Factory(:data_file)
+
+      file.start_time = now
+      file.end_time = now -1
+
+      file.should_not be_valid
+    end
   end
 
   describe "Associations" do
@@ -387,53 +405,6 @@ describe DataFile do
       old_path.should_not exist
       new_path.should exist
     end
-  end
-
-  describe "Providing metadata for non-toa5 files" do
-    it "accepts manual metadata for non-toa5 files" do
-      pending
-
-      #This was copied from a spec below (overlaps->toa5 vs other formats).
-      #It's not going to do what we want, it just has a few useful
-      #setup lines that can be copied into this spec
-
-
-      #txt = Factory :data_file, :format => nil
-      #jpg = Factory :data_file, :format => nil
-      #toa = Factory :data_file, :format => FileTypeDeterminer::TOA5
-      #
-      #station_name = 'station_name'
-      #table_name = 'table_name'
-      #
-      #[txt, jpg, toa].each do |file|
-      #  file.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
-      #  file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
-      #end
-    end
-
-    it "should have the minimum required metadata for non-toa5 files" do
-      pending
-
-      #this might belong with the validations above, haven't checked. just transcribing the story.
-
-      #Processing status
-      #Experiment that produced this dataset
-      #start time.
-    end
-
-    it "should only have metadata relevant to non-toa5 files" do
-      pending
-      #processing status
-      # experiment that produced this dataset
-      # description
-      # tags
-
-      #start time
-      # end time
-
-    end
-
-
   end
 
   describe "Deleting Files/data" do

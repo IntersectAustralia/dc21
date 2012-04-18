@@ -20,6 +20,8 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :file_processing_status
   validates_presence_of :experiment_id
   validates_length_of :file_processing_description, :maximum => 255
+  validates_presence_of :start_time, :if => :end_time?
+  validate :end_time_not_before_start_time
 
   scope :most_recent_first, order("created_at DESC")
 # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
@@ -205,6 +207,13 @@ class DataFile < ActiveRecord::Base
   end
 
   private
+
+  def end_time_not_before_start_time
+    return true unless start_time.present? && end_time.present?
+    errors.add(:end_time, "cannot be before start time") unless self.start_time <= self.end_time
+
+  end
+
 
   def candidate_overlaps(files)
     # filters given files for files which might be "overwritable"

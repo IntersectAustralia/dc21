@@ -61,12 +61,18 @@ class DataFilesController < ApplicationController
   end
 
   def bulk_update
+    successful_update = true
     params[:files].each do |id, attrs|
       file = DataFile.find(id)
-      file.update_attributes(attrs)
+      successful_update &= file.update_attributes(attrs)
     end
 
-    redirect_to root_path, :notice => "File metadata updated successfully"
+    if successful_update
+      redirect_to root_path, :notice => "File metadata updated successfully"
+    else
+      render :create
+    end
+
   end
 
   def download
