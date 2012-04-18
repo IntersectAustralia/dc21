@@ -52,6 +52,9 @@ module NavigationHelpers
       when /the upload page/
         new_data_file_path
 
+      when /the bulk update page/
+        bulk_update_data_files_path
+
       when /the set data file status page/
         list_for_post_processing_data_files_path
 
