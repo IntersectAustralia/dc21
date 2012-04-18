@@ -263,7 +263,7 @@ Feature: Upload files
       | End Time | 2010-06-10 |
 
     
-  Scenario: Start time is required for non-toa5 files
+  Scenario: Start time is required if end time specified
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -273,12 +273,13 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
+    And I fill in "2010-06-10" for "End Time"
     And I press "Update"
     Then I should be on the data files page
-    And I should see "Start Time is required"
+    And I should see "Start Time is required if End Time specified"
 
 
-  Scenario: End time not required
+  Scenario: End time not required with start time
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -297,4 +298,20 @@ Feature: Upload files
     Then I should see details displayed
       | Start Time | 2010-06-03 |
 
-    
+  Scenario: Neither start time nor end time required for non-toa5 files
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    Then I should be on the data files page
+
+    And I press "Update"
+    Then I should be on the home page
+    And the most recent file should have name "sample1.txt"
+
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Start Time | Unknown       |

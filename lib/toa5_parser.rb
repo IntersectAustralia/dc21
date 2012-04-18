@@ -45,10 +45,13 @@ class Toa5Parser
 
     if data_line_1
       start_time = Toa5Utilities.extract_time_from_data_line(data_line_1, delimiter)
-      attrs[:start_time] = start_time if start_time
-      attrs[:interval] = Toa5Utilities.extract_time_from_data_line(data_line_2, delimiter) - start_time if (data_line_2 && start_time)
+      if start_time
+        attrs[:start_time] = start_time
+        attrs[:interval] = Toa5Utilities.extract_time_from_data_line(data_line_2, delimiter) - start_time if data_line_2
+        attrs[:end_time] = Toa5Utilities.extract_time_from_data_line(last_line, delimiter) if last_line
+      end
+
     end
-    attrs[:end_time] = Toa5Utilities.extract_time_from_data_line(last_line, delimiter) if last_line
 
     return attrs
   end
