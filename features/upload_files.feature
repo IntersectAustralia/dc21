@@ -226,8 +226,8 @@ Feature: Upload files
     Then I should be on the data files page
     And I should see "Experiment" for file "sample1.txt"
     And I should see "Description" for file "sample1.txt"
-    And I should see "Start Time" for file "sample1.txt"
-    And I should see "End Time" for file "sample1.txt"
+    And I should see "start_time" for file "sample1.txt"
+    And I should see "end_time" for file "sample1.txt"
 
   Scenario: Non-toa5 metadata fields should not appear for toa5 files in bulk update
     Given I am on the upload page
@@ -235,11 +235,10 @@ Feature: Upload files
     And I select "My Experiment" from "Experiment"
     And I fill in "Description" with "My descriptive description"
     And I select "samples/toa5.dat" to upload
-    And I check "Photo"
     And I press "Upload"
     Then I should be on the data files page
-    And I should not see "Start Time" for file "toa5.dat"
-    And I should not see "End Time" for file "toa5.dat"
+    And I should not see "start_time" for file "toa5.dat"
+    And I should not see "end_time" for file "toa5.dat"
 
   Scenario: Provide Metadata for uploaded non-toa5 files
     Given I am on the upload page
@@ -251,19 +250,19 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
-    And I fill in "2010-06-03" for "Start Time"
-    And I fill in "2010-06-10" for "End Time"
+    And I fill in "2010-06-03" for "Start Date"
+    And I fill in "2010-06-10" for "End Date"
     And I press "Update"
     Then I should be on the home page
     And the most recent file should have name "sample1.txt"
 
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Start Time | 2010-06-03 |
-      | End Time | 2010-06-10 |
+      | Start date | 2010-06-03 |
+      | End date | 2010-06-10 |
 
     
-  Scenario: Start time is required if end time specified
+  Scenario: Start Date is required if end Date specified
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -273,13 +272,13 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
-    And I fill in "2010-06-10" for "End Time"
+    And I fill in "2010-06-10" for "End Date"
     And I press "Update"
-    Then I should be on the data files page
-    And I should see "Start Time is required if End Time specified"
+    Then I should be on the bulk update page
+    And I should see "Start time is required if End time specified"
 
 
-  Scenario: End time not required with start time
+  Scenario: End Date not required with start Date
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -289,29 +288,29 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
-    And I fill in "2010-06-03" for "Start Time"
-    And I press "Update"
-    Then I should be on the home page
-    And the most recent file should have name "sample1.txt"
-
-    And I follow the view link for data file "sample1.txt"
-    Then I should see details displayed
-      | Start Time | 2010-06-03 |
-
-  Scenario: Neither start time nor end time required for non-toa5 files
-    Given I am on the upload page
-    When I select "RAW" from "File type"
-    And I select "My Experiment" from "Experiment"
-    And I fill in "Description" with "My descriptive description"
-    And I select "samples/sample1.txt" to upload
-    And I check "Photo"
-    And I press "Upload"
-    Then I should be on the data files page
-
+    And I fill in "2010-06-03" for "Start Date"
     And I press "Update"
     Then I should be on the home page
     And the most recent file should have name "sample1.txt"
 
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Start Time | Unknown       |
+      | Start date | 2010-06-03 |
+
+  Scenario: Neither start Date nor end Date required for non-toa5 files
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    Then I should be on the data files page
+
+    And I press "Update"
+    Then I should be on the home page
+    And the most recent file should have name "sample1.txt"
+
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Start date | Unknown       |

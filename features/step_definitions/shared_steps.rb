@@ -79,13 +79,11 @@ end
 
 
 Then /^I should see element with id "([^"]*)"$/ do |arg1|
-  field = find_by_id(arg1)
-  field.should_not be_nil
+  page.should have_xpath("//*[@id='#{arg1}']")
 end
 
 Then /^I should not see element with id "([^"]*)"$/ do |arg1|
-  field = find_by_id(arg1)
-  field.should be_nil
+  page.should have_no_xpath("//*[@id='#{arg1}']")
 end
 
 
