@@ -20,7 +20,7 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :file_processing_status
   validates_presence_of :experiment_id
   validates_length_of :file_processing_description, :maximum => 255
-  validates_presence_of :start_time, :if => :end_time?
+  validates_presence_of :start_time, :if => :end_time?, :message => "Start Date cannot be blank if End Date is specified"
   validate :end_time_not_before_start_time
 
   scope :most_recent_first, order("created_at DESC")

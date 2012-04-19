@@ -57,22 +57,26 @@ class DataFilesController < ApplicationController
     files.each do |file|
       @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
     end
-                        puts @uploaded_files.inspect
   end
 
   def bulk_update
-    successful_update = true
+    successful_complete_update = true
     @uploaded_files = []
     params[:files].each do |id, attrs|
       file = DataFile.find(id)
-      @uploaded_files << file
-      successful_update &= file.update_attributes(attrs)
+      successful_update = file.update_attributes(attrs)
+      successful_complete_update &= successful_update
+      unless successful_update
+        file.add_message(:failed, file.errors.full_messages.join(", "))
+        @uploaded_files << file
+      end
+
     end
 
-    if successful_update
+    if successful_complete_update
       redirect_to root_path, :notice => "File metadata updated successfully"
     else
-         render :create
+      render :create
     end
 
   end

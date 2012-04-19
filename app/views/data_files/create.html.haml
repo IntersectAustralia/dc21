@@ -5,13 +5,16 @@
   .alert.alert-success 
     Your files have been uploaded. Below you can modify the information about individual files if you wish.
   = form_tag(bulk_update_data_files_path, :method => :put) do
+    - puts "Whole Array: #{@uploaded_files.inspect}"
     - @uploaded_files.each do |file|
+      - puts "File: #{file.inspect}"
       .file-panel{:id => "file_panel_#{file.id}"}
         %h2= file.filename
         %ul
-          - file.messages.each do |message_attrs|
-            -#%i.icon-info-sign
-            %li.alert{:class => message_attrs[:type]}= message_attrs[:message]
+          - if file.messages.is_a? Array
+            - file.messages.each do |message_attrs|
+              -#%i.icon-info-sign
+              %li.alert{:class => message_attrs[:type]}= message_attrs[:message]
         .control-group
           %label.control-label Type:
           .controls
