@@ -211,7 +211,6 @@ class DataFile < ActiveRecord::Base
   def end_time_not_before_start_time
     return true unless start_time.present? && end_time.present?
     errors.add(:end_time, "cannot be before start time") unless self.start_time <= self.end_time
-
   end
 
 
