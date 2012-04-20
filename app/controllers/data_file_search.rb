@@ -10,7 +10,9 @@ class DataFileSearch
   attr_accessor :description
   attr_accessor :stati
   attr_accessor :tags
-
+  #attr_accessor :experiments
+  #attr_accessor :uploader_id
+  #attr_accessor :upload_date_range
 
   def initialize(search_params)
     @search_params = search_params
@@ -18,7 +20,9 @@ class DataFileSearch
 
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.error = date_range.error
-
+    #self.experiments
+    #self.uploader_id
+    #self.upload_date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.facilities = @search_params[:facilities]
     self.facilities ||= []
     self.variables = @search_params[:variables]
@@ -59,6 +63,9 @@ class DataFileSearch
     if date_range.from_date || date_range.to_date
       search_result = search_result.with_data_in_range(date_range.from_date, date_range.to_date)
     end
+    #if date_range.from_date || date_range.to_date
+    #  search_result = search_result.with_data_in_range(date_range.from_date, date_range.to_date)
+    #end
     unless facilities.nil? || facilities.empty?
       search_result = search_result.with_station_name_in(facilities)
     end

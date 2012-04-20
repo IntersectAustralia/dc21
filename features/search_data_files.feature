@@ -80,6 +80,28 @@ Feature: Search data files by date range
     And the "from_date" field should contain "2010-06-03"
     And the "to_date" field should contain "2010-06-10"
 
+  Scenario: Search for files by upload date - from date only
+    When I do a date search for data files with upload dates "2010-06-03" and ""
+    Then I should see "exploredata" table with
+      | Filename    |
+      | mydata6.dat |
+    And the "from_date" field should contain "2010-06-03"
+
+  Scenario: Search for files by upload date - to date only
+    When I do a date search for data files with upload dates "" and "2010-06-10"
+    Then I should see "exploredata" table with
+      | Filename    |
+      | mydata6.dat |
+    And the "to_date" field should contain "2010-06-10"
+
+  Scenario: Search for files by upload date - range
+    When I do a date search for data files with upload dates "2010-06-03" and "2010-06-10"
+    Then I should see "exploredata" table with
+      | Filename    |
+      | mydata6.dat |
+    And the "from_date" field should contain "2010-06-03"
+    And the "to_date" field should contain "2010-06-10"
+
   Scenario: Search for files from specific facilities
     When I am on the list data files page
     Then I should see facility checkboxes
@@ -227,7 +249,7 @@ Feature: Search data files by date range
     And I check "PROCESSED"
     And I press "Update Search Results"
 
-#    And I press "Search"
+  #    And I press "Search"
     Then I should see "exploredata" table with
       | Filename    | Date added       | Added by                  | Type | Experiment    |
       | mydata8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | RAW  | My Experiment |
