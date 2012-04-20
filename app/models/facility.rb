@@ -58,6 +58,7 @@ class Facility < ActiveRecord::Base
   validates_numericality_of :b_long, :allow_blank => true
 
   validates_presence_of :primary_contact
+  validates_length_of :description, :maximum => 8192
 
   #Scopes
   default_scope :order => 'name ASC'

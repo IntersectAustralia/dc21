@@ -15,7 +15,7 @@ describe Experiment do
     it { should validate_presence_of(:facility_id) }
     it { should validate_presence_of(:access_rights) }
     it { should ensure_length_of(:name).is_at_most 255 }
-    it { should ensure_length_of(:description).is_at_most 255 }
+    it { should ensure_length_of(:description).is_at_most 8192 }
     it { should ensure_length_of(:subject).is_at_most 255 }
 
     describe "should validate that end date is on or after start date (unless end date blank)" do

@@ -16,6 +16,7 @@ describe Facility do
   describe "Validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:code) }
+    it { should ensure_length_of(:description).is_at_most 8192 }
     #it { should validate_presence_of(:primary_contact) }
     it "should validate uniqueness of name" do
       Factory(:facility)
