@@ -44,6 +44,10 @@ Feature: Publish a collection
     Then I should see "No matching files"
     And I should not see link "Publish"
 
+  Scenario: Publish button does not show prior to searching
+    Given I am on the list data files page
+    Then I should not see link "Publish"
+
   @javascript
   Scenario: Try to publish without entering a name
     Given I do a date search for data files with dates "2011-10-10" and "2011-10-15"
@@ -53,8 +57,17 @@ Feature: Publish a collection
     And I should see "Name can't be blank"
     And there should be no published collections
 
-  Scenario: Do a search, then modify the criteria but don't click update, then click "Publish" - does it use old or new search? (TODO confirm with stuart)
+  @javascript
+  Scenario: Try to publish with a duplicate name
+    Given I have a published collection called "my collection"
+    And I do a date search for data files with dates "2011-10-10" and "2011-10-15"
+    When I follow "Publish"
+    And I fill in "Name" with "my collection"
+    And I press "Confirm"
+    Then I should see "Name has already been taken"
+
   Scenario: RIF-CS and zip file are snapshots at the point in time where the collection was published
+    Given pending
     # TODO: publish a collection, then change some metadata / add more files, check that RIFCS and zip doesn't change
-  Scenario: Build a custom download without searching first (TODO confirm with Stuart if this is advisable)
-  Scenario: Try to publish with a duplicate name (TODO confirm with Stuart)
+
+

@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :published_collection do
       name "MyString"
-      created_by_id 1
+      association :created_by, :factory => :user
       rif_cs_file_path "MyString"
       zip_file_path "MyString"
     end

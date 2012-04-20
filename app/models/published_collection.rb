@@ -4,5 +4,6 @@ class PublishedCollection < ActiveRecord::Base
 
   validates_presence_of :name
   validates_presence_of :created_by
+  validates_uniqueness_of :name, :case_sensitive => false
 
 end

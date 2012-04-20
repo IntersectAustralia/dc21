@@ -40,3 +40,7 @@ When /^I perform a GET for the zip file for the latest published collection I sh
 
   compare_zip_to_expected_files(response.body, directory_to_match)
 end
+
+Given /^I have a published collection called "([^"]*)"$/ do |name|
+  Factory(:published_collection, name: name)
+end
