@@ -5,7 +5,7 @@ class DateRange
   attr_accessor :to_date
   attr_accessor :error
 
-  def initialize(from_date_text, to_date_text, allow_all_blank)
+  def initialize(from_date_text, to_date_text, allow_all_blank=true)
     self.from_date_text = from_date_text
     self.to_date_text = to_date_text
 

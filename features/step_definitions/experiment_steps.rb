@@ -1,7 +1,11 @@
 Given /^I have experiments$/ do |table|
   table.hashes.each do |exp|
     facility_name = exp.delete("facility")
-    facility = Facility.find_by_name!(facility_name)
+    facility = if facility_name.blank?
+                 Factory(:facility)
+               else
+                 facility = Facility.find_by_name!(facility_name)
+               end
 
     parent = exp.delete("parent")
     parent_exp = parent.blank? ? nil : Experiment.find_by_name!(parent)
@@ -74,6 +78,11 @@ end
 Given /^experiment "([^"]*)" has for code "([^"]*)"$/ do |exp, code|
   experiment = Experiment.find_by_name!(exp)
   experiment.experiment_for_codes.create!(:name => code, :url => "blah")
+end
+
+Given /^experiment "([^"]*)" has for code "([^"]*)" with url "([^"]*)"$/ do |exp, code, url|
+  experiment = Experiment.find_by_name!(exp)
+  experiment.experiment_for_codes.create!(:name => code, :url => url)
 end
 
 When /^I delete for code "([^"]*)"$/ do |code|

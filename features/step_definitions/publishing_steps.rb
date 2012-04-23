@@ -10,11 +10,25 @@ end
 Then /^the RIF\-CS file for the latest published collection should match "([^"]*)"$/ do |file|
   pc = PublishedCollection.last
   expected_contents = File.open(File.join(Rails.root, file)).read
+  # do substitution on collection url and root url
+  expected_contents.gsub!("$$COLLECTION_URL$$", published_collection_url(pc))
+  expected_contents.gsub!("$$ROOT_URL$$", root_url)
+
   actual_contents = File.open(pc.rif_cs_file_path).read
 
   # convert XML to hashes so we don't have to do dumb string comparison
   actual_hash = Hash.from_xml(actual_contents)
   expected_hash = Hash.from_xml(expected_contents)
+
+  # remove key and originating source and check them separately, since we don't know the URLs ahead of time
+  actual_originating_source = actual_hash['registryObjects']['registryObject'].delete('originatingSource')
+  actual_key = actual_hash['registryObjects']['registryObject'].delete('key')
+
+  actual_key.should =~ /^http:\/\/([^\/]*)\/published_collections\/#{pc.id}$/
+  actual_originating_source.should =~ /^http:\/\/([^\/]*)\/$/
+
+  expected_hash['registryObjects']['registryObject'].delete('originatingSource')
+  expected_hash['registryObjects']['registryObject'].delete('key')
 
   diff = expected_hash.diff(actual_hash)
   unless diff == {}
@@ -28,8 +42,9 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
     puts "------------------------------"
     puts actual_contents
     puts "------------------------------"
+    puts "Diff returned: #{diff}"
+    raise "XML files did not match"
   end
-  diff.should == {}
 end
 
 When /^I perform a GET for the zip file for the latest published collection I should get a zip matching "([^"]*)"$/ do |directory_to_match|
@@ -43,4 +58,14 @@ end
 
 Given /^I have a published collection called "([^"]*)"$/ do |name|
   Factory(:published_collection, name: name)
+end
+
+When /^I publish these search results as "([^"]*)"$/ do |name|
+  click_link "Publish"
+  fill_in "Name", :with => name
+  click_button "Confirm"
+
+  current_path = URI.parse(current_url).path
+  current_path.should == path_to("the home page")
+  page.should have_content("Your collection has been successfully submitted for publishing.")
 end
