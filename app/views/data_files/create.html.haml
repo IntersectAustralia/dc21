@@ -40,12 +40,12 @@
 
         - unless file.known_format?
           .control-group
-            = label_tag "file_#{file.id}_start_time", "Start Date", class: "control-label"
+            = label_tag "file_#{file.id}_start_time", "Start Time", class: "control-label"
             .controls
               = text_field_tag "files[#{file.id}][start_time]", @start_time, :id => "file_#{file.id}_start_time", :datepicker => true
 
           .control-group
-            = label_tag "file_#{file.id}_end_time", "End Date", class: "control-label"
+            = label_tag "file_#{file.id}_end_time", "End Time", class: "control-label"
             .control
               = text_field_tag "files[#{file.id}][end_time]", @end_time, :id => "file_#{file.id}_end_time", :datepicker => true
 

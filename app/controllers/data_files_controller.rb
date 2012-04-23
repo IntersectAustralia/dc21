@@ -63,6 +63,11 @@ class DataFilesController < ApplicationController
     successful_complete_update = true
     @uploaded_files = []
     params[:files].each do |id, attrs|
+
+
+      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec]) if attrs[:start_time].present?
+      attrs[:end_time] = sanitise_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec]) if attrs[:end_time].present?
+
       file = DataFile.find(id)
       successful_update = file.update_attributes(attrs)
       successful_complete_update &= successful_update
@@ -158,6 +163,16 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def sanitise_date_and_time(date, hr, min, sec)
+    return if date.blank?
+    adjusted_date = date #so we can use << without modifying the original
+    if hr.present? && min.present? && sec.present?
+      adjusted_date << " " << hr << ":" << min << ":" << sec
+    end
+    adjusted_date << " UTC"
+    return DateTime.parse(adjusted_date)
+  end
 
   def do_search(search_params)
     @search = DataFileSearch.new(search_params)
