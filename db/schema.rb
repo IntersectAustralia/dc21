@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120418015726) do
+ActiveRecord::Schema.define(:version => 20120423230538) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(:version => 20120418015726) do
     t.string   "zip_file_path"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "description"
   end
 
   create_table "roles", :force => true do |t|
