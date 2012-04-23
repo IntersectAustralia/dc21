@@ -4,12 +4,13 @@
 
 class PublishedCollectionRifCsWrapper < RifCsWrapper
 
-  attr_accessor :root_url, :collection_url, :files
+  attr_accessor :root_url, :collection_url, :files, :date_range
 
   def initialize(collection_object, files, options)
     super(collection_object)
     self.root_url = options[:root_url]
     self.collection_url = options[:collection_url]
+    self.date_range = options[:date_range]
     self.files = files
   end
 
@@ -29,12 +30,50 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     collection_url
   end
 
+  # returns an array of strings, each item being the text for a local subject
   def local_subjects
-    # returns an array of strings, being the text for each local subject
-    experiments = files.collect { |f| f.experiment }
+    experiments = files.collect(&:experiment)
     subjects = experiments.collect(&:subject).uniq.sort
     subjects.select { |s| !s.blank? }
   end
 
+  # returns an array of strings, each item being an FOR code in its PURL format
+  def for_codes
+    codes = files.collect { |f| f.experiment.experiment_for_codes }.flatten
+    codes.collect(&:url).uniq.sort
+  end
+
+  # returns the start of the temporal coverage period as a datetime object
+  # start is considered to be the later of either the earliest start date in the files OR the start of the date range being searched
+  def start_time
+    earliest_from_files = files.collect(&:start_time).compact.sort.first
+    return nil unless earliest_from_files
+
+    # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
+    earliest_from_files_as_dt = earliest_from_files.utc.to_datetime
+    if date_range && date_range.from_date
+      start_of_range = date_range.from_date.to_datetime
+      start_of_range > earliest_from_files_as_dt ? start_of_range : earliest_from_files_as_dt
+    else
+      earliest_from_files_as_dt
+    end
+  end
+
+  # returns the end of the temporal coverage period as a datetime object
+  # end is considered to be the earlier of either the latest end date in the files OR the end of the date range being searched
+  def end_time
+    latest_from_files = files.collect(&:end_time).compact.sort.last
+
+    return nil unless latest_from_files
+
+    # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
+    latest_from_files_as_dt = latest_from_files.utc.to_datetime
+    if date_range && date_range.to_date
+      end_of_range = date_range.to_date.to_datetime + 1.day
+      end_of_range < latest_from_files_as_dt ? end_of_range : latest_from_files_as_dt
+    else
+      latest_from_files_as_dt
+    end
+  end
 
 end

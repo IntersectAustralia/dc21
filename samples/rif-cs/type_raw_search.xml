@@ -10,6 +10,8 @@
         <namePart>Raw Stuff</namePart>
       </name>
       <subject type="local" xml:lang="en">Rainfall</subject>
+      <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/0202</subject>
+      <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/030304</subject>
     </collection>
   </registryObject>
 </registryObjects>

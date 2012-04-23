@@ -19,7 +19,7 @@ class PublishedCollectionsController < ApplicationController
       search = session[:search_for_publishing]
       files = search.do_search(DataFile.accessible_by(current_ability))
 
-      build_rif_cs(files)
+      build_rif_cs(files, search.date_range)
       build_zip_file(files, search)
       @published_collection.save!
       redirect_to root_path, notice: 'Your collection has been successfully submitted for publishing.'
@@ -39,14 +39,15 @@ class PublishedCollectionsController < ApplicationController
 
   private
 
-  def build_rif_cs(files)
+  def build_rif_cs(files, date_range)
     dir = APP_CONFIG['published_rif_cs_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
     output_location = File.join(dir, "rif-cs-#{@published_collection.id}.xml")
 
     file = File.new(output_location, 'w')
 
-    RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@published_collection, files, {:root_url => root_url, :collection_url => published_collection_url(@published_collection)}), file).build_rif_cs
+    options = {:root_url => root_url, :collection_url => published_collection_url(@published_collection), :date_range => date_range}
+    RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@published_collection, files, options), file).build_rif_cs
     file.close
 
     @published_collection.rif_cs_file_path = output_location

@@ -9,6 +9,9 @@ Feature: Publish a collection
       | name            | subject  |
       | Rain Experiment | Rainfall |
       | Tree Experiment | Trees    |
+    And experiment "Rain Experiment" has for code "0202 - ITEM 2" with url "http://purl.org/asc/1297.0/2008/for/0202"
+    And experiment "Rain Experiment" has for code "030304 - ITEM 4" with url "http://purl.org/asc/1297.0/2008/for/030304"
+    And experiment "Tree Experiment" has for code "05 - ENVIRONMENTAL SCIENCES" with url "http://purl.org/asc/1297.0/2008/for/05"
     And I have uploaded "sample1.txt" with type "RAW" and description "sample1 desc" and experiment "Rain Experiment"
     And I have uploaded "weather_station_05_min.dat" with type "PROCESSED" and description "5 min desc" and experiment "Rain Experiment"
     And I have uploaded "weather_station_15_min.dat" with type "RAW" and description "15 min desc" and experiment "Rain Experiment"

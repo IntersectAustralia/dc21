@@ -20,7 +20,7 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
   actual_hash = Hash.from_xml(actual_contents)
   expected_hash = Hash.from_xml(expected_contents)
 
-  # remove key and originating source and check them separately, since we can't get the URLs to match
+  # remove key and originating source and check them separately, since we don't know the URLs ahead of time
   actual_originating_source = actual_hash['registryObjects']['registryObject'].delete('originatingSource')
   actual_key = actual_hash['registryObjects']['registryObject'].delete('key')
 
@@ -29,7 +29,6 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
 
   expected_hash['registryObjects']['registryObject'].delete('originatingSource')
   expected_hash['registryObjects']['registryObject'].delete('key')
-
 
   diff = expected_hash.diff(actual_hash)
   unless diff == {}

@@ -28,6 +28,9 @@ class RifCsGenerator
           wrapper_object.local_subjects.each do |subject|
             xml.subject subject, {'type' => 'local', 'xml:lang' => 'en'}
           end
+          wrapper_object.for_codes.each do |for_code|
+            xml.subject for_code, {'type' => 'anzsrc-for'}
+          end
         end
       end
     end

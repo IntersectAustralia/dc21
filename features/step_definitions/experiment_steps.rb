@@ -80,6 +80,11 @@ Given /^experiment "([^"]*)" has for code "([^"]*)"$/ do |exp, code|
   experiment.experiment_for_codes.create!(:name => code, :url => "blah")
 end
 
+Given /^experiment "([^"]*)" has for code "([^"]*)" with url "([^"]*)"$/ do |exp, code, url|
+  experiment = Experiment.find_by_name!(exp)
+  experiment.experiment_for_codes.create!(:name => code, :url => url)
+end
+
 When /^I delete for code "([^"]*)"$/ do |code|
   ok = false
   all("ul#for_codes_list li").each do |item|
