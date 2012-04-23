@@ -282,7 +282,7 @@ input[type=textarea], input[type=text], input[type=password], input[type=search]
   +m-p-w-h-p-t-b-l-r-f(0, 7px 10px 5px 10px, "", 18px)
   +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
   resize: none
-  +font("", "", 1em, 18px)
+  +font("", "", 1rem, 18px)
   &:hover
     +border(1px, solid, #B9B9B9)
   &:focus
@@ -315,7 +315,8 @@ input[type=password]
 textarea
   +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, 608px, 66px)
 
-
+input.hasDatepicker
+  +m-p-w-h-p-t-b-l-r-f("", 7px 40px 5px 10px)
 
 input[type="search"]
   -webkit-appearance: textfield
@@ -361,7 +362,7 @@ select, input[type="file"]
   /* In IE7, the height of the select element cannot be changed by height, only font-size */
   *margin-top: 4px
   /* For IE7, add top margin to align select with labels */
-  +font("", "", "", 28px)
+  +font("", "", 1rem, 28px)
 
 input[type="file"]
   line-height: 18px \9
@@ -629,6 +630,9 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
   li
     display: block
 
+.alert.success, .alert.failed, .alert.error
+  +m-p-w-h-p-t-b-l-r-f(0 0 18px 170px, 8px 35px 8px 14px)
+
 ul
   li.alert
     display: block
@@ -642,12 +646,12 @@ ul
   right: -21px
   line-height: 18px
 
-.alert-success, alert.success
+.alert-success, .alert.success
   background-color: #DFF0D8
   border-color: #D6E9C6
   color: #468847
 
-.alert-danger, .alert-error, .alert.error
+.alert-danger, .alert-error, .alert.error, .alert.failed
   background-color: #F2DEDE
   border-color: #EED3D7
   color: #B94A48
