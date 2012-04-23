@@ -94,7 +94,8 @@ class DataFile < ActiveRecord::Base
   end
 
   def has_data_in_range?(from, to)
-    return false unless known_format?
+    return false if self.start_time.nil?
+
     if (from && to)
       (self.start_time < (to + 1.day)) && (self.end_time >= from)
     elsif from

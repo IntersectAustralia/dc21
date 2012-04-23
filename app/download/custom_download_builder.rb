@@ -16,7 +16,11 @@ class CustomDownloadBuilder
     paths = []
     files.each do |file|
       if file.has_data_in_range?(date_range.from_date, date_range.to_date)
-        paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, from_date_string, to_date_string)
+        if file.format == FileTypeDeterminer::TOA5
+          paths << Toa5Subsetter.extract_matching_rows_to(file, temp_dir, from_date_string, to_date_string)
+        else
+          paths << file.path
+        end
       end
     end
 

@@ -13,9 +13,11 @@ Feature: Publish a collection
     And I have uploaded "weather_station_05_min.dat" with type "PROCESSED" and description "5 min desc" and experiment "Rain Experiment"
     And I have uploaded "weather_station_15_min.dat" with type "RAW" and description "15 min desc" and experiment "Rain Experiment"
     And I have uploaded "WTC01_Table1.dat" with type "PROCESSED" and description "wtc01 desc" and experiment "Tree Experiment"
+    And I have uploaded "sample2.txt" with type "PROCESSED" and description "sample 2" and experiment "Tree Experiment"
+    And I have set the dates of "sample2.txt" as "2011-10-12" to "2011-11-12"
 
   @javascript
-  Scenario: Search by date range then publish - zip should include subsetted files
+  Scenario: Search by date range then publish - zip should include subsetted files (where its possible to subset) and originals (where we can't subset)
     Given I do a date search for data files with dates "2011-10-10" and "2011-10-15"
     And I publish these search results as "My Collection Of Stuff"
     Then there should be a published collection record named "My Collection Of Stuff" with creator "georgina@intersect.org.au"
