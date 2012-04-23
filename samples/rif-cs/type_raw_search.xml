@@ -7,10 +7,9 @@
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart>My Collection Of Stuff</namePart>
+        <namePart>Raw Stuff</namePart>
       </name>
       <subject type="local" xml:lang="en">Rainfall</subject>
-      <subject type="local" xml:lang="en">Trees</subject>
     </collection>
   </registryObject>
 </registryObjects>

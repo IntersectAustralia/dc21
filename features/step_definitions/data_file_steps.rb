@@ -58,6 +58,10 @@ When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)"$/ do |filename
   create_data_file filename, user, type
 end
 
+Given /^I have uploaded "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |filename, type, desc, exp|
+  create_data_file filename, User.first, type, desc, Experiment.find_by_name!(exp)
+end
+
 When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end
@@ -319,13 +323,12 @@ end
 
 private
 
-def create_data_file(filename, user, type=DataFile::STATUS_RAW)
+def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="desc", experiment=nil)
   attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
 
   path = Rails.root.join('samples', filename).to_s
   file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
-  experiment = Experiment.first
-  experiment = Factory(:experiment) unless experiment
+  experiment = (Experiment.first || Factory(:experiment)) unless experiment
   attachment_builder.build(file, experiment.id, type, "desc")
 end
 

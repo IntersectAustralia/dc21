@@ -16,8 +16,11 @@ class PublishedCollectionsController < ApplicationController
   def create
     @published_collection.created_by = current_user
     if @published_collection.save
-      build_rif_cs
-      build_zip_file
+      search = session[:search_for_publishing]
+      files = search.do_search(DataFile.accessible_by(current_ability))
+
+      build_rif_cs(files)
+      build_zip_file(files, search)
       @published_collection.save!
       redirect_to root_path, notice: 'Your collection has been successfully submitted for publishing.'
     else
@@ -36,25 +39,23 @@ class PublishedCollectionsController < ApplicationController
 
   private
 
-  def build_rif_cs
+  def build_rif_cs(files)
     dir = APP_CONFIG['published_rif_cs_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
     output_location = File.join(dir, "rif-cs-#{@published_collection.id}.xml")
 
     file = File.new(output_location, 'w')
-    RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@published_collection), file).build_rif_cs
+
+    RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@published_collection, files, {:root_url => root_url, :collection_url => published_collection_url(@published_collection)}), file).build_rif_cs
     file.close
 
     @published_collection.rif_cs_file_path = output_location
   end
 
-  def build_zip_file
+  def build_zip_file(files, search)
     dir = APP_CONFIG['published_zip_files_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
     output_location = File.join(dir, "data_#{@published_collection.id}.zip")
-
-    search = session[:search_for_publishing]
-    files = search.do_search(DataFile.accessible_by(current_ability))
 
     if search.date_range.blank?
       CustomDownloadBuilder.zip_for_files_with_ids(files.collect(&:id)) do |zip_file|

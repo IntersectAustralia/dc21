@@ -4,6 +4,15 @@
 
 class PublishedCollectionRifCsWrapper < RifCsWrapper
 
+  attr_accessor :root_url, :collection_url, :files
+
+  def initialize(collection_object, files, options)
+    super(collection_object)
+    self.root_url = options[:root_url]
+    self.collection_url = options[:collection_url]
+    self.files = files
+  end
+
   def collection_type
     'dataset'
   end
@@ -13,12 +22,18 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   end
 
   def originating_source
-    'TODO'
+    root_url
   end
 
   def key
-    'TODO'
-    #Rails.application.routes.url_helpers.published_collection_url(published_collection)
+    collection_url
+  end
+
+  def local_subjects
+    # returns an array of strings, being the text for each local subject
+    experiments = files.collect { |f| f.experiment }
+    subjects = experiments.collect(&:subject).uniq.sort
+    subjects.select { |s| !s.blank? }
   end
 
 

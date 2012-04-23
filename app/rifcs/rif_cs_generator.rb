@@ -10,7 +10,7 @@ class RifCsGenerator
 
   def initialize(wrapper_object, target)
     self.wrapper_object = wrapper_object
-    self.xml = Builder::XmlMarkup.new :target => target
+    self.xml = Builder::XmlMarkup.new :target => target, :indent => 2
   end
 
   def build_rif_cs
@@ -24,6 +24,9 @@ class RifCsGenerator
         xml.collection type: wrapper_object.collection_type do
           xml.name type: 'primary' do
             xml.namePart wrapper_object.name
+          end
+          wrapper_object.local_subjects.each do |subject|
+            xml.subject subject, {'type' => 'local', 'xml:lang' => 'en'}
           end
         end
       end

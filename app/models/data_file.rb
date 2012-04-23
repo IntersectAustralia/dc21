@@ -10,6 +10,7 @@ class DataFile < ActiveRecord::Base
   ALL_STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED, STATUS_ERROR]
 
   belongs_to :created_by, :class_name => "User"
+  belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
   has_and_belongs_to_many :tags
