@@ -28,6 +28,14 @@ describe DataFile do
     end
   end
 
+  describe "Callbacks" do
+    it "set end date before save if blank" do
+      df = Factory(:data_file, :start_time => "2011-01-01 11:00 UTC")
+      df.save!
+      df.end_time.should eq("2011-01-01 11:00 UTC")
+    end
+  end
+
   describe "Associations" do
     it { should belong_to(:created_by) }
     it { should have_many(:column_details) }

@@ -23,6 +23,8 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
   validate :end_time_not_before_start_time
 
+  before_save :fill_end_time_if_blank
+
   scope :most_recent_first, order("created_at DESC")
 # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
@@ -213,6 +215,11 @@ class DataFile < ActiveRecord::Base
     errors.add(:end_time, "cannot be before start time") unless self.start_time <= self.end_time
   end
 
+  def fill_end_time_if_blank
+    if start_time.present? && end_time.blank?
+      self.end_time = self.start_time
+    end
+  end
 
   def candidate_overlaps(files)
     # filters given files for files which might be "overwritable"
