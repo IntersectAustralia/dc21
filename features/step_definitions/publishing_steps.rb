@@ -60,9 +60,10 @@ Given /^I have a published collection called "([^"]*)"$/ do |name|
   Factory(:published_collection, name: name)
 end
 
-When /^I publish these search results as "([^"]*)"$/ do |name|
+When /^I publish these search results as "([^"]*)" with description "([^"]*)"$/ do |name, desc|
   click_link "Publish"
   fill_in "Name", :with => name
+  fill_in "Description", :with => desc
   click_button "Confirm"
 
   current_path = URI.parse(current_url).path

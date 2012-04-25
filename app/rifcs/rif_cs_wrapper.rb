@@ -14,5 +14,4 @@ class RifCsWrapper
     end
   end
 
-
 end

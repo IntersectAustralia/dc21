@@ -22,7 +22,7 @@ Feature: Publish a collection
   @javascript
   Scenario: Search by date range then publish - zip should include subsetted files (where its possible to subset) and originals (where we can't subset)
     Given I do a date search for data files with dates "2011-10-10" and "2011-10-15"
-    And I publish these search results as "My Collection Of Stuff"
+    And I publish these search results as "My Collection Of Stuff" with description "Describe my collection of stuff"
     Then there should be a published collection record named "My Collection Of Stuff" with creator "georgina@intersect.org.au"
     And the RIF-CS file for the latest published collection should match "samples/rif-cs/range_oct_10_oct_15.xml"
     When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/range_oct_10_oct_15"
@@ -33,7 +33,7 @@ Feature: Publish a collection
     And I click on "Type:"
     And I check "RAW"
     And I press "Update Search Results"
-    And I publish these search results as "Raw Stuff"
+    And I publish these search results as "Raw Stuff" with description ""
     Then there should be a published collection record named "Raw Stuff" with creator "georgina@intersect.org.au"
     And the RIF-CS file for the latest published collection should match "samples/rif-cs/type_raw_search.xml"
     When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/type_raw"

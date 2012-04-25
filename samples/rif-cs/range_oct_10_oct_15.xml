@@ -14,6 +14,7 @@
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/0202</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/030304</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/05</subject>
+      <description type="brief">Describe my collection of stuff</description>
     </collection>
   </registryObject>
 </registryObjects>

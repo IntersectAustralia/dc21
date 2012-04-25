@@ -2,7 +2,8 @@ require 'builder'
 
 # This class builds the RIF-CS for a collection, delegating to a wrapper object to find the necessary values.
 # The idea is that this can be reused across projects, and that the project-specific details of what goes into
-# the rifcs are encoded in the wrapper class. Create your own wrapper by subclassing RifCsWrapper.
+# the rifcs are encoded in the wrapper class. Create your own wrapper by subclassing RifCsWrapper. This is a work
+# in progress and will likely need a bit of work to make it flexible enough to handle various different project needs.
 
 class RifCsGenerator
 
@@ -29,7 +30,10 @@ class RifCsGenerator
             xml.subject subject, {'type' => 'local', 'xml:lang' => 'en'}
           end
           wrapper_object.for_codes.each do |for_code|
-            xml.subject for_code, {'type' => 'anzsrc-for'}
+            xml.subject for_code, type: 'anzsrc-for'
+          end
+          unless wrapper_object.description.blank?
+            xml.description wrapper_object.description, type: 'brief'
           end
         end
       end
