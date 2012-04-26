@@ -250,19 +250,19 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
-    And I fill in "2010-06-03" for "Start Date"
-    And I fill in "2010-06-10" for "End Date"
+    And I fill in "2010-06-03" for "Start Time"
+    And I fill in "2010-06-10" for "End Time"
     And I press "Update"
     Then I should be on the home page
     And the most recent file should have name "sample1.txt"
 
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Start date | 2010-06-03 |
-      | End date | 2010-06-10 |
+      | Start time | 2010-06-03  0:00:00 |
+      | End time   | 2010-06-10  0:00:00 |
 
-    
-  Scenario: Start Date is required if end Date specified
+
+  Scenario: Start Time is required if end Time specified
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -272,13 +272,13 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
-    And I fill in "2010-06-10" for "End Date"
+    And I fill in "2010-06-10" for "End Time"
     And I press "Update"
     Then I should be on the bulk update page
     And I should see "Start time is required if End time specified"
 
 
-  Scenario: End Date not required with start Date
+  Scenario: End Time not required with start Time
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -288,16 +288,16 @@ Feature: Upload files
     And I press "Upload"
     Then I should be on the data files page
 
-    And I fill in "2010-06-03" for "Start Date"
+    And I fill in "2010-06-03" for "Start Time"
     And I press "Update"
     Then I should be on the home page
     And the most recent file should have name "sample1.txt"
 
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Start date | 2010-06-03 |
+      | Start time | 2010-06-03  0:00:00 |
 
-  Scenario: Neither start Date nor end Date required for non-toa5 files
+  Scenario: Neither start Time nor end Time required for non-toa5 files
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -313,4 +313,72 @@ Feature: Upload files
 
     And I follow the view link for data file "sample1.txt"
     Then I should see details displayed
-      | Start date | Unknown       |
+      | Start time | Unknown |
+
+  @javascript @wip
+
+  Scenario: When entering a dates for non-toa5, i should also have the option of entering times
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    Then I should be on the data files page
+    And I should see "start_time" for file "sample1.txt"
+    And I should see "end_time" for file "sample1.txt"
+    And I should not see "start_hr" for file "sample1.txt"
+    And I should not see "end_hr" for file "sample1.txt"
+
+    And I fill in "2010-06-03" for "Start Time"
+    And I fill in "2010-06-10" for "End Time"
+    Then I should see "start_hr" for file "sample1.txt"
+    And I should see "start_min" for file "sample1.txt"
+    And I should see "start_sec" for file "sample1.txt"
+    And I should see "end_hr" for file "sample1.txt"
+    And I should see "end_min" for file "sample1.txt"
+    And I should see "end_sec" for file "sample1.txt"
+
+  @javascript @wip
+
+  Scenario: When clearing a date for non-toa5, times should also be removed
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    And I fill in "2010-06-03" for "Start Time"
+    And I fill in "2010-06-10" for "End Time"
+    And I should see "start_hr" for file "sample1.txt"
+    And I should see "end_hr" for file "sample1.txt"
+    And I fill in "" for "Start Time"
+    And I fill in "" for "End Time"
+
+    Then I should not see "start_hr" for file "sample1.txt"
+    And I should not see "start_min" for file "sample1.txt"
+    And I should not see "start_sec" for file "sample1.txt"
+    And I should not see "end_hr" for file "sample1.txt"
+    And I should not see "end_min" for file "sample1.txt"
+    And I should not see "end_sec" for file "sample1.txt"
+
+  @javascript @wip
+
+  Scenario: Dates and times for non-toa5 files are processed correctly
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I check "Photo"
+    And I press "Upload"
+    And I fill in "2010-06-03" for "Start Time"
+    And I select "05" from "Start Hour"
+    And I select "30" from "Start Min"
+    And I select "45" from "Start Second"
+    And I fill in "2010-06-10" for "End Time"
+    And I select "06" from "End Hour"
+    And I select "31" from "End Min"
+    And I select "44" from "End Second"

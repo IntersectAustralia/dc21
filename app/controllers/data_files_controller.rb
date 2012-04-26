@@ -62,8 +62,17 @@ class DataFilesController < ApplicationController
   def bulk_update
     successful_complete_update = true
     @uploaded_files = []
+
     params[:files].each do |id, attrs|
+
+      attrs.merge!(params[:date][:files][id]) if  params[:date].present? && params[:date][:files][id].present?
+
+
+      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
+      attrs[:end_time] = sanitise_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
+
       file = DataFile.find(id)
+
       successful_update = file.update_attributes(attrs)
       successful_complete_update &= successful_update
       unless successful_update
@@ -158,6 +167,17 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def sanitise_date_and_time(date, hr, min, sec)
+    return if date.blank?
+    adjusted_date = date #so we can use << without modifying the original
+    if hr.present? && min.present? && sec.present?
+      adjusted_date << " " << hr << ":" << min << ":" << sec
+    end
+    adjusted_date << " UTC"
+    #puts "#{date} #{hr}:#{min}:#{sec} -> #{adjusted_date} -> #{DateTime.parse(adjusted_date)}"
+    return DateTime.parse(adjusted_date)
+  end
 
   def do_search(search_params)
     @search = DataFileSearch.new(search_params)

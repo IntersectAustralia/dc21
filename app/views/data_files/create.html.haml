@@ -40,14 +40,21 @@
 
         - unless file.known_format?
           .control-group
-            = label_tag "file_#{file.id}_start_time", "Start Date", class: "control-label"
+            = label_tag "file_#{file.id}_start_time", "Start Time", class: "control-label"
             .controls
               = text_field_tag "files[#{file.id}][start_time]", @start_time, :id => "file_#{file.id}_start_time", :datepicker => true
-
+              .hidden{:id => "file_#{file.id}_start_container"}
+                = select_hour @start_time, {:field_name => "files[#{file.id}][start_hr]"}, {:id => "file_#{file.id}_start_hr"}
+                = select_minute @start_time, {:field_name => "files[#{file.id}][start_min]"}, {:id => "file_#{file.id}_start_min"}
+                = select_second @start_time, {:field_name => "files[#{file.id}][start_sec]"}, {:id => "file_#{file.id}_start_sec"}
           .control-group
-            = label_tag "file_#{file.id}_end_time", "End Date ", class: "control-label"
+            = label_tag "file_#{file.id}_end_time", "End Time", class: "control-label"
             .controls
               = text_field_tag "files[#{file.id}][end_time]", @end_time, :id => "file_#{file.id}_end_time", :datepicker => true
+              .hidden{:id => "file_#{file.id}_end_container"}
+                = select_hour @end_time, {:field_name => "files[#{file.id}][end_hr]"}, {:id => "file_#{file.id}_end_hr"}
+                = select_minute @end_time, {:field_name => "files[#{file.id}][end_min]"}, {:id => "file_#{file.id}_end_min"}
+                = select_second @end_time, {:field_name => "files[#{file.id}][end_sec]"}, {:id => "file_#{file.id}_end_sec"}
 
     .form-actions
       .actions

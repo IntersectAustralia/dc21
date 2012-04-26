@@ -29,10 +29,10 @@
     = render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
     = render "file_format_specific_details"
   - else
-    - start_date = @data_file.start_time.present? ? @data_file.start_time.strftime("%Y-%m-%d") : "Unknown"
-    - end_date = @data_file.end_time.present? ? @data_file.end_time.strftime("%Y-%m-%d") : "Unknown"
-    = render_field "Start date", start_date
-    = render_field "End date", end_date
+    - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
+    - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
+    = render_field "Start time", start_date
+    = render_field "End time", end_date
 
 
 = cancel_button "Back", data_files_path
