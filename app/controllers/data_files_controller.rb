@@ -62,13 +62,16 @@ class DataFilesController < ApplicationController
   def bulk_update
     successful_complete_update = true
     @uploaded_files = []
+
+    params[:files].merge!(params[:date][:files])
     params[:files].each do |id, attrs|
 
 
-      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec]) if attrs[:start_time].present?
+      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs.delete!(:start_hr), attrs.delete!(:start_min), attrs.delete!(:start_sec)) if attrs[:start_time].present?
       attrs[:end_time] = sanitise_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec]) if attrs[:end_time].present?
 
       file = DataFile.find(id)
+
       successful_update = file.update_attributes(attrs)
       successful_complete_update &= successful_update
       unless successful_update
