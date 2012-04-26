@@ -79,4 +79,30 @@ describe Experiment do
       Factory(:experiment, :access_rights => "blah").access_rights_description.should be_nil
     end
   end
+
+  describe "Write metadata to file" do
+    it "should produce a file with details written one per line" do
+      facility = Factory(:facility, name: 'My Facility')
+
+      experiment = Factory(:experiment,
+                           name: 'High CO2 and Drought',
+                           facility: facility,
+                           description: 'This is my description.',
+                           start_date: '2011-12-25',
+                           end_date: '2012-01-01',
+                           subject: 'Drought')
+      directory = Dir.mktmpdir
+      file_path = experiment.write_metadata_to_file(directory)
+      file_path.should =~ /high-co2-and-drought.txt$/
+      file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'experiment1.txt'))
+    end
+
+    it "should handle descriptions with line breaks" do
+
+    end
+
+    it "should handle missing non-mandatory values" do
+
+    end
+  end
 end

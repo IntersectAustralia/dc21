@@ -53,7 +53,26 @@ Spork.prefork do
 
   RSpec::Matchers.define(:be_same_file_as) do |expected_file_path|
     match do |actual_file_path|
-      md5_hash(actual_file_path).should == md5_hash(expected_file_path)
+
+      md5_actual = md5_hash(actual_file_path)
+      md5_expected = md5_hash(expected_file_path)
+
+      unless md5_actual == md5_expected
+        expected_contents = File.open(expected_file_path).read
+        actual_contents = File.open(actual_file_path).read
+          # print the files to make comparison easier
+          puts "------------------------------"
+          puts "Expected:"
+          puts "------------------------------"
+          puts expected_contents
+          puts "------------------------------"
+          puts "Actual:"
+          puts "------------------------------"
+          puts actual_contents
+          puts "------------------------------"
+      end
+
+      md5_actual.should == md5_expected
     end
 
     def md5_hash(file_path)

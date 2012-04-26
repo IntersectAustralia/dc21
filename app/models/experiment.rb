@@ -51,4 +51,17 @@ class Experiment < ActiveRecord::Base
   def access_rights_description
     AccessRightsLookup.new.get_name(self.access_rights)
   end
+
+  def write_metadata_to_file(directory_path)
+    file_path = File.join(directory_path, "#{name.parameterize}.txt")
+    File.open(file_path, 'w') do |file|
+      file.puts "Parent: #{parent_name}"
+      file.puts "Name: #{name}"
+      file.puts "Description: #{description}"
+      file.puts "Start date: #{start_date.to_s(:date_only)}"
+      file.puts "End date: #{end_date.to_s(:date_only)}"
+      file.puts "Subject: #{subject}"
+    end
+    file_path
+  end
 end

@@ -1,0 +1,6 @@
+Parent: Facility - My Facility
+Name: High CO2 and Drought
+Description: This is my description.
+Start date: 2011-12-25
+End date: 2012-01-01
+Subject: Drought
