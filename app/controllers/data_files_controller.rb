@@ -63,12 +63,13 @@ class DataFilesController < ApplicationController
     successful_complete_update = true
     @uploaded_files = []
 
-    params[:files].merge!(params[:date][:files])
     params[:files].each do |id, attrs|
 
+      attrs.merge!(params[:date][:files][id]) if  params[:date].present? && params[:date][:files][id].present?
 
-      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs.delete!(:start_hr), attrs.delete!(:start_min), attrs.delete!(:start_sec)) if attrs[:start_time].present?
-      attrs[:end_time] = sanitise_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec]) if attrs[:end_time].present?
+
+      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
+      attrs[:end_time] = sanitise_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
 
       file = DataFile.find(id)
 
@@ -174,6 +175,7 @@ class DataFilesController < ApplicationController
       adjusted_date << " " << hr << ":" << min << ":" << sec
     end
     adjusted_date << " UTC"
+    #puts "#{date} #{hr}:#{min}:#{sec} -> #{adjusted_date} -> #{DateTime.parse(adjusted_date)}"
     return DateTime.parse(adjusted_date)
   end
 
