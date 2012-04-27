@@ -9,9 +9,7 @@ describe PublishedCollectionRifCsWrapper do
 
     it "should always return dataset as the collection type" do
       PublishedCollectionRifCsWrapper.new(nil, nil, {}).collection_type.should eq("dataset")
-
     end
-
   end
 
   describe "Originating source" do
@@ -23,6 +21,12 @@ describe PublishedCollectionRifCsWrapper do
   describe "Key" do
     it "Should return the collection url as provided to the wrapper" do
       PublishedCollectionRifCsWrapper.new(nil, nil, {:collection_url => 'http://example.com/1'}).key.should eq('http://example.com/1')
+    end
+  end
+
+  describe "Electronic location" do
+    it "Should return the collection zip url as provided to the wrapper" do
+      PublishedCollectionRifCsWrapper.new(nil, nil, {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
     end
   end
 
@@ -41,6 +45,24 @@ describe PublishedCollectionRifCsWrapper do
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.local_subjects.should eq(["Bob", "Fred"])
+    end
+  end
+
+  describe "Rights" do
+    it "should collect all rights from experiments associated with the files" do
+      exp1 = Factory(:experiment, :access_rights => "Fred")
+      exp2 = Factory(:experiment, :access_rights => "Fred")
+      exp3 = Factory(:experiment, :access_rights => "Bob")
+      exp4 = Factory(:experiment, :access_rights => "Jane")
+
+      df1 = Factory(:data_file, :experiment => exp1)
+      df2 = Factory(:data_file, :experiment => exp2)
+      df3 = Factory(:data_file, :experiment => exp1)
+      df4 = Factory(:data_file, :experiment => exp3)
+      df5 = Factory(:data_file, :experiment => exp4)
+
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+      wrapper.access_rights.should eq(["Bob", "Fred"])
     end
   end
 

@@ -26,6 +26,11 @@ class RifCsGenerator
           xml.name type: 'primary' do
             xml.namePart wrapper_object.name
           end
+          xml.location do
+            xml.electronic type: 'url' do
+              xml.value wrapper_object.electronic_location
+            end
+          end
           wrapper_object.local_subjects.each do |subject|
             xml.subject subject, {'type' => 'local', 'xml:lang' => 'en'}
           end
@@ -34,6 +39,9 @@ class RifCsGenerator
           end
           unless wrapper_object.description.blank?
             xml.description wrapper_object.description, type: 'brief'
+          end
+          wrapper_object.access_rights.each do |right|
+            xml.description right, type: 'rights'
           end
         end
       end

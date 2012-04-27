@@ -4,12 +4,11 @@
 
 class PublishedCollectionRifCsWrapper < RifCsWrapper
 
-  attr_accessor :root_url, :collection_url, :files, :date_range
+  attr_accessor :options, :files, :date_range
 
   def initialize(collection_object, files, options)
     super(collection_object)
-    self.root_url = options[:root_url]
-    self.collection_url = options[:collection_url]
+    self.options = options
     self.date_range = options[:date_range]
     self.files = files
   end
@@ -23,11 +22,15 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   end
 
   def originating_source
-    root_url
+    options[:root_url]
   end
 
   def key
-    collection_url
+    options[:collection_url]
+  end
+
+  def electronic_location
+    options[:zip_url]
   end
 
   # returns an array of strings, each item being the text for a local subject
@@ -35,6 +38,11 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     experiments = files.collect(&:experiment)
     subjects = experiments.collect(&:subject).uniq.sort
     subjects.select { |s| !s.blank? }
+  end
+
+  def access_rights
+    experiments = files.collect(&:experiment)
+    experiments.collect(&:access_rights).uniq.sort
   end
 
   # returns an array of strings, each item being an FOR code in its PURL format

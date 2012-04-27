@@ -9,9 +9,15 @@
       <name type="primary">
         <namePart>Raw Stuff</namePart>
       </name>
+      <location>
+        <electronic type="url">
+          <value>$$ZIP_URL$$</value>
+        </electronic>
+      </location>
       <subject type="local" xml:lang="en">Rainfall</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/0202</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/030304</subject>
+      <description type="rights">http://creativecommons.org/licenses/by-nc-nd/3.0/au</description>
     </collection>
   </registryObject>
 </registryObjects>

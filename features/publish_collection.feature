@@ -6,9 +6,9 @@ Feature: Publish a collection
   Background:
     Given I am logged in as "georgina@intersect.org.au"
     And I have experiments
-      | name            | subject  |
-      | Rain Experiment | Rainfall |
-      | Tree Experiment | Trees    |
+      | name            | subject  | access_rights                                       |
+      | Rain Experiment | Rainfall | http://creativecommons.org/licenses/by-nc-nd/3.0/au |
+      | Tree Experiment | Trees    | http://creativecommons.org/licenses/by-nc-sa/3.0/au |
     And experiment "Rain Experiment" has for code "0202 - ITEM 2" with url "http://purl.org/asc/1297.0/2008/for/0202"
     And experiment "Rain Experiment" has for code "030304 - ITEM 4" with url "http://purl.org/asc/1297.0/2008/for/030304"
     And experiment "Tree Experiment" has for code "05 - ENVIRONMENTAL SCIENCES" with url "http://purl.org/asc/1297.0/2008/for/05"
