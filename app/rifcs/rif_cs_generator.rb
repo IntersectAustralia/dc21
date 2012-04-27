@@ -26,23 +26,29 @@ class RifCsGenerator
           xml.name type: 'primary' do
             xml.namePart wrapper_object.name
           end
+
           xml.location do
             xml.electronic type: 'url' do
               xml.value wrapper_object.electronic_location
             end
           end
+
           wrapper_object.local_subjects.each do |subject|
             xml.subject subject, {'type' => 'local', 'xml:lang' => 'en'}
           end
+
           wrapper_object.for_codes.each do |for_code|
             xml.subject for_code, type: 'anzsrc-for'
           end
+
           unless wrapper_object.description.blank?
             xml.description wrapper_object.description, type: 'brief'
           end
+
           wrapper_object.access_rights.each do |right|
             xml.description right, type: 'rights'
           end
+
           if wrapper_object.start_date || wrapper_object.end_date
             xml.coverage do
               xml.temporal do
@@ -52,6 +58,14 @@ class RifCsGenerator
                 if wrapper_object.end_date
                   xml.date wrapper_object.end_date.strftime('%Y-%m-%d'), type: 'dateTo', date_format: 'WCCDTF'
                 end
+              end
+            end
+          end
+
+          wrapper_object.locations.each do |points|
+            xml.coverage do
+              points.each do |point|
+                xml.spatial "#{point[:long]},#{point[:lat]}", type: 'gmlKmlPolyCoords'
               end
             end
           end

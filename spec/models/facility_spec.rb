@@ -57,6 +57,23 @@ describe Facility do
     end
   end
 
+  describe "Getting the location as a set of points" do
+    it "should return an empty array if no location" do
+      f = Factory(:facility, :a_lat => nil, :a_long => nil, :b_lat => nil, :b_long => nil)
+      f.location.should eq([])
+    end
+
+    it "should return a single point if only 1 lat/long set" do
+      f = Factory(:facility, :a_lat => 54.34, :a_long => 123.333, :b_lat => nil, :b_long => nil)
+      f.location.should eq([{:lat => 54.34, :long => 123.333}])
+    end
+
+    it "should return a single point if both lat/long values are set" do
+      f = Factory(:facility, :a_lat => 54.34, :a_long => 123.333, :b_lat => -34, :b_long => -178.333)
+      f.location.should eq([{:lat => 54.34, :long => 123.333}, {:lat => -34, :long => -178.333}])
+    end
+  end
+
   describe "Getting all the experiments under a facility other than a known experiment" do
     before(:each) do
       @facility = Factory(:facility)

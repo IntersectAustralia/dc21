@@ -5,10 +5,14 @@ Feature: Publish a collection
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
+    And I have facilities
+      | name      | a_lat   | a_long   | b_lat    | b_long   |
+      | Facility1 | 45.3434 | 150.9934 | 46.33333 | 155.5552 |
+      | Facility2 | -10.003 | -13.4554 |          |          |
     And I have experiments
-      | name            | subject  | access_rights                                       |
-      | Rain Experiment | Rainfall | http://creativecommons.org/licenses/by-nc-nd/3.0/au |
-      | Tree Experiment | Trees    | http://creativecommons.org/licenses/by-nc-sa/3.0/au |
+      | name            | subject  | access_rights                                       | facility  |
+      | Rain Experiment | Rainfall | http://creativecommons.org/licenses/by-nc-nd/3.0/au | Facility1 |
+      | Tree Experiment | Trees    | http://creativecommons.org/licenses/by-nc-sa/3.0/au | Facility2 |
     And experiment "Rain Experiment" has for code "0202 - ITEM 2" with url "http://purl.org/asc/1297.0/2008/for/0202"
     And experiment "Rain Experiment" has for code "030304 - ITEM 4" with url "http://purl.org/asc/1297.0/2008/for/030304"
     And experiment "Tree Experiment" has for code "05 - ENVIRONMENTAL SCIENCES" with url "http://purl.org/asc/1297.0/2008/for/05"

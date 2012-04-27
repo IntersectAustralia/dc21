@@ -67,26 +67,50 @@ describe PublishedCollectionRifCsWrapper do
   end
 
   describe "Field of research codes" do
-    it "should collect all FOR codes from experiments associated with the files" do
-      exp1 = Factory(:experiment)
-      exp2 = Factory(:experiment)
-      exp3 = Factory(:experiment)
-      exp4 = Factory(:experiment)
-      Factory(:experiment_for_code, :url => 'http://a', :experiment => exp1)
-      Factory(:experiment_for_code, :url => 'http://b', :experiment => exp2)
-      Factory(:experiment_for_code, :url => 'http://b', :experiment => exp3)
-      Factory(:experiment_for_code, :url => 'http://c', :experiment => exp3)
-      Factory(:experiment_for_code, :url => 'http://d', :experiment => exp3)
-      Factory(:experiment_for_code, :url => 'http://e', :experiment => exp4)
+     it "should collect all FOR codes from experiments associated with the files" do
+       exp1 = Factory(:experiment)
+       exp2 = Factory(:experiment)
+       exp3 = Factory(:experiment)
+       exp4 = Factory(:experiment)
+       Factory(:experiment_for_code, :url => 'http://a', :experiment => exp1)
+       Factory(:experiment_for_code, :url => 'http://b', :experiment => exp2)
+       Factory(:experiment_for_code, :url => 'http://b', :experiment => exp3)
+       Factory(:experiment_for_code, :url => 'http://c', :experiment => exp3)
+       Factory(:experiment_for_code, :url => 'http://d', :experiment => exp3)
+       Factory(:experiment_for_code, :url => 'http://e', :experiment => exp4)
 
-      df1 = Factory(:data_file, :experiment => exp1)
-      df2 = Factory(:data_file, :experiment => exp2)
-      df3 = Factory(:data_file, :experiment => exp1)
-      df4 = Factory(:data_file, :experiment => exp3)
-      df5 = Factory(:data_file, :experiment => exp4)
+       df1 = Factory(:data_file, :experiment => exp1)
+       df2 = Factory(:data_file, :experiment => exp2)
+       df3 = Factory(:data_file, :experiment => exp1)
+       df4 = Factory(:data_file, :experiment => exp3)
+       df5 = Factory(:data_file, :experiment => exp4)
+
+       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+       wrapper.for_codes.should eq(['http://a', 'http://b', 'http://c', 'http://d'])
+     end
+   end
+
+  describe "Locations" do
+    it "should gather all locations from facilities associated with the files" do
+      df1 = mock(:data_file)
+      df2 = mock(:data_file)
+      df3 = mock(:data_file)
+      df4 = mock(:data_file)
+
+      f1 = mock(:facility)
+      f1.stub(:location).and_return([])
+      f2 = mock(:facility)
+      f2.stub(:location).and_return(['not empty'])
+      f3 = mock(:facility)
+      f3.stub(:location).and_return(['also not empty'])
+
+      df1.stub_chain(:experiment, :facility).and_return(f1)
+      df2.stub_chain(:experiment, :facility).and_return(f2)
+      df3.stub_chain(:experiment, :facility).and_return(f3)
+      df4.stub_chain(:experiment, :facility).and_return(f3)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
-      wrapper.for_codes.should eq(['http://a', 'http://b', 'http://c', 'http://d'])
+      wrapper.locations.should eq([['not empty'], ['also not empty']])
     end
   end
 

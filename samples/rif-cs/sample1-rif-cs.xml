@@ -9,15 +9,23 @@
       <name type="primary">
         <namePart>No Dates</namePart>
       </name>
+
       <location>
         <electronic type="url">
           <value>$$ZIP_URL$$</value>
         </electronic>
       </location>
+
       <subject type="local" xml:lang="en">Rainfall</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/0202</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/030304</subject>
+
       <description type="rights">http://creativecommons.org/licenses/by-nc-nd/3.0/au</description>
+
+      <coverage>
+        <spatial type="gmlKmlPolyCoords">150.9934,45.3434</spatial>
+        <spatial type="gmlKmlPolyCoords">155.5552,46.33333</spatial>
+      </coverage>
     </collection>
   </registryObject>
 </registryObjects>

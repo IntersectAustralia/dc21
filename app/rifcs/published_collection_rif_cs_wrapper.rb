@@ -83,4 +83,14 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     end
   end
 
+  # Returns an array of locations for the collection. Each element in the array is also an array, containing the point(s) for that specific location
+  #TODO: this is a bit cumbersome, could be improved
+  def locations
+    facilities = files.collect { |f| f.experiment.facility }.uniq
+    locations = []
+    facilities.each do |f|
+      locations << f.location unless f.location.empty?
+    end
+    locations
+  end
 end
