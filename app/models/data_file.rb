@@ -33,6 +33,7 @@ class DataFile < ActiveRecord::Base
   scope :with_filename_containing, lambda { |name| where("data_files.filename ILIKE ?", "%#{name}%") }
   scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
   scope :with_status_in, lambda { |stati| where {file_processing_status.in stati} }
+  scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader)}
   #scope :with_any_of_these_tags, lambda { |tags| joins(:tags).where("data_files_tags.tag_id" => tags)}
 
   attr_accessor :messages
@@ -47,6 +48,16 @@ class DataFile < ActiveRecord::Base
     end
   end
 
+  def self.with_uploaded_date_in_range(from, to)
+    if (from && to)
+      where { (created_at < (to + 1.day)) & (created_at >= from) }
+    elsif from
+      where { created_at >= from }
+    else
+      where { created_at < (to + 1.day) }
+    end
+  end
+
   def self.with_any_of_these_tags(tags)
     data_file_ids = DataFile.unscoped.select("DISTINCT(data_files.id)").joins(:tags).where("data_files_tags.tag_id" => tags).collect(&:id)
     where(:id => data_file_ids)
@@ -55,6 +66,10 @@ class DataFile < ActiveRecord::Base
   def self.with_any_of_these_columns(column_names)
     data_file_ids = ColumnDetail.unscoped.select("DISTINCT(data_file_id)").where(:name => column_names).collect(&:data_file_id)
     where(:id => data_file_ids)
+  end
+
+  def self.with_experiment(experiments)
+    data_file_ids = Experiment.unscoped.select("DISTINCT(facility_id)").joins(:facility).where("facility.id" => facility).collect(&:id)
   end
 
   def self.searchable_facilities

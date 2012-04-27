@@ -1,5 +1,6 @@
 jQuery ->
   $('.variable_children').hide()
+  $('.facility_children').hide()
 
   $('input.variable_parent').click ->
     cb = $(this)
@@ -24,6 +25,39 @@ jQuery ->
 
   $('.expand_variable').click ->
     children_div = $(this).closest('div.variable_group').find('.variable_children').first()
+    children_div.slideToggle('fast')
+    if $(this).text() == "+"
+      $(this).text("-")
+    else
+      $(this).text("+")
+    false
+
+  #select all on parent click
+  $('input.facility').click ->
+    cb = $(this)
+    children = cb.closest('div.facility_group').find('input.experiment')
+    if cb.is(':checked')
+      children.each ->
+        $(this).prop("checked", true)
+    else
+      children.each ->
+        $(this).prop("checked", false)
+
+  # child click
+  $('input.experiment').click ->
+    cb = $(this)
+    parent = cb.closest('div.facility_group').find('input.facility').first()
+    if cb.is(':checked')
+      child_count = cb.closest('div.facility_group').find('input.experiment').length
+      checked_child_count = cb.closest('div.facility_group').find('input.experiment:checked').length
+      if child_count == checked_child_count
+        parent.prop("checked", true)
+    else
+      parent.prop("checked", false)
+
+  # expand and hide
+  $('.expand_facility').click ->
+    children_div = $(this).closest('div.facility_group').find('.facility_children').first()
     children_div.slideToggle('fast')
     if $(this).text() == "+"
       $(this).text("-")

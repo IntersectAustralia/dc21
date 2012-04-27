@@ -90,6 +90,14 @@ When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do
   click_button "Update Search Results"
 end
 
+When /^I do a date search for data files with upload dates "([^"]*)" and "([^"]*)"$/ do |from, to|
+  visit path_to("the list data files page")
+  find("#upload_date").click
+  fill_in "upload_from_date", :with => from
+  fill_in "upload_to_date", :with => to
+  click_button "Update Search Results"
+end
+
 When /^I fill in date search details between "([^"]*)" and "([^"]*)"$/ do |from, to|
   fill_in "From Date:", :with => from
   fill_in "To Date:", :with => to

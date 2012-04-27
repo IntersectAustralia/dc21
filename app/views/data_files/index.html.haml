@@ -66,13 +66,22 @@
             = label_tag "search_tag_#{index}", tag.name
             = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
-      .searchcategory
-        %h4#facility.expand Facility:
-        .facility
-          - facilities.each_with_index do |facility, index|
-            = label_tag "search_facility_#{index}", facility[1]
-            = check_box_tag "search[facilities][]", facility[0], @selected_facilities.include?(facility[0]), :id => "search_facility_#{index}"
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+
+      - #TODO temporarily disabled to pass dc21-182
+      -#.searchcategory
+      -#  %h4#facility.expand Facility:
+      -#  .facility
+      -#    - facilities.each_with_index do |facility, index|
+      -#      .facility_group
+      -#        = link_to "+", "#", :id => "expand_#{facility.name}", :class => "expand_facility"
+      -#        = label_tag "search_facility_#{index}", facility.name, :class => :facility
+      -#        = check_box_tag "search[facilities][]", facility.name, @selected_facilities.include?(facility.name), :id => "search_facility_#{index}", :class => :facility
+      -#        .facility_children
+      -#          - experiments.each_with_index do |experiment, e_index|
+      -#            - if experiment.facility_id == facility.id
+      -#              = label_tag "search_variable_#{index}_#{e_index}", experiment.name, :class => :experiment
+      -#              = check_box_tag "search[facilities][]", experiment.name, @selected_experiment, :class => :experiment
+      -#    .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
         %h4#variable.expand Variable:
         .variable
@@ -87,7 +96,20 @@
                   = label_tag "search_variable_#{index}_#{index2}", child_variable, :class => :variable_child
                   = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
-
+      .searchcategory
+        %h4#uploader.expand Uploader
+        .uploader
+          = label_tag "search[uploader_id]", "Uploader:"
+          = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+      .searchcategory
+        %h4#upload_date.expand Upload Date
+        .upload_date
+          = label_tag :from_date, "From Date:"
+          = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true
+          = label_tag :to_date, "To Date:"
+          = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true
+          .actions= submit_tag "Update Search Results", :class => "whitebutton"
 
 - unless @data_files.empty?
   = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do

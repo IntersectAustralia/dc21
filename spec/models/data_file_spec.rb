@@ -119,6 +119,23 @@ describe DataFile do
       end
     end
 
+    #TODO: In progress
+    describe "Find files with uploader" do
+      it "Find files for uploader" do
+        u1 = Factory(:user)
+        u2 = Factory(:user)
+        f1 = Factory(:data_file, :created_by_id => u1.id).id
+        f2 = Factory(:data_file, :created_by_id => u1.id).id
+        f3 = Factory(:data_file, :created_by_id => u1.id).id
+        f4 = Factory(:data_file, :created_by_id => u2.id).id
+        f5 = Factory(:data_file, :created_by_id => u2.id).id
+        f6 = Factory(:data_file, :created_by_id => u2.id).id
+
+        DataFile.with_uploader(u1.id).order(:id).collect(&:id).should eq([f1, f2, f3])
+        DataFile.with_uploader(u2.id).order(:id).collect(&:id).should eq([f4, f5, f6])
+      end
+    end
+
     describe "Find files with matching description" do
       it "should support partial and case-insensitive matches" do
         f1 = Factory(:data_file, :file_processing_description => "blah").id

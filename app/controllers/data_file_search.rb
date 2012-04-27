@@ -4,27 +4,36 @@ class DataFileSearch
   attr_accessor :error
   attr_accessor :date_range
   attr_accessor :facilities
+  attr_accessor :experiments
   attr_accessor :variables
   attr_accessor :variable_parents
   attr_accessor :filename
   attr_accessor :description
   attr_accessor :stati
   attr_accessor :tags
-  #attr_accessor :experiments
-  #attr_accessor :uploader_id
-  #attr_accessor :upload_date_range
+  attr_accessor :uploader_id
+  attr_accessor :upload_date_range
 
   def initialize(search_params)
     @search_params = search_params
     @search_params ||= {}
 
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
-    self.error = date_range.error
+    self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
     #self.experiments
-    #self.uploader_id
-    #self.upload_date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
+
+    self.error =
+        if date_range.error && upload_date_range.error
+          "Date Range: #{date_range.error}, Upload Date Range: #{upload_date_range.error}"
+        else
+          date_range.error || upload_date_range.error
+        end
+
+
     self.facilities = @search_params[:facilities]
     self.facilities ||= []
+    self.experiments = @search_params[:experiments]
+    self.experiments ||= []
     self.variables = @search_params[:variables]
     self.variables ||= []
     self.variable_parents = @search_params[:variable_parents]
@@ -34,11 +43,13 @@ class DataFileSearch
     self.tags = @search_params[:tags]
     self.tags ||= []
 
+    self.uploader_id = @search_params[:uploader_id]
     self.filename = @search_params[:filename]
     self.description = @search_params[:description]
 
     if !valid?
       self.date_range = DateRange.new(nil, nil, true)
+      self.upload_date_range = DateRange.new(nil, nil, true)
     end
   end
 
@@ -50,8 +61,8 @@ class DataFileSearch
         stati.empty? &&
         tags.empty? &&
         filename.blank? &&
-        description.blank?
-
+        description.blank? &&
+        uploader_id.nil?
   end
 
   def valid?
@@ -59,15 +70,19 @@ class DataFileSearch
   end
 
   def do_search(relation)
+
     search_result = relation
     if date_range.from_date || date_range.to_date
       search_result = search_result.with_data_in_range(date_range.from_date, date_range.to_date)
     end
-    #if date_range.from_date || date_range.to_date
-    #  search_result = search_result.with_data_in_range(date_range.from_date, date_range.to_date)
-    #end
+    if upload_date_range.from_date || upload_date_range.to_date
+      search_result = search_result.with_uploaded_date_in_range(upload_date_range.from_date, upload_date_range.to_date)
+    end
     unless facilities.nil? || facilities.empty?
       search_result = search_result.with_station_name_in(facilities)
+    end
+    unless experiments.nil? || experiments.empty?
+      search_result = search_result.with_experiment(experiments)
     end
     unless variables.nil? || variables.empty?
       search_result = search_result.with_any_of_these_columns(variables)
@@ -83,6 +98,9 @@ class DataFileSearch
     end
     unless description.blank?
       search_result = search_result.with_description_containing(description)
+    end
+    unless uploader_id.nil? || uploader_id.empty?
+      search_result = search_result.with_uploader(uploader_id)
     end
     search_result
   end

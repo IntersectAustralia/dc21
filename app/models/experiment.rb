@@ -22,7 +22,6 @@ class Experiment < ActiveRecord::Base
     end
   end
 
-
   def name_with_prefix
     "Experiment - #{name}"
   end

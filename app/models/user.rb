@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   before_validation :initialize_status
 
   scope :pending_approval, where(:status => 'U').order(:email)
+  scope :alphabetical_by_first_name, order(:first_name)
   scope :approved, where(:status => 'A').order(:email)
   scope :deactivated_or_approved, where("status = 'D' or status = 'A' ").order(:email)
   scope :approved_superusers, joins(:role).merge(User.approved).merge(Role.superuser_roles)

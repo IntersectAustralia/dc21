@@ -8,8 +8,9 @@ class DataFilesController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   expose(:tags) { Tag.order(:name) }
-  expose(:facilities) { DataFile.searchable_facilities }
+  expose(:facilities) { Facility.order(:name) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
+  expose(:experiments)  { Experiment.order(:name) }
 
   def index
     set_tab :explore, :contentnavigation
@@ -187,12 +188,16 @@ class DataFilesController < ApplicationController
     @from_date = @search.search_params[:from_date]
     @to_date = @search.search_params[:to_date]
     @selected_facilities = @search.facilities
+    @selected_experiments = @search.experiments
     @selected_variables = @search.variables
     @selected_parent_variables = @search.variable_parents
     @filename = @search.filename
     @description = @search.description
     @selected_stati = @search.stati
     @selected_tags = @search.tags
+    @uploader_id = @search.uploader_id
+    @upload_from_date = @search.search_params[:upload_from_date]
+    @upload_to_date = @search.search_params[:upload_to_date]
 
     # apply any sorting to the scope we've built up so far
     # prefix the sort column with the table name so we don't get ambiguity errors when doing joins

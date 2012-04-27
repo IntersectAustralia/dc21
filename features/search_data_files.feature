@@ -4,22 +4,29 @@ Feature: Search data files by date range
   I want to search for files by a variety of criteria
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I have users
+      | email                  | first_name | last_name |
+      | one@intersect.org.au   | First      | One       |
+      | two@intersect.org.au   | Second     | Two       |
+      | three@intersect.org.au | Third      | Three     |
+      | four@intersect.org.au  | Fourth     | Four      |
+      | five@intersect.org.au  | Fifth      | Five      |
+    And I am logged in as "admin@intersect.org.au"
     And I have tags
       | name  |
       | Photo |
       | Video |
       | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by               | start_time            | end_time               | file_processing_status | file_processing_description | tags         | experiment    |
-      | mydata8.dat   | 08/11/2011 10:15 | georgina@intersect.org.au | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | My Experiment |
-      | mydata7.dat   | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | My Experiment |
-      | mydata6.dat   | 30/12/2011 10:15 | kali@intersect.org.au     | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | My Experiment |
-      | datafile5.dat | 30/11/2011 19:00 | matthew@intersect.org.au  | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | My Experiment |
-      | datafile4.dat | 1/11/2011 10:15  | marc@intersect.org.au     | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | Other         |
-      | datafile3.dat | 30/1/2010 10:15  | sean@intersect.org.au     | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              | Experiment 2  |
-      | datafile2.dat | 30/11/2011 8:45  | kali@intersect.org.au     | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        | My Experiment |
-      | datafile1.dat | 01/12/2011 13:45 | sean@intersect.org.au     |                       |                        | UNKNOWN                |                             |              | Experiment 2  |
+      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | experiment    |
+      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | My Experiment |
+      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | My Experiment |
+      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | My Experiment |
+      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | My Experiment |
+      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | Other         |
+      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              | Experiment 2  |
+      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        | My Experiment |
+      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              | Experiment 2  |
     And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
     And file "mydata7.dat" has metadata item "station_name" with value "TC"
     And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
@@ -43,6 +50,7 @@ Feature: Search data files by date range
       | Temp   | Temperature |
       | temp2  | Temperature |
       | Temp_2 | Temperature |
+
 
   Scenario: Search for files by date range - from date only
     When I do a date search for data files with dates "2010-06-11" and ""
@@ -80,28 +88,40 @@ Feature: Search data files by date range
     And the "from_date" field should contain "2010-06-03"
     And the "to_date" field should contain "2010-06-10"
 
+
   Scenario: Search for files by upload date - from date only
-    When I do a date search for data files with upload dates "2010-06-03" and ""
+    When I do a date search for data files with upload dates "2011-01-01" and ""
     Then I should see "exploredata" table with
-      | Filename    |
-      | mydata6.dat |
-    And the "from_date" field should contain "2010-06-03"
+      | Filename      |
+      | mydata6.dat   |
+      | datafile1.dat |
+      | datafile5.dat |
+      | mydata7.dat   |
+      | datafile2.dat |
+      | mydata8.dat   |
+      | datafile4.dat |
+    And the "upload_from_date" field should contain "2011-01-01"
 
   Scenario: Search for files by upload date - to date only
-    When I do a date search for data files with upload dates "" and "2010-06-10"
+    When I do a date search for data files with upload dates "" and "2010-12-31"
     Then I should see "exploredata" table with
-      | Filename    |
-      | mydata6.dat |
-    And the "to_date" field should contain "2010-06-10"
+      | Filename      |
+      | datafile3.dat |
+    And the "upload_to_date" field should contain "2010-12-31"
 
   Scenario: Search for files by upload date - range
-    When I do a date search for data files with upload dates "2010-06-03" and "2010-06-10"
+    When I do a date search for data files with upload dates "2011-01-01" and "2011-11-30"
     Then I should see "exploredata" table with
-      | Filename    |
-      | mydata6.dat |
-    And the "from_date" field should contain "2010-06-03"
-    And the "to_date" field should contain "2010-06-10"
+      | Filename      |
+      | datafile5.dat |
+      | mydata7.dat   |
+      | datafile2.dat |
+      | mydata8.dat   |
+      | datafile4.dat |
+    And the "upload_from_date" field should contain "2011-01-01"
+    And the "upload_to_date" field should contain "2011-11-30"
 
+  @wip
   Scenario: Search for files from specific facilities
     When I am on the list data files page
     Then I should see facility checkboxes
@@ -121,6 +141,7 @@ Feature: Search data files by date range
     And the "HFE Weather Station" checkbox should be checked
     And the "Tree Chambers" checkbox should not be checked
 
+    @wip
   Scenario: Search for files from specific facilities and by date range
     When I am on the list data files page
     And I check "HFE Weather Station"
@@ -133,6 +154,28 @@ Feature: Search data files by date range
       | Filename      |
       | mydata6.dat   |
       | datafile4.dat |
+
+  Scenario: Search by Uploader
+    When I am on the list data files page
+    Then the "search_uploader_id" select should contain
+      | Please select |
+      | Fifth Five    |
+      | First One     |
+      | Fourth Four   |
+      | Fred Bloggs   |
+      | Second Two    |
+      | Third Three   |        
+    And nothing should be selected in the "Uploader:" select
+    
+    And I select "First One" from "Uploader:"
+    And I press "Search"
+    Then "First One" should be selected in the "Uploader:" select
+    And I should see "exploredata" table with
+      | Filename      |
+      | mydata7.dat   |
+      | mydata8.dat   |
+
+
 
   @javascript
   Scenario: Search for files with certain columns (checking mapped variable name)
@@ -251,8 +294,8 @@ Feature: Search data files by date range
 
   #    And I press "Search"
     Then I should see "exploredata" table with
-      | Filename    | Date added       | Added by                  | Type | Experiment    |
-      | mydata8.dat | 2011-11-08 10:15 | georgina@intersect.org.au | RAW  | My Experiment |
+      | Filename    | Date added       | Added by             | Type | Experiment    |
+      | mydata8.dat | 2011-11-08 10:15 | one@intersect.org.au | RAW  | My Experiment |
     And I should see "Showing 1 matching file"
 
   @javascript
