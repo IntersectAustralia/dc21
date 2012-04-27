@@ -41,6 +41,10 @@
       <coverage>
         <spatial type="gmlKmlPolyCoords">-13.4554,-10.003</spatial>
       </coverage>
+
+      <relatedInfo>
+        <notes>Fred Bloggs (georgina@intersect.org.au)</notes>
+      </relatedInfo>
     </collection>
   </registryObject>
 </registryObjects>

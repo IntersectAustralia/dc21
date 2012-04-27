@@ -69,6 +69,10 @@ class RifCsGenerator
               end
             end
           end
+
+          xml.relatedInfo do
+            xml.notes "#{wrapper_object.submitter_name} (#{wrapper_object.submitter_email})"
+          end
         end
       end
     end

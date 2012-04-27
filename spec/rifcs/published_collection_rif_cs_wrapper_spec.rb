@@ -30,6 +30,14 @@ describe PublishedCollectionRifCsWrapper do
     end
   end
 
+  describe "Collection submitter" do
+    it "Should return the name and email as passed in via the user object" do
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, nil, {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper.submitter_name.should eq('Georgina Edwards')
+      wrapper.submitter_email.should eq('georgina@intersect.org.au')
+    end
+  end
+
   describe "Local subjects" do
     it "should collect all subjects from experiments associated with the files" do
       exp1 = Factory(:experiment, :subject => "Fred")

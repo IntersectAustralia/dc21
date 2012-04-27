@@ -33,6 +33,14 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     options[:zip_url]
   end
 
+  def submitter_name
+    options[:submitter].full_name
+  end
+
+  def submitter_email
+    options[:submitter].email
+  end
+
   # returns an array of strings, each item being the text for a local subject
   def local_subjects
     experiments = files.collect(&:experiment)

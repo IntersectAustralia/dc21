@@ -34,6 +34,9 @@
         <spatial type="gmlKmlPolyCoords">155.5552,46.33333</spatial>
       </coverage>
 
+      <relatedInfo>
+        <notes>Fred Bloggs (georgina@intersect.org.au)</notes>
+      </relatedInfo>
     </collection>
   </registryObject>
 </registryObjects>

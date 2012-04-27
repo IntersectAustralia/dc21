@@ -49,7 +49,8 @@ class PublishedCollectionsController < ApplicationController
     options = {:root_url => root_url,
                :collection_url => published_collection_url(@published_collection),
                :zip_url => published_collection_url(@published_collection, :format => 'zip'),
-               :date_range => date_range}
+               :date_range => date_range,
+               :submitter => current_user}
     RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@published_collection, files, options), file).build_rif_cs
     file.close
 
