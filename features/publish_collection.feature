@@ -38,6 +38,16 @@ Feature: Publish a collection
     And the RIF-CS file for the latest published collection should match "samples/rif-cs/type_raw_search.xml"
     When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/type_raw"
 
+  @javascript
+  Scenario: None of the files have dates - RIFCS should not include temporal coverage
+    Given I am on the list data files page
+    And I click on "Filename:"
+    And I fill in "Filename" with "sample1"
+    And I press "Update Search Results"
+    And I publish these search results as "No Dates" with description ""
+    Then there should be a published collection record named "No Dates" with creator "georgina@intersect.org.au"
+    And the RIF-CS file for the latest published collection should match "samples/rif-cs/sample1-rif-cs.xml"
+
   Scenario: Publish button does not show if no results from the search
     Given I am on the list data files page
     And I click on "Type:"

@@ -18,6 +18,12 @@
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/0202</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/030304</subject>
       <description type="rights">http://creativecommons.org/licenses/by-nc-nd/3.0/au</description>
+      <coverage>
+          <temporal>
+              <date type="dateFrom" dateFormat="W3CDTF">2011-09-25</date>
+              <date type="dateTo" dateFormat="W3CDTF">2011-11-03</date>
+          </temporal>
+      </coverage>
     </collection>
   </registryObject>
 </registryObjects>

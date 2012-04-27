@@ -7,7 +7,7 @@
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart>My Collection Of Stuff</namePart>
+        <namePart>No Dates</namePart>
       </name>
       <location>
         <electronic type="url">
@@ -15,19 +15,9 @@
         </electronic>
       </location>
       <subject type="local" xml:lang="en">Rainfall</subject>
-      <subject type="local" xml:lang="en">Trees</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/0202</subject>
       <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/030304</subject>
-      <subject type="anzsrc-for">http://purl.org/asc/1297.0/2008/for/05</subject>
-      <description type="brief">Describe my collection of stuff</description>
       <description type="rights">http://creativecommons.org/licenses/by-nc-nd/3.0/au</description>
-      <description type="rights">http://creativecommons.org/licenses/by-nc-sa/3.0/au</description>
-      <coverage>
-          <temporal>
-              <date type="dateFrom" dateFormat="W3CDTF">2011-10-10</date>
-              <date type="dateTo" dateFormat="W3CDTF">2011-10-15</date>
-          </temporal>
-      </coverage>
     </collection>
   </registryObject>
 </registryObjects>

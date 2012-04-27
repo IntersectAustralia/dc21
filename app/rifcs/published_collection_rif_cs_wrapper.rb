@@ -77,7 +77,7 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
     latest_from_files_as_dt = latest_from_files.utc.to_datetime
     if date_range && date_range.to_date
-      end_of_range = date_range.to_date.to_datetime + 1.day
+      end_of_range = date_range.to_date.to_datetime
       end_of_range < latest_from_files_as_dt ? end_of_range : latest_from_files_as_dt
     else
       latest_from_files_as_dt
