@@ -99,56 +99,55 @@ describe PublishedCollectionRifCsWrapper do
     describe "Where search criteria did not include dates" do
       it "should return the earliest start date and latest end date in the matching files" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-01 01:00 UTC'))
-        wrapper.end_time.should eq(DateTime.parse('2011-04-26 14:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-01'))
+        wrapper.end_date.should eq(Date.parse('2011-04-26'))
       end
     end
 
     describe "Where search criteria did not include dates and none of the files have dates" do
       it "should return the earliest start date and latest end date in the matching files" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df5], {})
-        wrapper.start_time.should be_nil
-        wrapper.end_time.should be_nil
+        wrapper.start_date.should be_nil
+        wrapper.end_date.should be_nil
       end
     end
 
     describe "Where search criteria included start date only" do
       it "should return specified start date if some files start earlier than it" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2011-01-25", nil)})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-25 00:00 UTC'))
-        wrapper.end_time.should eq(DateTime.parse('2011-04-26 14:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-25'))
+        wrapper.end_date.should eq(Date.parse('2011-04-26'))
       end
       it "should return start of earliest file if specified start date is earlier than first file" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2010-12-25", nil)})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-01 01:00 UTC'))
-        wrapper.end_time.should eq(DateTime.parse('2011-04-26 14:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-01'))
+        wrapper.end_date.should eq(Date.parse('2011-04-26'))
       end
     end
 
     describe "Where search criteria included end date only" do
       it "should return specified end date if some files end after it" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new(nil, "2011-03-25")})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-01 01:00 UTC'))
-        #TODO: or should this be 23:59
-        wrapper.end_time.should eq(DateTime.parse('2011-03-26 00:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-01'))
+        wrapper.end_date.should eq(Date.parse('2011-03-25'))
       end
       it "should return end of last file if specified end date is later than last file" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new(nil, "2011-05-25", nil)})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-01 01:00 UTC'))
-        wrapper.end_time.should eq(DateTime.parse('2011-04-26 14:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-01'))
+        wrapper.end_date.should eq(Date.parse('2011-04-26'))
       end
     end
 
     describe "Where search criteria included start date and end date" do
       it "should return specified start/end date if some files have data outside the range" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2011-01-25", "2011-03-25")})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-25 00:00 UTC'))
-        wrapper.end_time.should eq(DateTime.parse('2011-03-26 00:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-25'))
+        wrapper.end_date.should eq(Date.parse('2011-03-25'))
       end
       it "should return start of first file and end of last file if data fits inside the range" do
         wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2010-12-25", "2011-05-25", nil)})
-        wrapper.start_time.should eq(DateTime.parse('2011-01-01 01:00 UTC'))
-        wrapper.end_time.should eq(DateTime.parse('2011-04-26 14:00 UTC'))
+        wrapper.start_date.should eq(Date.parse('2011-01-01'))
+        wrapper.end_date.should eq(Date.parse('2011-04-26'))
       end
 
     end

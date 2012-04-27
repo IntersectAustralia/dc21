@@ -43,14 +43,14 @@ class RifCsGenerator
           wrapper_object.access_rights.each do |right|
             xml.description right, type: 'rights'
           end
-          if wrapper_object.start_time || wrapper_object.end_time
+          if wrapper_object.start_date || wrapper_object.end_date
             xml.coverage do
               xml.temporal do
-                if wrapper_object.start_time
-                  xml.date wrapper_object.start_time.strftime('%Y-%m-%d'), type: 'dateFrom', date_format: 'WCCDTF'
+                if wrapper_object.start_date
+                  xml.date wrapper_object.start_date.strftime('%Y-%m-%d'), type: 'dateFrom', date_format: 'WCCDTF'
                 end
-                if wrapper_object.end_time
-                  xml.date wrapper_object.end_time.strftime('%Y-%m-%d'), type: 'dateTo', date_format: 'WCCDTF'
+                if wrapper_object.end_date
+                  xml.date wrapper_object.end_date.strftime('%Y-%m-%d'), type: 'dateTo', date_format: 'WCCDTF'
                 end
               end
             end

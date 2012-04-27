@@ -51,36 +51,35 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     codes.collect(&:url).uniq.sort
   end
 
-  # returns the start of the temporal coverage period as a datetime object
+  # returns the start of the temporal coverage period as a date object
   # start is considered to be the later of either the earliest start date in the files OR the start of the date range being searched
-  def start_time
+  def start_date
     earliest_from_files = files.collect(&:start_time).compact.sort.first
     return nil unless earliest_from_files
 
     # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
-    earliest_from_files_as_dt = earliest_from_files.utc.to_datetime
+    earliest_from_files_as_date = earliest_from_files.utc.to_date
     if date_range && date_range.from_date
-      start_of_range = date_range.from_date.to_datetime
-      start_of_range > earliest_from_files_as_dt ? start_of_range : earliest_from_files_as_dt
+      start_of_range = date_range.from_date
+      start_of_range > earliest_from_files_as_date ? start_of_range : earliest_from_files_as_date
     else
-      earliest_from_files_as_dt
+      earliest_from_files_as_date
     end
   end
 
-  # returns the end of the temporal coverage period as a datetime object
+  # returns the end of the temporal coverage period as a date object
   # end is considered to be the earlier of either the latest end date in the files OR the end of the date range being searched
-  def end_time
+  def end_date
     latest_from_files = files.collect(&:end_time).compact.sort.last
-
     return nil unless latest_from_files
 
     # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
-    latest_from_files_as_dt = latest_from_files.utc.to_datetime
+    latest_from_files_as_date = latest_from_files.utc.to_date
     if date_range && date_range.to_date
-      end_of_range = date_range.to_date.to_datetime
-      end_of_range < latest_from_files_as_dt ? end_of_range : latest_from_files_as_dt
+      end_of_range = date_range.to_date
+      end_of_range < latest_from_files_as_date ? end_of_range : latest_from_files_as_date
     else
-      latest_from_files_as_dt
+      latest_from_files_as_date
     end
   end
 
