@@ -94,7 +94,7 @@ class Facility < ActiveRecord::Base
   end
 
   # Returns an array of points for this facility. There will always be either zero, one or two points. One is a point, two is a rectangle.
-  def location
+  def location_as_points
     points = []
     if a_lat && a_long
       points << {:lat => a_lat, :long => a_long}

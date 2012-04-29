@@ -97,7 +97,7 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     facilities = files.collect { |f| f.experiment.facility }.uniq
     locations = []
     facilities.each do |f|
-      locations << f.location unless f.location.empty?
+      locations << f.location_as_points unless f.location_as_points.empty?
     end
     locations
   end

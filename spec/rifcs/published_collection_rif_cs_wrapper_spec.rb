@@ -106,11 +106,11 @@ describe PublishedCollectionRifCsWrapper do
       df4 = mock(:data_file)
 
       f1 = mock(:facility)
-      f1.stub(:location).and_return([])
+      f1.stub(:location_as_points).and_return([])
       f2 = mock(:facility)
-      f2.stub(:location).and_return(['not empty'])
+      f2.stub(:location_as_points).and_return(['not empty'])
       f3 = mock(:facility)
-      f3.stub(:location).and_return(['also not empty'])
+      f3.stub(:location_as_points).and_return(['also not empty'])
 
       df1.stub_chain(:experiment, :facility).and_return(f1)
       df2.stub_chain(:experiment, :facility).and_return(f2)
