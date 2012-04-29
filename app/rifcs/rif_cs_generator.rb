@@ -28,8 +28,10 @@ class RifCsGenerator
           end
 
           xml.location do
-            xml.electronic type: 'url' do
-              xml.value wrapper_object.electronic_location
+            xml.address do
+              xml.electronic type: 'url' do
+                xml.value wrapper_object.electronic_location
+              end
             end
           end
 
