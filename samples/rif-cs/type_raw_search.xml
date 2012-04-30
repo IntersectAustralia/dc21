@@ -11,9 +11,11 @@
       </name>
 
       <location>
-        <electronic type="url">
-          <value>$$ZIP_URL$$</value>
-        </electronic>
+        <address>
+          <electronic type="url">
+            <value>$$ZIP_URL$$</value>
+          </electronic>
+        </address>
       </location>
 
       <subject type="local" xml:lang="en">Rainfall</subject>
