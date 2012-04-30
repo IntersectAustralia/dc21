@@ -34,6 +34,7 @@ class DataFile < ActiveRecord::Base
   scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
   scope :with_status_in, lambda { |stati| where {file_processing_status.in stati} }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader)}
+  #scope :with_experiment, lambda { |experiment| where "data_files.experiment_id" => experiment }
   #scope :with_any_of_these_tags, lambda { |tags| joins(:tags).where("data_files_tags.tag_id" => tags)}
 
   attr_accessor :messages
@@ -68,8 +69,9 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
-  def self.with_experiment(experiments)
-    data_file_ids = Experiment.unscoped.select("DISTINCT(facility_id)").joins(:facility).where("facility.id" => facility).collect(&:id)
+  def self.with_experiment(experiment_names)
+    data_file_ids = DataFile.unscoped.select("data_files.id").joins(:experiment).where("experiments.name" => experiment_names).collect(&:id)
+    where(:id => data_file_ids)
   end
 
   def self.searchable_facilities
