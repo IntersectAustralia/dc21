@@ -23,7 +23,7 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
   # remove key, originating source, electronic location and check them separately, since we don't know the URLs ahead of time
   actual_originating_source = actual_hash['registryObjects']['registryObject'].delete('originatingSource')
   actual_key = actual_hash['registryObjects']['registryObject'].delete('key')
-  actual_location = actual_hash['registryObjects']['registryObject']['collection']['location']['electronic'].delete('value')
+  actual_location = actual_hash['registryObjects']['registryObject']['collection']['location']['address']['electronic'].delete('value')
 
   actual_key.should =~ /^http:\/\/([^\/]*)\/published_collections\/#{pc.id}$/
   actual_originating_source.should =~ /^http:\/\/([^\/]*)\/$/
@@ -31,7 +31,7 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
 
   expected_hash['registryObjects']['registryObject'].delete('originatingSource')
   expected_hash['registryObjects']['registryObject'].delete('key')
-  expected_hash['registryObjects']['registryObject']['collection']['location']['electronic'].delete('value')
+  expected_hash['registryObjects']['registryObject']['collection']['location']['address']['electronic'].delete('value')
 
   diff = expected_hash.diff(actual_hash)
   unless diff == {}

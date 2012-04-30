@@ -75,17 +75,17 @@ describe PublishedCollectionRifCsWrapper do
   end
 
   describe "Field of research codes" do
-     it "should collect all FOR codes from experiments associated with the files" do
+     it "should collect all FOR codes from experiments associated with the files, and strip off all but the last part of the url" do
        exp1 = Factory(:experiment)
        exp2 = Factory(:experiment)
        exp3 = Factory(:experiment)
        exp4 = Factory(:experiment)
-       Factory(:experiment_for_code, :url => 'http://a', :experiment => exp1)
-       Factory(:experiment_for_code, :url => 'http://b', :experiment => exp2)
-       Factory(:experiment_for_code, :url => 'http://b', :experiment => exp3)
-       Factory(:experiment_for_code, :url => 'http://c', :experiment => exp3)
-       Factory(:experiment_for_code, :url => 'http://d', :experiment => exp3)
-       Factory(:experiment_for_code, :url => 'http://e', :experiment => exp4)
+       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
+       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/0101', :experiment => exp2)
+       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/0234', :experiment => exp3)
+       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/05', :experiment => exp3)
+       Factory(:experiment_for_code, :url => 'asdf', :experiment => exp3)
+       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/020103', :experiment => exp4)
 
        df1 = Factory(:data_file, :experiment => exp1)
        df2 = Factory(:data_file, :experiment => exp2)
@@ -94,7 +94,7 @@ describe PublishedCollectionRifCsWrapper do
        df5 = Factory(:data_file, :experiment => exp4)
 
        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
-       wrapper.for_codes.should eq(['http://a', 'http://b', 'http://c', 'http://d'])
+       wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
      end
    end
 

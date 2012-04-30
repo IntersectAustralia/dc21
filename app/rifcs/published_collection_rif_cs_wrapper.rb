@@ -56,7 +56,12 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   # returns an array of strings, each item being an FOR code in its PURL format
   def for_codes
     codes = files.collect { |f| f.experiment.experiment_for_codes }.flatten
-    codes.collect(&:url).uniq.sort
+    codes_with_urls = codes.collect(&:url).uniq.sort
+    codes_with_urls.collect do |code|
+      last_slash = code.rindex('/')
+      chop_from = last_slash ? last_slash + 1 : 0
+      code[chop_from..-1]
+    end
   end
 
   # returns the start of the temporal coverage period as a date object
