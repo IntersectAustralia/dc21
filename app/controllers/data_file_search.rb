@@ -57,6 +57,7 @@ class DataFileSearch
     date_range.from_date.nil? &&
         date_range.to_date.nil? &&
         facilities.empty? &&
+        experiments.empty? &&
         variables.empty? &&
         stati.empty? &&
         tags.empty? &&
@@ -77,9 +78,6 @@ class DataFileSearch
     end
     if upload_date_range.from_date || upload_date_range.to_date
       search_result = search_result.with_uploaded_date_in_range(upload_date_range.from_date, upload_date_range.to_date)
-    end
-    unless facilities.nil? || facilities.empty?
-      search_result = search_result.with_station_name_in(facilities)
     end
     unless experiments.nil? || experiments.empty?
       search_result = search_result.with_experiment(experiments)

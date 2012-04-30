@@ -119,7 +119,23 @@ describe DataFile do
       end
     end
 
-    #TODO: In progress
+    describe "Find files with experiment" do
+      it "Find files with experiment" do
+        ex1 = Factory(:experiment, :name => "My experiment one")
+        ex2 = Factory(:experiment, :name => "My experiment two")
+        f1 = Factory(:data_file, :experiment_id => ex1.id).id
+        f2 = Factory(:data_file, :experiment_id => ex1.id).id
+        f3 = Factory(:data_file, :experiment_id => ex1.id).id
+        f4 = Factory(:data_file, :experiment_id => ex2.id).id
+        f5 = Factory(:data_file, :experiment_id => ex2.id).id
+        f6 = Factory(:data_file, :experiment_id => ex2.id).id
+
+        DataFile.with_experiment([ex1.name]).order(:id).collect(&:id).should eq([f1, f2, f3])
+        DataFile.with_experiment([ex2.name]).order(:id).collect(&:id).should eq([f4, f5, f6])
+        DataFile.with_experiment([ex1.name, ex2.name]).order(:id).collect(&:id).should eq([f1, f2, f3, f4, f5, f6])
+      end
+    end
+
     describe "Find files with uploader" do
       it "Find files for uploader" do
         u1 = Factory(:user)
