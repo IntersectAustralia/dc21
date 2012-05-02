@@ -33,7 +33,7 @@ jQuery ->
     false
 
   #select all on parent click
-  $('input.facility').click ->
+  $('input.facility_parent').click ->
     cb = $(this)
     children = cb.closest('div.facility_group').find('input.experiment')
     if cb.is(':checked')
@@ -46,7 +46,7 @@ jQuery ->
   # child click
   $('input.experiment').click ->
     cb = $(this)
-    parent = cb.closest('div.facility_group').find('input.facility').first()
+    parent = cb.closest('div.facility_group').find('input.facility_parent').first()
     if cb.is(':checked')
       child_count = cb.closest('div.facility_group').find('input.experiment').length
       checked_child_count = cb.closest('div.facility_group').find('input.experiment:checked').length
