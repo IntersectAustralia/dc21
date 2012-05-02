@@ -95,13 +95,13 @@
                   = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
-        %h4#uploader.expand Uploader
+        %h4#uploader.expand Uploader:
         .uploader
           = label_tag "search[uploader_id]", "Uploader:"
           = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
-        %h4#upload_date.expand Upload Date
+        %h4#upload_date.expand Upload Date:
         .upload_date
           = label_tag :from_date, "From Date:"
           = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true
