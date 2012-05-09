@@ -39,6 +39,12 @@ And /^I follow the view link for data file "([^"]*)"$/ do |filename|
   click_link("view_#{file.id}")
 end
 
+Given /^I edit data file "([^"]*)"$/ do |filename|
+  data_file = DataFile.find_by_filename(filename) #Experiment.find_by_name!(name)
+  click_link("view_#{data_file.id}")
+  click_link "Edit Data File"
+end
+
 When /^I have uploaded "([^"]*)"$/ do |filename|
   user = User.first
   create_data_file filename, user

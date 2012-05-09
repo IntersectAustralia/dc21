@@ -1,0 +1,77 @@
+- content_for :breadcrumb  do
+  %h1 Data / View / #{@data_file.filename}
+
+.container
+  = form_for (@data_file) do |f|
+    %h2 Edit Data File
+    = render "shared/error_messages", :target => @data_file
+    .control-group
+      %label.control-label{ :for => :data_file_filename } Name
+      .controls
+        = required
+        = f.text_field :filename
+    .control-group
+      %label.control-label{ :for => :file_processing_status } File type
+      .controls
+        = required
+        = f.select :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
+    .control-group
+      %label.control-label File Format
+      .controls
+        = @data_file.format_for_display
+    .control-group
+      %label.control-label{ :for => :data_file_file_processing_description } Description
+      .controls
+        = f.text_area :file_processing_description
+    .control-group#tags
+      %label.control-label{ :for => :tags } Tags
+      .controls
+        - if tags.empty?
+          .record None
+        - tags.each do |tag|
+          %label.checkbox
+            = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
+            = label_tag "tag_#{tag.id}", tag.name
+    .control-group
+      %label.control-label{ :for => :experiment} Experiment
+      .controls
+        = required
+        = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
+    .control-group
+      %label.control-label Date Added
+      .controls
+        = @data_file.created_at.to_s(:with_time)
+    .control-group
+      %label.control-label Added By
+      .controls
+        = (@data_file.created_by ? @data_file.created_by.email : "")
+
+    - if @data_file.known_format?
+      %hr/
+      %h3 Information From The File
+      = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
+      = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
+      = render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
+      = render "file_format_specific_details"
+    - else
+      .control-group
+        = label_tag "file_#{@data_file.id}_start_time", "Start Time", class: "control-label"
+        .controls
+          = text_field_tag "files[#{@data_file.id}][start_time]", @data_file.start_time, :id => "file_#{@data_file.id}_start_time", :datepicker => true
+          .hidden{:id => "file_#{@data_file.id}_start_container"}
+            = select_hour @start_time, {:field_name => "files[#{@data_file.id}][start_hr]"}, {:id => "file_#{@data_file.id}_start_hr"}
+            = select_minute @start_time, {:field_name => "files[#{@data_file.id}][start_min]"}, {:id => "file_#{@data_file.id}_start_min"}
+            = select_second @start_time, {:field_name => "files[#{@data_file.id}][start_sec]"}, {:id => "file_#{@data_file.id}_start_sec"}
+      .control-group
+        = label_tag "file_#{@data_file.id}_end_time", "End Time", class: "control-label"
+        .controls
+          = text_field_tag "files[#{@data_file.id}][end_time]", @data_file.end_time, :id => "file_#{@data_file.id}_end_time", :datepicker => true
+          .hidden{:id => "file_#{@data_file.id}_end_container"}
+            = select_hour @end_time, {:field_name => "files[#{@data_file.id}][end_hr]"}, {:id => "file_#{@data_file.id}_end_hr"}
+            = select_minute @end_time, {:field_name => "files[#{@data_file.id}][end_min]"}, {:id => "file_#{@data_file.id}_end_min"}
+            = select_second @end_time, {:field_name => "files[#{@data_file.id}][end_sec]"}, {:id => "file_#{@data_file.id}_end_sec"}
+    .form-actions
+      .actions-pre
+        = cancel_button "Cancel", data_files_path
+      .actions
+        = f.submit "Update"

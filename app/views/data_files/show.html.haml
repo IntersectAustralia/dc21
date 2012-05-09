@@ -5,6 +5,7 @@
   =render :partial => 'data_files/pageactions'
 
 = cancel_button "Back", data_files_path
+
 #file_details
   %hr/
   %h3 Basic Information
@@ -35,4 +36,8 @@
     = render_field "End time", end_date
 
 
-= cancel_button "Back", data_files_path
+.form-actions
+  .actions-pre
+    = cancel_button "Back", data_files_path
+  .actions
+    = link_to "Edit Data File", edit_data_file_path, :class => "bluebutton"

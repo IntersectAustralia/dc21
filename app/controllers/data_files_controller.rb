@@ -1,6 +1,7 @@
 class DataFilesController < ApplicationController
 
   ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id)
+  SAVE_MESSAGE = 'The data file was saved successfully.'
 
   before_filter :authenticate_user!
   load_and_authorize_resource
@@ -37,6 +38,33 @@ class DataFilesController < ApplicationController
   end
 
   def update
+    files = []
+    params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
+
+    tags = params[:tags]
+    @data_file.tag_ids = tags
+
+    if !params[:files].nil?
+      params[:files].each do |id, attrs|
+        attrs.merge!(params[:date][:files][id]) if params[:date].present? && params[:date][:files][id].present?
+        start_time = reformat_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec])
+        end_time = reformat_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec])
+        @data_file.start_time = start_time
+        @data_file.end_time = end_time
+      end
+    end
+
+    success = false
+    DataFile.transaction do
+      success = @data_file.update_attributes(params[:data_file])
+      raise ActiveRecord::Rollback unless success #tell AR to rollback the transaction but not pass on the error
+    end
+
+    if success
+      redirect_to data_file_path, notice: SAVE_MESSAGE
+    else
+      render action: "edit"
+    end
   end
 
   def create
@@ -178,6 +206,15 @@ class DataFilesController < ApplicationController
     adjusted_date << " UTC"
     #puts "#{date} #{hr}:#{min}:#{sec} -> #{adjusted_date} -> #{DateTime.parse(adjusted_date)}"
     return DateTime.parse(adjusted_date)
+  end
+
+  def reformat_date_and_time(date, hr, min, sec)
+    return if date.blank?
+    adjusted_date = date #so we can use << without modifying the original
+    if hr.present? && min.present? && sec.present?
+      adjusted_date << " " << hr << ":" << min << ":" << sec
+    end
+    return adjusted_date
   end
 
   def do_search(search_params)
