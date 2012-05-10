@@ -41,13 +41,13 @@ class DataFilesController < ApplicationController
     tags = params[:tags]
     @data_file.tag_ids = tags
 
-    attrs = params.delete(:date)
-
-    start_time = sanitise_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec])
-    end_time = sanitise_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec])
-
-    params[:data_file][:start_time] = start_time
-    params[:data_file][:end_time] = end_time
+    if !params[:date].nil?
+      attrs = params.delete(:date)
+      start_time = sanitise_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec])
+      end_time = sanitise_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec])
+      params[:data_file][:start_time] = start_time
+      params[:data_file][:end_time] = end_time
+    end
 
     if @data_file.update_attributes(params[:data_file])
       redirect_to data_file_path, notice: SAVE_MESSAGE

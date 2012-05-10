@@ -47,11 +47,6 @@ Feature: View the list of data files
     Then I should see "Filename can't be blank"
 
   Scenario: Validation errors - file type
-    When I am on the list data files page
-    And I edit data file "sample.txt"
-    And I select "" from the select box for ""
-    And I press "Update"
-    Then I should see "Filename can't be blank"
 
   Scenario: Validation errors - experiment
 
