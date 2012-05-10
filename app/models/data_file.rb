@@ -107,6 +107,13 @@ class DataFile < ActiveRecord::Base
     self.format.nil? ? "Unknown" : self.format
   end
 
+  def start_time_is_not_nil?
+    !self.start_time.nil?
+  end
+
+  def end_time_is_not_nil?
+    !self.end_time.nil?
+  end
 
   def known_format?
     !self.format.nil?

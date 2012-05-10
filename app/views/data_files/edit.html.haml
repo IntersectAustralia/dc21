@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Data / View / #{@data_file.filename}
+  %h1 Data / Edit / #{@data_file.filename}
 
 .container
   = form_for (@data_file) do |f|
@@ -55,21 +55,35 @@
       = render "file_format_specific_details"
     - else
       .control-group
-        = label_tag "file_#{@data_file.id}_start_time", "Start Time", class: "control-label"
+        = label_tag "data_file_start_time", "Start Time", class: "control-label"
         .controls
-          = text_field_tag "files[#{@data_file.id}][start_time]", @data_file.start_time, :id => "file_#{@data_file.id}_start_time", :datepicker => true
-          .hidden{:id => "file_#{@data_file.id}_start_container"}
-            = select_hour @start_time, {:field_name => "files[#{@data_file.id}][start_hr]"}, {:id => "file_#{@data_file.id}_start_hr"}
-            = select_minute @start_time, {:field_name => "files[#{@data_file.id}][start_min]"}, {:id => "file_#{@data_file.id}_start_min"}
-            = select_second @start_time, {:field_name => "files[#{@data_file.id}][start_sec]"}, {:id => "file_#{@data_file.id}_start_sec"}
+          - if @data_file.start_time_is_not_nil?
+            = text_field_tag "date[start_time]", @data_file.start_time.utc.to_date,  :id => "file_#{@data_file.id}_start_time", :datepicker => true
+            .show{:id => "file_#{@data_file.id}_start_container"}
+              = select_hour @data_file.start_time.utc, {:field_name => "start_hr"}, {:id => "start_hr"}
+              = select_minute @data_file.start_time.utc, {:field_name => "start_min"}, {:id => "start_min"}
+              = select_second @data_file.start_time.utc, {:field_name => "start_sec"}, {:id => "start_sec"}
+          - else
+            = text_field_tag "date[start_time]", @data_file.start_time, :id => "file_#{@data_file.id}_start_time", :datepicker => true
+            .hidden{:id => "file_#{@data_file.id}_start_container"}
+              = select_hour @data_file.start_time, {:field_name => "start_hr"}
+              = select_minute @data_file.start_time, {:field_name => "start_min"}
+              = select_second @data_file.start_time, {:field_name => "start_sec"}
       .control-group
-        = label_tag "file_#{@data_file.id}_end_time", "End Time", class: "control-label"
+        = label_tag "data_file_end_time", "End Time", class: "control-label"
         .controls
-          = text_field_tag "files[#{@data_file.id}][end_time]", @data_file.end_time, :id => "file_#{@data_file.id}_end_time", :datepicker => true
-          .hidden{:id => "file_#{@data_file.id}_end_container"}
-            = select_hour @end_time, {:field_name => "files[#{@data_file.id}][end_hr]"}, {:id => "file_#{@data_file.id}_end_hr"}
-            = select_minute @end_time, {:field_name => "files[#{@data_file.id}][end_min]"}, {:id => "file_#{@data_file.id}_end_min"}
-            = select_second @end_time, {:field_name => "files[#{@data_file.id}][end_sec]"}, {:id => "file_#{@data_file.id}_end_sec"}
+          -if @data_file.end_time_is_not_nil?
+            = text_field_tag "date[end_time]", @data_file.end_time.utc.to_date, :id => "file_#{@data_file.id}_end_time", :datepicker => true
+            .show{:id => "file_#{@data_file.id}_end_container"}
+              = select_hour @data_file.end_time.utc, {:field_name => "end_hr"}
+              = select_minute @data_file.end_time.utc, {:field_name => "end_min"}
+              = select_second @data_file.end_time.utc, {:field_name => "end_sec"}
+          - else
+            = text_field_tag "date[start_time]", @data_file.start_time, :id => "file_#{@data_file.id}_end_time", :datepicker => true
+            .hidden{:id => "file_#{@data_file.id}_end_container"}
+              = select_hour @data_file.end_time, {:field_name => "end_hr"}
+              = select_minute @data_file.end_time, {:field_name => "end_min"}
+              = select_second @data_file.end_time, {:field_name => "end_sec"}
     .form-actions
       .actions-pre
         = cancel_button "Cancel", data_files_path
