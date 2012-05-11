@@ -493,6 +493,20 @@ describe DataFile do
     end
   end
 
+  describe "Updating data file" do
+    it "should return false if there is no start date" do
+      @data_file = Factory(:data_file, :end_time => "")
+      result = @data_file.start_time_is_not_nil?
+      result.should eq(false)
+    end
+
+    it "should return false if there is no end date" do
+      @data_file = Factory(:data_file, :end_time => "")
+      result = @data_file.start_time_is_not_nil?
+      result.should eq(false)
+    end
+  end
+
   describe "Deleting Files/data" do
     it "should not leave the deleted file behind" do
       pending
