@@ -508,6 +508,7 @@ describe DataFile do
   end
 
   describe "Deleting Files/data" do
+
     it "should not leave the deleted file behind" do
       pending
       #cuke steps exist to handle uploading a real file, so this test will exist in cuke
