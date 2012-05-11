@@ -6,9 +6,10 @@ Feature: View the list of data files
   Background:
       Given I am logged in as "georgina@intersect.org.au"
       And I have data files
-        | filename     | created_at       | uploaded_by               | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format |
-        | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |
-        | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |
+        | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format |
+        | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |
+        | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |
+        | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | RAW                    |        |
 
   Scenario: Navigate from list and view edit data file page
     When I am on the list data files page
@@ -51,3 +52,9 @@ Feature: View the list of data files
   Scenario: Validation errors - experiment
 
   Scenario: Validation errors - end time before than start time
+
+  @javascript
+  Scenario: Editing data file that isn't mine
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    Then I should see "You are not authorized to access this page."
