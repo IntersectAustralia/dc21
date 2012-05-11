@@ -40,4 +40,5 @@
   .actions-pre
     = cancel_button "Back", data_files_path
   .actions
-    = link_to "Edit Data File", edit_data_file_path, :class => "bluebutton"
+    - if can? :edit, @data_file
+      = link_to "Edit Data File", edit_data_file_path, :class => "bluebutton"
