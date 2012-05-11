@@ -13,8 +13,11 @@
     .control-group
       %label.control-label{ :for => :file_processing_status } File type
       .controls
-        = required
-        = f.select :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
+        - if @data_file.is_raw_file?
+          = @data_file.file_processing_status
+        - else
+          = required
+          = f.select :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
     .control-group
       %label.control-label File Format
       .controls

@@ -119,6 +119,10 @@ class DataFile < ActiveRecord::Base
     !self.format.nil?
   end
 
+  def is_raw_file?
+    self.file_processing_status.eql? "RAW"
+  end
+
   def has_data_in_range?(from, to)
     return false if self.start_time.nil?
 
