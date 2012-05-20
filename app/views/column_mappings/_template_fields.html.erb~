@@ -1,5 +1,0 @@
-<div class="text_fields_container">
-  <div class="input_group">
-    <%= text_field_tag 'mapping_labels[]', :name, :id => label_id %>
-  </div>
-</div>
