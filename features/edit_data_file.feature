@@ -10,7 +10,7 @@ Feature: Edit data files
         | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format   |
         | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |          |
         | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5     |
-        | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                | Unknown  |
+        | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |          |
 
   Scenario: Navigate from list and view edit data file page
     Given I am logged in as "georgina@intersect.org.au"
@@ -52,20 +52,24 @@ Feature: Edit data files
     When I am on the list data files page
     And I edit data file "file.txt"
     And I fill in "Description" with "watermelons"
-    #And I fill in "Start Date" with "2/2/2012"
+    And I fill in "Start Time" with "2012-05-23"
+    And I fill in "End Time" with "2012-05-31"
     And I press "Update"
     Then I should see "watermelons"
-    #And I should see "2012-02-02 0:00:00"
+    And I should see "2012-05-23 4:00:00"
+    And I should see "2012-05-31 3:00:00"
 
   Scenario: Editing non-TOA-5 data file as researcher
     Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
     And I fill in "Description" with "watermelons"
-    #And I fill in "Start Date" with "2/2/2012"
+    And I fill in "Start Time" with "2012-05-23"
+    And I fill in "End Time" with "2012-05-31"
     And I press "Update"
     Then I should see "watermelons"
-    #And I should see "2/2/2012"
+    And I should see "2012-05-23 4:00:00"
+    And I should see "2012-05-31 3:00:00"
 
   Scenario: Cancel edit data file
     Given I am logged in as "georgina@intersect.org.au"

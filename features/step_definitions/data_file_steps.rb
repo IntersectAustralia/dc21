@@ -1,6 +1,9 @@
 Given /^I have data files$/ do |table|
   table.hashes.each do |attributes|
     email = attributes.delete('uploaded_by')
+    if attributes['format'] == ''
+      attributes['format'] = nil
+    end
     if attributes['file_processing_status'] == ''
       attributes['file_processing_status'] = nil
     end
