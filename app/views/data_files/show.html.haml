@@ -40,5 +40,5 @@
   .actions-pre
     = cancel_button "Back", data_files_path
   .actions
-    - if can? :edit, @data_file
+    - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
       = link_to "Edit Data File", edit_data_file_path, :class => "bluebutton"

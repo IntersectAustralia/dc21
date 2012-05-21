@@ -1,17 +1,19 @@
-Feature: View the list of data files
+Feature: Edit data files
   In order to edit what I need
   As a user
   I want to edit the details of data files
 
   Background:
-      Given I am logged in as "georgina@intersect.org.au"
+      Given I have a user "georgina@intersect.org.au" with role "Administrator"
+      Given I have a user "researcher@intersect.org.au" with role "Researcher"
       And I have data files
-        | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format |
-        | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |
-        | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |
-        | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | RAW                    |        |
+        | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format   |
+        | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |          |
+        | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5     |
+        | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                | Unknown  |
 
   Scenario: Navigate from list and view edit data file page
+    Given I am logged in as "georgina@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
     Then I should see "sample.txt"
@@ -21,40 +23,60 @@ Feature: View the list of data files
     When I follow "Cancel"
     Then I should be on the list data files page
 
-  Scenario: Editing the data file
+  Scenario: Editing TOA-5 data file as superuser
+    Given I am logged in as "georgina@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
-    And I fill in "Name" with "edtspl.txt"
-    And I fill in "Description" with "edited description"
+    And I fill in "Description" with "oranges"
+    And I edit the File Type to "RAW"
+    And I edit the Experiment to "My Nice Experiment"
     And I press "Update"
-    Then I should see "edtspl.txt"
-    And I should see "edited description"
+    Then I should see "oranges"
+    And I should see "RAW"
+    And I should see "My Nice Experiment"
 
-  Scenario: Cancel edit data file
-    When I am on the list data files page
-    And I edit data file "sample.txt"
-    And I fill in "Name" with "edited sample.txt"
-    And I fill in "Description" with "edited description"
-    Then I follow "Cancel"
-    Then I should not see "edited sample.txt"
-    And I should not see "edited description"
-    And I should see "sample.txt"
-
-  Scenario: Validation errors - name
-    When I am on the list data files page
-    And I edit data file "sample.txt"
-    And I fill in "Name" with ""
-    And I press "Update"
-    Then I should see "Filename can't be blank"
-
-  Scenario: Validation errors - file type
-
-  Scenario: Validation errors - experiment
-
-  Scenario: Validation errors - end time before than start time
-
-  @javascript
-  Scenario: Editing data file that isn't mine
+  Scenario: Editing TOA-5 data file as researcher
+    Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
-    Then I should see "You are not authorized to access this page."
+    And I fill in "Description" with "apples"
+    And I edit the File Type to "RAW"
+    And I edit the Experiment to "My Nice Experiment"
+    And I press "Update"
+    Then I should see "apples"
+    And I should see "RAW"
+    And I should see "My Nice Experiment"
+
+  Scenario: Editing non-TOA-5 data file as superuser
+    Given I am logged in as "georgina@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I fill in "Description" with "watermelons"
+    #And I fill in "Start Date" with "2/2/2012"
+    And I press "Update"
+    Then I should see "watermelons"
+    #And I should see "2012-02-02 0:00:00"
+
+  Scenario: Editing non-TOA-5 data file as researcher
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I fill in "Description" with "watermelons"
+    #And I fill in "Start Date" with "2/2/2012"
+    And I press "Update"
+    Then I should see "watermelons"
+    #And I should see "2/2/2012"
+
+  Scenario: Cancel edit data file
+    Given I am logged in as "georgina@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "sample.txt"
+    And I fill in "Description" with "watermelons"
+    Then I follow "Cancel"
+    And I should not see "watermelons"
+    And I should see "sample.txt"
+
+  Scenario: Editing data file that isn't mine
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    Then I should not see "Edit Data File"

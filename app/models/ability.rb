@@ -62,7 +62,7 @@ class Ability
             :post_process,
             :verify_upload], DataFile
     can :destroy, DataFile, :created_by_id => user.id
-    can :edit, DataFile, :created_by_id => user.id
+    can :update, DataFile, :created_by_id => user.id
 
     if user.role.admin?
       # only admins can manage users
@@ -74,7 +74,6 @@ class Ability
       can :approve, User
 
       can :manage, DataFile
-      can :edit, DataFile
     end
 
   end

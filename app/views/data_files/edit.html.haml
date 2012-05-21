@@ -57,7 +57,7 @@
       = render "file_format_specific_details"
     - else
       .control-group
-        = label_tag "data_file_start_time", "Start Time", class: "control-label"
+        = label_tag "data_file_start_time", "Start Time", class: "control-label", :for => "file_#{@data_file.id}_start_time"
         .controls
           - if @data_file.start_time_is_not_nil?
             = text_field_tag "date[start_time]", @data_file.start_time.utc.to_date,  :id => "file_#{@data_file.id}_start_time", :datepicker => true
@@ -72,7 +72,7 @@
               = select_minute @data_file.start_time, {:field_name => "start_min"}
               = select_second @data_file.start_time, {:field_name => "start_sec"}
       .control-group
-        = label_tag "data_file_end_time", "End Time", class: "control-label"
+        = label_tag "data_file_end_time", "End Time", class: "control-label", :for => "file_#{@data_file.id}_end_time"
         .controls
           -if @data_file.end_time_is_not_nil?
             = text_field_tag "date[end_time]", @data_file.end_time.utc.to_date, :id => "file_#{@data_file.id}_end_time", :datepicker => true

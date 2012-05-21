@@ -166,6 +166,16 @@ When /^I select "([^"]*)" from the select box for "([^"]*)"$/ do |option, filena
   select(option, :from => field)
 end
 
+When /^I edit the File Type to "([^"]*)"$/ do |option|
+  field = "data_file_file_processing_status"
+  select(option, :from => field)
+end
+
+When /^I edit the Experiment to "([^"]*)"$/ do |option|
+  field = "data_file_experiment_id"
+  select(option, :from => field)
+end
+
 When /^I fill in "([^"]*)" with "([^"]*)" for "([^"]*)"$/ do |field, value, filename|
   file = DataFile.find_by_filename(filename)
 

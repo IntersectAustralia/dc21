@@ -38,8 +38,8 @@ class DataFilesController < ApplicationController
   end
 
   def update
-    tags = params[:tags]
-    @data_file.tag_ids = tags
+    file = DataFile.find(params[:id])
+    file.tag_ids = params[:tags]
 
     if !params[:date].nil?
       attrs = params.delete(:date)
@@ -49,12 +49,31 @@ class DataFilesController < ApplicationController
       params[:data_file][:end_time] = end_time
     end
 
-    if @data_file.update_attributes(params[:data_file])
+    if file.update_attributes(params[:data_file])
       redirect_to data_file_path, notice: SAVE_MESSAGE
     else
       render action: "edit"
     end
   end
+
+
+
+  def destroy135
+    file = DataFile.find(params[:id])
+    if file.destroy
+      begin
+        File.delete @data_file.path
+        redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
+      rescue Errno::ENOENT
+        redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
+      end
+    else
+      redirect_to(show_data_file_path(file), :alert => "Could not delete this file (Do you have permission to delete it?)")
+    end
+  end
+
+
+
 
   def create
     files = []
