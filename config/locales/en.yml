@@ -4,6 +4,8 @@
 en:
   activerecord:
     attributes:
+      data_file:
+        file_processing_status: 'File type'
       facility:
         a_lat: 'Latitude'
         a_long: 'Longitude'
