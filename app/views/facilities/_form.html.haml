@@ -5,46 +5,54 @@
     %h2 New Facility
 
   .formerror= render "shared/error_messages", :target => @facility
+
   .control-group
-    %label.control-label{ :for => :name } Name
+    = f.label :name, class: 'control-label'
     .controls
       = required
       = f.text_field :name
+
   .control-group
-    %label.control-label Code
+    = f.label :code, class: 'control-label'
     .controls
       = required
       = f.text_field :code
+
   .control-group
-    %label.control-label Description
+    = f.label :description, class: 'control-label'
     .controls
       = f.text_area :description
+
   .control-group
-    %label.control-label Location of Facility
     .controls
       .record Point location or Top Left Corner of rectangle
+
   .control-group
-    %label.control-label Latitude
+    = f.label :a_lat, 'Latitude', class: 'control-label'
     .controls
       = f.text_field :a_lat, :placeholder => "Decimal, -90.0 to 90.0"
+
   .control-group
-    %label.control-label Longitude
+    = f.label :a_long, 'Longitude', class: 'control-label'
     .controls
       = f.text_field :a_long, :placeholder => "Decimal, -180 to 180"
+
   .control-group
-    %label.control-label Location of Facility
     .controls
       .record Bottom Right Corner of rectangle
+
   .control-group
-    %label.control-label Latitude
+    = f.label :b_lat, 'Latitude (bottom right)', class: 'control-label'
     .controls
       = f.text_field :b_lat, :placeholder => "Decimal, -90.0 to 90.0"
+
   .control-group
-    %label.control-label Longitude
+    = f.label :b_long, 'Longitude (bottom right)', class: 'control-label'
     .controls
       = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
+
   .control-group
-    %label.control-label Contacts
+    = label_tag :contacts_select, 'Contacts', class: 'control-label'
     .controls
       = required
       %span.input

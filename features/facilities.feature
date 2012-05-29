@@ -1,6 +1,6 @@
 Feature: View the list of facilities
   As a user
-  I want to view a list of facilties and be able to add/edit and view them
+  I want to view a list of facilities and be able to add/edit and view them
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
@@ -74,13 +74,13 @@ Feature: View the list of facilities
 
     And I follow "New Facility"
     When I fill in the following:
-      | facility_name        | Facility0 |
-      | facility_code        | f0        |
-      | facility_description | blah      |
-      | facility_a_lat       | -10.1     |
-      | facility_a_long      | 20.2      |
-      | facility_b_lat       | -30.3     |
-      | facility_b_long      | 40.4      |
+      | Name                     | Facility0 |
+      | Code                     | f0        |
+      | Description              | blah      |
+      | Latitude                 | -10.1     |
+      | Longitude                | 20.2      |
+      | Latitude (bottom right)  | -30.3     |
+      | Longitude (bottom right) | 40.4      |
     And I add the following contacts:
       | email                  | primary |
       | one@intersect.org.au   | false   |
@@ -111,8 +111,8 @@ Feature: View the list of facilities
   #TODO refactor into just using a factory
     And I follow "New Facility"
     When I fill in the following:
-      | facility_name        | Facility0 |
-      | facility_code        | f0        |
+      | Name | Facility0 |
+      | Code | f0        |
     And I add the following contacts:
       | email                  | primary |
       | one@intersect.org.au   | false   |
@@ -136,8 +136,8 @@ Feature: View the list of facilities
     Given I am on the facilities page
     And I follow "New Facility"
     When I fill in the following:
-      | facility_name |  |
-      | facility_code |  |
+      | Name |  |
+      | Code |  |
     And I press "Save Facility"
     Then I should see "Name can't be blank"
     And I should see "Code can't be blank"
@@ -149,8 +149,8 @@ Feature: View the list of facilities
     When I am on the facilities page
     And I follow "New Facility"
     When I fill in the following:
-      | facility_name | Facility0 |
-      | facility_code | f0        |
+      | Name | Facility0 |
+      | Code | f0        |
     And I press "Save Facility"
     Then I should see "Name has already been taken"
     Then I should see "Code has already been taken"
@@ -169,8 +169,8 @@ Feature: View the list of facilities
     And I follow the view link for facility "Facility0"
     And I follow "Edit Facility"
     And I fill in the following:
-      | facility_name | Facility1 |
-      | facility_code | fac1      |
+      | Name | Facility1 |
+      | Code | fac1      |
     And I press "Update"
     Then I should see "Facility successfully updated."
     And I should see details displayed
@@ -185,8 +185,8 @@ Feature: View the list of facilities
     And I follow the view link for facility "Facility0"
     And I follow "Edit Facility"
     And I fill in the following:
-      | facility_name | really_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_name |
-      | facility_code |                                                                                                                                                                                                                                                                                                                                                                                  |
+      | Name | really_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_name |
+      | Code |                                                                                                                                                                                                                                                                                                                                                                                  |
     And I press "Update"
     Then I should see "Code can't be blank"
     And I should see "Name is too long (maximum is 50 characters)"
@@ -200,8 +200,8 @@ Feature: View the list of facilities
     And I follow the view link for facility "Facility0"
     And I follow "Edit Facility"
     And I fill in the following:
-      | facility_name | Facility1 |
-      | facility_code | f1        |
+      | Name | Facility1 |
+      | Code | f1        |
     And I press "Update"
     Then I should see "Name has already been taken"
     And I should see "Code has already been taken"
@@ -214,8 +214,8 @@ Feature: View the list of facilities
     And I follow the view link for facility "Facility0"
     And I follow "Edit Facility"
     And I fill in the following:
-      | facility_name | Facility1 |
-      | facility_code | f1        |
+      | Name | Facility1 |
+      | Code | f1        |
     And I follow "Cancel"
     Then I should see details displayed
       | Name | Facility0 |
