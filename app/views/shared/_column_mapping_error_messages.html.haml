@@ -1,9 +1,7 @@
-- if !target.nil?
-  - if !target.empty?
-    .alert-message.block-message.error
-      %a.close ×
-      %h3.error_header The records could not be saved for the following reasons:
-      %p.notification{:id => "*.errors"}
-        - target.uniq.each do |msg|
-          %li
-            = msg
+- unless target.nil? || target.empty?
+  .alert.alert-error
+    %h3.error_header The records could not be saved for the following reasons:
+    %p.notification{:id => "*.errors"}
+      - target.uniq.each do |msg|
+        %li
+          = msg
