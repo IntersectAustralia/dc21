@@ -16,7 +16,7 @@ describe AttachmentBuilder do
 
   describe "Building attachments" do
 
-    it "should create new data file object with correct experiment, type, description" do
+    it "should create new data file object with correct experiment, type, description and size" do
       file_type_determiner = mock(FileTypeDeterminer)
       file_type_determiner.should_receive(:identify_file).and_return(nil)
       user = Factory(:user)
@@ -30,6 +30,7 @@ describe AttachmentBuilder do
       data_file.experiment_id.should eq(23)
       data_file.file_processing_status.should eq(DataFile::STATUS_RAW)
       data_file.file_processing_description.should eq("my desc")
+      data_file.file_size.should eq(717397) #size in bytes of the sample file being used
     end
 
     it "should extract metadata if file type is recognised" do

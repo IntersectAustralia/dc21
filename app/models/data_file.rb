@@ -20,6 +20,7 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
   validates_presence_of :experiment_id
+  validates_presence_of :file_size
   validates_length_of :file_processing_description, :maximum => 255
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
   validate :end_time_not_before_start_time

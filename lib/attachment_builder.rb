@@ -9,7 +9,7 @@ class AttachmentBuilder
 
   def build(file, experiment_id, type, description, tags=[])
     path, new_filename = store_file(file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, file.original_filename)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, file.original_filename, file.size)
     if data_file.messages.blank?
       data_file.add_message(:success, "File uploaded successfully.")
     end
@@ -18,7 +18,7 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, description, tags, original_filename)
+  def create_data_file(path, filename, experiment_id, type, description, tags, original_filename, size)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path,
@@ -26,7 +26,8 @@ class AttachmentBuilder
                              :created_by => @current_user,
                              :file_processing_status => type,
                              :experiment_id => experiment_id,
-                             :file_processing_description => description)
+                             :file_processing_description => description,
+                             :file_size => size)
     data_file.tag_ids = tags
 
     format = @file_type_determiner.identify_file(data_file)

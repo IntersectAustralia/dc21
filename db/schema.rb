@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120423230538) do
+ActiveRecord::Schema.define(:version => 20120529110342) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20120423230538) do
     t.string   "file_processing_status"
     t.string   "file_processing_description"
     t.integer  "experiment_id"
+    t.integer  "file_size"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

@@ -7,5 +7,6 @@ FactoryGirl.define do
     association :created_by, :factory => :user
     experiment_id -1
     file_processing_status "RAW"
+    file_size 10000
   end
 end

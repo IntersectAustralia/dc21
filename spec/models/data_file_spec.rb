@@ -7,6 +7,7 @@ describe DataFile do
     it { should validate_presence_of(:created_by_id) }
     it { should validate_presence_of(:file_processing_status) }
     it { should validate_presence_of(:experiment_id) }
+    it { should validate_presence_of(:file_size) }
     it { should ensure_length_of(:file_processing_description).is_at_most(255) }
     it 'ensures a start time, but only if end_time specified' do
       now = DateTime.now
