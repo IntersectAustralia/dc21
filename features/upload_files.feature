@@ -128,7 +128,7 @@ Feature: Upload files
       | Tags        |               |
 
   Scenario: Upload multiple files
-    Given pending
+    # This cannot be automated due to limitations with selenium+file uploads - see manual tests
 
   Scenario: Modify and save metadata after uploading
     Given I upload "samples/subsetted/range_oct_10_oct_12/weather_station_15_min.dat" with type "RAW" and description "new description" and experiment "My Experiment" and tags "Video"
@@ -152,7 +152,7 @@ Feature: Upload files
 
 
   Scenario: Modify and save metadata after uploading (multiple files)
-    Given pending
+    # This cannot be automated due to limitations with selenium+file uploads - see manual tests
 
   Scenario Outline: Possible outcomes for uploaded files
     Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_15_min.dat" with type "RAW"
@@ -187,7 +187,7 @@ Feature: Upload files
     | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
   Scenario: Upload multiple files where there's an overlap or name clash within the set of files being uploaded
-    Given pending
+    # This cannot be automated due to limitations with selenium+file uploads - see manual tests
 
   Scenario: Must be logged in to view the upload page
     Then users should be required to login on the upload page
