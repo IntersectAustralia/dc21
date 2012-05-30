@@ -1,4 +1,4 @@
-class ColumnMappingsController < AdminPagesController
+class ColumnMappingsController < ApplicationController
 
   #New/Create:
     #This is the manual / admin way to define a mapping. Builds a column mapping by
@@ -10,11 +10,10 @@ class ColumnMappingsController < AdminPagesController
       #-selecting an unmapped column from that file
       #-selecting a preconfigured name from a dropdown
 
-
-
   before_filter :authenticate_user!
   set_tab :admin
   set_tab :columnmappings, :contentnavigation
+  layout 'admin'
 
   def index
     @column_mappings = ColumnMapping.all
@@ -98,5 +97,4 @@ class ColumnMappingsController < AdminPagesController
     @column_mapping.destroy
     redirect_to column_mappings_path, :notice => "The mapping was successfully deleted."
   end
-  
 end

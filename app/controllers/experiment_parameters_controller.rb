@@ -10,6 +10,7 @@ class ExperimentParametersController < ApplicationController
 
   set_tab :home
   set_tab :facilities, :contentnavigation
+  layout 'data_files'
 
   def new
   end
@@ -37,10 +38,4 @@ class ExperimentParametersController < ApplicationController
     @experiment_parameter.destroy
     redirect_to facility_experiment_url(@facility, @experiment), notice: 'The experiment parameter has been deleted.'
   end
-
-  private
-  def default_layout
-    "main"
-  end
-
 end

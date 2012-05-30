@@ -3,18 +3,16 @@ class UserRegistersController < Devise::RegistrationsController
   set_tab :signup
 
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy, :edit_password, :update_password, :profile]
-  layout 'guest'
+  layout 'application'
 
   def profile
     set_tab :account
     set_tab :overview, :contentnavigation
-    #render :layout => 'user_preferences'
   end
 
   def edit
     set_tab :account
     set_tab :editdetails, :contentnavigation
-    #render :layout => 'user_preferences'
   end
 
   # Override the create method in the RegistrationsController to add the notification hook

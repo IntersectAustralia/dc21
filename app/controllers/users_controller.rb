@@ -1,8 +1,9 @@
-class UsersController < AdminPagesController
+class UsersController < ApplicationController
 
   before_filter :authenticate_user!
   load_and_authorize_resource
   set_tab :admin
+  layout 'admin'
 
   def index
     @users = User.deactivated_or_approved
@@ -16,10 +17,6 @@ class UsersController < AdminPagesController
       set_tab :users, :contentnavigation
     end
   end
-
-  #def admin
-  #
-  #end
 
   def access_requests
     @users = User.pending_approval
@@ -90,4 +87,5 @@ class UsersController < AdminPagesController
       redirect_to(edit_approval_user_path(@user), :alert => "Please select a role for the user.")
     end
   end
+
 end

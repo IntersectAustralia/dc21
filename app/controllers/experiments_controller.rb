@@ -9,6 +9,7 @@ class ExperimentsController < ApplicationController
 
   set_tab :home
   set_tab :facilities, :contentnavigation
+  layout 'data_files'
 
   def show
   end
@@ -43,8 +44,4 @@ class ExperimentsController < ApplicationController
     end
   end
 
-  private
-  def default_layout
-    "main"
-  end
 end

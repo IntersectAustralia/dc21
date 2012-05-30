@@ -6,7 +6,8 @@
     #content_wrapper
       = render 'layouts/banner'
       #content
-        = yield :breadcrumb
+        - if content_for?(:breadcrumb)
+          = yield :breadcrumb
         #content_container
           = yield
     = render 'layouts/footer'

@@ -8,18 +8,18 @@ class PagesController < ApplicationController
   def home
     if !user_signed_in?
       set_tab :login
-      render :layout => 'guest' and return
+      render :layout => 'application'
     else
       set_tab :home
       set_tab :dashboard, :contentnavigation
       @data_files = DataFile.most_recent_first.limit(5)
-      render :layout => 'main'
+      render :layout => 'data_files'
     end
   end
 
   def about
-      set_tab :about
-      render :layout => 'application'
+    set_tab :about
+    render :layout => 'application'
   end
 
   private

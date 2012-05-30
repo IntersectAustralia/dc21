@@ -7,6 +7,7 @@ class DataFilesController < ApplicationController
   load_and_authorize_resource
   set_tab :home
   helper_method :sort_column, :sort_direction
+  layout 'data_files'
 
   expose(:tags) { Tag.order(:name) }
   expose(:facilities) { Facility.order(:name) }
@@ -136,8 +137,7 @@ class DataFilesController < ApplicationController
     @files = DataFile.find(@ids)
     @from_date = params[:from_date]
     @to_date = params[:to_date]
-    render :layout => 'guest'
-
+    render :layout => 'application'
   end
 
   def custom_download
@@ -250,10 +250,6 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     !@data_file.errors.any?
-  end
-
-  def default_layout
-    "main"
   end
 
   def sort_column

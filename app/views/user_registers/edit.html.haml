@@ -1,14 +1,15 @@
-%h1 #{@user.email} / Edit Details
-#content_container
-  = render 'user_registers/contentnavigation'
-  .container
-    %h2 Edit Account Details
-    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
-      = render "shared/error_messages", :target => @user
-      = render :partial => 'personal_details', :locals => {:f => f}
+- content_for :breadcrumb  do
+  %h1 #{@user.email} / Edit Details
 
-      .form-actions
-        .actions-pre
-          = cancel_button 'Cancel', users_profile_path
-        .actions
-          = f.submit "Update"
+= render 'user_registers/contentnavigation'
+.container
+  = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+    .formerror= render "shared/error_messages", :target => @user
+    = render :partial => 'personal_details', :locals => {:f => f}
+
+    .form-actions
+      .actions-pre
+        = cancel_button 'Cancel', users_profile_path
+      .actions
+        = f.submit "Update"
+

@@ -4,6 +4,7 @@ class FacilitiesController < ApplicationController
 
   set_tab :home
   set_tab :facilities, :contentnavigation
+  layout 'data_files'
 
   def index
   end
@@ -66,8 +67,4 @@ class FacilitiesController < ApplicationController
     end
   end
 
-  private
-  def default_layout
-    "main"
-  end
 end

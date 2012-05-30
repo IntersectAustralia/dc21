@@ -1,15 +1,22 @@
-- title "Change Your Password"
+- content_for :breadcrumb  do
+  %h1 Change Your Password
 
-= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => {:method => :put}) do |f|
-  = f.hidden_field :reset_password_token
-  = render "shared/error_messages", :target => @user
-  .field
-    = f.label :password
-    = required
-    = f.password_field :password
-  .field
-    = f.label :password_confirmation
-    = required
-    = f.password_field :password_confirmation
-  .actions
-    = f.submit "Change Your Password"
+.container
+  = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => {:method => :put}) do |f|
+    = f.hidden_field :reset_password_token
+    .formerror= render "shared/error_messages", :target => @user
+    .control-group
+      = f.label :password, class: "control-label"
+      .controls
+        = required
+        = f.password_field :password
+    .control-group
+      = f.label :password_confirmation, class: "control-label"
+      .controls
+        = required
+        = f.password_field :password_confirmation
+    .form-actions
+      .actions-pre
+        = cancel_button 'Cancel', root_path
+      .actions
+        = f.submit "Change Your Password"
