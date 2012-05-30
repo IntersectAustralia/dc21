@@ -25,8 +25,9 @@ Feature: View the details of a data file
 
   Scenario: View a data file with no start/end times
     When I am on the data file details page for datafile.dat
-    Then I should not see "Start time" within the file details area
-    Then I should not see "End time" within the file details area
+    Then I should see details displayed
+      | Start time | Unknown |
+      | End time   | Unknown |
 
   Scenario: View a file with status/description experiment info
     When I am on the data file details page for datafile.dat
