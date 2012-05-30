@@ -169,3 +169,7 @@ def chatty_diff_table!(expected_table, actual, opts={})
     raise
   end
 end
+
+When /^I sleep briefly$/ do
+  sleep(0.5)
+end

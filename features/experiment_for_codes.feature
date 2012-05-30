@@ -84,6 +84,8 @@ Feature: Manage experiment metadata
   Scenario: FOR codes already chosen are retained on edit
     Given experiment "Weather Station" has for code "02 - PHYSICAL SCIENCES"
     When I edit experiment "Weather Station"
+    # workaround due to javascript lag causing this to fail intermittently
+    And I sleep briefly
     Then I should see for codes
       | 02 - PHYSICAL SCIENCES |
     And I add for code "05 - ENVIRONMENTAL SCIENCES"
