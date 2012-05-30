@@ -3,7 +3,7 @@
 
 .container
   = form_tag(connect_column_mapping_path, :method => :post, ) do
-    .formerror= render "shared/column_mapping_error_messages", :target => @messages
+    = render "shared/column_mapping_error_messages", :target => @messages
     %table#mappings
       %tr
         %th Code

@@ -4,7 +4,7 @@
 .container
   = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => {:method => :put}) do |f|
     = f.hidden_field :reset_password_token
-    .formerror= render "shared/error_messages", :target => @user
+    = render "shared/error_messages", :target => @user
     .control-group
       = f.label :password, class: "control-label"
       .controls

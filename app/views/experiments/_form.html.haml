@@ -4,8 +4,7 @@
   - else
     %h2 Edit Experiment
 
-  .rowform
-    .formerror= render "shared/error_messages", :target => @experiment
+  = render "shared/error_messages", :target => @experiment
 
   .control-group
     = f.label :parent_experiment_id, "Parent", class: "control-label"

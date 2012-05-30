@@ -1,5 +1,5 @@
 = form_for @published_collection do |f|
-  .formerror= render 'shared/error_messages', target: @published_collection
+  = render 'shared/error_messages', target: @published_collection
 
   .control-group
     = f.label :name, 'Name', class: 'control-label'

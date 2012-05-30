@@ -4,7 +4,7 @@
   - else
     %h2 New Facility
 
-  .formerror= render "shared/error_messages", :target => @facility
+  = render "shared/error_messages", :target => @facility
 
   .control-group
     = f.label :name, class: 'control-label'

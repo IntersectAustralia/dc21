@@ -1,7 +1,8 @@
-- if target.errors.any?
-  .alert.alert-error
-    %h3.error_header Please correct the following before continuing:
-    %p.notification{:id => "*.errors"}
-      - target.errors.full_messages.each do |msg|
-        %li
-          = msg
+.formerror
+  - if target.errors.any?
+    .alert.alert-error
+      %h3.error_header Please correct the following before continuing:
+      %p.notification{:id => "*.errors"}
+        - target.errors.full_messages.each do |msg|
+          %li
+            = msg
