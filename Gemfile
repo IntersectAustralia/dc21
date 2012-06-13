@@ -33,6 +33,7 @@ gem "simplecov", ">=0.3.8", :require => false, :group => :test
 gem "squeel"
 gem "httparty"
 gem "decent_exposure"
+gem "rvm-capistrano"
 
 group :development, :test do
   gem "rspec-rails"

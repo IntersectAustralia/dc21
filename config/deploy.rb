@@ -1,4 +1,3 @@
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require 'rvm/capistrano'
 require 'capistrano/ext/multistage'
 require 'bundler/capistrano'
@@ -11,7 +10,6 @@ set :rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-de
 set :shared_children, shared_children + %w(log_archive)
 set :shell, '/bin/bash'
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
-set :rvm_type, :user
 
 # Deploy using copy for now
 set :scm, 'git'
@@ -78,6 +76,8 @@ end
 
 before 'deploy:setup' do
   server_setup.rpm_install
+  rvm.install_rvm
+  rvm.install_ruby
   server_setup.rvm.trust
   server_setup.gem_install
   server_setup.passenger

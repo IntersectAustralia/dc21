@@ -242,6 +242,8 @@ GEM
     ruby_parser (2.0.6)
       sexp_processor (~> 3.0)
     rubyzip (0.9.6.1)
+    rvm-capistrano (1.2.2)
+      capistrano (>= 2.0.0)
     sass (3.1.10)
     sass-rails (3.1.4)
       actionpack (~> 3.1.0)
@@ -319,6 +321,7 @@ DEPENDENCIES
   rails3-generators
   rspec-rails
   rubyzip
+  rvm-capistrano
   sass-rails (~> 3.1.4)
   shoulda-matchers
   simplecov (>= 0.3.8)
