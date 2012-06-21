@@ -17,7 +17,7 @@ begin
       raise 'Cannot add an initial user, there are already users in the database' unless User.count.eql? 0
       raise 'Cannot add an initial user, there are no roles specified. Please seed first' if Role.count.eql? 0
       raise 'Add Initial User task has not been customised. Cannot continue!' unless customised
-      raise 'Initial User Password has not been changed' if user_attrs[:password].eql 'change me'
+      raise 'Initial User Password has not been changed' if user_attrs[:password].eql? 'change me'
 
       user = User.new(user_attrs)
       role = Role.find_by_name("Administrator")
