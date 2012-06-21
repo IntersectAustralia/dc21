@@ -7,9 +7,17 @@ set :application, 'dc21app'
 set :stages, %w(qa staging production)
 set :default_stage, "qa"
 set :rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql84-server postgresql84 postgresql84-devel}
+set :rpms_centos_6, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql-server postgresql postgresql-devel}
 set :shared_children, shared_children + %w(log_archive)
 set :shell, '/bin/bash'
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
+
+set :centos_6, true
+
+role :web, web_server
+role :app, app_server
+role :db,  db_server, :primary => true
+
 
 # Deploy using copy for now
 set :scm, 'git'
@@ -28,7 +36,8 @@ default_run_options[:pty] = true
 
 namespace :server_setup do
   task :rpm_install, :roles => :app do
-    run "#{try_sudo} yum install -y #{rpms.join(' ')}"
+    selected_rpms = centos_6 ? rpms_centos_6 : rpms
+    run "#{try_sudo} yum install -y #{selected_rpms.join(' ')}"
   end
   namespace :filesystem do
     task :dir_perms, :roles => :app do
@@ -57,7 +66,8 @@ namespace :server_setup do
   end
   namespace :config do
     task :apache do
-      src = "#{release_path}/config/httpd/#{stage}_rails_#{application}.conf"
+      run "cd #{release_path}/config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\""
+      src = "#{release_path}/config/httpd/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} && #{try_sudo} /sbin/service httpd graceful; /bin/true"
     end
@@ -89,8 +99,9 @@ end
 after 'deploy:update' do
   server_setup.logging.rotation
   server_setup.config.apache
-  deploy.restart
+  deploy.copy_templates
   deploy.additional_symlinks
+  deploy.restart
 end
 
 after 'deploy:finalize_update' do
@@ -152,6 +163,12 @@ namespace :deploy do
     run("cd #{current_path} && rake db:seed", :env => {'RAILS_ENV' => "#{stage}"})
   end
 
+  # Add an initial user
+  desc "Adds an initial user to the app"
+  task :add_initial_user, :roles => :db do
+    run("cd #{current_path} && rake db:add_initial_user", :env => {'RAILS_ENV' => "#{stage}"})
+  end
+
   desc "Full redepoyment, it runs deploy:update and deploy:refresh_db"
   task :full_redeploy do
     update
@@ -200,6 +217,11 @@ namespace :deploy do
     restart
   end
 
+  desc 'Move in custom configuration from local machine'
+  task :copy_templates do
+    upload "deploy_templates/", "#{release_path}/", :mode => 0664, :recursive => true
+  end
+
 end
 
 namespace :backup do
@@ -233,7 +255,6 @@ task :do_set_password, :roles => :app do
   put YAML::dump(buffer), "#{shared_path}/env_config/sample_password.yml", :mode => 0664
 end
 
-
 desc "After updating code we need to populate a new database.yml"
 task :generate_database_yml, :roles => :app do
   require "yaml"
@@ -253,6 +274,7 @@ task :generate_database_yml, :roles => :app do
 
   put YAML::dump(buffer), "#{release_path}/config/database.yml", :mode => 0664
 end
+
 
 after 'multistage:ensure' do
   set (:rails_env) {"#{defined?(rails_env) ? rails_env : stage.to_s}" }

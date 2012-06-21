@@ -1,8 +1,8 @@
 # Your HTTP server, Apache/etc
-role :web, 'hostname'
+set :web_server, 'hostname.com'
 # This may be the same as your Web server
-role :app, 'hostname.com'
+set :app_server, 'hostname.com'
 # This is where Rails migrations will run
-role :db,  'hostname.com', :primary => true
-
+set :db_server, 'hostname.com'
+# The user configured to run the rails app
 set :user, 'dc21'

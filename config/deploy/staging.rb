@@ -1,7 +1,8 @@
 # Your HTTP server, Apache/etc
-role :web, 'jp-dc21-staging.intersect.org.au'
+set :web_server, 'jp-dc21-staging.intersect.org.au'
 # This may be the same as your Web server
-role :app, 'jp-dc21-staging.intersect.org.au'
+set :app_server, 'jp-dc21-staging.intersect.org.au'
 # This is where Rails migrations will run
-role :db,  'jp-dc21-staging.intersect.org.au', :primary => true
-
+set :db_server, 'jp-dc21-staging.intersect.org.au'
+# The user configured to run the rails app
+set :user, 'dc21'
