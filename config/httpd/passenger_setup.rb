@@ -1,6 +1,7 @@
 gem_set = ARGV.shift
 current_path = ARGV.shift
 hostname = ARGV.shift
+environment = ARGV.shift
 
 gem_home = ENV['GEM_HOME']
 rvm_home = ENV['rvm_path']
@@ -22,7 +23,7 @@ PassengerTempDir #{current_path}/tmp/pids
 
 <VirtualHost #{hostname}:80>
     ServerName #{hostname}
-    RailsEnv qa
+    RailsEnv #{environment}
     DocumentRoot #{current_path}/public
 
     XSendFile on

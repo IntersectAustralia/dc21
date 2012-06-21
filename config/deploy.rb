@@ -9,14 +9,11 @@ set :default_stage, "qa"
 set :rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql84-server postgresql84 postgresql84-devel}
 set :rpms_centos_6, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql-server postgresql postgresql-devel}
 set :shared_children, shared_children + %w(log_archive)
-set :shell, '/bin/bash'
+set :bash, '/bin/bash'
+set :shell, bash # This is don in two lines to allow rpm_install to refer to bash (as shell just launches cap shell)
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
 
 set :centos_6, true
-
-role :web, web_server
-role :app, app_server
-role :db,  db_server, :primary => true
 
 
 # Deploy using copy for now
@@ -37,7 +34,8 @@ default_run_options[:pty] = true
 namespace :server_setup do
   task :rpm_install, :roles => :app do
     selected_rpms = centos_6 ? rpms_centos_6 : rpms
-    run "#{try_sudo} yum install -y #{selected_rpms.join(' ')}"
+    run "#{try_sudo} yum groupinstall -y \"Development Tools\"", :shell => bash
+    run "#{try_sudo} yum install -y #{selected_rpms.join(' ')}", :shell => bash
   end
   namespace :filesystem do
     task :dir_perms, :roles => :app do
@@ -66,7 +64,7 @@ namespace :server_setup do
   end
   namespace :config do
     task :apache do
-      run "cd #{release_path}/config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\""
+      run "cd #{release_path}/config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
       src = "#{release_path}/config/httpd/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} && #{try_sudo} /sbin/service httpd graceful; /bin/true"
@@ -219,7 +217,9 @@ namespace :deploy do
 
   desc 'Move in custom configuration from local machine'
   task :copy_templates do
-    upload "deploy_templates/", "#{release_path}/", :mode => 0664, :recursive => true
+    transfer :up, "deploy_templates/", "#{current_path}", :recursive => true, :via => :scp
+    run "cd #{current_path}/deploy_templates && cp -r * .."
+    run "cd #{current_path} && rm -r deploy_templates"
   end
 
 end

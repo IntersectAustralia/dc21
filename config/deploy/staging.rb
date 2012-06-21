@@ -6,3 +6,7 @@ set :app_server, 'jp-dc21-staging.intersect.org.au'
 set :db_server, 'jp-dc21-staging.intersect.org.au'
 # The user configured to run the rails app
 set :user, 'dc21'
+
+role :web, web_server
+role :app, app_server
+role :db,  db_server, :primary => true
