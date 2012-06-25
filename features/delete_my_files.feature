@@ -19,7 +19,7 @@ Feature: Delete files containing erroneous data
       | toa5.dat | researcher@intersect.org.au |
     And I follow the view link for data file "toa5.dat"
     And I follow "Delete This File"
-    And I dismiss popup
+    And I dismiss the popup
     And I am on the list data files page
     Then I should see only these rows in "exploredata" table
       | Filename | Added by                    |
@@ -34,12 +34,12 @@ Feature: Delete files containing erroneous data
       | toa5.dat | researcher@intersect.org.au | RAW  |
     When I follow the view link for data file "toa5.dat"
     And I follow "Delete This File"
-    Then The popup text is contains "toa5.dat"
-    And The popup text is contains "RAW"
-    And The popup text is contains "2011-10-06  0:40:00"
-    And The popup text is contains "2011-11-03 11:55:00"
-    And The popup text is contains "ROS_WS"
-    Then I dismiss popup
+    Then The popup text should contain "toa5.dat"
+    And The popup text should contain "RAW"
+    And The popup text should contain "2011-10-06  0:40:00"
+    And The popup text should contain "2011-11-03 11:55:00"
+    And The popup text should contain "ROS_WS"
+    Then I dismiss the popup
 
   Scenario: Deleting a file removes it from the list of files in Explore Data
     And I have uploaded "toa5.dat" as "researcher@intersect.org.au"

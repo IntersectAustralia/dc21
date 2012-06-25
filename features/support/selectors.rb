@@ -14,6 +14,9 @@ module HtmlSelectorsHelpers
       when "the list of files to download"
         "#files_to_download"
 
+      when "the api token display"
+        "#api_token_display"
+
       when "the list of for codes"
         "#selected_for_codes"
 

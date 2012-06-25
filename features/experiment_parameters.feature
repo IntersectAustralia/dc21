@@ -164,7 +164,7 @@ Feature: Manage experiment parameter metadata
   Scenario: Delete
     Given I am on the view experiment page for 'Weather Station Experiment'
     When I follow the delete link for experiment parameter "Temperature"
-    And I confirm popup
+    And I confirm the popup
     Then I should see "The experiment parameter has been deleted."
     Then I should see "experiment_parameters" table with
       | Category   | Subcategory    | Modification  | Amount | Units | Comments                   |
@@ -174,7 +174,7 @@ Feature: Manage experiment parameter metadata
   Scenario: Cancel out of delete
     Given I am on the view experiment page for 'Weather Station Experiment'
     When I follow the delete link for experiment parameter "Temperature"
-    And I dismiss popup
+    And I dismiss the popup
     Then I should see "experiment_parameters" table with
       | Category    | Subcategory     | Modification  | Amount | Units     | Comments                   |
       | Atmosphere  | Carbon Dioxide  | Above ambient | 20.0   | PPM       | A comment about atmosphere |

@@ -16,7 +16,6 @@ Given /^I have the usual roles$/ do
 end
 
 
-
 And /^I have role "([^"]*)"$/ do |name|
   Factory(:role, :name => name)
 end
@@ -39,7 +38,7 @@ def create_permission(entity, action, roles)
 end
 
 Given /^"([^"]*)" has role "([^"]*)"$/ do |email, role|
-  user = User.where(:email => email).first 
+  user = User.where(:email => email).first
   role = Role.where(:name => role).first
   user.role = role
   user.save!(:validate => false)
@@ -84,4 +83,21 @@ end
 Given /^"([^"]*)" is rejected as spam$/ do |email|
   user = User.where(:email => email).first
   user.reject_access_request
+end
+
+Then /^I should see no api token$/ do
+  # I should see field "API Token" with value "No token generated - click generate to get a token\nGenerate Token"
+  with_scope("the api token display") do
+    page.should have_content('No token generated - click generate to get a token')
+    page.should have_link('Generate Token')
+  end
+end
+
+Then /^I should see the api token displayed for user "([^"]*)"$/ do |email|
+  with_scope("the api token display") do
+    user = User.find_by_email!(email)
+    page.should have_content(user.authentication_token)
+    page.should have_link('Re-generate Token')
+    page.should have_link('Delete Token')
+  end
 end
