@@ -94,7 +94,7 @@ describe Experiment do
       directory = Dir.mktmpdir
       file_path = experiment.write_metadata_to_file(directory)
       file_path.should =~ /high-co2-and-drought.txt$/
-      # file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'experiment1.txt'))
+      file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'experiment1.txt'))
     end
 
     it "should handle descriptions with line breaks" do
