@@ -55,18 +55,11 @@ Feature: View the details of a data file
   Scenario: Must be logged in to view the details
     Then users should be required to login on the data file details page for sample.txt
 
-  Scenario: TOA5 file shows mapped station name where it has been mapped to a facility
-    Given I have facility "WTC Station" with code "WTC01"
-    And I have uploaded "WTC01_Table1.dat"
-    And I am on the list data files page
-    When I follow the view link for data file "WTC01_Table1.dat"
-    Then I should see field "Facility" with value "WTC01 (WTC Station)"
-
   Scenario: TOA5 file shows station code only if no mapping to facility exists
     Given I have uploaded "WTC01_Table1.dat"
     When I am on the list data files page
     And I follow the view link for data file "WTC01_Table1.dat"
-    Then I should see field "Facility" with value "WTC01"
+    Then I should see field "Station name" with value "WTC01"
 
   Scenario: TOA5 file shows correctly mapped column names in file info table
     Given I have uploaded "Test_Column_Table.dat"
