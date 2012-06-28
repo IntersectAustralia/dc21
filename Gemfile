@@ -34,6 +34,7 @@ gem "squeel"
 gem "httparty"
 gem "decent_exposure"
 gem "rvm-capistrano"
+gem "google-analytics-rails"
 
 group :development, :test do
   gem "rspec-rails"
