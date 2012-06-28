@@ -56,10 +56,24 @@ class Experiment < ActiveRecord::Base
     File.open(file_path, 'w') do |file|
       file.puts "Parent: #{parent_name}"
       file.puts "Name: #{name}"
-      file.puts "Description: #{description}"
+      file.puts "Description: #{description}" unless description == nil
       file.puts "Start date: #{start_date.to_s(:date_only)}"
-      file.puts "End date: #{end_date.to_s(:date_only)}"
+      file.puts "End date: #{end_date.to_s(:date_only)}" unless end_date == nil
       file.puts "Subject: #{subject}"
+      file.puts "Access Rights: #{access_rights}"
+      file.puts "FOR codes: #{experiment_for_codes.map { |for_code| for_code.name }.join("\n")}"
+      file.puts ""
+      file.puts "Parameters"
+      experiment_parameters.each do |param|
+        file.puts ""
+        file.puts "Category: #{param.parameter_category.name}"
+        file.puts "Subcategory: #{param.parameter_sub_category.name}"
+        file.puts "Modification: #{param.parameter_modification.name}"
+        file.puts "Amount: #{param.amount}"
+        file.puts "Units: #{param.parameter_unit.name}"
+        file.puts "Comments: #{param.comments}"
+      end
+
     end
     file_path
   end
