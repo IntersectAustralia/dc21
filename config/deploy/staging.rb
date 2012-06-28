@@ -5,7 +5,7 @@ set :app_server, 'jp-dc21-staging.intersect.org.au'
 # This is where Rails migrations will run
 set :db_server, 'jp-dc21-staging.intersect.org.au'
 # The user configured to run the rails app
-
+set :user, 'devel'
 
 role :web, web_server
 role :app, app_server

@@ -6,8 +6,12 @@ require 'capistrano_colors'
 set :application, 'dc21app'
 set :stages, %w(qa staging production)
 set :default_stage, "qa"
-set :rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql84-server postgresql84 postgresql84-devel}
-set :rpms_centos_6, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile postgresql-server postgresql postgresql-devel}
+
+set :build_rpms, %w(gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile  curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git)
+set :project_rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile}
+set :rpms_centos_5, %w{postgresql84-server postgresql84 postgresql84-devel}
+set :rpms_centos_6, %w{postgresql-server postgresql postgresql-devel}
+
 set :shared_children, shared_children + %w(log_archive)
 set :bash, '/bin/bash'
 set :shell, bash # This is don in two lines to allow rpm_install to refer to bash (as shell just launches cap shell)
@@ -28,19 +32,24 @@ set(:group) { "#{defined?(group) ? group : user}" }
 set(:user_home) { "/home/#{user}" }
 set(:deploy_to) { "#{user_home}/#{application}" }
 set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-samples'}" }
+set(:aux_data_dir) { "#{defined?(aux_data_dir) ? aux_data_dir : '/data/dc21-data'}" }
+set(:rif_cs_dir) { "#{defined?(rif_cs_dir) ? rif_cs_dir : '/data/dc21-data/published_rif_cs/'}" }
 
 default_run_options[:pty] = true
 
 namespace :server_setup do
   task :rpm_install, :roles => :app do
-    selected_rpms = centos_6 ? rpms_centos_6 : rpms
-    run "#{try_sudo} yum groupinstall -y \"Development Tools\"", :shell => bash
-    run "#{try_sudo} yum install -y #{selected_rpms.join(' ')}", :shell => bash
+    distro_rpms = centos_6 ? project_rpms_centos_6 : project_rpms
+    run "#{try_sudo} yum install -y #{(build_rpms + project_rpms + distro_rpms).uniq.join(' ')}", :shell => bash
   end
   namespace :filesystem do
     task :dir_perms, :roles => :app do
       run "[[ -d #{data_dir} ]] || #{try_sudo} mkdir -p #{data_dir}"
       run "#{try_sudo} chown -R #{user}.#{group} #{data_dir}"
+      run "[[ -d #{aux_data_dir} ]] || #{try_sudo} mkdir -p #{aux_data_dir}"
+      run "#{try_sudo} chown -R #{user}.#{group} #{aux_data_dir}"
+      run "[[ -d #{rif_cs_dir} ]] || #{try_sudo} mkdir -p #{rif_cs_dir}"
+      run "#{try_sudo} chown -R #{user}.#{group} #{rif_cs_dir}"
       run "[[ -d #{deploy_to} ]] || #{try_sudo} mkdir #{deploy_to}"
       run "#{try_sudo} chown -R #{user}.#{group} #{deploy_to}"
       run "#{try_sudo} chmod 0711 #{user_home}"

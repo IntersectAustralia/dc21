@@ -21,7 +21,7 @@ PassengerRoot #{gem_home}/gems/passenger-#{version}
 PassengerRuby #{wrapper_path}/ruby
 PassengerTempDir #{current_path}/tmp/pids
 
-<VirtualHost #{hostname}:80>
+<VirtualHost #{environment.eql?('production') ? hostname : '*'}:80>
     ServerName #{hostname}
     RailsEnv #{environment}
     DocumentRoot #{current_path}/public
