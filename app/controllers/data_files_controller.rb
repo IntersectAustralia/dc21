@@ -77,6 +77,10 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def api_create
+
+  end
+
   def bulk_update
     successful_complete_update = true
     @uploaded_files = []

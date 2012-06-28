@@ -45,6 +45,7 @@ Dc21app::Application.routes.draw do
       get :custom_download
       put :bulk_update
       post :search
+      post :api_create
     end
   end
 
