@@ -30,9 +30,17 @@ When /^I submit an API upload request with the following parameters as user "([^
     post_params[:experiment_id] = experiment.id
   end
 
+  post_params[:experiment_id] = params['experiment_id'] unless params['experiment_id'].blank?
+
   post_params[:type] = params['type']
 
   user = User.find_by_email!(email)
+  post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
+end
+
+When /^I submit an API upload request with an invalid file as user "([^"]*)"$/ do |email|
+  user = User.find_by_email!(email)
+  post_params = {:type => 'RAW', :experiment_id => Experiment.first.id, :file => 'this is a string not a file'}
   post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end
 

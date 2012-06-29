@@ -83,11 +83,10 @@ class DataFilesController < ApplicationController
     file = params[:file]
     type = params[:type]
     experiment_id = params[:experiment_id]
-
     errors = validate_api_inputs(file, type, experiment_id)
 
     if errors.empty?
-      uploaded_file = attachment_builder.build(file, experiment.id, type, "", [])
+      uploaded_file = attachment_builder.build(file, experiment_id, type, "", [])
       render :json => {:data_file_id => uploaded_file.id}
     else
       render :json => {:errors => errors}, :status => :bad_request
@@ -274,6 +273,9 @@ class DataFilesController < ApplicationController
     errors << 'Experiment id is required' if experiment_id.blank?
     errors << 'File is required' if file.blank?
     errors << 'File type is required' if type.blank?
+    errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
+    errors << 'Supplied experiment id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
+    errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
     errors
   end
 
