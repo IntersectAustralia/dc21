@@ -53,4 +53,41 @@ Then /^I should get a JSON response with errors "([^"]*)"$/ do |errors|
   actual['errors'].should eq(expected_errors)
 end
 
+Then /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with the success message$/ do |filename, type|
+  require 'json'
+  actual = JSON.parse(last_response.body)
 
+  actual['file_id'].should eq(DataFile.last.id)
+  actual['file_name'].should eq(filename)
+  actual['file_type'].should eq(type)
+  actual['messages'].should eq(['File uploaded successfully.'])
+end
+
+
+When /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with messages "([^"]*)"$/ do |filename, type, message_codes|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+
+  actual['file_id'].should eq(DataFile.last.id)
+  actual['file_name'].should eq(filename)
+  actual['file_type'].should eq(type)
+
+  messages = actual['messages']
+  expected_messages = message_codes.split(",")
+
+  messages.size.should eq(expected_messages.size), "Expected #{expected_messages.size} messages, found #{messages.size}. Messages were #{messages}."
+
+  if expected_messages.include?("success")
+    messages.include?("File uploaded successfully.").should be_true, "Expected success message to be present, found #{messages}."
+  end
+  if expected_messages.include?("renamed")
+    messages.include?("A file already existed with the same name. File has been renamed.").should be_true, "Expected rename message to be present, found #{messages}."
+  end
+  if expected_messages.include?("badoverlap")
+    messages.join(" ").include?("File cannot safely replace existing files. File has been saved with type ERROR.").should be_true, "Expected bad overlap message to be present, found #{messages}."
+  end
+  if expected_messages.include?("goodoverlap")
+    messages.join(" ").include?("The file replaced one or more other files with similar data. Replaced files: ").should be_true, "Expected good overlap message to be present, found #{messages}."
+  end
+
+end
