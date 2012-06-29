@@ -5,4 +5,3 @@ DC21 is a Ruby on Rails (3.1) application for the management of environmental da
 Head over to [the wiki](https://github.com/IntersectAustralia/dc21/wiki) for project documentation.
 
 This code is licensed under the GNU GPL v3 license - see LICENSE.txt
-- 

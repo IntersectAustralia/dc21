@@ -397,3 +397,10 @@ When /^I have set the dates of "([^"]*)" as "([^"]*)" to "([^"]*)"$/ do |filenam
   data_file.end_time = end_date
   data_file.save!
 end
+
+Then /^file "([^"]*)" should have automatically extracted metadata$/ do |filename|
+  data_file = DataFile.find_by_filename!(filename)
+  data_file.start_time.should_not be_nil
+  data_file.end_time.should_not be_nil
+  data_file.metadata_items.should_not be_empty
+end

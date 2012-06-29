@@ -40,7 +40,7 @@ module ApplicationHelper
     html << ":"
     html << '</label>'
     html << "<div class='controls'>"
-    html << "<div class='record'>"
+    html << "<div class='record' id='#{div_id + '_display'}'>"
     html << content
     html << '</div>'
     html << '</div>'

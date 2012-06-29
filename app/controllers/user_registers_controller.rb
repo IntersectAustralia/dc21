@@ -71,6 +71,17 @@ class UserRegistersController < Devise::RegistrationsController
     end
   end
 
+  def generate_token
+    current_user.reset_authentication_token!
+    redirect_to users_profile_path, :notice => "Your new API token is shown below."
+  end
+
+  def delete_token
+    current_user.authentication_token = nil
+    current_user.save!
+    redirect_to users_profile_path, :notice => "Your API token has been deleted."
+  end
+
   protected
   def after_update_path_for(resource)
     users_profile_path

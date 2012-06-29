@@ -4,6 +4,8 @@ Dc21app::Application.routes.draw do
     get "/users/profile", :to => "user_registers#profile" #page which gives options to edit details or change password
     get "/users/edit_password", :to => "user_registers#edit_password" #allow users to edit their own password
     put "/users/update_password", :to => "user_registers#update_password" #allow users to edit their own password
+    put "/users/generate_token", :to => "user_registers#generate_token" #allow users to generate an API token
+    delete "/users/delete_token", :to => "user_registers#delete_token" #allow users to delete their API token
   end
 
   get "/data_files/search" => "data_files#index" #to stop weird errors when visiting via get
@@ -43,6 +45,7 @@ Dc21app::Application.routes.draw do
       get :custom_download
       put :bulk_update
       post :search
+      post :api_create
     end
   end
 

@@ -58,9 +58,7 @@ class Ability
             :download,
             :download_selected,
             :bulk_update,
-            :list_for_post_processing,
-            :post_process,
-            :verify_upload], DataFile
+            :api_create], DataFile
     can :destroy, DataFile, :created_by_id => user.id
     can :update, DataFile, :created_by_id => user.id
 

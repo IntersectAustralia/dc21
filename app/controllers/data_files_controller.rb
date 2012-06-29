@@ -77,6 +77,18 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def api_create
+    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+
+    file = params[:file]
+    type = params[:type]
+    experiment = Experiment.find(params[:experiment_id])
+    uploaded_file = attachment_builder.build(file, experiment.id, type, "", [])
+    puts uploaded_file
+
+    render :json => {:data_file_id => uploaded_file.id}
+  end
+
   def bulk_update
     successful_complete_update = true
     @uploaded_files = []

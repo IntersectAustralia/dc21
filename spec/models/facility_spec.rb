@@ -91,4 +91,21 @@ describe Facility do
       @facility.experiments_excluding_me(@exp2).collect(&:id).should eq([@exp3.id, @exp1.id])
     end
   end
+
+  describe "" do
+    it "should produce a file with details written one per line" do
+      primary_contact = Factory(:user, first_name: 'Prim',
+                                last_name: 'Contact',
+                                email: 'prim@intersect.org.au')
+      facility = Factory(:facility, name: 'Whole Tree Chambers',
+                         code: 'WTC',
+                         description: 'The Whole Tree Chambers (WTC) facility was installed',
+                         a_lat: 20, a_long: 30,
+                         primary_contact: primary_contact)
+      directory = Dir.mktmpdir
+      file_path = facility.write_metadata_to_file(directory)
+      file_path.should =~ /whole-tree-chambers.txt/
+      file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'facility.txt'))
+    end
+  end
 end

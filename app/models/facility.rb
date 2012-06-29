@@ -105,6 +105,18 @@ class Facility < ActiveRecord::Base
     points
   end
 
+  def write_metadata_to_file(directory_path)
+    file_path = File.join(directory_path, "#{name.parameterize}.txt")
+    File.open(file_path, 'w') do |file|
+      file.puts "Name: #{name}"
+      file.puts "Code: #{code}"
+      file.puts "Description: #{description}"
+      file.puts "Location: #{location}"
+      file.puts "Primary Contact: #{primary_contact.full_name} (#{primary_contact.email})"
+    end
+    file_path
+  end
+
   private
 
   def remove_white_spaces
@@ -133,4 +145,5 @@ class Facility < ActiveRecord::Base
     # Make sure top-left point is the top left point
 
   end
+
 end

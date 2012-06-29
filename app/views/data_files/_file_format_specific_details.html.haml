@@ -2,9 +2,9 @@
   - @data_file.metadata_items.each do |item|
     - if item.key == "station_name"
       - if @data_file.facility
-        = render_field "Facility", item.value + " (" + @data_file.facility.name + ")"
+        = render_field "Station name", item.value
       - else 
-        = render_field "Facility", item.value
+        = render_field "Station name", item.value
     - else
       = render_field item.key.humanize, item.value
 
