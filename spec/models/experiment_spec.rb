@@ -80,7 +80,7 @@ describe Experiment do
     end
   end
 
-  describe "Write metadata to file" do
+  describe "write metadata to file" do
     it "should produce a file with details written one per line" do
       facility = Factory(:facility, name: 'My Facility')
 

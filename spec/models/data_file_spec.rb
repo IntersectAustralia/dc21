@@ -887,9 +887,23 @@ describe DataFile do
 
   describe "write metadata to file" do
     it "should produce a file with details written one per line" do
-      data_file = Factory(:data_file, filename: 'datafile.txt')
+      experiment = Factory(:experiment)
+      data_file = Factory(:data_file, 
+                          filename: "datafile",
+                          experiment: experiment,
+                          format: FileTypeDeterminer::TOA5)
+      Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
+      Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
+      Factory(:column_detail, :name => "Humi", :data_file => data_file)
+
+
+      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfl")
+      Factory(:column_mapping, :name => "Soil Temperature", :code => "SoilTemp")
+      Factory(:column_mapping, :name => "Humidity", :code => "Humi")
+
       directory = Dir.mktmpdir
       file_path = data_file.write_metadata_to_file(directory)
+      file_path.should =~ /datafile-metadata.txt$/
       puts file_path
     end
   end

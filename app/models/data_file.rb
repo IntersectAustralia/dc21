@@ -28,7 +28,7 @@ class DataFile < ActiveRecord::Base
   before_save :fill_end_time_if_blank
 
   scope :most_recent_first, order("created_at DESC")
-# search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
+  # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
   scope :with_filename_containing, lambda { |name| where("data_files.filename ILIKE ?", "%#{name}%") }
@@ -215,7 +215,49 @@ class DataFile < ActiveRecord::Base
     metadata_filename = File.basename(filename, '.*')
     file_path = File.join(directory_path, "#{metadata_filename}-metadata.txt")
     File.open(file_path, 'w') do |file|
-      file.puts "hi"
+      file.puts "Basic information"
+      file.puts ""
+      file.puts "Name: #{filename}"
+      file.puts "Type: #{status_as_string}"
+      file.puts "File format: #{format_for_display}"
+      file.puts "Description: #{file_processing_description}"
+      file.puts "Tags: #{tags.map { |tag| tag.name }.join(", ")}"
+      file.puts "Experiment: #{experiment.name}"
+      file.puts "Date added: #{created_at.to_s(:with_time)}"
+      file.puts "Added by: #{created_by.full_name}"
+      file.puts ""
+      if known_format?
+        file.puts "Information From The File"
+        file.puts ""
+        file.print "Start time: "
+        file.print start_time.utc.to_s(:with_seconds) if start_time != nil
+        file.puts ""
+        file.print "End time: "
+        file.print end_time.utc.to_s(:with_seconds) if end_time != nil
+        file.puts
+        display_interval = interval == nil ? "" : ActionController::Base.helpers.distance_of_time_in_words(interval)
+        file.puts "Sample interval: #{display_interval}"
+        metadata_items.each do |item|
+          file.puts "#{item.key.humanize}: #{item.value}"
+        end
+
+        file.puts ""
+        file.puts "Columns"
+        file.puts ""
+        column_details.each do |column_details|
+          file.puts "Column: #{column_details.name}"
+          file.print "Column Mapping: "
+          ColumnMapping.all.each do |map|
+            unless map.check_col_mapping(column_details.name).nil?
+              file.print "#{map.name} "
+            end
+          end
+          file.puts ""
+          file.puts "Unit: #{column_details.unit}"
+          file.puts "Measurement Type: #{column_details.data_type}"
+          file.puts ""
+        end
+      end
     end
     file_path
   end
