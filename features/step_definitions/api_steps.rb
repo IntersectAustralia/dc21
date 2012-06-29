@@ -29,10 +29,10 @@ When /^I submit an API upload request with the following parameters as user "([^
     experiment = Experiment.find_by_name!(params['experiment'])
     post_params[:experiment_id] = experiment.id
   end
-
   post_params[:experiment_id] = params['experiment_id'] unless params['experiment_id'].blank?
 
   post_params[:type] = params['type']
+  post_params[:description] = params['description'] if params['description']
 
   user = User.find_by_email!(email)
   post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params

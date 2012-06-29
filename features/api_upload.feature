@@ -35,6 +35,15 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have type "RAW"
     And file "weather_station_05_min.dat" should have automatically extracted metadata
 
+  Scenario: Optional description can be supplied on upload
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file        | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type        | RAW                                                           |
+      | experiment  | Flux Experiment 1                                             |
+      | description | My description                                                |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have description "My description"
+
   Scenario Outline: Invalid input scenarios
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file       | <file>       |
@@ -52,8 +61,8 @@ Feature: Upload files via the API
 
   Scenario: Invalid input - experiment id not found
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
-      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
-      | type       | RAW                                                           |
+      | file          | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type          | RAW                                                           |
       | experiment_id | 999999999                                                     |
     Then I should get a 400 response code
     And I should get a JSON response with errors "Supplied experiment id does not exist"

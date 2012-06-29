@@ -86,7 +86,7 @@ class DataFilesController < ApplicationController
     errors = validate_api_inputs(file, type, experiment_id)
 
     if errors.empty?
-      uploaded_file = attachment_builder.build(file, experiment_id, type, "", [])
+      uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], [])
       render :json => {:data_file_id => uploaded_file.id}
     else
       render :json => {:errors => errors}, :status => :bad_request
