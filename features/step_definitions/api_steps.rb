@@ -7,6 +7,10 @@ When /^I submit an API upload request without an API token$/ do
   post api_create_data_files_path(:format => :json)
 end
 
+When /^I submit an API upload request with an invalid API token$/ do
+  post api_create_data_files_path(:format => :json, :auth_token => 'blah')
+end
+
 Then /^I should get a (\d+) response code$/ do |status|
   last_response.status.should == status.to_i
 end

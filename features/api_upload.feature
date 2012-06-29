@@ -21,6 +21,10 @@ Feature: Upload files via the API
     When I submit an API upload request without an API token
     Then I should get a 401 response code
 
+  Scenario: Try to upload with in invalid API token
+    When I submit an API upload request with an invalid API token
+    Then I should get a 401 response code
+
   Scenario: Successful upload TOA5 file with minimum required metadata
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file       | samples/full_files/weather_station/weather_station_05_min.dat |
@@ -30,4 +34,3 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have experiment "Flux Experiment 1"
     And file "weather_station_05_min.dat" should have type "RAW"
     And file "weather_station_05_min.dat" should have automatically extracted metadata
-
