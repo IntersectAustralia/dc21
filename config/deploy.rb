@@ -18,7 +18,7 @@ set :shell, bash # This is don in two lines to allow rpm_install to refer to bas
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
 
 set :centos_6, true
-
+set :proxy, nil #this should be of the format http://proxy.example.com:8080
 
 # Deploy using copy for now
 set :scm, 'git'
@@ -41,6 +41,14 @@ namespace :server_setup do
   task :rpm_install, :roles => :app do
     distro_rpms = centos_6 ? project_rpms_centos_6 : project_rpms
     run "#{try_sudo} yum install -y #{(build_rpms + project_rpms + distro_rpms).uniq.join(' ')}", :shell => bash
+  end
+
+  task :set_proxies do
+    unless proxy.nil?
+      run "echo 'export http_proxy=\"#{proxy}\"' >> ~/.bash_rc"
+      run "echo 'export HTTP_PROXY=$http_proxy'' >> ~/.bash_rc"
+      run "echo 'proxy=\"#{proxy}\"' >> ~/.curlrc"
+    end
   end
   namespace :filesystem do
     task :dir_perms, :roles => :app do
@@ -66,7 +74,11 @@ namespace :server_setup do
     end
   end
   task :gem_install, :roles => :app do
-    run "gem install bundler passenger"
+    if proxy
+      run "gem install bundler passenger -p #{proxy}"
+    else
+      run "gem install bundler passenger"
+    end
   end
   task :passenger, :roles => :app do
     run "passenger-install-apache2-module -a"
@@ -286,5 +298,5 @@ end
 
 
 after 'multistage:ensure' do
-  set (:rails_env) {"#{defined?(rails_env) ? rails_env : stage.to_s}" }
+  set (:rails_env) {"#{defined?(rails_env) ? rails_env : stage.to_s}"}
 end
