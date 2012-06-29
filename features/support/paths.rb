@@ -55,9 +55,6 @@ module NavigationHelpers
       when /the bulk update page/
         bulk_update_data_files_path
 
-      when /the set data file status page/
-        list_for_post_processing_data_files_path
-
       # Facility paths
       when /the view facility page for '(.*)'/
         facility_path(Facility.find_by_name($1))
