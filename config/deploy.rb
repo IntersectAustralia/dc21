@@ -17,9 +17,6 @@ set :bash, '/bin/bash'
 set :shell, bash # This is don in two lines to allow rpm_install to refer to bash (as shell just launches cap shell)
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
 
-set :centos_6, true
-set :proxy, nil #this should be of the format http://proxy.example.com:8080
-
 # Deploy using copy for now
 set :scm, 'git'
 #set :repository, 'ssh://git.intersect.org.au/git/dc21'
