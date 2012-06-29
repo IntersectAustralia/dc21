@@ -34,3 +34,19 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have experiment "Flux Experiment 1"
     And file "weather_station_05_min.dat" should have type "RAW"
     And file "weather_station_05_min.dat" should have automatically extracted metadata
+
+  Scenario Outline: Invalid input scenarios
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | <file>       |
+      | type       | <type>       |
+      | experiment | <experiment> |
+    Then I should get a 400 response code
+    And I should get a JSON response with errors "<errors>"
+  Examples:
+    | file                                                          | type      | experiment        | errors                                           | description                 |
+    |                                                               | RAW       | Flux Experiment 1 | File is required                                 | missing file                |
+    | samples/full_files/weather_station/weather_station_05_min.dat |           | Flux Experiment 1 | File type is required                            | missing type                |
+    | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                        | missing experiment          |
+    | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required | missing experiment and type |
+
+

@@ -82,11 +82,16 @@ class DataFilesController < ApplicationController
 
     file = params[:file]
     type = params[:type]
-    experiment = Experiment.find(params[:experiment_id])
-    uploaded_file = attachment_builder.build(file, experiment.id, type, "", [])
-    puts uploaded_file
+    experiment_id = params[:experiment_id]
 
-    render :json => {:data_file_id => uploaded_file.id}
+    errors = validate_api_inputs(file, type, experiment_id)
+
+    if errors.empty?
+      uploaded_file = attachment_builder.build(file, experiment.id, type, "", [])
+      render :json => {:data_file_id => uploaded_file.id}
+    else
+      render :json => {:errors => errors}, :status => :bad_request
+    end
   end
 
   def bulk_update
@@ -262,6 +267,14 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     !@data_file.errors.any?
+  end
+
+  def validate_api_inputs(file, type, experiment_id)
+    errors = []
+    errors << 'Experiment id is required' if experiment_id.blank?
+    errors << 'File is required' if file.blank?
+    errors << 'File type is required' if type.blank?
+    errors
   end
 
   def sort_column

@@ -18,11 +18,31 @@ end
 When /^I submit an API upload request with the following parameters as user "([^"]*)"$/ do |email, table|
   params = Hash[*table.raw.flatten]
 
-  file = Rack::Test::UploadedFile.new(params['file'], "application/octet-stream")
-  experiment = Experiment.find_by_name!(params['experiment'])
-  type = params['type']
+  post_params = {}
+
+  unless params['file'].blank?
+    file = Rack::Test::UploadedFile.new(params['file'], "application/octet-stream")
+    post_params[:file] = file
+  end
+
+  unless params['experiment'].blank?
+    experiment = Experiment.find_by_name!(params['experiment'])
+    post_params[:experiment_id] = experiment.id
+  end
+
+  post_params[:type] = params['type']
 
   user = User.find_by_email!(email)
-  post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), {'file' => file, 'experiment_id' => experiment.id, 'type' => type}
+  post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end
+
+Then /^I should get a JSON response with errors "([^"]*)"$/ do |errors|
+  expected_errors = errors.split(", ")
+
+  require 'json'
+  actual = JSON.parse(last_response.body)
+
+  actual['errors'].should eq(expected_errors)
+end
+
 
