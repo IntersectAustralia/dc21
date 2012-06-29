@@ -31,6 +31,7 @@ Feature: Upload files via the API
       | type       | RAW                                                           |
       | experiment | Flux Experiment 1                                             |
     Then I should get a 200 response code
+    And I should get a JSON response with filename "weather_station_05_min.dat" and type "RAW" with no messages
     And file "weather_station_05_min.dat" should have experiment "Flux Experiment 1"
     And file "weather_station_05_min.dat" should have type "RAW"
     And file "weather_station_05_min.dat" should have automatically extracted metadata

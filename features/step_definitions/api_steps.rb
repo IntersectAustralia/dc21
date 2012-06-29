@@ -53,4 +53,14 @@ Then /^I should get a JSON response with errors "([^"]*)"$/ do |errors|
   actual['errors'].should eq(expected_errors)
 end
 
+Then /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with no messages$/ do |filename, type|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+
+  actual['file_id'].should eq(DataFile.last.id)
+  actual['file_name'].should eq(filename)
+  actual['file_type'].should eq(type)
+  actual['messages'].should eq([])
+end
+
 

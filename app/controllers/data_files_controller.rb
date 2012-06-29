@@ -87,7 +87,7 @@ class DataFilesController < ApplicationController
 
     if errors.empty?
       uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], [])
-      render :json => {:data_file_id => uploaded_file.id}
+      render :json => {:file_id => uploaded_file.id, :messages => [], :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
     else
       render :json => {:errors => errors}, :status => :bad_request
     end
