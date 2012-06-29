@@ -92,7 +92,7 @@ describe Facility do
     end
   end
 
-  describe "" do
+  describe "Write metadata to file" do
     it "should produce a file with details written one per line" do
       primary_contact = Factory(:user, first_name: 'Prim',
                                 last_name: 'Contact',

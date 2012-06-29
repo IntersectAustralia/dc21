@@ -885,6 +885,15 @@ describe DataFile do
     end
   end
 
+  describe "write metadata to file" do
+    it "should produce a file with details written one per line" do
+      data_file = Factory(:data_file, filename: 'datafile.txt')
+      directory = Dir.mktmpdir
+      file_path = data_file.write_metadata_to_file(directory)
+      puts file_path
+    end
+  end
+
 end
 
 def make_data_file!(start_time, end_time, path, station_name, table_name, status=DataFile::STATUS_RAW)

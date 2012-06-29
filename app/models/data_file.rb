@@ -211,6 +211,15 @@ class DataFile < ActiveRecord::Base
     save!
   end
 
+  def write_metadata_to_file(directory_path)
+    metadata_filename = File.basename(filename, '.*')
+    file_path = File.join(directory_path, "#{metadata_filename}-metadata.txt")
+    File.open(file_path, 'w') do |file|
+      file.puts "hi"
+    end
+    file_path
+  end
+
   protected
 
   def with_filtered_data_in_date_range_in_temp_file(from_time, to_time, &block)
@@ -336,6 +345,5 @@ class DataFile < ActiveRecord::Base
 
     exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
   end
-
 
 end
