@@ -8,3 +8,4 @@ coverage/
 .idea/
 dc21.ids
 exportToHTML/
+apache_insertion.conf
