@@ -46,7 +46,7 @@ namespace :server_setup do
   task :set_proxies do
     unless proxy.nil?
       run "echo 'export http_proxy=\"#{proxy}\"' >> ~/.bash_rc"
-      run "echo 'export HTTP_PROXY=$http_proxy'' >> ~/.bash_rc"
+      run "echo 'export HTTP_PROXY=$http_proxy' >> ~/.bash_rc"
       run "echo 'proxy=\"#{proxy}\"' >> ~/.curlrc"
     end
   end
