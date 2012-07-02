@@ -83,14 +83,15 @@ class DataFilesController < ApplicationController
     file = params[:file]
     type = params[:type]
     experiment_id = params[:experiment_id]
-    errors = validate_api_inputs(file, type, experiment_id)
+    tag_names = params[:tag_names]
+    errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
 
     if errors.empty?
-      uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], [])
-      messages = uploaded_file.messages.collect { |m| m[:message]}
+      uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+      messages = uploaded_file.messages.collect { |m| m[:message] }
       render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
     else
-      render :json => {:errors => errors}, :status => :bad_request
+      render :json => {:messages => errors}, :status => :bad_request
     end
   end
 
@@ -269,7 +270,7 @@ class DataFilesController < ApplicationController
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id)
+  def validate_api_inputs(file, type, experiment_id, tag_names)
     errors = []
     errors << 'Experiment id is required' if experiment_id.blank?
     errors << 'File is required' if file.blank?
@@ -277,7 +278,28 @@ class DataFilesController < ApplicationController
     errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
     errors << 'Supplied experiment id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
     errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
-    errors
+
+    tag_ids = parse_tags(tag_names, errors)
+    [errors, tag_ids]
+  end
+
+  def parse_tags(tag_names, errors)
+    return [] if tag_names.blank?
+    tag_ids = []
+    begin
+      tag_names_array = CSV.parse_line(tag_names)
+      tag_names_array.each do |tag_name|
+        tag = Tag.find_by_name(tag_name)
+        if tag
+          tag_ids << tag.id
+        else
+          errors << "Unknown tag '#{tag_name}'"
+        end
+      end
+    rescue CSV::MalformedCSVError
+      errors << 'Incorrect format for tags - tags must be double-quoted and comma separated'
+    end
+    tag_ids
   end
 
   def sort_column

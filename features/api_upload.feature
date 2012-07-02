@@ -15,7 +15,7 @@ Feature: Upload files via the API
       | name       |
       | Photo      |
       | Video      |
-      | Gap-Filled |
+      | Gap Filled |
 
   Scenario: Try to upload without an API token
     When I submit an API upload request without an API token
@@ -45,20 +45,51 @@ Feature: Upload files via the API
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have description "My description"
 
+  Scenario: Optional tags can be supplied on upload
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | tag_names  | "Photo","Gap Filled"                                          |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have tags "Photo,Gap Filled"
+
+  Scenario: Tags containing commas work ok
+    Given I have tag "Contains, a comma"
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | tag_names  | "Photo","Contains, a comma"                                   |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have 2 tags
+
+  Scenario: Single tag is accepted
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | tag_names  | "Photo"                                                       |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have tags "Photo"
+
   Scenario Outline: Invalid input scenarios
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file       | <file>       |
       | type       | <type>       |
       | experiment | <experiment> |
+      | tag_names  | <tag_names>  |
     Then I should get a 400 response code
     And I should get a JSON response with errors "<errors>"
   Examples:
-    | file                                                          | type      | experiment        | errors                                           | description                 |
-    |                                                               | RAW       | Flux Experiment 1 | File is required                                 | missing file                |
-    | samples/full_files/weather_station/weather_station_05_min.dat |           | Flux Experiment 1 | File type is required                            | missing type                |
-    | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                        | missing experiment          |
-    | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required | missing experiment and type |
-    | samples/full_files/weather_station/weather_station_05_min.dat | BLAH      | Flux Experiment 1 | File type not recognised                         | invalid type                |
+    | file                                                          | type      | experiment        | errors                                                                     | tag_names      | description                 |
+    |                                                               | RAW       | Flux Experiment 1 | File is required                                                           |                | missing file                |
+    | samples/full_files/weather_station/weather_station_05_min.dat |           | Flux Experiment 1 | File type is required                                                      |                | missing type                |
+    | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                                                  |                | missing experiment          |
+    | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required                           |                | missing experiment and type |
+    | samples/full_files/weather_station/weather_station_05_min.dat | BLAH      | Flux Experiment 1 | File type not recognised                                                   |                | invalid type                |
+    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                             | "Video","Blah" | unknown tag                 |
+    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Incorrect format for tags - tags must be double-quoted and comma separated | "Video,"Blah"  | badly formatted tags        |
 
   Scenario: Invalid input - experiment id not found
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"

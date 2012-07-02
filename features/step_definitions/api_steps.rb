@@ -30,6 +30,7 @@ When /^I submit an API upload request with the following parameters as user "([^
     post_params[:experiment_id] = experiment.id
   end
   post_params[:experiment_id] = params['experiment_id'] unless params['experiment_id'].blank?
+  post_params[:tag_names] = params['tag_names'] unless params['tag_names'].blank?
 
   post_params[:type] = params['type']
   post_params[:description] = params['description'] if params['description']
@@ -50,7 +51,7 @@ Then /^I should get a JSON response with errors "([^"]*)"$/ do |errors|
   require 'json'
   actual = JSON.parse(last_response.body)
 
-  actual['errors'].should eq(expected_errors)
+  actual['messages'].should eq(expected_errors)
 end
 
 Then /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with the success message$/ do |filename, type|
