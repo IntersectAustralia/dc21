@@ -44,7 +44,9 @@ namespace :server_setup do
     unless proxy.nil?
       run "echo 'export http_proxy=\"#{proxy}\"' >> ~#{user}/.bashrc"
       run "echo 'export HTTP_PROXY=$http_proxy' >> ~#{user}/.bashrc"
-      run "echo 'proxy=\"#{proxy}\"' >> ~#{user}/.curlrc"
+      run "#{try_sudo} echo 'proxy=\"#{proxy}\"' >> /etc/curlrc"
+      run "echo '---\nhttp-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc"
+
     end
   end
   namespace :filesystem do
@@ -71,11 +73,7 @@ namespace :server_setup do
     end
   end
   task :gem_install, :roles => :app do
-    if proxy
-      run "gem install bundler passenger -p #{proxy}"
-    else
       run "gem install bundler passenger"
-    end
   end
   task :passenger, :roles => :app do
     run "passenger-install-apache2-module -a"
