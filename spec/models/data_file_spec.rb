@@ -891,20 +891,21 @@ describe DataFile do
       data_file = Factory(:data_file, 
                           filename: "datafile",
                           experiment: experiment,
-                          format: FileTypeDeterminer::TOA5)
+                          format: FileTypeDeterminer::TOA5,
+                          created_at: "2012-06-27 06:49:08")
       Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
       Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
       Factory(:column_detail, :name => "Humi", :data_file => data_file)
 
 
-      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfl")
+      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfll")
       Factory(:column_mapping, :name => "Soil Temperature", :code => "SoilTemp")
       Factory(:column_mapping, :name => "Humidity", :code => "Humi")
 
       directory = Dir.mktmpdir
       file_path = data_file.write_metadata_to_file(directory)
       file_path.should =~ /datafile-metadata.txt$/
-      puts file_path
+      file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'datafile-metadata.txt'))
     end
   end
 
