@@ -1,0 +1,34 @@
+Basic information
+
+Name: datafile
+Type: RAW
+File format: TOA5
+Description: 
+Tags: 
+Experiment: MyString
+Date added: 2012-06-27  6:49
+Added by: Fred Bloggs
+
+Information From The File
+
+Start time: 
+End time: 
+Sample interval: 
+
+Columns
+
+Column: Humi
+Column Mapping: Humidity 
+Unit: 
+Measurement Type: 
+
+Column: SoilTemp
+Column Mapping: Soil Temperature 
+Unit: 
+Measurement Type: 
+
+Column: Rnfll
+Column Mapping: Rainfall 
+Unit: 
+Measurement Type: 
+
