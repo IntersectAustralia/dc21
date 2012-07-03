@@ -48,6 +48,8 @@ class DataFilesController < ApplicationController
       params[:data_file][:end_time] = end_time
     end
 
+    @data_file.check_filepath(params[:data_file][:filename], APP_CONFIG['files_root'])
+
     if @data_file.update_attributes(params[:data_file])
       redirect_to data_file_path, notice: SAVE_MESSAGE
     else

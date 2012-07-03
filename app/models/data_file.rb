@@ -210,6 +210,16 @@ class DataFile < ActiveRecord::Base
     save!
   end
 
+  def check_filepath(new_filename, path_dir)
+    if filename != new_filename
+      newpath = File.join(path_dir, new_filename)
+      if File.exists? newpath
+        raise "file with path #{newpath} already exist"
+      end
+      rename_to(newpath, new_filename)
+    end
+  end
+
   protected
 
   def with_filtered_data_in_date_range_in_temp_file(from_time, to_time, &block)

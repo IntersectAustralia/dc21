@@ -493,6 +493,38 @@ describe DataFile do
     end
   end
 
+  describe "Checking Filepath" do
+    it "should not update filename that has not not been edited" do
+      old_path = set_up_data_file_path
+      old_path.should exist
+
+      data_file = Factory(:data_file, :path => old_path, :filename => "blah.txt")
+      data_file.check_filepath("blah.txt", "some_dir/")
+      data_file.reload
+      data_file.filename.should eq("blah.txt")
+      data_file.path.should eq(old_path.to_s)
+      old_path.should exist
+    end
+
+    it "should update the filename and path if filename is edited" do
+      old_path = set_up_data_file_path
+      data_file = Factory(:data_file, :path => old_path, :filename => "blah.txt")
+      new_filename = "newfile.txt"
+      new_filepath_dir = Rails.root.join("tmp")
+      data_file.check_filepath(new_filename, new_filepath_dir)
+      data_file.reload
+      new_path = File.join(new_filepath_dir, new_filename)
+      data_file.path.should eq(new_path)
+      data_file.filename.should eq(new_filename)
+      old_path.should_not exist
+      new_path.should exist
+    end
+
+    it "should raise an error if filename clashes with another existing file" do
+
+    end
+  end
+
   describe "Updating data file" do
     it "should return false if there is no start date" do
       @data_file = Factory(:data_file, :end_time => "")
@@ -896,4 +928,10 @@ def make_data_file!(start_time, end_time, path, station_name, table_name, status
   data_file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
 
   data_file
+end
+
+def set_up_data_file_path
+  old_path = Rails.root.join("tmp", "blah.txt")
+  FileUtils.cp(Rails.root.join("samples/sample1.txt"), old_path)
+  old_path
 end
