@@ -92,3 +92,8 @@ When /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" w
   end
 
 end
+
+When /^I make a request for the explore data page with the API token for "([^"]*)"$/ do |email|
+  user = User.find_by_email!(email)
+  get data_files_path(:auth_token => user.authentication_token, :format => :json)
+end

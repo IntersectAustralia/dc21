@@ -34,3 +34,9 @@ Feature: Create and manage authentication tokens
     Then The popup text should contain "Are you sure you want to delete your token? You will no longer be able to perform API actions."
     When I confirm the popup
     Then I should see no api token
+
+  Scenario: Tokens can't be used on non-API actions
+    Given user "diego@intersect.org.au" has an API token
+    When I make a request for the explore data page with the API token for "diego@intersect.org.au"
+    Then I should get a 401 response code
+
