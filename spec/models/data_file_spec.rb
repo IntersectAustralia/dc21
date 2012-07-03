@@ -496,9 +496,8 @@ describe DataFile do
       old_path = set_up_data_file_path
       old_path.should exist
 
-      data_file = Factory(:data_file, :path => old_path, :filename => "blah.txt")
+      data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
       data_file.check_filepath("blah.txt", "some_dir/")
-      data_file.reload
       data_file.filename.should eq("blah.txt")
       data_file.path.should eq(old_path.to_s)
       old_path.should exist
@@ -506,13 +505,12 @@ describe DataFile do
 
     it "should update the filename and path if filename is edited" do
       old_path = set_up_data_file_path
-      data_file = Factory(:data_file, :path => old_path, :filename => "blah.txt")
+      data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
       new_filename = "newfile.txt"
       new_filepath_dir = Rails.root.join("tmp")
       data_file.check_filepath(new_filename, new_filepath_dir)
-      data_file.reload
-      new_path = File.join(new_filepath_dir, new_filename)
-      data_file.path.should eq(new_path)
+      new_path = Rails.root.join(new_filepath_dir, new_filename)
+      data_file.path.should eq(new_path.to_s)
       data_file.filename.should eq(new_filename)
       old_path.should_not exist
       new_path.should exist
