@@ -8,7 +8,8 @@
     .control-group
       %label.control-label{ :for => :data_file_filename } Name
       .controls
-        = @data_file.filename
+        = required
+        = f.text_field :filename
     .control-group
       %label.control-label{ :for => :file_processing_status } File type
       .controls
