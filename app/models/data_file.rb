@@ -214,7 +214,9 @@ class DataFile < ActiveRecord::Base
     if filename != new_filename
       newpath = File.join(path_dir, new_filename)
       if File.exists? newpath
-        raise "file with path #{newpath} already exist"
+        err_msg = "file with name #{new_filename} already exists"
+        errors.add(:filename, err_msg)
+        raise err_msg
       end
       rename_to(newpath, new_filename)
     end
