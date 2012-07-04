@@ -289,12 +289,12 @@ describe DataFile do
 
     it "when searching with start date only should return all files which end on or after the given date" do
       search_result = DataFile.with_data_in_range(Date.parse("2011-03-01"), nil)
-      search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@f2, @f3, @f4, @f6])
+      search_result.size.should eq(5)
+      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f3], @files[:f4], @files[:f6], @files[:f7]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-04-30"), nil)
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@f2, @f4, @f6])
+      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-05-01"), nil)
       search_result.size.should eq(0)
@@ -303,15 +303,15 @@ describe DataFile do
     it "when searching with end date only should return all files that start on or before the given date" do
       search_result = DataFile.with_data_in_range(nil, Date.parse("2011-03-01"))
       search_result.size.should eq(5)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f4, @f5])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f4], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(nil, Date.parse("2011-02-28"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f5])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(nil, Date.parse("2011-01-01"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f5])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(nil, Date.parse("2010-12-31"))
       search_result.size.should eq(0)
@@ -323,28 +323,28 @@ describe DataFile do
 
       search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2011-01-01"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f5])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2011-02-01"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f5])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f5]])
 
       #single day
       search_result = DataFile.with_data_in_range(Date.parse("2011-02-01"), Date.parse("2011-02-01"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-02-15"), Date.parse("2011-03-15"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@f1, @f2, @f3, @f4])
+      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f4]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-04-01"), Date.parse("2011-12-12"))
-      search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@f2, @f4, @f6])
+      search_result.size.should eq(4)
+      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6], @files[:f7]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-04-30"), Date.parse("2011-12-12"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@f2, @f4, @f6])
+      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-05-01"), Date.parse("2011-12-12"))
       search_result.size.should eq(0)
