@@ -493,7 +493,7 @@ describe DataFile do
 
   describe "Checking Filepath" do
     it "should not update filename that has not not been edited" do
-      old_path = set_up_data_file_path
+      old_path = set_up_data_file_path("blah.txt")
       old_path.should exist
 
       data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
@@ -501,10 +501,12 @@ describe DataFile do
       data_file.filename.should eq("blah.txt")
       data_file.path.should eq(old_path.to_s)
       old_path.should exist
+      sample_file_path = Rails.root.join("samples/sample1.txt")
+      FileUtils.compare_file(old_path.to_s, sample_file_path.to_s).should eq(true)
     end
 
     it "should update the filename and path if filename is edited" do
-      old_path = set_up_data_file_path
+      old_path = set_up_data_file_path("blah.txt")
       data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
       new_filename = "newfile.txt"
       new_filepath_dir = Rails.root.join("tmp")
@@ -514,10 +516,18 @@ describe DataFile do
       data_file.filename.should eq(new_filename)
       old_path.should_not exist
       new_path.should exist
+      # cleanup  (look up 'after each'/ 'after all')
+      File.delete(new_path.to_s)
     end
 
     it "should raise an error if filename clashes with another existing file" do
-
+      old_path = set_up_data_file_path("blah.txt")
+      old_data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
+      another_path = set_up_data_file_path("another.txt")
+      another_data_file = Factory(:data_file, :path => another_path.to_s, :filename => "another.txt")
+      new_filename = "another.txt"
+      new_filepath_dir = Rails.root.join("tmp")
+      expect { data_file.check_filepath(new_filename, new_filepath_dir) }.should raise_error
     end
   end
 
@@ -950,8 +960,8 @@ def make_data_file!(start_time, end_time, path, station_name, table_name, status
   data_file
 end
 
-def set_up_data_file_path
-  old_path = Rails.root.join("tmp", "blah.txt")
-  FileUtils.cp(Rails.root.join("samples/sample1.txt"), old_path)
-  old_path
+def set_up_data_file_path(filename)
+  path = Rails.root.join("tmp", filename)
+  FileUtils.cp(Rails.root.join("samples/sample1.txt"), path)
+  path
 end
