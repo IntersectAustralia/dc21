@@ -16,6 +16,7 @@ class DataFile < ActiveRecord::Base
   has_and_belongs_to_many :tags
 
   validates_presence_of :filename
+  validates_uniqueness_of :filename
   validates_presence_of :path
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
@@ -262,15 +263,10 @@ class DataFile < ActiveRecord::Base
     file_path
   end
 
-  def check_filepath(new_filename, path_dir)
-    if filename != new_filename
-      newpath = File.join(path_dir, new_filename)
-      if File.exists? newpath
-        err_msg = "file with name #{new_filename} already exists"
-        errors.add(:filename, err_msg)
-        raise err_msg
-      end
-      rename_to(newpath, new_filename)
+  def rename_file(old_filename, new_filename, path_dir)
+    if filename != old_filename
+      new_path = File.join(path_dir, new_filename)
+      rename_to(new_path, new_filename)
     end
   end
 

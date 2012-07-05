@@ -15,6 +15,7 @@ class DataFilesController < ApplicationController
   expose(:facilities) { Facility.order(:name) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
   expose(:experiments) { Experiment.order(:name) }
+  expose(:column_mappings) { ColumnMapping.all }
 
   def index
     set_tab :explore, :contentnavigation
@@ -38,6 +39,7 @@ class DataFilesController < ApplicationController
   end
 
   def edit
+    @column_mappings = ColumnMapping.all
   end
 
   def update
@@ -50,17 +52,14 @@ class DataFilesController < ApplicationController
       params[:data_file][:start_time] = start_time
       params[:data_file][:end_time] = end_time
     end
-
-    begin
-      @data_file.check_filepath(params[:data_file][:filename], APP_CONFIG['files_root'])
-      if @data_file.update_attributes(params[:data_file])
-        redirect_to data_file_path, notice: SAVE_MESSAGE
-      else
-        render action: "edit"
-      end
-    rescue
+    old_filename = @data_file.filename
+    if @data_file.update_attributes(params[:data_file])
+      @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root'])
+      redirect_to data_file_path, notice: SAVE_MESSAGE
+    else
       render action: "edit"
     end
+
   end
 
   def create

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :data_file do
-    filename "a-filename"
+    sequence(:filename) { |n| "file-#{n}" }
     path "a-path"
     association :created_by, :factory => :user
     experiment_id -1

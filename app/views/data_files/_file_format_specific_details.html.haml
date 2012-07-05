@@ -22,7 +22,7 @@
       %tr
         %td= column_details.name
         %td
-          - @column_mappings.each do |map|
+          - column_mappings.each do |map|
             - unless map.check_col_mapping(column_details.name).nil?
               = map.name
         %td= column_details.unit

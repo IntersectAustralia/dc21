@@ -9,6 +9,10 @@ describe DataFile do
     it { should validate_presence_of(:experiment_id) }
     it { should validate_presence_of(:file_size) }
     it { should ensure_length_of(:file_processing_description).is_at_most(255) }
+    it "should validate uniqueness of filename" do
+      Factory(:data_file)
+      should validate_uniqueness_of(:filename)
+    end
     it 'ensures a start time, but only if end_time specified' do
       now = DateTime.now
       file = Factory(:data_file)
@@ -27,6 +31,7 @@ describe DataFile do
 
       file.should_not be_valid
     end
+
   end
 
   describe "Callbacks" do
@@ -509,7 +514,7 @@ describe DataFile do
       old_path.should exist
 
       data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
-      data_file.check_filepath("blah.txt", "some_dir/")
+      data_file.rename_file("blah.txt", "blah.txt", "some_dir/")
       data_file.filename.should eq("blah.txt")
       data_file.path.should eq(old_path.to_s)
       old_path.should exist
@@ -522,7 +527,7 @@ describe DataFile do
       data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
       new_filename = "newfile.txt"
       new_filepath_dir = Rails.root.join("tmp")
-      data_file.check_filepath(new_filename, new_filepath_dir)
+      data_file.rename_file("blah.txt", new_filename, new_filepath_dir)
       new_path = Rails.root.join(new_filepath_dir, new_filename)
       data_file.path.should eq(new_path.to_s)
       data_file.filename.should eq(new_filename)
@@ -532,15 +537,6 @@ describe DataFile do
       File.delete(new_path.to_s)
     end
 
-    it "should raise an error if filename clashes with another existing file" do
-      old_path = set_up_data_file_path("blah.txt")
-      old_data_file = Factory(:data_file, :path => old_path.to_s, :filename => "blah.txt")
-      another_path = set_up_data_file_path("another.txt")
-      another_data_file = Factory(:data_file, :path => another_path.to_s, :filename => "another.txt")
-      new_filename = "another.txt"
-      new_filepath_dir = Rails.root.join("tmp")
-      expect { data_file.check_filepath(new_filename, new_filepath_dir) }.should raise_error
-    end
   end
 
   describe "Updating data file" do
