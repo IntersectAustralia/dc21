@@ -52,6 +52,7 @@ class DataFilesController < ApplicationController
       params[:data_file][:start_time] = start_time
       params[:data_file][:end_time] = end_time
     end
+
     old_filename = @data_file.filename
     if @data_file.update_attributes(params[:data_file])
       @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root'])
