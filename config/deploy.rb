@@ -2,20 +2,26 @@ require 'rvm/capistrano'
 require 'capistrano/ext/multistage'
 require 'bundler/capistrano'
 require 'capistrano_colors'
+require 'colorize'
+
+# Extra capistrano tasks
+load 'lib/intersect_capistrano_tasks'
 
 set :application, 'dc21app'
 set :stages, %w(qa staging production)
 set :default_stage, "qa"
 
-set :build_rpms, %w(gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile  curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git)
-set :project_rpms, %w{openssl openssl-devel curl-devel httpd-devel apr-devel apr-util-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel libffi mod_ssl mod_xsendfile}
-set :rpms_centos_5, %w{postgresql84-server postgresql84 postgresql84-devel}
-set :rpms_centos_6, %w{postgresql-server postgresql postgresql-devel}
+set :build_rpms, %w(gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile  curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git)
+set :project_rpms, %w()
+set :rpms_el5, %w(postgresql84-server postgresql84 postgresql84-devel)
+set :rpms_el6, %w(postgresql-server postgresql postgresql-devel)
 
 set :shared_children, shared_children + %w(log_archive)
 set :bash, '/bin/bash'
 set :shell, bash # This is don in two lines to allow rpm_install to refer to bash (as shell just launches cap shell)
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
+
+set :bundle_flags, "--deployment"
 
 # Deploy using copy for now
 set :scm, 'git'
@@ -36,7 +42,7 @@ default_run_options[:pty] = true
 
 namespace :server_setup do
   task :rpm_install, :roles => :app do
-    distro_rpms = centos_6 ? project_rpms_centos_6 : project_rpms
+    distro_rpms = el6 ? rpms_el6 : rpms_el5
     run "#{try_sudo} yum install -y #{(build_rpms + project_rpms + distro_rpms).uniq.join(' ')}", :shell => bash
   end
 
@@ -44,9 +50,8 @@ namespace :server_setup do
     unless proxy.nil?
       run "echo 'export http_proxy=\"#{proxy}\"' >> ~#{user}/.bashrc"
       run "echo 'export HTTP_PROXY=$http_proxy' >> ~#{user}/.bashrc"
-      run "#{try_sudo} echo 'proxy=\"#{proxy}\"' >> /etc/curlrc"
+      run "echo 'proxy=\"#{proxy}\"' >> ~#{user}/.curlrc"
       run "echo '---\nhttp-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc"
-
     end
   end
   namespace :filesystem do
@@ -73,7 +78,7 @@ namespace :server_setup do
     end
   end
   task :gem_install, :roles => :app do
-      run "gem install bundler passenger"
+    run "gem install bundler passenger"
   end
   task :passenger, :roles => :app do
     run "passenger-install-apache2-module -a"
@@ -109,6 +114,9 @@ end
 after 'deploy:setup' do
   server_setup.filesystem.dir_perms
   server_setup.filesystem.mkdir_db_dumps
+end
+before 'deploy:update' do
+  export_proxy
 end
 after 'deploy:update' do
   server_setup.logging.rotation
@@ -180,7 +188,7 @@ namespace :deploy do
   # Add an initial user
   desc "Adds an initial user to the app"
   task :add_initial_user, :roles => :db do
-    run("cd #{current_path} && rake db:add_initial_user", :env => {'RAILS_ENV' => "#{stage}"})
+
   end
 
   desc "Full redepoyment, it runs deploy:update and deploy:refresh_db"
@@ -238,60 +246,4 @@ namespace :deploy do
     run "cd #{current_path} && rm -r deploy_templates"
   end
 
-end
-
-namespace :backup do
-  namespace :db do
-    desc "make a database backup"
-    task :dump do
-      run "cd #{current_path} && rake db:backup", :env => {'RAILS_ENV' => stage}
-    end
-
-    desc "trim database backups"
-    task :trim do
-      run "cd #{current_path} && rake db:trim_backups", :env => {'RAILS_ENV' => stage}
-    end
-  end
-end
-
-desc "Give sample users a custom password"
-task :generate_populate_yml, :roles => :app do
-  require "yaml"
-  require 'colorize'
-
-  puts "Set sample user password? (required on initial deploy) [NO/yes]".colorize(:red)
-  input = STDIN.gets.chomp
-  do_set_password if input.match(/^yes/)
-end
-
-desc "Helper method that actually sets the sample user password"
-task :do_set_password, :roles => :app do
-  set :custom_sample_password, proc { Capistrano::CLI.password_prompt("Sample User password: ") }
-  buffer = Hash[:password => custom_sample_password]
-  put YAML::dump(buffer), "#{shared_path}/env_config/sample_password.yml", :mode => 0664
-end
-
-desc "After updating code we need to populate a new database.yml"
-task :generate_database_yml, :roles => :app do
-  require "yaml"
-  require 'colorize'
-
-  set :production_database_password, proc { Capistrano::CLI.password_prompt("Database password: ") }
-
-  buffer = YAML::load_file('config/database.yml')
-  # get rid of unneeded configurations
-  buffer.delete('test')
-  buffer.delete('development')
-  buffer.delete('cucumber')
-  buffer.delete('spec')
-
-  # Populate production password
-  buffer[rails_env]['password'] = production_database_password
-
-  put YAML::dump(buffer), "#{release_path}/config/database.yml", :mode => 0664
-end
-
-
-after 'multistage:ensure' do
-  set (:rails_env) {"#{defined?(rails_env) ? rails_env : stage.to_s}"}
 end

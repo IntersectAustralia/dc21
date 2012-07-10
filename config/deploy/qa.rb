@@ -8,7 +8,7 @@ set :db_server, 'knt1-dc21-qa.intersect.org.au'
 set :user, 'devel'
 
 # If you are using RHEL/CentOS 6 or later, set this to true
-set :centos_6, false
+set :el6, false
 
 # If you have a proxy server, enter the value here in "inverted commas", eg:
 #set :proxy, "http://user:pass@proxy.example.com:8080" # with a user/password
