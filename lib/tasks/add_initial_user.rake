@@ -10,7 +10,7 @@ begin
 
       user_file = File.expand_path("#{Rails.root}/config/initial_user.yml", __FILE__)
       raise "Cannot continue! Could not find #{user_file}" unless File.exists? user_file
-      user_attrs = YAML::load_file(config_file)
+      user_attrs = YAML::load_file(user_file)
 
       user = User.new(user_attrs)
       role = Role.find_by_name("Administrator")
