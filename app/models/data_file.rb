@@ -264,7 +264,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def rename_file(old_filename, new_filename, path_dir)
-    if filename != old_filename
+    if new_filename != old_filename
       new_path = File.join(path_dir, new_filename)
       rename_to(new_path, new_filename)
     end

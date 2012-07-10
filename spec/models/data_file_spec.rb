@@ -529,8 +529,8 @@ describe DataFile do
       new_filepath_dir = Rails.root.join("tmp")
       data_file.rename_file("blah.txt", new_filename, new_filepath_dir)
       new_path = Rails.root.join(new_filepath_dir, new_filename)
-      data_file.path.should eq(new_path.to_s)
       data_file.filename.should eq(new_filename)
+      data_file.path.should eq(new_path.to_s)
       old_path.should_not exist
       new_path.should exist
       # cleanup  (look up 'after each'/ 'after all')
