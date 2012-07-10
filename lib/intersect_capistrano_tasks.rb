@@ -105,7 +105,7 @@ namespace :deploy do
       put YAML::dump(user), output_file, :mode => 0664
       run("cd #{current_path} && rake db:add_initial_user", :env => {'RAILS_ENV' => "#{stage}"})
     ensure
-      #delete output_file
+      delete output_file
     end
 
   end
