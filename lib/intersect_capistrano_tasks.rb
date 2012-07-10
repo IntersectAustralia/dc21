@@ -76,8 +76,8 @@ namespace :deploy do
 
       #get a password
       until user[:password]
-        password = Capistrano::CLI.password_prompt("New user password: ".yellow)
-        conf_password = Capistrano::CLI.password_prompt("confirm password: ".yellow)
+        password = Capistrano::CLI.password_prompt("New user password (input will be hidden): ".yellow)
+        conf_password = Capistrano::CLI.password_prompt("Confirm password: ".yellow)
 
         if password.eql? conf_password
           if password =~ PasswordFormatValidator::PASS_REGEX

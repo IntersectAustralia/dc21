@@ -8,7 +8,7 @@ begin
       raise 'Cannot add an initial user, there are already administrators in the database' unless User.approved_superusers.count.eql? 0
       raise 'Cannot add an initial user, there are no roles specified. Please seed first' if Role.count.eql? 0
 
-      user_file = File.expand_path("#{Rails.root}/tmp/env_config/sample_password.yml", __FILE__)
+      user_file = File.expand_path("#{Rails.root}/config/initial_user.yml", __FILE__)
       raise "Cannot continue! Could not find #{user_file}" unless File.exists? user_file
       user_attrs = YAML::load_file(config_file)
 
