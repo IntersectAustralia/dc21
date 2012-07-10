@@ -102,21 +102,21 @@ Feature: View the list of data files
     Given I have data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | RAW                    | My Experiment |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | CLEANSED               | Experiment 2  |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | CLEANSED               | Other         |
+      | sample2.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | CLEANSED               | Experiment 2  |
+      | sample1.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | CLEANSED               | Other         |
     When I am on the list data files page
     And I follow "Experiment"
     Then I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type     | Experiment    |
-      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
+      | sample2.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
-      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Other         |
+      | sample1.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Other         |
     And I follow "Experiment"
     Then I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type     | Experiment    |
-      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Other         |
+      | sample1.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Other         |
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
-      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
+      | sample2.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
 
   @javascript
   Scenario: User clicks download without selecting files
