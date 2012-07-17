@@ -84,3 +84,11 @@ Feature: Edit data files
     Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     Then I should not see "Edit Data File"
+
+  Scenario: Editing data file name with trailing spaces
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I fill in "Name" with "sample.txt  "
+    And I press "Update"
+    Then I should see "Filename has already been taken"

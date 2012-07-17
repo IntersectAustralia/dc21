@@ -15,6 +15,8 @@ class DataFile < ActiveRecord::Base
   has_many :metadata_items, :dependent => :destroy
   has_and_belongs_to_many :tags
 
+  before_validation :strip_trailing_whitespaces
+
   validates_presence_of :filename
   validates_uniqueness_of :filename
   validates_presence_of :path
@@ -296,6 +298,12 @@ class DataFile < ActiveRecord::Base
       file.close
       file.unlink
     end
+  end
+
+  protected
+
+  def strip_trailing_whitespaces
+    self.filename = self.filename.strip
   end
 
   private
