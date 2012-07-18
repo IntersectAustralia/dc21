@@ -11,6 +11,7 @@ Feature: Edit data files
         | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |          |
         | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5     |
         | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |          |
+        | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |          |
 
   Scenario: Navigate from list and view edit data file page
     Given I am logged in as "georgina@intersect.org.au"
@@ -50,6 +51,13 @@ Feature: Edit data files
     And I should see "RAW"
     And I should see "My Nice Experiment"
 
+  Scenario: Editing a data file with ERROR status
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I follow the view link for data file "error.txt"
+    Then I should see "ERROR"
+    And I should not see "Edit Data File"
+
   Scenario: Editing non-TOA-5 data file as superuser
     Given I am logged in as "georgina@intersect.org.au"
     When I am on the list data files page
@@ -85,7 +93,7 @@ Feature: Edit data files
 
   Scenario: Editing data file that isn't mine
     Given I am logged in as "researcher@intersect.org.au"
-    When I am on the list data files page
+    When I follow the view link for data file "datafile.dat"
     Then I should not see "Edit Data File"
 
   Scenario: Editing data file name with trailing spaces

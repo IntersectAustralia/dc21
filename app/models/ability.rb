@@ -61,6 +61,9 @@ class Ability
             :api_create], DataFile
     can :destroy, DataFile, :created_by_id => user.id
     can :update, DataFile, :created_by_id => user.id
+    cannot :update, DataFile do |datafile|
+      datafile.is_error_file?
+    end
 
     if user.role.admin?
       # only admins can manage users
@@ -72,6 +75,9 @@ class Ability
       can :approve, User
 
       can :manage, DataFile
+      cannot :update, DataFile do |datafile|
+        datafile.is_error_file?
+      end
     end
 
   end

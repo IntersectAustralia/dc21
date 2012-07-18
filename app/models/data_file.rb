@@ -124,7 +124,11 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_raw_file?
-    self.file_processing_status.eql? "RAW"
+    self.file_processing_status.eql? STATUS_RAW
+  end
+
+  def is_error_file?
+    self.file_processing_status.eql? STATUS_ERROR
   end
 
   def has_data_in_range?(from, to)
