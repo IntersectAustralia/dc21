@@ -6,6 +6,7 @@
     = link_to "+ New Data Entry", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
 
 .container
+  = render_field "ID", @experiment.id
   = render_field "Parent", @experiment.parent_name
   = render_field "Name", @experiment.name
   = render_field "Description", @experiment.description

@@ -17,6 +17,7 @@ Feature: Edit data files
     When I am on the list data files page
     And I edit data file "sample.txt"
     Then I should see "sample.txt"
+    And I should see "3"
     And I should see "sean@intersect.org.au"
     And I should see "2010-06-01 5:23:00"
     And I should see "2011-11-30 1:00:00"
@@ -27,6 +28,7 @@ Feature: Edit data files
     Given I am logged in as "georgina@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
+    Then I should see "2"
     And I fill in "Description" with "oranges"
     And I edit the File Type to "RAW"
     And I edit the Experiment to "My Nice Experiment"
@@ -39,6 +41,7 @@ Feature: Edit data files
     Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
+    Then I should see "3"
     And I fill in "Description" with "apples"
     And I edit the File Type to "RAW"
     And I edit the Experiment to "My Nice Experiment"
