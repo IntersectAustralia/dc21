@@ -1,0 +1,25 @@
+# for DC21 you'll need to modify the base URL and leave the rest
+api_endpoint: http://172.16.25.39:3000/data_files/api_create
+
+# for DC21 you'll need to update with your own auth token
+common_parameters:
+  auth_token: RfmknM43yYnZxtVPfAuH
+
+# Don't modify this for DC21
+file_parameter_name: file
+
+# Each file to send has one entry below
+# Simple date substitutions are allowed for today or yesterday's date, use either of:
+# %%today_yyyy-mm-dd%% (will be replaced with the current date in yyyy-mm-dd format)
+# %%yesterday_yyyy-mm-dd%% (will be replaced with yesterday's date in yyyy-mm-dd format)
+# %%today_yymmdd%% (will be replaced with the current date in yymmdd format)
+# %%yesterday_yymmdd%% (will be replaced with yesterday's date in yymmdd format)
+# other date formats can be added on request
+
+files:
+  -
+    path: C:\Trending\Data\Trendlog_0008000_0000000NNN (000-339)\SAME_ROOT-D-%%yesterday_yyyy-mm-dd%%.mdb
+    file_parameters:
+      description: Information regarding the system controlling the temperature and humidity inside the tree chambers.
+      type: RAW
+      experiment_id: TODO
