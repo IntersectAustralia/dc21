@@ -1,14 +1,17 @@
 !!!
-%html
-  %head
-    = render 'layouts/head'
-  %body
-    #content_wrapper
-      = render 'layouts/banner'
-      #content
-        - if content_for?(:breadcrumb)
-          = yield :breadcrumb
-        #content_container
-          = yield
-    = render 'layouts/footer'
+/[if gt IE 8]
+  %html
+/[if IE 8]
+  %html.ie8
+%head
+  = render 'layouts/head'
+%body
+  #content_wrapper
+    = render 'layouts/banner'
+    #content
+      - if content_for?(:breadcrumb)
+        = yield :breadcrumb
+      #content_container
+        = yield
+  = render 'layouts/footer'
 
