@@ -31,11 +31,11 @@ Feature: Edit data files
     And I edit data file "sample.txt"
     Then I should see "2"
     And I fill in "Description" with "oranges"
-    And I edit the File Type to "RAW"
+    And I edit the File Type to "PROCESSED"
     And I edit the Experiment to "My Nice Experiment"
     And I press "Update"
     Then I should see "oranges"
-    And I should see "RAW"
+    And I should see "PROCESSED"
     And I should see "My Nice Experiment"
 
   Scenario: Editing TOA-5 data file as researcher
@@ -44,11 +44,11 @@ Feature: Edit data files
     And I edit data file "file.txt"
     Then I should see "3"
     And I fill in "Description" with "apples"
-    And I edit the File Type to "RAW"
+    And I edit the File Type to "PROCESSED"
     And I edit the Experiment to "My Nice Experiment"
     And I press "Update"
     Then I should see "apples"
-    And I should see "RAW"
+    And I should see "PROCESSED"
     And I should see "My Nice Experiment"
 
   Scenario: Editing a data file with ERROR status

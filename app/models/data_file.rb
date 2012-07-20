@@ -6,6 +6,7 @@ class DataFile < ActiveRecord::Base
   STATUS_CLEANSED = 'CLEANSED'
   STATUS_PROCESSED = 'PROCESSED'
   STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED]
+  STATI_FOR_EDIT = STATI - [STATUS_RAW]
   STATUS_ERROR = 'ERROR'
   ALL_STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED, STATUS_ERROR]
 
@@ -307,7 +308,9 @@ class DataFile < ActiveRecord::Base
   protected
 
   def strip_trailing_whitespaces
-    self.filename = self.filename.strip
+    if self.filename
+      self.filename = self.filename.strip
+    end
   end
 
   private
