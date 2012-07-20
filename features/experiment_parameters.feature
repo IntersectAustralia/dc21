@@ -1,4 +1,3 @@
-@javascript
 Feature: Manage experiment parameter metadata
   In order to make data more useful to others
   As a researcher
@@ -29,6 +28,7 @@ Feature: Manage experiment parameter metadata
     When I am on the view experiment page for 'Weather Station Experiment'
     Then I should see "There are no parameters to display"
 
+  @javascript
   Scenario: Subcategory dropdown populates based on the category dropdown on create screen
     Given I am on the create experiment parameter page for 'Weather Station Experiment'
     Then the "Category" select should contain
@@ -50,6 +50,7 @@ Feature: Manage experiment parameter metadata
     Then the "Subcategory" select should contain
       | Please select a category first |
 
+  @javascript
   Scenario: Subcategory select doesn't contain 'please select' prompt if there's only one possibility
     Given I am on the create experiment parameter page for 'Weather Station Experiment'
     When I select "Humidity" from "Category"
@@ -97,6 +98,7 @@ Feature: Manage experiment parameter metadata
     And I press "Save"
     Then I should see "Parameter modification can't be blank"
 
+  @javascript
   Scenario: Subcategory dropdown remains populated on validation error
     Given I am on the create experiment parameter page for 'Weather Station Experiment'
     And I select "Light" from "Category"
@@ -137,6 +139,7 @@ Feature: Manage experiment parameter metadata
       | Light      | Natural        | Excluded        |        |        | A comment about the light  |
       | Light      | Ultraviolet    | Absolute target | 10.22  | Lumens | My comment                 |
 
+  @javascript
   Scenario: Subcategory dropdown should be populated correctly when editing
     Given I am on the view experiment page for 'Weather Station Experiment'
     And I follow the edit link for the experiment parameter for "Temperature"
@@ -148,6 +151,7 @@ Feature: Manage experiment parameter metadata
       | Air Temperature             |
       | Soil Temperature            |
 
+  @javascript
   Scenario: Edit with a validation error
     Given I am on the view experiment page for 'Weather Station Experiment'
     And I follow the edit link for the experiment parameter for "Temperature"
@@ -161,6 +165,7 @@ Feature: Manage experiment parameter metadata
     And I follow "Cancel"
     Then I should be on the view experiment page for 'Weather Station Experiment'
 
+  @javascript
   Scenario: Delete
     Given I am on the view experiment page for 'Weather Station Experiment'
     When I follow the delete link for experiment parameter "Temperature"
@@ -171,6 +176,7 @@ Feature: Manage experiment parameter metadata
       | Atmosphere | Carbon Dioxide | Above ambient | 20.0   | PPM   | A comment about atmosphere |
       | Light      | Natural        | Excluded      |        |       | A comment about the light  |
 
+  @javascript
   Scenario: Cancel out of delete
     Given I am on the view experiment page for 'Weather Station Experiment'
     When I follow the delete link for experiment parameter "Temperature"

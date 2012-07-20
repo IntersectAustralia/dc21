@@ -184,7 +184,7 @@ Feature: Search data files by date range
     And I expand all the mapped variables
     Then I should see variable checkboxes
       | Rainfall    | Rnfl, Rnfll         |
-      | Temperature | Temp, Temp_2, temp2 |
+      | Temperature | Temp, temp2, Temp_2 |
       | Unmapped    | Humi, humidity      |
     When I check "Humi"
     And I check "Rainfall"
@@ -349,7 +349,7 @@ Feature: Search data files by date range
     And I expand all the mapped variables
     Then I should see variable checkboxes
       | Rainfall    | Rnfl, Rnfll         |
-      | Temperature | Temp, Temp_2, temp2 |
+      | Temperature | Temp, temp2, Temp_2 |
       | Unmapped    | Humi, humidity      |
     When I check "Rainfall"
     Then the "Rnfll" checkbox should be checked
