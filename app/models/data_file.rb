@@ -16,7 +16,7 @@ class DataFile < ActiveRecord::Base
   has_many :metadata_items, :dependent => :destroy
   has_and_belongs_to_many :tags
 
-  before_validation :strip_trailing_whitespaces
+  before_validation :strip_whitespaces
 
   validates_presence_of :filename
   validates_uniqueness_of :filename
@@ -307,10 +307,8 @@ class DataFile < ActiveRecord::Base
 
   protected
 
-  def strip_trailing_whitespaces
-    if self.filename
-      self.filename = self.filename.strip
-    end
+  def strip_whitespaces
+    self.filename.strip! if self.filename
   end
 
   private
