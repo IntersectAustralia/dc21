@@ -115,20 +115,20 @@
         %th.view.select
           = (link_to "All", "javascript:selectToggle(false, 'datafiles');") + "/" + (link_to "None", "javascript:selectToggle(true, 'datafiles');")
         %th.view View
-        %th.sortable= sortable "data_files.filename", "Filename"
-        %th.sortable= sortable "data_files.created_at", "Date added"
+        %th.sortable.filename= sortable "data_files.filename", "Filename"
+        %th.sortable.date= sortable "data_files.created_at", "Date added"
         %th.sortable.email= sortable "users.email", "Added by"
-        %th.sortable= sortable "data_files.file_processing_status", "Type"
-        %th.sortable= sortable "data_files.experiment_id", "Experiment"
+        %th.sortable.type= sortable "data_files.file_processing_status", "Type"
+        %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
           %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}"
-          %td= data_file.filename
-          %td= data_file.created_at.to_s(:with_time)
+          %td.filename= data_file.filename
+          %td.date= data_file.created_at.to_s(:with_time)
           %td.email= data_file.created_by.email if data_file.created_by
-          %td= data_file.status_as_string
-          %td= data_file.experiment_name
+          %td.type= data_file.status_as_string
+          %td.experiment= data_file.experiment_name
     #helper_text.select
       Select one or more files to download
     #download_actions.actions.hidden

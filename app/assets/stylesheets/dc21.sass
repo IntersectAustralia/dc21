@@ -57,8 +57,8 @@
       +inlineblock
     input[type=text]
       +m-p-w-h-p-t-b-l-r-f(0, "", 560px)
-    input
-      
+input#from_date, input#to_date
+  width: 70px
 
 .searchactions
   +m-p-w-h-p-t-b-l-r-f("")
@@ -265,12 +265,34 @@ h3.upload
     float: right
     a
       font-weight: normal
+  #downloadtoggle
+    display: none
 
 
 #exploredata, .exploredata
+
 .exploredata.search, #exploredata.search, #exploredata.search tbody
   +inlineblock
   +width(770px, 770px, 770px)
+  overflow: none
+#exploredata.search, #exploredata.search tbody
+  display: table
+  tr
+    +width(770px, 770px, 770px)
+  td.view.select, th.view.select
+    +width(40px, 40px, 40px)
+  td.view, th.view
+    +width(50px, 50px, 50px)
+  td.filename, th.filename
+    +width(150px, 150px, 150px)
+  td.date, th.date
+    +width(110px, 110px, 110px)
+  td.email, th.email
+    +width(150px, 150px, 150px)
+  td.experiment, th.experiment
+    +width(100px, 100px, 100px)
+  td.experiment, th.experiment
+    +width(120px, 120px, 120px)
 
 
 th.sortable 
@@ -303,7 +325,7 @@ th.sortable
       background-size: 12px
 form
   .select
-    display: none
+    //display: none
 
 
 // SHOW DATA /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -645,3 +667,29 @@ ul#files_to_download
 
 .ie8 .footerwrapper
   display: none
+
+
+.ie8
+  table#exploredata
+    overflow: hidden
+    table-layout: fixed
+    td
+    td.view.select, th.view.select
+      +width(50px, 50px, 50px)
+    td.view, th.view
+      +width(40px, 40px, 40px)
+    td.filename, th.filename
+      +width(150px, 150px, 150px)
+    td.date, th.date
+      +width(110px, 110px, 110px)
+    td.email, th.email
+      +width(160px, 160px, 160px)
+    td.type, th.type
+      +width(70px, 70px, 70px)
+    td.experiment, th.experiment
+      +width(90px, 90px, 90px)
+//.exploredata.search, #exploredata.search, #exploredata.search tbody
+  +inlineblock
+  +width(770px, 770px, 770px)
+  overflow: none
+
