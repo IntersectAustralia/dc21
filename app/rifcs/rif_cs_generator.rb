@@ -73,7 +73,7 @@ class RifCsGenerator
           end
 
           xml.relatedInfo do
-            xml.notes "#{wrapper_object.submitter_name} (#{wrapper_object.submitter_email})"
+            xml.notes "Published by #{wrapper_object.submitter_name} (#{wrapper_object.submitter_email})"
           end
         end
       end
