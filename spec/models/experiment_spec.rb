@@ -81,20 +81,27 @@ describe Experiment do
   end
 
   describe "write metadata to file" do
-    it "should produce a file with details written one per line" do
+
+    before(:each) do
+
       facility = Factory(:facility, name: 'My Facility')
 
-      experiment = Factory(:experiment,
-                           name: 'High CO2 and Drought',
-                           facility: facility,
-                           description: 'This is my description.',
-                           start_date: '2011-12-25',
-                           end_date: '2012-01-01',
-                           subject: 'Drought')
-      directory = Dir.mktmpdir
-      file_path = experiment.write_metadata_to_file(directory)
+      # Set only mandatory fields
+      @experiment = Factory(:experiment,
+                            name: 'High CO2 and Drought',
+                            facility: facility,
+                            start_date: '2011-12-25',
+                            subject: 'Drought')
+      @directory = Dir.mktmpdir
+    end
+
+
+    it "should produce a file with details written one per line" do
+      @experiment.description = 'This is my description.'
+      @experiment.end_date = '2012-01-01'
+      file_path = @experiment.write_metadata_to_file(@directory)
       file_path.should =~ /high-co2-and-drought.txt$/
-      file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'experiment1.txt'))
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment1.txt'))
     end
 
     it "should handle descriptions with line breaks" do
@@ -102,7 +109,8 @@ describe Experiment do
     end
 
     it "should handle missing non-mandatory values" do
-
+      file_path = @experiment.write_metadata_to_file(@directory)
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_optional.txt'))
     end
   end
 end

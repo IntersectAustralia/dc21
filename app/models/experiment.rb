@@ -56,9 +56,11 @@ class Experiment < ActiveRecord::Base
     File.open(file_path, 'w') do |file|
       file.puts "Parent: #{parent_name}"
       file.puts "Name: #{name}"
-      file.puts "Description: #{description}" unless description == nil
+      # Description may be nil, but nil interpolates to empty string
+      # We follow the same approach for all attributes that can be nil
+      file.puts "Description: #{description}"
       file.puts "Start date: #{start_date.to_s(:date_only)}"
-      file.puts "End date: #{end_date.to_s(:date_only)}" unless end_date == nil
+      file.puts "End date: #{end_date.try(:to_s, :date_only)}"
       file.puts "Subject: #{subject}"
       file.puts "Access Rights: #{access_rights}"
       file.puts "FOR codes: #{experiment_for_codes.map { |for_code| for_code.name }.join("\n")}"
