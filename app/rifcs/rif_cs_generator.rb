@@ -75,6 +75,13 @@ class RifCsGenerator
           xml.relatedInfo do
             xml.notes "Published by #{wrapper_object.submitter_name} (#{wrapper_object.submitter_email})"
           end
+
+          wrapper_object.files.map(&:experiment).map(&:facility).uniq.each do |facility|
+            contact = facility.primary_contact
+            xml.relatedInfo do
+              xml.notes "Primary contact for #{facility.name} is #{contact.full_name} (#{contact.email})"
+            end
+          end
         end
       end
     end

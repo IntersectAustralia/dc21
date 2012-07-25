@@ -1,6 +1,12 @@
 Given /^I have facilities$/ do |table|
   table.hashes.each do |attributes|
-    Factory(:facility, attributes)
+    if attributes.include? ("primary_contact")
+      primary_contact_email = attributes.delete("primary_contact")
+      primary_contact = User.find_by_email(primary_contact_email)
+      Factory(:facility, attributes.merge(:primary_contact => primary_contact))
+    else
+      Factory(:facility, attributes)
+    end
   end
 end
 
