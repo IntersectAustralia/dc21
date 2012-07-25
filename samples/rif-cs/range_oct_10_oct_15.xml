@@ -45,8 +45,16 @@
       </coverage>
 
       <relatedInfo>
-        <notes>Fred Bloggs (georgina@intersect.org.au)</notes>
+        <notes>Published by Fred Bloggs (georgina@intersect.org.au)</notes>
       </relatedInfo>
+
+      <relatedInfo>
+        <notes>Primary contact for Facility1 is Fred Bloggs (primary_contact@intersect.org.au)</notes>
+      </relatedInfo>
+      <relatedInfo>
+        <notes>Primary contact for Facility2 is Fred Bloggs (primary_contact@intersect.org.au)</notes>
+      </relatedInfo>
+
     </collection>
   </registryObject>
 </registryObjects>

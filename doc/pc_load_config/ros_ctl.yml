@@ -1,0 +1,51 @@
+# for DC21 you'll need to modify the base URL and leave the rest
+api_endpoint: http://172.16.25.39:3000/data_files/api_create
+
+# for DC21 you'll need to update with your own auth token
+common_parameters:
+  auth_token: RfmknM43yYnZxtVPfAuH
+
+# Don't modify this for DC21
+file_parameter_name: file
+
+# Each file to send has one entry below
+# Simple date substitutions are allowed for today or yesterday's date, use either of:
+# %%today_yyyy-mm-dd%% (will be replaced with the current date in yyyy-mm-dd format)
+# %%yesterday_yyyy-mm-dd%% (will be replaced with yesterday's date in yyyy-mm-dd format)
+# %%today_yymmdd%% (will be replaced with the current date in yymmdd format)
+# %%yesterday_yymmdd%% (will be replaced with yesterday's date in yymmdd format)
+# other date formats can be added on request
+
+#STILL TO BE ADDED - need to confirm details
+#C:\Campbellsci\LoggerNet\ROS_N_ROS0PTable05Min.dat
+#C:\Campbellsci\LoggerNet\ROS_N_ROS0PTable15Min.dat
+#N = Logger number, P = Plot number
+#1 = 1 & 8
+#2 = 2 & 7
+#3 = 3 & 10
+#4 = 4 & 9
+#5 = 5 & 11
+#6 = 6 &12
+
+files:
+  -
+    path: C:\Campbellsci\LoggerNet\ROS_WS_Table2.dat
+    file_parameters:
+      description: Minute whole tree chamber data from WTC Control PC
+      type: RAW
+      experiment_id: TODO
+  -
+    path: C:\Campbellsci\LoggerNet\ROS_WS_Table05min.dat
+    file_parameters:
+      type: RAW
+      experiment_id: TODO
+  -
+    path: C:\Campbellsci\LoggerNet\EddyFlux_flux.dat
+    file_parameters:
+      type: RAW
+      experiment_id: TODO
+  -
+    path: C:\Campbellsci\LoggerNet\EddyFlux_ts_data.dat
+    file_parameters:
+      type: RAW
+      experiment_id: TODO
