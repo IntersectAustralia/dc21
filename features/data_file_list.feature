@@ -125,7 +125,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download Files"
+    #And I click on "Download Files"
     Then I should not see button "Download Selected Files"
 
   @javascript
@@ -135,7 +135,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download Files"
+    #And I click on "Download Files"
     And I should not see button "Download Selected Files"
     And I check "ids[]"
     Then I should see button "Download Selected Files"
@@ -147,11 +147,11 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download Files"
+    #And I click on "Download Files"
     And I check "ids[]"
     Then I should see button "Download Selected Files"
-    And I click on "Download Files"
-    And I should not see button "Download Selected Files"
+    #And I click on "Download Files"
+    #And I should not see button "Download Selected Files"
 
 
   Scenario: User downloads a selection of files
@@ -160,7 +160,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download Files"
+    #And I click on "Download Files"
     And I check "ids[]"
     And I press "Download Selected Files"
     Then I should get a download of all data files
@@ -173,7 +173,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download Files"
+    #And I click on "Download Files"
     And I click on "All"
 #    Then All checkboxes in "datafiles" are checked
 
@@ -184,7 +184,7 @@ Feature: View the list of data files
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | samples/sample1.txt |
       | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | samples/sample2.txt |
     When I am on the list data files page
-    And I click on "Download Files"
+    #And I click on "Download Files"
     Then I check "ids[]"
     And I press "Download Selected Files"
    

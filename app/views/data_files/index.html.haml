@@ -18,8 +18,8 @@
         - else
           = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
 
-    #downloadtoggle.download.whitebutton
-      %span= link_to 'Download Files'
+    -##downloadtoggle.download.whitebutton
+      -#%span= link_to 'Download Files'
     - unless @data_files.empty? || @search.showing_all?
       .whitebutton
         %span= link_to 'Publish', '#', id: :publish_button
