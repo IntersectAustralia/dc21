@@ -163,12 +163,6 @@ class DataFile < ActiveRecord::Base
     Experiment.find(experiment_id).name
   end
 
-  def facility
-    station_name_item = metadata_items.where(:key => MetadataKeys::STATION_NAME_KEY).first
-    return nil unless station_name_item
-    Facility.find_by_code(station_name_item.value)
-  end
-
   def check_for_bad_overlap
     station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
     table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
@@ -338,7 +332,7 @@ class DataFile < ActiveRecord::Base
     left_overlaps | right_overlaps | middle_overlaps
   end
 
-  def relevant_overlap_files(station_name, table_name)
+  def   relevant_overlap_files(station_name, table_name)
     toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5, :file_processing_status => STATUS_RAW)
     toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
 

@@ -50,26 +50,6 @@ describe DataFile do
     it { should have_and_belong_to_many(:tags) }
   end
 
-  describe "Get facility" do
-    it "returns nil if no station name metadata item" do
-      Factory(:data_file).facility.should be_nil
-    end
-
-    it "returns nil if station name metadata item exists but no facility matches the value" do
-      df = Factory(:data_file)
-      df.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => "ASDF")
-      df.facility.should be_nil
-    end
-
-    it "returns the facility object if station name matches a facility" do
-      df = Factory(:data_file)
-      df.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => "ASDF")
-      df.facility.should be_nil
-      facility = Factory(:facility, :code => "ASDF", :name => "Fred's Facility")
-      df.facility.should eq(facility)
-    end
-  end
-
   describe "Get experiment name" do
     it "returns 'Other' if set to -1" do
       Factory(:data_file, :experiment_id => -1).experiment_name.should eq("Other")

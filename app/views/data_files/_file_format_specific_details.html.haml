@@ -1,12 +1,5 @@
-- if @data_file.format == "TOA5"
-  - @data_file.metadata_items.each do |item|
-    - if item.key == "station_name"
-      - if @data_file.facility
-        = render_field "Station name", item.value
-      - else 
-        = render_field "Station name", item.value
-    - else
-      = render_field item.key.humanize, item.value
+- @data_file.metadata_items.each do |item|
+  = render_field item.key.humanize, item.value
 
   %hr/
   %h3 Columns
