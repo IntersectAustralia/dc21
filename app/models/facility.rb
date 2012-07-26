@@ -105,19 +105,6 @@ class Facility < ActiveRecord::Base
     points
   end
 
-  def write_metadata_to_file(directory_path, host_url)
-    file_path = File.join(directory_path, "#{name.parameterize}.txt")
-    File.open(file_path, 'w') do |file|
-      file.puts "Name: #{name}"
-      file.puts "Code: #{code}"
-      file.puts "Description: #{description}"
-      file.puts "Location: #{location}"
-      file.puts "Primary Contact: #{primary_contact.full_name} (#{primary_contact.email})"
-      file.puts "Persistent URL: #{entity_url(host_url)}"
-    end
-    file_path
-  end
-
   private
 
   def entity_url(host_url)

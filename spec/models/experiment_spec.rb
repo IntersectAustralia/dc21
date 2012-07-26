@@ -105,10 +105,6 @@ describe Experiment do
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment1.txt'))
     end
 
-    it "should handle descriptions with line breaks" do
-
-    end
-
     it "should handle missing non-mandatory values" do
       file_path = @experiment.write_metadata_to_file(@directory, "http://localhost")
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_optional.txt'))

@@ -917,6 +917,7 @@ describe DataFile do
     it "should produce a file with details written one per line" do
       experiment = Factory(:experiment)
       data_file = Factory(:data_file, 
+                          id: 1,
                           filename: "datafile",
                           experiment: experiment,
                           format: FileTypeDeterminer::TOA5,
@@ -931,7 +932,7 @@ describe DataFile do
       Factory(:column_mapping, :name => "Humidity", :code => "Humi")
 
       directory = Dir.mktmpdir
-      file_path = data_file.write_metadata_to_file(directory)
+      file_path = data_file.write_metadata_to_file(directory, "http://localhost")
       file_path.should =~ /datafile-metadata.txt$/
       file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'datafile-metadata.txt'))
     end

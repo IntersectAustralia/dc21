@@ -213,7 +213,7 @@ class DataFile < ActiveRecord::Base
     save!
   end
 
-  def write_metadata_to_file(directory_path)
+  def write_metadata_to_file(directory_path, host_url)
     metadata_filename = File.basename(filename, '.*')
     file_path = File.join(directory_path, "#{metadata_filename}-metadata.txt")
     File.open(file_path, 'w') do |file|
@@ -227,6 +227,7 @@ class DataFile < ActiveRecord::Base
       file.puts "Experiment: #{experiment.name}"
       file.puts "Date added: #{created_at.to_s(:with_time)}"
       file.puts "Added by: #{created_by.full_name}"
+      file.puts "Persistent URL: #{entity_url(host_url)}"
       file.puts ""
       if known_format?
         file.puts "Information From The File"
@@ -272,6 +273,10 @@ class DataFile < ActiveRecord::Base
   end
 
   protected
+
+  def entity_url(host_url)
+    Rails.application.routes.url_helpers.data_file_url(self, :host => host_url)
+  end
 
   def with_filtered_data_in_date_range_in_temp_file(from_time, to_time, &block)
     # from_date and to_date are inclusive
