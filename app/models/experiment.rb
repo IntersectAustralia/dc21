@@ -51,7 +51,7 @@ class Experiment < ActiveRecord::Base
     AccessRightsLookup.new.get_name(self.access_rights)
   end
 
-  def write_metadata_to_file(directory_path)
+  def write_metadata_to_file(directory_path, host_url)
     file_path = File.join(directory_path, "#{name.parameterize}.txt")
     File.open(file_path, 'w') do |file|
       file.puts "Parent: #{parent_name}"
@@ -64,6 +64,7 @@ class Experiment < ActiveRecord::Base
       file.puts "Subject: #{subject}"
       file.puts "Access Rights: #{access_rights}"
       file.puts "FOR codes: #{experiment_for_codes.map { |for_code| for_code.name }.join("\n")}"
+      file.puts "Persistent URL: #{entity_url(host_url)}"
       file.puts ""
       file.puts "Parameters"
       experiment_parameters.each do |param|
@@ -78,5 +79,10 @@ class Experiment < ActiveRecord::Base
 
     end
     file_path
+  end
+
+  private 
+  def entity_url(host_url)
+    Rails.application.routes.url_helpers.facility_experiment_url(facility, self, :host => host_url)
   end
 end

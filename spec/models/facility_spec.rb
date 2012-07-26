@@ -105,7 +105,7 @@ describe Facility do
       directory = Dir.mktmpdir
       file_path = facility.write_metadata_to_file(directory)
       file_path.should =~ /whole-tree-chambers.txt/
-      file_path.should be_same_file_as(Rails.root.join('samples', 'metadata', 'facility.txt'))
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/facility.txt'))
     end
   end
 end
