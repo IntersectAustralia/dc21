@@ -2,7 +2,7 @@ defaults: &defaults
   files_root: /data/dc21-data
   published_zip_files_directory: /data/dc21-data/published_zip_files
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
-  extra_config_file: /data/dc21app_extra_config.yml
+  extra_config_file_root: /data
 
 development:
   <<: *defaults

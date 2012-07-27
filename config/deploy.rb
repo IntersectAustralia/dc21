@@ -244,12 +244,12 @@ namespace :deploy do
     require "yaml"
 
     config = YAML::load_file('config/dc21app_config.yml')
-    file_path = config[stage.to_s]['extra_config_file']
+    file_path = "#{config[stage.to_s]['extra_config_file']}/dc21app_extra_config.yml"
 
-    output = capture("ls #{config[stage.to_s]['extra_config_file']} | grep '^dc21app_extra_config.yml$'").strip
+    output = capture("ls #{config[stage.to_s]['extra_config_file_root']} | grep '^dc21app_extra_config.yml$'").strip
 
     if output.empty?
-      run("cp #{current_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file']}", :env => {'RAILS_ENV' => "#{stage}"})
+      run("cp #{current_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file_root']}", :env => {'RAILS_ENV' => "#{stage}"})
       print "\nNOTICE: Please update #{file_path} with the appropriate values and restart the server\n\n".colorize(:green)
     else
       print "\nALERT: Config file #{file_path} detected. Will not overwrite\n\n".colorize(:red)
