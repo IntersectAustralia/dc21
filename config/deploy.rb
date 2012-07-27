@@ -114,6 +114,7 @@ end
 after 'deploy:setup' do
   server_setup.filesystem.dir_perms
   server_setup.filesystem.mkdir_db_dumps
+
 end
 before 'deploy:update' do
   export_proxy
@@ -121,14 +122,13 @@ end
 after 'deploy:update' do
   server_setup.logging.rotation
   server_setup.config.apache
-  deploy.create_templates
   deploy.additional_symlinks
   deploy.restart
 end
 
 after 'deploy:finalize_update' do
   generate_database_yml
-
+  deploy.create_templates
   #solved in Capfile
   #run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
 end
@@ -245,10 +245,9 @@ namespace :deploy do
 
     config = YAML::load_file('config/dc21app_config.yml')
     file_path = "#{config[stage.to_s]['extra_config_file']}/dc21app_extra_config.yml"
+    output = capture("ls #{config[stage.to_s]['extra_config_file_root']}").strip
 
-    output = capture("ls #{config[stage.to_s]['extra_config_file_root']} | grep '^dc21app_extra_config.yml$'").strip
-
-    if output.empty?
+    if output[/dc21app_extra_config\.yml/].nil?
       run("cp #{current_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file_root']}", :env => {'RAILS_ENV' => "#{stage}"})
       print "\nNOTICE: Please update #{file_path} with the appropriate values and restart the server\n\n".colorize(:green)
     else
