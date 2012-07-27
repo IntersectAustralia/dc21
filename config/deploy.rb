@@ -121,7 +121,7 @@ end
 after 'deploy:update' do
   server_setup.logging.rotation
   server_setup.config.apache
-  deploy.copy_templates
+  deploy.create_templates
   deploy.additional_symlinks
   deploy.restart
 end
@@ -239,11 +239,22 @@ namespace :deploy do
     restart
   end
 
-  desc 'Move in custom configuration from local machine'
-  task :copy_templates do
-    transfer :up, "deploy_templates/", "#{current_path}", :recursive => true, :via => :scp
-    run "cd #{current_path}/deploy_templates && cp -r * .."
-    run "cd #{current_path} && rm -r deploy_templates"
+  desc 'Create extra config in central location'
+  task :create_templates do
+    require "yaml"
+
+    config = YAML::load_file('config/dc21app_config.yml')
+    file_path = config[stage.to_s]['extra_config_file']
+
+    output = capture("ls #{config[stage.to_s]['extra_config_file']} | grep '^dc21app_extra_config.yml$'").strip
+
+    if output.empty?
+      run("cp #{current_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file']}", :env => {'RAILS_ENV' => "#{stage}"})
+      print "\nNOTICE: Please update #{file_path} with the appropriate values and restart the server\n\n".colorize(:green)
+    else
+      print "\nALERT: Config file #{file_path} detected. Will not overwrite\n\n".colorize(:red)
+    end
+
   end
 
 end
