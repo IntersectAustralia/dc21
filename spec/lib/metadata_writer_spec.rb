@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe MetadataWriter do
+
+  before(:each) do
+    @subject = MetadataWriter.new(nil, nil)
+  end
+
   describe "Write facility metadata to file" do
     it "should produce a file with details written one per line" do
       primary_contact = Factory(:user,
@@ -17,7 +22,7 @@ describe MetadataWriter do
                          primary_contact: primary_contact)
 
       directory = Dir.mktmpdir
-      file_path = subject.write_facility_metadata(facility, directory)
+      file_path = @subject.write_facility_metadata(facility, directory)
       file_path.should =~ /whole-tree-chambers.txt/
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/facility.txt'))
     end
@@ -42,13 +47,13 @@ describe MetadataWriter do
     it "should produce a file with details written one per line" do
       @experiment.description = 'This is my description.'
       @experiment.end_date = '2012-01-01'
-      file_path = subject.write_experiment_metadata(@experiment, @directory)
+      file_path = @subject.write_experiment_metadata(@experiment, @directory)
       file_path.should =~ /high-co2-and-drought.txt$/
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment1.txt'))
     end
 
     it "should handle missing non-mandatory values" do
-      file_path = subject.write_experiment_metadata(@experiment, @directory)
+      file_path = @subject.write_experiment_metadata(@experiment, @directory)
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_optional.txt'))
     end
   end
@@ -72,7 +77,7 @@ describe MetadataWriter do
       Factory(:column_mapping, :name => "Humidity", :code => "Humi")
 
       directory = Dir.mktmpdir
-      file_path = subject.write_data_file_metadata(data_file, directory)
+      file_path = @subject.write_data_file_metadata(data_file, directory)
       file_path.should =~ /datafile-metadata.txt$/
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-metadata.txt'))
     end

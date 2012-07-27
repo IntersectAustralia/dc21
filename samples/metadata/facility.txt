@@ -3,4 +3,4 @@ Code: WTC
 Description: The Whole Tree Chambers (WTC) facility was installed
 Location: 20.0 , 30.0
 Primary Contact: Prim Contact (prim@intersect.org.au)
-Persistent URL: http://localhost/facilities/1
+Persistent URL: http://localhost:3000/facilities/1

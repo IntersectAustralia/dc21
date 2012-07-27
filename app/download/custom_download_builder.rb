@@ -1,7 +1,9 @@
 class CustomDownloadBuilder
 
   def self.zip_for_files_with_ids(ids, &block)
-    file_paths = DataFile.find(ids).collect(&:path)
+    data_files = DataFile.find(ids)
+    generate_metadata_for(data_files)
+    file_paths = data_files.collect(&:path)
 
     zip_file = Tempfile.new("temp_file")
     ZipBuilder.build_zip(zip_file, file_paths)
@@ -35,5 +37,10 @@ class CustomDownloadBuilder
     zip_file.unlink
 
     true
+  end
+
+  def self.generate_metadata_for(data_files)
+    m_w = MetadataWriter.new(data_files, Dir.new("/tmp"))
+    m_w.generate_metadata
   end
 end

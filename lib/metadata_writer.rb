@@ -1,5 +1,26 @@
 class MetadataWriter
 
+  def initialize(data_files, directory_path)
+    @data_files = data_files
+    @directory_path = directory_path
+  end
+
+  def generate_metadata
+    experiments = @data_files.map(&:experiment).uniq
+    facilities = experiments.map(&:facility).uniq
+    @data_files.each do |data_file|
+      write_data_file_metadata(data_file, @directory_path)
+    end
+
+    experiments.each do |experiment|
+      write_experiment_metadata(experiment, @directory_path)
+    end
+
+    facilities.each do |facility|
+      write_facility_metadata(facility, @directory_path)
+    end
+  end
+
   def write_facility_metadata(facility, directory_path)
     file_path = File.join(directory_path, "#{facility.name.parameterize}.txt")
     File.open(file_path, 'w') do |file|
@@ -98,19 +119,23 @@ class MetadataWriter
 
   private
   def facility_url(facility)
-    Rails.application.routes.url_helpers.facility_url(facility, :host => host_url)
+    Rails.application.routes.url_helpers.facility_url(facility, host_details)
   end
 
   def experiment_url(experiment)
-    Rails.application.routes.url_helpers.facility_experiment_url(experiment.facility, experiment, :host => host_url)
+    Rails.application.routes.url_helpers.facility_experiment_url(experiment.facility, experiment, host_details)
   end
 
 
   def data_file_url(data_file)
-    Rails.application.routes.url_helpers.data_file_url(data_file, :host => host_url)
+    Rails.application.routes.url_helpers.data_file_url(data_file, host_details)
   end
 
-  def host_url
-    "localhost"
+  def host_details
+    url_options = Rails.application.config.action_mailer.default_url_options
+    host = url_options[:host]
+    protocol = url_options[:protocol]
+    port = url_options[:port]
+    { host: host, protocol: protocol, port: port}
   end
 end

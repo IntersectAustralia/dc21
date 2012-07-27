@@ -6,6 +6,6 @@ End date:
 Subject: Drought
 Access Rights: http://creativecommons.org/licenses/by/3.0/au
 FOR codes: 
-Persistent URL: http://localhost/facilities/1/experiments/1
+Persistent URL: http://localhost:3000/facilities/1/experiments/1
 
 Parameters
