@@ -1,0 +1,97 @@
+Basic information
+
+Name: weather_station_15_min.dat
+Type: RAW
+File format: TOA5
+Description: desc
+Tags: 
+Experiment: Rain Experiment
+Date added: 2012-07-30 15:38
+Added by: Fred Bloggs
+Persistent URL: http://localhost:3000/data_files/5658
+
+Information From The File
+
+Start time: 2011-09-25 21:45:00
+End time: 2011-11-03 11:45:00
+Sample interval: 15 minutes
+Datalogger model: CR3000
+Dld name: CPU:weather_station_final.CR3
+Dld signature: 30238
+Os version: CR3000.Std.11
+Serial number: 4909
+Station name: ROS_WS
+Table name: Table15min
+
+Columns
+
+Column: TIMESTAMP
+Column Mapping: 
+Unit: TS
+Measurement Type: 
+
+Column: RECORD
+Column Mapping: 
+Unit: RN
+Measurement Type: 
+
+Column: Rain_mm_Tot
+Column Mapping: 
+Unit: mm
+Measurement Type: Tot
+
+Column: ASoilTemp_Avg
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: PTemp_C_Avg
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: VW_Avg
+Column Mapping: 
+Unit: 
+Measurement Type: Avg
+
+Column: VW_2_Avg
+Column Mapping: 
+Unit: 
+Measurement Type: Avg
+
+Column: VW_3_Avg
+Column Mapping: 
+Unit: 
+Measurement Type: Avg
+
+Column: HalfBR_Avg(1)
+Column Mapping: 
+Unit: mV/mV
+Measurement Type: Avg
+
+Column: HalfBR_Avg(2)
+Column Mapping: 
+Unit: mV/mV
+Measurement Type: Avg
+
+Column: SoilTemp_Avg(1)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTemp_Avg(2)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: shf_mv_Avg
+Column Mapping: 
+Unit: mV
+Measurement Type: Avg
+
+Column: shf_Avg
+Column Mapping: 
+Unit: W/m^2
+Measurement Type: Avg
+

@@ -1,0 +1,102 @@
+Basic information
+
+Name: weather_station_05_min.dat
+Type: RAW
+File format: TOA5
+Description: desc
+Tags: 
+Experiment: MyString
+Date added: 2012-07-30 13:57
+Added by: Fred Bloggs
+Persistent URL: http://localhost:3000/data_files/5052
+
+Information From The File
+
+Start time: 2011-10-06  0:40:00
+End time: 2011-11-03 11:55:00
+Sample interval: 5 minutes
+Datalogger model: CR3000
+Dld name: CPU:weather_station_final.CR3
+Dld signature: 30238
+Os version: CR3000.Std.11
+Serial number: 4909
+Station name: ROS_WS
+Table name: Table05min
+
+Columns
+
+Column: TIMESTAMP
+Column Mapping: 
+Unit: TS
+Measurement Type: 
+
+Column: RECORD
+Column Mapping: 
+Unit: RN
+Measurement Type: 
+
+Column: PPFD_Avg
+Column Mapping: 
+Unit: mV
+Measurement Type: Avg
+
+Column: AirTC_Avg
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: RH
+Column Mapping: 
+Unit: %
+Measurement Type: Smp
+
+Column: WS_ms_Avg
+Column Mapping: 
+Unit: meters/second
+Measurement Type: Avg
+
+Column: WS_ms_Max
+Column Mapping: 
+Unit: meters/second
+Measurement Type: Max
+
+Column: WindDir
+Column Mapping: 
+Unit: degrees
+Measurement Type: Smp
+
+Column: NetSW_Avg
+Column Mapping: 
+Unit: W/m^2
+Measurement Type: Avg
+
+Column: NetLW_Avg
+Column Mapping: 
+Unit: W/m^2
+Measurement Type: Avg
+
+Column: NetRad_Avg
+Column Mapping: 
+Unit: W/m^2
+Measurement Type: Avg
+
+Column: LWmV_Avg
+Column Mapping: 
+Unit: mV
+Measurement Type: Avg
+
+Column: LWMDry_Tot
+Column Mapping: 
+Unit: Minutes
+Measurement Type: Tot
+
+Column: LWMCon_Tot
+Column Mapping: 
+Unit: Minutes
+Measurement Type: Tot
+
+Column: LWMWet_Tot
+Column Mapping: 
+Unit: Minutes
+Measurement Type: Tot
+

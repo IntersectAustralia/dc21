@@ -1,0 +1,12 @@
+Basic information
+
+Name: sample1.txt
+Type: RAW
+File format: Unknown
+Description: desc
+Tags: 
+Experiment: Rain Experiment
+Date added: 2012-07-30 15:38
+Added by: Fred Bloggs
+Persistent URL: http://localhost:3000/data_files/5656
+

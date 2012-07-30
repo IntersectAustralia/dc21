@@ -6,19 +6,23 @@ class MetadataWriter
   end
 
   def generate_metadata
-    experiments = @data_files.map(&:experiment).uniq
+    experiments = @data_files.map(&:experiment).uniq.delete_if { |exp| exp == nil }
     facilities = experiments.map(&:facility).uniq
+
+    files = []
+
     @data_files.each do |data_file|
-      write_data_file_metadata(data_file, @directory_path)
+      files << write_data_file_metadata(data_file, @directory_path)
     end
 
     experiments.each do |experiment|
-      write_experiment_metadata(experiment, @directory_path)
+      files << write_experiment_metadata(experiment, @directory_path)
     end
 
     facilities.each do |facility|
-      write_facility_metadata(facility, @directory_path)
+      files << write_facility_metadata(facility, @directory_path)
     end
+    files
   end
 
   def write_facility_metadata(facility, directory_path)
@@ -76,7 +80,11 @@ class MetadataWriter
       file.puts "File format: #{datafile.format_for_display}"
       file.puts "Description: #{datafile.file_processing_description}"
       file.puts "Tags: #{datafile.tags.map { |tag| tag.name }.join(", ")}"
-      file.puts "Experiment: #{datafile.experiment.name}"
+      if datafile.experiment_id != -1
+        file.puts "Experiment: #{datafile.experiment.name}"
+      else
+        file.puts "Experiment: UNKNOWN"
+      end
       file.puts "Date added: #{datafile.created_at.to_s(:with_time)}"
       file.puts "Added by: #{datafile.created_by.full_name}"
       file.puts "Persistent URL: #{data_file_url(datafile)}"
@@ -92,7 +100,7 @@ class MetadataWriter
         file.puts
         display_interval = datafile.interval == nil ? "" : ActionController::Base.helpers.distance_of_time_in_words(datafile.interval)
         file.puts "Sample interval: #{display_interval}"
-        datafile.metadata_items.each do |item|
+        datafile.metadata_items.order(:key).each do |item|
           file.puts "#{item.key.humanize}: #{item.value}"
         end
 

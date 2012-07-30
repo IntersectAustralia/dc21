@@ -1,0 +1,6 @@
+Name: Facility1
+Code: code-14
+Description: 
+Location: 
+Primary Contact: Fred Bloggs (primary_contact@intersect.org.au)
+Persistent URL: http://localhost:3000/facilities/2788

@@ -1,0 +1,102 @@
+Basic information
+
+Name: WTC01_Table1.dat
+Type: PROCESSED
+File format: TOA5
+Description: desc
+Tags: 
+Experiment: Tree Experiment
+Date added: 2012-07-30 15:38
+Added by: Fred Bloggs
+Persistent URL: http://localhost:3000/data_files/5654
+
+Information From The File
+
+Start time: 2011-08-11  9:30:00
+End time: 2011-11-02 13:00:00
+Sample interval: 15 minutes
+Datalogger model: CR1000
+Dld name: CPU:WTCsensors_Ch1.CR1
+Dld signature: 47130
+Os version: CR1000.Std.19
+Serial number: 33590
+Station name: WTC01
+Table name: Table1
+
+Columns
+
+Column: TIMESTAMP
+Column Mapping: 
+Unit: TS
+Measurement Type: 
+
+Column: RECORD
+Column Mapping: 
+Unit: RN
+Measurement Type: 
+
+Column: VW_Avg(1)
+Column Mapping: 
+Unit: 
+Measurement Type: Avg
+
+Column: VW_Avg(2)
+Column Mapping: 
+Unit: 
+Measurement Type: Avg
+
+Column: VW_Avg(3)
+Column Mapping: 
+Unit: 
+Measurement Type: Avg
+
+Column: SoilTempProbe_Avg(1)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTempProbe_Avg(2)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTempProbe_Avg(3)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTempProbe_Avg(4)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTempProbe_Avg(5)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTempProbe_Avg(6)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTemp_Avg(1)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: SoilTemp_Avg(2)
+Column Mapping: 
+Unit: Deg C
+Measurement Type: Avg
+
+Column: BattV_Min
+Column Mapping: 
+Unit: Volts
+Measurement Type: Min
+
+Column: PTemp
+Column Mapping: 
+Unit: 
+Measurement Type: Smp
+
