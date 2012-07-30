@@ -244,7 +244,7 @@ namespace :deploy do
     require "yaml"
 
     config = YAML::load_file('config/dc21app_config.yml')
-    file_path = "#{config[stage.to_s]['extra_config_file']}/dc21app_extra_config.yml"
+    file_path = "#{config[stage.to_s]['extra_config_file_root']}/dc21app_extra_config.yml"
     output = capture("ls #{config[stage.to_s]['extra_config_file_root']}").strip
 
     if output[/dc21app_extra_config\.yml/].nil?
