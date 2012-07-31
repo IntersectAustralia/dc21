@@ -37,8 +37,8 @@ class DataFile < ActiveRecord::Base
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
   scope :with_filename_containing, lambda { |name| where("data_files.filename ILIKE ?", "%#{name}%") }
   scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
-  scope :with_status_in, lambda { |stati| where {file_processing_status.in stati} }
-  scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader)}
+  scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
+  scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
   #scope :with_experiment, lambda { |experiment| where "data_files.experiment_id" => experiment }
   #scope :with_any_of_these_tags, lambda { |tags| joins(:tags).where("data_files_tags.tag_id" => tags)}
 
@@ -289,6 +289,9 @@ class DataFile < ActiveRecord::Base
         next if time < from_time
         break if time > to_time
 
+        line.squish!
+        line << "\n"
+
         file.write(line)
       end
       file.seek 0
@@ -332,7 +335,7 @@ class DataFile < ActiveRecord::Base
     left_overlaps | right_overlaps | middle_overlaps
   end
 
-  def   relevant_overlap_files(station_name, table_name)
+  def relevant_overlap_files(station_name, table_name)
     toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5, :file_processing_status => STATUS_RAW)
     toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
 
