@@ -51,32 +51,5 @@ class Experiment < ActiveRecord::Base
     AccessRightsLookup.new.get_name(self.access_rights)
   end
 
-  def write_metadata_to_file(directory_path)
-    file_path = File.join(directory_path, "#{name.parameterize}.txt")
-    File.open(file_path, 'w') do |file|
-      file.puts "Parent: #{parent_name}"
-      file.puts "Name: #{name}"
-      # Description may be nil, but nil interpolates to empty string
-      # We follow the same approach for all attributes that can be nil
-      file.puts "Description: #{description}"
-      file.puts "Start date: #{start_date.to_s(:date_only)}"
-      file.puts "End date: #{end_date.try(:to_s, :date_only)}"
-      file.puts "Subject: #{subject}"
-      file.puts "Access Rights: #{access_rights}"
-      file.puts "FOR codes: #{experiment_for_codes.map { |for_code| for_code.name }.join("\n")}"
-      file.puts ""
-      file.puts "Parameters"
-      experiment_parameters.each do |param|
-        file.puts ""
-        file.puts "Category: #{param.parameter_category.name}"
-        file.puts "Subcategory: #{param.parameter_sub_category.name}"
-        file.puts "Modification: #{param.parameter_modification.name}"
-        file.puts "Amount: #{param.amount}"
-        file.puts "Units: #{param.parameter_unit.name}"
-        file.puts "Comments: #{param.comments}"
-      end
 
-    end
-    file_path
-  end
 end

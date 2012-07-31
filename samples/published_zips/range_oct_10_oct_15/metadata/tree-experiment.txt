@@ -1,0 +1,11 @@
+Parent: Facility - Facility2
+Name: Tree Experiment
+Description: 
+Start date: 2012-02-09
+End date: 
+Subject: Trees
+Access Rights: http://creativecommons.org/licenses/by-nc-sa/3.0/au
+FOR codes: 05 - ENVIRONMENTAL SCIENCES
+Persistent URL: http://localhost:3000/facilities/2787/experiments/3033
+
+Parameters

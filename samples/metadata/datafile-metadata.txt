@@ -8,6 +8,7 @@ Tags:
 Experiment: MyString
 Date added: 2012-06-27  6:49
 Added by: Fred Bloggs
+Persistent URL: http://localhost:3000/data_files/1
 
 Information From The File
 

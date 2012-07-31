@@ -1,0 +1,11 @@
+Parent: Facility - name-3
+Name: MyString
+Description: 
+Start date: 2012-02-09
+End date: 
+Subject: MyString
+Access Rights: http://creativecommons.org/licenses/by/3.0/au
+FOR codes: 
+Persistent URL: http://localhost:3000/facilities/2399/experiments/2561
+
+Parameters

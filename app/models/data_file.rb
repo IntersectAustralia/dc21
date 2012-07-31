@@ -213,57 +213,6 @@ class DataFile < ActiveRecord::Base
     save!
   end
 
-  def write_metadata_to_file(directory_path)
-    metadata_filename = File.basename(filename, '.*')
-    file_path = File.join(directory_path, "#{metadata_filename}-metadata.txt")
-    File.open(file_path, 'w') do |file|
-      file.puts "Basic information"
-      file.puts ""
-      file.puts "Name: #{filename}"
-      file.puts "Type: #{status_as_string}"
-      file.puts "File format: #{format_for_display}"
-      file.puts "Description: #{file_processing_description}"
-      file.puts "Tags: #{tags.map { |tag| tag.name }.join(", ")}"
-      file.puts "Experiment: #{experiment.name}"
-      file.puts "Date added: #{created_at.to_s(:with_time)}"
-      file.puts "Added by: #{created_by.full_name}"
-      file.puts ""
-      if known_format?
-        file.puts "Information From The File"
-        file.puts ""
-        file.print "Start time: "
-        file.print start_time.utc.to_s(:with_seconds) if start_time != nil
-        file.puts ""
-        file.print "End time: "
-        file.print end_time.utc.to_s(:with_seconds) if end_time != nil
-        file.puts
-        display_interval = interval == nil ? "" : ActionController::Base.helpers.distance_of_time_in_words(interval)
-        file.puts "Sample interval: #{display_interval}"
-        metadata_items.each do |item|
-          file.puts "#{item.key.humanize}: #{item.value}"
-        end
-
-        file.puts ""
-        file.puts "Columns"
-        file.puts ""
-        column_details.each do |column_details|
-          file.puts "Column: #{column_details.name}"
-          file.print "Column Mapping: "
-          ColumnMapping.all.each do |map|
-            unless map.check_col_mapping(column_details.name).nil?
-              file.print "#{map.name} "
-            end
-          end
-          file.puts ""
-          file.puts "Unit: #{column_details.unit}"
-          file.puts "Measurement Type: #{column_details.data_type}"
-          file.puts ""
-        end
-      end
-    end
-    file_path
-  end
-
   def rename_file(old_filename, new_filename, path_dir)
     if new_filename != old_filename
       new_path = File.join(path_dir, new_filename)
@@ -272,6 +221,10 @@ class DataFile < ActiveRecord::Base
   end
 
   protected
+
+  def entity_url(host_url)
+    Rails.application.routes.url_helpers.data_file_url(self, :host => host_url)
+  end
 
   def with_filtered_data_in_date_range_in_temp_file(from_time, to_time, &block)
     # from_date and to_date are inclusive
