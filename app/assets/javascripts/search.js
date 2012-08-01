@@ -12,52 +12,52 @@ $(function () {
   $('.searchcategory .upload_date').hide();
 
   $('#date').click(function (event) {
-    $('.date').slideToggle();
+    $('.searchcategory .date').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#time').click(function (event) {
-    $('.time').slideToggle();
+    $('.searchcategory .time').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#facility').click(function (event) {
-    $('.facility').slideToggle();
+    $('.searchcategory .facility').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#variable').click(function (event) {
-    $('.variable').slideToggle();
+    $('.searchcategory .variable').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#filename_category').click(function (event) {
-    $('.filename').slideToggle();
+    $('.searchcategory .filename').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#description_category').click(function (event) {
-    $('.description').slideToggle();
+    $('.searchcategory .description').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#type_category').click(function (event) {
-    $('.type').slideToggle();
+    $('.searchcategory .type').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#tags_category').click(function (event) {
-    $('.tags').slideToggle();
+    $('.searchcategory .tags').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#uploader').click(function (event) {
-    $('.uploader').slideToggle();
+    $('.searchcategory .uploader').slideToggle();
     $(this).toggleClass('current');
   });
 
   $('#upload_date').click(function (event) {
-    $('.upload_date').slideToggle();
+    $('.searchcategory .upload_date').slideToggle();
     $(this).toggleClass('current');
   });
 
