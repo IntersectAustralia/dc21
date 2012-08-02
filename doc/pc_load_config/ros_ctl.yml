@@ -160,12 +160,12 @@ files:
         type: RAW
         experiment_id: TODO
   -
-      path: C:\Campbellsci\LoggerNet\ROS_6_ROS06Table05Min.dat
+      path: C:\Campbellsci\LoggerNet\ROS_6_ROS06Table15Min.dat
       file_parameters:
         type: RAW
         experiment_id: TODO
   -
-      path: C:\Campbellsci\LoggerNet\ROS_6_ROS12Table05Min.dat
+      path: C:\Campbellsci\LoggerNet\ROS_6_ROS12Table15Min.dat
       file_parameters:
         type: RAW
         experiment_id: TODO
