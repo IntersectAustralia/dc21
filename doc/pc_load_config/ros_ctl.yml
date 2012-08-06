@@ -49,3 +49,123 @@ files:
     file_parameters:
       type: RAW
       experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_1_ROS01Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_1_ROS08Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_2_ROS02Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_2_ROS07Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_3_ROS03Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_3_ROS10Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_4_ROS04Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_4_ROS09Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_5_ROS05Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_5_ROS11Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_6_ROS06Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_6_ROS12Table05Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_1_ROS01Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_1_ROS08Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_2_ROS02Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_2_ROS07Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_3_ROS03Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_3_ROS10Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_4_ROS04Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_4_ROS09Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_5_ROS05Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_5_ROS11Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_6_ROS06Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
+  -
+      path: C:\Campbellsci\LoggerNet\ROS_6_ROS12Table15Min.dat
+      file_parameters:
+        type: RAW
+        experiment_id: TODO
