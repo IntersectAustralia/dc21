@@ -226,35 +226,6 @@ class DataFile < ActiveRecord::Base
     Rails.application.routes.url_helpers.data_file_url(self, :host => host_url)
   end
 
-  def with_filtered_data_in_date_range_in_temp_file(from_time, to_time, &block)
-    # from_date and to_date are inclusive
-    # block takes one argument, the Tempfile with the filtered data
-    raise "unsupported format: #{self.format}" unless self.format == FileTypeDeterminer::TOA5
-    file = Tempfile.new('filtered_datafile')
-    begin
-      delimiter = nil
-      File.new(self.path).each_line.with_index do |line, idx|
-        delimiter = Toa5Utilities.detect_delimiter(line) if idx == 0
-        next unless idx > 3 # skip header lines
-
-        time = Toa5Utilities.extract_time_from_data_line(line, delimiter)
-
-        next if time < from_time
-        break if time > to_time
-
-        line.squish!
-        line << "\n"
-
-        file.write(line)
-      end
-      file.seek 0
-      block.call(file)
-    ensure
-      file.close
-      file.unlink
-    end
-  end
-
   protected
 
   def strip_whitespaces
@@ -310,11 +281,12 @@ class DataFile < ActiveRecord::Base
       start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
       end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
 
-      candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
-        self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
-          FileUtils.identical? candidate_overlap_file, my_overlap_file
-        end
-      end
+      temp_dir = Dir.mktmpdir
+
+      candidate_overlap_file = Toa5Subsetter.extract_matching_rows_to(candidate_overlap_data_file, temp_dir, start_comparison_time, end_comparison_time, true)
+      my_overlap_file = Toa5Subsetter.extract_matching_rows_to(self, temp_dir, start_comparison_time, end_comparison_time, true)
+
+      FileUtils.identical? candidate_overlap_file, my_overlap_file
     end
   end
 
@@ -349,11 +321,12 @@ class DataFile < ActiveRecord::Base
       start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
       end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
 
-      candidate_overlap_data_file.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |candidate_overlap_file|
-        self.with_filtered_data_in_date_range_in_temp_file(start_comparison_time, end_comparison_time) do |my_overlap_file|
-          !FileUtils.identical? candidate_overlap_file, my_overlap_file
-        end
-      end
+      temp_dir = Dir.mktmpdir
+
+      candidate_overlap_file = Toa5Subsetter.extract_matching_rows_to(candidate_overlap_data_file, temp_dir, start_comparison_time, end_comparison_time, true)
+      my_overlap_file = Toa5Subsetter.extract_matching_rows_to(self, temp_dir, start_comparison_time, end_comparison_time, true)
+
+      !FileUtils.identical? candidate_overlap_file, my_overlap_file
     end
 
     exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch

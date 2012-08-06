@@ -1,10 +1,18 @@
 class Toa5Subsetter
-  def self.extract_matching_rows_to(data_file, temp_dir, from_date_string, to_date_string)
-    # convert the dates to appropriate times in UTC since we store the times from the files in UTC
-    from_time = from_date_string.blank? ? nil : Time.parse("#{from_date_string} 00:00:00 UTC")
-    to_time = to_date_string.blank? ? nil : (Time.parse("#{to_date_string} 00:00:00 UTC") + 1.day) #add one day to get midnight the following day
+  def self.extract_matching_rows_to(data_file, temp_dir, from_time_val, to_time_val, overlap = false)
 
     file = File.open(data_file.path)
+
+    if overlap
+      #outfile = Tempfile.new('filtered_datafile')
+      from_time = from_time_val
+      to_time = to_time_val
+    else
+      # convert the dates to appropriate times in UTC since we store the times from the files in UTC
+      from_time = from_time_val.blank? ? nil : Time.parse("#{from_time_val} 00:00:00 UTC")
+      to_time = to_time_val.blank? ? nil : (Time.parse("#{to_time_val} 00:00:00 UTC") + 1.day) #add one day to get midnight the following day
+
+    end
 
     outfile_name = File.join(temp_dir, data_file.filename)
     outfile = File.open(outfile_name, 'w')
@@ -18,9 +26,17 @@ class Toa5Subsetter
         delimiter = Toa5Utilities.detect_delimiter(line)
       end
       if counter <= 4
-        outfile.puts(line)
+        outfile.puts(line) unless overlap
       else
-        outfile.puts(line) if data_line_in_range?(line, from_time, to_time, delimiter)
+
+        if data_line_in_range?(line, from_time, to_time, delimiter)
+          if overlap
+            line.squish!
+            line << "\n"
+          end
+          outfile.puts(line)
+
+        end
       end
 
       counter += 1
