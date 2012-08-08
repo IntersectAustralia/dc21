@@ -30,6 +30,18 @@ set :repository, 'git://github.com/IntersectAustralia/dc21.git'
 set :deploy_via, :copy
 set :copy_exclude, [".git/*"]
 
+set :branch do
+  default_tag = 'HEAD'
+
+  #puts "Availible remote branches:".yellow
+  #puts `git branch -r`.gsub /origin\//, ''
+  puts "Availible tags:".yellow
+  puts `git tag`
+  tag = Capistrano::CLI.ui.ask "Tag to deploy (make sure to push the branch/tag first) or HEAD?: [#{default_tag}] ".yellow
+  tag = default_tag if tag.empty?
+  tag
+end
+
 set(:user) { "#{defined?(user) ? user : 'devel'}" }
 set(:group) { "#{defined?(group) ? group : user}" }
 set(:user_home) { "/home/#{user}" }

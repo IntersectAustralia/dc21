@@ -35,6 +35,7 @@ gem "httparty"
 gem "decent_exposure"
 gem "rvm-capistrano"
 gem "google-analytics-rails"
+gem 'highline' # This has (up until now) been implicitly included by capistrano
 
 group :development, :test do
   gem "rspec-rails"
