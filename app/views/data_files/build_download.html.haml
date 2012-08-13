@@ -17,13 +17,13 @@
   %br/
 
   = radio_button_tag :type, :date, true
-  = label_tag :type_date, "Only include data in the following range"
+  = label_tag :type_date, "Only include data in the following range (yyyy-mm-dd)"
   %br/
 
   = label_tag :from_date, "From Date:"
-  = text_field_tag :from_date, @from_date, :id => :from_date
+  = text_field_tag :from_date, @from_date, :id => :from_date, :placeholder => "yyyy-mm-dd"
   = label_tag :to_date, "To Date:"
-  = text_field_tag :to_date, @to_date, :id => :to_date
+  = text_field_tag :to_date, @to_date, :id => :to_date, :placeholder => "yyyy-mm-dd"
 
   .actions
     = submit_tag "Download", :class => "bluebutton"
