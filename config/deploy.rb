@@ -60,10 +60,10 @@ namespace :server_setup do
 
   task :set_proxies do
     unless proxy.nil?
-      run "echo 'export http_proxy=\"#{proxy}\"' >> ~#{user}/.bashrc"
-      run "echo 'export HTTP_PROXY=$http_proxy' >> ~#{user}/.bashrc"
-      run "echo 'proxy=\"#{proxy}\"' >> ~#{user}/.curlrc"
-      run "echo '---\nhttp-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc"
+      run "echo 'export http_proxy=\"#{proxy}\"' >> ~#{user}/.bashrc", :shell => bash
+      run "echo 'export HTTP_PROXY=$http_proxy' >> ~#{user}/.bashrc", :shell => bash
+      run "echo 'proxy=\"#{proxy}\"' >> ~#{user}/.curlrc", :shell => bash
+      run "echo '---\nhttp-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc", :shell => bash
     end
   end
   namespace :filesystem do
