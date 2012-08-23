@@ -11,11 +11,6 @@ set :application, 'dc21app'
 set :stages, %w(qa staging production)
 set :default_stage, "qa"
 
-set :build_rpms, %w(gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile  curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git)
-set :project_rpms, %w()
-set :rpms_el5, %w(postgresql84-server postgresql84 postgresql84-devel)
-set :rpms_el6, %w(postgresql-server postgresql postgresql-devel)
-
 set :shared_children, shared_children + %w(log_archive)
 set :bash, '/bin/bash'
 set :shell, bash # This is don in two lines to allow rpm_install to refer to bash (as shell just launches cap shell)
@@ -26,15 +21,13 @@ set :bundle_flags, "--deployment"
 # Deploy using copy for now
 set :scm, 'git'
 #set :repository, 'ssh://git.intersect.org.au/git/dc21'
-set :repository, 'git://github.com/IntersectAustralia/dc21.git'
+set :repository, 'https://github.com/IntersectAustralia/dc21.git'
 set :deploy_via, :copy
 set :copy_exclude, [".git/*"]
 
 set :branch do
   default_tag = 'HEAD'
 
-  #puts "Availible remote branches:".yellow
-  #puts `git branch -r`.gsub /origin\//, ''
   puts "Availible tags:".yellow
   puts `git tag`
   tag = Capistrano::CLI.ui.ask "Tag to deploy (make sure to push the branch/tag first) or HEAD?: [#{default_tag}] ".yellow
@@ -53,11 +46,6 @@ set(:rif_cs_dir) { "#{defined?(rif_cs_dir) ? rif_cs_dir : '/data/dc21-data/publi
 default_run_options[:pty] = true
 
 namespace :server_setup do
-  task :rpm_install, :roles => :app do
-    distro_rpms = el6 ? rpms_el6 : rpms_el5
-    run "#{try_sudo} yum install -y #{(build_rpms + project_rpms + distro_rpms).uniq.join(' ')}", :shell => bash
-  end
-
   task :set_proxies do
     unless proxy.nil?
       run "echo 'export http_proxy=\"#{proxy}\"' >> ~#{user}/.bashrc", :shell => bash
@@ -94,7 +82,8 @@ namespace :server_setup do
     end
   end
   task :gem_install, :roles => :app do
-    run "gem install bundler passenger"
+    run "gem install bundler -v 1.0.20"
+    run "gem install passenger"
   end
   task :passenger, :roles => :app do
     run "passenger-install-apache2-module -a"
@@ -120,9 +109,6 @@ namespace :server_setup do
 end
 
 before 'deploy:setup' do
-  server_setup.rpm_install
-  rvm.install_rvm
-  rvm.install_ruby
   server_setup.rvm.trust
   server_setup.gem_install
   server_setup.passenger
