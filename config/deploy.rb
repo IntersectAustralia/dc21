@@ -250,7 +250,7 @@ namespace :deploy do
     output = capture("ls #{config[stage.to_s]['extra_config_file_root']}").strip
 
     if output[/dc21app_extra_config\.yml/].nil?
-      run("cp #{current_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file_root']}", :env => {'RAILS_ENV' => "#{stage}"})
+      run("cp #{release_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file_root']}", :env => {'RAILS_ENV' => "#{stage}"})
       print "\nNOTICE: Please update #{file_path} with the appropriate values and restart the server\n\n".colorize(:green)
     else
       print "\nALERT: Config file #{file_path} detected. Will not overwrite\n\n".colorize(:red)
