@@ -55,7 +55,8 @@ namespace :server_setup do
       run "echo 'echo \'export HTTP_PROXY=$http_proxy\' >> /etc/bashrc' | #{try_sudo} /bin/bash" , :shell => bash
 
       run "echo 'proxy=\"#{proxy}\"' >> ~#{user}/.curlrc", :shell => bash
-      run "echo '---\nhttp-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc", :shell => bash
+      run "echo '---' >> ~#{user}/.gemrc", :shell => bash
+      run "echo 'http-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc", :shell => bash
     end
   end
   namespace :filesystem do
