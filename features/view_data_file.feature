@@ -5,6 +5,8 @@ Feature: View the details of a data file
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
+    And I have facility "My Test Facility" with code "MTF"
+    And I have experiment "My Nice Experiment" which belongs to facility "MTF"
     And I have data files
       | filename     | created_at       | uploaded_by               | start_time           | end_time                | interval | experiment         | file_processing_description | file_processing_status | format |
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |                      |                         |          | My Nice Experiment | Description of my file      | RAW                    |        |
@@ -29,21 +31,19 @@ Feature: View the details of a data file
       | Start time | Unknown |
       | End time   | Unknown |
 
-  Scenario: View a file with status/description experiment info
+  Scenario: View a file with status/description/experiment info filled in
     When I am on the data file details page for datafile.dat
     Then I should see details displayed
       | Experiment  | My Nice Experiment     |
-      | Type        | RAW                    |
-      | Description | Description of my file |
+      | Facility    | My Test Facility       |
       | Type        | RAW                    |
       | Description | Description of my file |
 
-  Scenario: View a file with NO status/description experiment info
+  Scenario: View a file with NO status/description info and "Other" experiment
     When I am on the data file details page for sample.txt
     Then I should see details displayed
       | Experiment  | Other   |
-      | Type        | UNKNOWN |
-      | Description |         |
+      | Facility    |         |
       | Type        | UNKNOWN |
       | Description |         |
 
@@ -130,17 +130,4 @@ Feature: View the details of a data file
     When I am on the list data files page
     And I follow the view link for data file "Test_Column_Table.dat"
     Then I should not see "Fill in column mappings"
-
-# This scenario no longer possible, but it may become relevant soon.
-# TODO Delete in sprint 4
-#  Scenario: Fill in missing column mappings with invalid information
-#    Given I have uploaded "Test_Column_Table.dat"
-#    When I am on the list data files page
-#    And I follow the view link for data file "Test_Column_Table.dat"
-#    And I follow "Fill in column mappings"
-#    And I press "Submit Column Mappings"
-#    Then I should see "Name can't be blank"
-
-
-
 

@@ -61,6 +61,18 @@ describe DataFile do
     end
   end
 
+  describe "Get facility name" do
+    it "returns blank if experiment is 'Other'" do
+      Factory(:data_file, :experiment_id => -1).facility_name.should eq("")
+    end
+
+    it "returns the facility name if experiment is set to anything other than 'Other'" do
+      facility = Factory(:facility, :name => "Bob")
+      exp = Factory(:experiment, :name => "Fred", :facility => facility)
+      Factory(:data_file, :experiment_id => exp.id).facility_name.should eq("Bob")
+    end
+  end
+
   describe "Get file extension" do
     it "should return the correct extension" do
       Factory(:data_file, :filename => "abc.csv").extension.should eq("csv")

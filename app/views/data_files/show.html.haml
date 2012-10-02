@@ -19,6 +19,7 @@
       = tag.name
       %br/
   = render_field "Experiment", @data_file.experiment_name
+  = render_field "Facility", @data_file.facility_name
   = render_field "Date added", @data_file.created_at.to_s(:with_time)
   = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
 

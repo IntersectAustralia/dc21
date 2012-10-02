@@ -163,6 +163,11 @@ class DataFile < ActiveRecord::Base
     Experiment.find(experiment_id).name
   end
 
+  def facility_name
+    return "" if experiment_id.nil? || experiment_id == -1
+    Experiment.find(experiment_id).facility.name
+  end
+
   def check_for_bad_overlap
     station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
     table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
