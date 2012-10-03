@@ -1,4 +1,4 @@
-Feature: Edit data files
+Feature: Edit data files metadata
   In order to edit what I need
   As a user
   I want to edit the details of data files
@@ -56,7 +56,7 @@ Feature: Edit data files
     When I am on the list data files page
     And I follow the view link for data file "error.txt"
     Then I should see "ERROR"
-    And I should not see "Edit Data File"
+    And I should not see "Edit Metadata"
 
   Scenario: Editing non-TOA-5 data file as superuser
     Given I am logged in as "georgina@intersect.org.au"
@@ -94,7 +94,7 @@ Feature: Edit data files
   Scenario: Editing data file that isn't mine
     Given I am logged in as "researcher@intersect.org.au"
     When I follow the view link for data file "datafile.dat"
-    Then I should not see "Edit Data File"
+    Then I should not see "Edit Metadata"
 
   Scenario: Editing data file name with trailing spaces
     Given I am logged in as "researcher@intersect.org.au"

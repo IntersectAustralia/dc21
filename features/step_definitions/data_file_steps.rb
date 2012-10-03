@@ -45,7 +45,7 @@ end
 Given /^I edit data file "([^"]*)"$/ do |filename|
   data_file = DataFile.find_by_filename(filename) #Experiment.find_by_name!(name)
   click_link("view_#{data_file.id}")
-  click_link "Edit Data File"
+  click_link "Edit Metadata"
 end
 
 When /^I have uploaded "([^"]*)"$/ do |filename|
