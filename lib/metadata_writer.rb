@@ -70,8 +70,14 @@ class MetadataWriter
   end
 
   def write_data_file_metadata(datafile, directory_path)
-    metadata_filename = File.basename(datafile.filename, '.*')
-    file_path = File.join(directory_path, "#{metadata_filename}-metadata.txt")
+    base_filename = File.basename(datafile.filename, '.*')
+    extension = File.extname(datafile.filename)
+
+    metadata_filename = base_filename
+    metadata_filename << "-#{extension[1..-1]}" unless extension.blank?
+    metadata_filename << "-metadata.txt"
+
+    file_path = File.join(directory_path, metadata_filename)
     File.open(file_path, 'w') do |file|
       file.puts "Basic information"
       file.puts ""
