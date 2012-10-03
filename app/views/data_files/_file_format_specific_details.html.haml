@@ -1,22 +1,22 @@
 - @data_file.metadata_items.each do |item|
   = render_field item.key.humanize, item.value
 
-  %hr/
-  %h3 Columns
-  - if @data_file.cols_unmapped?
-    = link_to "Fill in column mappings", map_column_mapping_path(:id => @data_file.id), :class => "bluebutton"
-  %table#column_info
+%hr/
+%h3 Columns
+- if @data_file.cols_unmapped?
+  = link_to "Fill in column mappings", map_column_mapping_path(:id => @data_file.id), :class => "bluebutton"
+%table#column_info
+  %tr
+    %th Column
+    %th Column Mapping
+    %th Unit
+    %th Measurement Type
+  - @data_file.column_details.each do |column_details|
     %tr
-      %th Column
-      %th Column Mapping
-      %th Unit
-      %th Measurement Type
-    - @data_file.column_details.each do |column_details|
-      %tr
-        %td= column_details.name
-        %td
-          - column_mappings.each do |map|
-            - unless map.check_col_mapping(column_details.name).nil?
-              = map.name
-        %td= column_details.unit
-        %td= column_details.data_type
+      %td= column_details.name
+      %td
+        - column_mappings.each do |map|
+          - unless map.check_col_mapping(column_details.name).nil?
+            = map.name
+      %td= column_details.unit
+      %td= column_details.data_type
