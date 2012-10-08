@@ -3,6 +3,26 @@ defaults: &defaults
   published_zip_files_directory: /data/dc21-data/published_zip_files
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
   extra_config_file_root: /data
+  # the following are defaults that can be overridden in the dc21app_extra_config.yml
+  password_reset_email_sender: pwd-reset@intersect.org.au
+  account_request_user_status_email_sender: account-status@intersect.org.au
+  account_request_admin_notification_sender: account-request@intersect.org.au
+  column_mappings: &column_mappings
+    - Timestamp
+    - Record
+    - Average Soil Temp (Probe1)
+    - Average Soil Temp (Probe2)
+    - Average Soil Temp (Probe3)
+    - Average Soil Temp (Probe4)
+    - Average Soil Temp (Probe5)
+    - Average Soil Temp (Probe6)
+    - Temperature
+    - Wind Speed
+    - Sample
+    - Rainfall
+  for_codes_lookup_base_url: http://jp-dc21-misc.intersect.org.au:9001
+  for_codes_path: /mint/ANZSRC_FOR/opensearch/lookup
+  devise_mailer_sender: no-reply@intersect.org.au
 
 development:
   <<: *defaults
