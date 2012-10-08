@@ -61,7 +61,7 @@ class MetadataWriter
         file.puts "Subcategory: #{param.parameter_sub_category.name}"
         file.puts "Modification: #{param.parameter_modification.name}"
         file.puts "Amount: #{param.amount}"
-        file.puts "Units: #{param.parameter_unit.name}"
+        file.puts "Units: #{param.parameter_unit ? param.parameter_unit.name : ""}"
         file.puts "Comments: #{param.comments}"
       end
 

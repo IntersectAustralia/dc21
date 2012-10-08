@@ -56,6 +56,22 @@ describe MetadataWriter do
       file_path = @subject.write_experiment_metadata(@experiment, @directory)
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_optional.txt'))
     end
+
+    it "should include experiment parameter information when present" do
+      cat1 = Factory(:parameter_category, name: 'Cat1')
+      cat2 = Factory(:parameter_category, name: 'Cat2')
+      subcat1 = Factory(:parameter_sub_category, name: 'Subcat1', parameter_category: cat1)
+      subcat2 = Factory(:parameter_sub_category, name: 'Subcat2', parameter_category: cat2)
+      mod1 = Factory(:parameter_modification, name: 'Excluded')
+      mod2 = Factory(:parameter_modification, name: 'Added')
+      mg = Factory(:parameter_unit, name: 'mg')
+
+      @experiment.experiment_parameters.create!(parameter_category: cat1, parameter_sub_category: subcat1, parameter_modification: mod1)
+      @experiment.experiment_parameters.create!(parameter_category: cat2, parameter_sub_category: subcat2, parameter_modification: mod2, parameter_unit: mg, amount: 10, comments: 'my comment')
+      file_path = @subject.write_experiment_metadata(@experiment, @directory)
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_with_parameters.txt'))
+
+    end
   end
 
   describe "write data file metadata to file" do
