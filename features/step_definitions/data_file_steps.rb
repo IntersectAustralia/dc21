@@ -135,7 +135,7 @@ Then /^I should see facility checkboxes$/ do |table|
   labels.should eq(expected_labels)
 end
 
-Then /^I should see variable checkboxes$/ do |table|
+Then /^I should see column checkboxes$/ do |table|
   labels = all(".variable_group").collect do |group|
     parent = group.find("label.variable_parent").text.strip
     children = group.all("label.variable_child").map { |label| label.text.strip }
@@ -344,7 +344,7 @@ When /^I collapse "([^"]*)"$/ do |variable|
 end
 
 
-When /^I expand all the mapped variables$/ do
+When /^I expand all the mapped columns$/ do
   all(".expand_variable").each { |link| link.click }
 end
 

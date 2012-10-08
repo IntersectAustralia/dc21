@@ -178,11 +178,11 @@ Feature: Search data files by date range
 
 
   @javascript
-  Scenario: Search for files with certain columns (checking mapped variable name)
+  Scenario: Search for files with certain columns (checking mapped column name)
     When I am on the list data files page
-    And I click on "Variable:"
-    And I expand all the mapped variables
-    Then I should see variable checkboxes
+    And I click on "Columns:"
+    And I expand all the mapped columns
+    Then I should see column checkboxes
       | Rainfall    | Rnfl, Rnfll         |
       | Temperature | Temp, temp2, Temp_2 |
       | Unmapped    | Humi, humidity      |
@@ -195,17 +195,17 @@ Feature: Search data files by date range
       | datafile5.dat |
       | mydata8.dat   |
       | datafile4.dat |
-    When I click on "Variable:"
-    And I expand all the mapped variables
+    When I click on "Columns:"
+    And I expand all the mapped columns
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
     And the "Temp" checkbox should not be checked
 
   @javascript
-  Scenario: Search for files with certain columns (checking raw variable names)
+  Scenario: Search for files with certain columns (checking raw column names)
     When I am on the list data files page
-    And I click on "Variable:"
-    And I expand all the mapped variables
+    And I click on "Columns:"
+    And I expand all the mapped columns
     When I check "Humi"
     And I check "Rnfll"
     And I press "Search"
@@ -214,8 +214,8 @@ Feature: Search data files by date range
       | mydata6.dat   |
       | mydata8.dat   |
       | datafile4.dat |
-    When I click on "Variable:"
-    And I expand all the mapped variables
+    When I click on "Columns:"
+    And I expand all the mapped columns
     And the "Humi" checkbox should be checked
     And the "Rnfll" checkbox should be checked
     Then the "Rainfall" checkbox should not be checked
@@ -276,8 +276,8 @@ Feature: Search data files by date range
   @javascript
   Scenario: Search for files by a lot of different things at once
     Given I am on the list data files page
-    And I click on "Variable:"
-    And I expand all the mapped variables
+    And I click on "Columns:"
+    And I expand all the mapped columns
     And I click on "Filename:"
     And I click on "Tags:"
     And I click on "Description:"
@@ -343,11 +343,11 @@ Feature: Search data files by date range
     And the "to_date" field should contain "2012-06-13"
 
   @javascript
-  Scenario: Checking and unchecking parent variable names check/unchecks the children
+  Scenario: Checking and unchecking parent column names check/unchecks the children
     Given I am on the list data files page
-    And I click on "Variable:"
-    And I expand all the mapped variables
-    Then I should see variable checkboxes
+    And I click on "Columns:"
+    And I expand all the mapped columns
+    Then I should see column checkboxes
       | Rainfall    | Rnfl, Rnfll         |
       | Temperature | Temp, temp2, Temp_2 |
       | Unmapped    | Humi, humidity      |
@@ -361,19 +361,19 @@ Feature: Search data files by date range
     And the "Rnfl" checkbox should not be checked
 
   @javascript
-  Scenario: Unchecking child variable name unchecks the parent
+  Scenario: Unchecking child column name unchecks the parent
     Given I am on the list data files page
-    And I click on "Variable:"
-    And I expand all the mapped variables
+    And I click on "Columns:"
+    And I expand all the mapped columns
     When I check "Rainfall"
     And I uncheck "Rnfl"
     Then the "Rainfall" checkbox should not be checked
 
   @javascript
-  Scenario: Checking child variable name checks the parent if it completes the set
+  Scenario: Checking child column name checks the parent if it completes the set
     Given I am on the list data files page
-    And I click on "Variable:"
-    And I expand all the mapped variables
+    And I click on "Columns:"
+    And I expand all the mapped columns
     When I check "Rnfll"
     Then the "Rainfall" checkbox should not be checked
     When I check "Rnfl"
@@ -381,9 +381,9 @@ Feature: Search data files by date range
 
   @javascript @wip
 
-  Scenario: Expanding a parent variable name should show the children
+  Scenario: Expanding a parent column name should show the children
     Given I am on the list data files page
-    And I click on "Variable:"
+    And I click on "Columns:"
     Then I should not see "Rnfl"
     Then I should not see "Rnfll"
     When I expand "Rainfall"

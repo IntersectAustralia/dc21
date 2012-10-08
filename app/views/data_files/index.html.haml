@@ -74,7 +74,7 @@
                     = check_box_tag "search[experiments][]", experiment.name, @selected_experiments.include?(experiment.name), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
       .searchcategory
-        %h4#variable.expand Variable:
+        %h4#variable.expand Columns:
         .variable
           -# variables contains something like [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
           - variables.each_with_index do |variable_info, index|
