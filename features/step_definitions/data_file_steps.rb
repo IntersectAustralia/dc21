@@ -71,8 +71,14 @@ Given /^I have uploaded "([^"]*)" with type "([^"]*)" and description "([^"]*)" 
   create_data_file filename, User.first, type, desc, Experiment.find_by_name!(exp)
 end
 
-When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |file_name|
+  post_path = data_files_path
+  file_path = "#{Rails.root}/samples/#{file_name}"
+  raise "Can't find test file: #{file_name}" unless File.exists?(file_path)
+  file = Rack::Test::UploadedFile.new(file_path, "application/octet-stream")
+  result = post post_path, {"file" => file}
+  result.status.should eq(302)
+  result.headers["Location"].should =~ /users\/sign_in/
 end
 
 Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|

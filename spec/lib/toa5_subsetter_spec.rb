@@ -62,8 +62,14 @@ describe Toa5Subsetter do
   end
 
   describe "invalid file" do
-    it "should fail gracefully" do
-      pending
+    it "should not throw an error" do
+      # this should never happen, because a file won't be marked as TOA5 in the first place unless it can be parsed, so
+      # we're not to bothered what happens, as long as it doesn't throw unexpected errors
+      # this test just checks that no error is thrown
+      data_file = not_really_toa5
+      temp_dir = Dir.mktmpdir
+      Toa5Subsetter.extract_matching_rows_to(data_file, temp_dir, "2011-10-09", "2011-10-14")
+      File.exist?(File.join(temp_dir, data_file.filename)).should be_true
     end
   end
 end

@@ -1,9 +1,7 @@
 class Facility < ActiveRecord::Base
 
   #Associations
-  has_many :column_details
   has_many :experiments, :order => 'name'
-
   has_many :aggregated_contactables, :class_name => "FacilityContact"
   has_one :primary_contactable, :class_name => "FacilityContact", :conditions => {:primary => true}, :dependent => :destroy
   has_many :contactables, :class_name => "FacilityContact", :conditions => {:primary => false}, :dependent => :destroy
@@ -14,27 +12,19 @@ class Facility < ActiveRecord::Base
           :class_name => 'User',
           :source => :user
 
-  # has_many  :aggregated_contacts,
-  #           :through => :aggregated_contactables,
-  #           :class_name => 'User',
-  #           :source => :user
-
   has_many :contacts,
            :through => :contactables,
            :class_name => 'User',
            :source => :user,
            :order => 'users.last_name, users.first_name'
 
-  #accepts_nested_attributes_for :primary_contactable
   accepts_nested_attributes_for :primary_contact
   accepts_nested_attributes_for :aggregated_contactables
-  # accepts_nested_attributes_for :contactables
   accepts_nested_attributes_for :contacts
 
   #Hooks
   before_validation :pigeonhole_location
   before_validation :remove_white_spaces
-  after_validation :sanitise_location
 
   #Validations
   validates :name, :code, :presence => true,
@@ -116,26 +106,12 @@ class Facility < ActiveRecord::Base
     self.code = self.code.to_s.strip
   end
 
-  def swap_ab_ll
-    #Simple method, but will be used multiple times
-    self.a_lat, self.b_lat = b_lat, a_lat
-    self.a_long, self.b_long = b_long, a_long
-  end
-
   def pigeonhole_location
     if self.a_lat.blank? && self.a_long.blank?
-      swap_ab_ll
+      # if they've filled in b but not a, switch the b values into a
+      self.a_lat, self.b_lat = b_lat, a_lat
+      self.a_long, self.b_long = b_long, a_long
     end
-  end
-
-  def sanitise_location
-    #This will come in handy:
-    #http://stackoverflow.com/questions/2855189/sort-latitude-and-longitude-coordinates-into-clockwise-ordered-quadrilateral
-
-    #Do we have a point or a rectangle?
-
-    # Make sure top-left point is the top left point
-
   end
 
 end

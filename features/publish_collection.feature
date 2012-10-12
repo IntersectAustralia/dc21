@@ -83,8 +83,18 @@ Feature: Publish a collection
     And I press "Confirm"
     Then I should see "Name has already been taken"
 
+  @javascript
   Scenario: RIF-CS and zip file are snapshots at the point in time where the collection was published
-    Given pending
-# TODO: publish a collection, then change some metadata / add more files, check that RIFCS and zip doesn't change
+    # publish
+    Given I do a date search for data files with dates "2011-10-10" and "2011-10-15"
+    And I publish these search results as "My Collection Of Stuff" with description "Describe my collection of stuff"
+    # change some details
+    When I edit data file "weather_station_05_min.dat"
+    And I fill in "Name" with "changedit.dat"
+    And I press "Update"
+    # published collection should remain as before
+    Then there should be a published collection record named "My Collection Of Stuff" with creator "georgina@intersect.org.au"
+    And the RIF-CS file for the latest published collection should match "samples/rif-cs/range_oct_10_oct_15.xml"
+    When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/range_oct_10_oct_15"
 
 

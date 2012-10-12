@@ -142,12 +142,6 @@ Given /^I have the standard set of experiment parameter lookup values$/ do
 
 end
 
-When /^I add experiment parameter$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-
 def click_view_experiment_link(name)
   experiment = Experiment.find_by_name!(name)
   click_link "view_#{experiment.id}"

@@ -547,10 +547,6 @@ describe DataFile do
 
   describe "Deleting Files/data" do
 
-    it "should not leave the deleted file behind" do
-      pending
-      #cuke steps exist to handle uploading a real file, so this test will exist in cuke
-    end
     it "should remove only/all column details associated with a file from the database" do
       df1 = Factory(:data_file)
       df1_cols = []
