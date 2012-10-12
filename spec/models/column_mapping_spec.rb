@@ -70,19 +70,18 @@ describe ColumnMapping do
     end
 
     it "should handle the case where we have columns that are named with the same name as a mapped name" do
-      pending("Need to confirm the expected behaviour for this")
-      Factory(:column_mapping, :code => "humidity", :name => "Humidity")
-      Factory(:column_mapping, :code => "humi", :name => "Humidity")
-      Factory(:column_mapping, :code => "asdf", :name => "Stuff")
+      Factory(:column_mapping, :code => "humidity", :name => "humidity")
+      Factory(:column_mapping, :code => "humi", :name => "humidity")
+      Factory(:column_mapping, :code => "asdf", :name => "stuff")
 
       Factory(:column_detail, :name => "new")
       Factory(:column_detail, :name => "different")
-      Factory(:column_detail, :name => "Humidity")
+      Factory(:column_detail, :name => "humidity")
 
       output = ColumnMapping.mapped_column_names_for_search
       output.size.should eq(3)
-      output[0].should eq(["Humidity", ["humi", "humidity"]])
-      output[1].should eq(["Stuff", ["asdf"]])
+      output[0].should eq(["humidity", ["humi", "humidity"]])
+      output[1].should eq(["stuff", ["asdf"]])
       output[2].should eq(["Unmapped", ["different", "new"]])
     end
 
