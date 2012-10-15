@@ -24,7 +24,6 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
   validates_presence_of :experiment_id
-  validates_presence_of :file_size
   validates_length_of :file_processing_description, :maximum => 255
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
   validate :end_time_not_before_start_time
@@ -39,8 +38,6 @@ class DataFile < ActiveRecord::Base
   scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
-  #scope :with_experiment, lambda { |experiment| where "data_files.experiment_id" => experiment }
-  #scope :with_any_of_these_tags, lambda { |tags| joins(:tags).where("data_files_tags.tag_id" => tags)}
 
   attr_accessor :messages
 
