@@ -43,6 +43,7 @@ set(:deploy_to) { "#{user_home}/#{application}" }
 set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-samples'}" }
 set(:aux_data_dir) { "#{defined?(aux_data_dir) ? aux_data_dir : '/data/dc21-data'}" }
 set(:rif_cs_dir) { "#{defined?(rif_cs_dir) ? rif_cs_dir : '/data/dc21-data/published_rif_cs/'}" }
+set :normalize_asset_timestamps, false
 
 default_run_options[:pty] = true
 
