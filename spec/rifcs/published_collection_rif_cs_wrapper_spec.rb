@@ -4,37 +4,56 @@ describe PublishedCollectionRifCsWrapper do
 
   describe "Static values" do
     it "should always return uws as the group" do
-      PublishedCollectionRifCsWrapper.new(nil, nil, {}).group.should eq("University of Western Sydney")
+      PublishedCollectionRifCsWrapper.new(nil, [], {}).group.should eq("University of Western Sydney")
     end
 
     it "should always return dataset as the collection type" do
-      PublishedCollectionRifCsWrapper.new(nil, nil, {}).collection_type.should eq("dataset")
+      PublishedCollectionRifCsWrapper.new(nil, [], {}).collection_type.should eq("dataset")
     end
   end
 
   describe "Originating source" do
     it "Should return the root url as provided to the wrapper" do
-      PublishedCollectionRifCsWrapper.new(nil, nil, {:root_url => 'http://example.com'}).originating_source.should eq('http://example.com')
+      PublishedCollectionRifCsWrapper.new(nil, [], {:root_url => 'http://example.com'}).originating_source.should eq('http://example.com')
     end
   end
 
   describe "Key" do
     it "Should return the collection url as provided to the wrapper" do
-      PublishedCollectionRifCsWrapper.new(nil, nil, {:collection_url => 'http://example.com/1'}).key.should eq('http://example.com/1')
+      PublishedCollectionRifCsWrapper.new(nil, [], {:collection_url => 'http://example.com/1'}).key.should eq('http://example.com/1')
     end
   end
 
   describe "Electronic location" do
     it "Should return the collection zip url as provided to the wrapper" do
-      PublishedCollectionRifCsWrapper.new(nil, nil, {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
+      PublishedCollectionRifCsWrapper.new(nil, [], {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
     end
   end
 
-  describe "Collection submitter" do
-    it "Should return the name and email as passed in via the user object" do
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, nil, {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
-      wrapper.submitter_name.should eq('Georgina Edwards')
-      wrapper.submitter_email.should eq('georgina@intersect.org.au')
+  describe "Notes" do
+    it "should include submitter in notes" do
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper.notes[0].should eq('Published by Georgina Edwards (georgina@intersect.org.au)')
+    end
+
+    it "should include facility contacts in notes" do
+      user1 = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
+      user2 = Factory(:user, :first_name => 'Bob', :last_name => 'Jones', :email => 'bob@intersect.org.au')
+      facility1 = Factory(:facility, :name => 'Fac1', :primary_contact => user1)
+      facility2 = Factory(:facility, :name => 'Fac2', :primary_contact => user2)
+      experiment1 = Factory(:experiment, :facility => facility1)
+      experiment2 = Factory(:experiment, :facility => facility1)
+      experiment3 = Factory(:experiment, :facility => facility2)
+
+      df1 = Factory(:data_file, :experiment => experiment1)
+      df2 = Factory(:data_file, :experiment => experiment2)
+      df3 = Factory(:data_file, :experiment => experiment3)
+      df4 = Factory(:data_file, :experiment => experiment3)
+      df5 = Factory(:data_file, :experiment_id => -1)
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper.notes.size.should eq(3)
+      wrapper.notes.include?('Primary contact for Fac1 is Fred Smith (fred@intersect.org.au')
+      wrapper.notes.include?('Primary contact for Fac2 is Bob Jones (bob@intersect.org.au')
     end
   end
 
@@ -54,6 +73,16 @@ describe PublishedCollectionRifCsWrapper do
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.local_subjects.should eq(["Bob", "Fred"])
     end
+
+    it "Should handle data files with the 'Other' experiment" do
+      exp1 = Factory(:experiment, :subject => "Fred")
+
+      df1 = Factory(:data_file, :experiment => exp1)
+      df2 = Factory(:data_file, :experiment_id => -1)
+
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper.local_subjects.should eq(["Fred"])
+    end
   end
 
   describe "Rights" do
@@ -71,6 +100,16 @@ describe PublishedCollectionRifCsWrapper do
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.access_rights.should eq(["Bob", "Fred"])
+    end
+
+   it "should should handle files with the 'other' experiment" do
+      exp1 = Factory(:experiment, :access_rights => "Fred")
+
+      df1 = Factory(:data_file, :experiment => exp1)
+      df2 = Factory(:data_file, :experiment_id => -1)
+
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper.access_rights.should eq(["Fred"])
     end
   end
 
@@ -96,6 +135,17 @@ describe PublishedCollectionRifCsWrapper do
        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
        wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
      end
+
+     it "should handle files with the 'Other' experiment" do
+       exp1 = Factory(:experiment)
+       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
+
+       df1 = Factory(:data_file, :experiment => exp1)
+       df2 = Factory(:data_file, :experiment_id => -1)
+
+       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+       wrapper.for_codes.should eq(%w(02))
+     end
    end
 
   describe "Locations" do
@@ -119,6 +169,17 @@ describe PublishedCollectionRifCsWrapper do
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.locations.should eq([['not empty'], ['also not empty']])
+    end
+
+    it "should handle data files with the 'other' experiment" do
+      fac1 = Factory(:facility)
+      fac1.stub(:location_as_points).and_return(['loc'])
+      exp1 = Factory(:experiment, :facility => fac1)
+      df1 = Factory(:data_file, :experiment => exp1)
+      df2 = Factory(:data_file, :experiment_id => -1)
+
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper.locations.should eq([['loc']])
     end
   end
 

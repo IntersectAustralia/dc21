@@ -10,6 +10,7 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     super(collection_object)
     self.options = options
     self.date_range = options[:date_range]
+    raise "Files cannot be nil" unless files
     self.files = files
   end
 
@@ -33,29 +34,19 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     options[:zip_url]
   end
 
-  def submitter_name
-    options[:submitter].full_name
-  end
-
-  def submitter_email
-    options[:submitter].email
-  end
-
   # returns an array of strings, each item being the text for a local subject
   def local_subjects
-    experiments = files.collect(&:experiment)
     subjects = experiments.collect(&:subject).uniq.sort
     subjects.select { |s| !s.blank? }
   end
 
   def access_rights
-    experiments = files.collect(&:experiment)
     experiments.collect(&:access_rights).uniq.sort
   end
 
   # returns an array of strings, each item being an FOR code in its PURL format
   def for_codes
-    codes = files.collect { |f| f.experiment.experiment_for_codes }.flatten
+    codes = experiments.collect(&:experiment_for_codes).flatten
     codes_with_urls = codes.collect(&:url).uniq.sort
     codes_with_urls.collect do |code|
       last_slash = code.rindex('/')
@@ -99,11 +90,31 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   # Returns an array of locations for the collection. Each element in the array is also an array, containing the point(s) for that specific location
   #TODO: this is a bit cumbersome, could be improved
   def locations
-    facilities = files.collect { |f| f.experiment.facility }.uniq
     locations = []
     facilities.each do |f|
       locations << f.location_as_points unless f.location_as_points.empty?
     end
     locations
+  end
+
+  def notes
+    notes = []
+    notes << "Published by #{options[:submitter].full_name} (#{options[:submitter].email})"
+
+    facilities.each do |facility|
+      contact = facility.primary_contact
+      notes << "Primary contact for #{facility.name} is #{contact.full_name} (#{contact.email})"
+    end
+
+    notes
+  end
+
+  private
+  def experiments
+    files.collect(&:experiment).compact.uniq
+  end
+
+  def facilities
+    experiments.collect(&:facility).compact.uniq
   end
 end
