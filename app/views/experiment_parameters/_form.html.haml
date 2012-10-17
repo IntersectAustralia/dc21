@@ -25,7 +25,7 @@
   .control-group
     = f.label :amount, class: "control-label"
     .controls
-      = f.text_field :amount
+      = f.text_field :amount, :size => 20, :maxlength => 30
 
   .control-group
     = f.label :parameter_unit_id, "Units", class: "control-label"
@@ -36,7 +36,7 @@
   .control-group
     = f.label :comments, class: "control-label"
     .controls
-      = f.text_field :comments
+      = f.text_field :comments, :size => 30, :maxlength => 255
 
   .form-actions
     .actions-pre
