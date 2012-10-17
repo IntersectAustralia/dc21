@@ -26,6 +26,29 @@ describe MetadataWriter do
       file_path.should =~ /whole-tree-chambers.txt/
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/facility.txt'))
     end
+
+    it "should handle facility with missing primary contact" do
+      primary_contact = Factory(:user,
+                                first_name: 'Prim',
+                                last_name: 'Contact',
+                                email: 'prim@intersect.org.au')
+
+      facility = Factory(:facility,
+                         name: 'Whole Tree Chambers',
+                         id: 1,
+                         code: 'WTC',
+                         description: 'The Whole Tree Chambers (WTC) facility was installed',
+                         a_lat: 20, a_long: 30,
+                         primary_contact: primary_contact)
+
+      facility.aggregated_contactables.each { |contactable| contactable.delete }
+      facility.reload
+
+      directory = Dir.mktmpdir
+      file_path = @subject.write_facility_metadata(facility, directory)
+      file_path.should =~ /whole-tree-chambers.txt/
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/facility_no_contact.txt'))
+    end
   end
   describe "write experiement metadata to file" do
 

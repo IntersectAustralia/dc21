@@ -55,6 +55,19 @@ describe PublishedCollectionRifCsWrapper do
       wrapper.notes.include?('Primary contact for Fac1 is Fred Smith (fred@intersect.org.au')
       wrapper.notes.include?('Primary contact for Fac2 is Bob Jones (bob@intersect.org.au')
     end
+
+    it "should handle facility with missing contact" do
+      user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
+      facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
+      facility.aggregated_contactables.each { |contactable| contactable.delete }
+      facility.reload
+      experiment = Factory(:experiment, :facility => facility)
+
+      df1 = Factory(:data_file, :experiment => experiment)
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      # this should never happen, its ok that nothing shows
+      wrapper.notes.size.should eq(1)
+    end
   end
 
   describe "Local subjects" do

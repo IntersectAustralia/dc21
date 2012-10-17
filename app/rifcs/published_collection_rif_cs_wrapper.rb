@@ -103,7 +103,7 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
 
     facilities.each do |facility|
       contact = facility.primary_contact
-      notes << "Primary contact for #{facility.name} is #{contact.full_name} (#{contact.email})"
+      notes << "Primary contact for #{facility.name} is #{contact.full_name} (#{contact.email})" if contact
     end
 
     notes
