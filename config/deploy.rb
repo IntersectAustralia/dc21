@@ -93,10 +93,13 @@ namespace :server_setup do
   end
   namespace :config do
     task :apache do
-      run "cd #{release_path}/config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
-      src = "#{release_path}/config/httpd/apache_insertion.conf"
+      run "mkdir -p apache_config"
+      upload "config/httpd", "apache_config", :via => :scp, :recursive => true
+
+      run "cd apache_config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
+      src = "apache_config/httpd/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
-      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} && #{try_sudo} /sbin/service httpd graceful; /bin/true"
+      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
     end
   end
   namespace :logging do
@@ -120,13 +123,13 @@ after 'deploy:setup' do
   server_setup.filesystem.dir_perms
   server_setup.filesystem.mkdir_db_dumps
 
+  server_setup.logging.rotation
+  server_setup.config.apache
 end
 before 'deploy:update' do
   export_proxy
 end
 after 'deploy:update' do
-  server_setup.logging.rotation
-  server_setup.config.apache
   deploy.additional_symlinks
   deploy.restart
 end
