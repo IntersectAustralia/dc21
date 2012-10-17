@@ -115,7 +115,7 @@ describe PublishedCollectionRifCsWrapper do
       wrapper.access_rights.should eq(["Bob", "Fred"])
     end
 
-   it "should should handle files with the 'other' experiment" do
+    it "should should handle files with the 'other' experiment" do
       exp1 = Factory(:experiment, :access_rights => "Fred")
 
       df1 = Factory(:data_file, :experiment => exp1)
@@ -127,39 +127,39 @@ describe PublishedCollectionRifCsWrapper do
   end
 
   describe "Field of research codes" do
-     it "should collect all FOR codes from experiments associated with the files, and strip off all but the last part of the url" do
-       exp1 = Factory(:experiment)
-       exp2 = Factory(:experiment)
-       exp3 = Factory(:experiment)
-       exp4 = Factory(:experiment)
-       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
-       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/0101', :experiment => exp2)
-       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/0234', :experiment => exp3)
-       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/05', :experiment => exp3)
-       Factory(:experiment_for_code, :url => 'asdf', :experiment => exp3)
-       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/020103', :experiment => exp4)
+    it "should collect all FOR codes from experiments associated with the files, and strip off all but the last part of the url" do
+      exp1 = Factory(:experiment)
+      exp2 = Factory(:experiment)
+      exp3 = Factory(:experiment)
+      exp4 = Factory(:experiment)
+      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
+      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/0101', :experiment => exp2)
+      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/0234', :experiment => exp3)
+      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/05', :experiment => exp3)
+      Factory(:experiment_for_code, :url => 'asdf', :experiment => exp3)
+      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/020103', :experiment => exp4)
 
-       df1 = Factory(:data_file, :experiment => exp1)
-       df2 = Factory(:data_file, :experiment => exp2)
-       df3 = Factory(:data_file, :experiment => exp1)
-       df4 = Factory(:data_file, :experiment => exp3)
-       df5 = Factory(:data_file, :experiment => exp4)
+      df1 = Factory(:data_file, :experiment => exp1)
+      df2 = Factory(:data_file, :experiment => exp2)
+      df3 = Factory(:data_file, :experiment => exp1)
+      df4 = Factory(:data_file, :experiment => exp3)
+      df5 = Factory(:data_file, :experiment => exp4)
 
-       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
-       wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
-     end
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+      wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
+    end
 
-     it "should handle files with the 'Other' experiment" do
-       exp1 = Factory(:experiment)
-       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
+    it "should handle files with the 'Other' experiment" do
+      exp1 = Factory(:experiment)
+      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
 
-       df1 = Factory(:data_file, :experiment => exp1)
-       df2 = Factory(:data_file, :experiment_id => -1)
+      df1 = Factory(:data_file, :experiment => exp1)
+      df2 = Factory(:data_file, :experiment_id => -1)
 
-       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
-       wrapper.for_codes.should eq(%w(02))
-     end
-   end
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper.for_codes.should eq(%w(02))
+    end
+  end
 
   describe "Locations" do
     it "should gather all locations from facilities associated with the files" do
@@ -202,60 +202,16 @@ describe PublishedCollectionRifCsWrapper do
     let(:df3) { Factory(:data_file, :start_time => '2011-01-01 01:00 UTC', :end_time => '2011-01-02 18:00 UTC') }
     let(:df4) { Factory(:data_file, :start_time => '2011-03-15 06:00 UTC', :end_time => '2011-03-30 22:00 UTC') }
     let(:df5) { Factory(:data_file, :start_time => nil, :end_time => nil) }
-    describe "Where search criteria did not include dates" do
-      it "should return the earliest start date and latest end date in the matching files" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {})
-        wrapper.start_date.should eq(Date.parse('2011-01-01'))
-        wrapper.end_date.should eq(Date.parse('2011-04-26'))
-      end
+    it "should return the earliest start date and latest end date in the matching files" do
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {})
+      wrapper.start_date.should eq(Date.parse('2011-01-01'))
+      wrapper.end_date.should eq(Date.parse('2011-04-26'))
     end
 
-    describe "Where search criteria did not include dates and none of the files have dates" do
-      it "should return the earliest start date and latest end date in the matching files" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df5], {})
-        wrapper.start_date.should be_nil
-        wrapper.end_date.should be_nil
-      end
-    end
-
-    describe "Where search criteria included start date only" do
-      it "should return specified start date if some files start earlier than it" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2011-01-25", nil)})
-        wrapper.start_date.should eq(Date.parse('2011-01-25'))
-        wrapper.end_date.should eq(Date.parse('2011-04-26'))
-      end
-      it "should return start of earliest file if specified start date is earlier than first file" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2010-12-25", nil)})
-        wrapper.start_date.should eq(Date.parse('2011-01-01'))
-        wrapper.end_date.should eq(Date.parse('2011-04-26'))
-      end
-    end
-
-    describe "Where search criteria included end date only" do
-      it "should return specified end date if some files end after it" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new(nil, "2011-03-25")})
-        wrapper.start_date.should eq(Date.parse('2011-01-01'))
-        wrapper.end_date.should eq(Date.parse('2011-03-25'))
-      end
-      it "should return end of last file if specified end date is later than last file" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new(nil, "2011-05-25", nil)})
-        wrapper.start_date.should eq(Date.parse('2011-01-01'))
-        wrapper.end_date.should eq(Date.parse('2011-04-26'))
-      end
-    end
-
-    describe "Where search criteria included start date and end date" do
-      it "should return specified start/end date if some files have data outside the range" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2011-01-25", "2011-03-25")})
-        wrapper.start_date.should eq(Date.parse('2011-01-25'))
-        wrapper.end_date.should eq(Date.parse('2011-03-25'))
-      end
-      it "should return start of first file and end of last file if data fits inside the range" do
-        wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:date_range => DateRange.new("2010-12-25", "2011-05-25", nil)})
-        wrapper.start_date.should eq(Date.parse('2011-01-01'))
-        wrapper.end_date.should eq(Date.parse('2011-04-26'))
-      end
-
+    it "should return nil if none of the files have dates" do
+      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df5], {})
+      wrapper.start_date.should be_nil
+      wrapper.end_date.should be_nil
     end
   end
 end

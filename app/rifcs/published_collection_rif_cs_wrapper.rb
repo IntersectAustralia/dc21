@@ -9,7 +9,6 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   def initialize(collection_object, files, options)
     super(collection_object)
     self.options = options
-    self.date_range = options[:date_range]
     raise "Files cannot be nil" unless files
     self.files = files
   end
@@ -56,19 +55,12 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   end
 
   # returns the start of the temporal coverage period as a date object
-  # start is considered to be the later of either the earliest start date in the files OR the start of the date range being searched
+  # start is considered to be the the earliest start date found in the matching files, or nil if no files have dates
   def start_date
     earliest_from_files = files.collect(&:start_time).compact.sort.first
     return nil unless earliest_from_files
-
     # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
-    earliest_from_files_as_date = earliest_from_files.utc.to_date
-    if date_range && date_range.from_date
-      start_of_range = date_range.from_date
-      start_of_range > earliest_from_files_as_date ? start_of_range : earliest_from_files_as_date
-    else
-      earliest_from_files_as_date
-    end
+    earliest_from_files.utc.to_date
   end
 
   # returns the end of the temporal coverage period as a date object
@@ -76,15 +68,8 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
   def end_date
     latest_from_files = files.collect(&:end_time).compact.sort.last
     return nil unless latest_from_files
-
     # beware of issues with timezones - we store the file start/end times as UTC (since we don't know the zone) - don't change this unless you understand it
-    latest_from_files_as_date = latest_from_files.utc.to_date
-    if date_range && date_range.to_date
-      end_of_range = date_range.to_date
-      end_of_range < latest_from_files_as_date ? end_of_range : latest_from_files_as_date
-    else
-      latest_from_files_as_date
-    end
+    latest_from_files.utc.to_date
   end
 
   # Returns an array of locations for the collection. Each element in the array is also an array, containing the point(s) for that specific location
