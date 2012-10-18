@@ -105,7 +105,8 @@ describe MetadataWriter do
     end
 
     it "should produce a file with details written one per line" do
-      experiment = Factory(:experiment)
+      facility = Factory(:facility, :name => 'My Facility')
+      experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
       data_file = Factory(:data_file,
                            id: 1,
                            filename: "datafile.jpg",
@@ -122,8 +123,26 @@ describe MetadataWriter do
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata.txt'))
     end
 
+    it "should handle files with the 'Other' experiment" do
+      data_file = Factory(:data_file,
+                           id: 1,
+                           filename: "datafile.jpg",
+                           experiment_id: -1,
+                           format: FileTypeDeterminer::TOA5,
+                           created_at: "2012-06-27 06:49:08")
+      Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
+      Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
+      Factory(:column_detail, :name => "Humi", :data_file => data_file)
+
+      directory = Dir.mktmpdir
+      file_path = @subject.write_data_file_metadata(data_file, directory)
+      file_path.should =~ /datafile-jpg-metadata.txt$/
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata-other.txt'))
+    end
+
     it "should handle files with no extension" do
-      experiment = Factory(:experiment)
+      facility = Factory(:facility, :name => 'My Facility')
+      experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
       data_file = Factory(:data_file,
                            id: 1,
                            filename: "datafile",

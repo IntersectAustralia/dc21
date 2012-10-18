@@ -87,11 +87,8 @@ class MetadataWriter
       file.puts "File format: #{datafile.format_for_display}"
       file.puts "Description: #{datafile.file_processing_description}"
       file.puts "Tags: #{datafile.tags.map { |tag| tag.name }.join(", ")}"
-      if datafile.experiment_id != -1
-        file.puts "Experiment: #{datafile.experiment.name}"
-      else
-        file.puts "Experiment: UNKNOWN"
-      end
+      file.puts "Experiment: #{datafile.experiment_name}"
+      file.puts "Facility: #{datafile.facility_name}"
       file.puts "Date added: #{datafile.created_at.to_s(:with_time)}"
       file.puts "Added by: #{datafile.created_by.full_name}"
       file.puts "Persistent URL: #{data_file_url(datafile)}"
