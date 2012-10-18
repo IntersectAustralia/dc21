@@ -6,7 +6,10 @@ File format: Unknown
 Description: desc
 Tags: 
 Experiment: Tree Experiment
+Facility: Facility2
 Date added: 2012-07-30 15:38
 Added by: Fred Bloggs
+Start time: 2011-10-12  9:00:23
+End time: 2011-11-12  4:00:00
 Persistent URL: http://localhost:3000/data_files/5655
 

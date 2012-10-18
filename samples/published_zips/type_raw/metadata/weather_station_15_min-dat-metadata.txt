@@ -6,6 +6,7 @@ File format: TOA5
 Description: desc
 Tags: 
 Experiment: Rain Experiment
+Facility: Facility1
 Date added: 2012-07-30 15:38
 Added by: Fred Bloggs
 Persistent URL: http://localhost:3000/data_files/5658

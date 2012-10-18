@@ -1,0 +1,15 @@
+Basic information
+
+Name: nontoa5.jpg
+Type: RAW
+File format: Unknown
+Description: 
+Tags: 
+Experiment: My Experiment
+Facility: My Facility
+Date added: 2012-06-27  6:49
+Added by: Fred Bloggs
+Start time: 2012-10-23  7:56:45
+End time: 2012-12-01 22:04:23
+Persistent URL: http://localhost:3000/data_files/1
+

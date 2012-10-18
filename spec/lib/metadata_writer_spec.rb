@@ -123,6 +123,24 @@ describe MetadataWriter do
       file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata.txt'))
     end
 
+    it "should handle non TOA5 files that have start/end times" do
+      facility = Factory(:facility, :name => 'My Facility')
+      experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
+      data_file = Factory(:data_file,
+                           id: 1,
+                           filename: "nontoa5.jpg",
+                           experiment: experiment,
+                           format: nil,
+                           start_time: "2012-10-23 07:56:45 utc",
+                           end_time: "2012-12-01 22:04:23 utc",
+                           created_at: "2012-06-27 06:49:08")
+
+      directory = Dir.mktmpdir
+      file_path = @subject.write_data_file_metadata(data_file, directory)
+      file_path.should =~ /nontoa5-jpg-metadata.txt$/
+      file_path.should be_same_file_as(Rails.root.join('samples/metadata/nontoa5-jpg-metadata.txt'))
+    end
+
     it "should handle files with the 'Other' experiment" do
       data_file = Factory(:data_file,
                            id: 1,

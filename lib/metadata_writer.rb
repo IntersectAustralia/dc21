@@ -91,6 +91,10 @@ class MetadataWriter
       file.puts "Facility: #{datafile.facility_name}"
       file.puts "Date added: #{datafile.created_at.to_s(:with_time)}"
       file.puts "Added by: #{datafile.created_by.full_name}"
+      unless datafile.known_format?
+        file.puts "Start time: #{datafile.start_time.utc.to_s(:with_seconds)}" if datafile.start_time
+        file.puts "End time: #{datafile.end_time.utc.to_s(:with_seconds)}" if datafile.end_time
+      end
       file.puts "Persistent URL: #{data_file_url(datafile)}"
       file.puts ""
       if datafile.known_format?
