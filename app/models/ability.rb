@@ -39,6 +39,9 @@ class Ability
     # alias reject_as_spam to reject so they are considered the same
     alias_action :reject_as_spam, :to => :reject
 
+    # alias search to read
+    alias_action :search, :to => :read
+
     return unless user && user.role
 
     #TODO: we have no rules about permissions for these yet

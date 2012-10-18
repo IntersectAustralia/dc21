@@ -30,8 +30,8 @@
 
       <coverage>
         <temporal>
-          <date type="dateFrom" dateFormat="W3CDTF">2011-10-10</date>
-          <date type="dateTo" dateFormat="W3CDTF">2011-10-15</date>
+          <date type="dateFrom" dateFormat="W3CDTF">2011-08-11</date>
+          <date type="dateTo" dateFormat="W3CDTF">2011-11-12</date>
         </temporal>
       </coverage>
 

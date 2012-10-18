@@ -20,8 +20,6 @@ Feature: Edit data files metadata
     Then I should see "sample.txt"
     And I should see "3"
     And I should see "sean@intersect.org.au"
-    And I should see "2010-06-01 5:23:00"
-    And I should see "2011-11-30 1:00:00"
     When I follow "Cancel"
     Then I should be on the list data files page
 

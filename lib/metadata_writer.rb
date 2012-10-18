@@ -32,7 +32,8 @@ class MetadataWriter
       file.puts "Code: #{facility.code}"
       file.puts "Description: #{facility.description}"
       file.puts "Location: #{facility.location}"
-      file.puts "Primary Contact: #{facility.primary_contact.full_name} (#{facility.primary_contact.email})"
+      primary_contact = facility.primary_contact ? "#{facility.primary_contact.full_name} (#{facility.primary_contact.email})" : ""
+      file.puts "Primary Contact: #{primary_contact}"
       file.puts "Persistent URL: #{facility_url(facility)}"
     end
     file_path

@@ -19,8 +19,8 @@ class PublishedCollectionsController < ApplicationController
       search = session[:search_for_publishing]
       files = search.do_search(DataFile.accessible_by(current_ability))
 
-      build_rif_cs(files, search.date_range)
-      build_zip_file(files, search)
+      build_rif_cs(files)
+      build_zip_file(files)
       @published_collection.save!
       redirect_to root_path, notice: 'Your collection has been successfully submitted for publishing.'
     else
@@ -39,7 +39,7 @@ class PublishedCollectionsController < ApplicationController
 
   private
 
-  def build_rif_cs(files, date_range)
+  def build_rif_cs(files)
     dir = APP_CONFIG['published_rif_cs_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
     output_location = File.join(dir, "rif-cs-#{@published_collection.id}.xml")
@@ -49,7 +49,6 @@ class PublishedCollectionsController < ApplicationController
     options = {:root_url => root_url,
                :collection_url => published_collection_url(@published_collection),
                :zip_url => published_collection_url(@published_collection, :format => 'zip'),
-               :date_range => date_range,
                :submitter => current_user}
     RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@published_collection, files, options), file).build_rif_cs
     file.close
@@ -57,21 +56,14 @@ class PublishedCollectionsController < ApplicationController
     @published_collection.rif_cs_file_path = output_location
   end
 
-  def build_zip_file(files, search)
+  def build_zip_file(files)
     dir = APP_CONFIG['published_zip_files_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
     output_location = File.join(dir, "data_#{@published_collection.id}.zip")
 
-    if search.date_range.blank?
-      CustomDownloadBuilder.zip_for_files_with_ids(files.collect(&:id)) do |zip_file|
-        zip_file.close
-        FileUtils.cp(zip_file.path, output_location)
-      end
-    else
-      CustomDownloadBuilder.subsetted_zip_for_files(files, search.date_range, search.search_params[:from_date], search.search_params[:to_date]) do |zip_file|
-        zip_file.close
-        FileUtils.cp(zip_file.path, output_location)
-      end
+    CustomDownloadBuilder.zip_for_files_with_ids(files.collect(&:id)) do |zip_file|
+      zip_file.close
+      FileUtils.cp(zip_file.path, output_location)
     end
 
     @published_collection.zip_file_path = output_location

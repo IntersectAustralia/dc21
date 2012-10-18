@@ -22,6 +22,8 @@ describe ExperimentParameter do
     it { should validate_presence_of(:parameter_sub_category) }
     it { should validate_presence_of(:parameter_modification) }
     it { should validate_numericality_of(:amount) }
+    it { should ensure_length_of(:comments).is_at_most 255 }
+
   end
 
   describe "Scopes" do

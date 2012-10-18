@@ -10,6 +10,7 @@ class ExperimentParameter < ActiveRecord::Base
   validates_presence_of :parameter_sub_category
   validates_presence_of :parameter_modification
   validates_numericality_of :amount, :allow_blank => true
+  validates_length_of :comments, :maximum => 255
 
   scope :in_order, joins(:parameter_category, :parameter_sub_category, :parameter_modification).order('parameter_categories.name, parameter_sub_categories.name, parameter_modifications.name')
 end
