@@ -97,9 +97,9 @@
         %h4#upload_date.expand Upload Date:
         .upload_date
           = label_tag :from_date, "From Date:"
-          = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true
+          = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
-          = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true
+          = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true, :size => 10, :maxlength => 10
           .actions= submit_tag "Update Search Results", :class => "whitebutton"
 
 - unless @data_files.empty?
