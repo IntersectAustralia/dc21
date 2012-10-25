@@ -1,5 +1,3 @@
-- #Stuff for preparing the 'delete file' message. Arguably this can go in the controller, but it may eventually be
-- #moved to a separate confirmation page, so here will suffice for now.
 
 - station = @data_file.metadata_items.find_by_key("station_name")
 - if station.present?
@@ -18,5 +16,4 @@
   - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
     = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton",
      :confirm => delete_warning, :method => :delete
-  .searchcontainer
 
