@@ -27,14 +27,15 @@ class MetadataWriter
 
   def write_facility_metadata(facility, directory_path)
     file_path = File.join(directory_path, "#{facility.name.parameterize}.txt")
-    File.open(file_path, 'w') do |file|
-      file.puts "Name: #{facility.name}"
-      file.puts "Code: #{facility.code}"
-      file.puts "Description: #{facility.description}"
-      file.puts "Location: #{facility.location}"
+    # open file in binary mode so we can control line endings
+    File.open(file_path, 'wb') do |file|
+      write_line file, "Name: #{facility.name}"
+      write_line file, "Code: #{facility.code}"
+      write_line file, "Description: #{facility.description}"
+      write_line file, "Location: #{facility.location}"
       primary_contact = facility.primary_contact ? "#{facility.primary_contact.full_name} (#{facility.primary_contact.email})" : ""
-      file.puts "Primary Contact: #{primary_contact}"
-      file.puts "Persistent URL: #{facility_url(facility)}"
+      write_line file, "Primary Contact: #{primary_contact}"
+      write_line file, "Persistent URL: #{facility_url(facility)}"
     end
     file_path
   end
@@ -43,27 +44,27 @@ class MetadataWriter
   def write_experiment_metadata(experiment, directory_path)
     file_path = File.join(directory_path, "#{experiment.name.parameterize}.txt")
     File.open(file_path, 'w') do |file|
-      file.puts "Parent: #{experiment.parent_name}"
-      file.puts "Name: #{experiment.name}"
+      write_line file, "Parent: #{experiment.parent_name}"
+      write_line file, "Name: #{experiment.name}"
       # Description may be nil, but nil interpolates to empty string
       # We follow the same approach for all attributes that can be nil
-      file.puts "Description: #{experiment.description}"
-      file.puts "Start date: #{experiment.start_date.to_s(:date_only)}"
-      file.puts "End date: #{experiment.end_date.try(:to_s, :date_only)}"
-      file.puts "Subject: #{experiment.subject}"
-      file.puts "Access Rights: #{experiment.access_rights}"
-      file.puts "FOR codes: #{experiment.experiment_for_codes.map { |for_code| for_code.name }.join("\n")}"
-      file.puts "Persistent URL: #{experiment_url(experiment)}"
-      file.puts ""
-      file.puts "Parameters"
+      write_line file, "Description: #{experiment.description}"
+      write_line file, "Start date: #{experiment.start_date.to_s(:date_only)}"
+      write_line file, "End date: #{experiment.end_date.try(:to_s, :date_only)}"
+      write_line file, "Subject: #{experiment.subject}"
+      write_line file, "Access Rights: #{experiment.access_rights}"
+      write_line file, "FOR codes: #{experiment.experiment_for_codes.map { |for_code| for_code.name }.join("\n")}"
+      write_line file, "Persistent URL: #{experiment_url(experiment)}"
+      write_line file, ""
+      write_line file, "Parameters"
       experiment.experiment_parameters.each do |param|
-        file.puts ""
-        file.puts "Category: #{param.parameter_category.name}"
-        file.puts "Subcategory: #{param.parameter_sub_category.name}"
-        file.puts "Modification: #{param.parameter_modification.name}"
-        file.puts "Amount: #{param.amount}"
-        file.puts "Units: #{param.parameter_unit ? param.parameter_unit.name : ""}"
-        file.puts "Comments: #{param.comments}"
+        write_line file, ""
+        write_line file, "Category: #{param.parameter_category.name}"
+        write_line file, "Subcategory: #{param.parameter_sub_category.name}"
+        write_line file, "Modification: #{param.parameter_modification.name}"
+        write_line file, "Amount: #{param.amount}"
+        write_line file, "Units: #{param.parameter_unit ? param.parameter_unit.name : ""}"
+        write_line file, "Comments: #{param.comments}"
       end
 
     end
@@ -80,53 +81,51 @@ class MetadataWriter
 
     file_path = File.join(directory_path, metadata_filename)
     File.open(file_path, 'w') do |file|
-      file.puts "Basic information"
-      file.puts ""
-      file.puts "Name: #{datafile.filename}"
-      file.puts "Type: #{datafile.status_as_string}"
-      file.puts "File format: #{datafile.format_for_display}"
-      file.puts "Description: #{datafile.file_processing_description}"
-      file.puts "Tags: #{datafile.tags.map { |tag| tag.name }.join(", ")}"
-      file.puts "Experiment: #{datafile.experiment_name}"
-      file.puts "Facility: #{datafile.facility_name}"
-      file.puts "Date added: #{datafile.created_at.to_s(:with_time)}"
-      file.puts "Added by: #{datafile.created_by.full_name}"
+      write_line file, "Basic information"
+      write_line file, ""
+      write_line file, "Name: #{datafile.filename}"
+      write_line file, "Type: #{datafile.status_as_string}"
+      write_line file, "File format: #{datafile.format_for_display}"
+      write_line file, "Description: #{datafile.file_processing_description}"
+      write_line file, "Tags: #{datafile.tags.map { |tag| tag.name }.join(", ")}"
+      write_line file, "Experiment: #{datafile.experiment_name}"
+      write_line file, "Facility: #{datafile.facility_name}"
+      write_line file, "Date added: #{datafile.created_at.to_s(:with_time)}"
+      write_line file, "Added by: #{datafile.created_by.full_name}"
       unless datafile.known_format?
-        file.puts "Start time: #{datafile.start_time.utc.to_s(:with_seconds)}" if datafile.start_time
-        file.puts "End time: #{datafile.end_time.utc.to_s(:with_seconds)}" if datafile.end_time
+        write_line file, "Start time: #{datafile.start_time.utc.to_s(:with_seconds)}" if datafile.start_time
+        write_line file, "End time: #{datafile.end_time.utc.to_s(:with_seconds)}" if datafile.end_time
       end
-      file.puts "Persistent URL: #{data_file_url(datafile)}"
-      file.puts ""
+      write_line file, "Persistent URL: #{data_file_url(datafile)}"
+      write_line file, ""
       if datafile.known_format?
-        file.puts "Information From The File"
-        file.puts ""
-        file.print "Start time: "
-        file.print datafile.start_time.utc.to_s(:with_seconds) if datafile.start_time != nil
-        file.puts ""
-        file.print "End time: "
-        file.print datafile.end_time.utc.to_s(:with_seconds) if datafile.end_time != nil
-        file.puts
+        write_line file, "Information From The File"
+        write_line file, ""
+        start_time = datafile.start_time ? datafile.start_time.utc.to_s(:with_seconds) : ''
+        end_time = datafile.end_time ? datafile.end_time.utc.to_s(:with_seconds) : ''
+        write_line file, "Start time: #{start_time}"
+        write_line file, "End time: #{end_time}"
         display_interval = datafile.interval == nil ? "" : ActionController::Base.helpers.distance_of_time_in_words(datafile.interval)
-        file.puts "Sample interval: #{display_interval}"
+        write_line file, "Sample interval: #{display_interval}"
         datafile.metadata_items.order(:key).each do |item|
-          file.puts "#{item.key.humanize}: #{item.value}"
+          write_line file, "#{item.key.humanize}: #{item.value}"
         end
 
-        file.puts ""
-        file.puts "Columns"
-        file.puts ""
+        write_line file, ""
+        write_line file, "Columns"
+        write_line file, ""
         datafile.column_details.each do |column_details|
-          file.puts "Column: #{column_details.name}"
+          write_line file, "Column: #{column_details.name}"
           file.print "Column Mapping: "
           ColumnMapping.all.each do |map|
             unless map.check_col_mapping(column_details.name).nil?
               file.print "#{map.name} "
             end
           end
-          file.puts ""
-          file.puts "Unit: #{column_details.unit}"
-          file.puts "Measurement Type: #{column_details.data_type}"
-          file.puts ""
+          write_line file, ""
+          write_line file, "Unit: #{column_details.unit}"
+          write_line file, "Measurement Type: #{column_details.data_type}"
+          write_line file, ""
         end
       end
     end
@@ -153,5 +152,10 @@ class MetadataWriter
     protocol = url_options[:protocol]
     port = url_options[:port]
     { host: host, protocol: protocol, port: port}
+  end
+
+  def write_line(file, string)
+    #force windows line endings so that windows users can easily open the files in notepad
+    file.print string + "\r\n"
   end
 end
