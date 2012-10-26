@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def cancel_button(link_text, path, options = {})
-    ("<div class='cancelbutton'><span></span>" + link_to(h(link_text), path, options.merge(:class => "cancelbutton")) + "</div>").html_safe
+    link_to(h(link_text), path, options.merge(:class => "whitebutton")).html_safe
   end
 
   private

@@ -974,43 +974,13 @@ input.redbutton, button.redbutton, a.redbutton, .redbutton
 // BUTTONS - BACK / CANCEL
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-input.cancelbutton, input[type=button], button.cancelbutton, a.cancelbutton
+input[type=button]
   +m-p-w-h-p-t-b-l-r-f("", 5px 10px, "", 18px, relative)
   +font("", normal, 0.875em, 18px, $dark3, none, center)
   z-index: 9
   +gradient-light-1
   +border(1px, solid, #dcdcdc, 1px 1px 1px 0, 2px)
   +inlineblock
-
-.cancelbutton
-  +inlineblock
-
-  span
-    +m-p-w-h-p-t-b-l-r-f(4px -15px 0 0, "", 20px, 20px)
-    z-index: 1
-    +gradient-light-1
-    +border(1px, solid, #dcdcdc, "", 2px)
-    +inlineblock
-    cursor: pointer
-    -webkit-transform: rotate(45deg)
-    -moz-transform: rotate(45deg)
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=45)
-  &:hover
-    span, a
-      color: $dark2
-      +border(1px, solid, #c6c6c6)
-      +gradient-light-2
-  &:hover
-    span
-      +gradient-light-2
-      +border(1px, solid, #c6c6c6)
-      +inlineblock
-  &:hover
-    a
-      +border(1px, solid, #c6c6c6, 1px 1px 1px 0)
-  &:active
-    span, a
-      +boxshadow-2-inset
 
 // TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

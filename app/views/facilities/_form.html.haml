@@ -87,7 +87,7 @@
   .form-actions
     - if edit_mode
       .actions-pre
-        = cancel_button 'Cancel', facility_path("#{@facility.id}"), :class => "cancelbutton"
+        = cancel_button 'Cancel', facility_path("#{@facility.id}")
       .actions
         = f.submit "Update", :class => ""
     -else
