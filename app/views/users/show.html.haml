@@ -2,6 +2,8 @@
   %h1 Admin / Access Requests / #{@user.email}
 
 .container
+  = render 'actions'
+
   = render_field "Email", @user.email
   = render_field "First name", @user.first_name
   = render_field "Last name", @user.last_name
@@ -14,32 +16,5 @@
         = @user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
   = render_field "Role", (@user.role ? @user.role.name : "")
   = render_field "Status", @user.status_description
-  .actions
-    - if @user.pending_approval?
-      .floatright
-        - if can?(:reject, @user) then
-          = link_to "Spam", reject_as_spam_user_path(@user), :method => :put, :class => "whitebutton"
-          = link_to "Reject", reject_user_path(@user), :method => :put, :class => "redbutton"
-        - if can?(:approve, @user) then
-          = link_to "Approve", edit_approval_user_path(@user), :method => :get, :class => "bluebutton"
-      = cancel_button 'Back', access_requests_users_path
 
-    - if @user.approved?
-      .floatright
-        - if can?(:update_role, User)
-          = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
-        - if can?(:deactivate, User)
-          - if @user == current_user
-            = link_to "Deactivate", deactivate_user_path(@user), :confirm => "This is the user you are currently logged in as. Are you sure you want to deactivate it?" , :method => :put, :class => "redbutton"
-          - else
-            = link_to "Deactivate", deactivate_user_path(@user), :method => :put, :class => "redbutton"
-      = cancel_button 'Back', users_path
-
-    - if @user.deactivated?
-      .floatright
-        - if can?(:update_role, User)
-          = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
-        - if can?(:activate, User)
-          = link_to "Activate", activate_user_path(@user), :method => :put, :class => "bluebutton"
-      = cancel_button 'Back', users_path
-
+  = render 'actions'

@@ -1,0 +1,28 @@
+.form-actions
+  .actions-pre
+    - if @user.pending_approval?
+      = cancel_button 'Back', access_requests_users_path
+    - else
+      = cancel_button 'Back', users_path
+  .actions
+    - if @user.pending_approval?
+      - if can?(:reject, @user) then
+        = link_to "Spam", reject_as_spam_user_path(@user), :method => :put, :class => "whitebutton"
+        = link_to "Reject", reject_user_path(@user), :method => :put, :class => "redbutton"
+      - if can?(:approve, @user) then
+        = link_to "Approve", edit_approval_user_path(@user), :method => :get, :class => "bluebutton"
+
+    - if @user.approved?
+      - if can?(:update_role, User)
+        = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
+      - if can?(:deactivate, User)
+        - if @user == current_user
+          = link_to "Deactivate", deactivate_user_path(@user), :confirm => "This is the user you are currently logged in as. Are you sure you want to deactivate it?" , :method => :put, :class => "redbutton"
+        - else
+          = link_to "Deactivate", deactivate_user_path(@user), :method => :put, :class => "redbutton"
+
+    - if @user.deactivated?
+      - if can?(:update_role, User)
+        = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
+      - if can?(:activate, User)
+        = link_to "Activate", activate_user_path(@user), :method => :put, :class => "bluebutton"

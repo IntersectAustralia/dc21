@@ -2,6 +2,7 @@
   %h1 Facilities / #{@facility.name}
 
 .container
+  = render 'actions'
   = render_field "Name", @facility.name
   = render_field "Code", @facility.code
   .description
@@ -14,11 +15,7 @@
     - @facility.contacts.each_with_index do |c, i|
       = render_field "Other Contact #{i+1}", "#{c.full_name} (#{c.email})"
 
-  .form-actions
-    .actions-pre
-      = cancel_button 'Back', facilities_path
-    .actions
-      = link_to "Edit Facility", edit_facility_path, :class => "bluebutton"
+  = render 'actions'
 
 %h2 Experiments
 = render 'experiments/list', :experiments => @facility.experiments

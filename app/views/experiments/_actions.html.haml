@@ -1,0 +1,5 @@
+.form-actions
+  .actions-pre
+    = cancel_button 'Back', facility_path(@facility)
+  .actions
+    = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "bluebutton"
