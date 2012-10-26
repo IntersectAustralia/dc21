@@ -17,11 +17,6 @@ class PagesController < ApplicationController
     end
   end
 
-  def about
-    set_tab :about
-    render :layout => 'application'
-  end
-
   private
 
 end

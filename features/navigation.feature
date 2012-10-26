@@ -47,15 +47,9 @@ Feature: Navigation between pages across the site
     And I follow "Users"
     Then I should be on the users page
 
-  Scenario: Should be links for about and admin in top navigation bar
+  Scenario: Should be link for admin in top navigation bar
     Given I am on the home page
-    Then I should see link "About"
     Then I should see link "Admin"
-
-  Scenario: Clicking about link in top navigation bar directs to correct page
-    Given I am on the home page
-    When I follow "About"
-    Then I should be on the about pages page
 
   Scenario: Clicking admin link in top navigation bar directs to correct page
     Given I am on the home page

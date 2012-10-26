@@ -10,7 +10,6 @@
           - if !user_signed_in?
           - else
             = tab.home '', root_url, :id => "home"
-          = tab.about 'About', about_pages_path
           - if !user_signed_in?
             = tab.login 'Log in', root_url
             = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
