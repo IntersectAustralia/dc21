@@ -1,3 +1,3 @@
-#content_container
-  = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
-    = render(:partial => 'form', :locals => { :f => f })
+.container_home
+  = form_for("user", :url => user_session_path) do |f|
+    = render(:partial => 'devise/sessions/form', :locals => { :f => f })
