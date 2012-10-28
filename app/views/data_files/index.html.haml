@@ -32,33 +32,33 @@
           = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
           = text_field_tag "search[to_date]", @to_date, :id => :to_date, :datepicker => true, :size => 10, :maxlength => 10
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#filename_category.expand Filename:
         .filename
           = label_tag :filename, "Filename:"
           = text_field_tag "search[filename]", @filename, :id => :filename
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#description_category.expand Description:
         .description
           = label_tag :description, "Description:"
           = text_field_tag "search[description]", @description, :id => :description
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#type_category.expand Type:
         .type
           - DataFile::ALL_STATI.each_with_index do |status, index|
             = label_tag "search_status_#{index}", status
             = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}"
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#tags_category.expand Tags:
         .tags
           - tags.each_with_index do |tag, index|
             = label_tag "search_tag_#{index}", tag.name
             = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#facility.expand Facility:
         .facility
@@ -72,7 +72,7 @@
                   - if experiment.facility_id == facility.id
                     = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
                     = check_box_tag "search[experiments][]", experiment.name, @selected_experiments.include?(experiment.name), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#variable.expand Columns:
         .variable
@@ -86,13 +86,13 @@
                 - variable_info[1].each_with_index do |child_variable, index2|
                   = label_tag "search_variable_#{index}_#{index2}", child_variable, :class => :variable_child
                   = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#uploader.expand Uploader:
         .uploader
           = label_tag "search[uploader_id]", "Uploader:"
           = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#upload_date.expand Upload Date:
         .upload_date
@@ -100,7 +100,7 @@
           = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
           = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true, :size => 10, :maxlength => 10
-          .actions= submit_tag "Update Search Results", :class => "whitebutton"
+          .actions= submit_tag "Update Search Results", :class => "bluebutton"
 
 - unless @data_files.empty?
   = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
