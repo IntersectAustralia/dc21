@@ -18,7 +18,7 @@
 
   - @users.each do |user|
     %tr{ :class => cycle('field_bg', 'field_nobg')}
-      %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}"
+      %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}", :title => 'View'
       %td= user.first_name
       %td= user.last_name
       %td.email= user.email
@@ -31,4 +31,4 @@
           = user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
       %td.actions
         - if can?(:update_role, User)
-          = link_to '', edit_role_user_path(user), :id => "edit_role_#{user.id}", :class => "edit"
+          = link_to '', edit_role_user_path(user), :id => "edit_role_#{user.id}", :class => "edit", :title => 'Edit role'
