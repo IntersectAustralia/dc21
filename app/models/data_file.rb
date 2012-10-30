@@ -1,14 +1,17 @@
 require 'tempfile'
 
 class DataFile < ActiveRecord::Base
-  STATUS_UNKNOWN = 'UNKNOWN'
+  # raw and error are special status values that cannot be modified/removed
+  # the rest come from a config file and can be customised per installation
   STATUS_RAW = 'RAW'
-  STATUS_CLEANSED = 'CLEANSED'
-  STATUS_PROCESSED = 'PROCESSED'
-  STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED]
-  STATI_FOR_EDIT = STATI - [STATUS_RAW]
   STATUS_ERROR = 'ERROR'
-  ALL_STATI = [STATUS_UNKNOWN, STATUS_RAW, STATUS_CLEANSED, STATUS_PROCESSED, STATUS_ERROR]
+  # stati for selection when uploading
+  STATI = [STATUS_RAW] + APP_CONFIG['file_types']
+  # cannot change to 'RAW' or 'ERROR' during editing
+  STATI_FOR_EDIT = STATI - [STATUS_RAW]
+  # for searching we include error as well
+  ALL_STATI = STATI + [STATUS_ERROR]
+
 
   belongs_to :created_by, :class_name => "User"
   belongs_to :experiment
