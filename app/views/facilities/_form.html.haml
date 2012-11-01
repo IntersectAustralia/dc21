@@ -10,13 +10,13 @@
     = f.label :name, class: 'control-label'
     .controls
       = required
-      = f.text_field :name
+      = f.text_field :name, :maxlength => 50
 
   .control-group
     = f.label :code, class: 'control-label'
     .controls
       = required
-      = f.text_field :code
+      = f.text_field :code, :maxlength => 50
 
   .control-group
     = f.label :description, class: 'control-label'

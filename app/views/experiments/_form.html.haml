@@ -20,7 +20,7 @@
     = f.label :name, "Name", class: "control-label"
     .controls
       = required
-      = f.text_field :name
+      = f.text_field :name, :maxlength => 255, :size => 50
   
   .control-group
     = f.label :description, "Description", class: "control-label"
