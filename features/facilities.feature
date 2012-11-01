@@ -185,11 +185,9 @@ Feature: View the list of facilities
     And I follow the view link for facility "Facility0"
     And I follow "Edit Facility"
     And I fill in the following:
-      | Name | really_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_namereally_long_name |
       | Code |                                                                                                                                                                                                                                                                                                                                                                                  |
     And I press "Update"
     Then I should see "Code can't be blank"
-    And I should see "Name is too long (maximum is 50 characters)"
 
   Scenario: Edit the details of a facility to become a duplicate
     Given I have facilities
