@@ -92,11 +92,6 @@ Then /^the file should contain "([^"]*)"$/ do |expected|
   expected.strip.should eq(actual)
 end
 
-Then /^I should get a download of all data files$/ do
-  page.response_headers['Content-Disposition'].should include("filename=\"download_selected.zip\"")
-  page.response_headers['Content-Disposition'].should include("attachment")
-end
-
 When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do |from, to|
   visit path_to("the list data files page")
   find("#date").click
@@ -409,4 +404,30 @@ Then /^file "([^"]*)" should have automatically extracted metadata$/ do |filenam
   data_file.start_time.should_not be_nil
   data_file.end_time.should_not be_nil
   data_file.metadata_items.should_not be_empty
+end
+
+When /^I check file "([^"]*)"$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  checkbox_id = "download_checkbox_#{data_file.id}"
+  check(checkbox_id)
+end
+
+When /^I uncheck file "([^"]*)"$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  checkbox_id = "download_checkbox_#{data_file.id}"
+  uncheck(checkbox_id)
+end
+
+Then /^file "([^"]*)" should be checked$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  checkbox_id = "download_checkbox_#{data_file.id}"
+  field_checked = find_field(checkbox_id)['checked']
+  field_checked.should be_true
+end
+
+Then /^file "([^"]*)" should be unchecked$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  checkbox_id = "download_checkbox_#{data_file.id}"
+  field_checked = find_field(checkbox_id)['checked']
+  field_checked.should be_false
 end

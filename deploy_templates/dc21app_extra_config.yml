@@ -18,6 +18,10 @@ defaults: &defaults
   for_codes_lookup_base_url: http://jp-dc21-misc.intersect.org.au:9001
   for_codes_path: /mint/ANZSRC_FOR/opensearch/lookup
   devise_mailer_sender: no-reply@intersect.org.au
+  file_types:
+    - PROCESSED
+    - CLEANSED
+    - UNKNOWN
 
 development:
   <<: *defaults

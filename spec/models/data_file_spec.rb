@@ -168,13 +168,13 @@ describe DataFile do
     describe "Find files with processing status in" do
       it "should find matching files" do
         f1 = Factory(:data_file, :file_processing_status => DataFile::STATUS_ERROR).id
-        f2 = Factory(:data_file, :file_processing_status => DataFile::STATUS_PROCESSED).id
+        f2 = Factory(:data_file, :file_processing_status => 'PROCESSED').id
         f3 = Factory(:data_file, :file_processing_status => DataFile::STATUS_RAW).id
-        f4 = Factory(:data_file, :file_processing_status => DataFile::STATUS_UNKNOWN).id
-        f5 = Factory(:data_file, :file_processing_status => DataFile::STATUS_CLEANSED).id
+        f4 = Factory(:data_file, :file_processing_status => 'UNKNOWN').id
+        f5 = Factory(:data_file, :file_processing_status => 'CLEANSED').id
         f6 = Factory(:data_file, :file_processing_status => DataFile::STATUS_RAW).id
 
-        DataFile.with_status_in([DataFile::STATUS_RAW, DataFile::STATUS_CLEANSED]).order(:id).collect(&:id).should eq([f3, f5, f6])
+        DataFile.with_status_in([DataFile::STATUS_RAW, 'CLEANSED']).order(:id).collect(&:id).should eq([f3, f5, f6])
         DataFile.with_status_in([DataFile::STATUS_ERROR]).order(:id).collect(&:id).should eq([f1])
       end
     end
@@ -719,7 +719,7 @@ describe DataFile do
         it "only looks at raw" do
           subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
           subset_end = Time.parse '2011/10/14 23:55 UTC'
-          statii = [DataFile::STATUS_ERROR, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
+          statii = [DataFile::STATUS_ERROR, 'UNKNOWN', 'CLEANSED', 'PROCESSED']
 
           statii.each do |status|
             make_data_file!(@start_time, @end_time, @path, @station_name, @table_name, status)
@@ -884,7 +884,7 @@ describe DataFile do
         it "only looks at raw" do
           subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
           subset_end = Time.parse '2011/10/14 23:55 UTC'
-          statii = [DataFile::STATUS_ERROR, DataFile::STATUS_UNKNOWN, DataFile::STATUS_CLEANSED, DataFile::STATUS_PROCESSED]
+          statii = [DataFile::STATUS_ERROR, 'UNKNOWN', 'CLEANSED', 'PROCESSED']
           statii.each do |status|
             make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name, status)
           end
