@@ -11,13 +11,13 @@ def create_test_files
   ColumnDetail.delete_all
   MetadataItem.delete_all
   create_data_file("sample1.txt", "georgina@intersect.org.au")
-  create_data_file("sample2.txt", "alexb@intersect.org.au")
-  create_data_file("weather_station_15_min.dat", "alexb@intersect.org.au")
+  create_data_file("sample2.txt", "admin@intersect.org.au")
+  create_data_file("weather_station_15_min.dat", "admin@intersect.org.au")
   create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
   create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
   create_data_file("sample3.txt", "kali@intersect.org.au")
   create_data_file("WTC01_Table1.dat", "georgina@intersect.org.au")
-  create_data_file("WTC02_Table1.dat", "alexb@intersect.org.au")
+  create_data_file("WTC02_Table1.dat", "admin@intersect.org.au")
 end
 
 def create_test_users
