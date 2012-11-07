@@ -566,9 +566,11 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
 /* Base notification container for users
 
 #notice, #alert
+  min-width: 1140px
   p
     +m-p-w-h-p-t-b-l-r-f("", 10px 0, 100%, 20px, relative)
     +font("", bold, 1em, 20px, $light0, "", center)
+    min-width: 1140px
   span
     +m-p-w-h-p-t-b-l-r-f(-40px 10px 0 0, "", 20px, "", "", "", "", "", "", right)
     +font("", bold, 1.75em, 35px, #404040)
@@ -1106,6 +1108,10 @@ table.activity, table.activity tbody
 
     #header_wrapper
       +m-p-w-h-p-t-b-l-r-f(-48px 0 0 0)
+      min-width: auto
+      .container
+        width: auto
+
       .logo
         +m-p-w-h-p-t-b-l-r-f(56px 0 0 0, "", "", 20px)
         text-shadow: #EEE 0px 1px 0px
@@ -1123,7 +1129,10 @@ table.activity, table.activity tbody
   #header #header_wrapper
     margin: 41px 0 0 0
   #notice, #alert
+    min-width: 100%
     +m-p-w-h-p-t-b-l-r-f("", "", "", "", fixed, 0, "", 0, 0)
+    p
+      min-width: 100%
 
 // SCROLLING - HEADER + NOTIFICATION
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -1170,22 +1179,24 @@ table.activity, table.activity tbody
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #header
-  +m-p-w-h-p-t-b-l-r-f("", "", 100%, "", relative, 0)
+  +m-p-w-h-p-t-b-l-r-f("", "", "", "", relative, 0)
   z-index: 10
 
   #header_wrapper
     height: 88px
+    min-width: 1140px
     background: url("../images/header-bg.png") top left repeat-x
     color: $dark3
     +boxshadow-2
 
     .container
       +m-p-w-h-p-t-b-l-r-f(0 auto, 0 20px)
-      +width("", 940px, 1100px)
-      min-height: 100%
+      max-width: 1100px
+      height: 99px
+      overflow-y: hidden
 
       .logo
-        +m-p-w-h-p-t-b-l-r-f(15px 0 0 0, "", 300px, 60px)
+        +m-p-w-h-p-t-b-l-r-f(15px 0 0 0, "", 200px, 60px)
         float: left
         overflow: visible
         +inlineblock
