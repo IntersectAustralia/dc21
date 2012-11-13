@@ -4,7 +4,9 @@
   .footerwrapper
     %a.logo{:href => "http://www.intersect.org.au/attribution-policy", :target => "_about"}>
     - if Rails.env.development?
-      #dev 
+      #dev
         %p DC21 Env: Development. Click for debug info.
     - else
-      %p Developed by Intersect Australia Ltd.
+      %p
+        Developed by Intersect Australia Ltd.  Version:
+        = render 'shared/tag'

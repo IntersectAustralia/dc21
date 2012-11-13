@@ -131,6 +131,7 @@ before 'deploy:update' do
 end
 after 'deploy:update' do
   deploy.additional_symlinks
+  deploy.write_tag
   deploy.restart
 end
 
@@ -172,6 +173,11 @@ namespace :deploy do
 
     run "rm -f #{release_path}/db_dumps"
     run "ln -s #{shared_path}/db_dumps #{release_path}/db_dumps"
+  end
+
+  desc "Write the tag that was deployed to a file on the server so we can display it on the app"
+  task :write_tag do
+    put branch, "#{release_path}/app/views/shared/_tag.html.haml"
   end
 
   # Load the schema
