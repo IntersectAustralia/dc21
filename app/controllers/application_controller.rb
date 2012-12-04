@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :authenticate_user!
+  before_filter :current_cart
 
   # catch access denied and redirect to the home page
   rescue_from CanCan::AccessDenied do |exception|

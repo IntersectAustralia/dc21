@@ -11,13 +11,11 @@
     %h2 Recent Activity
     %table#exploredata
       %tr
-        %th.view= "View"
         %th= "Filename"
         %th= "Date added"
         %th= "Added by"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
-          %td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}", :title => 'View'
-          %td= data_file.filename
+          %td= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}", :title => 'View'
           %td= data_file.created_at.to_s(:with_time)
           %td= data_file.created_by.email if data_file.created_by

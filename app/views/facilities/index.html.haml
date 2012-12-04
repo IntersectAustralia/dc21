@@ -10,11 +10,9 @@
 - else
   %table#facilities
     %tr
-      %th.view View
       %th= "Name"
       %th= "Code"
     - @facilities.each do |facility|
       %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td.view= link_to '', facility, :class => "view", :id => "view_#{facility.id}", :title => 'View'
-        %td= facility.name
+        %td= link_to facility.name, facility, :id => "view_#{facility.id}", :title => 'View'
         %td= facility.code

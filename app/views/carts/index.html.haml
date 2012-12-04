@@ -1,0 +1,17 @@
+%h1 Listing carts
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @carts.each do |cart|
+    %tr
+      %td= link_to 'Show', cart
+      %td= link_to 'Edit', edit_cart_path(cart)
+      %td= link_to 'Destroy', cart, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Cart', new_cart_path

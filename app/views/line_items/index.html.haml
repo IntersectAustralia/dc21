@@ -1,0 +1,21 @@
+%h1 Listing line_items
+
+%table
+  %tr
+    %th Data file
+    %th Cart
+    %th
+    %th
+    %th
+
+  - @line_items.each do |line_item|
+    %tr
+      %td= line_item.data_file_id
+      %td= line_item.cart_id
+      %td= link_to 'Show', line_item
+      %td= link_to 'Edit', edit_line_item_path(line_item)
+      %td= link_to 'Destroy', line_item, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Line item', new_line_item_path
