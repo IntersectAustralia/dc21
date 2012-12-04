@@ -1,5 +1,9 @@
 Dc21app::Application.routes.draw do
 
+  resources :line_items
+
+  resources :carts
+
   devise_for :users, :controllers => {:registrations => "user_registers", :passwords => "user_passwords"} do
     get "/users/profile", :to => "user_registers#profile" #page which gives options to edit details or change password
     get "/users/edit_password", :to => "user_registers#edit_password" #allow users to edit their own password

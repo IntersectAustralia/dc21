@@ -10,6 +10,10 @@
   .actions
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
       = link_to "Edit Metadata", edit_data_file_path, :class => "bluebutton"
+    - if @cart.data_files.where(:id => @data_file.id).count != 0
+      This item is already in your cart.
+    - else
+      = button_to 'Add to Cart', line_items_path(data_file_id: @data_file.id), :class => "bluebutton"
 
 
 #file_details
@@ -49,3 +53,5 @@
   .actions
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
       = link_to "Edit Metadata", edit_data_file_path, :class => "bluebutton"
+    - if !Cart.find(session[:cart_id]).line_items.where(:data_file_id => @data_file.id)
+      = button_to 'Add to Cart', line_items_path(data_file_id: @data_file.id), :class => "bluebutton"

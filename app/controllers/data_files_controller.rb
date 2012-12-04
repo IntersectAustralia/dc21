@@ -31,6 +31,7 @@ class DataFilesController < ApplicationController
   def show
     set_tab :explore, :contentnavigation
     @column_mappings = ColumnMapping.all
+    @cart = Cart.find(session[:cart_id])
   end
 
   def new

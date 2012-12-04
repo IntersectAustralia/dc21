@@ -17,6 +17,7 @@ class DataFile < ActiveRecord::Base
   belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
+  has_many :line_items
   has_and_belongs_to_many :tags
 
   before_validation :strip_whitespaces
