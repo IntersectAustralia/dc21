@@ -20,6 +20,9 @@ class DataFilesController < ApplicationController
   def index
     set_tab :explore, :contentnavigation
     do_search(params[:search])
+    if session[:cart_id]
+      @cart = Cart.find(session[:cart_id])
+    end
   end
 
   def search
@@ -31,7 +34,9 @@ class DataFilesController < ApplicationController
   def show
     set_tab :explore, :contentnavigation
     @column_mappings = ColumnMapping.all
-    @cart = Cart.find(session[:cart_id])
+    if session[:cart_id]
+      @cart = Cart.find(session[:cart_id])
+    end
   end
 
   def new
