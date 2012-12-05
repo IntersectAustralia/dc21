@@ -16,9 +16,9 @@ Feature: Administer users
     Given "raul@intersect.org.au" is deactivated
     When I am on the list users page
     Then I should see "users" table with
-      | First name | Last name | Email                     | Role          | Status      |
-      | Georgina   | Edwards   | georgina@intersect.org.au | Administrator | Active      |
-      | Raul       | Carrizo   | raul@intersect.org.au     |               | Deactivated |
+      | Email                     | First name | Last name | Role          | Status      |
+      | georgina@intersect.org.au | Georgina   | Edwards   | Administrator | Active      |
+      | raul@intersect.org.au     | Raul       | Carrizo   |               | Deactivated |
 
   Scenario: View user details
     Given "raul@intersect.org.au" has role "Researcher"
