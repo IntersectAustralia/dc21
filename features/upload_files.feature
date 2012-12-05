@@ -382,3 +382,13 @@ Feature: Upload files
     And I select "06" from "End Hour"
     And I select "31" from "End Min"
     And I select "44" from "End Second"
+
+Scenario: The date format is on the date files page after uploading a file
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    Then I should be on the data files page
+    And I should see "yyyy-mm-dd"

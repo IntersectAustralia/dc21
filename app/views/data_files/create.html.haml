@@ -40,6 +40,8 @@
 
         - unless file.known_format?
           .control-group
+            .date-format yyyy-mm-dd
+          .control-group
             = label_tag "file_#{file.id}_start_time", "Start Time", class: "control-label"
             .controls
               = text_field_tag "files[#{file.id}][start_time]", @start_time, :id => "file_#{file.id}_start_time", :datepicker => true
