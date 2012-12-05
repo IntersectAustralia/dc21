@@ -1,7 +1,0 @@
-- content_for :breadcrumb  do
-  %h1 Your Cart
-.container
-  -#= render 'actions'
-  - @cart.line_items.each do |item|
-    = render_field "File", item.data_file.filename
-  -#= render 'actions'

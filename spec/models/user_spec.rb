@@ -3,6 +3,7 @@ require 'spec_helper'
 describe User do
   describe "Associations" do
     it { should belong_to(:role) }
+    it { should have_many(:line_items) }
   end
 
   describe "Named Scopes" do
@@ -245,6 +246,19 @@ describe User do
 
       supers = User.get_superuser_emails
       supers.should eq(["a@intersect.org.au", "c@intersect.org.au"])
+    end
+  end
+
+  describe 'Checking if a file is already in the cart' do
+    it 'should check if the file is in the users cart' do
+      user = Factory(:user)
+      data_file_1 = Factory(:data_file)
+      data_file_2 = Factory(:data_file)
+      user.line_items.create!(:data_file_id => data_file_1.id)
+      user.reload
+
+      user.data_file_in_cart?(data_file_1).should be_true
+      user.data_file_in_cart?(data_file_2).should be_false
     end
   end
   

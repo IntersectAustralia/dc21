@@ -40,19 +40,17 @@ class LineItemsController < ApplicationController
   # POST /line_items
   # POST /line_items.json
   def create
-    @cart = current_cart
-    data_file = DataFile.find(params[:data_file_id])
-    @line_item = @cart.line_items.build
-    @line_item.data_file= data_file
+    @data_file = DataFile.find(params[:data_file_id])
+    @line_item = current_user.line_items.build
+    @line_item.data_file= @data_file
 
     respond_to do |format|
       if @line_item.save
-        format.html { redirect_to data_file_path(data_file),
+        format.html { redirect_to data_file_path(@data_file),
           notice: 'File was successfully added to cart.' }
-        format.json { render json: @line_item,
-          status: :created, location: @line_item }
+        format.js { }
       else
-        format.html { redirect_to data_file_path(data_file),
+        format.html { redirect_to data_file_path(@data_file),
           notice: 'File could not be added to cart.' }
       end
     end

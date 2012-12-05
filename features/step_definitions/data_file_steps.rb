@@ -431,3 +431,26 @@ Then /^file "([^"]*)" should be unchecked$/ do |name|
   field_checked = find_field(checkbox_id)['checked']
   field_checked.should be_false
 end
+
+Then /^I should see the add to cart link for ([^"]*)$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  link_id = "add_to_cart_#{data_file.id}"
+  page.should have_link(link_id)
+end
+
+When /^I add ([^"]*) to the cart$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  link_id = "add_to_cart_#{data_file.id}"
+  link = find_link(link_id)
+  link.click
+  wait_until do
+    page.evaluate_script('$.active') == 0
+  end
+
+end
+
+Then /^I should not see the add to cart link for ([^"]*)$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  link_id = "add_to_cart_#{data_file.id}"
+  page.should_not have_link(link_id)
+end

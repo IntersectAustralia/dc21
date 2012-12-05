@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
 
   belongs_to :role
+  has_many :line_items
+  has_many :data_files, :through => :line_items
 
   # Setup accessible attributes (status/approved flags should NEVER be accessible by mass assignment)
   attr_accessible :email, :password, :password_confirmation, :first_name, :last_name
@@ -151,6 +153,10 @@ class User < ActiveRecord::Base
       else
         "Unknown" 
     end
+  end
+
+  def data_file_in_cart?(data_file)
+    data_files.include?(data_file)
   end
 
   private
