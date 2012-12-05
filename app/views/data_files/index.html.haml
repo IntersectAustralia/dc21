@@ -28,6 +28,7 @@
       .searchcategory
         %h4#date.expand Date:
         .date
+          .date-format yyyy-mm-dd
           = label_tag :from_date, "From Date:"
           = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
@@ -96,6 +97,7 @@
       .searchcategory
         %h4#upload_date.expand Upload Date:
         .upload_date
+          .date-format yyyy-mm-dd
           = label_tag :from_date, "From Date:"
           = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
