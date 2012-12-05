@@ -5,6 +5,7 @@
 - # "data_files" which is an array of DataFile (rails model) objects chosen for the package
 - # "facilities" which is an array of Facility (rails model) objects associated with the chosen data files
 - # "experiments" which is an array of Experiment (rails model) objects for the chosen data files
+- # "metadata_url_helper" which is a MetadataUrlHelper object that can be used to find the URLs for the models
 %html
   %head
 
@@ -19,7 +20,77 @@
       %section
         %h2= experiment.name
 
+        %table
+          %tr
+            %td Parent
+            %td= experiment.parent_name
+          %tr
+            %td Name
+            %td= experiment.name
+          %tr
+            %td Description
+            %td= experiment.description
+          %tr
+            %td Start date
+            %td= experiment.start_date.to_s(:date_only)
+          %tr
+            %td End date
+            %td= experiment.end_date.try(:to_s, :date_only)
+          %tr
+            %td Subject
+            %td= experiment.subject
+          %tr
+            %td Access Rights
+            %td= "#{experiment.access_rights_description} (#{experiment.access_rights})"
+          %tr
+            %td FOR codes
+            %td= experiment.experiment_for_codes.map { |for_code| for_code.name }.join("<br/>")
+          %tr
+            %td Persistent URL
+            %td= metadata_url_helper.experiment_url(experiment)
+
+        - unless experiment.experiment_parameters.empty?
+          %h3 Experiment Parameters
+          %table
+            %thead
+              %tr
+                %th Category
+                %th Subcategory
+                %th Modification
+                %th Amount
+                %th Units
+                %th Comments
+            %tbody
+              - experiment.experiment_parameters.each do |param|
+                %tr
+                  %td= param.parameter_category.name
+                  %td= param.parameter_sub_category.name
+                  %td= param.parameter_modification.name
+                  %td= param.amount
+                  %td= param.parameter_unit ? param.parameter_unit.name : ""
+                  %td= param.comments
+
     %h1 Facilities
     - facilities.each do |facility|
       %section
         %h2= facility.name
+
+        %table
+          %tr
+            %td Name
+            %td= facility.name
+          %tr
+            %td Code
+            %td= facility.code
+          %tr
+            %td Description
+            %td= facility.description
+          %tr
+            %td Location
+            %td= facility.location
+          %tr
+            %td Primary Contact
+            %td= facility.primary_contact ? "#{facility.primary_contact.full_name} (#{facility.primary_contact.email})" : ""
+          %tr
+            %td Persistent URL
+            %td= metadata_url_helper.facility_url(facility)
