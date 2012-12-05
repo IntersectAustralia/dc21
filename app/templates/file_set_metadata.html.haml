@@ -1,0 +1,25 @@
+!!!
+
+- # this is the template for the README.html file that is packaged on download
+- # you have access to the following locals:
+- # "data_files" which is an array of DataFile (rails model) objects chosen for the package
+- # "facilities" which is an array of Facility (rails model) objects associated with the chosen data files
+- # "experiments" which is an array of Experiment (rails model) objects for the chosen data files
+%html
+  %head
+
+  %body
+    %h1 Files
+    - data_files.each do |data_file|
+      %section
+        %h2= data_file.filename
+
+    %h1 Experiments
+    - experiments.each do |experiment|
+      %section
+        %h2= experiment.name
+
+    %h1 Facilities
+    - facilities.each do |facility|
+      %section
+        %h2= facility.name
