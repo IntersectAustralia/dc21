@@ -45,8 +45,6 @@ Dc21app::Application.routes.draw do
     end
     collection do
       get :download_selected
-      #get :build_download
-      #get :custom_download
       put :bulk_update
       post :search
       post :api_create

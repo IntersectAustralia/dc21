@@ -154,49 +154,7 @@ class DataFilesController < ApplicationController
     if ids.nil?
       redirect_to(data_files_path, :alert => "No files were selected for download")
     else
-      if params[:build_custom]
-        redirect_to build_download_data_files_url(:ids => ids, :from_date => params[:searched_from_date], :to_date => params[:searched_to_date])
-        return
-      else
-        send_zip(ids)
-      end
-    end
-  end
-
-  def build_download
-    @ids = params[:ids]
-    @files = DataFile.find(@ids)
-    @from_date = params[:from_date]
-    @to_date = params[:to_date]
-    render :layout => 'application'
-  end
-
-  def custom_download
-    type = params[:type]
-    @ids = params[:ids]
-    @files = DataFile.find(@ids)
-    @from_date = params[:from_date]
-    @to_date = params[:to_date]
-
-    if type == "all"
-      send_zip(@ids)
-      return
-    end
-
-    date_range = DateRange.new(@from_date, @to_date, false)
-    unless date_range.valid?
-      flash.now[:alert] = date_range.error
-      render :build_download
-      return
-    end
-
-    success = CustomDownloadBuilder.subsetted_zip_for_files(@files, date_range, @from_date, @to_date) do |zip_file|
-      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "custom_download.zip"
-    end
-
-    unless success
-      flash.now[:alert] = "There is no data available for the date range you entered."
-      render :build_download
+      send_zip(ids)
     end
   end
 

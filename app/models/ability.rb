@@ -56,8 +56,6 @@ class Ability
     can [
             :read, #index, show
             :create, #new, create
-            :build_download,
-            :custom_download,
             :download,
             :download_selected,
             :bulk_update,
