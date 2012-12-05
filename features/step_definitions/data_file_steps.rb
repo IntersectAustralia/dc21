@@ -38,13 +38,11 @@ Given /^I have data files$/ do |table|
 end
 
 And /^I follow the view link for data file "([^"]*)"$/ do |filename|
-  file = DataFile.find_by_filename(filename)
-  click_link("view_#{file.id}")
+  click_link(filename)
 end
 
 Given /^I edit data file "([^"]*)"$/ do |filename|
-  data_file = DataFile.find_by_filename(filename) #Experiment.find_by_name!(name)
-  click_link("view_#{data_file.id}")
+  click_link(filename)
   click_link "Edit Metadata"
 end
 

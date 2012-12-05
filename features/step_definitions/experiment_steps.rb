@@ -144,7 +144,7 @@ end
 
 def click_view_experiment_link(name)
   experiment = Experiment.find_by_name!(name)
-  click_link "view_#{experiment.id}"
+  click_link name
 end
 
 def get_for_codes_on_page

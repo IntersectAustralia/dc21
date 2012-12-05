@@ -32,6 +32,7 @@ Feature: View the list of data files
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | RAW                    | My Experiment |
       | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | UNKNOWN                | Other         |
     When I am on the list data files page
+    Then show me the page
     When I follow "Filename"
     Then I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type    | Experiment    |
