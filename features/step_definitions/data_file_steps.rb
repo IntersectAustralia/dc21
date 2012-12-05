@@ -447,8 +447,18 @@ When /^I add ([^"]*) to the cart$/ do |name|
 
 end
 
-Then /^I should not see the add to cart link for ([^"]*)$/ do |name|
+And /^I should not see the add to cart link for ([^"]*)$/ do |name|
   data_file = DataFile.find_by_filename(name)
   link_id = "add_to_cart_#{data_file.id}"
   page.should_not have_link(link_id)
+end
+
+When /^I should not see the add all to cart link$/ do
+  page.should_not have_link("Add All")
+end
+
+When /^I wait for the page$/ do
+  wait_until do
+    page.evaluate_script('$.active') == 0
+  end
 end

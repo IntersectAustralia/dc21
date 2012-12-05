@@ -40,7 +40,11 @@ class LineItemsController < ApplicationController
   # POST /line_items
   # POST /line_items.json
   def create
-    @data_file = DataFile.find(params[:data_file_id])
+    add_all
+  end
+
+  def add_single
+    @data_file = DataFile.find(params[:data_file_ids])
     @line_item = current_user.line_items.build
     @line_item.data_file= @data_file
 
@@ -56,6 +60,17 @@ class LineItemsController < ApplicationController
     end
   end
 
+  def add_all
+    data_files = params[:data_file_ids]
+    data_files.each do |data_file|
+      @line_item = current_user.line_items.build
+      @line_item.data_file= data_file
+      @line_item.save
+    end
+    respond_to do |format|
+      format.js { }
+    end
+  end
 
   # PUT /line_items/1
   # PUT /line_items/1.json
