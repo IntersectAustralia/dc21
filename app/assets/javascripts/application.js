@@ -42,6 +42,13 @@ $(function () {
     });
   }
 
+
+  // Cart contents
+  $("[id^=add_to_cart]").click(function (event) {
+    var cartcount = $("#drop3").text().trim().split(" ").get(0)
+    $("#drop3").text(cartcount + " items in your cart");
+  });
+
   // ACCOUNT MENU
   $('#accountmenu_container').hide();
   $('#accountmenu').click(function (event) {

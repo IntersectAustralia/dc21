@@ -119,7 +119,7 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          = link_to 'Add all', link_to "Profile", :controller => "line_items", :action => "add_all", :data_file_ids => @data_files, :method => :post, :class => "bluebutton", :id => "add_all_to_cart", :remote => true
+          = link_to 'Add all', line_items_path(:add_all => true, :data_file_ids => @data_files.map(&:id)), :method => :post, :class => "bluebutton", :id => "add_all_to_cart", :remote => true
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"

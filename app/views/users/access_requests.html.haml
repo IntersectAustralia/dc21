@@ -3,20 +3,18 @@
 
 %table#access_requests
   %tr
-    %th.view
+    %th.email
+      Email
     %th.firstname
       First name
     %th.lastname
       Last name
-    %th.email
-      Email
     %th.actions Actions
   - @users.each do |user|
     %tr{:class => cycle('field_bg', 'field_nobg')}
-      %td.view= link_to '', user, :class => "view", :id => "view_#{user.id}", :title => 'View'
+      %td.email= link_to user.email, user, :class => "email", :id => "view_#{user.id}", :title => 'View'
       %td.firstname= user.first_name
       %td.lastname= user.last_name
-      %td.email= user.email
       %td.actions
         - if can?(:reject, user) then
           = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "spam floatleft"

@@ -40,7 +40,11 @@ class LineItemsController < ApplicationController
   # POST /line_items
   # POST /line_items.json
   def create
-    add_all
+      if params[:add_all] == 'true'
+        add_all
+      else
+        add_single
+      end
   end
 
   def add_single
@@ -61,11 +65,13 @@ class LineItemsController < ApplicationController
   end
 
   def add_all
-    data_files = params[:data_file_ids]
-    data_files.each do |data_file|
-      @line_item = current_user.line_items.build
-      @line_item.data_file= data_file
-      @line_item.save
+    params[:data_files_ids[]].each do |file_id|
+      data_file = DataFile.find(file_id)
+      unless current_user.data_file_in_cart?(data_file)
+        @line_item = current_user.line_items.build
+        @line_item.data_file= data_file
+        @line_item.save
+      end
     end
     respond_to do |format|
       format.js { }
@@ -91,6 +97,18 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.json
   def destroy
+    @line_item = LineItem.find(params[:id])
+    @line_item.destroy
+
+    respond_to do |format|
+      format.html { redirect_to line_items_url }
+      format.json { head :ok }
+    end
+  end
+
+   # DELETE /line_items/1
+  # DELETE /line_items/1.json
+  def download
     @line_item = LineItem.find(params[:id])
     @line_item.destroy
 
