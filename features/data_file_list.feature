@@ -119,4 +119,14 @@ Feature: View the list of data files
       | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
       | sample2.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
 
+    Scenario: Exploring data by Date has a date format prompt
+      Given I am on the list data files page
+      And I click on "Date:"
+      Then I should see "yyyy-mm-dd"
+
+    Scenario: Exploring data by Upload Date has a date format prompt
+      Given I am on the list data files page
+      And I click on "Upload Date:"
+      Then I should see "yyyy-mm-dd"
+
 
