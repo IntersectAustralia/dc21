@@ -14,8 +14,13 @@
         %th= "Filename"
         %th= "Date added"
         %th= "Added by"
+        %th.add_cart
+          = link_to 'Add All', add_all_line_items_path(:data_file_ids => @data_files.map(&:id)), :method => :get, :class => "bluebutton", :id => "add_all_to_cart"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}", :title => 'View'
           %td= data_file.created_at.to_s(:with_time)
           %td= data_file.created_by.email if data_file.created_by
+          %td.add_cart
+            - unless current_user.data_file_in_cart?(data_file)
+              = link_to 'Add to Cart', line_items_path(:data_file_ids => data_file), :method => :post, :class => "bluebutton", :id => "add_to_cart_#{data_file.id}", :remote => true
