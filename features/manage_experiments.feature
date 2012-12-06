@@ -184,3 +184,7 @@ Feature: Manage experiment metadata
     And I follow "Cancel"
     Then I should be on the view experiment page for 'Weather Station'
 
+  Scenario: Date format is visible on the New Experiment page
+    Given I am on the view facility page for 'Tree Chambers'
+    When I follow "New Experiment"
+    Then I should see "yyyy-mm-dd"

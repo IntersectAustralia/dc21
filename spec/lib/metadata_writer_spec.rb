@@ -2,179 +2,187 @@ require 'spec_helper'
 
 describe MetadataWriter do
 
+  # set up fully populated example entities
   before(:each) do
-    @subject = MetadataWriter.new(nil, nil)
+    @primary_contact = Factory(:user, first_name: 'Prim', last_name: 'Contact', email: 'prim@intersect.org.au')
+    @facility = Factory(:facility,
+                        name: 'Whole Tree Chambers',
+                        id: 1,
+                        code: 'WTC',
+                        description: 'The Whole Tree Chambers (WTC) facility was installed',
+                        a_lat: 20, a_long: 30,
+                        primary_contact: @primary_contact)
+    @experiment = Factory(:experiment,
+                          id: 1,
+                          name: 'High CO2 and Drought',
+                          facility: @facility,
+                          start_date: '2011-12-25',
+                          end_date: '2012-01-01',
+                          subject: 'Drought',
+                          description: 'Experiment desc',
+                          access_rights: 'http://creativecommons.org/licenses/by/3.0/au')
+    @experiment.set_for_codes({'1' => {'name' => '0101 - Mathematics', 'url' => 'someurl'}, '2' => {'name' => '0202 - Science', 'url' => 'someotherurl'}})
+
+    cat1 = Factory(:parameter_category, name: 'Cat1')
+    cat2 = Factory(:parameter_category, name: 'Cat2')
+    subcat1 = Factory(:parameter_sub_category, name: 'Subcat1', parameter_category: cat1)
+    subcat2 = Factory(:parameter_sub_category, name: 'Subcat2', parameter_category: cat2)
+    mod1 = Factory(:parameter_modification, name: 'Excluded')
+    mod2 = Factory(:parameter_modification, name: 'Added')
+    mg = Factory(:parameter_unit, name: 'mg')
+    @experiment.experiment_parameters.create!(parameter_category: cat1, parameter_sub_category: subcat1, parameter_modification: mod1)
+    @experiment.experiment_parameters.create!(parameter_category: cat2, parameter_sub_category: subcat2, parameter_modification: mod2, parameter_unit: mg, amount: 10, comments: 'my comment')
+
+    @data_file1 = Factory(:data_file, filename: 'datafile.jpg', experiment: @experiment)
+    @data_file2 = Factory(:data_file, filename: 'myfile.txt', experiment: @experiment)
+
   end
 
-  describe "Write facility metadata to file" do
-    it "should produce a file with details written one per line" do
-      primary_contact = Factory(:user,
-                                first_name: 'Prim',
-                                last_name: 'Contact',
-                                email: 'prim@intersect.org.au')
 
-      facility = Factory(:facility, 
-                         name: 'Whole Tree Chambers',
-                         id: 1,
-                         code: 'WTC',
-                         description: 'The Whole Tree Chambers (WTC) facility was installed',
-                         a_lat: 20, a_long: 30,
-                         primary_contact: primary_contact)
-
-      directory = Dir.mktmpdir
-      file_path = @subject.write_facility_metadata(facility, directory)
-      file_path.should =~ /whole-tree-chambers.txt/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/facility.txt'))
+  describe 'Basic metadata generation' do
+    it 'should produce HTML with file, facility and experiment metadata (without duplication of facilities and experiments)' do
+      output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+      diff_html(output_html, 'spec/samples/simple_readme.html')
     end
 
-    it "should handle facility with missing primary contact" do
-      primary_contact = Factory(:user,
-                                first_name: 'Prim',
-                                last_name: 'Contact',
-                                email: 'prim@intersect.org.au')
-
-      facility = Factory(:facility,
-                         name: 'Whole Tree Chambers',
-                         id: 1,
-                         code: 'WTC',
-                         description: 'The Whole Tree Chambers (WTC) facility was installed',
-                         a_lat: 20, a_long: 30,
-                         primary_contact: primary_contact)
-
-      facility.aggregated_contactables.each { |contactable| contactable.delete }
-      facility.reload
-
-      directory = Dir.mktmpdir
-      file_path = @subject.write_facility_metadata(facility, directory)
-      file_path.should =~ /whole-tree-chambers.txt/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/facility_no_contact.txt'))
-    end
-  end
-  describe "write experiement metadata to file" do
-
-    before(:each) do
-
-      facility = Factory(:facility, id:1, name: 'My Facility')
-
-      # Set only mandatory fields
-      @experiment = Factory(:experiment,
-                            id: 1,
-                            name: 'High CO2 and Drought',
-                            facility: facility,
-                            start_date: '2011-12-25',
-                            subject: 'Drought')
-      @directory = Dir.mktmpdir
-    end
-
-
-    it "should produce a file with details written one per line" do
-      @experiment.description = 'This is my description.'
-      @experiment.end_date = '2012-01-01'
-      file_path = @subject.write_experiment_metadata(@experiment, @directory)
-      file_path.should =~ /high-co2-and-drought.txt$/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment1.txt'))
-    end
-
-    it "should handle missing non-mandatory values" do
-      file_path = @subject.write_experiment_metadata(@experiment, @directory)
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_optional.txt'))
-    end
-
-    it "should include experiment parameter information when present" do
-      cat1 = Factory(:parameter_category, name: 'Cat1')
-      cat2 = Factory(:parameter_category, name: 'Cat2')
-      subcat1 = Factory(:parameter_sub_category, name: 'Subcat1', parameter_category: cat1)
-      subcat2 = Factory(:parameter_sub_category, name: 'Subcat2', parameter_category: cat2)
-      mod1 = Factory(:parameter_modification, name: 'Excluded')
-      mod2 = Factory(:parameter_modification, name: 'Added')
-      mg = Factory(:parameter_unit, name: 'mg')
-
-      @experiment.experiment_parameters.create!(parameter_category: cat1, parameter_sub_category: subcat1, parameter_modification: mod1)
-      @experiment.experiment_parameters.create!(parameter_category: cat2, parameter_sub_category: subcat2, parameter_modification: mod2, parameter_unit: mg, amount: 10, comments: 'my comment')
-      file_path = @subject.write_experiment_metadata(@experiment, @directory)
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/experiment_with_parameters.txt'))
-
+    it 'should handle a variety of experiments and facilities' do
+      pending
     end
   end
 
-  describe "write data file metadata to file" do
-    before(:each) do
-      Factory(:column_mapping, :name => "Rainfall", :code => "Rnfll")
-      Factory(:column_mapping, :name => "Soil Temperature", :code => "SoilTemp")
-      Factory(:column_mapping, :name => "Humidity", :code => "Humi")
+  describe 'Handling cases with incomplete data (only minimal fields filled in)' do
+    context 'Facilities' do
+      it 'should handle missing primary contact' do
+        @facility.aggregated_contactables.each { |contactable| contactable.delete }
+        @facility.reload
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        diff_html(output_html, 'spec/samples/readme_no_facility_contact.html')
+      end
+
+      it 'should handle missing non-mandatory values' do
+        @facility.a_lat = nil
+        @facility.a_long = nil
+        @facility.b_lat = nil
+        @facility.b_long = nil
+        @facility.description = nil
+        @facility.save!
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        diff_html(output_html, 'spec/samples/readme_minimal_facility.html')
+      end
     end
 
-    it "should produce a file with details written one per line" do
-      facility = Factory(:facility, :name => 'My Facility')
-      experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
-      data_file = Factory(:data_file,
-                           id: 1,
-                           filename: "datafile.jpg",
-                           experiment: experiment,
-                           format: FileTypeDeterminer::TOA5,
-                           created_at: "2012-06-27 06:49:08")
-      Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
-      Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
-      Factory(:column_detail, :name => "Humi", :data_file => data_file)
+    context 'Experiments' do
+      it 'should handle missing non-mandatory values on experiments' do
+        @experiment.description = nil
+        @experiment.end_date = nil
+        @experiment.experiment_for_codes.delete_all
+        @experiment.save!
 
-      directory = Dir.mktmpdir
-      file_path = @subject.write_data_file_metadata(data_file, directory)
-      file_path.should =~ /datafile-jpg-metadata.txt$/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata.txt'))
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        diff_html(output_html, 'spec/samples/readme_minimal_experiment.html')
+      end
+
+
+      it 'should handle experiment with no parameters' do
+        @experiment.experiment_parameters.delete_all
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        diff_html(output_html, 'spec/samples/readme_no_experiment_parameters.html')
+      end
     end
-
-    it "should handle non TOA5 files that have start/end times" do
-      facility = Factory(:facility, :name => 'My Facility')
-      experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
-      data_file = Factory(:data_file,
-                           id: 1,
-                           filename: "nontoa5.jpg",
-                           experiment: experiment,
-                           format: nil,
-                           start_time: "2012-10-23 07:56:45 utc",
-                           end_time: "2012-12-01 22:04:23 utc",
-                           created_at: "2012-06-27 06:49:08")
-
-      directory = Dir.mktmpdir
-      file_path = @subject.write_data_file_metadata(data_file, directory)
-      file_path.should =~ /nontoa5-jpg-metadata.txt$/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/nontoa5-jpg-metadata.txt'))
-    end
-
-    it "should handle files with the 'Other' experiment" do
-      data_file = Factory(:data_file,
-                           id: 1,
-                           filename: "datafile.jpg",
-                           experiment_id: -1,
-                           format: FileTypeDeterminer::TOA5,
-                           created_at: "2012-06-27 06:49:08")
-      Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
-      Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
-      Factory(:column_detail, :name => "Humi", :data_file => data_file)
-
-      directory = Dir.mktmpdir
-      file_path = @subject.write_data_file_metadata(data_file, directory)
-      file_path.should =~ /datafile-jpg-metadata.txt$/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata-other.txt'))
-    end
-
-    it "should handle files with no extension" do
-      facility = Factory(:facility, :name => 'My Facility')
-      experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
-      data_file = Factory(:data_file,
-                           id: 1,
-                           filename: "datafile",
-                           experiment: experiment,
-                           format: FileTypeDeterminer::TOA5,
-                           created_at: "2012-06-27 06:49:08")
-      Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
-      Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
-      Factory(:column_detail, :name => "Humi", :data_file => data_file)
-
-      directory = Dir.mktmpdir
-      file_path = @subject.write_data_file_metadata(data_file, directory)
-      file_path.should =~ /datafile-metadata.txt$/
-      file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-metadata.txt'))
+    context 'Files' do
+#  it "should produce a file with details written one per line" do
+#    facility = Factory(:facility, :name => 'My Facility')
+#    experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
+#    data_file = Factory(:data_file,
+#                         id: 1,
+#                         filename: "datafile.jpg",
+#                         experiment: experiment,
+#                         format: FileTypeDeterminer::TOA5,
+#                         created_at: "2012-06-27 06:49:08")
+#    Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
+#    Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
+#    Factory(:column_detail, :name => "Humi", :data_file => data_file)
+#
+#    directory = Dir.mktmpdir
+#    file_path = @subject.write_data_file_metadata(data_file, directory)
+#    file_path.should =~ /datafile-jpg-metadata.txt$/
+#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata.txt'))
+#  end
+#
+#  it "should handle non TOA5 files that have start/end times" do
+#    facility = Factory(:facility, :name => 'My Facility')
+#    experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
+#    data_file = Factory(:data_file,
+#                         id: 1,
+#                         filename: "nontoa5.jpg",
+#                         experiment: experiment,
+#                         format: nil,
+#                         start_time: "2012-10-23 07:56:45 utc",
+#                         end_time: "2012-12-01 22:04:23 utc",
+#                         created_at: "2012-06-27 06:49:08")
+#
+#    directory = Dir.mktmpdir
+#    file_path = @subject.write_data_file_metadata(data_file, directory)
+#    file_path.should =~ /nontoa5-jpg-metadata.txt$/
+#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/nontoa5-jpg-metadata.txt'))
+#  end
+#
+#  it "should handle files with the 'Other' experiment" do
+#    data_file = Factory(:data_file,
+#                         id: 1,
+#                         filename: "datafile.jpg",
+#                         experiment_id: -1,
+#                         format: FileTypeDeterminer::TOA5,
+#                         created_at: "2012-06-27 06:49:08")
+#    Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
+#    Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
+#    Factory(:column_detail, :name => "Humi", :data_file => data_file)
+#
+#    directory = Dir.mktmpdir
+#    file_path = @subject.write_data_file_metadata(data_file, directory)
+#    file_path.should =~ /datafile-jpg-metadata.txt$/
+#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata-other.txt'))
+#  end
+#
+#  it "should handle files with no extension" do
+#    facility = Factory(:facility, :name => 'My Facility')
+#    experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
+#    data_file = Factory(:data_file,
+#                         id: 1,
+#                         filename: "datafile",
+#                         experiment: experiment,
+#                         format: FileTypeDeterminer::TOA5,
+#                         created_at: "2012-06-27 06:49:08")
+#    Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
+#    Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
+#    Factory(:column_detail, :name => "Humi", :data_file => data_file)
+#
+#    directory = Dir.mktmpdir
+#    file_path = @subject.write_data_file_metadata(data_file, directory)
+#    file_path.should =~ /datafile-metadata.txt$/
+#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-metadata.txt'))
+#  end
     end
   end
 end
+
+def diff_html(output_html, expected_file)
+  expected_html = File.read(File.join(Rails.root, expected_file))
+
+  # parse the html as XML convert to a hash for comparison, so we don't have to worry about spacing/line ending differences
+  actual_hash = Hash.from_xml(output_html)
+  expected_hash = Hash.from_xml(expected_html)
+
+  diff = expected_hash.diff(actual_hash)
+  unless diff == {}
+    puts "HTML did not match"
+    puts "Expected:"
+    puts expected_html
+    puts "Actual:"
+    puts output_html
+  end
+  diff.should == {}
+
+end
+
+

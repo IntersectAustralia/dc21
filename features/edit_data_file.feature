@@ -101,3 +101,9 @@ Feature: Edit data files metadata
     And I fill in "Name" with "sample.txt  "
     And I press "Update"
     Then I should see "Filename has already been taken"
+
+  Scenario: When editing metadata the date format is visible
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    Then I should see "yyyy-mm-dd"

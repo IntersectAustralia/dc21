@@ -1,6 +1,0 @@
-Name: Whole Tree Chambers
-Code: WTC
-Description: The Whole Tree Chambers (WTC) facility was installed
-Location: 20.0 , 30.0
-Primary Contact: 
-Persistent URL: http://localhost:3000/facilities/1
