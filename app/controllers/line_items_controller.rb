@@ -77,7 +77,7 @@ class LineItemsController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { redirect_to data_file_path(@data_file),
+      format.html { redirect_to data_files_path(@data_file),
           notice: 'All files were added to your cart.' }
       format.js { }
     end
