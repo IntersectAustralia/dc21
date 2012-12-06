@@ -47,10 +47,10 @@ $(function () {
   $("[id^=add_to_cart]").click(function (event) {
     var cartcount = parseInt($("#drop3").text().trim().split(" ")[0]) + 1
       if (cartcount == 1) {
-        $("#drop3").text(cartcount + " file in cart");
+        $("#drop3").text(cartcount + " File in Cart");
       }
       else {
-        $("#drop3").text(cartcount + " files in cart");
+        $("#drop3").text(cartcount + " Files in Cart");
       }
   });
 

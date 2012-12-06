@@ -30,9 +30,9 @@ Feature: View the list of data files
 
   Scenario: When coming back to view details page later, add to cart doesn't show if already in cart
     Given I am on the data file details page for sample.txt
-    And I press "Add to Cart"
+    And I press "Add to cart"
     When I am on the data file details page for sample.txt
-    Then I should not see button "Add to Cart"
+    Then I should not see button "Add to cart"
 
   Scenario: When coming back to list of files page later, add to cart doesn't show if already in cart
     Given I am on the list data files page
@@ -43,11 +43,11 @@ Feature: View the list of data files
 
   Scenario: Add all to cart from list of files
     Given I am on the list data files page
-    Then I should see "0 files in cart"
+    Then I should see "0 Files in Cart"
     Then I should see "Add All"
     And I press "Add All"
     Then I wait for the page
-    Then I should see "3 files in cart"
+    Then I should see "3 Files in Cart"
     And I should not see the add to cart link for sample.txt
     And I should not see the add to cart link for datafile.dat
     And I should not see the add to cart link for sample2.txt
@@ -56,30 +56,43 @@ Feature: View the list of data files
   Scenario: Cart details persist after logout, and are retrieved when user next logs in
     Given I am on the list data files page
     And I add sample.txt to the cart
-    Then I should see "1 file in cart"
+    Then I should see "1 File in Cart"
     And I follow "Sign out"
     When I am logged in as "georgina@intersect.org.au"
     And I am on the list data files page
-    Then I should see "1 file in cart"
+    Then I should see "1 File in Cart"
     And I should not see the add to cart link for sample.txt
     And I should see the add to cart link for datafile.dat
 
   Scenario: number of items in cart updates upon adding from list of files
     Given I am on the list data files page
-    Then I should see "0 files in cart"
+    Then I should see "0 Files in Cart"
     When I add sample.txt to the cart
-    Then I should see "1 file in cart"
+    Then I should see "1 File in Cart"
 
   Scenario: number of items in cart updates upon removing items from list of files
     Given I am on the list data files page
-    Then I should see "0 files in cart"
+    Then I should see "0 Files in Cart"
     When I add sample.txt to the cart
-    And I should see "1 file in cart"
+    And I should see "1 File in Cart"
     When I remove sample.txt from the cart
-    Then I should see "0 files in cart"
+    Then I should see "0 Files in Cart"
 
    Scenario: number of items in cart updates upon adding from list of files
     Given I am on the list data files page
-    Then I should see "0 files in cart"
+    Then I should see "0 Files in Cart"
     When I add sample.txt to the cart
-    Then I should see "1 file in cart"
+    Then I should see "1 File in Cart"
+
+    Scenario: Removal of data file from server should automatically reflect in cart
+    Given I am on the list data files page
+    Then I should see "0 Files in Cart"
+    Then I should see "Add All"
+    And I press "Add All"
+    Then I wait for the page
+    Then I should see "3 Files in Cart"
+    And I go to sample.txt
+    And I press "Delete This File"
+    And I press "OK"
+    And I wait for the page
+    Then I should see "2 Files in Cart"

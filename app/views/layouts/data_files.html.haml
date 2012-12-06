@@ -39,9 +39,11 @@
                     %li.divider
                       =link_to "Download",  download_selected_data_files_path
                     %li.divider
-                      =link_to "Clear",  destroy_all_line_items_path
+                      =link_to "Package",  download_selected_data_files_path
                     %li.divider
-                      =link_to "Edit",  line_items_path
+                      =link_to "Clear cart",  destroy_all_line_items_path
+                    %li.divider
+                      =link_to "Edit cart",  line_items_path
 
         = yield
   = render 'layouts/footer'

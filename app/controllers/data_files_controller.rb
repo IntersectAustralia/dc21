@@ -163,6 +163,9 @@ class DataFilesController < ApplicationController
     file = DataFile.find(params[:id])
     if file.destroy
       begin
+        LineItem.where("data_file_id = ?", file.id).each do |item|
+            item.destroy
+        end
         File.delete @data_file.path
         redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
       rescue Errno::ENOENT
@@ -175,6 +178,13 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def cleanout_cart_items
+    file_id = params[:id]
+    LineItem.where(:data_file_id == file_id).each do |item|
+      item.destroy
+    end
+  end
 
   def sanitise_date_and_time(date, hr, min, sec)
     return if date.blank?
