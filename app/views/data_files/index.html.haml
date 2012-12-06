@@ -1,6 +1,9 @@
 - content_for :breadcrumb  do
   %h1 Home / Explore Data
 
+- add_all_warning = "Do you really want to add #{@data_files.size} files to your cart?"
+
+
 .datacontroll
   - if @data_files.empty? || !@search.showing_all?
     = link_to "Clear Search", data_files_path, class: "btn pull-left"
@@ -119,7 +122,7 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          = link_to 'Add All', add_all_line_items_path(:data_file_ids => @data_files.map(&:id)), :method => :get, :class => "bluebutton", :id => "add_all_to_cart"
+          = link_to 'Add All', add_all_line_items_path(:data_file_ids => @data_files.map(&:id)), :method => :get, :class => "bluebutton", :confirm => add_all_warning, :id => "add_all_to_cart"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"

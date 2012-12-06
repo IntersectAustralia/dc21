@@ -68,17 +68,19 @@ class LineItemsController < ApplicationController
   end
 
   def add_all
+    count = 0
     params[:data_file_ids].each do |data_file_id|
       @data_file = DataFile.find(data_file_id)
       unless current_user.data_file_in_cart?(@data_file)
         @line_item = current_user.line_items.build
         @line_item.data_file= @data_file
         @line_item.save
+        count = count + 1
       end
     end
     respond_to do |format|
       format.html { redirect_to data_files_path(@data_file),
-          notice: 'All files were added to your cart.' }
+          notice: "#{count} files were added to your cart." }
       format.js { }
     end
   end
