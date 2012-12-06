@@ -1,21 +1,29 @@
-%h1 Listing line_items
+- content_for :breadcrumb  do
+  %h1 View Cart
 
-%table
-  %tr
-    %th Data file
-    %th Cart
-    %th
-    %th
-    %th
-
-  - @line_items.each do |line_item|
+- if @line_items.empty?
+  %h3 Your cart is empty.
+- else
+  - @data_files = DataFile.find(@line_items.map(&:data_file_id))
+  %table#exploredata.search
     %tr
-      %td= line_item.data_file_id
-      %td= line_item.cart_id
-      %td= link_to 'Show', line_item
-      %td= link_to 'Edit', edit_line_item_path(line_item)
-      %td= link_to 'Destroy', line_item, :confirm => 'Are you sure?', :method => :delete
+      %th.sortable.filename= "Filename"
+      %th.sortable.date=  "Date added"
+      %th.sortable.email=  "Added by"
+      %th.sortable.type= "Type"
+      %th.sortable.experiment=  "Experiment"
+      %th.delete_cart
+        = link_to 'Clear',  destroy_all_line_items_path, :class =>  "bluebutton"
+    - @line_items.each do |line_item|
+      %tr{:class => cycle('field_bg', 'field_nobg')}
+        - data_file = DataFile.find(line_item.data_file_id)
+        %td.filename= link_to data_file.filename, data_file_path(data_file)
+        %td.date= data_file.created_at.to_s(:with_time)
+        %td.email= data_file.created_by.email if data_file.created_by
+        %td.type= data_file.status_as_string
+        %td.experiment= data_file.experiment_name
+        %td.delete_cart= link_to 'Delete', line_item, :method => :delete, :class =>  "bluebutton"
 
-%br
 
-= link_to 'New Line item', new_line_item_path
+
+
