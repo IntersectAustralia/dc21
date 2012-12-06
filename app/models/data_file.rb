@@ -154,10 +154,6 @@ class DataFile < ActiveRecord::Base
     return false
   end
 
-  def status_as_string
-    self.file_processing_status.present? ? self.file_processing_status.upcase : "UNDEFINED"
-  end
-
   def experiment_name
     return "Other" if experiment_id == -1
     return "" if experiment_id.nil?

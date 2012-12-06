@@ -23,23 +23,12 @@ end
 #
 #  file_path = File.join(directory_path, metadata_filename)
 #  File.open(file_path, 'w') do |file|
-#    write_line file, "Basic information"
-#    write_line file, ""
-#    write_line file, "Name: #{datafile.filename}"
-#    write_line file, "Type: #{datafile.status_as_string}"
-#    write_line file, "File format: #{datafile.format_for_display}"
-#    write_line file, "Description: #{datafile.file_processing_description}"
-#    write_line file, "Tags: #{datafile.tags.map { |tag| tag.name }.join(", ")}"
-#    write_line file, "Experiment: #{datafile.experiment_name}"
-#    write_line file, "Facility: #{datafile.facility_name}"
-#    write_line file, "Date added: #{datafile.created_at.to_s(:with_time)}"
-#    write_line file, "Added by: #{datafile.created_by.full_name}"
+
 #    unless datafile.known_format?
 #      write_line file, "Start time: #{datafile.start_time.utc.to_s(:with_seconds)}" if datafile.start_time
 #      write_line file, "End time: #{datafile.end_time.utc.to_s(:with_seconds)}" if datafile.end_time
 #    end
-#    write_line file, "Persistent URL: #{data_file_url(datafile)}"
-#    write_line file, ""
+
 #    if datafile.known_format?
 #      write_line file, "Information From The File"
 #      write_line file, ""

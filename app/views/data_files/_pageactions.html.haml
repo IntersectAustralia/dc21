@@ -4,7 +4,7 @@
   - fac = Facility.find_by_code(station.value)
   - station_text = fac.nil? ? station.value : station.value + "\n (" + fac.name + ")"
 - delete_warning_beginning = "Do you really want to remove the file #{@data_file.filename}"
-- delete_warning_contents = @data_file.file_processing_status.present? ? "\n* containing #{@data_file.status_as_string} data" : " whose content is unspecified"
+- delete_warning_contents = @data_file.file_processing_status.present? ? "\n* containing #{@data_file.file_processing_status} data" : " whose content is unspecified"
 - delete_warning_station = station.present? ? "\n* sourced from #{station_text}" : ""
 - delete_warning_time = (@data_file.start_time.present? && @data_file.end_time.present?) ? "\n* from #{@data_file.start_time.utc.to_s(:with_seconds)} \n* to #{@data_file.end_time.utc.to_s(:with_seconds)}" : ""
 - delete_warning_tail = "? \nThis action cannot be undone."

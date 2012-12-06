@@ -14,6 +14,38 @@
     - data_files.each do |data_file|
       %section
         %h2= data_file.filename
+        
+        %table
+          %tr
+            %td Name
+            %td= data_file.filename
+          %tr
+            %td Type
+            %td= data_file.file_processing_status
+          %tr
+            %td File format
+            %td= data_file.format_for_display
+          %tr
+            %td Description
+            %td= data_file.file_processing_description
+          %tr
+            %td Tags
+            %td= data_file.tags.map { |tag| tag.name }.join(", ")
+          %tr
+            %td Experiment
+            %td= data_file.experiment_name
+          %tr
+            %td Facility
+            %td= data_file.facility_name
+          %tr
+            %td Date added
+            %td= data_file.created_at.to_s(:with_time)
+          %tr
+            %td Added by
+            %td= data_file.created_by.full_name
+          %tr
+            %td Persistent URL
+            %td= metadata_url_helper.data_file_url(data_file)
 
     %h1 Experiments
     - experiments.each do |experiment|
