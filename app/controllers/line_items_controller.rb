@@ -1,6 +1,9 @@
 class LineItemsController < ApplicationController
+
   # GET /line_items
   # GET /line_items.json
+
+
   def index
     @line_items = LineItem.all
 
@@ -65,15 +68,17 @@ class LineItemsController < ApplicationController
   end
 
   def add_all
-    params[:data_files_ids[]].each do |file_id|
-      data_file = DataFile.find(file_id)
-      unless current_user.data_file_in_cart?(data_file)
+    params[:data_file_ids].each do |data_file_id|
+      @data_file = DataFile.find(data_file_id)
+      unless current_user.data_file_in_cart?(@data_file)
         @line_item = current_user.line_items.build
-        @line_item.data_file= data_file
+        @line_item.data_file= @data_file
         @line_item.save
       end
     end
     respond_to do |format|
+      format.html { redirect_to data_file_path(@data_file),
+          notice: 'All files were added to your cart.' }
       format.js { }
     end
   end
@@ -103,6 +108,18 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to line_items_url }
       format.json { head :ok }
+    end
+  end
+
+  def destroy_all
+    LineItem.where('user_id' == current_user.id).each do |line_item|
+      unless line_item.nil?
+        line_item.destroy
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to data_files_path, notice: 'Your cart was cleared.' }
+      format.js {  }
     end
   end
 

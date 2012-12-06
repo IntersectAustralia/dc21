@@ -43,10 +43,15 @@ $(function () {
   }
 
 
-  // Cart contents
+  // CART CONTENTS
   $("[id^=add_to_cart]").click(function (event) {
-    var cartcount = $("#drop3").text().trim().split(" ").get(0)
-    $("#drop3").text(cartcount + " items in your cart");
+    var cartcount = parseInt($("#drop3").text().trim().split(" ")[0]) + 1
+      if (cartcount == 1) {
+        $("#drop3").text(cartcount + " file in cart");
+      }
+      else {
+        $("#drop3").text(cartcount + " files in cart");
+      }
   });
 
   // ACCOUNT MENU

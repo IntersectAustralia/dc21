@@ -12,17 +12,6 @@
     = render 'layouts/banner'
     #content
       #menu
-        = tabs_tag(:builder => MenuTabBuilder) do |tab|
-          = tab.account current_user.email, :id => "accountmenu"
-          #accountmenu_container
-            %ul
-              %li.settings= link_to "Settings", users_profile_path
-              %li.signout= link_to "← Sign out", destroy_user_session_path
-            -# if current_user.line_items.count == 1
-              = "1 file in cart"
-            -# else
-              = "#{current_user.line_items.count} files in cart"
-
       - if content_for? :pageactions
         =yield :pageactions
       - else
@@ -41,11 +30,15 @@
           %ul.nav.pull-right
             %li#fat-menu.dropdown
               %a#drop3.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :role => "button"}
-                #{current_user.line_items.count} files in cart
+                -if current_user.line_items.count == 1
+                  1 file in cart
+                -else
+                  #{current_user.line_items.count} files in cart
                 %b.caret
                   %ul.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}
                     %li.divider
                       =link_to "Download",  download_selected_data_files_path()
+                      =link_to "Clear",  destroy_all_line_items_path()
 
         = yield
   = render 'layouts/footer'

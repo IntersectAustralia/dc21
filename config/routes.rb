@@ -1,6 +1,11 @@
 Dc21app::Application.routes.draw do
 
-  resources :line_items
+  resources :line_items  do
+    collection do
+      get :add_all
+      get :destroy_all
+    end
+  end
 
   resources :carts
 
@@ -38,6 +43,8 @@ Dc21app::Application.routes.draw do
     get :home
     get :about
   end
+
+
 
   resources :data_files do
     member do
