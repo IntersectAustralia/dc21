@@ -115,6 +115,7 @@
         -##%th.view View
         %th.sortable.filename= sortable "data_files.filename", "Filename"
         %th.sortable.date= sortable "data_files.created_at", "Date added"
+        %th.sortable.size= sortable "data_files.file_size", "Size"
         %th.sortable.email= sortable "users.email", "Added by"
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
@@ -127,6 +128,7 @@
 
           %td.filename= link_to  data_file.filename, data_file_path(data_file)
           %td.date= data_file.created_at.to_s(:with_time)
+          %td.size= number_to_human_size(data_file.file_size)
           %td.email= data_file.created_by.email if data_file.created_by
           %td.type= data_file.status_as_string
           %td.experiment= data_file.experiment_name
