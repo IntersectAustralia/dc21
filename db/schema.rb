@@ -13,6 +13,13 @@
 
 ActiveRecord::Schema.define(:version => 20121205005025) do
 
+  create_table "cart_items", :force => true do |t|
+    t.integer  "data_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+  end
+
   create_table "column_details", :force => true do |t|
     t.string   "name"
     t.string   "unit"
@@ -110,13 +117,6 @@ ActiveRecord::Schema.define(:version => 20121205005025) do
     t.boolean  "primary",     :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "line_items", :force => true do |t|
-    t.integer  "data_file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
   end
 
   create_table "metadata_items", :force => true do |t|

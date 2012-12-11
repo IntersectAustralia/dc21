@@ -12,9 +12,9 @@
       = link_to "Edit Metadata", edit_data_file_path, :class => "bluebutton"
     - if current_user.data_file_in_cart?(@data_file)
 
-      -#= link_to 'Remove from Cart', remove_line_items_path, :method => :delete,  :action => "destroy",  :class =>  "redbutton"
+      -#= link_to 'Remove from Cart', remove_cart_items_path, :method => :delete,  :action => "destroy",  :class =>  "redbutton"
     - else
-      = link_to 'Add to Cart', line_items_path(:data_file_ids => @data_file.id),  :class => "bluebutton"
+      = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "bluebutton"
 
 #file_details
   %hr/
@@ -55,4 +55,4 @@
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
       = link_to "Edit Metadata", edit_data_file_path, :class => "bluebutton"
     - unless current_user.data_file_in_cart?(@data_file)
-      = link_to 'Add to Cart', line_items_path(:data_file_ids => @data_file.id), :method => "post", :class => "bluebutton"
+      = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id), :method => "post", :class => "bluebutton"

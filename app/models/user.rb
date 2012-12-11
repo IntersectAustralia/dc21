@@ -3,8 +3,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
 
   belongs_to :role
-  has_many :line_items
-  has_many :data_files, :through => :line_items
+  has_many :cart_items
+  has_many :data_files, :through => :cart_items
 
   # Setup accessible attributes (status/approved flags should NEVER be accessible by mass assignment)
   attr_accessible :email, :password, :password_confirmation, :first_name, :last_name

@@ -1,4 +1,4 @@
-class LineItem < ActiveRecord::Base
+class CartItem < ActiveRecord::Base
   belongs_to :data_file
   belongs_to :user
   attr_accessible :user_id, :data_file_id

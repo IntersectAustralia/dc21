@@ -1,0 +1,49 @@
+- remove_all_warning = "Do you really want to remove #{@cart_items.size} files from your cart?"
+
+- content_for :breadcrumb  do
+  %h1 View / Edit Cart
+
+.form-actions
+  .actions-pre
+    = cancel_button "Back", :back
+  .actions
+    = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
+    = link_to "Package",  download_selected_data_files_path, :class => "bluebutton"
+
+  %hr/
+
+- if @cart_items.empty?
+  %h3 Your cart is empty.
+- else
+  %h3
+    = @cart_items.size == 1 ? "Showing 1 file" : "Showing #{@cart_items.size} files"
+  - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
+  %table
+    %tr
+      %th.sortable.filename= "Filename"
+      %th.sortable.date=  "Date added"
+      %th.sortable.size= "Size"
+      %th.sortable.email=  "Added by"
+      %th.sortable.type= "Type"
+      %th.sortable.experiment=  "Experiment"
+      %th.delete_cart
+        = link_to 'Remove All',  destroy_all_cart_items_path, :class =>  "redbutton", :confirm => remove_all_warning, :id => "remove_all_from_cart"
+    - @cart_items.each do |cart_item|
+      %tr{:class => cycle('field_bg', 'field_nobg')}
+        - data_file = DataFile.find(cart_item.data_file_id)
+        %td.filename= link_to data_file.filename, data_file_path(data_file)
+        %td.date= data_file.created_at.to_s(:with_time)
+        %td.size= number_to_human_size(data_file.file_size)
+        %td.email= data_file.created_by.email if data_file.created_by
+        %td.type= data_file.status_as_string
+        %td.experiment= data_file.experiment_name
+        %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "redbutton", :id => "remove_from_cart"
+
+
+.form-actions
+  .actions-pre
+    = cancel_button "Back", :back
+  .actions
+    = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
+    = link_to "Package",  download_selected_data_files_path, :class => "bluebutton"
+

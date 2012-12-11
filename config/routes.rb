@@ -1,6 +1,6 @@
 Dc21app::Application.routes.draw do
 
-  resources :line_items  do
+  resources :cart_items  do
     collection do
       get :add_all
       get :destroy_all

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   describe "Associations" do
     it { should belong_to(:role) }
-    it { should have_many(:line_items) }
+    it { should have_many(:cart_items) }
   end
 
   describe "Named Scopes" do
@@ -254,7 +254,7 @@ describe User do
       user = Factory(:user)
       data_file_1 = Factory(:data_file)
       data_file_2 = Factory(:data_file)
-      user.line_items.create!(:data_file_id => data_file_1.id)
+      user.cart_items.create!(:data_file_id => data_file_1.id)
       user.reload
 
       user.data_file_in_cart?(data_file_1).should be_true

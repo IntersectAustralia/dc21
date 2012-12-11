@@ -1,6 +1,6 @@
 class CreateLineItems < ActiveRecord::Migration
   def change
-    create_table :line_items do |t|
+    create_table :cart_items do |t|
       t.integer :data_file_id
       t.integer :cart_id
 
