@@ -31,6 +31,7 @@
   = render_field "Experiment", @data_file.experiment_name
   = render_field "Facility", @data_file.facility_name
   = render_field "Date added", @data_file.created_at.to_s(:with_time)
+  = render_field "Size", number_to_human_size(@data_file.file_size)
   = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
 
   - if @data_file.known_format?
