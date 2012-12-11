@@ -88,6 +88,14 @@ class DataFilesController < ApplicationController
     files.each do |file|
       @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
     end
+    
+    # RackMultipart tempfile hack
+    params[:files].each do |file|
+      tempfile = file.tempfile.path
+      if File::exists?(tempfile)
+        FileUtils.remove_entry_secure tempfile
+      end
+    end
   end
 
   def api_create
