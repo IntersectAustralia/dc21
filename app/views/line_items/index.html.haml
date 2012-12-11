@@ -14,7 +14,7 @@
       %th.sortable.type= "Type"
       %th.sortable.experiment=  "Experiment"
       %th.delete_cart
-        = link_to 'Clear',  destroy_all_line_items_path, :class =>  "bluebutton"
+        = link_to 'Remove All',  destroy_all_line_items_path, :class =>  "bluebutton"
     - @line_items.each do |line_item|
       %tr{:class => cycle('field_bg', 'field_nobg')}
         - data_file = DataFile.find(line_item.data_file_id)
@@ -24,7 +24,7 @@
         %td.email= data_file.created_by.email if data_file.created_by
         %td.type= data_file.status_as_string
         %td.experiment= data_file.experiment_name
-        %td.delete_cart= link_to 'Delete', line_item, :method => :delete, :class =>  "bluebutton"
+        %td.delete_cart= link_to 'Remove', line_item, :method => :delete, :class =>  "bluebutton"
 
 
 
