@@ -152,10 +152,15 @@ class DataFilesController < ApplicationController
 
   def download_selected
     ids=current_user.data_files.collect(&:id)
-    if ids.nil?
-      redirect_to(data_files_path, :alert => "No files were selected for download")
-    else
+    unless ids.empty?
       send_zip(ids)
+    end
+  end
+
+  def package_selected
+    ids=current_user.data_files.collect(&:id)
+    unless ids.empty?
+      send_bagit(ids)
     end
   end
 
@@ -172,7 +177,6 @@ class DataFilesController < ApplicationController
         redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
       end
     else
-      redirect_to(show_data_file_path(file), :alert => "Could not delete this file (Do you have permission to delete it?)")
       redirect_to(show_data_file_path(file), :alert => "Could not delete this file (Do you have permission to delete it?)")
     end
   end
@@ -300,6 +304,12 @@ class DataFilesController < ApplicationController
 
   def send_zip(ids)
     CustomDownloadBuilder.zip_for_files_with_ids(ids) do |zip_file|
+      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+    end
+  end
+
+  def send_bagit(ids)
+    CustomDownloadBuilder.bagit_for_files_with_ids(ids) do |zip_file|
       send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
     end
   end

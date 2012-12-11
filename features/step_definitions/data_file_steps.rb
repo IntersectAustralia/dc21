@@ -80,6 +80,7 @@ When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |file_n
 end
 
 Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|
+  puts page.response_headers
   page.response_headers['Content-Type'].should == type
   page.response_headers['Content-Disposition'].should include("filename=\"#{name}\"")
   page.response_headers['Content-Disposition'].should include("attachment")
@@ -436,16 +437,26 @@ Then /^I should see the add to cart link for ([^"]*)$/ do |name|
   page.should have_link(link_id)
 end
 
-When /^I add ([^"]*) to the cart$/ do |name|
-  data_file = DataFile.find_by_filename(name)
-  link_id = "add_to_cart_#{data_file.id}"
-  link = find_link(link_id)
-  link.click
-  wait_until do
-    page.evaluate_script('$.active') == 0
-  end
+# When /^I add ([^"]*) to the cart$/ do |name|
+#   data_file = DataFile.find_by_filename(name)
+#   link_id = "add_to_cart_#{data_file.id}"
+#   link = find_link(link_id)
+#   link.click
+#   wait_until do
+#     page.evaluate_script('$.active') == 0
+#   end
+# end
 
+# rack-test compatible version of 'add to cart'
+# doesn't require javascript (selenium)
+When /^I add "([^"]*)" to the cart$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  click_link("add_to_cart_#{data_file.id}")
+  # link_id = "add_to_cart_#{data_file.id}"
+  # link = find_link(link_id)
+  # link.click
 end
+
 
 And /^I should not see the add to cart link for ([^"]*)$/ do |name|
   data_file = DataFile.find_by_filename(name)

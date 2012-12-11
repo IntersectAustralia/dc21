@@ -17,7 +17,7 @@ group :assets do
 end
 
 gem 'therubyracer'
-
+gem 'bagit'
 gem 'jquery-rails'
 gem "haml"
 gem "haml-rails"

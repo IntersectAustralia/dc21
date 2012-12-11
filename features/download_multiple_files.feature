@@ -12,34 +12,20 @@ Feature: Download multiple files
       | sample3.txt | 30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/sample3.txt |
     And I am on the list data files page
 
+  
+  Scenario: Download a selection of files as Zip
+    I should see button "Add to Cart"
+    When I add "sample1.txt" to the cart
+    And I am on the list data files page
+    Then I add "sample2.txt" to the cart
+    And I click on "Download"
+    Then I should receive a zip file matching "samples/zip"
+  
 
-  @javascript
-  Scenario: Download button doesn't appear until files are selected
-    Then I should not see button "Download Selected Files"
-    When I check file "sample1.txt"
-    Then I should see button "Download Selected Files"
-    When I uncheck file "sample1.txt"
-    Then I should not see button "Download Selected Files"
-
-  Scenario: Download a selection of files
-    When I check file "sample1.txt"
-    And I check file "sample2.txt"
-    And I press "Download Selected Files"
-    Then I should get a file with name "download_selected.zip" and content type "application/zip"
-
-  @javascript
-  Scenario: 'All' link checks all files
-    When I click on "All"
-    Then file "sample1.txt" should be checked
-    Then file "sample2.txt" should be checked
-    Then file "sample3.txt" should be checked
-
-  @javascript
-  Scenario: 'None' link unchecks all files
-    When I check file "sample1.txt"
-    When I check file "sample3.txt"
-    When I click on "None"
-    Then file "sample1.txt" should be unchecked
-    Then file "sample2.txt" should be unchecked
-    Then file "sample3.txt" should be unchecked
-
+  Scenario: Package a selection of files as a BagIt Zip
+    I should see button "Add to Cart"
+    When I add "sample1.txt" to the cart
+    And I am on the list data files page
+    Then I add "sample2.txt" to the cart
+    And I click on "Package"
+    Then I should receive a zip file matching "samples/bagit"
