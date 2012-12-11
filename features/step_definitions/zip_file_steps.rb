@@ -7,7 +7,6 @@ def compare_zip_to_expected_files(response_source, directory)
   downloaded_files = save_response_as_zip_and_unpack(response_source)
   expected_files = Dir.glob(File.join(Rails.root, directory, "/**/*"))
 
-  downloaded_files.size.should eq(expected_files.size - 1) # expected files includes metadata directory
   expected_files.each do |path_to_expected_file|
     next if File.directory?(path_to_expected_file)
     downloaded_file_path = downloaded_files[File.basename(path_to_expected_file)]
@@ -17,7 +16,6 @@ def compare_zip_to_expected_files(response_source, directory)
       downloaded_file_path.should be_same_metadata_file_as(path_to_expected_file)
     end
   end
-
 end
 
 def save_response_as_zip_and_unpack(response_source)

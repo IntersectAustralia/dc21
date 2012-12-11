@@ -1,0 +1,3 @@
+3e7dcaed24a1b3cc4209a7f3f8bb0b29 data/sample1.txt
+7f4610c800af98a6c6e3d4b2a295f5b4 data/README.html
+361b5c60bc6eadb415d8079edaeecc8a data/sample2.txt
