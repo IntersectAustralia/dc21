@@ -19,6 +19,24 @@
           = link_to "Upload", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
       - if content_for?(:breadcrumb)
         = yield :breadcrumb
+
+      %div{:class => 'btn-group'}
+        %a#drop3{:class => "btn dropdown-toggle", "data-toggle" => 'dropdown', :href => '#', :role => "button"}
+          -if current_user.line_items.count == 1
+            1 file in cart
+          -else
+            #{current_user.line_items.count} files in cart
+          %span.caret
+        %ul.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}
+          %li.divider
+            =link_to "Download",  download_selected_data_files_path, :class => "whitebutton"
+          %li.divider
+            =link_to "Package",  download_selected_data_files_path, :class => "whitebutton"
+          %li.divider
+            =link_to "Clear cart",  destroy_all_line_items_path, :class => "whitebutton"
+          %li.divider
+            =link_to "Edit cart",  line_items_path, :class => "whitebutton"
+
       #content_container
         .contentnavigation
           = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
@@ -27,7 +45,13 @@
             = tab.facilities 'Facilities', facilities_path, :id => "facilities"
             = yield :actions
 
-          %ul.nav.pull-right
+
+
+
+
+
+
+          -#l.nav.pull-right
             %li#fat-menu.dropdown
               %a#drop3.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :role => "button"}
                 -if current_user.line_items.count == 1
