@@ -54,7 +54,16 @@ $(function () {
       else {
         $("#drop3").text(cartcount + " Files in Cart");
       }
+
   });
+
+  //diable cart buttons unless there is something in the cart
+    $('a[id^=cart_]').click(function (event) {
+      var cartcount = parseInt($("#drop3").text().trim().split(" ")[0])
+      if(cartcount == 0) {
+        event.preventDefault();
+      } 
+    });
 
   // ACCOUNT MENU
   $('#accountmenu_container').hide();
