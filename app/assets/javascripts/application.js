@@ -45,6 +45,8 @@ $(function () {
 
   // CART CONTENTS
   $("[id^=add_to_cart]").click(function (event) {
+    $(this).off('click');
+    $(this).attr('disabled', 'disabled');
     var cartcount = parseInt($("#drop3").text().trim().split(" ")[0]) + 1
       if (cartcount == 1) {
         $("#drop3").text(cartcount + " File in Cart");
