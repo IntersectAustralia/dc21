@@ -45,6 +45,8 @@ $(function () {
 
   // CART CONTENTS
   $("[id^=add_to_cart]").click(function (event) {
+    $(this).off('click');
+    $(this).attr('disabled', 'disabled');
     var cartcount = parseInt($("#drop3").text().trim().split(" ")[0]) + 1
       if (cartcount == 1) {
         $("#drop3").text(cartcount + " File in Cart");
@@ -53,6 +55,14 @@ $(function () {
         $("#drop3").text(cartcount + " Files in Cart");
       }
   });
+
+  //diable cart buttons unless there is something in the cart
+    $('a[id^=cart_]').click(function (event) {
+      var cartcount = parseInt($("#drop3").text().trim().split(" ")[0])
+      if(cartcount == 0) {
+        event.preventDefault();
+      } 
+    });
 
   // ACCOUNT MENU
   $('#accountmenu_container').hide();

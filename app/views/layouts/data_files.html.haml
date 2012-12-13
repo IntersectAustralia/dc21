@@ -32,13 +32,14 @@
           %span.caret
         %ul.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}
           %li.divider
-            =link_to "Download",  download_selected_data_files_path, :class => "whitebutton"
+            =link_to "Download",  download_selected_data_files_path, :id => "cart_download", :class => "whitebutton"
           %li.divider
-            =link_to "Package",  package_selected_data_files_path, :class => "whitebutton"
+            =link_to "Package",  package_selected_data_files_path, :id => "cart_package", :class => "whitebutton"
           %li.divider
-            =link_to "Clear cart",  destroy_all_cart_items_path, :class => "whitebutton", :confirm => remove_all_warning
+            =link_to "Clear cart",  destroy_all_cart_items_path, :class => "whitebutton", :id => "cart_clear", :confirm => remove_all_warning
           %li.divider
-            =link_to "Edit cart",  cart_items_path, :class => "whitebutton"
+            =link_to "Edit cart",  cart_items_path, :id => "cart_edit", :class => "whitebutton"
+
 
       #content_container
         .contentnavigation
