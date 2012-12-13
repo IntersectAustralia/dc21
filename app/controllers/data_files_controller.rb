@@ -162,6 +162,8 @@ class DataFilesController < ApplicationController
     ids=current_user.data_files.collect(&:id)
     unless ids.empty?
       send_zip(ids)
+    else
+      redirect_to(:back)
     end
   end
 
@@ -169,6 +171,8 @@ class DataFilesController < ApplicationController
     ids=current_user.data_files.collect(&:id)
     unless ids.empty?
       send_bagit(ids)
+    else
+      redirect_to(:back)
     end
   end
 

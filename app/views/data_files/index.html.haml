@@ -3,7 +3,6 @@
 
 - add_all_warning = "Do you really want to add #{@data_files.size} files to your cart?"
 
-
 .datacontroll
   - if @data_files.empty? || !@search.showing_all?
     = link_to "Clear Search", data_files_path, class: "btn pull-left"

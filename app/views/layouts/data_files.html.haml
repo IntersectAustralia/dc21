@@ -36,7 +36,7 @@
           %li.divider
             =link_to "Package",  package_selected_data_files_path, :class => "whitebutton"
           %li.divider
-            =link_to "Clear cart",  destroy_all_cart_items_path, :class => "whitebutton"
+            =link_to "Clear cart",  destroy_all_cart_items_path, :class => "whitebutton", :confirm => remove_all_warning
           %li.divider
             =link_to "Edit cart",  cart_items_path, :class => "whitebutton"
 
