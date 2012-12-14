@@ -43,6 +43,12 @@ $(function () {
   }
 
 
+  // CART MENU
+  $('#drop3').click(function (event) {
+    var accountmenu = $('#drop3').width() + 24;
+    $('#cart-actions').css('width', accountmenu);
+  });
+
   // CART CONTENTS
   $("[id^=add_to_cart]").click(function (event) {
     $(this).off('click');
