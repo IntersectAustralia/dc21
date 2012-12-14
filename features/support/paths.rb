@@ -85,6 +85,10 @@ module NavigationHelpers
       when /the publish page/
         new_from_search_published_collections_path
 
+      # Cart paths
+      when /the edit cart page/
+        cart_items_path
+
       else
         begin
           page_name =~ /^the (.*) page$/

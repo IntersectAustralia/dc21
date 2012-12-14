@@ -14,7 +14,7 @@
 
       -#= link_to 'Remove from Cart', remove_cart_items_path, :method => :delete,  :action => "destroy",  :class =>  "redbutton"
     - else
-      = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "bluebutton"
+      = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "bluebutton", :method => "post"
 
 #file_details
   %hr/

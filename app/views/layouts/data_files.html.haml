@@ -23,9 +23,9 @@
       .btn-group.pull-right.dropdown
         %a#drop3.btn.dropdown-toggle{"data-toggle" => 'dropdown', :href => '#', :role => "button"}
           -if @cart_items.size == 1
-            1 file in cart
+            1 File in Cart
           -else
-            #{@cart_items.size} files in cart
+            #{@cart_items.size} Files in Cart
           %span.caret
         %ul#cart-actions.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}
           %li

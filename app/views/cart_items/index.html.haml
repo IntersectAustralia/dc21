@@ -41,7 +41,7 @@
         %td.email= data_file.created_by.email if data_file.created_by
         %td.type= data_file.status_as_string
         %td.experiment= data_file.experiment_name
-        %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "redbutton", :id => "remove_from_cart"
+        %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "redbutton", :id => "remove_from_cart_#{cart_item.id}"
 
 
 .form-actions
