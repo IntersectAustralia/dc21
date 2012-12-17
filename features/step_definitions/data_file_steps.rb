@@ -80,7 +80,6 @@ When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |file_n
 end
 
 Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|
-  puts page.response_headers
   page.response_headers['Content-Type'].should == type
   page.response_headers['Content-Disposition'].should include("filename=\"#{name}\"")
   page.response_headers['Content-Disposition'].should include("attachment")

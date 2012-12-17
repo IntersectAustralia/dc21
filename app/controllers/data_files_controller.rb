@@ -147,7 +147,6 @@ class DataFilesController < ApplicationController
       file_params = {:filename => @data_file.filename}
       file_params[:type] = content_type if content_type
       send_file @data_file.path, file_params
-
   end
 
   def download_selected
