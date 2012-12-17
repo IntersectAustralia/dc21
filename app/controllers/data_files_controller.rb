@@ -94,10 +94,12 @@ class DataFilesController < ApplicationController
     ensure      
       # RackMultipart tempfile hack
       # removes RackMultipart from /tmp
-      params[:files].each do |file|
-        tempfile = file.tempfile.path
-        if File::exists?(tempfile)
-          FileUtils.remove_entry_secure tempfile
+      if params[:files]
+        params[:files].each do |file|
+          tempfile = file.tempfile.path
+          if File::exists?(tempfile)
+            FileUtils.remove_entry_secure tempfile
+          end
         end
       end
     end
