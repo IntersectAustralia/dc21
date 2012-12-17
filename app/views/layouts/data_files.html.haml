@@ -21,7 +21,7 @@
         .pageactions
           = link_to "Upload", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
       .btn-group.pull-right.dropdown
-        %a#drop3.btn.dropdown-toggle{"data-toggle" => 'dropdown', :href => '#', :role => "button"}
+        %a#drop3.btn.dropdown-toggle{"data-toggle" => @cart_items.size > 0 ? 'dropdown' : 'dropdown disabled', :href => '#', :role => "button"}
           -if @cart_items.size == 1
             1 File in Cart
           -else
@@ -33,7 +33,7 @@
           %li
             =link_to "Package",  package_selected_data_files_path, :id => "cart_package"
           %li
-            =link_to "Clear cart",  destroy_all_cart_items_path, :id => "cart_clear", :confirm => remove_all_warning
+            =link_to "Clear cart",  destroy_all_cart_items_path, :id => "cart_clear"
           %li
             =link_to "Edit cart",  cart_items_path, :id => "cart_edit"
 
