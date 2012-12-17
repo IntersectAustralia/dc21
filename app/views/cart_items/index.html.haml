@@ -24,7 +24,10 @@
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
   %table
     %tr
-      %th.sortable.filename= "Filename"
+
+
+
+      %th.sortable.filename=  "Filename"
       %th.sortable.date=  "Date added"
       %th.sortable.size= "Size"
       %th.sortable.email=  "Added by"

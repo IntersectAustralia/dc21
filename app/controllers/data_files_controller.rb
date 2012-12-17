@@ -255,6 +255,14 @@ class DataFilesController < ApplicationController
     else
       @data_files = @data_files.order(col + ' ' + sort_direction)
     end
+    @unadded_items = false
+    @data_files.each do |data_file|
+      unless current_user.data_file_in_cart?(data_file)
+        @unadded_items = true
+      end
+    end
+
+
 
     if @search.error
       flash.now[:alert] = @search.error

@@ -159,7 +159,11 @@ class User < ActiveRecord::Base
     data_files.include?(data_file)
   end
 
-  private
+
+
+    private
+
+
 
   def initialize_status
     self.status = "U" unless self.status
