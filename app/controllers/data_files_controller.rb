@@ -78,28 +78,15 @@ class DataFilesController < ApplicationController
     type = params[:file_processing_status]
     tags = params[:tags]
 
-    begin
-      unless validate_inputs(files, experiment_id, type, description, tags)
-        render :new
-        return
-      end
+    unless validate_inputs(files, experiment_id, type, description, tags)
+      render :new
+      return
+    end
 
-      @uploaded_files = []
-
-      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-      files.each do |file|
-        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
-      end
-
-    ensure      
-      # RackMultipart tempfile hack
-      # removes RackMultipart from /tmp
-      params[:files].each do |file|
-        tempfile = file.tempfile.path
-        if File::exists?(tempfile)
-          FileUtils.remove_entry_secure tempfile
-        end
-      end
+    @uploaded_files = []
+    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+    files.each do |file|
+      @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
     end
   end
 
@@ -160,7 +147,6 @@ class DataFilesController < ApplicationController
       file_params = {:filename => @data_file.filename}
       file_params[:type] = content_type if content_type
       send_file @data_file.path, file_params
-
   end
 
   def download_selected

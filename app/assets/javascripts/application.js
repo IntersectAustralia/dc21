@@ -51,7 +51,6 @@ $(function () {
 
   // CART CONTENTS
   $("[id^=add_cart_item]").click(function (event) {
-
      $(this).addClass("disabled");
     var cartcount = parseInt($("#drop3").text().trim().split(" ")[0]) + 1
       if (cartcount == 1) {
@@ -60,9 +59,11 @@ $(function () {
       else {
         $("#drop3").text(cartcount + " Files in Cart");
       }
+    $('a[id^=cart_]').each(function(){
+      $(this).removeAttr('class');
+    });
+    $('#drop3').attr('data-toggle', 'dropdown');
   });
-
-
 
 
   //disable cart buttons unless there is something in the cart
@@ -70,8 +71,19 @@ $(function () {
       var cartcount = parseInt($("#drop3").text().trim().split(" ")[0])
       if(cartcount == 0) {
         event.preventDefault();
-      } 
-    });
+      }
+  });
+
+  $('#add_all_to_cart').click(function (event) {
+    var items = $('a[id^=add_to_cart]').length;
+    if (items == 0) {
+      event.preventDefault();
+    } else {
+      if (!confirm('Add ' + items + ' file(s) to cart?')) {
+        event.preventDefault();
+      }
+    }
+  });
 
   // ACCOUNT MENU
   $('#accountmenu_container').hide();

@@ -9,6 +9,6 @@ Feature: Download a file
 
   Scenario: Download
     When I am on the data file details page for sample1.txt
-    When I follow "Download"
+    When I click on "Download Data"
     Then I should get a file with name "sample1.txt" and content type "text/plain"
     And the file should contain "Plain text file sample1.txt"
