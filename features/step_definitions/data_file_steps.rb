@@ -430,6 +430,7 @@ Then /^file "([^"]*)" should be unchecked$/ do |name|
   field_checked.should be_false
 end
 
+
 Then /^I should see the add to cart link for ([^"]*)$/ do |name|
   data_file = DataFile.find_by_filename(name)
   link_id = "add_cart_item_#{data_file.id}"
@@ -475,6 +476,7 @@ When /^I wait for the page$/ do
     page.evaluate_script('$.active') == 0
   end
 end
+<<<<<<< HEAD
 
 When /^the add to cart link for ([^"]*) should be disabled$/ do |name|
   data_file = DataFile.find_by_filename(name)
@@ -487,3 +489,5 @@ When /^the add to cart link for ([^"]*) should not be disabled$/ do |name|
   link_id = "add_cart_item_#{data_file.id}"
   page.should have_link(link_id)
 end
+=======
+>>>>>>> cd0db364cbed52f762aecad59b8ca93c37cd03f9

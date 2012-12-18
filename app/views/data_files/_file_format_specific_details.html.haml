@@ -11,12 +11,9 @@
     %th Column Mapping
     %th Unit
     %th Measurement Type
-  - @data_file.column_details.each do |column_details|
+  - @data_file.column_details.order(:position).each do |column_details|
     %tr
       %td= column_details.name
-      %td
-        - column_mappings.each do |map|
-          - unless map.check_col_mapping(column_details.name).nil?
-            = map.name
+      %td= column_details.get_mapped_name
       %td= column_details.unit
       %td= column_details.data_type

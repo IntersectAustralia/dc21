@@ -69,12 +69,12 @@
             .facility_group
               = link_to "+", "#", :id => "expand_#{facility.name}", :class => "expand_facility"
               = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
-              = check_box_tag "search[facilities][]", facility.name, @selected_facilities.include?(facility.name), :id => "search_facility_#{index}", :class => :facility_parent
+              = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
               .facility_children
                 - experiments.each_with_index do |experiment, e_index|
                   - if experiment.facility_id == facility.id
                     = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
-                    = check_box_tag "search[experiments][]", experiment.name, @selected_experiments.include?(experiment.name), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
+                    = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#variable.expand Columns:
@@ -136,7 +136,7 @@
           %td.date= data_file.created_at.to_s(:with_time)
           %td.size= number_to_human_size(data_file.file_size)
           %td.email= data_file.created_by.email if data_file.created_by
-          %td.type= data_file.status_as_string
+          %td.type= data_file.file_processing_status
           %td.experiment= data_file.experiment_name
           %td.add_cart
             -if current_user.data_file_in_cart?(data_file)

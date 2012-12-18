@@ -21,13 +21,13 @@ describe ColumnDetail do
  
   describe "Connected Mappings" do
     it "should return matching column mapping if it exists" do
-      column = Factory(:column_detail, :name => "test")
-      mapping = Factory(:column_mapping, :code => "test")
-      column.find_by_code_uncased.should eq(mapping)
+      mapping = Factory(:column_mapping, :code => "test", :name => "My Mapping")
+      Factory(:column_detail, :name => "test").get_mapped_name.should eq("My Mapping")
+      Factory(:column_detail, :name => "Test").get_mapped_name.should eq("My Mapping")
     end
     it "should return nil if no mapping exists" do
       column = Factory(:column_detail, :name => "test")
-      column.find_by_code_uncased.should eq(nil)
+      column.get_mapped_name.should eq(nil)
     end
   end
 end

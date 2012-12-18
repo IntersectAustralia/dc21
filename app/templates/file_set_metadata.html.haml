@@ -14,6 +14,82 @@
     - data_files.each do |data_file|
       %section
         %h2= data_file.filename
+        
+        %table
+          %tr
+            %td Name
+            %td= data_file.filename
+          %tr
+            %td Type
+            %td= data_file.file_processing_status
+          %tr
+            %td File format
+            %td= data_file.format_for_display
+          %tr
+            %td Description
+            %td= data_file.file_processing_description
+          %tr
+            %td Tags
+            %td= data_file.tags.map { |tag| tag.name }.join(", ")
+          %tr
+            %td Experiment
+            %td= data_file.experiment_name
+          %tr
+            %td Facility
+            %td= data_file.facility_name
+          - unless data_file.known_format?
+            - if data_file.start_time
+              %tr
+                %td Start time
+                %td= data_file.start_time.utc.to_s(:with_seconds)
+            - if data_file.end_time
+              %tr
+                %td End time
+                %td= data_file.end_time.utc.to_s(:with_seconds)
+          %tr
+            %td Date added
+            %td= data_file.created_at.to_s(:with_time)
+          %tr
+            %td Added by
+            %td= data_file.created_by.full_name
+          %tr
+            %td Persistent URL
+            %td= metadata_url_helper.data_file_url(data_file)
+
+        - if data_file.known_format?
+          %h3 Information From The File
+          %table
+            %tr
+              %td Start time
+              %td= data_file.start_time.nil? ? "" : data_file.start_time.utc.to_s(:with_seconds)
+            %tr
+              %td End time
+              %td= data_file.end_time.nil? ? "" : data_file.end_time.utc.to_s(:with_seconds)
+            %tr
+              %td Sample interval
+              %td= data_file.interval.nil? ? "" : ActionController::Base.helpers.distance_of_time_in_words(data_file.interval)
+
+            - data_file.metadata_items.order(:key).each do |item|
+              %tr
+                %td= item.key.humanize
+                %td= item.value
+
+        - unless data_file.column_details.empty?
+          %h3 Columns
+          %table
+            %thead
+              %tr
+                %th Column
+                %th Column Mapping
+                %th Unit
+                %th Measurement Type
+            %tbody
+              - data_file.column_details.each do |column_details|
+                %tr
+                  %td= column_details.name
+                  %td= column_details.get_mapped_name
+                  %td= column_details.unit
+                  %td= column_details.data_type
 
     %h1 Experiments
     - experiments.each do |experiment|
