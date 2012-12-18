@@ -1,8 +1,7 @@
 - content_for :breadcrumb  do
   %h1 Home / Explore Data
-  %h3 = puts "disabled: #{!@unadded_items}"
 
-- add_all_warning = "Do you really want to add #{@data_files.size} files to your cart?"
+- add_all_warning = "Do you really want to add all files to your cart?"
 
 .datacontroll
   - if @data_files.empty? || !@search.showing_all?
@@ -126,7 +125,7 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          = button_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :class => @unadded_items? "bluebutton" : "greybutton" , :confirm => add_all_warning, :id => "add_all_to_cart", :disabled => false
+          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)),:method => :post, :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :confirm => add_all_warning, :id => "add_all_to_cart"
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
@@ -139,10 +138,9 @@
           %td.type= data_file.status_as_string
           %td.experiment= data_file.experiment_name
           %td.add_cart
-            - unless current_user.data_file_in_cart?(data_file)
-              = link_to 'Add to Cart', cart_items_path(:data_file_ids => data_file), :method => :post, :class => "bluebutton", :id => "add_to_cart_#{data_file.id}", :remote => true
-    #helper_text.select
-      Select one or more files to download
+            = link_to 'Add to Cart', cart_items_path(:data_file_ids => data_file), :method => :post, :class => current_user.data_file_in_cart?(data_file)? "bluebutton disabled" : "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true
+      #helper_text.select
+        Select one or more files to download
     -###download_actions.actions.hidden
       = submit_tag "Download Selected Files", :class => "bluebutton"
       -#= submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"

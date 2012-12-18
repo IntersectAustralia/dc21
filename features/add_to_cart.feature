@@ -20,13 +20,17 @@ Feature: View the list of data files
     And I should be on the data file details page for sample.txt
     And I should not see link "Add to Cart"
 
-  Scenario: Add to cart from the list of files
+  Scenario: Add to cart button should be grey and disabled after clicking
     Given I am on the list data files page
     Then I should see the add to cart link for datafile.dat
     And I should see the add to cart link for sample.txt
     When I add sample.txt to the cart
     And I should see the add to cart link for datafile.dat
-    And I should not see the add to cart link for sample.txt
+    And I should see the add to cart link for sample.txt
+    And the add to cart link for datafile.dat should be grey
+    And the add to cart link for datafile.dat should be disabled
+    And the add to cart link for datafile.dat should be blue
+    And the add to cart link for datafile.dat should not be disabled
 
   Scenario: When coming back to view details page later, add to cart doesn't show if already in cart
     Given I am on the data file details page for sample.txt

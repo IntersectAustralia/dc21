@@ -38,24 +38,27 @@ class CartItemsController < ApplicationController
   end
 
   def add_single
+    session[:return_to]= request.referer
     @data_file = DataFile.find(params[:data_file_ids])
     @cart_item = current_user.cart_items.build
     @cart_item.data_file= @data_file
 
     respond_to do |format|
       if @cart_item.save
-        format.html { redirect_to data_file_path(@data_file),
+        format.html { redirect_to session[:return_to],
           notice: 'File was successfully added to cart.' }
         format.js { }
       else
-        format.html { redirect_to data_file_path(@data_file),
+        format.html { redirect_to session[:return_to],
           notice: 'File could not be added to cart.' }
+        format.js { }
       end
     end
   end
 
   def add_all
     count = 0
+    session[:return_to]= request.referer
     params[:data_file_ids].each do |data_file_id|
       @data_file = DataFile.find(data_file_id)
       unless current_user.data_file_in_cart?(@data_file)
@@ -66,9 +69,8 @@ class CartItemsController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { redirect_to data_files_path(@data_file),
+      format.html {  redirect_to session[:return_to],
           notice: "#{count} files were added to your cart." }
-      format.js { }
     end
   end
 

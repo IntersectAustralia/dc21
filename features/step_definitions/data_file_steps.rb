@@ -431,6 +431,15 @@ Then /^file "([^"]*)" should be unchecked$/ do |name|
   field_checked.should be_false
 end
 
+
+The /^the add to cart link for "([^"]*)" should be grey$/ do |name|
+  data_file = DataFile.find_by_filename(name)
+  link_id = "add_to_cart_#{data_file.id}"
+  link = find_link(link_id)
+  page.should have_css("#{parent}.#{css_class} #{element_id}")
+  page.should have_css("bluebutton.disabled #{link_id}")
+end
+
 Then /^I should see the add to cart link for ([^"]*)$/ do |name|
   data_file = DataFile.find_by_filename(name)
   link_id = "add_to_cart_#{data_file.id}"

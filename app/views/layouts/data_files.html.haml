@@ -6,7 +6,7 @@
 /[if IE 7]
   %html.ie7
 - @cart_items = current_user.cart_items
-- remove_all_warning = "Do you really want to remove #{@cart_items.size} files from your cart?"
+- remove_all_warning = "Do you really want to remove all files from your cart?"
 
 %head
   = render 'layouts/head'
@@ -48,30 +48,6 @@
             = tab.explore 'Explore Data', data_files_path, :id => "data"
             = tab.facilities 'Facilities', facilities_path, :id => "facilities"
             = yield :actions
-
-
-
-
-
-
-
-          -#l.nav.pull-right
-            %li#fat-menu.dropdown
-              %a#drop3.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :role => "button"}
-                -if current_user.cart_items.count == 1
-                  1 file in cart
-                -else
-                  #{current_user.cart_items.count} files in cart
-                %b.caret
-                  %ul.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}
-                    %li.divider
-                      =link_to "Download",  download_selected_data_files_path
-                    %li.divider
-                      =link_to "Package",  package_selected_data_files_path
-                    %li.divider
-                      =link_to "Clear cart",  destroy_all_line_items_path
-                    %li.divider
-                      =link_to "Edit cart",  line_items_path
 
         = yield
   = render 'layouts/footer'
