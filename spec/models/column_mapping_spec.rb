@@ -107,25 +107,5 @@ describe ColumnMapping do
       output[0].should eq(["Humidity", ["humi", "humidity"]])
       output[1].should eq(["Stuff", ["asdf"]])
     end
-
   end
-
-  describe "Check column mapping" do
-    it "should check whether column mapping is correct" do
-      test = Factory(:column_mapping, :code => "abc", :name => "def")
-      test.check_col_mapping("abc").should eq(test)
-      test.check_col_mapping("def").should eq(nil)
-    end
-    it "should check whether column mapping exists in given array" do
-      test = ColumnMapping.new(:code => "abc", :name => "def")
-      test2 = ColumnMapping.new(:code => "bcd", :name => "efg")
-      test3 = ColumnMapping.new(:code => "abc", :name => "fgh")
-      test4 = ColumnMapping.new(:code => "cde", :name => "ghi")
-      mappings = [test2, test3]
-      test.check_code_exists?(mappings).should eq(true)
-      mappings = [test2, test4]
-      test.check_code_exists?(mappings).should eq(false)
-    end
-  end
-
 end

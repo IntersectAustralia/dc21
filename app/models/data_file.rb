@@ -14,7 +14,6 @@ class DataFile < ActiveRecord::Base
 
 
   belongs_to :created_by, :class_name => "User"
-  belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
   has_many :cart_items
@@ -75,18 +74,8 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
-  def self.with_experiment(experiment_names)
-    data_file_ids = DataFile.unscoped.select("data_files.id").joins(:experiment).where("experiments.name" => experiment_names).collect(&:id)
-    where(:id => data_file_ids)
-  end
-
-  def self.searchable_facilities
-    existing_values = MetadataItem.select("DISTINCT(value)").where(:key => MetadataKeys::STATION_NAME_KEY).collect(&:value)
-    code_to_name_hash = Hash[*Facility.find_all_by_code(existing_values).collect { |mi| [mi.code, mi.name] }.flatten]
-    existing_values.each do |value|
-      code_to_name_hash[value] = value unless code_to_name_hash[value]
-    end
-    code_to_name_hash.collect { |k, v| [k, v] }.sort { |a, b| a[1] <=> b[1] }
+  def self.with_experiment(experiment_ids)
+    where(:experiment_id => experiment_ids)
   end
 
   def self.searchable_column_names
@@ -147,11 +136,17 @@ class DataFile < ActiveRecord::Base
 
   def cols_unmapped?
     self.column_details.each do |col|
-      if col.find_by_code_uncased.nil?
+      if col.get_mapped_name.nil?
         return true
       end
     end
     return false
+  end
+
+  def experiment
+    # we don't use an association because of the special behaviour with using -1 for "Other"
+    return nil if experiment_id == -1 || experiment_id.nil?
+    Experiment.find(experiment_id)
   end
 
   def experiment_name

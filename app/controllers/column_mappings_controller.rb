@@ -68,7 +68,7 @@ class ColumnMappingsController < ApplicationController
     @column_mappings = []
     @data_file = DataFile.find_by_id(params[:id])
     @data_file.column_details.each do |col|
-      if col.find_by_code_uncased.nil?
+      if col.get_mapped_name.nil?
         @column_mappings << ColumnMapping.new(:code => col.name)
       end
     end
