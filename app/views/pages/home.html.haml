@@ -7,8 +7,6 @@
   - content_for :breadcrumb  do
     %h1 Home / Dashboard
 
-  - add_all_warning = "Do you really want to add all files to your cart?"
-
   .recentactivity
     %h2 Recent Activity
     %table#exploredata
@@ -19,7 +17,7 @@
         %th= "Added by"
         %th.add_cart
           - unless @data_files.length < 1
-            = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :confirm => add_all_warning, :id => "add_all_to_cart"
+            = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
 
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}

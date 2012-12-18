@@ -51,37 +51,43 @@ $(function () {
 
   // CART CONTENTS
   $("[id^=add_cart_item]").click(function (event) {
-     $(this).addClass("disabled");
-    var cartcount = parseInt($("#drop3").text().trim().split(" ")[0]) + 1
+    if (!$(this).hasClass("disabled")) {
+      $(this).addClass("disabled");
+      $(this).attr('id', "add_cart_item_disabled");
+      var cartcount = parseInt ($("#drop3").text().trim().split(" ")[0]) + 1
       if (cartcount == 1) {
         $("#drop3").text(cartcount + " File in Cart");
       }
       else {
         $("#drop3").text(cartcount + " Files in Cart");
       }
-    $('a[id^=cart_]').each(function(){
-      $(this).removeAttr('class');
-    });
-    $('#drop3').attr('data-toggle', 'dropdown');
-  });
-
-
-  //disable cart buttons unless there is something in the cart
-    $('a[id^=cart_]').click(function (event) {
-      var cartcount = parseInt($("#drop3").text().trim().split(" ")[0])
-      if(cartcount == 0) {
-        event.preventDefault();
+      //  disable 'add all' button if all others have been clicked
+      var all_items = $("a[id^=add_cart_item]").length
+      var used_items = $("a[id^=add_cart_item_disabled]").length
+      if (used_items == all_items) {
+        $('#add_all_to_cart').addClass("disabled");
       }
+      // enable cart menu dropdown, as it is no longer empty
+      $("#drop3").attr("data-toggle", "dropdown");
+      $("#notice").slideUp();
+    }
+    else {
+      return false;
+    }
   });
 
   $('#add_all_to_cart').click(function (event) {
-    var items = $('a[id^=add_to_cart]').length;
-    if (items == 0) {
-      event.preventDefault();
-    } else {
-      if (!confirm('Add ' + items + ' file(s) to cart?')) {
-        event.preventDefault();
+    if (!$(this).hasClass("disabled")) {
+      if (confirm('Do you really want to add all files to your cart?')) {
+        $(this).addClass("disabled");
       }
+      else {
+        return false;
+      }
+      $("#notice").slideUp();
+    }
+    else {
+      return false;
     }
   });
 
@@ -159,7 +165,7 @@ $(window).scroll(function (e) {
   if (!checkonScroll) {
     return;
   }
-  ;
+
   if ($('#notice, #alert').length > 0) {
     if ($(this).scrollTop() > scrollNotifications && $al.css('position') != 'fixed') {
       $('#content_wrapper').addClass('scrollnotification');

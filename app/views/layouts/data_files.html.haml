@@ -33,7 +33,7 @@
           %li
             =link_to "Package",  package_selected_data_files_path, :id => "cart_package"
           %li
-            =link_to "Clear cart",  destroy_all_cart_items_path, :id => "cart_clear"
+            =link_to "Clear cart",  destroy_all_cart_items_path, :id => "cart_clear", :confirm => remove_all_warning
           %li
             =link_to "Edit cart",  cart_items_path, :id => "cart_edit"
 

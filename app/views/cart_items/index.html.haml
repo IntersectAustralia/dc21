@@ -3,17 +3,12 @@
 - content_for :breadcrumb  do
   %h1 View / Edit Cart
 
-
-
-
-
-
 - if @cart_items.empty?
   %h3 Your cart is empty.
 - else
   .form-actions
     .actions-pre
-      = cancel_button "Back", :back
+      = cancel_button "Back", data_files_path
     .actions
       = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
       = link_to "Package",  download_selected_data_files_path, :class => "bluebutton"
@@ -24,9 +19,6 @@
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
   %table
     %tr
-
-
-
       %th.sortable.filename=  "Filename"
       %th.sortable.date=  "Date added"
       %th.sortable.size= "Size"

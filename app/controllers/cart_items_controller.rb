@@ -4,7 +4,7 @@ class CartItemsController < ApplicationController
   # GET /cart_items.json
   def index
     @cart_items = CartItem.all
-
+    session[:back]= request.referer
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @cart_items }
@@ -77,11 +77,12 @@ class CartItemsController < ApplicationController
   # DELETE /cart_items/1
   # DELETE /cart_items/1.json
   def destroy
+    session[:return_to]= request.referer
     @cart_item = CartItem.find(params[:id])
     @cart_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to cart_items_url }
+      format.html { redirect_to session[:return_to], notice: "File was successfully removed from cart." }
       format.json { head :ok }
     end
   end

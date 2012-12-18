@@ -26,17 +26,22 @@ Feature: View the list of data files
     And I should see the add to cart link for sample.txt
     When I add sample.txt to the cart
     And I should see the add to cart link for datafile.dat
-    And I should see the add to cart link for sample.txt
-    And the add to cart link for datafile.dat should be grey
-    And the add to cart link for datafile.dat should be disabled
-    And the add to cart link for datafile.dat should be blue
+    And the add to cart link for sample.txt should be disabled
     And the add to cart link for datafile.dat should not be disabled
 
-  Scenario: When coming back to view details page later, add to cart doesn't show if already in cart
+  Scenario: When coming back to view details page later, remove_from_cart show if already in cart
     Given I am on the data file details page for sample.txt
     And I click on "Add to Cart"
     When I am on the data file details page for sample.txt
     Then I should not see link "Add to Cart"
+    And I should see link "Remove from Cart"
+
+  Scenario: remove from cart from the view details page
+    Given I am on the data file details page for sample.txt
+    And I click on "Add to Cart"
+    When I am on the data file details page for sample.txt
+    And I click on "Remove from Cart"
+    And I should see "File was successfully removed from cart."
 
   Scenario: When coming back to list of files page later, add to cart doesn't show if already in cart
     Given I am on the list data files page
