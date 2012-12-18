@@ -431,7 +431,7 @@ Then /^file "([^"]*)" should be unchecked$/ do |name|
 end
 
 
-The /^the add to cart link for "([^"]*)" should be grey$/ do |name|
+Then /^the add to cart link for "([^"]*)" should be grey$/ do |name|
   data_file = DataFile.find_by_filename(name)
   link_id = "add_to_cart_#{data_file.id}"
   link = find_link(link_id)
