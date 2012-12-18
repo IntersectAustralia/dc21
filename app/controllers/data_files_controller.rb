@@ -107,19 +107,29 @@ class DataFilesController < ApplicationController
 
   def api_create
     attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-
     file = params[:file]
     type = params[:type]
     experiment_id = params[:experiment_id]
     tag_names = params[:tag_names]
     errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
 
-    if errors.empty?
-      uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
-      messages = uploaded_file.messages.collect { |m| m[:message] }
-      render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
-    else
-      render :json => {:messages => errors}, :status => :bad_request
+    begin
+      if errors.empty?
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+        messages = uploaded_file.messages.collect { |m| m[:message] }
+        render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
+      else
+        render :json => {:messages => errors}, :status => :bad_request
+      end
+    ensure
+      # RackMultipart tempfile hack
+      # removes RackMultipart from /tmp
+      if params[:file] and params[:file].is_a? ActionDispatch::Http::UploadedFile
+        tempfile = params[:file].tempfile.path
+        if File::exists?(tempfile)
+          FileUtils.remove_entry_secure tempfile
+        end
+      end
     end
   end
 
