@@ -1,5 +1,7 @@
 Dc21app::Application.routes.draw do
 
+  resources :packages
+
   resources :cart_items  do
     collection do
       post :add_all

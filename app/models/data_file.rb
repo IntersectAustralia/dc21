@@ -5,13 +5,13 @@ class DataFile < ActiveRecord::Base
   # the rest come from a config file and can be customised per installation
   STATUS_RAW = 'RAW'
   STATUS_ERROR = 'ERROR'
+  STATUS_PACKAGE = 'PACKAGE'
   # stati for selection when uploading
   STATI = [STATUS_RAW] + APP_CONFIG['file_types']
   # cannot change to 'RAW' or 'ERROR' during editing
   STATI_FOR_EDIT = STATI - [STATUS_RAW]
   # for searching we include error as well
-  ALL_STATI = STATI + [STATUS_ERROR]
-
+  ALL_STATI = [STATUS_PACKAGE] + STATI + [STATUS_ERROR]
 
   belongs_to :created_by, :class_name => "User"
   has_many :column_details, :dependent => :destroy
