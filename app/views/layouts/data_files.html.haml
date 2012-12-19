@@ -8,6 +8,9 @@
 - @cart_items = current_user.cart_items
 - remove_all_warning = "Do you really want to remove all files from your cart?"
 
+:javascript
+  window.cart_size = #{current_user.cart_size};
+
 %head
   = render 'layouts/head'
 %body
@@ -23,9 +26,13 @@
       .btn-group.pull-right.dropdown
         %a#drop3.btn.dropdown-toggle{"data-toggle" => @cart_items.size > 0 ? 'dropdown' : 'dropdown disabled', :href => '#', :role => "button"}
           -if @cart_items.size == 1
-            1 File in Cart
+            %b 1 File in Cart
+            %br
+            #{number_to_human_size(current_user.cart_size)}
           -else
-            #{@cart_items.size} Files in Cart
+            %b #{@cart_items.size} Files in Cart
+            %br
+            #{number_to_human_size(current_user.cart_size)}
           %span.caret
         %ul#cart-actions.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}
           %li

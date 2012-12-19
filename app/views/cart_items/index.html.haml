@@ -41,7 +41,7 @@
 
 .form-actions
   .actions-pre
-    = cancel_button "Back", :back
+    = cancel_button "Back", data_files_path
   .actions
     - unless @cart_items.empty?
       = link_to "Download", download_selected_data_files_path, :class => "bluebutton"

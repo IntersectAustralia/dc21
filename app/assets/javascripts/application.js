@@ -54,12 +54,15 @@ $(function () {
     if (!$(this).hasClass("disabled")) {
       $(this).addClass("disabled");
       $(this).attr('id', "add_cart_item_disabled");
-      var cartcount = parseInt ($("#drop3").text().trim().split(" ")[0]) + 1
+      var cartcount = parseInt ($("#drop3").text().trim().split(" ")[0]) + 1;
+      var file_size = parseInt($(this).data('file-size'), 10);
+      window.cart_size += file_size;
+
       if (cartcount == 1) {
-        $("#drop3").text(cartcount + " File in Cart");
+        $("#drop3").html("<b>"+cartcount + " File in Cart</b> <br>" + bytesToSize(window.cart_size) + " <span class=\"caret\"></span>");
       }
       else {
-        $("#drop3").text(cartcount + " Files in Cart");
+        $("#drop3").html("<b>"+cartcount + " Files in Cart</b> <br>" + bytesToSize(window.cart_size) + " <span class=\"caret\"></span>");
       }
       //  disable 'add all' button if all others have been clicked
       var all_items = $("a[id^=add_cart_item]").length
@@ -75,6 +78,21 @@ $(function () {
       return false;
     }
   });
+
+  function bytesToSize(bytes) {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return 'n/a';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    var dec_places =0;
+    if (i >= 2) {
+        dec_places = 2;
+    }
+    var num =  (bytes / Math.pow(1024, i)).toFixed(dec_places);
+
+
+    return num+' ' + sizes[[i]];
+  };
+
 
   $('#add_all_to_cart').click(function (event) {
     if (!$(this).hasClass("disabled")) {
