@@ -165,11 +165,11 @@ Feature: Search data files by date range
       | Fred Bloggs   |
       | Second Two    |
       | Third Three   |        
-    And nothing should be selected in the "Uploader:" select
+    And nothing should be selected in the "Added By:" select
     
-    And I select "First One" from "Uploader:"
+    And I select "First One" from "Added By:"
     And I press "Search"
-    Then "First One" should be selected in the "Uploader:" select
+    Then "First One" should be selected in the "Added By:" select
     And I should see "exploredata" table with
       | Filename      |
       | mydata7.dat   |

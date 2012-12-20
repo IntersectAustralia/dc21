@@ -38,7 +38,7 @@
           %li
             =link_to "Download",  download_selected_data_files_path, :id => "cart_download"
           %li
-            =link_to "Package",  package_selected_data_files_path, :id => "cart_package"
+            =link_to "Package",  new_package_path, :id => "cart_package"
           %li
             =link_to "Clear cart",  destroy_all_cart_items_path, :id => "cart_clear", :confirm => remove_all_warning
           %li

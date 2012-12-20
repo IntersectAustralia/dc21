@@ -89,6 +89,9 @@ module NavigationHelpers
       when /the edit cart page/
         cart_items_path
 
+      when /the create package page/
+        new_package_path
+
       else
         begin
           page_name =~ /^the (.*) page$/
