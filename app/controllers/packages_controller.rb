@@ -50,4 +50,19 @@ class PackagesController < DataFilesController
     end
   end
 
+  def package_selected
+    ids=current_user.data_files.collect(&:id)
+    unless ids.empty?
+      send_bagit(ids)
+    else
+      redirect_to(:back||data_files_path)
+    end
+  end
+
+  def upload_bagit(ids)
+    CustomDownloadBuilder.bagit_for_files_with_ids(ids)
+
+  end
+
+
 end

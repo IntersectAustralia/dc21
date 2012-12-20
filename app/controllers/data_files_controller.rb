@@ -162,14 +162,7 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def package_selected
-    ids=current_user.data_files.collect(&:id)
-    unless ids.empty?
-      send_bagit(ids)
-    else
-      redirect_to(:back||data_files_path)
-    end
-  end
+
 
   def destroy
     file = DataFile.find(params[:id])

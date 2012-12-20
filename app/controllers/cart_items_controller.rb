@@ -89,14 +89,18 @@ class CartItemsController < ApplicationController
 
   def destroy_all
     session[:return_to]= request.referer
-    CartItem.where('user_id' == current_user.id).each do |cart_item|
-      unless cart_item.nil?
-        cart_item.destroy
+    if current_user.data_files.empty?
+      redirect_to(data_files_path, :notice => "Your cart is empty.")
+    else
+      CartItem.where('user_id' == current_user.id).each do |cart_item|
+        unless cart_item.nil?
+          cart_item.destroy
+        end
       end
-    end
-    respond_to do |format|
-      format.html { redirect_to session[:return_to], notice: 'Your cart was cleared.' }
-      format.js {  }
+      respond_to do |format|
+        format.html { redirect_to session[:return_to], notice: 'Your cart was cleared.' }
+        format.js {  }
+      end
     end
   end
 end
