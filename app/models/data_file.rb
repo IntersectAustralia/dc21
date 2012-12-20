@@ -32,6 +32,7 @@ class DataFile < ActiveRecord::Base
   validate :end_time_not_before_start_time
 
   before_save :fill_end_time_if_blank
+  before_save :set_file_size_if_nil
 
   scope :most_recent_first, order("created_at DESC")
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
@@ -116,6 +117,10 @@ class DataFile < ActiveRecord::Base
 
   def is_raw_file?
     self.file_processing_status.eql? STATUS_RAW
+  end
+
+  def is_package?
+    self.file_processing_status.eql? STATUS_PACKAGE
   end
 
   def is_error_file?
@@ -240,6 +245,11 @@ class DataFile < ActiveRecord::Base
     if start_time.present? && end_time.blank?
       self.end_time = self.start_time
     end
+  end
+
+  protected
+  def set_file_size_if_nil
+     self.file_size = 0 unless self.file_size
   end
 
   def candidate_overlaps(files)
