@@ -4,7 +4,8 @@ Dc21app::Application.routes.draw do
 
   resources :cart_items  do
     collection do
-      post :add_all
+      get :add_all
+      get :add_single
       get :destroy_all
     end
   end

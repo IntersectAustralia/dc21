@@ -45,11 +45,11 @@ class CartItemsController < ApplicationController
 
     respond_to do |format|
       if @cart_item.save
-        format.html { redirect_to session[:return_to],
+        format.html { redirect_to session[:return_to]||data_files_path,
           notice: 'File was successfully added to cart.' }
         format.js { }
       else
-        format.html { redirect_to session[:return_to],
+        format.html { redirect_to session[:return_to]||data_files_path,
           notice: 'File could not be added to cart.' }
         format.js { }
       end
@@ -69,7 +69,7 @@ class CartItemsController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html {  redirect_to session[:return_to],
+      format.html {  redirect_to session[:return_to]||data_files_path,
           notice: "#{count} files were added to your cart." }
     end
   end
