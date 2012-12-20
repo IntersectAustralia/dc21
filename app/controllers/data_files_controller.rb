@@ -150,11 +150,15 @@ class DataFilesController < ApplicationController
   end
 
   def download_selected
-    ids=current_user.data_files.collect(&:id)
-    unless ids.empty?
-      send_zip(ids)
+    if current_user.data_files.empty?
+      redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      redirect_to(:back)
+      ids=current_user.data_files.collect(&:id)
+      unless ids.empty?
+        send_zip(ids)
+      else
+        redirect_to(:back||data_files_path)
+      end
     end
   end
 
@@ -163,7 +167,7 @@ class DataFilesController < ApplicationController
     unless ids.empty?
       send_bagit(ids)
     else
-      redirect_to(:back)
+      redirect_to(:back||data_files_path)
     end
   end
 

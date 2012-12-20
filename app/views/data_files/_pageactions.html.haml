@@ -12,7 +12,6 @@
 
 
 .pageactions
-  = link_to "Download Data", download_data_file_path(@data_file), :class => "bluebutton"
   - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
     = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton",
      :confirm => delete_warning, :method => :delete

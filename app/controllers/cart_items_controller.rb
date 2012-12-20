@@ -99,16 +99,4 @@ class CartItemsController < ApplicationController
       format.js {  }
     end
   end
-
-   # DELETE /cart_items/1
-  # DELETE /cart_items/1.json
-  def download
-    @cart_item = CartItem.find(params[:id])
-    @cart_item.destroy
-
-    respond_to do |format|
-      format.html { redirect_to cart_items_url }
-      format.json { head :ok }
-    end
-  end
 end

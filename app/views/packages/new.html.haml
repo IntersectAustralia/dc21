@@ -2,6 +2,12 @@
   %h1 Data / New Package
 
 .container
+-if current_user.data_files.empty?
+  %h3 You cannot create a package because your cart is empty.
+  .form-actions
+    .actions-pre
+      = cancel_button "Back", data_files_path
+-else
   = form_for(@package, :html => {:multipart => true}) do |f|
     %h2 New Package
     = render "shared/error_messages", :target => @package
