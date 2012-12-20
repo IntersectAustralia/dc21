@@ -34,10 +34,10 @@ Feature: Search data files by date range
     And file "datafile4.dat" has metadata item "station_name" with value "HFE_WS"
     And file "mydata8.dat" has column info "Rnfll", "Millilitres", "Tot"
     And file "mydata6.dat" has column info "Rnfll", "Millilitres", "Tot"
-    And file "mydata6.dat" has column info "Temp", "DegC", "Avg"
+    And file "mydata6.dat" has column info "temp", "DegC", "Avg"
     And file "datafile5.dat" has column info "Rnfl", "Millilitres", "Tot"
     And file "datafile4.dat" has column info "Humi", "Percent", "Avg"
-    And file "datafile1.dat" has column info "Temp_2", "DegC", "Avg"
+    And file "datafile1.dat" has column info "temp3", "DegC", "Avg"
     And file "datafile1.dat" has column info "humidity", "DegC", "Avg"
     And I have facilities
       | name                | code   |
@@ -47,9 +47,9 @@ Feature: Search data files by date range
       | code   | name        |
       | Rnfll  | Rainfall    |
       | Rnfl   | Rainfall    |
-      | Temp   | Temperature |
+      | temp   | Temperature |
       | temp2  | Temperature |
-      | Temp_2 | Temperature |
+      | temp3 | Temperature |
 
 
   Scenario: Search for files by date range - from date only
@@ -166,7 +166,6 @@ Feature: Search data files by date range
       | Second Two    |
       | Third Three   |        
     And nothing should be selected in the "Added By:" select
-    
     And I select "First One" from "Added By:"
     And I press "Search"
     Then "First One" should be selected in the "Added By:" select
@@ -175,8 +174,6 @@ Feature: Search data files by date range
       | mydata7.dat   |
       | mydata8.dat   |
 
-
-
   @javascript
   Scenario: Search for files with certain columns (checking mapped column name)
     When I am on the list data files page
@@ -184,7 +181,7 @@ Feature: Search data files by date range
     And I expand all the mapped columns
     Then I should see column checkboxes
       | Rainfall    | Rnfl, Rnfll         |
-      | Temperature | Temp, temp2, Temp_2 |
+      | Temperature | temp, temp2, temp3 |
       | Unmapped    | Humi, humidity      |
     When I check "Humi"
     And I check "Rainfall"
@@ -199,7 +196,7 @@ Feature: Search data files by date range
     And I expand all the mapped columns
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
-    And the "Temp" checkbox should not be checked
+    And the "temp" checkbox should not be checked
 
   @javascript
   Scenario: Search for files with certain columns (checking raw column names)
@@ -349,12 +346,12 @@ Feature: Search data files by date range
     And I expand all the mapped columns
     Then I should see column checkboxes
       | Rainfall    | Rnfl, Rnfll         |
-      | Temperature | Temp, temp2, Temp_2 |
+      | Temperature | temp, temp2, temp3 |
       | Unmapped    | Humi, humidity      |
     When I check "Rainfall"
     Then the "Rnfll" checkbox should be checked
     And the "Rnfl" checkbox should be checked
-    But the "Temp" checkbox should not be checked
+    But the "temp" checkbox should not be checked
     And the "Humi" checkbox should not be checked
     When I uncheck "Rainfall"
     Then the "Rnfll" checkbox should not be checked

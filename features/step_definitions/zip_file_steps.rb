@@ -13,7 +13,7 @@ def compare_zip_to_expected_files(response_source, directory)
     if downloaded_file_path.nil?
       raise "Expected downloaded zip to include file #{File.basename(path_to_expected_file)} but did not find it. Found #{downloaded_files.keys}."
     else
-      downloaded_file_path.should be_same_metadata_file_as(path_to_expected_file)
+      downloaded_file_path.should be_same_file_as(path_to_expected_file)
     end
   end
 end
