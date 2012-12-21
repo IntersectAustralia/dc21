@@ -63,7 +63,7 @@ class DataFileSearch
         tags.empty? &&
         filename.blank? &&
         description.blank? &&
-        uploader_id.nil?
+        uploader_id.blank?
   end
 
   def valid?

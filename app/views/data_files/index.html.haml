@@ -3,9 +3,10 @@
 
 - add_all_warning = "Do you really want to add #{@data_files.size} files to your cart?"
 
+= will_paginate(@data_files_paginated)
 .datacontroll
   - if @data_files.empty? || !@search.showing_all?
-    = link_to "Clear Search", data_files_path, class: "btn pull-left"
+    = link_to "Clear Search", clear_data_files_path, class: "btn pull-left"
   .data-results
     - unless @data_files.empty? || @search.showing_all?
       -##.whitebutton
@@ -27,6 +28,42 @@
     = form_tag(search_data_files_path, :id => "search_form") do
       =hidden_field_tag "direction", sort_direction
       =hidden_field_tag "sort", sort_column
+      - if params["search"].nil?
+        =hidden_field_tag "date_visible", "false"
+        =hidden_field_tag "filename_visible", "false"
+        =hidden_field_tag "description_visible", "false"
+        =hidden_field_tag "type_visible", "false"
+        =hidden_field_tag "tags_visible", "false"
+        =hidden_field_tag "facility_visible", "false"
+        =hidden_field_tag "variable_visible", "false"
+        =hidden_field_tag "uploader_visible", "false"
+        =hidden_field_tag "upload_date_visible", "false"
+      -else
+        =hidden_field_tag "date_visible", (params["search"]["from_date"].blank? and params["search"]["to_date"].blank?) ? "false" : "true"
+        =hidden_field_tag "filename_visible", params["search"]["filename"].blank? ? "false" : "true"
+        =hidden_field_tag "description_visible", params["search"]["description"].blank? ? "false" : "true"
+
+        - if params["search"]["stati"].nil?
+          =hidden_field_tag "type_visible", "false"
+        - else
+          =hidden_field_tag "type_visible", params["search"]["stati"].empty? ? "false" : "true"
+
+        - if params["search"]["tags"].nil?
+          =hidden_field_tag "tags_visible", "false"
+        -else
+          =hidden_field_tag "tags_visible", params["search"]["tags"].empty? ? "false" : "true"
+
+        - if params["search"]["facilities"].nil? and params["search"]["experiments"].nil?
+          =hidden_field_tag "facility_visible", "false"
+        - else
+          =hidden_field_tag "facility_visible", "true"
+
+        - if params["search"]["variable_parents"].nil? and params["search"]["variables"].nil?
+          =hidden_field_tag "variable_visible", "false"
+        -else
+          =hidden_field_tag "variable_visible", "true"
+        =hidden_field_tag "uploader_visible", params["search"]["uploader_id"].blank? ? "false" : "true"
+        =hidden_field_tag "upload_date_visible", (params["search"]["upload_from_date"].blank? and params["search"]["upload_to_date"].blank?) ? "false" : "true"
       .searchcategory
         %h4#date.expand Date:
         .date
@@ -108,7 +145,6 @@
 
 - unless @data_files.empty?
 
-
   = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
     = hidden_field_tag "searched_from_date", @from_date
     = hidden_field_tag "searched_to_date", @to_date
@@ -125,7 +161,7 @@
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
           %a.bluebutton#add_all_to_cart{:href => add_all_cart_items_path(:data_file_ids => @data_files.map(&:id))} Add All
-      - @data_files.each do |data_file|
+      - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
           -##%td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}", :title => 'View'

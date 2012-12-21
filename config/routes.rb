@@ -56,6 +56,7 @@ Dc21app::Application.routes.draw do
       put :bulk_update
       post :search
       post :api_create
+      get :clear
     end
   end
 

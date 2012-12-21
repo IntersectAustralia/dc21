@@ -6,6 +6,9 @@ class DataFilesController < ApplicationController
   SAVE_MESSAGE = 'The data file was saved successfully.'
 
   before_filter :authenticate_user!
+  before_filter :sort_params, :only => [ :index, :search ]
+  before_filter :search_params, :only => [ :index, :search ]
+  before_filter :page_params, :only => [ :index ]
   load_and_authorize_resource
   set_tab :home
   helper_method :sort_column, :sort_direction
@@ -20,14 +23,28 @@ class DataFilesController < ApplicationController
   def index
     set_tab :explore, :contentnavigation
     do_search(params[:search])
+    @data_files_paginated = @data_files.paginate(page: params[:page])
     if session[:cart_id]
       @cart = Cart.find(session[:cart_id])
     end
   end
 
   def search
+    session[:page] = nil
     set_tab :explore, :contentnavigation
     do_search(params[:search])
+    @data_files_paginated = @data_files.paginate(page: params[:page])
+    render :index
+  end
+
+  def clear
+    session[:search_params] = nil
+    set_tab :explore, :contentnavigation
+    do_search(params[:search])
+    @data_files_paginated = @data_files.paginate(page: params[:page])
+    if session[:cart_id]
+      @cart = Cart.find(session[:cart_id])
+    end
     render :index
   end
 
@@ -314,6 +331,32 @@ class DataFilesController < ApplicationController
   def send_bagit(ids)
     CustomDownloadBuilder.bagit_for_files_with_ids(ids) do |zip_file|
       send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+    end
+  end
+
+  def sort_params
+    if params["sort"]
+      session["sort"] = params["sort"]
+      session["direction"] = params["direction"]
+    elsif session["sort"]
+      params["sort"] = session["sort"]
+      params["direction"] = session["direction"]
+    end
+  end
+
+  def search_params
+    if params["search"]
+      session["search"] = params["search"]
+    elsif session["search"]
+      params["search"] = session["search"]
+    end
+  end
+
+  def page_params
+    if params["page"]
+      session["page"] = params["page"]
+    elsif session["page"]
+      params["page"] = session["page"]
     end
   end
 

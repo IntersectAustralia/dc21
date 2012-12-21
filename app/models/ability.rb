@@ -42,6 +42,9 @@ class Ability
     # alias search to read
     alias_action :search, :to => :read
 
+    # alias clear to read
+    alias_action :clear, :to => :read
+
     return unless user && user.role
 
     #TODO: we have no rules about permissions for these yet

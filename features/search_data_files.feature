@@ -393,3 +393,10 @@ Feature: Search data files by date range
     Then I should not see "Rnfl"
     Then I should not see "Rnfll"
 
+  @javascript
+  Scenario: Searched panel remains open after searching
+    Given I am on the list data files page
+    And I click on "Type:" within the search box
+    And I check "RAW"
+    And I press "Update Search Results"
+    Then the "RAW" checkbox should be checked

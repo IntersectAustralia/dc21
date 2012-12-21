@@ -1,15 +1,33 @@
 $(function () {
   var hidden_selects = true;
-  $('.searchcategory .date').hide();
+  if ($('#date_visible').val() == "false") {
+     $('.searchcategory .date').hide();
+  }
   $('.searchcategory .time').hide();
-  $('.searchcategory .facility').hide();
-  $('.searchcategory .variable').hide();
-  $('.searchcategory .description').hide();
-  $('.searchcategory .filename').hide();
-  $('.searchcategory .tags').hide();
-  $('.searchcategory .type').hide();
-  $('.searchcategory .uploader').hide();
-  $('.searchcategory .upload_date').hide();
+  if ($('#facility_visible').val() == "false") {
+    $('.searchcategory .facility').hide();
+  }
+  if ($('#variable_visible').val() == "false") {
+    $('.searchcategory .variable').hide();
+  }
+  if ($('#description_visible').val() == "false") {
+    $('.searchcategory .description').hide();
+  }
+  if ($('#filename_visible').val() == "false") {
+    $('.searchcategory .filename').hide();
+  }
+  if ($('#tags_visible').val() == "false") {
+    $('.searchcategory .tags').hide();
+  }
+  if ($('#type_visible').val() == "false") {
+    $('.searchcategory .type').hide();
+  }
+  if ($('#uploader_visible').val() == "false") {
+    $('.searchcategory .uploader').hide();
+  }
+  if ($('#upload_date_visible').val() == "false") {
+    $('.searchcategory .upload_date').hide();
+  }
 
   $('#date').click(function (event) {
     $('.searchcategory .date').slideToggle();
