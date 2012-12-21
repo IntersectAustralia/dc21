@@ -41,7 +41,7 @@ class CustomDownloadBuilder
 
       data_files = DataFile.find(ids)
       data_files.collect do |data_file|
-        temp_path = File.join(bag.data_dir, data_file.filename)
+        temp_path = File.join(bag.data_dir, "files", data_file.filename)
         FileUtils.cp data_file.path, temp_path
         temp_path
       end
