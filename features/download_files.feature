@@ -29,3 +29,10 @@ Feature: Download multiple files
     And I add "sample2.txt" to the cart
     And I click on "Package"
     Then I should receive a zip file matching "samples/bagit"
+
+# this functionality has been disabled for now - leaving here in case we re-instate it
+#  Scenario: Download a single file from the view data file details page
+#    When I am on the data file details page for sample1.txt
+#    When I click on "Download Data"
+#    Then I should get a file with name "sample1.txt" and content type "text/plain"
+#    And the file should contain "Plain text file sample1.txt"
