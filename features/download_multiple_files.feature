@@ -12,11 +12,17 @@ Feature: Download multiple files
       | sample3.txt | 30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/sample3.txt | 3  |
     And I am on the list data files page
 
-  Scenario: Download a selection of files as Zip
+  Scenario: Download a selection of files from the cart
     When I add "sample1.txt" to the cart
     And I add "sample2.txt" to the cart
     And I click on "Download"
     Then I should receive a zip file matching "samples/zip"
+
+  Scenario: Download a single file from the cart
+    When I add "sample1.txt" to the cart
+    And I click on "Download"
+    Then I should get a file with name "sample1.txt" and content type "text/plain"
+    And the file should contain "Plain text file sample1.txt"
 
   Scenario: Package a selection of files as a BagIt Zip
     When I add "sample1.txt" to the cart
