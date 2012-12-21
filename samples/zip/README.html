@@ -2,7 +2,51 @@
 <html>
   <head></head>
   <body>
+    <h1>Summary</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Experiment</th>
+          <th>Facility</th>
+          <th>Download</th>
+          <th>View</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href='#datafile_1'>sample1.txt</a>
+          </td>
+          <td>RAW</td>
+          <td>Other</td>
+          <td></td>
+          <td>
+            <a href='http://localhost:3000/data_files/1/download'>Download</a>
+          </td>
+          <td>
+            <a href='http://localhost:3000/data_files/1'>View</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href='#datafile_2'>sample2.txt</a>
+          </td>
+          <td>RAW</td>
+          <td>Other</td>
+          <td></td>
+          <td>
+            <a href='http://localhost:3000/data_files/2/download'>Download</a>
+          </td>
+          <td>
+            <a href='http://localhost:3000/data_files/2'>View</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <h1>Files</h1>
+    <a name='datafile_1'></a>
     <section>
       <h2>sample1.txt</h2>
       <table>
@@ -52,10 +96,13 @@
         </tr>
         <tr>
           <td>Persistent URL</td>
-          <td>http://localhost:3000/data_files/1</td>
+          <td>
+            <a href='http://localhost:3000/data_files/1'>http://localhost:3000/data_files/1</a>
+          </td>
         </tr>
       </table>
     </section>
+    <a name='datafile_2'></a>
     <section>
       <h2>sample2.txt</h2>
       <table>
@@ -105,7 +152,9 @@
         </tr>
         <tr>
           <td>Persistent URL</td>
-          <td>http://localhost:3000/data_files/2</td>
+          <td>
+            <a href='http://localhost:3000/data_files/2'>http://localhost:3000/data_files/2</a>
+          </td>
         </tr>
       </table>
     </section>

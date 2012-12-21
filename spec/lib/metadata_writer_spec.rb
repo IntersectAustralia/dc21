@@ -164,10 +164,6 @@ def diff_html(output_html, expected_file)
     puts "Actual:"
     puts output_html
   end
-  File.open("exp.html", 'w+') { |f| f.write(expected_html) }
-  File.open("act.html", 'w+') { |f| f.write(output_html) }
-  File.open("exp.txt", 'w+') { |f| f.write(expected_hash.to_s.gsub("{", "\n{")) }
-  File.open("act.txt", 'w+') { |f| f.write(actual_hash.to_s.gsub("{", "\n{")) }
 
   diff.should == {}
 

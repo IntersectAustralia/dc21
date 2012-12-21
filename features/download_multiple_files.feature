@@ -13,17 +13,13 @@ Feature: Download multiple files
     And I am on the list data files page
 
   Scenario: Download a selection of files as Zip
-  I should see button "Add to Cart"
     When I add "sample1.txt" to the cart
-    And I am on the list data files page
-    Then I add "sample2.txt" to the cart
+    And I add "sample2.txt" to the cart
     And I click on "Download"
     Then I should receive a zip file matching "samples/zip"
 
   Scenario: Package a selection of files as a BagIt Zip
-  I should see button "Add to Cart"
     When I add "sample1.txt" to the cart
-    And I am on the list data files page
-    Then I add "sample2.txt" to the cart
+    And I add "sample2.txt" to the cart
     And I click on "Package"
     Then I should receive a zip file matching "samples/bagit"

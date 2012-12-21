@@ -3,7 +3,39 @@
 <html>
 <head></head>
 <body>
+<h1>Summary</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Experiment</th>
+        <th>Facility</th>
+        <th>Download</th>
+        <th>View</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><a href="#file_1">datafile.jpg</a></td>
+        <td>RAW</td>
+        <td><a href="#experiment_1">High CO2 and Drought</a></td>
+        <td><a href="#facility_1">Whole Tree Chambers</a></td>
+        <td><a href="http://localhost:3000/data_files/1/download">Download</a></td>
+        <td><a href="http://localhost:3000/data_files/1">View</a></td>
+    </tr>
+    <tr>
+        <td><a href="#file_2">myfile.txt</a></td>
+        <td>PROCESSED</td>
+        <td><a href="#experiment_1">High CO2 and Drought</a></td>
+        <td><a href="#facility_1">Whole Tree Chambers</a></td>
+        <td><a href="http://localhost:3000/data_files/2/download">Download</a></td>
+        <td><a href="http://localhost:3000/data_files/2">View</a></td>
+    </tr>
+    </tbody>
+</table>
 <h1>Files</h1>
+<a name="datafile_1"/>
 <section>
     <h2>datafile.jpg</h2>
 
@@ -46,7 +78,7 @@
         </tr>
         <tr>
             <td>Persistent URL</td>
-            <td>http://localhost:3000/data_files/1</td>
+            <td><a href="http://localhost:3000/data_files/1">http://localhost:3000/data_files/1</a></td>
         </tr>
 
     </table>
@@ -112,6 +144,7 @@
     </table>
 
 </section>
+<a name="datafile_2"/>
 <section>
     <h2>myfile.txt</h2>
     <table>
@@ -153,12 +186,13 @@
         </tr>
         <tr>
             <td>Persistent URL</td>
-            <td>http://localhost:3000/data_files/2</td>
+            <td><a href="http://localhost:3000/data_files/2">http://localhost:3000/data_files/2</a></td>
         </tr>
     </table>
 </section>
 
 <h1>Experiments</h1>
+<a name="experiment_1"/>
 <section>
     <h2>High CO2 and Drought</h2>
 
@@ -197,7 +231,7 @@
         </tr>
         <tr>
             <td>Persistent URL</td>
-            <td>http://localhost:3000/facilities/1/experiments/1</td>
+            <td><a href="http://localhost:3000/facilities/1/experiments/1">http://localhost:3000/facilities/1/experiments/1</a></td>
         </tr>
     </table>
 
@@ -236,6 +270,7 @@
 </section>
 
 <h1>Facilities</h1>
+<a name="facility_1"/>
 <section>
     <h2>Whole Tree Chambers</h2>
     <table>
@@ -261,7 +296,7 @@
         </tr>
         <tr>
             <td>Persistent URL</td>
-            <td>http://localhost:3000/facilities/1</td>
+            <td><a href="http://localhost:3000/facilities/1">http://localhost:3000/facilities/1</a></td>
         </tr>
     </table>
 </section>

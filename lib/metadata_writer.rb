@@ -31,4 +31,7 @@ class MetadataUrlHelper
     Rails.application.routes.url_helpers.data_file_url(data_file, @host_details)
   end
 
+  def data_file_download_url(data_file)
+    Rails.application.routes.url_helpers.download_data_file_url(data_file, @host_details)
+  end
 end

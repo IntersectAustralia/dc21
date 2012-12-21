@@ -160,6 +160,11 @@ class DataFile < ActiveRecord::Base
     Experiment.find(experiment_id).name
   end
 
+  def facility
+    return nil if experiment_id.nil? || experiment_id == -1
+    Experiment.find(experiment_id).facility
+  end
+
   def facility_name
     return "" if experiment_id.nil? || experiment_id == -1
     Experiment.find(experiment_id).facility.name
