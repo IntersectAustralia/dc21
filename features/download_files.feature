@@ -18,17 +18,18 @@ Feature: Download multiple files
     And I click on "Download"
     Then I should receive a zip file matching "samples/zip"
 
+
   Scenario: Download a single file from the cart
     When I add "sample1.txt" to the cart
     And I click on "Download"
     Then I should get a file with name "sample1.txt" and content type "text/plain"
     And the file should contain "Plain text file sample1.txt"
 
-  Scenario: Package a selection of files as a BagIt Zip
-    When I add "sample1.txt" to the cart
-    And I add "sample2.txt" to the cart
-    And I click on "Package"
-    Then I should receive a zip file matching "samples/bagit"
+# Scenario: Package a selection of files as a BagIt Zip
+#   When I add "sample1.txt" to the cart
+#   And I add "sample2.txt" to the cart
+#   And I click on "Package"
+#   Then I should receive a zip file matching "samples/bagit"
 
 # this functionality has been disabled for now - leaving here in case we re-instate it
 #  Scenario: Download a single file from the view data file details page

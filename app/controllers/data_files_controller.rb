@@ -193,7 +193,7 @@ class DataFilesController < ApplicationController
   def cleanout_cart_items
     file_id = params[:id]
     CartItem.where(:data_file_id == file_id).each do |item|
-      item.destroy
+      item.destroy if item.user_id.eql?(current_user.id)
     end
   end
 
@@ -251,7 +251,6 @@ class DataFilesController < ApplicationController
         @unadded_items = true
       end
     end
-
 
     if @search.error
       flash.now[:alert] = @search.error

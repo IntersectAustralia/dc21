@@ -3,7 +3,7 @@ class CartItemsController < ApplicationController
   # GET /cart_items
   # GET /cart_items.json
   def index
-    @cart_items = CartItem.all
+    @cart_items = current_user.cart_items
     session[:back]= request.referer
     respond_to do |format|
       format.html # index.html.erb
@@ -30,11 +30,11 @@ class CartItemsController < ApplicationController
   # POST /cart_items
   # POST /cart_items.json
   def create
-      if params[:add_all] == 'true'
-        add_all
-      else
-        add_single
-      end
+    if params[:add_all] == 'true'
+      add_all
+    else
+      add_single
+    end
   end
 
   def add_single
@@ -46,11 +46,11 @@ class CartItemsController < ApplicationController
     respond_to do |format|
       if @cart_item.save
         format.html { redirect_to session[:return_to]||data_files_path,
-          notice: 'File was successfully added to cart.' }
+                                  notice: 'File was successfully added to cart.' }
         format.js { }
       else
         format.html { redirect_to session[:return_to]||data_files_path,
-          notice: 'File could not be added to cart.' }
+                                  notice: 'File could not be added to cart.' }
         format.js { }
       end
     end
@@ -70,7 +70,7 @@ class CartItemsController < ApplicationController
     end
     respond_to do |format|
       format.html {  redirect_to session[:return_to]||data_files_path,
-          notice: "#{count} files were added to your cart." }
+                                 notice: "#{count} files were added to your cart." }
     end
   end
 

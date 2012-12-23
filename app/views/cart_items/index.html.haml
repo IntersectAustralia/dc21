@@ -17,7 +17,7 @@
     = @cart_items.size == 1 ? "Showing 1 file" : "Showing #{@cart_items.size} files"
 
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
-  %table
+  %table#exploredata
     %tr
       %th.sortable.filename=  "Filename"
       %th.sortable.date=  "Date added"

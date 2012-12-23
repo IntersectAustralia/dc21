@@ -123,6 +123,10 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.eql? STATUS_PACKAGE
   end
 
+  def is_toa5?
+    self.format.eql?('TOA5')
+  end
+
   def is_error_file?
     self.file_processing_status.eql? STATUS_ERROR
   end
@@ -254,7 +258,7 @@ class DataFile < ActiveRecord::Base
 
   protected
   def set_file_size_if_nil
-     self.file_size = 0 unless self.file_size
+    self.file_size = 0 unless self.file_size
   end
 
   def candidate_overlaps(files)

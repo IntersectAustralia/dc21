@@ -8,7 +8,7 @@
     .actions-pre
       = cancel_button "Back", data_files_path
 -else
-  = form_for(@package, :html => {:multipart => true}) do |f|
+  = form_for(@package, :url => url_for(:controller => :packages, :action => :create), :html => {:multipart => true}) do |f|
     %h2 New Package
     = render "shared/error_messages", :target => @package
     .control-group

@@ -8,8 +8,13 @@ class AttachmentBuilder
   end
 
   def build(file, experiment_id, type, description, tags=[])
-    path, new_filename = store_file(file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, file.original_filename, file.size)
+    build_named_file(file.original_filename, file, experiment_id, type, description, tags=[])
+  end
+
+
+  def build_named_file(original_filename, file, experiment_id, type, description, tags=[])
+    path, new_filename = store_file(original_filename, file)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, original_filename, file.size)
     if data_file.messages.blank?
       data_file.add_message(:success, "File uploaded successfully.")
     end
@@ -53,8 +58,8 @@ class AttachmentBuilder
     data_file
   end
 
-  def store_file(file)
-    filename = calculate_filename(file.original_filename)
+  def store_file(original_filename, file)
+    filename = calculate_filename(original_filename)
     store_path = File.join(@files_root, filename)
 
     FileUtils.cp(file.path, store_path)
