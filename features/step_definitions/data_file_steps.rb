@@ -9,13 +9,9 @@ Given /^I have data files$/ do |table|
     end
     exp = attributes.delete('experiment')
     unless exp.blank?
-      if exp == "Other"
-        attributes["experiment_id"] = "-1"
-      else
-        experiment = Experiment.find_by_name(exp)
-        experiment = Factory(:experiment, :name => exp) unless experiment
-        attributes["experiment_id"] = experiment.id
-      end
+      experiment = Experiment.find_by_name(exp)
+      experiment = Factory(:experiment, :name => exp) unless experiment
+      attributes["experiment_id"] = experiment.id
     end
     if email
       user = User.find_by_email(email)

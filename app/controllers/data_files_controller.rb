@@ -256,9 +256,7 @@ class DataFilesController < ApplicationController
     if col == "users.email"
       @data_files = @data_files.joins(:created_by).order(col + ' ' + sort_direction)
     elsif col == "data_files.experiment_id"
-      # do experiment sorting in memory, since its too hard to do in the database with "Other" being -1
-      @data_files = @data_files.sort_by(&:experiment_name)
-      @data_files = @data_files.reverse if sort_direction == "desc"
+      @data_files = @data_files.joins(:experiment).order("experiments.name" + ' ' + sort_direction)
     else
       @data_files = @data_files.order(col + ' ' + sort_direction)
     end

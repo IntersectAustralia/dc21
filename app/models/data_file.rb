@@ -14,6 +14,7 @@ class DataFile < ActiveRecord::Base
   ALL_STATI = [STATUS_PACKAGE] + STATI + [STATUS_ERROR]
 
   belongs_to :created_by, :class_name => "User"
+  belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
   has_many :cart_items

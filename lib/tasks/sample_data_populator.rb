@@ -129,6 +129,12 @@ def create_facilities_and_experiments
   test.experiments.create(:name => "Test Experiment 1", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Test1")
   test.experiments.create(:name => "Test Experiment 2", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au", :subject => "Test2")
   test.experiments.create(:name => "Test Experiment 3", :start_date => "2012-06-01", :access_rights => "http://creativecommons.org/licenses/by-nc-nd/3.0/au", :subject => "Test3")
+
+  other = create_facility(:name => "Other", :code => "Other Code", :primary_contact => user)
+  other_experiment = other.experiments.create(:name => "Other", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Other subject")
+  other_experiment.id = -1
+  other_experiment.save!
+
 end
 
 def create_facility(attrs)

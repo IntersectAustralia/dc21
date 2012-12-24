@@ -8,6 +8,7 @@ Feature: Upload files
     And I am logged in as "researcher@intersect.org.au"
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
+    And I have facility "Other" with code "Other Code"
     Given I have experiments
       | name              | facility            |
       | My Experiment     | ROS Weather Station |
@@ -15,6 +16,7 @@ Feature: Upload files
       | Flux Experiment 1 | Flux Tower          |
       | Flux Experiment 2 | Flux Tower          |
       | Flux Experiment 3 | Flux Tower          |
+      | Other             | Other               |
     And I have tags
       | name       |
       | Photo      |

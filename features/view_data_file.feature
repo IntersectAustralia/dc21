@@ -7,6 +7,8 @@ Feature: View the details of a data file
     Given I am logged in as "georgina@intersect.org.au"
     And I have facility "My Test Facility" with code "MTF"
     And I have experiment "My Nice Experiment" which belongs to facility "MTF"
+    And I have facility "Other" with code "Other Code"
+    And I have experiment "Other" which belongs to facility "Other Code"
     And I have data files
       | filename     | created_at       | uploaded_by               | start_time           | end_time                | interval | experiment         | file_processing_description | file_processing_status | format |
       | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |                      |                         |          | My Nice Experiment | Description of my file      | RAW                    |        |
@@ -43,7 +45,7 @@ Feature: View the details of a data file
     When I am on the data file details page for sample.txt
     Then I should see details displayed
       | Experiment  | Other   |
-      | Facility    |         |
+      | Facility    | Other   |
       | Type        | UNKNOWN |
       | Description |         |
 
