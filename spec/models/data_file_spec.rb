@@ -43,7 +43,6 @@ describe DataFile do
 
   describe "Associations" do
     it { should belong_to(:created_by) }
-    it { should belong_to(:experiment) }
     it { should have_many(:column_details) }
     it { should have_many(:metadata_items) }
     it { should have_and_belong_to_many(:tags) }
@@ -127,9 +126,9 @@ describe DataFile do
         f5 = Factory(:data_file, :experiment_id => ex2.id).id
         f6 = Factory(:data_file, :experiment_id => ex2.id).id
 
-        DataFile.with_experiment([ex1.name]).order(:id).collect(&:id).should eq([f1, f2, f3])
-        DataFile.with_experiment([ex2.name]).order(:id).collect(&:id).should eq([f4, f5, f6])
-        DataFile.with_experiment([ex1.name, ex2.name]).order(:id).collect(&:id).should eq([f1, f2, f3, f4, f5, f6])
+        DataFile.with_experiment([ex1.id]).order(:id).collect(&:id).should eq([f1, f2, f3])
+        DataFile.with_experiment([ex2.id]).order(:id).collect(&:id).should eq([f4, f5, f6])
+        DataFile.with_experiment([ex1.id, ex2.id]).order(:id).collect(&:id).should eq([f1, f2, f3, f4, f5, f6])
       end
     end
 
@@ -372,24 +371,6 @@ describe DataFile do
       DataFile.with_station_name_in(["ABC", "DEF"]).collect(&:id).sort.should eq([f1.id, f2.id, f4.id])
       DataFile.with_station_name_in(["ABC", "ASDF"]).collect(&:id).sort.should eq([f1.id, f4.id])
       DataFile.with_station_name_in(["ASDF"]).collect(&:id).sort.should eq([])
-    end
-  end
-
-  describe "Getting set of facilities for searching" do
-
-    it "should exclude mapped facilities that don't have any records, and should include unmapped facilities" do
-      Factory(:data_file).metadata_items.create!(:key => "station_name", :value => "code2")
-      Factory(:data_file).metadata_items.create!(:key => "station_name", :value => "ROS_WS")
-      Factory(:data_file).metadata_items.create!(:key => "station_name", :value => "code2")
-      Factory(:facility, :name => "Name1", :code => "code1")
-      Factory(:facility, :name => "Name2", :code => "code2")
-
-      searchables = DataFile.searchable_facilities
-      searchables.size.should eq(2)
-      searchables[0][0].should eq("code2")
-      searchables[0][1].should eq("Name2")
-      searchables[1][0].should eq("ROS_WS")
-      searchables[1][1].should eq("ROS_WS")
     end
   end
 

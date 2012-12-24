@@ -22,6 +22,7 @@ describe MetadataWriter do
                           description: 'Experiment desc',
                           access_rights: 'http://creativecommons.org/licenses/by/3.0/au')
     @experiment.set_for_codes({'1' => {'name' => '0101 - Mathematics', 'url' => 'someurl'}, '2' => {'name' => '0202 - Science', 'url' => 'someotherurl'}})
+    @experiment.save!
 
     cat1 = Factory(:parameter_category, name: 'Cat1')
     cat2 = Factory(:parameter_category, name: 'Cat2')
@@ -33,16 +34,51 @@ describe MetadataWriter do
     @experiment.experiment_parameters.create!(parameter_category: cat1, parameter_sub_category: subcat1, parameter_modification: mod1)
     @experiment.experiment_parameters.create!(parameter_category: cat2, parameter_sub_category: subcat2, parameter_modification: mod2, parameter_unit: mg, amount: 10, comments: 'my comment')
 
-    @data_file1 = Factory(:data_file, filename: 'datafile.jpg', experiment: @experiment)
-    @data_file2 = Factory(:data_file, filename: 'myfile.txt', experiment: @experiment)
+    # TOA5 file with full metadata
+    @data_file1 = Factory(:data_file,
+                          id: 1,
+                          filename: "datafile.jpg",
+                          experiment_id: @experiment.id,
+                          file_processing_status: DataFile::STATUS_RAW,
+                          format: FileTypeDeterminer::TOA5,
+                          created_at: "2012-06-27 06:49:08",
+                          file_processing_description: 'My file desc',
+                          created_by: Factory(:user, first_name: 'Fred', last_name: 'Bloggs'),
+                          interval: 900,
+                          start_time: '2012-10-23 07:56:45 utc',
+                          end_time: '2012-12-01 22:04:23 utc')
+    photo = Tag.create!(name: 'Photo')
+    video = Tag.create!(name: 'Video')
+    @data_file1.tag_ids = [photo.id, video.id]
+    @data_file1.save!
 
+    Factory(:column_detail, :name => "Rnfll", :unit => 'Deg C', :data_type => 'Avg', :position => 1, :data_file => @data_file1)
+    Factory(:column_detail, :name => "SoilTemp", :unit => 'M/S', :data_type => 'Max', :position => 3, :data_file => @data_file1)
+    Factory(:column_detail, :name => "Humi", :unit => 'M', :data_type => 'Avg', :position => 2, :data_file => @data_file1)
+
+    Factory(:column_mapping, :name => "Rainfall", :code => "Rnfll")
+
+    Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "WTC", :data_file => @data_file1)
+    Factory(:metadata_item, :key => MetadataKeys::TABLE_NAME_KEY, :value => "15_min", :data_file => @data_file1)
+    Factory(:metadata_item, :key => 'something', :value => "Some value", :data_file => @data_file1)
+
+    # Minimal metadata
+    @data_file2 = Factory(:data_file,
+                          filename: 'myfile.txt',
+                          id: 2,
+                          experiment_id: @experiment.id,
+                          file_processing_status: 'PROCESSED',
+                          format: nil,
+                          created_at: "2012-12-27 14:09:24",
+                          file_processing_description: nil,
+                          created_by: Factory(:user, first_name: 'Fred', last_name: 'Bloggs'))
   end
 
 
   describe 'Basic metadata generation' do
     it 'should produce HTML with file, facility and experiment metadata (without duplication of facilities and experiments)' do
       output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
-      diff_html(output_html, 'spec/samples/simple_readme.html')
+      diff_html(output_html, 'spec/samples/readme.html')
     end
 
     it 'should handle a variety of experiments and facilities' do
@@ -82,7 +118,6 @@ describe MetadataWriter do
         diff_html(output_html, 'spec/samples/readme_minimal_experiment.html')
       end
 
-
       it 'should handle experiment with no parameters' do
         @experiment.experiment_parameters.delete_all
         output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
@@ -90,78 +125,26 @@ describe MetadataWriter do
       end
     end
     context 'Files' do
-#  it "should produce a file with details written one per line" do
-#    facility = Factory(:facility, :name => 'My Facility')
-#    experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
-#    data_file = Factory(:data_file,
-#                         id: 1,
-#                         filename: "datafile.jpg",
-#                         experiment: experiment,
-#                         format: FileTypeDeterminer::TOA5,
-#                         created_at: "2012-06-27 06:49:08")
-#    Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
-#    Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
-#    Factory(:column_detail, :name => "Humi", :data_file => data_file)
-#
-#    directory = Dir.mktmpdir
-#    file_path = @subject.write_data_file_metadata(data_file, directory)
-#    file_path.should =~ /datafile-jpg-metadata.txt$/
-#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata.txt'))
-#  end
-#
-#  it "should handle non TOA5 files that have start/end times" do
-#    facility = Factory(:facility, :name => 'My Facility')
-#    experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
-#    data_file = Factory(:data_file,
-#                         id: 1,
-#                         filename: "nontoa5.jpg",
-#                         experiment: experiment,
-#                         format: nil,
-#                         start_time: "2012-10-23 07:56:45 utc",
-#                         end_time: "2012-12-01 22:04:23 utc",
-#                         created_at: "2012-06-27 06:49:08")
-#
-#    directory = Dir.mktmpdir
-#    file_path = @subject.write_data_file_metadata(data_file, directory)
-#    file_path.should =~ /nontoa5-jpg-metadata.txt$/
-#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/nontoa5-jpg-metadata.txt'))
-#  end
-#
-#  it "should handle files with the 'Other' experiment" do
-#    data_file = Factory(:data_file,
-#                         id: 1,
-#                         filename: "datafile.jpg",
-#                         experiment_id: -1,
-#                         format: FileTypeDeterminer::TOA5,
-#                         created_at: "2012-06-27 06:49:08")
-#    Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
-#    Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
-#    Factory(:column_detail, :name => "Humi", :data_file => data_file)
-#
-#    directory = Dir.mktmpdir
-#    file_path = @subject.write_data_file_metadata(data_file, directory)
-#    file_path.should =~ /datafile-jpg-metadata.txt$/
-#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-jpg-metadata-other.txt'))
-#  end
-#
-#  it "should handle files with no extension" do
-#    facility = Factory(:facility, :name => 'My Facility')
-#    experiment = Factory(:experiment, :name => 'My Experiment', :facility => facility)
-#    data_file = Factory(:data_file,
-#                         id: 1,
-#                         filename: "datafile",
-#                         experiment: experiment,
-#                         format: FileTypeDeterminer::TOA5,
-#                         created_at: "2012-06-27 06:49:08")
-#    Factory(:column_detail, :name => "Rnfll", :data_file => data_file)
-#    Factory(:column_detail, :name => "SoilTemp", :data_file => data_file)
-#    Factory(:column_detail, :name => "Humi", :data_file => data_file)
-#
-#    directory = Dir.mktmpdir
-#    file_path = @subject.write_data_file_metadata(data_file, directory)
-#    file_path.should =~ /datafile-metadata.txt$/
-#    file_path.should be_same_file_as(Rails.root.join('samples/metadata/datafile-metadata.txt'))
-#  end
+      it 'should handle non TOA5 files that have start/end times' do
+        @data_file2.start_time = '2012-10-23 07:56:45 utc'
+        @data_file2.end_time = '2012-12-01 22:04:23 utc'
+        @data_file2.format = nil
+        @data_file2.save!
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        diff_html(output_html, 'spec/samples/readme_non_toa5_with_start_end.html')
+      end
+
+      it 'should handle files with the "Other" experiment' do
+        @data_file1.experiment_id = -1
+        @data_file1.save!
+        @data_file1.reload
+        @data_file1 = DataFile.find(@data_file1.id)
+        @data_file1.experiment_id.should eq(-1)
+        @data_file1.experiment_name.should eq("Other")
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        diff_html(output_html, 'spec/samples/readme_file_with_other_experiment.html')
+      end
+
     end
   end
 end
@@ -169,7 +152,7 @@ end
 def diff_html(output_html, expected_file)
   expected_html = File.read(File.join(Rails.root, expected_file))
 
-  # parse the html as XML convert to a hash for comparison, so we don't have to worry about spacing/line ending differences
+  # parse the html as XML and convert to a hash for comparison, so we don't have to worry about spacing/line ending differences
   actual_hash = Hash.from_xml(output_html)
   expected_hash = Hash.from_xml(expected_html)
 
@@ -181,6 +164,7 @@ def diff_html(output_html, expected_file)
     puts "Actual:"
     puts output_html
   end
+
   diff.should == {}
 
 end

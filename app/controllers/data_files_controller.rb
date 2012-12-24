@@ -78,7 +78,7 @@ class DataFilesController < ApplicationController
 
     old_filename = @data_file.filename
     if @data_file.update_attributes(params[:data_file])
-      @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root'])
+      @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root']) unless @data_file.is_package?
       redirect_to data_file_path, notice: SAVE_MESSAGE
     else
       render action: "edit"
@@ -157,39 +157,33 @@ class DataFilesController < ApplicationController
   end
 
   def download
-      extname = File.extname(@data_file.filename)[1..-1]
-      mime_type = Mime::Type.lookup_by_extension(extname)
-      content_type = mime_type.to_s unless mime_type.nil?
-
-      file_params = {:filename => @data_file.filename}
-      file_params[:type] = content_type if content_type
-      send_file @data_file.path, file_params
+    send_data_file(@data_file)
   end
 
   def download_selected
-    ids=current_user.data_files.collect(&:id)
-    unless ids.empty?
-      send_zip(ids)
+    if current_user.data_files.empty?
+      redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      redirect_to(:back)
+      ids=current_user.data_files.collect(&:id)
+      unless ids.empty?
+        if ids.size == 1
+          send_data_file(DataFile.find(ids.first))
+        else
+          send_zip(ids)
+        end
+      else
+        redirect_to(:back||data_files_path)
+      end
     end
   end
 
-  def package_selected
-    ids=current_user.data_files.collect(&:id)
-    unless ids.empty?
-      send_bagit(ids)
-    else
-      redirect_to(:back)
-    end
-  end
 
   def destroy
     file = DataFile.find(params[:id])
     if file.destroy
       begin
         CartItem.where("data_file_id = ?", file.id).each do |item|
-            item.destroy
+          item.destroy
         end
         File.delete @data_file.path
         redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
@@ -203,10 +197,20 @@ class DataFilesController < ApplicationController
 
   private
 
+  def send_data_file(data_file)
+    extname = File.extname(data_file.filename)[1..-1]
+    mime_type = Mime::Type.lookup_by_extension(extname)
+    content_type = mime_type.to_s unless mime_type.nil?
+
+    file_params = {:filename => data_file.filename}
+    file_params[:type] = content_type if content_type
+    send_file data_file.path, file_params
+  end
+
   def cleanout_cart_items
     file_id = params[:id]
     CartItem.where(:data_file_id == file_id).each do |item|
-      item.destroy
+      item.destroy if item.user_id.eql?(current_user.id)
     end
   end
 
@@ -257,6 +261,12 @@ class DataFilesController < ApplicationController
       @data_files = @data_files.reverse if sort_direction == "desc"
     else
       @data_files = @data_files.order(col + ' ' + sort_direction)
+    end
+    @unadded_items = false
+    @data_files.each do |data_file|
+      unless current_user.data_file_in_cart?(data_file)
+        @unadded_items = true
+      end
     end
 
     if @search.error

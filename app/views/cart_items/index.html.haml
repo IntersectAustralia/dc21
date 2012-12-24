@@ -3,17 +3,12 @@
 - content_for :breadcrumb  do
   %h1 View / Edit Cart
 
-
-
-
-
-
 - if @cart_items.empty?
   %h3 Your cart is empty.
 - else
   .form-actions
     .actions-pre
-      = cancel_button "Back", :back
+      = cancel_button "Back", data_files_path
     .actions
       = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
       = link_to "Package",  download_selected_data_files_path, :class => "bluebutton"
@@ -22,9 +17,9 @@
     = @cart_items.size == 1 ? "Showing 1 file" : "Showing #{@cart_items.size} files"
 
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
-  %table
+  %table#exploredata
     %tr
-      %th.sortable.filename= "Filename"
+      %th.sortable.filename=  "Filename"
       %th.sortable.date=  "Date added"
       %th.sortable.size= "Size"
       %th.sortable.email=  "Added by"
@@ -39,14 +34,14 @@
         %td.date= data_file.created_at.to_s(:with_time)
         %td.size= number_to_human_size(data_file.file_size)
         %td.email= data_file.created_by.email if data_file.created_by
-        %td.type= data_file.status_as_string
+        %td.type= data_file.file_processing_status
         %td.experiment= data_file.experiment_name
         %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "redbutton", :id => "remove_from_cart_#{cart_item.id}"
 
 
 .form-actions
   .actions-pre
-    = cancel_button "Back", :back
+    = cancel_button "Back", data_files_path
   .actions
     - unless @cart_items.empty?
       = link_to "Download", download_selected_data_files_path, :class => "bluebutton"

@@ -1,7 +1,7 @@
 - content_for :breadcrumb  do
   %h1 Home / Explore Data
 
-- add_all_warning = "Do you really want to add #{@data_files.size} files to your cart?"
+- add_all_warning = "Do you really want to add all files to your cart?"
 
 = will_paginate(@data_files_paginated)
 .datacontroll
@@ -106,12 +106,12 @@
             .facility_group
               = link_to "+", "#", :id => "expand_#{facility.name}", :class => "expand_facility"
               = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
-              = check_box_tag "search[facilities][]", facility.name, @selected_facilities.include?(facility.name), :id => "search_facility_#{index}", :class => :facility_parent
+              = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
               .facility_children
                 - experiments.each_with_index do |experiment, e_index|
                   - if experiment.facility_id == facility.id
                     = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
-                    = check_box_tag "search[experiments][]", experiment.name, @selected_experiments.include?(experiment.name), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
+                    = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
         %h4#variable.expand Columns:
@@ -128,9 +128,9 @@
                   = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
-        %h4#uploader.expand Uploader:
+        %h4#uploader.expand Added By:
         .uploader
-          = label_tag "search[uploader_id]", "Uploader:"
+          = label_tag "search[uploader_id]", "Added By:"
           = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
@@ -148,6 +148,7 @@
   = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
     = hidden_field_tag "searched_from_date", @from_date
     = hidden_field_tag "searched_to_date", @to_date
+
     %table#exploredata.search
       %tr
         -##%th.view.select
@@ -160,7 +161,8 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          %a.bluebutton#add_all_to_cart{:href => add_all_cart_items_path(:data_file_ids => @data_files.map(&:id))} Add All
+          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+
       - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
@@ -170,13 +172,15 @@
           %td.date= data_file.created_at.to_s(:with_time)
           %td.size= number_to_human_size(data_file.file_size)
           %td.email= data_file.created_by.email if data_file.created_by
-          %td.type= data_file.status_as_string
+          %td.type= data_file.file_processing_status
           %td.experiment= data_file.experiment_name
           %td.add_cart
-            - unless current_user.data_file_in_cart?(data_file)
-              = link_to 'Add to Cart', cart_items_path(:data_file_ids => data_file), :method => :post, :class => "bluebutton", :id => "add_to_cart_#{data_file.id}", :remote => true
-    #helper_text.select
-      Select one or more files to download
+            -if current_user.data_file_in_cart?(data_file)
+              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "bluebutton disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
+            -else
+              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
+      #helper_text.select
+        Select one or more files to download
     -###download_actions.actions.hidden
       = submit_tag "Download Selected Files", :class => "bluebutton"
       -#= submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"

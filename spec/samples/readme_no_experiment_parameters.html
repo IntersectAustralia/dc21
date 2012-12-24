@@ -3,15 +3,196 @@
 <html>
 <head></head>
 <body>
+<h1>Summary</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Experiment</th>
+        <th>Facility</th>
+        <th>Download</th>
+        <th>View</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><a href="#file_1">datafile.jpg</a></td>
+        <td>RAW</td>
+        <td><a href="#experiment_1">High CO2 and Drought</a></td>
+        <td><a href="#facility_1">Whole Tree Chambers</a></td>
+        <td><a href="http://localhost:3000/data_files/1/download">Download</a></td>
+        <td><a href="http://localhost:3000/data_files/1">View</a></td>
+    </tr>
+    <tr>
+        <td><a href="#file_2">myfile.txt</a></td>
+        <td>PROCESSED</td>
+        <td><a href="#experiment_1">High CO2 and Drought</a></td>
+        <td><a href="#facility_1">Whole Tree Chambers</a></td>
+        <td><a href="http://localhost:3000/data_files/2/download">Download</a></td>
+        <td><a href="http://localhost:3000/data_files/2">View</a></td>
+    </tr>
+    </tbody>
+</table>
 <h1>Files</h1>
+<a name="datafile_1"/>
 <section>
     <h2>datafile.jpg</h2>
+
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>datafile.jpg</td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td>RAW</td>
+        </tr>
+        <tr>
+            <td>File format</td>
+            <td>TOA5</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>My file desc</td>
+        </tr>
+        <tr>
+            <td>Tags</td>
+            <td>Photo, Video</td>
+        </tr>
+        <tr>
+            <td>Experiment</td>
+            <td>High CO2 and Drought</td>
+        </tr>
+        <tr>
+            <td>Facility</td>
+            <td>Whole Tree Chambers</td>
+        </tr>
+        <tr>
+            <td>Date added</td>
+            <td>2012-06-27  6:49</td>
+        </tr>
+        <tr>
+            <td>Added by</td>
+            <td>Fred Bloggs</td>
+        </tr>
+        <tr>
+            <td>Persistent URL</td>
+            <td><a href="http://localhost:3000/data_files/1">http://localhost:3000/data_files/1</a></td>
+        </tr>
+
+    </table>
+
+    <h3>Information From The File</h3>
+    <table>
+        <tr>
+            <td>Start time</td>
+            <td>2012-10-23  7:56:45</td>
+        </tr>
+        <tr>
+            <td>End time</td>
+            <td>2012-12-01 22:04:23</td>
+        </tr>
+        <tr>
+            <td>Sample interval</td>
+            <td>15 minutes</td>
+        </tr>
+        <tr>
+            <td>Something</td>
+            <td>Some value</td>
+        </tr>
+        <tr>
+            <td>Station name</td>
+            <td>WTC</td>
+        </tr>
+        <tr>
+            <td>Table name</td>
+            <td>15_min</td>
+        </tr>
+    </table>
+
+    <h3>Columns</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Column</th>
+            <th>Column Mapping</th>
+            <th>Unit</th>
+            <th>Measurement Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Rnfll</td>
+            <td>Rainfall</td>
+            <td>Deg C</td>
+            <td>Avg</td>
+        </tr>
+        <tr>
+            <td>Humi</td>
+            <td></td>
+            <td>M</td>
+            <td>Avg</td>
+        </tr>
+        <tr>
+            <td>SoilTemp</td>
+            <td></td>
+            <td>M/S</td>
+            <td>Max</td>
+        </tr>
+        </tbody>
+    </table>
+
 </section>
+<a name="datafile_2"/>
 <section>
     <h2>myfile.txt</h2>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>myfile.txt</td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td>PROCESSED</td>
+        </tr>
+        <tr>
+            <td>File format</td>
+            <td>Unknown</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Tags</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Experiment</td>
+            <td>High CO2 and Drought</td>
+        </tr>
+        <tr>
+            <td>Facility</td>
+            <td>Whole Tree Chambers</td>
+        </tr>
+        <tr>
+            <td>Date added</td>
+            <td>2012-12-27 14:09</td>
+        </tr>
+        <tr>
+            <td>Added by</td>
+            <td>Fred Bloggs</td>
+        </tr>
+        <tr>
+            <td>Persistent URL</td>
+            <td><a href="http://localhost:3000/data_files/2">http://localhost:3000/data_files/2</a></td>
+        </tr>
+    </table>
 </section>
 
 <h1>Experiments</h1>
+<a name="experiment_1"/>
 <section>
     <h2>High CO2 and Drought</h2>
 
@@ -50,13 +231,14 @@
         </tr>
         <tr>
             <td>Persistent URL</td>
-            <td>http://localhost:3000/facilities/1/experiments/1</td>
+            <td><a href="http://localhost:3000/facilities/1/experiments/1">http://localhost:3000/facilities/1/experiments/1</a></td>
         </tr>
     </table>
 
 </section>
 
 <h1>Facilities</h1>
+<a name="facility_1"/>
 <section>
     <h2>Whole Tree Chambers</h2>
     <table>
@@ -82,7 +264,7 @@
         </tr>
         <tr>
             <td>Persistent URL</td>
-            <td>http://localhost:3000/facilities/1</td>
+            <td><a href="http://localhost:3000/facilities/1">http://localhost:3000/facilities/1</a></td>
         </tr>
     </table>
 </section>

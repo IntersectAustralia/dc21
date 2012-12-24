@@ -5,16 +5,15 @@ class DataFile < ActiveRecord::Base
   # the rest come from a config file and can be customised per installation
   STATUS_RAW = 'RAW'
   STATUS_ERROR = 'ERROR'
+  STATUS_PACKAGE = 'PACKAGE'
   # stati for selection when uploading
   STATI = [STATUS_RAW] + APP_CONFIG['file_types']
   # cannot change to 'RAW' or 'ERROR' during editing
   STATI_FOR_EDIT = STATI - [STATUS_RAW]
   # for searching we include error as well
-  ALL_STATI = STATI + [STATUS_ERROR]
-
+  ALL_STATI = [STATUS_PACKAGE] + STATI + [STATUS_ERROR]
 
   belongs_to :created_by, :class_name => "User"
-  belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
   has_many :cart_items
@@ -33,6 +32,7 @@ class DataFile < ActiveRecord::Base
   validate :end_time_not_before_start_time
 
   before_save :fill_end_time_if_blank
+  before_save :set_file_size_if_nil
 
   scope :most_recent_first, order("created_at DESC")
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
@@ -75,18 +75,8 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
-  def self.with_experiment(experiment_names)
-    data_file_ids = DataFile.unscoped.select("data_files.id").joins(:experiment).where("experiments.name" => experiment_names).collect(&:id)
-    where(:id => data_file_ids)
-  end
-
-  def self.searchable_facilities
-    existing_values = MetadataItem.select("DISTINCT(value)").where(:key => MetadataKeys::STATION_NAME_KEY).collect(&:value)
-    code_to_name_hash = Hash[*Facility.find_all_by_code(existing_values).collect { |mi| [mi.code, mi.name] }.flatten]
-    existing_values.each do |value|
-      code_to_name_hash[value] = value unless code_to_name_hash[value]
-    end
-    code_to_name_hash.collect { |k, v| [k, v] }.sort { |a, b| a[1] <=> b[1] }
+  def self.with_experiment(experiment_ids)
+    where(:experiment_id => experiment_ids)
   end
 
   def self.searchable_column_names
@@ -129,6 +119,14 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.eql? STATUS_RAW
   end
 
+  def is_package?
+    self.file_processing_status.eql? STATUS_PACKAGE
+  end
+
+  def is_toa5?
+    self.format.eql?('TOA5')
+  end
+
   def is_error_file?
     self.file_processing_status.eql? STATUS_ERROR
   end
@@ -147,21 +145,28 @@ class DataFile < ActiveRecord::Base
 
   def cols_unmapped?
     self.column_details.each do |col|
-      if col.find_by_code_uncased.nil?
+      if col.get_mapped_name.nil?
         return true
       end
     end
     return false
   end
 
-  def status_as_string
-    self.file_processing_status.present? ? self.file_processing_status.upcase : "UNDEFINED"
+  def experiment
+    # we don't use an association because of the special behaviour with using -1 for "Other"
+    return nil if experiment_id == -1 || experiment_id.nil?
+    Experiment.find(experiment_id)
   end
 
   def experiment_name
     return "Other" if experiment_id == -1
     return "" if experiment_id.nil?
     Experiment.find(experiment_id).name
+  end
+
+  def facility
+    return nil if experiment_id.nil? || experiment_id == -1
+    Experiment.find(experiment_id).facility
   end
 
   def facility_name
@@ -249,6 +254,11 @@ class DataFile < ActiveRecord::Base
     if start_time.present? && end_time.blank?
       self.end_time = self.start_time
     end
+  end
+
+  protected
+  def set_file_size_if_nil
+    self.file_size = 0 unless self.file_size
   end
 
   def candidate_overlaps(files)

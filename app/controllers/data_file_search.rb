@@ -20,7 +20,6 @@ class DataFileSearch
 
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
-    #self.experiments
 
     self.error =
         if date_range.error && upload_date_range.error

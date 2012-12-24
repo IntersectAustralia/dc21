@@ -45,10 +45,10 @@ describe PublishedCollectionRifCsWrapper do
       experiment2 = Factory(:experiment, :facility => facility1)
       experiment3 = Factory(:experiment, :facility => facility2)
 
-      df1 = Factory(:data_file, :experiment => experiment1)
-      df2 = Factory(:data_file, :experiment => experiment2)
-      df3 = Factory(:data_file, :experiment => experiment3)
-      df4 = Factory(:data_file, :experiment => experiment3)
+      df1 = Factory(:data_file, :experiment_id => experiment1.id)
+      df2 = Factory(:data_file, :experiment_id => experiment2.id)
+      df3 = Factory(:data_file, :experiment_id => experiment3.id)
+      df4 = Factory(:data_file, :experiment_id => experiment3.id)
       df5 = Factory(:data_file, :experiment_id => -1)
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes.size.should eq(3)
@@ -63,7 +63,7 @@ describe PublishedCollectionRifCsWrapper do
       facility.reload
       experiment = Factory(:experiment, :facility => facility)
 
-      df1 = Factory(:data_file, :experiment => experiment)
+      df1 = Factory(:data_file, :experiment_id => experiment.id)
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       # this should never happen, its ok that nothing shows
       wrapper.notes.size.should eq(1)
@@ -77,11 +77,11 @@ describe PublishedCollectionRifCsWrapper do
       exp3 = Factory(:experiment, :subject => "Bob")
       exp4 = Factory(:experiment, :subject => "Jane")
 
-      df1 = Factory(:data_file, :experiment => exp1)
-      df2 = Factory(:data_file, :experiment => exp2)
-      df3 = Factory(:data_file, :experiment => exp1)
-      df4 = Factory(:data_file, :experiment => exp3)
-      df5 = Factory(:data_file, :experiment => exp4)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.local_subjects.should eq(["Bob", "Fred"])
@@ -90,7 +90,7 @@ describe PublishedCollectionRifCsWrapper do
     it "Should handle data files with the 'Other' experiment" do
       exp1 = Factory(:experiment, :subject => "Fred")
 
-      df1 = Factory(:data_file, :experiment => exp1)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
@@ -105,11 +105,11 @@ describe PublishedCollectionRifCsWrapper do
       exp3 = Factory(:experiment, :access_rights => "Bob")
       exp4 = Factory(:experiment, :access_rights => "Jane")
 
-      df1 = Factory(:data_file, :experiment => exp1)
-      df2 = Factory(:data_file, :experiment => exp2)
-      df3 = Factory(:data_file, :experiment => exp1)
-      df4 = Factory(:data_file, :experiment => exp3)
-      df5 = Factory(:data_file, :experiment => exp4)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.access_rights.should eq(["Bob", "Fred"])
@@ -118,7 +118,7 @@ describe PublishedCollectionRifCsWrapper do
     it "should should handle files with the 'other' experiment" do
       exp1 = Factory(:experiment, :access_rights => "Fred")
 
-      df1 = Factory(:data_file, :experiment => exp1)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
@@ -139,11 +139,11 @@ describe PublishedCollectionRifCsWrapper do
       Factory(:experiment_for_code, :url => 'asdf', :experiment => exp3)
       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/020103', :experiment => exp4)
 
-      df1 = Factory(:data_file, :experiment => exp1)
-      df2 = Factory(:data_file, :experiment => exp2)
-      df3 = Factory(:data_file, :experiment => exp1)
-      df4 = Factory(:data_file, :experiment => exp3)
-      df5 = Factory(:data_file, :experiment => exp4)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
@@ -153,7 +153,7 @@ describe PublishedCollectionRifCsWrapper do
       exp1 = Factory(:experiment)
       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
 
-      df1 = Factory(:data_file, :experiment => exp1)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
@@ -185,14 +185,15 @@ describe PublishedCollectionRifCsWrapper do
     end
 
     it "should handle data files with the 'other' experiment" do
-      fac1 = Factory(:facility)
-      fac1.stub(:location_as_points).and_return(['loc'])
+      fac1 = Factory(:facility, :a_lat => 1.1, :a_long => -87.3)
       exp1 = Factory(:experiment, :facility => fac1)
-      df1 = Factory(:data_file, :experiment => exp1)
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
+      df1.experiment.should eq(exp1)
+      df2.experiment.should be_nil
       wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
-      wrapper.locations.should eq([['loc']])
+      wrapper.locations.should eq([[{:lat=>1.1, :long=>-87.3}]])
     end
   end
 

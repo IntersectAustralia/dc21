@@ -16,7 +16,9 @@
         %th= "Size"
         %th= "Added by"
         %th.add_cart
-          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :get, :class => "bluebutton", :id => "add_all_to_cart"
+          - unless @data_files.length < 1
+            = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           %td= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}", :title => 'View'
@@ -24,5 +26,4 @@
           %td= number_to_human_size(data_file.file_size)
           %td= data_file.created_by.email if data_file.created_by
           %td.add_cart
-            - unless current_user.data_file_in_cart?(data_file)
-              = link_to 'Add to Cart', cart_items_path(:data_file_ids => data_file), :method => :post, :class => "bluebutton", :id => "add_to_cart_#{data_file.id}", :remote => true
+            = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => current_user.data_file_in_cart?(data_file)? "bluebutton disabled" : "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}

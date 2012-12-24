@@ -7,13 +7,18 @@
     = render "shared/error_messages", :target => @data_file
     .control-group
       %label.control-label{ :for => :data_file_filename } Name
-      .controls
-        = required
-        = f.text_field :filename
+      -if @data_file.is_package?
+        .controls
+          = @data_file.filename
+      -else
+        .controls
+          = required
+          = f.text_field :filename
+
     .control-group
       %label.control-label{ :for => :file_processing_status } File type
       .controls
-        - if @data_file.is_raw_file?
+        - if @data_file.is_raw_file? or @data_file.is_package?
           = @data_file.file_processing_status
         - else
           = required

@@ -6,14 +6,13 @@ class ColumnDetail < ActiveRecord::Base
 
   default_scope order(:position)
 
-  def find_by_code_uncased
-    mappings = ColumnMapping.all
-    mappings.each do |map|
-      if map.code.to_s.downcase == self.name.to_s.downcase
-        return map
+  def get_mapped_name
+    ColumnMapping.all.each do |map|
+      if map.code.downcase == self.name.downcase
+        return map.name
       end
     end
-    return nil
+    nil
   end
 
 end

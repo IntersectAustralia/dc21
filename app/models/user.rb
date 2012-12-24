@@ -159,8 +159,15 @@ class User < ActiveRecord::Base
     data_files.include?(data_file)
   end
 
-  private
+  def cart_size
+    sum = 0
+    data_files.each do |data_file|
+      sum += data_file.file_size unless data_file.file_size.nil?
+    end
+    sum
+  end
 
+    private
   def initialize_status
     self.status = "U" unless self.status
   end
