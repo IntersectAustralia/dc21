@@ -64,41 +64,50 @@ class DataFilesController < ApplicationController
   end
 
   def create
-    files = []
-    params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
+    begin
+      files = []
+      params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
 
-    experiment_id = params[:experiment_id]
-    description = params[:description]
-    type = params[:file_processing_status]
-    tags = params[:tags]
+      experiment_id = params[:experiment_id]
+      description = params[:description]
+      type = params[:file_processing_status]
+      tags = params[:tags]
 
-    unless validate_inputs(files, experiment_id, type, description, tags)
-      render :new
-      return
+      unless validate_inputs(files, experiment_id, type, description, tags)
+        render :new
+        return
+      end
+
+      @uploaded_files = []
+      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+      files.each do |file|
+        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
+      end
+    ensure
+      clean_up_temp_files(files)
     end
 
-    @uploaded_files = []
-    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-    files.each do |file|
-      @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
-    end
   end
 
   def api_create
-    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+    begin
+      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
 
-    file = params[:file]
-    type = params[:type]
-    experiment_id = params[:experiment_id]
-    tag_names = params[:tag_names]
-    errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
+      file = params[:file]
+      type = params[:type]
+      experiment_id = params[:experiment_id]
+      tag_names = params[:tag_names]
+      errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
 
-    if errors.empty?
-      uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
-      messages = uploaded_file.messages.collect { |m| m[:message] }
-      render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
-    else
-      render :json => {:messages => errors}, :status => :bad_request
+      if errors.empty?
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+        messages = uploaded_file.messages.collect { |m| m[:message] }
+        render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
+      else
+        render :json => {:messages => errors}, :status => :bad_request
+      end
+    ensure
+      clean_up_temp_files([file])
     end
   end
 
@@ -328,4 +337,13 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def clean_up_temp_files(files)
+    # removes RackMultipart from /tmp
+    files.each do |file|
+      if file.is_a? ActionDispatch::Http::UploadedFile
+        tempfile = file.tempfile.path
+        FileUtils.remove_entry_secure tempfile if File::exists?(tempfile)
+      end
+    end
+  end
 end
