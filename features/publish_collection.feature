@@ -6,13 +6,15 @@ Feature: Publish a PACKAGE
 
   Background:
     Given I am logged in as "georgina@intersect.org.au"
-    And I have a user "primary_contact@intersect.org.au"
+    And "georgina@intersect.org.au" has role "Administrator"
+    And I have a user "researchert@intersect.org.au"
+    And "researcher@intersect.org.au" has role "Researcher"
     And I have data files
-      | filename      | file_processing_status |created_at       | uploaded_by               | start_time       | end_time            | path                | id | published  | published_date      |
-      | package1.zip  | PACKAGE                |01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip | 1  | false      |                     |
-      | package2.zip  | PACKAGE                |30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip | 2  | false      |                     |
+      | filename      | file_processing_status |created_at       | uploaded_by               | start_time       | end_time            | path                  | id | published  | published_date      |
+      | package1.zip  | PACKAGE                |01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false      |                     |
+      | package2.zip  | PACKAGE                |30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false      |                     |
       | published.zip | PACKAGE                |30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/published.zip | 3  | true       | 27/12/2012 13:05:23 |
-      | sample1.txt   | RAW                   |01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 4  | false      |                     |
+      | sample1.txt   | RAW                    |01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false      |                     |
 
 #
 #
@@ -66,6 +68,15 @@ Feature: Publish a PACKAGE
    Then I should see "Publish"
    And I follow "Publish"
    And I should see "Your collection has been successfully submitted for publishing."
+
+  Scenario: Only administrators are allowed to edit a package once published
+   Given I am logged in as researcher@intersect.org.au
+   And I am on the data file details page for published.zip
+   Then I should not see "Edit Metadata"
+   When I am logged in as researcher@intersect.org.au
+   And I am on the data file details page for published.zip
+   Then I should see "Edit Metadata"
+
 #
 #  Scenario: Publish button does not show prior to searching
 #    Given I am on the list data files page
