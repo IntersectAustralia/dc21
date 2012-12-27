@@ -7,12 +7,12 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type, description, tags=[])
-    build_named_file(file.original_filename, file, experiment_id, type, description, tags=[])
+  def build(file, experiment_id, type, description, tags = [])
+    build_named_file(file.original_filename, file, experiment_id, type, description, tags)
   end
 
 
-  def build_named_file(original_filename, file, experiment_id, type, description, tags=[])
+  def build_named_file(original_filename, file, experiment_id, type, description, tags = [])
     path, new_filename = store_file(original_filename, file)
     data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, original_filename, file.size)
     if data_file.messages.blank?

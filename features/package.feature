@@ -53,8 +53,30 @@ Feature: Create a package
     Then I should see "Filename"
     And I should see "Experiment"
     And I press "Save"
-    Then I should see "Filename can't be blank"
-    And I should see "Experiment can't be blank"
+    Then I should see "Please provide a filename"
+    And I should see "Please select an experiment"
+
+  Scenario: New package - rendering correct data_file view screen
+    Given I am on the list data files page
+    And I add sample.txt to the cart
+    And I add datafile.dat to the cart
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Filename" with "my_other_package"
+    And I fill in "Description" with "Here's a description"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    And I press "Save"
+    When I am on the data file details page for my_other_package.zip
+    Then I should see details displayed
+      | Name  | my_other_package.zip   |
+      | Type        | PACKAGE |
+      | File format | BAGIT   |
+      | Description | Here's a description   |
+      | Experiment  | My Experiment   |
+
+
 
 
 
