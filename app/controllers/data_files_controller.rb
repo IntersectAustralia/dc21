@@ -38,7 +38,7 @@ class DataFilesController < ApplicationController
   end
 
   def clear
-    session[:search_params] = nil
+    session["search"] = nil
     set_tab :explore, :contentnavigation
     do_search(params[:search])
     @data_files_paginated = @data_files.paginate(page: params[:page])
