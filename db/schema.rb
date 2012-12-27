@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121218113105) do
+ActiveRecord::Schema.define(:version => 20121227150816) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "data_file_id"
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(:version => 20121218113105) do
     t.string   "file_processing_description"
     t.integer  "experiment_id"
     t.integer  "file_size"
+    t.boolean  "published",                   :default => false
+    t.datetime "published_date"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|
@@ -128,6 +130,11 @@ ActiveRecord::Schema.define(:version => 20121218113105) do
   end
 
   add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
+
+  create_table "packages", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "parameter_categories", :force => true do |t|
     t.string   "name"

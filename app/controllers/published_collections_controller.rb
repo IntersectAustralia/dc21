@@ -14,18 +14,21 @@ class PublishedCollectionsController < ApplicationController
   end
 
   def create
-    @published_collection.created_by = current_user
-    if @published_collection.save
-      search = session[:search_for_publishing]
-      files = search.do_search(DataFile.accessible_by(current_ability))
+    redirect_to root_path, notice: 'Your collection has been successfully submitted for publishing.'
 
-      build_rif_cs(files)
-      build_zip_file(files)
-      @published_collection.save!
-      redirect_to root_path, notice: 'Your collection has been successfully submitted for publishing.'
-    else
-      render 'new_from_search'
-    end
+
+#    @published_collection.created_by = current_user
+#    if @published_collection.save
+#      search = session[:search_for_publishing]
+#      files = search.do_search(DataFile.accessible_by(current_ability))
+#
+#      build_rif_cs(files)
+#      build_zip_file(files)
+#      @published_collection.save!
+#      redirect_to root_path, notice: 'Your collection has been successfully submitted for publishing.'
+#    else
+#      render 'new_from_search'
+#    end
   end
 
   def show

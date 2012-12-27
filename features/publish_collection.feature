@@ -1,30 +1,21 @@
-#Feature: Publish a collection
-#  In order to tell ANDS about my data
- # As a user
-  #I want to publish a collection
+@javascript
+Feature: Publish a PACKAGE
+  In order to tell ANDS about my data
+  As a user
+  I want to publish a PACKAGE
 
-#  Background:
-#    Given I am logged in as "georgina@intersect.org.au"
-#    And I have a user "primary_contact@intersect.org.au"
-#    And I have facilities
-#      | name      | a_lat   | a_long   | b_lat    | b_long   | primary_contact                  |
-#      | Facility1 | 45.3434 | 150.9934 | 46.33333 | 155.5552 | primary_contact@intersect.org.au |
-#      | Facility2 | -10.003 | -13.4554 |          |          | primary_contact@intersect.org.au |
-#    And I have experiments
-#      | name            | subject  | access_rights                                       | facility  |
-#      | Rain Experiment | Rainfall | http://creativecommons.org/licenses/by-nc-nd/3.0/au | Facility1 |
-#      | Tree Experiment | Trees    | http://creativecommons.org/licenses/by-nc-sa/3.0/au | Facility2 |
-#    And experiment "Rain Experiment" has for code "0202 - ITEM 2" with url "http://purl.org/asc/1297.0/2008/for/0202"
-#    And experiment "Rain Experiment" has for code "030304 - ITEM 4" with url "http://purl.org/asc/1297.0/2008/for/030304"
-#####    And experiment "Tree Experiment" has for code "05 - ENVIRONMENTAL SCIENCES" with url "http://purl.org/asc/1297.0/2008/for/05"
-#    And I have uploaded "sample1.txt" with type "RAW" and description "sample1 desc" and experiment "Rain Experiment"
-#    And I have uploaded "weather_station_05_min.dat" with type "PROCESSED" and description "5 min desc" and experiment "Rain Experiment"
-#    And I have uploaded "weather_station_15_min.dat" with type "RAW" and description "15 min desc" and experiment "Rain Experiment"
-#    And I have uploaded "WTC01_Table1.dat" with type "PROCESSED" and description "wtc01 desc" and experiment "Tree Experiment"
-#    And I have uploaded "sample2.txt" with type "PROCESSED" and description "sample 2" and experiment "Tree Experiment"
-#    And I have set the dates of "sample2.txt" as "2011-10-12 09:00:23 UTC" to "2011-11-12 04:00:00 UTC"
+  Background:
+    Given I am logged in as "georgina@intersect.org.au"
+    And I have a user "primary_contact@intersect.org.au"
+    And I have data files
+      | filename      | file_processing_status |created_at       | uploaded_by               | start_time       | end_time            | path                | id | published  | published_date      |
+      | package1.zip  | PACKAGE                |01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip | 1  | false      |                     |
+      | package2.zip  | PACKAGE                |30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip | 2  | false      |                     |
+      | published.zip | PACKAGE                |30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/published.zip | 3  | true       | 27/12/2012 13:05:23 |
+      | sample1.txt   | RAW                   |01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 4  | false      |                     |
+
 #
-#  @javascript
+#
 #  Scenario: Search by date range then publish - zip should include full files (regardless of whether they fall outside date range)
 #    Given I do a date search for data files with dates "2011-10-10" and "2011-10-15"
 #    And I publish these search results as "My Collection Of Stuff" with description "Describe my collection of stuff"
@@ -53,13 +44,28 @@
 #    Then there should be a published collection record named "No Dates" with creator "georgina@intersect.org.au"
 #    And the RIF-CS file for the latest published collection should match "samples/rif-cs/sample1-rif-cs.xml"
 #
-#  Scenario: Publish button does not show if no results from the search
-#    Given I am on the list data files page
-#    And I click on "Type:"
-#    And I check "CLEANSED"
-#    And I press "Update Search Results"
-#    Then I should see "No matching files"
-#    And I should not see link "Publish"
+  Scenario: Metadata should reflect publish status for a package
+   Given I am on the data file details page for package1.zip
+   Then I should see details displayed
+    | Name  | package1.zip   |
+    | Published        | No |
+   And I should not see "Published date:"
+   When I am on the data file details page for published.zip
+   Then I should see details displayed
+    | Name            | published.zip |
+    | Published       | Yes           |
+    | Published date  | 2012-12-27 13:05   |
+   When I am on the data file details page for sample1.txt
+   Then I should not see "Published:"
+   And I should not see "Published date:"
+
+  Scenario: Publish button should only appear for packages
+   Given I am on the data file details page for sample1.txt
+   Then I should not see "Publish"
+   When I am on the data file details page for package1.zip
+   Then I should see "Publish"
+   And I follow "Publish"
+   And I should see "Your collection has been successfully submitted for publishing."
 #
 #  Scenario: Publish button does not show prior to searching
 #    Given I am on the list data files page
