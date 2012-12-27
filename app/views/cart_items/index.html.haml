@@ -15,6 +15,9 @@
 
   %h3.results
     = @cart_items.size == 1 ? "Showing 1 file" : "Showing #{@cart_items.size} files"
+    %br
+    Total #{number_to_human_size(current_user.cart_size)}
+
 
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
   %table#exploredata
