@@ -125,7 +125,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_toa5?
-    self.format.eql?('TOA5')
+    self.format.eql?(FileTypeDeterminer::TOA5)
   end
 
   def is_error_file?

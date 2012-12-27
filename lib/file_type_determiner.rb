@@ -4,9 +4,9 @@ class FileTypeDeterminer
   BAGIT = "BAGIT"
 
   def identify_file(data_file)
-    type = nil
-    type = TOA5 if is_toa5?(data_file)
-    type = BAGIT if is_bagit?(data_file)
+    return TOA5 if is_toa5?(data_file)
+    return BAGIT if is_bagit?(data_file)
+    nil
   end
 
   private
