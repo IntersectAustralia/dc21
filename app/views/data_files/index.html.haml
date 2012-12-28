@@ -181,7 +181,4 @@
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
       #helper_text.select
         Select one or more files to download
-    -###download_actions.actions.hidden
-      = submit_tag "Download Selected Files", :class => "bluebutton"
-      -#= submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"
 

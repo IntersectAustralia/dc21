@@ -52,6 +52,7 @@ Dc21app::Application.routes.draw do
   resources :data_files do
     member do
       get :download
+      get :publish
     end
     collection do
       get :download_selected

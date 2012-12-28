@@ -16,5 +16,5 @@
     = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton",
      :confirm => delete_warning, :method => :delete
   - if @data_file.is_package? and !@data_file.published
-    = link_to 'Publish', published_collections_path, :class => "bluebutton", :method => :post
+    = link_to 'Publish', published_collections_path(:package_id => @data_file.id), :class => "bluebutton", :method => :post
 

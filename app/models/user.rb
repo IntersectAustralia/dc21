@@ -81,6 +81,9 @@ class User < ActiveRecord::Base
     save
   end
 
+  def is_admin?
+    self.approved? and self.role.admin?
+  end
 
   def approved?
     self.status == 'A'

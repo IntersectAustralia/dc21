@@ -232,6 +232,13 @@ class DataFile < ActiveRecord::Base
     end
   end
 
+
+  def set_to_published
+    self.published = true
+    self.published_date = DateTime.now
+    save!
+  end
+
   protected
 
   def entity_url(host_url)
