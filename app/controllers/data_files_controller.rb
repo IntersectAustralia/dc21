@@ -2,7 +2,7 @@ require 'csv'
 
 class DataFilesController < ApplicationController
 
-  ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id)
+  ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id data_files.file_size)
   SAVE_MESSAGE = 'The data file was saved successfully.'
 
   before_filter :authenticate_user!
