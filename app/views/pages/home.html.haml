@@ -17,7 +17,9 @@
         %th= "Added by"
         %th.add_cart
           - unless @data_files.length < 1
-            = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+            -#= link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+            = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => "bluebutton", :id => "add_all_to_cart"
+
 
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}

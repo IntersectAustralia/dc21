@@ -161,7 +161,8 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+          -#= link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => "bluebutton" , :id => "add_all_to_cart"
 
       - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}

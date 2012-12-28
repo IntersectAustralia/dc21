@@ -65,11 +65,11 @@ $(function () {
         $("#drop3").html("<b>"+cartcount + " Files in Cart</b> <br>" + bytesToSize(window.cart_size) + " <span class=\"caret\"></span>");
       }
       //  disable 'add all' button if all others have been clicked
-      var all_items = $("a[id^=add_cart_item]").length
-      var used_items = $("a[id^=add_cart_item_disabled]").length
-      if (used_items == all_items) {
-        $('#add_all_to_cart').addClass("disabled");
-      }
+      //var all_items = $("a[id^=add_cart_item]").length
+      //var used_items = $("a[id^=add_cart_item_disabled]").length
+      //if (used_items == all_items) {
+     //   $('#add_all_to_cart').addClass("disabled");
+      //}
       // enable cart menu dropdown, as it is no longer empty
       $("#drop3").attr("data-toggle", "dropdown");
       $("#notice").slideUp();
