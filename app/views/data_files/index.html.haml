@@ -89,9 +89,25 @@
         %h4#type_category.expand Type:
         .type
           - DataFile::ALL_STATI.each_with_index do |status, index|
-            = label_tag "search_status_#{index}", status
-            = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}"
+            - package = status.eql?('PACKAGE')
+            .type_group
+              - if package
+                = link_to "+", "#", :id => "expand_package", :class => "expand_type"
+              = label_tag "search_status_#{index}", status,  :class => package.eql?(true) ? :type_parent :  :type
+              = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}",  :class => package.eql?(true) ? :type_parent : :type
+              .type_children
+                - if status.eql?('PACKAGE')
+                  = label_tag "search_status_published", 'Published', :class => :publish_title
+                  = label_tag "search_status_published", 'Yes', :class => :publish_option
+                  = check_box_tag "search[published][]", true, false, :id => "search_status_#{index}", :class => :publish
+                  = label_tag "search_status_unpublished", 'No', :class => :publish_option
+                  = check_box_tag "search[unpublished][]", true, false, :id => "search_status_#{index}", :class => :publish
+                  = label_tag "search_published_date", 'Date:', :class => :publish
+                  = text_field_tag "search[published_date][]", nil, :id => :published_date, :datepicker => true, :size => 10, :maxlength => 10, :class => "publish_date"
+                  = label_tag "search_published_date", 'DOI:', :class => :publish
+                  = text_field_tag "search[published_doi][]", '', :id => :published_doi, :datepicker => true, :size => 10, :maxlength => 10, :class => "publish_date"
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
+
       .searchcategory
         %h4#tags_category.expand Tags:
         .tags
@@ -155,10 +171,8 @@
           = (link_to "All", "javascript:selectToggle(false, 'datafiles');") + "/" + (link_to "None", "javascript:selectToggle(true, 'datafiles');")
         -##%th.view View
         %th.sortable.filename= sortable "data_files.filename", "Filename"
-        %th.sortable.file_size= sortable "data_files.file_size", "Size3"
-        %th.sortable.experiment2= sortable "data_files.experiment_id", "Experiment"
-        -#%th.sortable.date= sortable "data_files.created_at", "Date added"
-
+        %th.sortable.date= sortable "data_files.created_at", "Date added"
+        %th.sortable.size= sortable "data_files.file_size", "Size"
         %th.sortable.email= sortable "users.email", "Added by"
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
@@ -171,11 +185,9 @@
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
           -##%td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}", :title => 'View'
 
-          %td.filename= link_to  data_file.filename, data_file_path(data_file)
-          %td.file_size= data_file.file_size
-          %td.experiment2= data_file.experiment_name
-          -#%td.date= data_file.created_at.to_s(:with_time)
-
+          %td.filename= link_to data_file.filename, data_file_path(data_file)
+          %td.date= data_file.created_at.to_s(:with_time)
+          %td.size= number_to_human_size(data_file.file_size)
           %td.email= data_file.created_by.email if data_file.created_by
           %td.type= data_file.file_processing_status
           %td.experiment= data_file.experiment_name

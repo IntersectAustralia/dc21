@@ -547,21 +547,30 @@ th.actions, td.actions
       input[type=checkbox]
         +m-p-w-h-p-t-b-l-r-f(7px 0)
         +inlineblock
-      label.variable_child
+      label.variable_child, label.type_child
         +m-p-w-h-p-t-b-l-r-f("", 5px 0px 0 40px, 189px)
         +inlineblock
       label.variable_parent
         +m-p-w-h-p-t-b-l-r-f("", 3px 0px 0 5px, 190px)
         +inlineblock
-      label.facility_parent
+      label.facility_parent, label.type_parent
         +m-p-w-h-p-t-b-l-r-f("", 5px 0px 0 5px, 190px)
         +inlineblock
-      label.type_parent
-        +m-p-w-h-p-t-b-l-r-f("", 5px 0px 0 5px, 190px)
-        +inlineblock
-      label.experiment
+      label.experiment, label.publish_title
         +m-p-w-h-p-t-b-l-r-f("", 5px 0px 0 40px, 189px)
         +inlineblock
+      label.experiment, label.publish
+        +m-p-w-h-p-t-b-l-r-f("", 5px 0px 0 40px, 189px)
+        +inlineblock
+      label.experiment, label.publish_option
+        +m-p-w-h-p-t-b-l-r-f("", 5px 0px 0 60px, 169px)
+        +inlineblock
+      .publish_date
+        width: 65px
+        +m-p-w-h-p-t-b-l-r-f(1px 30px)
+
+      label.type
+        padding: 0 19px 0 20px
 
     .actions
       +m-p-w-h-p-t-b-l-r-f(20px 0 15px, 0 0 10px 0)
@@ -587,7 +596,7 @@ input#datasearch
 input.datasearchsubmit
   +m-p-w-h-p-t-b-l-r-f(0 0 0 -144px, "", "", 32px, "", "", "", "", "", right)
 
-a.expand_variable, a.expand_facility, a.expand_type
+a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
   padding-left: 20px
   width: 10px
   +inlineblock

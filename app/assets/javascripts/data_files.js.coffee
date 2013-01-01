@@ -1,6 +1,7 @@
 jQuery ->
   $('.variable_children').hide()
   $('.facility_children').hide()
+  $('.type_children').hide()
 
   $('input.variable_parent').click ->
     cb = $(this)
@@ -43,6 +44,15 @@ jQuery ->
       children.each ->
         $(this).prop("checked", false)
 
+  #select all on parent click
+  $('input.type_parent').click ->
+    cb = $(this)
+    children = cb.closest('div.type_group').find('input.publish')
+    if cb.is(':checked')
+    else
+      children.each ->
+        $(this).prop("checked", false)
+
   # child click
   $('input.experiment').click ->
     cb = $(this)
@@ -55,9 +65,33 @@ jQuery ->
     else
       parent.prop("checked", false)
 
+  # child click
+  $('input.publish').click ->
+    cb = $(this)
+    parent = cb.closest('div.type_group').find('input.type_parent').first()
+    if cb.is(':checked')
+      checked_children = cb.closest('div.type_group').find('input.publish:checked')
+      if checked_children.length > 0
+        parent.prop("checked", true)
+      #uncheck other options
+      checked_children.each ->
+        $(this).prop("checked", false)
+      cb.prop("checked", true)
+
+
   # expand and hide
   $('.expand_facility').click ->
     children_div = $(this).closest('div.facility_group').find('.facility_children').first()
+    children_div.slideToggle('fast')
+    if $(this).text() == "+"
+      $(this).text("-")
+    else
+      $(this).text("+")
+    false
+
+  # expand and hide
+  $('.expand_type').click ->
+    children_div = $(this).closest('div.type_group').find('.type_children').first()
     children_div.slideToggle('fast')
     if $(this).text() == "+"
       $(this).text("-")
