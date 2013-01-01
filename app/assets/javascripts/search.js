@@ -123,7 +123,6 @@ function selectToggle(checked, form) {
     else {
       dataForm.elements[i].checked = "checked";
       $('#download_actions').show();
-
     }
   }
 }

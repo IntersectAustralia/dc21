@@ -80,6 +80,22 @@ class DataFile < ActiveRecord::Base
     where(:experiment_id => experiment_ids)
   end
 
+  def self.with_published
+    where(:published => true)
+  end
+
+  def self.with_unpublished
+    where(:published => false)
+  end
+
+  def self.with_published_date(date)
+    where {published_date == date}
+  end
+
+  def self.with_published_doi(date)
+    #
+  end
+
   def self.searchable_column_names
     mapped = ColumnMapping.code_to_name_map
 

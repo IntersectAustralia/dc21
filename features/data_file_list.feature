@@ -8,14 +8,14 @@ Feature: View the list of data files
 
   Scenario: View the list
     Given I have data files
-      | filename     | created_at       | uploaded_by               | file_processing_status | experiment    |
-      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au | RAW                    | My Experiment |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | CLEANSED               | Experiment 2  |
+      | filename      | created_at        | uploaded_by               | file_processing_status  | experiment    |
+      | datafile.dat  | 30/11/2011 10:15  | georgina@intersect.org.au | RAW                     | My Experiment |
+      | sample.txt    | 01/12/2011 13:45  | sean@intersect.org.au     | CLEANSED                | Experiment 2  |
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename     | Date added       | Added by                  | Type     | Experiment    |
-      | sample.txt   | 2011-12-01 13:45 | sean@intersect.org.au     | CLEANSED | Experiment 2  |
-      | datafile.dat | 2011-11-30 10:15 | georgina@intersect.org.au | RAW      | My Experiment |
+      | Filename| Date added  | Added by  | Type  | Experiment  |
+      | sample.txt  | 2011-12-01 13:45  | sean@intersect.org.au | CLEANSED  | Experiment 2  |
+      | datafile.dat  | 2011-11-30 10:15  | georgina@intersect.org.au | RAW | My Experiment |
     And I should see "Showing all 2 files"
 
   Scenario: View the list when there's nothing to show

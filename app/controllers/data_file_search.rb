@@ -13,6 +13,10 @@ class DataFileSearch
   attr_accessor :tags
   attr_accessor :uploader_id
   attr_accessor :upload_date_range
+  attr_accessor :published
+  attr_accessor :unpublished
+  attr_accessor :published_date
+  attr_accessor :published_doi
 
   def initialize(search_params)
     @search_params = search_params
@@ -20,8 +24,11 @@ class DataFileSearch
 
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
+    #self.published_date = Date.parse(@search_params[:published_date].first) unless @search_params[:published_date].nil? or @search_params[:published_date].empty?
 
     self.error =
+       # if published_date.error
+       #   "Published Date: #{published_date.error}"
         if date_range.error && upload_date_range.error
           "Date Range: #{date_range.error}, Upload Date Range: #{upload_date_range.error}"
         else
@@ -41,6 +48,10 @@ class DataFileSearch
     self.stati ||= []
     self.tags = @search_params[:tags]
     self.tags ||= []
+    self.published = @search_params[:published]
+    self.published ||= []
+    self.unpublished = @search_params[:unpublished]
+    self.unpublished ||= []
 
     self.uploader_id = @search_params[:uploader_id]
     self.filename = @search_params[:filename]
@@ -99,6 +110,18 @@ class DataFileSearch
     unless uploader_id.nil? || uploader_id.empty?
       search_result = search_result.with_uploader(uploader_id)
     end
+    unless published.nil? || published.empty?
+      search_result = search_result.with_published
+    end
+    unless unpublished.nil? || unpublished.empty?
+      search_result = search_result.with_unpublished
+    end
+    #if published_date
+    #  search_result = search_result.with_published_date(published_date)
+    #end
+#    unless published_doi.nil?
+#      search_result = search_result.with_published_doi(published_doi)
+#    end
     search_result
   end
 
