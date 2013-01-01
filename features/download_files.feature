@@ -16,8 +16,8 @@ Feature: Download multiple files
     When I add "sample1.txt" to the cart
     And I add "sample2.txt" to the cart
     And I click on "Download"
-    Then I should receive a zip file matching "samples/zip"
-
+    Then I should get a file with name "sample1.txt.zip" and content type "application/zip"
+    And I should receive a zip file matching "samples/zip"
 
   Scenario: Download a single file from the cart
     When I add "sample1.txt" to the cart
