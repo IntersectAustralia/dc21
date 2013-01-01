@@ -204,6 +204,11 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def api_search
+    do_api_search(params)
+    render :json => @data_files
+  end
+
   private
 
   def send_data_file(data_file)
@@ -278,6 +283,15 @@ class DataFilesController < ApplicationController
 
     if @search.error
       flash.now[:alert] = @search.error
+    end
+  end
+
+  def do_api_search(search_params)
+    puts search_params
+    @search = DataFileSearch.new(search_params)
+    @data_files = @search.do_search(@data_files)
+    @data_files.each do |data_file|
+      data_file.url = download_data_file_url(data_file.id)
     end
   end
 
@@ -386,4 +400,5 @@ class DataFilesController < ApplicationController
       end
     end
   end
+
 end

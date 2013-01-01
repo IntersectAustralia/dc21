@@ -44,7 +44,11 @@ class DataFile < ActiveRecord::Base
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
 
-  attr_accessor :messages
+  attr_accessor :messages, :url
+
+  def as_json(options = {})
+    super(options).merge(:url => url)
+  end
 
   def self.with_data_in_range(from, to)
     if (from && to)

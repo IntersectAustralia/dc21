@@ -97,3 +97,26 @@ When /^I make a request for the explore data page with the API token for "([^"]*
   user = User.find_by_email!(email)
   get data_files_path(:auth_token => user.authentication_token, :format => :json)
 end
+
+When /^I perform an API search with the following parameters as user "([^"]*)"$/ do |email, table|
+  post_params = Hash[*table.raw.flatten]
+  user = User.find_by_email!(email)
+  post api_search_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
+end
+
+When /^I should get a JSON response with$/ do |table|
+  actual = JSON.parse(last_response.body)
+  actual.size.should eq(table.hashes.size)
+  count = 0
+  table.hashes.each do |attributes|
+    actual[count]["filename"].should eq(attributes["filename"])
+    count += 1
+  end
+end
+
+When /^I should have file download link for each entry$/ do
+  actual = JSON.parse(last_response.body)
+  actual.each do |entry|
+    entry["url"].should eq(Rails.application.routes.url_helpers.download_data_file_url(entry["id"], :host => 'example.org'))
+  end
+end

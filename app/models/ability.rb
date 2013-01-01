@@ -62,7 +62,8 @@ class Ability
             :download,
             :download_selected,
             :bulk_update,
-            :api_create], DataFile
+            :api_create,
+            :api_search], DataFile
     can :destroy, DataFile, :created_by_id => user.id
     can :update, DataFile, :created_by_id => user.id
     cannot :update, DataFile do |datafile|
