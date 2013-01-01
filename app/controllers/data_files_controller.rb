@@ -175,7 +175,7 @@ class DataFilesController < ApplicationController
     if current_user.data_files.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      ids=current_user.data_files.collect(&:id)
+      ids = current_user.data_files.collect(&:id)
       unless ids.empty?
         if ids.size == 1
           send_data_file(DataFile.find(ids.first))
@@ -342,8 +342,11 @@ class DataFilesController < ApplicationController
   end
 
   def send_zip(ids)
-    CustomDownloadBuilder.zip_for_files_with_ids(ids) do |zip_file|
-      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+    files = DataFile.find(ids)
+    first_file_name = files.collect(&:filename).sort.first
+    download_file_name = "#{first_file_name}.zip"
+    CustomDownloadBuilder.zip_for_files(files) do |zip_file|
+      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => download_file_name
     end
   end
 
