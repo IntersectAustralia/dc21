@@ -97,7 +97,7 @@
               = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}",  :class => package.eql?(true) ? :type_parent : :type
               .type_children
                 - if status.eql?('PACKAGE')
-                  = label_tag "search_status_published", 'Published', :class => :publish_title
+                  = label_tag "search_status_published", 'Published:', :class => :publish_title
                   = label_tag "search_status_published", 'Yes', :class => :publish_option
                   = check_box_tag "search[published][]", true, false, :id => "search_status_#{index}", :class => :publish
                   = label_tag "search_status_unpublished", 'No', :class => :publish_option
