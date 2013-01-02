@@ -31,4 +31,6 @@ Dc21app::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  WillPaginate.per_page = 2
 end
