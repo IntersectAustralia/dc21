@@ -132,7 +132,7 @@ def create_facilities_and_experiments
 
   other = create_facility(:name => "Other", :code => "Other Code", :primary_contact => user)
   other.id = -1
-  other.save!
+  other.save
   other_experiment = other.experiments.create(:name => "Other", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Other subject")
   other_experiment.id = -1
   other_experiment.save!
