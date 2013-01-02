@@ -36,6 +36,9 @@ GEM
     bagit (0.2.0)
       validatable (~> 1.6)
     bcrypt-ruby (3.0.1)
+    bootstrap-sass (2.1.1.0)
+    bootstrap-will_paginate (0.0.9)
+      will_paginate
     builder (3.0.0)
     cancan (1.6.7)
     capistrano (2.9.0)
@@ -303,6 +306,8 @@ PLATFORMS
 
 DEPENDENCIES
   bagit
+  bootstrap-sass
+  bootstrap-will_paginate
   cancan
   capistrano
   capistrano-ext

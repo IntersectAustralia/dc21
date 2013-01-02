@@ -3,7 +3,6 @@
 
 - add_all_warning = "Do you really want to add all files to your cart?"
 
-= will_paginate(@data_files_paginated)
 .datacontroll
   - if @data_files.empty? || !@search.showing_all?
     = link_to "Clear Search", clear_data_files_path, class: "btn pull-left"
@@ -12,13 +11,18 @@
       -##.whitebutton
         %span= link_to 'Publish', '#', id: :publish_button
     %h3.results
+      - pg_num = params[:page].nil? ? 0 : params[:page].to_i - 1
       - if @data_files.empty?
         No matching files
+      - elsif @data_files.size == 1
+        = "Showing 1 of 1 file"
       - else
-        - if @search.showing_all?
-          = "Showing all #{@data_files.size} files"
+        - if @data_files_paginated.length == 1
+          = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
         - else
-          = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
+          = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
+
+    = will_paginate(@data_files_paginated)
 
     -##downloadtoggle.download.whitebutton
       -#%span= link_to 'Download Files'
@@ -199,4 +203,8 @@
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
       #helper_text.select
         Select one or more files to download
+
+    .page_info
+      = page_entries_info @data_files_paginated
+    = will_paginate(@data_files_paginated)
 

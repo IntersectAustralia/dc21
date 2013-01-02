@@ -16,7 +16,7 @@ Feature: Paginating the list of data files
       | filename     | created_at       | uploaded_by               | file_processing_status | experiment  |
       | sample1.txt  | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | Experiment4 |
     And I am on the list data files page
-    Then I should see "Showing all 1 files"
+    Then I should see "Showing 1 of 1 file"
     Then I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type     | Experiment    |
       | sample1.txt  | 2011-12-01 13:45 | sean@intersect.org.au     | RAW      | Experiment4   |
@@ -31,7 +31,7 @@ Feature: Paginating the list of data files
       | sample4.txt  | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | Experiment1 |
       | sample5.txt  | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | Experiment3 |
     And I am on the list data files page
-    Then I should see "Showing all 5 files"
+    Then I should see "Showing 1-2 of 5 files"
     And I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type     | Experiment    |
       | sample1.txt  | 2011-12-01 13:45 | sean@intersect.org.au     | RAW      | Experiment4   |
@@ -42,7 +42,7 @@ Feature: Paginating the list of data files
     And I should see link "2" in "the pagination area"
     And I should see link "3" in "the pagination area"
     When I follow "3" within the pagination area
-    Then I should see "Showing all 5 files"
+    Then I should see "Showing 5 of 5 files"
     And I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type     | Experiment    |
       | sample5.txt  | 2011-12-01  9:45 | admin@intersect.org.au    | RAW      | Experiment3   |
@@ -52,7 +52,7 @@ Feature: Paginating the list of data files
     And I should see link "2" in "the pagination area"
     And I should not see link "3" in "the pagination area"
     When I follow "2" within the pagination area
-    Then I should see "Showing all 5 files"
+    Then I should see "Showing 3-4 of 5 files"
     And I should see "exploredata" table with
       | Filename     | Date added       | Added by                  | Type     | Experiment    |
       | sample3.txt  | 2011-12-01 11:45 | georgina@intersect.org.au | RAW      | Experiment5   |
