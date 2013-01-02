@@ -10,10 +10,10 @@ Feature: Create a package
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
     And I have data files
-      | filename     |
-      | datafile.dat |
-      | sample.txt   |
-      | sample2.txt  |
+      | filename    | created_at       | uploaded_by               | start_time       | end_time            | path                | id |
+      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  |
+      | sample2.txt | 30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt | 2  |
+      | sample3.txt | 30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/sample3.txt | 3  |
     And I have experiments
       | name              | facility            |
       | My Experiment     | ROS Weather Station |
@@ -34,8 +34,8 @@ Feature: Create a package
 
   Scenario: New package
     Given I am on the list data files page
-    And I add sample.txt to the cart
-    And I add datafile.dat to the cart
+    And I add sample1.txt to the cart
+    And I add sample2.txt to the cart
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
@@ -47,14 +47,36 @@ Feature: Create a package
 
   Scenario: New package - empty form submission
     Given I am on the list data files page
-    And I add sample.txt to the cart
-    And I add datafile.dat to the cart
+    And I add sample3.txt to the cart
+    And I add sample2.txt to the cart
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
     And I press "Save"
-    Then I should see "Filename can't be blank"
-    And I should see "Experiment can't be blank"
+    Then I should see "Please provide a filename"
+    And I should see "Please select an experiment"
+
+  Scenario: New package - rendering correct data_file view screen
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    And I add sample2.txt to the cart
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Filename" with "my_other_package"
+    And I fill in "Description" with "Here's a description"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    And I press "Save"
+    When I am on the data file details page for my_other_package.zip
+    Then I should see details displayed
+      | Name  | my_other_package.zip   |
+      | Type        | PACKAGE |
+      | File format | BAGIT   |
+      | Description | Here's a description   |
+      | Experiment  | My Experiment   |
+
+
 
 
 

@@ -11,6 +11,10 @@ class CartItemsController < ApplicationController
     end
   end
 
+  def show
+    redirect_to data_files_path
+  end
+
   # GET /cart_items/new
   # GET /cart_items/new.json
   def new
@@ -44,13 +48,13 @@ class CartItemsController < ApplicationController
     @cart_item.data_file= @data_file
 
     respond_to do |format|
-      if @cart_item.save
+      if !current_user.data_file_in_cart?(@data_file) and @cart_item.save
         format.html { redirect_to session[:return_to]||data_files_path,
-                                  notice: 'File was successfully added to cart.' }
+            notice: 'File was successfully added to cart.' }
         format.js { }
       else
         format.html { redirect_to session[:return_to]||data_files_path,
-                                  notice: 'File could not be added to cart.' }
+            notice: 'File could not be added: It may already exist in your cart.' }
         format.js { }
       end
     end
@@ -70,7 +74,7 @@ class CartItemsController < ApplicationController
     end
     respond_to do |format|
       format.html {  redirect_to session[:return_to]||data_files_path,
-                                 notice: "#{count} files were added to your cart." }
+          notice: "#{count} files were added to your cart." }
     end
   end
 
@@ -79,10 +83,12 @@ class CartItemsController < ApplicationController
   def destroy
     session[:return_to]= request.referer
     @cart_item = CartItem.find(params[:id])
-    @cart_item.destroy
+    unless @cart_item.nil?
+      @cart_item.destroy
+    end
 
     respond_to do |format|
-      format.html { redirect_to session[:return_to], notice: "File was successfully removed from cart." }
+      format.html { redirect_to session[:return_to]||data_files_path, notice: "File was successfully removed from cart." }
       format.json { head :ok }
     end
   end
@@ -92,13 +98,13 @@ class CartItemsController < ApplicationController
     if current_user.data_files.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      CartItem.where('user_id' == current_user.id).each do |cart_item|
+      current_user.cart_items.each do |cart_item|
         unless cart_item.nil?
           cart_item.destroy
         end
       end
       respond_to do |format|
-        format.html { redirect_to session[:return_to], notice: 'Your cart was cleared.' }
+        format.html { redirect_to session[:return_to]||data_files_path, notice: 'Your cart was cleared.' }
         format.js {  }
       end
     end

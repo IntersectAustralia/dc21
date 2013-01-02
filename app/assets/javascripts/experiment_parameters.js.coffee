@@ -20,3 +20,4 @@ setup_subcategory_select = (subcategories, selected_subcategory) ->
     else
       $('#parameter_sub_category_select').html("<option value=''>Please select a subcategory</option>" + options.html())
     $('#parameter_sub_category_select').val(selected_subcategory)
+

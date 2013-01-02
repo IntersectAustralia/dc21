@@ -39,6 +39,7 @@ gem 'highline' # This has (up until now) been implicitly included by capistrano
 gem 'will_paginate'
 gem 'bootstrap-sass'
 gem 'bootstrap-will_paginate'
+gem 'rake', '~> 0.9.2.2'
 
 group :development, :test do
   gem "rspec-rails"

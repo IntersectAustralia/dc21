@@ -2,7 +2,7 @@ require 'csv'
 
 class DataFilesController < ApplicationController
 
-  ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id)
+  ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id data_files.file_size)
   SAVE_MESSAGE = 'The data file was saved successfully.'
 
   before_filter :authenticate_user!
@@ -38,7 +38,7 @@ class DataFilesController < ApplicationController
   end
 
   def clear
-    session[:search_params] = nil
+    session["search"] = nil
     set_tab :explore, :contentnavigation
     do_search(params[:search])
     @data_files_paginated = @data_files.paginate(page: params[:page])
@@ -87,41 +87,50 @@ class DataFilesController < ApplicationController
   end
 
   def create
-    files = []
-    params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
+    begin
+      files = []
+      params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
 
-    experiment_id = params[:experiment_id]
-    description = params[:description]
-    type = params[:file_processing_status]
-    tags = params[:tags]
+      experiment_id = params[:experiment_id]
+      description = params[:description]
+      type = params[:file_processing_status]
+      tags = params[:tags]
 
-    unless validate_inputs(files, experiment_id, type, description, tags)
-      render :new
-      return
+      unless validate_inputs(files, experiment_id, type, description, tags)
+        render :new
+        return
+      end
+
+      @uploaded_files = []
+      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+      files.each do |file|
+        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
+      end
+    ensure
+      clean_up_temp_files(files)
     end
 
-    @uploaded_files = []
-    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-    files.each do |file|
-      @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
-    end
   end
 
   def api_create
-    attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+    begin
+      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
 
-    file = params[:file]
-    type = params[:type]
-    experiment_id = params[:experiment_id]
-    tag_names = params[:tag_names]
-    errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
+      file = params[:file]
+      type = params[:type]
+      experiment_id = params[:experiment_id]
+      tag_names = params[:tag_names]
+      errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
 
-    if errors.empty?
-      uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
-      messages = uploaded_file.messages.collect { |m| m[:message] }
-      render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
-    else
-      render :json => {:messages => errors}, :status => :bad_request
+      if errors.empty?
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+        messages = uploaded_file.messages.collect { |m| m[:message] }
+        render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
+      else
+        render :json => {:messages => errors}, :status => :bad_request
+      end
+    ensure
+      clean_up_temp_files([file])
     end
   end
 
@@ -156,6 +165,8 @@ class DataFilesController < ApplicationController
 
   end
 
+
+
   def download
     send_data_file(@data_file)
   end
@@ -164,7 +175,7 @@ class DataFilesController < ApplicationController
     if current_user.data_files.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      ids=current_user.data_files.collect(&:id)
+      ids = current_user.data_files.collect(&:id)
       unless ids.empty?
         if ids.size == 1
           send_data_file(DataFile.find(ids.first))
@@ -193,6 +204,11 @@ class DataFilesController < ApplicationController
     else
       redirect_to(show_data_file_path(file), :alert => "Could not delete this file (Do you have permission to delete it?)")
     end
+  end
+
+  def api_search
+    do_api_search(params)
+    render :json => @data_files
   end
 
   private
@@ -272,6 +288,15 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def do_api_search(search_params)
+    puts search_params
+    @search = DataFileSearch.new(search_params)
+    @data_files = @search.do_search(@data_files)
+    @data_files.each do |data_file|
+      data_file.url = download_data_file_url(data_file.id)
+    end
+  end
+
   def validate_inputs(files, experiment_id, type, description, tags)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
@@ -331,8 +356,11 @@ class DataFilesController < ApplicationController
   end
 
   def send_zip(ids)
-    CustomDownloadBuilder.zip_for_files_with_ids(ids) do |zip_file|
-      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
+    files = DataFile.find(ids)
+    first_file_name = files.collect(&:filename).sort.first
+    download_file_name = "#{first_file_name}.zip"
+    CustomDownloadBuilder.zip_for_files(files) do |zip_file|
+      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => download_file_name
     end
   end
 
@@ -365,6 +393,16 @@ class DataFilesController < ApplicationController
       session["page"] = params["page"]
     elsif session["page"]
       params["page"] = session["page"]
+    end
+  end
+
+  def clean_up_temp_files(files)
+    # removes RackMultipart from /tmp
+    files.each do |file|
+      if file.is_a? ActionDispatch::Http::UploadedFile
+        tempfile = file.tempfile.path
+        FileUtils.remove_entry_secure tempfile if File::exists?(tempfile)
+      end
     end
   end
 

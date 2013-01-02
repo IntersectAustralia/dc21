@@ -32,7 +32,6 @@ class PackagesController < DataFilesController
     experiment_id = params[:experiment_id]
     description = params[:description]
     type= 'PACKAGE'
-    created_by = current_user
     tags = params[:tags]
     unless validate_inputs(ids, filename, experiment_id, type, description, tags)
       render 'packages/new'

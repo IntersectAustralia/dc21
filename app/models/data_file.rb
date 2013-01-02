@@ -44,7 +44,11 @@ class DataFile < ActiveRecord::Base
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
 
-  attr_accessor :messages
+  attr_accessor :messages, :url
+
+  def as_json(options = {})
+    super(options).merge(:url => url)
+  end
 
   def self.with_data_in_range(from, to)
     if (from && to)
@@ -78,6 +82,22 @@ class DataFile < ActiveRecord::Base
 
   def self.with_experiment(experiment_ids)
     where(:experiment_id => experiment_ids)
+  end
+
+  def self.with_published
+    where(:published => true)
+  end
+
+  def self.with_unpublished
+    where(:published => false)
+  end
+
+  def self.with_published_date(date)
+    where {published_date == date}
+  end
+
+  def self.with_published_doi(date)
+    #
   end
 
   def self.searchable_column_names
@@ -125,7 +145,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_toa5?
-    self.format.eql?('TOA5')
+    self.format.eql?(FileTypeDeterminer::TOA5)
   end
 
   def is_error_file?
@@ -230,6 +250,13 @@ class DataFile < ActiveRecord::Base
       new_path = File.join(path_dir, new_filename)
       rename_to(new_path, new_filename)
     end
+  end
+
+
+  def set_to_published
+    self.published = true
+    self.published_date = DateTime.now
+    save!
   end
 
   protected

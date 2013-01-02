@@ -11,10 +11,13 @@
       = cancel_button "Back", data_files_path
     .actions
       = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
-      = link_to "Package",  download_selected_data_files_path, :class => "bluebutton"
+      = link_to "Package",  new_package_path, :class => "bluebutton"
 
   %h3.results
     = @cart_items.size == 1 ? "Showing 1 file" : "Showing #{@cart_items.size} files"
+    %br
+    Total #{number_to_human_size(current_user.cart_size)}
+
 
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
   %table#exploredata

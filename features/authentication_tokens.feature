@@ -9,7 +9,7 @@ Feature: Create and manage authentication tokens
     And I have a user "diego@intersect.org.au" with role "Researcher"
     And I am logged in as "diego@intersect.org.au"
     When I click on "diego@intersect.org.au"
-    And I follow "Settings"
+    And I click on "Settings"
 
   Scenario: New user has no token
     Then I should see no api token

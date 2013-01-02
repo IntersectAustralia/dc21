@@ -6,6 +6,8 @@ describe DataFilesHelper do
       Factory(:facility, name: "Fred")
       Factory(:facility, name: "Joe")
       Factory(:facility, name: "Alice")
+      other = Factory(:facility, id: -1, name: "Other")
+      Factory(:experiment, id: -1, name: "Other", facility: other)
 
       output = helper.grouped_experiments_for_select
       output.collect(&:name).should eq(["Alice", "Fred", "Joe", "Other"])

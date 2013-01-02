@@ -1,7 +1,12 @@
 - content_for :breadcrumb  do
   %h1 Data / Edit / #{@data_file.filename}
 
+
+
 .container
+- if @data_file.published? and !can?(:read, User)
+  You do not have permission to edit this published file.
+- else
   = form_for (@data_file) do |f|
     %h2 Edit Metadata
     = render "shared/error_messages", :target => @data_file
@@ -91,4 +96,4 @@
       .actions-pre
         = cancel_button "Cancel", data_files_path
       .actions
-        = f.submit "Update"
+        = f.submit "Update", :confirm => @data_file.published? ? "This file has already been published. Do you really want to edit the metadata for this file? " : nil

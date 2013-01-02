@@ -93,9 +93,25 @@
         %h4#type_category.expand Type:
         .type
           - DataFile::ALL_STATI.each_with_index do |status, index|
-            = label_tag "search_status_#{index}", status
-            = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}"
+            - package = status.eql?('PACKAGE')
+            .type_group
+              - if package
+                = link_to "+", "#", :id => "expand_package", :class => "expand_type"
+              = label_tag "search_status_#{index}", status,  :class => package.eql?(true) ? :type_parent :  :type
+              = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}",  :class => package.eql?(true) ? :type_parent : :type
+              .type_children
+                - if status.eql?('PACKAGE')
+                  = label_tag "search_status_published", 'Published:', :class => :publish_title
+                  = label_tag "search_status_published", 'Yes', :class => :publish_option
+                  = check_box_tag "search[published][]", true, false, :id => "search_status_#{index}", :class => :publish
+                  = label_tag "search_status_unpublished", 'No', :class => :publish_option
+                  = check_box_tag "search[unpublished][]", true, false, :id => "search_status_#{index}", :class => :publish
+                  = label_tag "search_published_date", 'Date:', :class => :publish
+                  = text_field_tag "search[published_date][]", nil, :id => :published_date, :datepicker => true, :size => 10, :maxlength => 10, :class => "publish_date"
+                  = label_tag "search_published_date", 'DOI:', :class => :publish
+                  = text_field_tag "search[published_doi][]", '', :id => :published_doi, :datepicker => true, :size => 10, :maxlength => 10, :class => "publish_date"
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
+
       .searchcategory
         %h4#tags_category.expand Tags:
         .tags
@@ -138,7 +154,7 @@
           = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
-        %h4#upload_date.expand Upload Date:
+        %h4#upload_date.expand Date Added:
         .upload_date
           .date-format yyyy-mm-dd
           = label_tag :from_date, "From Date:"
@@ -165,13 +181,15 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+          -#= link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
+          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => "bluebutton" , :id => "add_all_to_cart"
+
       - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
           -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
           -##%td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}", :title => 'View'
 
-          %td.filename= link_to  data_file.filename, data_file_path(data_file)
+          %td.filename= link_to data_file.filename, data_file_path(data_file)
           %td.date= data_file.created_at.to_s(:with_time)
           %td.size= number_to_human_size(data_file.file_size)
           %td.email= data_file.created_by.email if data_file.created_by
@@ -184,9 +202,6 @@
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
       #helper_text.select
         Select one or more files to download
-    -###download_actions.actions.hidden
-      = submit_tag "Download Selected Files", :class => "bluebutton"
-      -#= submit_tag "Build Custom Download", :class => "bluebutton", :name => "build_custom"
 
     .page_info
       = page_entries_info @data_files_paginated

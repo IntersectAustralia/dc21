@@ -192,7 +192,6 @@ Feature: Search data files by date range
       | datafile5.dat |
       | mydata8.dat   |
       | datafile4.dat |
-    When I click on "Columns:"
     And I expand all the mapped columns
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
@@ -211,7 +210,6 @@ Feature: Search data files by date range
       | mydata6.dat   |
       | mydata8.dat   |
       | datafile4.dat |
-    When I click on "Columns:"
     And I expand all the mapped columns
     And the "Humi" checkbox should be checked
     And the "Rnfll" checkbox should be checked
@@ -397,3 +395,56 @@ Feature: Search data files by date range
     And I check "RAW"
     And I press "Update Search Results"
     Then the "RAW" checkbox should be checked
+
+  @javascript
+  Scenario: Searched panel closes when "Clear Search" pressed, keeps results as no searching at all in this session
+    Given I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename      | Date added       | Type      |
+      | mydata6.dat   | 2011-12-30 10:15 | CLEANSED  |
+      | datafile1.dat | 2011-12-01 13:45 | UNKNOWN   |
+      | datafile5.dat | 2011-11-30 19:00 | RAW       |
+      | mydata7.dat   | 2011-11-30 10:15 | PROCESSED |
+      | datafile2.dat | 2011-11-30 8:45  | RAW       |
+      | mydata8.dat   | 2011-11-08 10:15 | RAW       |
+      | datafile4.dat | 2011-11-01 10:15 | CLEANSED  |
+      | datafile3.dat | 2010-01-30 10:15 | ERROR     |
+    And I click on "Type:" within the search box
+    And I check "RAW"
+    And I press "Update Search Results"
+    Then the "RAW" checkbox should be checked
+    And I should see "exploredata" table with
+      | Filename      | Date added       | Type      |
+      | datafile5.dat | 2011-11-30 19:00 | RAW       |
+      | datafile2.dat | 2011-11-30 8:45  | RAW       |
+      | mydata8.dat   | 2011-11-08 10:15 | RAW       |
+    And I should see "Clear Search"
+    When I follow "Clear Search"
+    Then I should not see "Clear Search"
+    And I should see "exploredata" table with
+      | Filename      | Date added       | Type      |
+      | mydata6.dat   | 2011-12-30 10:15 | CLEANSED  |
+      | datafile1.dat | 2011-12-01 13:45 | UNKNOWN   |
+      | datafile5.dat | 2011-11-30 19:00 | RAW       |
+      | mydata7.dat   | 2011-11-30 10:15 | PROCESSED |
+      | datafile2.dat | 2011-11-30 8:45  | RAW       |
+      | mydata8.dat   | 2011-11-08 10:15 | RAW       |
+      | datafile4.dat | 2011-11-01 10:15 | CLEANSED  |
+      | datafile3.dat | 2010-01-30 10:15 | ERROR     |
+    When I click on "Type:" within the search box
+    Then the "RAW" checkbox should not be checked
+    When I follow "Dashboard"
+    And I follow "Explore Data"
+    Then I should not see "Clear Search"
+    And I should see "exploredata" table with
+      | Filename      | Date added       | Type      |
+      | mydata6.dat   | 2011-12-30 10:15 | CLEANSED  |
+      | datafile1.dat | 2011-12-01 13:45 | UNKNOWN   |
+      | datafile5.dat | 2011-11-30 19:00 | RAW       |
+      | mydata7.dat   | 2011-11-30 10:15 | PROCESSED |
+      | datafile2.dat | 2011-11-30 8:45  | RAW       |
+      | mydata8.dat   | 2011-11-08 10:15 | RAW       |
+      | datafile4.dat | 2011-11-01 10:15 | CLEANSED  |
+      | datafile3.dat | 2010-01-30 10:15 | ERROR     |
+    When I click on "Type:" within the search box
+    Then the "RAW" checkbox should not be checked
