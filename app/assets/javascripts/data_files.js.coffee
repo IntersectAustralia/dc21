@@ -138,9 +138,3 @@ jQuery ->
       $(selector_to_toggle).hide()
     else
       $(selector_to_toggle).show()
-
-
-  $('#publish_button').click (e) ->
-    $("#search_form").attr("action", "/published_collections/new_from_search");
-    $('#search_form').submit()
-    e.preventDefault();

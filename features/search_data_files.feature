@@ -192,7 +192,6 @@ Feature: Search data files by date range
       | datafile5.dat |
       | mydata8.dat   |
       | datafile4.dat |
-    When I click on "Columns:"
     And I expand all the mapped columns
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
@@ -211,7 +210,6 @@ Feature: Search data files by date range
       | mydata6.dat   |
       | mydata8.dat   |
       | datafile4.dat |
-    When I click on "Columns:"
     And I expand all the mapped columns
     And the "Humi" checkbox should be checked
     And the "Rnfll" checkbox should be checked
