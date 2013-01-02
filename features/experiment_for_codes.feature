@@ -27,7 +27,7 @@ Feature: Manage experiment metadata
       | 0307 - ITEM 7 |
       | 0308 - ITEM 8 |
       | 0309 - ITEM 9 |
-    When I select "0302 - ITEM 2" from "for_code_level2"
+    When I select "0302 - ITEM 2" from "for_code_level2"                    F
     Then the "for_code_level3" select should contain
       | Please select   |
       | 030201 - ITEM 1 |

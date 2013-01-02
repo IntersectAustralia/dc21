@@ -48,8 +48,7 @@ jQuery ->
   $('input.type_parent').click ->
     cb = $(this)
     children = cb.closest('div.type_group').find('input.publish')
-    if cb.is(':checked')
-    else
+    if !cb.is(':checked')
       children.each ->
         $(this).prop("checked", false)
 
@@ -129,12 +128,11 @@ jQuery ->
       $("#files_input").append(html)
 
   $('[id^="file_"][id$="_time"]').live 'change', ->
-
     id_val = parseInt($(this).attr('id').match(/file_([0-9]+).*/).pop())
     time_type = $(this).attr('id').match(/file_([0-9]+)_(start|end)_time/).pop()
     selector_to_toggle = "#file_" + id_val + "_" + time_type + "_container"
-
     if $(this).val() == ""
       $(selector_to_toggle).hide()
     else
       $(selector_to_toggle).show()
+
