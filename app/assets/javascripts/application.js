@@ -55,8 +55,7 @@ $(function () {
       $(this).addClass("disabled");
       $(this).attr('id', "add_cart_item_disabled");
       var cartcount = parseInt ($("#drop3").text().trim().split(" ")[0]) + 1;
-      var file_size = parseInt($(this).data('file-size'), 10);
-        window.cart_size += file_size;
+        window.cart_size += parseInt($(this).data('file-size'), 10);
 
       if (cartcount == 1) {
         $("#drop3").html("<b>"+cartcount + " File in Cart</b> <br>" + bytesToSize(window.cart_size) + " <span class=\"caret\"></span>");
@@ -85,13 +84,11 @@ $(function () {
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     var dec_places =0;
     if (i >= 2) {
-        dec_places = 2;
+      dec_places = 2;
     }
     var num =  (bytes / Math.pow(1024, i)).toFixed(dec_places);
-
-
     return num+' ' + sizes[[i]];
-  };
+  }
 
 
   $('#add_all_to_cart').click(function (event) {
