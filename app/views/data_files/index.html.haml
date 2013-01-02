@@ -150,7 +150,7 @@
           = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
       .searchcategory
-        %h4#upload_date.expand Upload Date:
+        %h4#upload_date.expand Date Added:
         .upload_date
           .date-format yyyy-mm-dd
           = label_tag :from_date, "From Date:"
