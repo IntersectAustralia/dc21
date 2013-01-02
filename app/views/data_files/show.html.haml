@@ -9,7 +9,7 @@
     = cancel_button "Back", data_files_path
   .actions
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
-      - if !@data_file.published and can?(:edit, @data_file)
+      - if !@data_file.published or can?(:edit, @data_file)
         = link_to "Edit Metadata", edit_data_file_path, :class => "bluebutton"
     - if current_user.data_file_in_cart?(@data_file)
       -cart_item = CartItem.where(:data_file_id => @data_file).first
@@ -58,7 +58,7 @@
     = cancel_button "Back", data_files_path
   .actions
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
-      - if !@data_file.published and can?(:edit, @data_file)
+      - if !@data_file.published or can?(:edit, @data_file)
         = link_to "Edit Metadata", edit_data_file_path, :class => "bluebutton"
     - unless current_user.data_file_in_cart?(@data_file)
       = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id), :method => "post", :class => "bluebutton"
