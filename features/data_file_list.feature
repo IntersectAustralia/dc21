@@ -125,7 +125,7 @@ Feature: View the list of data files
 
     Scenario: Exploring data by Upload Date has a date format prompt
       Given I am on the list data files page
-      And I click on "Upload Date:"
+      And I click on "Date Added:"
       Then I should see "yyyy-mm-dd"
 
 

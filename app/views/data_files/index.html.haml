@@ -99,13 +99,14 @@
                 - if status.eql?('PACKAGE')
                   = label_tag "search_status_published", 'Published:', :class => :publish_title
                   = label_tag "search_status_published", 'Yes', :class => :publish_option
-                  = check_box_tag "search[published][]", true, false, :id => "search_status_#{index}", :class => :publish
+                  - published = true unless @published.nil? or @published.empty?
+                  = check_box_tag "search[published][]", true, published, :id => "search_status_#{index}", :class => :publish
                   = label_tag "search_status_unpublished", 'No', :class => :publish_option
-                  = check_box_tag "search[unpublished][]", true, false, :id => "search_status_#{index}", :class => :publish
-                  = label_tag "search_published_date", 'Date:', :class => :publish
-                  = text_field_tag "search[published_date][]", nil, :id => :published_date, :datepicker => true, :size => 10, :maxlength => 10, :class => "publish_date"
-                  = label_tag "search_published_date", 'DOI:', :class => :publish
-                  = text_field_tag "search[published_doi][]", '', :id => :published_doi, :datepicker => true, :size => 10, :maxlength => 10, :class => "publish_date"
+                  - unpublished = true unless @unpublished.nil? or @unpublished.empty?
+                  = check_box_tag "search[unpublished][]", true, unpublished, :id => "search_status_#{index}", :class => :publish
+                  .date-format yyyy-mm-dd
+                  = label_tag "search_published_date", 'Published Date:', :class => :publish
+                  = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
           .actions= submit_tag "Update Search Results", :class => "bluebutton"
 
       .searchcategory

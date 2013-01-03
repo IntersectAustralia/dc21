@@ -264,6 +264,9 @@ class DataFilesController < ApplicationController
     @uploader_id = @search.uploader_id
     @upload_from_date = @search.search_params[:upload_from_date]
     @upload_to_date = @search.search_params[:upload_to_date]
+    @published = @search.published
+    @unpublished = @search.unpublished
+    @published_date = @search.published_date
 
     # apply any sorting to the scope we've built up so far
     # prefix the sort column with the table name so we don't get ambiguity errors when doing joins
@@ -303,6 +306,7 @@ class DataFilesController < ApplicationController
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
     @data_file.errors.add(:base, "Please select the file type") if type.blank?
     @data_file.errors.add(:base, "Please select at least one file to upload") if files.blank?
+    #TODO limit description field
     @data_file.experiment_id = experiment_id
     @data_file.file_processing_status = type
     @data_file.file_processing_description = description

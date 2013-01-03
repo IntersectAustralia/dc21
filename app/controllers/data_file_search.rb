@@ -16,7 +16,7 @@ class DataFileSearch
   attr_accessor :published
   attr_accessor :unpublished
   attr_accessor :published_date
-  attr_accessor :published_doi
+  attr_accessor :published_date_check
 
   def initialize(search_params)
     @search_params = search_params
@@ -24,16 +24,9 @@ class DataFileSearch
 
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
-    #self.published_date = Date.parse(@search_params[:published_date].first) unless @search_params[:published_date].nil? or @search_params[:published_date].empty?
+    self.published_date_check = DateRange.new(@search_params[:published_date], "", true)
 
-    self.error =
-       # if published_date.error
-       #   "Published Date: #{published_date.error}"
-        if date_range.error && upload_date_range.error
-          "Date Range: #{date_range.error}, Upload Date Range: #{upload_date_range.error}"
-        else
-          date_range.error || upload_date_range.error
-        end
+    handle_date_errors
 
 
     self.facilities = @search_params[:facilities]
@@ -52,7 +45,7 @@ class DataFileSearch
     self.published ||= []
     self.unpublished = @search_params[:unpublished]
     self.unpublished ||= []
-
+    self.published_date = @search_params[:published_date] unless @search_params[:published_date].nil? or @search_params[:published_date].empty? or published_date_check.error
     self.uploader_id = @search_params[:uploader_id]
     self.filename = @search_params[:filename]
     self.description = @search_params[:description]
@@ -60,6 +53,7 @@ class DataFileSearch
     if !valid?
       self.date_range = DateRange.new(nil, nil, true)
       self.upload_date_range = DateRange.new(nil, nil, true)
+      self.published_date = nil
     end
   end
 
@@ -78,6 +72,20 @@ class DataFileSearch
 
   def valid?
     self.error.blank?
+  end
+
+  def handle_date_errors
+    error_text = []
+      if published_date_check.error
+        error_text << "Published Date: #{published_date_check.error}"
+      end
+      if date_range.error
+        error_text << "Date Range: #{date_range.error}"
+      end
+      if upload_date_range.error
+        error_text << "Upload Date Range: #{upload_date_range.error}"
+      end
+      self.error = error_text.join(", ") unless error_text.empty?
   end
 
   def do_search(relation)
@@ -116,12 +124,10 @@ class DataFileSearch
     unless unpublished.nil? || unpublished.empty?
       search_result = search_result.with_unpublished
     end
-    #if published_date
-    #  search_result = search_result.with_published_date(published_date)
-    #end
-#    unless published_doi.nil?
-#      search_result = search_result.with_published_doi(published_doi)
-#    end
+    unless published_date.nil? or published_date.empty?
+      date = Date.parse(published_date)
+      search_result = search_result.with_published_date(date) unless date.nil?
+    end
     search_result
   end
 

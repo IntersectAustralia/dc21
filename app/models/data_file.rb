@@ -75,6 +75,7 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
+
   def self.with_any_of_these_columns(column_names)
     data_file_ids = ColumnDetail.unscoped.select("DISTINCT(data_file_id)").where(:name => column_names).collect(&:data_file_id)
     where(:id => data_file_ids)
@@ -85,19 +86,16 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.with_published
-    where(:published => true)
+    where{(file_processing_status != 'PACKAGE') | (published)}
   end
 
   def self.with_unpublished
-    where(:published => false)
+    where{(file_processing_status != 'PACKAGE') | (published == false)}
   end
 
   def self.with_published_date(date)
-    where {published_date == date}
-  end
 
-  def self.with_published_doi(date)
-    #
+    where {(file_processing_status != 'PACKAGE') | (published_date >= date.midnight) & (published_date < (date + 1).midnight)}
   end
 
   def self.searchable_column_names
@@ -375,5 +373,4 @@ class DataFile < ActiveRecord::Base
 
     exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
   end
-
 end

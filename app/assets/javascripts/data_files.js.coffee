@@ -52,7 +52,7 @@ jQuery ->
       children.each ->
         $(this).prop("checked", false)
 
-  # child click
+  # child click - experiment
   $('input.experiment').click ->
     cb = $(this)
     parent = cb.closest('div.facility_group').find('input.facility_parent').first()
@@ -64,7 +64,7 @@ jQuery ->
     else
       parent.prop("checked", false)
 
-  # child click
+  # child click  - publish yes/no
   $('input.publish').click ->
     cb = $(this)
     parent = cb.closest('div.type_group').find('input.type_parent').first()
@@ -76,6 +76,12 @@ jQuery ->
       checked_children.each ->
         $(this).prop("checked", false)
       cb.prop("checked", true)
+
+  # child click  - publish date
+  $('input.publish_date').click ->
+    cb = $(this)
+    parent = cb.closest('div.type_group').find('input.type_parent').first()
+    parent.prop("checked", true)
 
 
   # expand and hide
