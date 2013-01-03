@@ -58,10 +58,10 @@ $(function () {
         window.cart_size += parseInt($(this).data('file-size'), 10);
 
       if (cartcount == 1) {
-        $("#drop3").html("<b>"+cartcount + " File in Cart</b> <br>" + bytesToSize(window.cart_size) + " <span class=\"caret\"></span>");
+        $("#drop3").html("<b>"+cartcount + " File in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
       }
       else {
-        $("#drop3").html("<b>"+cartcount + " Files in Cart</b> <br>" + bytesToSize(window.cart_size) + " <span class=\"caret\"></span>");
+        $("#drop3").html("<b>"+cartcount + " Files in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
       }
       //  disable 'add all' button if all others have been clicked
       //var all_items = $("a[id^=add_cart_item]").length
