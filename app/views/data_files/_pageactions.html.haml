@@ -12,7 +12,7 @@
 
 
 .pageactions
-  - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
+  - if !@data_file.published and ( can?(:manage, DataFile) || @data_file.created_by.eql?(current_user) )
     = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton",
      :confirm => delete_warning, :method => :delete
   - if @data_file.is_package? and !@data_file.published
