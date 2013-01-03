@@ -7,6 +7,14 @@ Spork.prefork do
   # need to restart spork for it take effect.
 
   require 'simplecov'
+  require 'simplecov-rcov'
+  class SimpleCov::Formatter::MergedFormatter
+    def format(result)
+       SimpleCov::Formatter::HTMLFormatter.new.format(result)
+       SimpleCov::Formatter::RcovFormatter.new.format(result)
+    end
+  end
+  SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
   SimpleCov.start 'rails'
   # This file is copied to spec/ when you run 'rails generate rspec:install'
   ENV["RAILS_ENV"] ||= 'test'

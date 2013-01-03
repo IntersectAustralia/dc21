@@ -5,7 +5,16 @@
 # files.
 
 require 'simplecov'
+require 'simplecov-rcov'
+class SimpleCov::Formatter::MergedFormatter
+  def format(result)
+    SimpleCov::Formatter::HTMLFormatter.new.format(result)
+    SimpleCov::Formatter::RcovFormatter.new.format(result)
+  end
+end
+SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
 SimpleCov.start 'rails'
+
 require 'rubygems'
 require 'spork'
 ENV["RAILS_ENV"] ||= "test"
@@ -23,7 +32,7 @@ Spork.prefork do
   Capybara.ignore_hidden_elements = true
 
 end
- 
+
 Spork.each_run do
   # By default, any exception happening in your Rails application will bubble up
   # to Cucumber so that your scenario will fail. This is a different from how 
@@ -41,7 +50,7 @@ Spork.each_run do
   # recommended as it will mask a lot of errors for you!
   #
   ActionController::Base.allow_rescue = false
-  
+
   # Remove/comment out the lines below if your app doesn't have a database.
   # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
   begin
@@ -49,7 +58,7 @@ Spork.each_run do
   rescue NameError
     raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
   end
-  
+
   # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
   # See the DatabaseCleaner documentation for details. Example:
   #

@@ -28,8 +28,6 @@ gem "capistrano-ext"
 gem "capistrano"
 gem "capistrano_colors"
 gem "colorize"
-gem "metrical", :group => :test
-gem "simplecov", ">=0.3.8", :require => false, :group => :test
 gem "squeel"
 gem "httparty"
 gem "decent_exposure"
@@ -57,4 +55,10 @@ end
 
 group :development do
   gem "rails3-generators"
+end
+
+group :test do
+  gem "metrical"
+  gem "simplecov", ">=0.3.8", :require => false
+  gem "simplecov-rcov", :require => false
 end
