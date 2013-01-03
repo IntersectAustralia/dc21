@@ -1,38 +1,19 @@
 class CartItemsController < ApplicationController
 
-  # GET /cart_items
-  # GET /cart_items.json
   def index
     @cart_items = current_user.cart_items
     session[:back]= request.referer
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @cart_items }
-    end
   end
 
-  def show
-    redirect_to data_files_path
-  end
-
-  # GET /cart_items/new
-  # GET /cart_items/new.json
   def new
     @cart_item = CartItem.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @cart_item }
-    end
   end
 
-  # GET /cart_items/1/edit
   def edit
     @cart_item = CartItem.find(params[:id])
   end
 
-  # POST /cart_items
-  # POST /cart_items.json
+
   def create
     if params[:add_all] == 'true'
       add_all
@@ -78,8 +59,6 @@ class CartItemsController < ApplicationController
     end
   end
 
-  # DELETE /cart_items/1
-  # DELETE /cart_items/1.json
   def destroy
     session[:return_to]= request.referer
     @cart_item = CartItem.find(params[:id])

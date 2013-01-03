@@ -65,11 +65,24 @@ jQuery ->
       parent.prop("checked", false)
 
   # child click  - publish yes/no
-  $('input.publish').click ->
+  $('input.publish_yes').click ->
     cb = $(this)
     parent = cb.closest('div.type_group').find('input.type_parent').first()
     if cb.is(':checked')
-      checked_children = cb.closest('div.type_group').find('input.publish:checked')
+      checked_children = cb.closest('div.type_group').find('input.publish_no:checked')
+      if checked_children.length > 0
+        parent.prop("checked", true)
+      #uncheck other options
+      checked_children.each ->
+        $(this).prop("checked", false)
+      cb.prop("checked", true)
+
+    # child click  - publish yes/no
+  $('input.publish_no').click ->
+    cb = $(this)
+    parent = cb.closest('div.type_group').find('input.type_parent').first()
+    if cb.is(':checked')
+      checked_children = cb.closest('div.type_group').find('input.publish_yes:checked')
       if checked_children.length > 0
         parent.prop("checked", true)
       #uncheck other options

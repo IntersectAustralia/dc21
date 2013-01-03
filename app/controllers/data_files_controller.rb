@@ -24,9 +24,6 @@ class DataFilesController < ApplicationController
     set_tab :explore, :contentnavigation
     do_search(params[:search])
     @data_files_paginated = @data_files.paginate(page: params[:page])
-    if session[:cart_id]
-      @cart = Cart.find(session[:cart_id])
-    end
   end
 
   def search
@@ -42,18 +39,12 @@ class DataFilesController < ApplicationController
     set_tab :explore, :contentnavigation
     do_search(params[:search])
     @data_files_paginated = @data_files.paginate(page: params[:page])
-    if session[:cart_id]
-      @cart = Cart.find(session[:cart_id])
-    end
     render :index
   end
 
   def show
     set_tab :explore, :contentnavigation
     @column_mappings = ColumnMapping.all
-    if session[:cart_id]
-      @cart = Cart.find(session[:cart_id])
-    end
   end
 
   def new

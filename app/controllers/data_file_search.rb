@@ -25,9 +25,7 @@ class DataFileSearch
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
     self.published_date_check = DateRange.new(@search_params[:published_date], "", true)
-
     handle_date_errors
-
 
     self.facilities = @search_params[:facilities]
     self.facilities ||= []

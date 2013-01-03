@@ -1,27 +1,12 @@
 class PackagesController < DataFilesController
 
-  # GET /packages/new
-  # GET /packages/new.json
   def new
     @package = Package.new
     set_tab :dashboard, :contentnavigation
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @package }
-    end
   end
 
-  # GET /packages/1/edit
   def edit
     @package = Package.find(params[:id])
-  end
-
-  def show
-    redirect_to(new_package_path)
-  end
-
-  def index
-    redirect_to(new_package_path)
   end
 
   def create
@@ -43,10 +28,8 @@ class PackagesController < DataFilesController
       respond_to do |format|
         if @data_file
           format.html { redirect_to data_file_path(@data_file), notice: 'Package was successfully created.' }
-          format.json { render json: data_files_path, status: :created, location: @package }
         else
-          format.html { redirect_to  new_package_path}
-          format.json { render json: @package.errors, status: :unprocessable_entity }
+          format.html { redirect_to  new_package_path, notice: 'Package could not be created.'}
         end
       end
     end
