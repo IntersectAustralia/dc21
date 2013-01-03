@@ -197,6 +197,3 @@
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "bluebutton disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
             -else
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
-      #helper_text.select
-        Select one or more files to download
-
