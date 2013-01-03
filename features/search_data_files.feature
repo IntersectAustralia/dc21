@@ -63,7 +63,7 @@ Feature: Search data files by date range
       | datafile3.dat | 2010-01-30 10:15 | Experiment 2  |
     And the "from_date" field should contain "2010-06-11"
     And the "to_date" field should contain ""
-    And I should see "Showing 5 matching files"
+    And I should see "Showing all 5 files"
 
   Scenario: Search for files by date range - to date only
     When I do a date search for data files with dates "" and "2010-06-10"
@@ -291,7 +291,7 @@ Feature: Search data files by date range
     Then I should see "exploredata" table with
       | Filename    | Date added       | Added by             | Type | Experiment    |
       | mydata8.dat | 2011-11-08 10:15 | one@intersect.org.au | RAW  | My Experiment |
-    And I should see "Showing 1 matching file"
+    And I should see "Showing 1 file"
 
   @javascript
   Scenario: Should be able to sort within search results

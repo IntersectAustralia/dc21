@@ -15,7 +15,9 @@
       - if @data_files.empty?
         No matching files
       - elsif @data_files.size == 1
-        = "Showing 1 of 1 file"
+        = "Showing 1 file"
+      - elsif @data_files.size <= @data_files.per_page
+        = "Showing all #{@data_files.size} files"
       - else
         - if @data_files_paginated.length == 1
           = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
@@ -203,7 +205,7 @@
       #helper_text.select
         Select one or more files to download
 
-    .page_info
-      = page_entries_info @data_files_paginated
+    -#.page_info
+    -#  = page_entries_info @data_files_paginated
     = will_paginate(@data_files_paginated)
 
