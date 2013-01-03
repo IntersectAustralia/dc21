@@ -202,6 +202,7 @@ Feature: Search data files by date range
     When I am on the list data files page
     And I click on "Columns:"
     And I expand all the mapped columns
+    And I take a screenshot called "srch-by-cols"
     When I check "Humi"
     And I check "Rnfll"
     And I press "Search"
