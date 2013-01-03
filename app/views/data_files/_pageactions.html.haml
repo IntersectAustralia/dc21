@@ -10,11 +10,17 @@
 - delete_warning_tail = "? \nThis action cannot be undone."
 - delete_warning = delete_warning_beginning << delete_warning_contents << delete_warning_station << delete_warning_time << delete_warning_tail
 
+- publish_warning = []
+- publish_warning <<  "Do you really want to publish the file  #{@data_file.filename}?\n"
+- publish_warning <<  "Once published, this file cannot be deleted.\n"
+- publish_warning <<  "This action cannot be undone."
+
+
 
 .pageactions
   - if !@data_file.published and ( can?(:manage, DataFile) || @data_file.created_by.eql?(current_user) )
     = link_to "Delete This File", data_file_path(@data_file), :class => "redbutton",
      :confirm => delete_warning, :method => :delete
   - if @data_file.is_package? and !@data_file.published
-    = link_to 'Publish', published_collections_path(:package_id => @data_file.id), :class => "bluebutton", :method => :post
+    = link_to 'Publish', published_collections_path(:package_id => @data_file.id), :class => "bluebutton", :method => :post, :confirm => publish_warning
 
