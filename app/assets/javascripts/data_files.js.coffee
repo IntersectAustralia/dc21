@@ -64,12 +64,12 @@ jQuery ->
     else
       parent.prop("checked", false)
 
-  # child click  - publish yes/no
-  $('input.publish_yes').click ->
+  # child click - publish yes/no
+  $('input.publish').click ->
     cb = $(this)
     parent = cb.closest('div.type_group').find('input.type_parent').first()
     if cb.is(':checked')
-      checked_children = cb.closest('div.type_group').find('input.publish_no:checked')
+      checked_children = cb.closest('div.type_group').find('input.publish:checked')
       if checked_children.length > 0
         parent.prop("checked", true)
       #uncheck other options
@@ -77,20 +77,7 @@ jQuery ->
         $(this).prop("checked", false)
       cb.prop("checked", true)
 
-    # child click  - publish yes/no
-  $('input.publish_no').click ->
-    cb = $(this)
-    parent = cb.closest('div.type_group').find('input.type_parent').first()
-    if cb.is(':checked')
-      checked_children = cb.closest('div.type_group').find('input.publish_yes:checked')
-      if checked_children.length > 0
-        parent.prop("checked", true)
-      #uncheck other options
-      checked_children.each ->
-        $(this).prop("checked", false)
-      cb.prop("checked", true)
-
-  # child click  - publish date
+  # child click - publish date
   $('input.publish_date').click ->
     cb = $(this)
     parent = cb.closest('div.type_group').find('input.type_parent').first()
@@ -141,7 +128,7 @@ jQuery ->
       html = "" +
       "<label class='control-label' for='" + next_id + "'>Select file(s)</label>\n" +
       "<div class='controls'>\n" +
-      "  <input id='" + next_id + "' multiple='multiple' name='files[]' type='file'>\n" +
+      " <input id='" + next_id + "' multiple='multiple' name='files[]' type='file'>\n" +
       "</div>"
 
       $("#files_input").append(html)
@@ -154,4 +141,3 @@ jQuery ->
       $(selector_to_toggle).hide()
     else
       $(selector_to_toggle).show()
-
