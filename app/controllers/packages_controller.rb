@@ -35,15 +35,6 @@ class PackagesController < DataFilesController
     end
   end
 
-  def package_selected
-    ids=current_user.data_files.collect(&:id)
-    unless ids.empty?
-      send_bagit(ids)
-    else
-      redirect_to(:back||data_files_path)
-    end
-  end
-
   def validate_inputs(ids, filename, experiment_id, type, description, tags)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @package = DataFile.new
