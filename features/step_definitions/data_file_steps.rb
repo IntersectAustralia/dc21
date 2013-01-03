@@ -341,6 +341,7 @@ end
 
 When /^I expand all the mapped columns$/ do
   all(".expand_variable").each { |link| link.click }
+  sleep(0.5)
 end
 
 private
