@@ -126,4 +126,17 @@ Feature: View the list of data files
     And I wait for the page
     Then I should see "2 Files in Cart"
 
+  Scenario: Clearing of cart
+    Given I am on the list data files page
+    And I add sample.txt to the cart
+    And I add sample2.txt to the cart
+    Then I should see "2 Files in Cart"
+    When I am on the edit cart page
+    Then I should see "sample.txt"
+    And I should see "sample2.txt"
+    And I follow "Remove All"
+    And I confirm the popup
+    And I should see "Your cart was cleared."
+    And I should not see "0 files in cart."
+
 
