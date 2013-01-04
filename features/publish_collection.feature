@@ -10,11 +10,11 @@ Feature: Publish a PACKAGE
     And I have a user "researcher@intersect.org.au" with role "Researcher"
     And I am logged in as "georgina@intersect.org.au"
     And I have data files
-      | filename      | file_processing_status |created_at       | uploaded_by               | start_time       | end_time            | path                  | id | published  | published_date      |
-      | package1.zip  | PACKAGE                |01/12/2011 13:45 | researcher@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false      |                     |
-      | package2.zip  | PACKAGE                |30/11/2011 10:15 | georgina@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false      |                     |
-      | published.zip | PACKAGE                |30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/published.zip | 3  | true       | 27/12/2012 13:05:23 |
-      | sample1.txt   | RAW                    |01/12/2011 13:45 | researcher@intersect.org.au     | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false      |                     |
+      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      |
+      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |
+      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | georgina@intersect.org.au   | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |
+      | published.zip | PACKAGE                | 30/12/2011 12:34 | georgina@intersect.org.au   |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 |
+      | sample1.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false     |                     |
 
 #
 #
@@ -46,38 +46,40 @@ Feature: Publish a PACKAGE
 #    Then there should be a published collection record named "No Dates" with creator "georgina@intersect.org.au"
 #    And the RIF-CS file for the latest published collection should match "samples/rif-cs/sample1-rif-cs.xml"
 #
+
   Scenario: Metadata should reflect publish status for a package
-   Given I am on the data file details page for package1.zip
-   Then I should see details displayed
-    | Name  | package1.zip   |
-    | Published        | No |
-   And I should not see "Published date:"
-   When I am on the data file details page for published.zip
-   Then I should see details displayed
-    | Name            | published.zip |
-    | Published       | Yes           |
-    | Published date  | 2012-12-27 13:05   |
-   When I am on the data file details page for sample1.txt
-   Then I should not see "Published:"
-   And I should not see "Published date:"
+    Given I am on the data file details page for package1.zip
+    Then I should see details displayed
+      | Name      | package1.zip |
+      | Published | No           |
+    And I should not see "Published date:"
+    When I am on the data file details page for published.zip
+    Then I should see details displayed
+      | Name           | published.zip    |
+      | Published      | Yes              |
+      | Published date | 2012-12-27 13:05 |
+    When I am on the data file details page for sample1.txt
+    Then I should not see "Published:"
+    And I should not see "Published date:"
 
   Scenario: Publish button should only appear for packages
-   Given I am on the data file details page for sample1.txt
-   Then I should not see "Publish"
-   When I am on the data file details page for package1.zip
-   Then I should see "Publish"
-   And I follow "Publish"
-   And I should see "Package has been successfully submitted for publishing."
+    Given I am on the data file details page for sample1.txt
+    Then I should not see "Publish"
+    When I am on the data file details page for package1.zip
+    Then I should see "Publish"
+    And I follow "Publish"
+    And I confirm the popup
+    And I should see "Package has been successfully submitted for publishing."
 
   Scenario: Only administrators are allowed to edit a package once published
-   Given I logout
-   And I am logged in as "researcher@intersect.org.au"
-   And I am on the data file details page for published.zip
-   Then I should not see "Edit Metadata"
-   Then I logout
-   When I am logged in as "georgina@intersect.org.au"
-   And I am on the data file details page for published.zip
-   Then I should see "Edit Metadata"
+    Given I logout
+    And I am logged in as "researcher@intersect.org.au"
+    And I am on the data file details page for published.zip
+    Then I should not see "Edit Metadata"
+    Then I logout
+    When I am logged in as "georgina@intersect.org.au"
+    And I am on the data file details page for published.zip
+    Then I should see "Edit Metadata"
 
 #
 #  Scenario: Publish button does not show prior to searching
