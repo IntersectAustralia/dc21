@@ -340,7 +340,11 @@ end
 
 
 When /^I expand all the mapped columns$/ do
-  all(".expand_variable").each { |link| link.click }
+  sleep(0.5)
+  all(".expand_variable").each do |link|
+    link.click
+  end
+  sleep(2)
 end
 
 private
