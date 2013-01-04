@@ -340,8 +340,11 @@ end
 
 
 When /^I expand all the mapped columns$/ do
+  require 'capybara/util/save_and_open_page'
+  Capybara.save_page(body)
+
   all(".expand_variable").each do |link|
-    puts "Clicking variable #{link}"
+    puts "Clicking variable #{link[:id]}"
     link.click
   end
   sleep(0.5)
