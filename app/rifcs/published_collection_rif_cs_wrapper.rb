@@ -33,6 +33,10 @@ class PublishedCollectionRifCsWrapper < RifCsWrapper
     options[:zip_url]
   end
 
+  def change_submitter(submitter)
+    options[:submitter] = submitter
+  end
+
   # returns an array of strings, each item being the text for a local subject
   def local_subjects
     subjects = experiments.collect(&:subject).uniq.sort

@@ -24,7 +24,7 @@ class RifCsGenerator
         xml.originatingSource wrapper_object.originating_source
         xml.collection type: wrapper_object.collection_type do
           xml.name type: 'primary' do
-            xml.namePart wrapper_object.name
+            xml.namePart wrapper_object.filename
           end
 
           xml.location do
@@ -43,8 +43,8 @@ class RifCsGenerator
             xml.subject for_code, type: 'anzsrc-for'
           end
 
-          unless wrapper_object.description.blank?
-            xml.description wrapper_object.description, type: 'brief'
+          unless wrapper_object.file_processing_description.blank?
+            xml.description wrapper_object.file_processing_description, type: 'brief'
           end
 
           wrapper_object.access_rights.each do |right|

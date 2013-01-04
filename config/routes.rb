@@ -1,6 +1,10 @@
 Dc21app::Application.routes.draw do
 
-  resources :packages
+  resources :packages do
+    member do
+      get :publish
+    end
+  end
 
   resources :cart_items  do
     collection do
@@ -47,16 +51,12 @@ Dc21app::Application.routes.draw do
     get :about
   end
 
-
-
   resources :data_files do
     member do
       get :download
-      get :publish
     end
     collection do
       get :download_selected
-      get :package_selected
       put :bulk_update
       post :search
       post :api_create
