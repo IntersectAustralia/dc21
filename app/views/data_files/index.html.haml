@@ -28,42 +28,6 @@
     = form_tag(search_data_files_path, :id => "search_form") do
       =hidden_field_tag "direction", sort_direction
       =hidden_field_tag "sort", sort_column
-      - if params["search"].nil?
-        =hidden_field_tag "date_visible", "false"
-        =hidden_field_tag "filename_visible", "false"
-        =hidden_field_tag "description_visible", "false"
-        =hidden_field_tag "type_visible", "false"
-        =hidden_field_tag "tags_visible", "false"
-        =hidden_field_tag "facility_visible", "false"
-        =hidden_field_tag "variable_visible", "false"
-        =hidden_field_tag "uploader_visible", "false"
-        =hidden_field_tag "upload_date_visible", "false"
-      -else
-        =hidden_field_tag "date_visible", (params["search"]["from_date"].blank? and params["search"]["to_date"].blank?) ? "false" : "true"
-        =hidden_field_tag "filename_visible", params["search"]["filename"].blank? ? "false" : "true"
-        =hidden_field_tag "description_visible", params["search"]["description"].blank? ? "false" : "true"
-
-        - if params["search"]["stati"].nil?
-          =hidden_field_tag "type_visible", "false"
-        - else
-          =hidden_field_tag "type_visible", params["search"]["stati"].empty? ? "false" : "true"
-
-        - if params["search"]["tags"].nil?
-          =hidden_field_tag "tags_visible", "false"
-        -else
-          =hidden_field_tag "tags_visible", params["search"]["tags"].empty? ? "false" : "true"
-
-        - if params["search"]["facilities"].nil? and params["search"]["experiments"].nil?
-          =hidden_field_tag "facility_visible", "false"
-        - else
-          =hidden_field_tag "facility_visible", "true"
-
-        - if params["search"]["variable_parents"].nil? and params["search"]["variables"].nil?
-          =hidden_field_tag "variable_visible", "false"
-        -else
-          =hidden_field_tag "variable_visible", "true"
-        =hidden_field_tag "uploader_visible", params["search"]["uploader_id"].blank? ? "false" : "true"
-        =hidden_field_tag "upload_date_visible", (params["search"]["upload_from_date"].blank? and params["search"]["upload_to_date"].blank?) ? "false" : "true"
       .searchcategory
         %h4#date.expand Date:
         .date

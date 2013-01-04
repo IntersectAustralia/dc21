@@ -1,59 +1,111 @@
 $(function () {
     var hidden_selects = true;
-    if ($('#date_visible').val() == "false") {
-        $('.searchcategory .date').hide();
-    }
-    else {
+
+    // Date
+    if ( $('#from_date').val() || $('#to_date').val() ) {
         $('#date').toggleClass('current');
     }
+    else {
+        $('.searchcategory .date').hide();
+    }
+
     $('.searchcategory .time').hide();
-    if ($('#facility_visible').val() == "false") {
-        $('.searchcategory .facility').hide();
-    }
-    else {
-        $('#facility').toggleClass('current');
-    }
-    if ($('#variable_visible').val() == "false") {
-        $('.searchcategory .variable').hide();
-    }
-    else {
-        $('#variable').toggleClass('current');
-    }
-    if ($('#description_visible').val() == "false") {
-        $('.searchcategory .description').hide();
-    }
-    else {
-        $('#description_category').toggleClass('current');
-    }
-    if ($('#filename_visible').val() == "false") {
-        $('.searchcategory .filename').hide();
-    }
-    else {
+
+    // Filename
+    if ($.trim($('#filename').val()).length > 0 ) {
         $('#filename_category').toggleClass('current');
     }
-    if ($('#tags_visible').val() == "false") {
-        $('.searchcategory .tags').hide();
+    else {
+        $('.searchcategory .filename').hide();
+    }
+
+    // Description
+    if ($.trim($('#description').val()).length > 0 ) {
+        $('#description_category').toggleClass('current');
     }
     else {
-        $('#tags_category').toggleClass('current');
+        $('.searchcategory .description').hide();
     }
-    if ($('#type_visible').val() == "false") {
-        $('.searchcategory .type').hide();
-    }
-    else {
+
+    // Type
+    if ( $('.searchcategory .type input[type="checkbox"][checked]').length > 0 ) {
         $('#type_category').toggleClass('current');
     }
-    if ($('#uploader_visible').val() == "false") {
-        $('.searchcategory .uploader').hide();
+    else {
+        $('.searchcategory .type').hide();
+    }
+
+    // Type children
+    $('.type_group').each(function(index) {
+        if ( $(this).find('input[type="checkbox"][checked]').length == 0 ) {
+            $('.type_children', this).hide();
+            $('.expand_type', this).text("+");
+        }
+        else {
+            $('.expand_type', this).text("-");
+        }
+    });
+
+    // Tags
+    if ( $('.searchcategory .tags input[type="checkbox"][checked]').length > 0 ) {
+        $('#tags_category').toggleClass('current');
     }
     else {
+        $('.searchcategory .tags').hide();
+    }
+
+    // Facility
+    if ( $('.searchcategory .facility input[type="checkbox"][checked]').length > 0 ) {
+        $('#facility').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .facility').hide();
+    }
+
+    // Facility children
+    $('.facility_group').each(function(index) {
+        if ( $(this).find('input[type="checkbox"][checked]').length == 0 ) {
+            $('.facility_children', this).hide();
+            $('.expand_facility', this).text("+");
+        }
+        else {
+            $('.expand_facility', this).text("-");
+        }
+    });
+
+    // Columns
+    if ( $('.searchcategory .variable input[type="checkbox"][checked]').length > 0 ) {
+        $('#variable').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .variable').hide();
+    }
+
+    // Column children
+    $('.variable_group').each(function(index) {
+        if ( $(this).find('input[type="checkbox"][checked]').length == 0 ) {
+            $('.variable_children', this).hide();
+            $('.expand_variable', this).text("+");
+        }
+        else {
+            $('.expand_variable', this).text("-");
+        }
+    });
+
+    // Added By
+    if ( $('.searchcategory .uploader option[selected]').length > 0 ) {
         $('#uploader').toggleClass('current');
     }
-    if ($('#upload_date_visible').val() == "false") {
-        $('.searchcategory .upload_date').hide();
+    else {
+        $('.searchcategory .uploader').hide();
+    }
+
+    // Date Added
+    if ( $('#upload_from_date').val() || $('#upload_to_date').val() ) {
+        $('#upload_date').toggleClass('current');
     }
     else {
-        $('#upload_date').toggleClass('current');
+        $('.searchcategory .upload_date').hide();
     }
 
     $('#date').click(function (event) {

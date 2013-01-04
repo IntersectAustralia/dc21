@@ -1,7 +1,4 @@
 jQuery ->
-  $('.variable_children').hide()
-  $('.facility_children').hide()
-  $('.type_children').hide()
 
   $('input.variable_parent').click ->
     cb = $(this)
