@@ -28,7 +28,7 @@ $(function () {
     }
 
     // Type
-    if ( $('.searchcategory .type input[type="checkbox"][checked]').length > 0 ) {
+    if ( $('.searchcategory .type input[type="checkbox"][checked]').length > 0 || $('#publish_date').val() ) {
         $('#type_category').toggleClass('current');
     }
     else {
@@ -37,12 +37,12 @@ $(function () {
 
     // Type children
     $('.type_group').each(function(index) {
-        if ( $(this).find('input[type="checkbox"][checked]').length == 0 ) {
-            $('.type_children', this).hide();
-            $('.expand_type', this).text("+");
+        if ( $(this).find('input[type="checkbox"][checked]').length > 0 || ($(this).find('input[id="publish_date"]') && $('#publish_date').val()) ) {
+            $('.expand_type', this).text("-");
         }
         else {
-            $('.expand_type', this).text("-");
+            $('.type_children', this).hide();
+            $('.expand_type', this).text("+");
         }
     });
 
