@@ -24,9 +24,16 @@ class PackagesController < DataFilesController
     end
     CustomDownloadBuilder.bagit_for_files_with_ids(ids)  do |zip_file|
       attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-      @data_file = attachment_builder.build_named_file(filename, zip_file, experiment_id, type, description, tags)
+      @package = attachment_builder.build_named_file(filename, zip_file, experiment_id, type, description, tags)
+      unless @package.nil?
+        files = []
+        files << @package
+        build_rif_cs(files)
+
+      end
       respond_to do |format|
-        if @data_file
+        if @package
+          @data_file = @package
           format.html { redirect_to data_file_path(@data_file), notice: 'Package was successfully created.' }
         else
           format.html { redirect_to  new_package_path, notice: 'Package could not be created.'}
@@ -47,6 +54,56 @@ class PackagesController < DataFilesController
     @package.file_processing_description = description
     @package.tag_ids = tags
     !@package.errors.any?
+  end
+
+  def publish
+    begin
+      valid = false
+      unless @package.nil?
+        if @package.published.eql?(true)
+          redirect_to  data_files_path, :notice => "This package is already submitted for publishing."
+        else
+          if @package.save! and publish_rif_cs
+              @package.set_to_published
+              valid = true
+          end
+        end
+      end
+    rescue
+      valid = false
+    end
+
+    redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing" : "Unable to publish package."
+  end
+
+  def build_rif_cs(files)
+    #build the rif-cs and place in the unpublished_rif_cs folder, where it will stay until published in DC21
+    dir = APP_CONFIG['unpublished_rif_cs_directory']
+    Dir.mkdir(dir) unless Dir.exists?(dir)
+    output_location = File.join(dir, "rif-cs-#{@package.id}.xml")
+
+    file = File.new(output_location, 'w')
+
+    options = {:root_url => root_url,
+               :collection_url => data_file_path(@package),
+               :zip_url => download_data_file_url(@package),
+               :submitter => current_user}
+    RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@package, files, options), file).build_rif_cs
+    file.close
+  end
+
+  def publish_rif_cs
+    #TODO set new 'submitter' value
+    dir = APP_CONFIG['published_rif_cs_directory']
+    unpublished_dir = APP_CONFIG['unpublished_rif_cs_directory']
+    Dir.mkdir(dir) unless Dir.exists?(dir)
+    output_location = File.join(dir, "rif-cs-#{@package.id}.xml")
+    unpublished_location = File.join(unpublished_dir, "rif-cs-#{@package.id}.xml")
+    if File.exist?(output_location)
+      raise Exception
+    end
+    FileUtils.mv(unpublished_location, output_location)
+    true
   end
 
 end

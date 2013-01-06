@@ -1,7 +1,7 @@
 defaults: &defaults
   files_root: /data/dc21-data
-  published_zip_files_directory: /data/dc21-data/published_zip_files
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
+  unpublished_rif_cs_directory: /data/dc21-data/unpublished_rif_cs
   extra_config_file_root: /data
   # the following are defaults that can be overridden in the dc21app_extra_config.yml which is kept separate from the
   # code in production servers

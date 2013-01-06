@@ -1,5 +1,3 @@
 class Package < DataFile
 
-
-
 end
