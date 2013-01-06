@@ -73,7 +73,7 @@ class PackagesController < DataFilesController
       valid = false
     end
 
-    redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing" : "Unable to publish package."
+    redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing." : "Unable to publish package."
   end
 
   def build_rif_cs(files)
