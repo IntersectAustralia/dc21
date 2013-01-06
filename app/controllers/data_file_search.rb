@@ -65,7 +65,9 @@ class DataFileSearch
         tags.empty? &&
         filename.blank? &&
         description.blank? &&
-        uploader_id.blank?
+        uploader_id.blank? &&
+        upload_date_range.from_date.nil? &&
+        upload_date_range.to_date.nil?
   end
 
   def valid?

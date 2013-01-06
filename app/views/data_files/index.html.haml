@@ -3,22 +3,28 @@
 
 - add_all_warning = "Do you really want to add all files to your cart?"
 
-= will_paginate(@data_files_paginated)
 .datacontroll
+  %span.results
+    - pg_num = params[:page].nil? ? 0 : params[:page].to_i - 1
+    - if @data_files.empty?
+      No matching files
+    - elsif @data_files.size == 1
+      = "Showing 1 file"
+    - elsif @data_files.size <= @data_files.per_page
+      = "Showing all #{@data_files.size} files"
+    - else
+      - if @data_files_paginated.length == 1
+        = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
+      - else
+        = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
   - if @data_files.empty? || !@search.showing_all?
     = link_to "Clear Search", clear_data_files_path, class: "btn pull-left"
   .data-results
     - unless @data_files.empty? || @search.showing_all?
       -##.whitebutton
         %span= link_to 'Publish', '#', id: :publish_button
-    %h3.results
-      - if @data_files.empty?
-        No matching files
-      - else
-        - if @search.showing_all?
-          = "Showing all #{@data_files.size} files"
-        - else
-          = @data_files.size == 1 ? "Showing 1 matching file" : "Showing #{@data_files.size} matching files"
+    = will_paginate(@data_files_paginated)
+
 
     -##downloadtoggle.download.whitebutton
       -#%span= link_to 'Download Files'
@@ -28,42 +34,6 @@
     = form_tag(search_data_files_path, :id => "search_form") do
       =hidden_field_tag "direction", sort_direction
       =hidden_field_tag "sort", sort_column
-      - if params["search"].nil?
-        =hidden_field_tag "date_visible", "false"
-        =hidden_field_tag "filename_visible", "false"
-        =hidden_field_tag "description_visible", "false"
-        =hidden_field_tag "type_visible", "false"
-        =hidden_field_tag "tags_visible", "false"
-        =hidden_field_tag "facility_visible", "false"
-        =hidden_field_tag "variable_visible", "false"
-        =hidden_field_tag "uploader_visible", "false"
-        =hidden_field_tag "upload_date_visible", "false"
-      -else
-        =hidden_field_tag "date_visible", (params["search"]["from_date"].blank? and params["search"]["to_date"].blank?) ? "false" : "true"
-        =hidden_field_tag "filename_visible", params["search"]["filename"].blank? ? "false" : "true"
-        =hidden_field_tag "description_visible", params["search"]["description"].blank? ? "false" : "true"
-
-        - if params["search"]["stati"].nil?
-          =hidden_field_tag "type_visible", "false"
-        - else
-          =hidden_field_tag "type_visible", params["search"]["stati"].empty? ? "false" : "true"
-
-        - if params["search"]["tags"].nil?
-          =hidden_field_tag "tags_visible", "false"
-        -else
-          =hidden_field_tag "tags_visible", params["search"]["tags"].empty? ? "false" : "true"
-
-        - if params["search"]["facilities"].nil? and params["search"]["experiments"].nil?
-          =hidden_field_tag "facility_visible", "false"
-        - else
-          =hidden_field_tag "facility_visible", "true"
-
-        - if params["search"]["variable_parents"].nil? and params["search"]["variables"].nil?
-          =hidden_field_tag "variable_visible", "false"
-        -else
-          =hidden_field_tag "variable_visible", "true"
-        =hidden_field_tag "uploader_visible", params["search"]["uploader_id"].blank? ? "false" : "true"
-        =hidden_field_tag "upload_date_visible", (params["search"]["upload_from_date"].blank? and params["search"]["upload_to_date"].blank?) ? "false" : "true"
       .searchcategory
         %h4#date.expand Date:
         .date
@@ -197,3 +167,7 @@
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "bluebutton disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
             -else
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
+      -# #helper_text.select
+      -#   Select one or more files to download
+
+    = will_paginate(@data_files_paginated)

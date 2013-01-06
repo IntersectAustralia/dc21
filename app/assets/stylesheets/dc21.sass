@@ -4,10 +4,14 @@
 
 
 
-h3.results
+span.results
   font-family: Helvetica,Arial,sans-serif
   font-size: 13px
+  line-height: 28px
   font-weight: normal
+  float: left
+  width: 262px
+  text-align: right
 
 
 
@@ -70,7 +74,7 @@ h3.results
   vertical-align: middle
 
 .dropdown-toggle
-  height: 35px
+  height: 20px
   input, button, select, textarea
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
   label, input, button, select, textarea
@@ -606,11 +610,110 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
 .searchcontroll
   float: left
 
+.pagination
+  height: 40px
+  margin: 20px 0
+
+
+/* line 10, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul 
+  display: inline-block
+  margin-left: 0
+  margin-bottom: 0
+  -webkit-border-radius: 3px
+  -moz-border-radius: 3px
+  border-radius: 3px
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+
+
+/* line 18, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > li 
+  display: inline
+
+
+/* line 22, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > li > a,
+.pagination ul > li > span 
+  float: left
+  padding: 0 14px
+  line-height: 38px
+  text-decoration: none
+  background-color: white
+  border: 1px solid #dddddd
+  border-left-width: 0
+
+
+/* line 33, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > li > a:hover,
+.pagination ul > .active > a,
+.pagination ul > .active > span 
+  background-color: #f5f5f5
+
+
+/* line 37, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > .active > a,
+.pagination ul > .active > span 
+  color: #999999
+  cursor: default
+
+
+/* line 43, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > .disabled > span,
+.pagination ul > .disabled > a,
+.pagination ul > .disabled > a:hover 
+  color: #999999
+  background-color: transparent
+  cursor: default
+
+
+/* line 49, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > li:first-child > a,
+.pagination ul > li:first-child > span 
+  border-left-width: 1px
+  -webkit-border-radius: 3px 0 0 3px
+  -moz-border-radius: 3px 0 0 3px
+  border-radius: 3px 0 0 3px
+
+
+/* line 54, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination ul > li:last-child > a,
+.pagination ul > li:last-child > span 
+  -webkit-border-radius: 0 3px 3px 0
+  -moz-border-radius: 0 3px 3px 0
+  border-radius: 0 3px 3px 0
+
+
+/* line 59, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination-centered 
+  text-align: center
+
+
+/* line 62, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
+.pagination-right 
+  text-align: right
+
+
+.pagination
+  height: 30px
+  margin: 0 0 20px 0
+  text-align: center
+
+.pagination ul > li > a, .pagination ul > li > span
+  padding: 0 14px
+  line-height: 28px
+  background-color: white
+  border: 1px solid #DDD
+  border-left-width: 0
+  font-size: 12px
+
 h3.upload
   +m-p-w-h-p-t-b-l-r-f("", 20px 0 10px 0)
 
 .datacontroll
   +m-p-w-h-p-t-b-l-r-f("", "", "", 40px)
+  +clearfix
 
   h3.filter
     +m-p-w-h-p-t-b-l-r-f("", 0 20px 0 0, 265px)
@@ -618,6 +721,7 @@ h3.upload
     float: left
   .data-results
     +m-p-w-h-p-t-b-l-r-f(0 0 0 287px)
+    +clearfix
     h3.results
       +inlineblock
       +font("", normal, 13px)

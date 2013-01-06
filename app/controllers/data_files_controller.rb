@@ -283,7 +283,6 @@ class DataFilesController < ApplicationController
   end
 
   def do_api_search(search_params)
-    puts search_params
     @search = DataFileSearch.new(search_params)
     @data_files = @search.do_search(@data_files)
     @data_files.each do |data_file|
