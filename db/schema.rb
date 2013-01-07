@@ -131,6 +131,11 @@ ActiveRecord::Schema.define(:version => 20121227150816) do
 
   add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
 
+  create_table "packages", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "parameter_categories", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
