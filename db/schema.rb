@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121227150816) do
+ActiveRecord::Schema.define(:version => 20130107211149) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "data_file_id"
@@ -131,11 +131,6 @@ ActiveRecord::Schema.define(:version => 20121227150816) do
 
   add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
 
-  create_table "packages", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "parameter_categories", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -161,16 +156,6 @@ ActiveRecord::Schema.define(:version => 20121227150816) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "published_collections", :force => true do |t|
-    t.string   "name"
-    t.integer  "created_by_id"
-    t.string   "rif_cs_file_path"
-    t.string   "zip_file_path"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "description"
   end
 
   create_table "roles", :force => true do |t|
