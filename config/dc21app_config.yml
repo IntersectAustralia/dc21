@@ -101,6 +101,7 @@ test:
   files_root: /tmp
   published_zip_files_directory: /tmp/published_zip_files
   published_rif_cs_directory: /tmp/published_rif_cs
+  unpublished_rif_cs_directory: /tmp/unpublished_rif_cs
 
 production:
   <<: *defaults
