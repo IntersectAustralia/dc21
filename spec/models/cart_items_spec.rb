@@ -8,8 +8,8 @@ describe CartItem do
   end
 
   describe "Associations" do
-    it { should have_one(:data_file) }
-    it { should have_one(:user) }
+    it { should belong_to(:data_file) }
+    it { should belong_to(:user) }
   end
 
   describe "Validations" do
@@ -17,8 +17,8 @@ describe CartItem do
     it { should validate_presence_of(:user_id) }
 
     it "should validate uniqueness of data_file/user_id combination" do
-      Factory(:facility)
-      should_validate_uniqueness_of (:data_file_id, :scoped_to => :user_id)
+      Factory(:cart_item)
+      should validate_uniqueness_of(:data_file_id).scoped_to(:user_id)
     end
   end
 
