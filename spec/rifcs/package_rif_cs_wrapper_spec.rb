@@ -1,38 +1,38 @@
 require 'spec_helper'
 
-describe PublishedCollectionRifCsWrapper do
+describe PackageRifCsWrapper do
 
   describe "Static values" do
     it "should always return uws as the group" do
-      PublishedCollectionRifCsWrapper.new(nil, [], {}).group.should eq("University of Western Sydney")
+      PackageRifCsWrapper.new(nil, [], {}).group.should eq("University of Western Sydney")
     end
 
     it "should always return dataset as the collection type" do
-      PublishedCollectionRifCsWrapper.new(nil, [], {}).collection_type.should eq("dataset")
+      PackageRifCsWrapper.new(nil, [], {}).collection_type.should eq("dataset")
     end
   end
 
   describe "Originating source" do
     it "Should return the root url as provided to the wrapper" do
-      PublishedCollectionRifCsWrapper.new(nil, [], {:root_url => 'http://example.com'}).originating_source.should eq('http://example.com')
+      PackageRifCsWrapper.new(nil, [], {:root_url => 'http://example.com'}).originating_source.should eq('http://example.com')
     end
   end
 
   describe "Key" do
     it "Should return the collection url as provided to the wrapper" do
-      PublishedCollectionRifCsWrapper.new(nil, [], {:collection_url => 'http://example.com/1'}).key.should eq('http://example.com/1')
+      PackageRifCsWrapper.new(nil, [], {:collection_url => 'http://example.com/1'}).key.should eq('http://example.com/1')
     end
   end
 
   describe "Electronic location" do
     it "Should return the collection zip url as provided to the wrapper" do
-      PublishedCollectionRifCsWrapper.new(nil, [], {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
+      PackageRifCsWrapper.new(nil, [], {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
     end
   end
 
   describe "Notes" do
     it "should include submitter in notes" do
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(nil, [], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes[0].should eq('Published by Georgina Edwards (georgina@intersect.org.au)')
     end
 
@@ -50,7 +50,7 @@ describe PublishedCollectionRifCsWrapper do
       df3 = Factory(:data_file, :experiment_id => experiment3.id)
       df4 = Factory(:data_file, :experiment_id => experiment3.id)
       df5 = Factory(:data_file, :experiment_id => -1)
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes.size.should eq(3)
       wrapper.notes.include?('Primary contact for Fac1 is Fred Smith (fred@intersect.org.au')
       wrapper.notes.include?('Primary contact for Fac2 is Bob Jones (bob@intersect.org.au')
@@ -64,7 +64,7 @@ describe PublishedCollectionRifCsWrapper do
       experiment = Factory(:experiment, :facility => facility)
 
       df1 = Factory(:data_file, :experiment_id => experiment.id)
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(nil, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       # this should never happen, its ok that nothing shows
       wrapper.notes.size.should eq(1)
     end
@@ -83,7 +83,7 @@ describe PublishedCollectionRifCsWrapper do
       df4 = Factory(:data_file, :experiment_id => exp3.id)
       df5 = Factory(:data_file, :experiment_id => exp4.id)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.local_subjects.should eq(["Bob", "Fred"])
     end
 
@@ -93,7 +93,7 @@ describe PublishedCollectionRifCsWrapper do
       df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
       wrapper.local_subjects.should eq(["Fred"])
     end
   end
@@ -111,7 +111,7 @@ describe PublishedCollectionRifCsWrapper do
       df4 = Factory(:data_file, :experiment_id => exp3.id)
       df5 = Factory(:data_file, :experiment_id => exp4.id)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.access_rights.should eq(["Bob", "Fred"])
     end
 
@@ -121,7 +121,7 @@ describe PublishedCollectionRifCsWrapper do
       df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
       wrapper.access_rights.should eq(["Fred"])
     end
   end
@@ -145,7 +145,7 @@ describe PublishedCollectionRifCsWrapper do
       df4 = Factory(:data_file, :experiment_id => exp3.id)
       df5 = Factory(:data_file, :experiment_id => exp4.id)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
     end
 
@@ -156,7 +156,7 @@ describe PublishedCollectionRifCsWrapper do
       df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => -1)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
       wrapper.for_codes.should eq(%w(02))
     end
   end
@@ -180,7 +180,7 @@ describe PublishedCollectionRifCsWrapper do
       df3.stub_chain(:experiment, :facility).and_return(f3)
       df4.stub_chain(:experiment, :facility).and_return(f3)
 
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.locations.should eq([['not empty'], ['also not empty']])
     end
 
@@ -192,7 +192,7 @@ describe PublishedCollectionRifCsWrapper do
 
       df1.experiment.should eq(exp1)
       df2.experiment.should be_nil
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
       wrapper.locations.should eq([[{:lat=>1.1, :long=>-87.3}]])
     end
   end
@@ -204,13 +204,13 @@ describe PublishedCollectionRifCsWrapper do
     let(:df4) { Factory(:data_file, :start_time => '2011-03-15 06:00 UTC', :end_time => '2011-03-30 22:00 UTC') }
     let(:df5) { Factory(:data_file, :start_time => nil, :end_time => nil) }
     it "should return the earliest start date and latest end date in the matching files" do
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {})
       wrapper.start_date.should eq(Date.parse('2011-01-01'))
       wrapper.end_date.should eq(Date.parse('2011-04-26'))
     end
 
     it "should return nil if none of the files have dates" do
-      wrapper = PublishedCollectionRifCsWrapper.new(nil, [df5], {})
+      wrapper = PackageRifCsWrapper.new(nil, [df5], {})
       wrapper.start_date.should be_nil
       wrapper.end_date.should be_nil
     end

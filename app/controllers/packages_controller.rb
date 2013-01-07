@@ -88,7 +88,7 @@ class PackagesController < DataFilesController
                :collection_url => data_file_path(@package),
                :zip_url => download_data_file_url(@package),
                :submitter => current_user}
-    RifCsGenerator.new(PublishedCollectionRifCsWrapper.new(@package, files, options), file).build_rif_cs
+    RifCsGenerator.new(PackageRifCsWrapper.new(@package, files, options), file).build_rif_cs
     file.close
   end
 
