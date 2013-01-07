@@ -82,6 +82,7 @@ Feature: Navigation between pages across the site
   Scenario: Editing own user details
     Given I am on the home page
     When I click on "georgina@intersect.org.au"
+    And I sleep briefly
     And I follow "Settings"
     Then I should be on the users profile page
 

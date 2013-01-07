@@ -90,6 +90,21 @@ $(function () {
     return num+' ' + sizes[[i]];
   }
 
+  $('#add_all_to_cart').click(function (event) {
+    if (!$(this).hasClass("disabled")) {
+      if (confirm('Do you really want to add all files to your cart?')) {
+        $(this).addClass("disabled");
+      }
+      else {
+        return false;
+      }
+      $("#notice").slideUp();
+    }
+    else {
+      return false;
+    }
+  });
+
   // ACCOUNT MENU
   $('#accountmenu_container').hide();
   $('#accountmenu').click(function (event) {

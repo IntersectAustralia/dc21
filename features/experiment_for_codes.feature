@@ -16,6 +16,7 @@ Feature: Manage experiment metadata
   Scenario: Second and third level dropdowns populate based on selection in the previous one
     Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
     When I select "03 - CHEMICAL SCIENCES" from "FOR codes"
+    And I sleep briefly
     Then the "for_code_level2" select should contain
       | Please select |
       | 0301 - ITEM 1 |

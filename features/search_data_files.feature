@@ -192,9 +192,9 @@ Feature: Search data files by date range
       | datafile5.dat |
       | mydata8.dat   |
       | datafile4.dat |
-    And I expand all the mapped columns
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
+    When I expand "Temperature"
     And the "temp" checkbox should not be checked
 
   @javascript
@@ -210,7 +210,6 @@ Feature: Search data files by date range
       | mydata6.dat   |
       | mydata8.dat   |
       | datafile4.dat |
-    And I expand all the mapped columns
     And the "Humi" checkbox should be checked
     And the "Rnfll" checkbox should be checked
     Then the "Rainfall" checkbox should not be checked
