@@ -43,6 +43,7 @@ set(:deploy_to) { "#{user_home}/#{application}" }
 set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-samples'}" }
 set(:aux_data_dir) { "#{defined?(aux_data_dir) ? aux_data_dir : '/data/dc21-data'}" }
 set(:rif_cs_dir) { "#{defined?(rif_cs_dir) ? rif_cs_dir : '/data/dc21-data/published_rif_cs/'}" }
+set(:unpublished_rif_cs_dir) { "#{defined?(unpublished_rif_cs_dir) ? unpublished_rif_cs_dir : '/data/dc21-data/unpublished_rif_cs/'}" }
 set :normalize_asset_timestamps, false
 
 default_run_options[:pty] = true
@@ -69,6 +70,8 @@ namespace :server_setup do
       run "#{try_sudo} chown -R #{user}.#{group} #{aux_data_dir}"
       run "[[ -d #{rif_cs_dir} ]] || #{try_sudo} mkdir -p #{rif_cs_dir}"
       run "#{try_sudo} chown -R #{user}.#{group} #{rif_cs_dir}"
+      run "[[ -d #{unpublished_rif_cs_dir} ]] || #{try_sudo} mkdir -p #{unpublished_rif_cs_dir}"
+      run "#{try_sudo} chown -R #{user}.#{group} #{unpublished_rif_cs_dir}"
       run "[[ -d #{deploy_to} ]] || #{try_sudo} mkdir #{deploy_to}"
       run "#{try_sudo} chown -R #{user}.#{group} #{deploy_to}"
       run "#{try_sudo} chmod 0711 #{user_home}"
