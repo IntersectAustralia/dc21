@@ -327,12 +327,14 @@ class DataFile < ActiveRecord::Base
       start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
       end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
 
-      temp_dir = Dir.mktmpdir
+      mismatch = false
+      Dir.mktmpdir { |temp_dir|
+        candidate_overlap_file = Toa5Subsetter.extract_matching_rows_to(candidate_overlap_data_file, temp_dir, start_comparison_time, end_comparison_time, true)
+        my_overlap_file = Toa5Subsetter.extract_matching_rows_to(self, temp_dir, start_comparison_time, end_comparison_time, true)
 
-      candidate_overlap_file = Toa5Subsetter.extract_matching_rows_to(candidate_overlap_data_file, temp_dir, start_comparison_time, end_comparison_time, true)
-      my_overlap_file = Toa5Subsetter.extract_matching_rows_to(self, temp_dir, start_comparison_time, end_comparison_time, true)
-
-      !FileUtils.identical? candidate_overlap_file, my_overlap_file
+        mismatch = !FileUtils.identical?(candidate_overlap_file, my_overlap_file)
+      }
+      mismatch
     end
 
     exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
