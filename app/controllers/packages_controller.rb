@@ -99,9 +99,6 @@ class PackagesController < DataFilesController
     Dir.mkdir(dir) unless Dir.exists?(dir)
     output_location = File.join(dir, "rif-cs-#{@package.id}.xml")
     unpublished_location = File.join(unpublished_dir, "rif-cs-#{@package.id}.xml")
-    if File.exist?(output_location)
-      raise Exception
-    end
     FileUtils.mv(unpublished_location, output_location)
     true
   end
