@@ -637,10 +637,11 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
 .pagination ul > li > a,
 .pagination ul > li > span 
   float: left
-  padding: 0 14px
+  padding: 0 13px
   line-height: 38px
   text-decoration: none
   background-color: white
+  color: #666
   border: 1px solid #dddddd
   border-left-width: 0
 
@@ -649,13 +650,20 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
 .pagination ul > li > a:hover,
 .pagination ul > .active > a,
 .pagination ul > .active > span 
-  background-color: #f5f5f5
+  background-color: #333
+  color: #EFEFEF
+  border-top: 1px solid #000
+  border-bottom: 1px solid #000
+  border-right: 1px solid #000
 
 
 /* line 37, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
 .pagination ul > .active > a,
 .pagination ul > .active > span 
-  color: #999999
+  color: #333
+  background: #F1F1F1
+  border: 1px solid #DFDFDF
+  border-left: 0px solid #000
   cursor: default
 
 
@@ -663,9 +671,12 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
 .pagination ul > .disabled > span,
 .pagination ul > .disabled > a,
 .pagination ul > .disabled > a:hover 
-  color: #999999
+  color: #CCC
   background-color: transparent
   cursor: default
+  border-top: 1px solid #DDD
+  border-bottom: 1px solid #DDD
+  border-right: 1px solid #DDD
 
 
 /* line 49, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
@@ -701,7 +712,7 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
   text-align: center
 
 .pagination ul > li > a, .pagination ul > li > span
-  padding: 0 14px
+  padding: 0 13px
   line-height: 28px
   background-color: white
   border: 1px solid #DDD
