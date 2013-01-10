@@ -795,10 +795,16 @@ h3.upload
     +width(50px, 50px, 50px)
   td.filename, th.filename
     +width(150px, 150px, 150px)
+    display: block
+    a
+      +width(150px, 150px, 150px)
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
   td.date, th.date
     +width(110px, 110px, 110px)
   td.email, th.email
-    +width(150px, 150px, 150px)
+    +width(130px, 130px, 130px)
   td.experiment, th.experiment
     +width(100px, 100px, 100px)
   td.experiment, th.experiment
@@ -1213,3 +1219,11 @@ ul#files_to_download
   +width(770px, 770px, 770px)
   overflow: none
 
+.ie9
+  table#exploredata.search
+    overflow: hidden
+    table-layout: fixed
+
+
+.ie9 input[type="password"], .ie9 input[type="text"]
+  line-height: 18px
