@@ -17,7 +17,7 @@
         - if @data_files_paginated.length == 1
           = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
         - else
-        = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
+          = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
   .data-results
     - unless @data_files.empty? || @search.showing_all?
       -##.whitebutton
