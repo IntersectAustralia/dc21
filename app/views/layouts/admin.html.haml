@@ -1,20 +1,28 @@
 !!!
-%html
-  %head
-    = render 'layouts/head'
-  %body
-    #content_wrapper
-      = render 'layouts/banner'
-      #content
-        - if content_for?(:breadcrumb)
-          = yield :breadcrumb
-        #content_container
-          .contentnavigation
-            = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-              = tab.users 'Users', users_path, :id => "users"
-              = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests"
-              = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings"
-              = yield :actions
-          = yield
-    = render 'layouts/footer'
+/[if gt IE 9]
+  %html
+/[if IE 9]
+  %html.ie9
+/[if IE 8]
+  %html.ie8
+/[if IE 7]
+  %html.ie7
+
+%head
+  = render 'layouts/head'
+%body
+  #content_wrapper
+    = render 'layouts/banner'
+    #content
+      - if content_for?(:breadcrumb)
+        = yield :breadcrumb
+      #content_container
+        .contentnavigation
+          = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
+            = tab.users 'Users', users_path, :id => "users"
+            = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests"
+            = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings"
+            = yield :actions
+        = yield
+  = render 'layouts/footer'
 
