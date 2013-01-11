@@ -779,7 +779,15 @@ h3.upload
     display: none
 
 
-#exploredata, .exploredata
+.recentactivity #exploredata
+  td.filename, th.filename
+    +width(400px, 400px, 400px)
+    a
+      +width(400px, 400px, 400px)
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+    
 
 .exploredata.search, #exploredata.search, #exploredata.search tbody
   +inlineblock
@@ -1223,6 +1231,9 @@ ul#files_to_download
 
 .ie9
   table#exploredata.search
+    overflow: hidden
+    table-layout: fixed
+  table
     overflow: hidden
     table-layout: fixed
 
