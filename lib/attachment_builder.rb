@@ -80,7 +80,7 @@ class AttachmentBuilder
       match ? match[1].to_i : nil
     end
     numbers = matching.compact.sort
-    next_number = numbers.empty? ? 1 : (numbers.last + 1)
+    next_number = SequenceHelper.next_available(numbers)
 
     if ext.blank?
       original + "_#{next_number}"
