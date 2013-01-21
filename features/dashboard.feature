@@ -4,8 +4,8 @@ Feature: View the dashboard main page
     Given I am logged in as "georgina@intersect.org.au"
 
   Scenario: Dashboard shows recent uploaded files
-    Given I have uploaded "sample1.txt"
-    And I have uploaded "WTC01_Table1.dat"
+    Given I have uploaded "sample1.txt" as "georgina@intersect.org.au"
+    And I have uploaded "WTC01_Table1.dat" as "georgina@intersect.org.au"
     When I am on the home page
     Then I should see "exploredata" table with
       | Filename         | Added by                  |
