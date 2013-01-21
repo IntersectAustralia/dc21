@@ -71,6 +71,21 @@ Feature: Delete files containing erroneous data
       | Filename      | Date added       |
       | datafile6.dat | 2011-12-30 10:15 |
 
+  Scenario: Deleting a file causes it to be removed from any carts it is in
+    Given I have data files
+      | filename      | created_at       | uploaded_by                 | start_time           | end_time               |
+      | datafile7.dat | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC |
+      | datafile6.dat | 30/12/2011 10:15 | other_user@intersect.org.au | 1/6/2010 6:42:01 UTC | 11/6/2010 18:05:23 UTC |
+    And the cart for "researcher@intersect.org.au" contains "datafile6.dat"
+    And the cart for "researcher@intersect.org.au" contains "datafile7.dat"
+    And the cart for "other_user@intersect.org.au" contains "datafile7.dat"
+    Then the cart for "other_user@intersect.org.au" should contain 1 file
+    And the cart for "researcher@intersect.org.au" should contain 2 files
+    And I am on the data file details page for datafile7.dat
+    And I follow "Delete This File"
+    Then the cart for "other_user@intersect.org.au" should be empty
+    And the cart for "researcher@intersect.org.au" should contain 1 file
+
   Scenario: Files can be deleted from the details page
     Given I have data files
       | filename      | created_at       | uploaded_by                 | start_time           | end_time               |

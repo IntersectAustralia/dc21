@@ -6,6 +6,7 @@ Feature: Overlapping Files
 
   Background:
     Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "other@intersect.org.au" with role "Researcher"
     And I am logged in as "researcher@intersect.org.au"
     And I have experiment "My Experiment"
 
@@ -45,3 +46,33 @@ Feature: Overlapping Files
     Then I should see details displayed
       | Type        | RAW                   |
       | Description | orig wtc01_table1.dat |
+
+  Scenario: Safe overlap removes replaced files from carts and adds new one to carts
+    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" with type "RAW"
+    And I have uploaded "subsetted/range_oct_13_oct_15/weather_station_05_min_13_to_15.dat" with type "RAW"
+    And the cart for "researcher@intersect.org.au" contains "weather_station_05_min_10_to_12.dat"
+    And the cart for "researcher@intersect.org.au" contains "weather_station_05_min_13_to_15.dat"
+    And the cart for "other@intersect.org.au" contains "weather_station_05_min_10_to_12.dat"
+    Then the cart for "other@intersect.org.au" should contain 1 file
+    And the cart for "researcher@intersect.org.au" should contain 2 files
+    When I upload "samples/weather_station_05_min.dat" with type "RAW" and description "new description" and experiment "My Experiment"
+    Then I should see "Carts have been updated."
+    And I am on the list data files page
+    Then I should see only these rows in "exploredata" table
+      | Filename                   | Added by                    | Type |
+      | weather_station_05_min.dat | researcher@intersect.org.au | RAW  |
+    And the cart for "other@intersect.org.au" should contain only file "weather_station_05_min.dat"
+    And the cart for "researcher@intersect.org.au" should contain only file "weather_station_05_min.dat"
+
+  Scenario: Safe overlap doesn't show carts message if no files in carts
+    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" with type "RAW"
+    And I have uploaded "subsetted/range_oct_13_oct_15/weather_station_05_min_13_to_15.dat" with type "RAW"
+    When I upload "samples/weather_station_05_min.dat" with type "RAW" and description "new description" and experiment "My Experiment"
+    Then I should not see "Carts have been updated."
+    And I am on the list data files page
+    Then I should see only these rows in "exploredata" table
+      | Filename                   | Added by                    | Type |
+      | weather_station_05_min.dat | researcher@intersect.org.au | RAW  |
+    And the cart for "other@intersect.org.au" should be empty
+    And the cart for "researcher@intersect.org.au" should be empty
+

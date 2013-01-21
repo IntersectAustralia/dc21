@@ -184,9 +184,6 @@ class DataFilesController < ApplicationController
     file = DataFile.find(params[:id])
     if !file.published and file.destroy
       begin
-        CartItem.where("data_file_id = ?", file.id).each do |item|
-          item.destroy
-        end
         File.delete @data_file.path
         redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
       rescue Errno::ENOENT

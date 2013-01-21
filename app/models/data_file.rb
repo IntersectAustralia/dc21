@@ -17,7 +17,7 @@ class DataFile < ActiveRecord::Base
   belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
-  has_many :cart_items
+  has_many :cart_items, :dependent => :destroy
   has_and_belongs_to_many :tags
 
   before_validation :strip_whitespaces
@@ -222,12 +222,23 @@ class DataFile < ActiveRecord::Base
       overlap = safe_overlap(station_item.value, table_item.value)
 
       unless overlap.empty?
-        add_message(:info, "The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}")
+        info_message = "The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}"
 
         overlap_descriptions = overlap.map(&:file_processing_description)
-        overlap.each { |df| df.destroy }
+        users_with_replaced_files_in_cart = []
+        overlap.each do |df|
+          users_with_replaced_files_in_cart += df.cart_items.collect(&:user)
+          df.destroy
+        end
         self.file_processing_description = overlap_descriptions.join(', ') if file_processing_description.blank?
         save!
+        # replace old file(s) with new one in carts
+        users_with_replaced_files_in_cart.uniq!
+        users_with_replaced_files_in_cart.each do |user|
+          user.cart_items.create!(:data_file_id => self.id)
+        end
+        info_message << " Carts have been updated." unless users_with_replaced_files_in_cart.empty?
+        add_message(:info, info_message)
       end
 
       return overlap.collect(&:filename)

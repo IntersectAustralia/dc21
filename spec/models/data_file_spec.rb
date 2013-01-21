@@ -45,6 +45,7 @@ describe DataFile do
     it { should belong_to(:created_by) }
     it { should have_many(:column_details) }
     it { should have_many(:metadata_items) }
+    it { should have_many(:cart_items) }
     it { should have_and_belong_to_many(:tags) }
   end
 
@@ -567,11 +568,30 @@ describe DataFile do
       Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => df2)
       Factory(:metadata_item, :key => MetadataKeys::STATION_NAME_KEY, :value => "ABC", :data_file => df3)
 
-
       DataFile.with_station_name_in(["ABC"]).collect(&:id).sort.should eq([df1.id, df2.id, df3.id])
       df1.destroy
       DataFile.with_station_name_in(["ABC"]).collect(&:id).sort.should eq([df2.id, df3.id])
       MetadataItem.find_by_data_file_id(df1).should eq nil
+    end
+
+    it "should remove all cart items for the data file" do
+      df1 = Factory(:data_file)
+      df2 = Factory(:data_file)
+      user1 = Factory(:user)
+      user2 = Factory(:user)
+      user1.cart_items.create!(:data_file_id => df1.id)
+      user1.cart_items.create!(:data_file_id => df2.id)
+      user2.cart_items.create!(:data_file_id => df1.id)
+
+      user1.cart_items.size.should eq(2)
+      user2.cart_items.size.should eq(1)
+
+      df1.destroy
+
+      user1.reload
+      user2.reload
+      user1.cart_items.size.should eq(1)
+      user2.cart_items.size.should eq(0)
     end
 
   end

@@ -387,7 +387,7 @@ def upload(file, type, description, experiment, tags)
     check(tag) unless tag.blank?
   end
   click_button "Upload"
-
+  page.should have_content("Your files have been uploaded.")
 end
 
 When /^I have set the dates of "([^"]*)" as "([^"]*)" to "([^"]*)"$/ do |filename, start, end_date|
@@ -490,3 +490,24 @@ When /^the add to cart link for ([^"]*) should not be disabled$/ do |name|
   page.should have_link(link_id)
 end
 
+Then /^the cart for "([^"]*)" should be empty$/ do |email|
+  User.find_by_email!(email).cart_items.size.should eq(0)
+end
+
+Then /^the cart for "([^"]*)" should contain (\d+) files?$/ do |email, count|
+  User.find_by_email!(email).cart_items.size.should eq(count.to_i)
+end
+
+
+When /^the cart for "([^"]*)" contains "([^"]*)"$/ do |email, file_name|
+  user = User.find_by_email!(email)
+  file = DataFile.find_by_filename(file_name)
+  user.cart_items.create!(:data_file_id => file.id)
+end
+
+When /^the cart for "([^"]*)" should contain only file "([^"]*)"$/ do |email, file_name|
+  user = User.find_by_email!(email)
+  file = DataFile.find_by_filename(file_name)
+  user.cart_items.size.should eq(1)
+  user.cart_items.first.data_file_id.should eq(file.id)
+end
