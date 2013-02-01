@@ -588,341 +588,84 @@ describe DataFile do
   end
 
   describe "overlaps" do
-    describe "mismatched" do
-      describe "misses" do
-        it "Toa5 versus other formats" do
-          times = {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC")}
-          txt = Factory(:data_file, times.merge(:format => nil))
-          jpg = Factory(:data_file, times.merge(:format => nil))
-          toa = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5))
 
-          station_name = 'station_name'
-          table_name = 'table_name'
+    describe "Getting files from same station with same table name" do
+      it "Should return files that are RAW, TOA5 and have same station and table name" do
+        toa1 = create_toa5('s1', 't1')
+        times = {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC")}
+        txt = Factory(:data_file, times.merge(:format => nil))
+        diff_station = create_toa5('s2', 't1')
+        diff_table = create_toa5('s1', 't2')
+        same1 = create_toa5('s1', 't1')
+        same2 = create_toa5('s1', 't1')
+        diff_both = create_toa5('s2', 't2')
+        no_station_table = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :file_processing_status => 'RAW'))
+        not_raw = create_toa5('s1', 't1', 'PROCESSED')
 
-          [txt, jpg, toa].each do |file|
-            file.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
-            file.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
-          end
-
-          toa.send(:mismatched_overlap, station_name, table_name).should be_empty
-          jpg.send(:mismatched_overlap, station_name, table_name).should be_empty
-          txt.send(:mismatched_overlap, station_name, table_name).should be_empty
-        end
-        it "different station/table name combinations" do
-          times = {:start_time => "2012-02-01 03:45 UTC", :end_time => "2012-04-03 14:44 UTC"}
-
-          station_a = "Station A"
-          table_a = "Table A"
-          station_b = "Station B"
-          table_b = "Table B"
-
-          path = Rails.root.join('spec/samples', 'toa5.dat')
-
-          toa5 = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
-          MetadataItem.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_a, :data_file => toa5)
-          MetadataItem.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_a, :data_file => toa5)
-
-          changed_toa5 = Factory.build(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :path => path))
-
-          changed_toa5.send(:mismatched_overlap, station_b, table_a).should be_empty
-          changed_toa5.send(:mismatched_overlap, station_a, table_b).should be_empty
-          changed_toa5.send(:mismatched_overlap, station_b, table_b).should be_empty
-        end
+        toa1.raw_toa5_files_with_same_station_name_and_table_name.collect(&:id).sort.should eq([same1.id, same2.id].sort)
       end
-
-      describe "obvious misses" do
-        before :each do
-          @start_time = Time.new(2011, 5, 30)
-          @end_time = Time.new(2011, 6, 20)
-          @some_path = "blah"
-          @toa5_file = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :format => FileTypeDeterminer::TOA5)
-          @station_name = 'stn'
-          @table_name = 'asdf'
-        end
-        it "earlier files" do
-          earlier = make_data_file!(@start_time - 2.days, @start_time - 1.day, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should be_empty
-        end
-        it "later files" do
-          later = make_data_file!(@end_time + 1.day, @end_time + 2.days, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should be_empty
-        end
-
-      end
-      describe "obvious overlap" do
-        before :each do
-          @start_time = Time.new(2011, 5, 20)
-          @end_time = Time.new(2011, 8, 22)
-          @toa5_file = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :format => FileTypeDeterminer::TOA5, :file_processing_status => DataFile::STATUS_RAW)
-          @some_path = 'arbitary_path'
-
-          @station_name = 'stn'
-          @table_name = 'tbl'
-        end
-        it "start time" do
-          early_start = @start_time - 2.day
-          early_end = @end_time - 1.day
-          start_time_overlap = make_data_file!(early_start, early_end, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [start_time_overlap]
-        end
-        it "total overlap" do
-          early_start = @start_time - 1.day
-          late_end = @end_time + 1.day
-          total_overlap = make_data_file!(early_start, late_end, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [total_overlap]
-        end
-        it "end overlap" do
-          late_start = @start_time + 1.day
-          late_end = @end_time + 1.day
-          end_overlap = make_data_file!(late_start, late_end, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [end_overlap]
-        end
-        it "overlaps touching start" do
-          early_start = @start_time - 2.day
-          touching_start = make_data_file!(early_start, @start_time, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [touching_start]
-        end
-        it "overlaps touching end" do
-          late_end = @end_time + 1.day
-          touching_end = make_data_file!(@end_time, late_end, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [touching_end]
-        end
-      end
-      describe "raw" do
-        before :each do
-          @start_time = Time.parse '2011/10/6 0:00 UTC'
-          @end_time = Time.parse '2011/11/3 11:55 UTC'
-          @station_name = "Station"
-          @table_name = "Table"
-          @path = Rails.root.join('spec/samples', 'toa5.dat').to_s
-        end
-        it "only looks at raw" do
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
-          subset_end = Time.parse '2011/10/14 23:55 UTC'
-          statii = [DataFile::STATUS_ERROR, 'UNKNOWN', 'CLEANSED', 'PROCESSED']
-
-          statii.each do |status|
-            make_data_file!(@start_time, @end_time, @path, @station_name, @table_name, status)
-          end
-          it = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
-
-          it.send(:mismatched_overlap, @station_name, @table_name).should be_empty
-        end
-      end
-
-      describe "content comparisons" do
-        before :each do
-          @start_time = Time.parse '2011/10/6 0:00 UTC'
-          @end_time = Time.parse '2011/11/3 11:55 UTC'
-          @station_name = "Station"
-          @table_name = "Table"
-          @path = Rails.root.join('spec/samples', 'toa5.dat').to_s
-
-          @toa5 = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
-        end
-        describe "subset_to" do
-          before :each do
-            @subset_end = Time.parse '2011/10/14 23:55 UTC'
-          end
-
-          it "subset_to same" do
-            subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
-            subset_same = make_data_file!(@start_time, @subset_end, subset_path, @station_name, @table_name)
-
-            subset_same.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should be_empty
-          end
-
-          it "subset_to different" do
-            truncated_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only_different.dat').to_s
-            subset_different = Factory.build(:data_file, :path => truncated_path, :start_time => @start_time, :end_time => @subset_end, :format => FileTypeDeterminer::TOA5, :file_processing_status => DataFile::STATUS_RAW)
-
-            subset_different.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
-          end
-        end
-
-        describe "subset_from" do
-          before :each do
-            @subset_start = Time.parse '2011/10/9 0:00 UTC'
-          end
-          it "subset_from same" do
-            subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only.dat').to_s
-            subset_same = make_data_file!(@subset_start, @end_time, subset_path, @station_name, @table_name)
-
-            #subset_same.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
-
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should be_empty
-          end
-          it "subset_from different" do
-            subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only_different.dat').to_s
-
-            subset_diff = make_data_file!(@subset_start, @end_time, subset_path, @station_name, @table_name)
-
-            subset_diff.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
-
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [subset_diff]
-          end
-        end
-
-        describe "subset_range" do
-          before :each do
-            @subset_start = Time.parse '2011/10/9 0:00 UTC'
-            @subset_end = Time.parse '2011/10/14 23:55 UTC'
-          end
-          it "subset_range same" do
-            subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range.dat').to_s
-
-            subset_same_toa5 = make_data_file!(@subset_start, @subset_end, subset_path, @station_name, @table_name)
-
-            subset_same_toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
-
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should be_empty
-          end
-          it "subset_range different" do
-            subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range_different.dat').to_s
-
-            subset_diff_toa5 = make_data_file!(@subset_start, @subset_end, subset_path, @station_name, @table_name)
-
-            subset_diff_toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [@toa5]
-
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [subset_diff_toa5]
-          end
-        end
-
-        describe "exact match" do
-          it "exact overlap with identical content" do
-            same = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq []
-          end
-          it "exact overlap with different content" do
-            same = make_data_file!(@start_time, @end_time, Rails.root.join('spec/samples', 'toa5_different.dat').to_s, @station_name, @table_name)
-            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [same]
-          end
-        end
-      end
-
     end
-
-    describe "safe" do
-      before :each do
-        @start_time = Time.parse '2011/10/6 0:00 UTC'
-        @end_time = Time.parse '2011/11/3 11:55 UTC'
-        @station_name = "Station"
-        @table_name = "Table"
-        @path = Rails.root.join('spec/samples', 'toa5.dat').to_s
-
-        @toa5 = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
-      end
-      describe "obvious misses" do
-        it "before" do
-          make_data_file!(@start_time - 2.days, @end_time - 1.day, @path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+    describe "Categorising overlap" do
+      let(:start_time) { Time.parse('2012-02-01 03:45:03 UTC') }
+      let(:end_time) { Time.parse('2012-02-20 15:23:59 UTC') }
+      let(:existing) { create_toa5_with_dates(start_time, end_time) }
+      describe "Should correctly identify files that do not overlap at all" do
+        it "file completely before" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.day, start_time - 1.second)).should eq('NONE')
         end
-        it "after" do
-          make_data_file!(@end_time + 1.day, @end_time + 2.days, @path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
-        end
-        it "total" do
-          make_data_file!(@start_time - 1.day, @end_time + 1.day, @path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
-        end
-        it "start_time" do
-          make_data_file!(@start_time + 1.day, @end_time + 1.day, @path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
-        end
-        it "end_time" do
-          make_data_file!(@start_time - 1.day, @end_time - 1.day, @path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+        it "file completely after" do
+          existing.categorise_overlap(create_toa5_with_dates(end_time + 1.second, end_time + 1.day)).should eq('NONE')
         end
       end
-      describe "doesn't pick files with different content" do
-        it "subset_to" do
-          subset_end = Time.parse '2011/10/14 23:55 UTC'
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only_different.dat').to_s
-
-          subset_to = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+      describe "Should correctly identify files that are safe (i.e. are supersets AND content matches)" do
+        before(:each) { FileOverlapContentChecker.stub(:new).and_return(double(:content_matches => true)) }
+        it "exact same dates" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time)).should eq('SAFE')
         end
-        it "subset_from" do
-          subset_start = Time.parse '2011/10/9 0:00 UTC'
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only_different.dat').to_s
-          subset_from = make_data_file!(subset_start, @end_time, subset_path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+        it "starts before, ends at same time" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.day, end_time)).should eq('SAFE')
         end
-        it "subset_range" do
-          subset_start = Time.parse '2011/10/9 0:00 UTC'
-          subset_end = Time.parse '2011/10/14 23:55 UTC'
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range_different.dat').to_s
-
-          subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+        it "starts before, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.second, end_time + 1.day)).should eq('SAFE')
         end
-        it "identical file" do
-          different = make_data_file!(@start_time, @end_time, Rails.root.join('spec/samples', 'toa5_different.dat').to_s, @station_name, @table_name)
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+        it "starts at same time, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time + 1.second)).should eq('SAFE')
         end
       end
-      describe "RAW only" do
-        it "only looks at raw" do
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
-          subset_end = Time.parse '2011/10/14 23:55 UTC'
-          statii = [DataFile::STATUS_ERROR, 'UNKNOWN', 'CLEANSED', 'PROCESSED']
-          statii.each do |status|
-            make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name, status)
-          end
-          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+      describe "Should correctly identify files that are unsafe due to content mismatch (i.e. are supersets but content mismatched)" do
+        before(:each) { FileOverlapContentChecker.stub(:new).and_return(double(:content_matches => false)) }
+        it "exact same dates" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time)).should eq('UNSAFE')
+        end
+        it "starts before, ends at same time" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.day, end_time)).should eq('UNSAFE')
+        end
+        it "starts before, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.second, end_time + 1.day)).should eq('UNSAFE')
+        end
+        it "starts at same time, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time + 1.second)).should eq('UNSAFE')
         end
       end
-      describe "picks files with smaller content" do
-        it "subset_to" do
-          subset_end = Time.parse '2011/10/14 23:55 UTC'
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_to_only.dat').to_s
-
-          subset_to = make_data_file!(@start_time, subset_end, subset_path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_to]
+      describe "Should correctly identify files are unsafe due to dates (i.e. are subsets or mismatched overlaps)" do
+        it "starts before, ends during" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.hour, end_time - 1.minute)).should eq('UNSAFE')
         end
-        it "subset_from" do
-          subset_start = Time.parse '2011/10/9 0:00 UTC'
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_from_only.dat').to_s
-          subset_from = make_data_file!(subset_start, @end_time, subset_path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_from]
+        it "starts at same time, ends during" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time - 1.second)).should eq('UNSAFE')
         end
-        it "subset_range" do
-          subset_start = Time.parse '2011/10/9 0:00 UTC'
-          subset_end = Time.parse '2011/10/14 23:55 UTC'
-          subset_path = Rails.root.join('spec/samples', 'toa5_subsetted_range.dat').to_s
-
-          subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
-
-          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_range]
+        it "starts after, ends before" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time + 1.second, end_time - 1.day)).should eq('UNSAFE')
         end
-        it "identical file" do
-          same = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
-          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [same]
+        it "starts after, ends at same time" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time + 1.minute, end_time - 1.hour)).should eq('UNSAFE')
         end
-
+        it "starts after, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time + 1.hour, end_time + 1.hour)).should eq('UNSAFE')
+        end
       end
     end
   end
-
-
 end
 
 def make_data_file!(start_time, end_time, path, station_name, table_name, status=DataFile::STATUS_RAW)
@@ -934,8 +677,23 @@ def make_data_file!(start_time, end_time, path, station_name, table_name, status
   data_file
 end
 
+def create_toa5(station_name, table_name, status='RAW')
+  df = Factory(:data_file, {:start_time => Time.parse("2012-02-01 03:45 UTC"), :end_time => Time.parse("2012-04-03 14:44 UTC"), :format => FileTypeDeterminer::TOA5, :file_processing_status => status})
+  df.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => station_name)
+  df.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name)
+  df
+end
+
+def create_toa5_with_dates(start_time, end_time)
+  df = Factory(:data_file, {:start_time => start_time, :end_time => end_time, :format => FileTypeDeterminer::TOA5, :file_processing_status => 'RAW'})
+  df.metadata_items.create!(:key => MetadataKeys::STATION_NAME_KEY, :value => 'S1')
+  df.metadata_items.create!(:key => MetadataKeys::TABLE_NAME_KEY, :value => 'S2')
+  df
+end
+
 def set_up_data_file_path(filename)
   path = Rails.root.join("tmp", filename)
   FileUtils.cp(Rails.root.join("samples/sample1.txt"), path)
   path
 end
+

@@ -168,46 +168,9 @@ class DataFile < ActiveRecord::Base
     Experiment.find(experiment_id).facility.name
   end
 
-  def check_for_bad_overlap
-    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
-    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
-    if station_item and table_item
-      overlap = mismatched_overlap(station_item.value, table_item.value)
-
-      if overlap.any?
-        add_message(:error, 'File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with ' + overlap.map(&:filename).join(', '))
-        self.file_processing_status = DataFile::STATUS_ERROR
-        self.save!
-        return true
-      end
-
-    end
-    false
-  end
-
   def add_message(type, message)
     self.messages ||= []
     self.messages << {:type => type, :message => message}
-  end
-
-  def destroy_safe_overlap
-    station_item = metadata_items.find_by_key MetadataKeys::STATION_NAME_KEY
-    table_item = metadata_items.find_by_key MetadataKeys::TABLE_NAME_KEY
-    if station_item and table_item
-      overlap = safe_overlap(station_item.value, table_item.value)
-
-      unless overlap.empty?
-        add_message(:info, "The file replaced one or more other files with similar data. Replaced files: #{overlap.collect(&:filename).join(", ")}")
-
-        overlap_descriptions = overlap.map(&:file_processing_description)
-        overlap.each { |df| df.destroy }
-        self.file_processing_description = overlap_descriptions.join(', ') if file_processing_description.blank?
-        save!
-      end
-
-      return overlap.collect(&:filename)
-    end
-    []
   end
 
   def rename_to(new_path, new_name)
@@ -225,13 +188,43 @@ class DataFile < ActiveRecord::Base
     end
   end
 
+  def categorise_overlap(new_file)
+    #assumes if we've got here then new_file is from same station and table and is RAW+toa5, this just about dates/times
+    #returns NONE, SAFE, UNSAFE
+
+    # new file ends before I start
+    return 'NONE' if new_file.end_time < self.start_time
+    # new file starts after I end
+    return 'NONE' if new_file.start_time > self.end_time
+
+    # new file starts before or on my start, ends after or on my end - i.e. is identical or a superset and could be safe to replace me
+    if new_file.start_time <= self.start_time && new_file.end_time >= self.end_time
+      # check that the content actually matches
+      return 'SAFE' if FileOverlapContentChecker.new(self, new_file).content_matches
+    end
+
+    # otherwise, must be unsafe
+    'UNSAFE'
+  end
+
+  def raw_toa5_files_with_same_station_name_and_table_name
+    station_name = metadata_items.find_by_key(MetadataKeys::STATION_NAME_KEY).try(:value)
+    table_name = metadata_items.find_by_key(MetadataKeys::TABLE_NAME_KEY).try(:value)
+
+    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5, :file_processing_status => STATUS_RAW)
+    toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
+
+    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
+    by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
+
+    DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
+  end
+
   protected
 
   def entity_url(host_url)
     Rails.application.routes.url_helpers.data_file_url(self, :host => host_url)
   end
-
-  protected
 
   def strip_whitespaces
     self.filename.strip! if self.filename
@@ -249,83 +242,4 @@ class DataFile < ActiveRecord::Base
       self.end_time = self.start_time
     end
   end
-
-  def candidate_overlaps(files)
-    # filters given files for files which might be "overwritable", meaning they fall entirely within the current file
-    files.where('start_time >= ?', start_time).where('end_time <= ?', end_time)
-  end
-
-  def relevant_overlap_files(station_name, table_name)
-    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5, :file_processing_status => STATUS_RAW)
-    toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
-
-    by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
-    by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
-
-    toa5_files = DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
-  end
-
-  def safe_overlap(station_name, table_name)
-    return [] if self.format != FileTypeDeterminer::TOA5 or self.file_processing_status != STATUS_RAW
-
-    toa5_files = relevant_overlap_files(station_name, table_name)
-
-    candidate_overlaps = candidate_overlaps(toa5_files)
-
-
-    candidate_overlaps.find_all do |candidate_overlap_data_file|
-      start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
-      end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
-
-      temp_dir = Dir.mktmpdir
-
-      candidate_overlap_file = Toa5Subsetter.extract_matching_rows_to(candidate_overlap_data_file, temp_dir, start_comparison_time, end_comparison_time, true)
-      my_overlap_file = Toa5Subsetter.extract_matching_rows_to(self, temp_dir, start_comparison_time, end_comparison_time, true)
-
-      FileUtils.identical? candidate_overlap_file, my_overlap_file
-    end
-  end
-
-  def mismatched_overlap(station_name, table_name)
-    # This method is intended to be called for files which aren't yet persisted
-    # Thus, they will not have associated MetadataItem records
-    # That is why they are listed as parameters here.
-    # This method assumes TOA5 files all have start_times and end_times populated
-
-    return [] if self.format != FileTypeDeterminer::TOA5 or self.file_processing_status != STATUS_RAW
-
-    toa5_files = relevant_overlap_files(station_name, table_name)
-
-    start_time_overlaps = toa5_files.where('start_time > ?', start_time)
-    start_time_overlaps = start_time_overlaps.where('start_time <= ?', end_time)
-    start_time_overlaps = start_time_overlaps.where('end_time > ?', end_time)
-
-    total_overlaps = toa5_files.where('start_time < ?', start_time)
-    total_overlaps = total_overlaps.where('end_time > ?', end_time)
-    total_overlaps |= toa5_files.where('start_time = ?', start_time).where('end_time > ?', end_time)
-    total_overlaps |= toa5_files.where('start_time < ?', start_time).where('end_time = ?', end_time)
-
-    end_time_overlaps = toa5_files.where('start_time < ?', start_time)
-    end_time_overlaps = end_time_overlaps.where('end_time < ?', end_time)
-    end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
-
-    candidate_overlaps = candidate_overlaps(toa5_files)
-
-    content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
-      start_comparison_time = [candidate_overlap_data_file.start_time, self.start_time].max
-      end_comparison_time = [candidate_overlap_data_file.end_time, self.end_time].min
-
-      mismatch = false
-      Dir.mktmpdir { |temp_dir|
-        candidate_overlap_file = Toa5Subsetter.extract_matching_rows_to(candidate_overlap_data_file, temp_dir, start_comparison_time, end_comparison_time, true)
-        my_overlap_file = Toa5Subsetter.extract_matching_rows_to(self, temp_dir, start_comparison_time, end_comparison_time, true)
-
-        mismatch = !FileUtils.identical?(candidate_overlap_file, my_overlap_file)
-      }
-      mismatch
-    end
-
-    start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
-  end
-
 end
