@@ -300,7 +300,8 @@ Then /^the most recent file should have name "([^"]*)"$/ do |name|
 end
 
 Then /^file "([^"]*)" should have type "([^"]*)"$/ do |filename, type|
-  DataFile.find_by_filename!(filename).file_processing_status.should eq(type)
+  base_filename = filename.split("/").last
+  DataFile.find_by_filename!(base_filename).file_processing_status.should eq(type)
 end
 
 Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
@@ -312,7 +313,7 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
 end
 
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |file, type, description, experiment|
-  upload(file, type, description, experiment, "")
+  upload(file.strip, type, description, experiment, "")
 end
 
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and tags "([^"]*)"$/ do |file, type, description, experiment, tags|
@@ -430,7 +431,6 @@ Then /^file "([^"]*)" should be unchecked$/ do |name|
   field_checked.should be_false
 end
 
-
 Then /^I should see the add to cart link for ([^"]*)$/ do |name|
   data_file = DataFile.find_by_filename(name)
   link_id = "add_cart_item_#{data_file.id}"
@@ -510,4 +510,10 @@ When /^the cart for "([^"]*)" should contain only file "([^"]*)"$/ do |email, fi
   file = DataFile.find_by_filename(file_name)
   user.cart_items.size.should eq(1)
   user.cart_items.first.data_file_id.should eq(file.id)
+end
+
+When /^there should be files named "([^"]*)" in the system$/ do |csv_files|
+  names = csv_files.split(",").map(&:strip)
+  DataFile.count.should eq(names.size), "Expected #{names.size} files but found #{DataFile.count}"
+  DataFile.all.collect(&:filename).sort.should eq(names.sort)
 end

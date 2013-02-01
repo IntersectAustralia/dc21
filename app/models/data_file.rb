@@ -299,17 +299,8 @@ class DataFile < ActiveRecord::Base
   end
 
   def candidate_overlaps(files)
-    # filters given files for files which might be "overwritable"
-    left_overlaps = files.where('start_time = ?', start_time)
-    left_overlaps = left_overlaps.where('end_time < ?', end_time)
-
-    middle_overlaps = files.where('start_time > ?', start_time)
-    middle_overlaps = middle_overlaps.where('end_time < ?', end_time)
-
-    right_overlaps = files.where('start_time > ?', start_time)
-    right_overlaps = right_overlaps.where('end_time = ?', end_time)
-
-    left_overlaps | right_overlaps | middle_overlaps
+    # filters given files for files which might be "overwritable", meaning they fall entirely within the current file
+    files.where('start_time >= ?', start_time).where('end_time <= ?', end_time)
   end
 
   def relevant_overlap_files(station_name, table_name)
@@ -366,8 +357,6 @@ class DataFile < ActiveRecord::Base
     end_time_overlaps = end_time_overlaps.where('end_time < ?', end_time)
     end_time_overlaps = end_time_overlaps.where('end_time >= ?', start_time)
 
-    exact_overlaps = toa5_files.where('start_time = ? and end_time = ?', start_time, end_time)
-
     candidate_overlaps = candidate_overlaps(toa5_files)
 
     content_mismatch = candidate_overlaps.find_all do |candidate_overlap_data_file|
@@ -384,6 +373,6 @@ class DataFile < ActiveRecord::Base
       mismatch
     end
 
-    exact_overlaps | start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
+    start_time_overlaps | end_time_overlaps | total_overlaps | content_mismatch
   end
 end
