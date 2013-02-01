@@ -454,14 +454,6 @@ describe DataFile do
     end
   end
 
-  describe "Is known format method" do
-    it "should return true only if format attribute is set" do
-      Factory(:data_file, :format => nil).known_format?.should be_false
-      Factory(:data_file, :format => 'asdf').known_format?.should be_true
-      Factory(:data_file, :format => "TOA5").known_format?.should be_true
-    end
-  end
-
   describe "Column Mappings" do
     it "should return true if there are columns which are unmapped" do
       @data_file = Factory(:data_file)
@@ -690,11 +682,6 @@ describe DataFile do
 
           @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [end_overlap]
         end
-        it "exact overlap" do
-          same_time = make_data_file!(@start_time, @end_time, @some_path, @station_name, @table_name)
-
-          @toa5_file.send(:mismatched_overlap, @station_name, @table_name).should eq [same_time]
-        end
         it "overlaps touching start" do
           early_start = @start_time - 2.day
           touching_start = make_data_file!(early_start, @start_time, @some_path, @station_name, @table_name)
@@ -808,6 +795,17 @@ describe DataFile do
             @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [subset_diff_toa5]
           end
         end
+
+        describe "exact match" do
+          it "exact overlap with identical content" do
+            same = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq []
+          end
+          it "exact overlap with different content" do
+            same = make_data_file!(@start_time, @end_time, Rails.root.join('spec/samples', 'toa5_different.dat').to_s, @station_name, @table_name)
+            @toa5.send(:mismatched_overlap, @station_name, @table_name).should eq [same]
+          end
+        end
       end
 
     end
@@ -848,11 +846,6 @@ describe DataFile do
 
           @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
-        it "exact time match" do
-          same_toa5 = Factory.build(:data_file, :start_time => @start_time, :end_time => @end_time, :path => @path)
-
-          same_toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
-        end
       end
       describe "doesn't pick files with different content" do
         it "subset_to" do
@@ -877,6 +870,10 @@ describe DataFile do
 
           subset_range = make_data_file!(subset_start, subset_end, subset_path, @station_name, @table_name)
 
+          @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
+        end
+        it "identical file" do
+          different = make_data_file!(@start_time, @end_time, Rails.root.join('spec/samples', 'toa5_different.dat').to_s, @station_name, @table_name)
           @toa5.send(:safe_overlap, @station_name, @table_name).should be_empty
         end
       end
@@ -916,6 +913,11 @@ describe DataFile do
 
           @toa5.send(:safe_overlap, @station_name, @table_name).should eq [subset_range]
         end
+        it "identical file" do
+          same = make_data_file!(@start_time, @end_time, @path, @station_name, @table_name)
+          @toa5.send(:safe_overlap, @station_name, @table_name).should eq [same]
+        end
+
       end
     end
   end
