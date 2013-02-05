@@ -11,13 +11,7 @@ Feature: Overlapping Files
     And I have experiment "My Experiment"
 
   Scenario: Safe overlap one file supplying description and experiment
-    Given I have data files
-      | filename              | uploaded_by                 | path                                                  | file_processing_status | experiment | file_processing_description | start_time          | end_time            | format |
-      | WTC01_Table1_orig.dat | researcher@intersect.org.au | samples/subsetted/range_aug_1_aug_31/WTC01_Table1.dat | RAW                    | Other      | orig wtc01_table1.dat       | 2011-08-11 19:30:00 | 2011-08-31 23:45:00 | TOA5   |
-    And file "WTC01_Table1_orig.dat" has the following metadata
-      | key          | value  |
-      | station_name | WTC01  |
-      | table_name   | Table1 |
+    Given I upload "samples/subsetted/range_aug_1_aug_31/WTC01_Table1.dat" with type "RAW" and description "orig desc" and experiment "My Experiment"
     And I upload "samples/WTC01_Table1.dat" with type "RAW" and description "new description" and experiment "My Experiment"
     When I am on the list data files page
     Then I should see only these rows in "exploredata" table
@@ -30,13 +24,7 @@ Feature: Overlapping Files
       | Experiment  | My Experiment   |
 
   Scenario: Safe overlap one file inherits description
-    Given I have data files
-      | filename              | uploaded_by                 | path                                                  | file_processing_status | experiment | file_processing_description | start_time          | end_time            | format |
-      | WTC01_Table1_orig.dat | researcher@intersect.org.au | samples/subsetted/range_aug_1_aug_31/WTC01_Table1.dat | RAW                    | Other      | orig wtc01_table1.dat       | 2011-08-11 19:30:00 | 2011-08-31 23:45:00 | TOA5   |
-    And file "WTC01_Table1_orig.dat" has the following metadata
-      | key          | value  |
-      | station_name | WTC01  |
-      | table_name   | Table1 |
+    Given I upload "samples/subsetted/range_aug_1_aug_31/WTC01_Table1.dat" with type "RAW" and description "orig desc" and experiment "My Experiment"
     And I upload "samples/WTC01_Table1.dat" with type "RAW" and description "" and experiment "My Experiment"
     When I am on the list data files page
     Then I should see only these rows in "exploredata" table
@@ -45,7 +33,7 @@ Feature: Overlapping Files
     When I follow the view link for data file "WTC01_Table1.dat"
     Then I should see details displayed
       | Type        | RAW                   |
-      | Description | orig wtc01_table1.dat |
+      | Description | orig desc |
 
   Scenario: Safe overlap removes replaced files from carts and adds new one to carts
     Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" with type "RAW"

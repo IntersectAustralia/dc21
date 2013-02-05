@@ -110,7 +110,7 @@ class Toa5Parser
       lines[:line_4] = line if counter == 4
       lines[:line_5] = line if counter == 5
       lines[:line_6] = line if counter == 6
-      lines[:last_line] = line
+      lines[:last_line] = line unless line.blank?
     end
     lines
   end
