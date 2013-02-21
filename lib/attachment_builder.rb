@@ -42,14 +42,7 @@ class AttachmentBuilder
     @metadata_extractor.extract_metadata(data_file, format) if format
     data_file.reload
 
-    bad_overlap = data_file.check_for_bad_overlap
-    unless bad_overlap
-      replaced_filenames = data_file.destroy_safe_overlap
-      # if we renamed the file, but then deleted the file it clashed with, rename it back
-      if replaced_filenames.include?(original_filename) and (filename != original_filename)
-        data_file.rename_to(File.join(@files_root, original_filename), original_filename)
-      end
-    end
+    OverlapChecker.new(data_file, original_filename, @files_root).run
 
     if data_file.filename != original_filename
       data_file.add_message(:info, "A file already existed with the same name. File has been renamed.")

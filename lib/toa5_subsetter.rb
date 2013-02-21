@@ -4,14 +4,12 @@ class Toa5Subsetter
     file = File.open(data_file.path)
 
     if overlap
-      #outfile = Tempfile.new('filtered_datafile')
       from_time = from_time_val
       to_time = to_time_val
     else
       # convert the dates to appropriate times in UTC since we store the times from the files in UTC
       from_time = from_time_val.blank? ? nil : Time.parse("#{from_time_val} 00:00:00 UTC")
-      to_time = to_time_val.blank? ? nil : (Time.parse("#{to_time_val} 00:00:00 UTC") + 1.day) #add one day to get midnight the following day
-
+      to_time = to_time_val.blank? ? nil : (Time.parse("#{to_time_val} 00:00:00 UTC") + 1.day - 1.second) #add one day to get midnight the following day
     end
 
     outfile_name = File.join(temp_dir, data_file.filename)
@@ -26,14 +24,13 @@ class Toa5Subsetter
         delimiter = Toa5Utilities.detect_delimiter(line)
       end
       if counter <= 4
-        outfile.puts(line) unless overlap
+        outfile.puts(line)
       else
-
         if data_line_in_range?(line, from_time, to_time, delimiter)
-          if overlap
-            line.squish!
-            line << "\n"
-          end
+          #if overlap
+          #  line.squish!
+          #  line << "\n"
+          #end
           outfile.puts(line)
 
         end
@@ -51,11 +48,11 @@ class Toa5Subsetter
     time = Toa5Utilities.extract_time_from_data_line(line, delimiter)
     return false if time.nil?
     if (from_time && to_time)
-      time >= from_time && time < to_time
+      time >= from_time && time <= to_time
     elsif from_time
       time >= from_time
     else
-      time < to_time
+      time <= to_time
     end
   end
 
