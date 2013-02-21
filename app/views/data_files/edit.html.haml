@@ -4,96 +4,101 @@
 
 
 .container
-- if @data_file.published? and !can?(:read, User)
-  You do not have permission to edit this published file.
-- else
-  = form_for (@data_file) do |f|
-    %h2 Edit Metadata
-    = render "shared/error_messages", :target => @data_file
-    .control-group
-      %label.control-label{ :for => :data_file_filename } Name
-      -if @data_file.is_package?
+  - if @data_file.published? and !can?(:read, User)
+    You do not have permission to edit this published file.
+  - else
+    = form_for (@data_file) do |f|
+      %h2 Editing Metadata of #{@data_file.filename}
+      = render "shared/error_messages", :target => @data_file
+      .control-group
+        %label.control-label{ :for => :data_file_filename } Name
+        -if @data_file.is_package?
+          .controls
+            .record
+              = @data_file.filename
+        -else
+          .controls
+            = required
+            = f.text_field :filename
+
+      .control-group
+        %label.control-label{ :for => :file_processing_status } File type
         .controls
-          = @data_file.filename
-      -else
+          - if @data_file.is_raw_file? or @data_file.is_package?
+            .record
+              = @data_file.file_processing_status
+          - else
+            = required
+            = f.select :file_processing_status, options_for_select(DataFile::STATI_FOR_EDIT, @data_file.file_processing_status), :include_blank => true
+      .control-group
+        %label.control-label File Format
+        .controls
+          .record
+          = @data_file.format_for_display
+      .control-group
+        %label.control-label{ :for => :data_file_file_processing_description } Description
+        .controls
+          = f.text_area :file_processing_description
+      .control-group#tags
+        %label.control-label{ :for => :tags } Tags
+        .controls
+          - if tags.empty?
+            .record None
+          - tags.each do |tag|
+            %label.checkbox
+              = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
+              = label_tag "tag_#{tag.id}", tag.name
+      .control-group
+        %label.control-label{ :for => :experiment} Experiment
         .controls
           = required
-          = f.text_field :filename
-
-    .control-group
-      %label.control-label{ :for => :file_processing_status } File type
-      .controls
-        - if @data_file.is_raw_file? or @data_file.is_package?
-          = @data_file.file_processing_status
-        - else
-          = required
-          = f.select :file_processing_status, options_for_select(DataFile::STATI_FOR_EDIT, @data_file.file_processing_status), :include_blank => true
-    .control-group
-      %label.control-label File Format
-      .controls
-        = @data_file.format_for_display
-    .control-group
-      %label.control-label{ :for => :data_file_file_processing_description } Description
-      .controls
-        = f.text_area :file_processing_description
-    .control-group#tags
-      %label.control-label{ :for => :tags } Tags
-      .controls
-        - if tags.empty?
-          .record None
-        - tags.each do |tag|
-          %label.checkbox
-            = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
-            = label_tag "tag_#{tag.id}", tag.name
-    .control-group
-      %label.control-label{ :for => :experiment} Experiment
-      .controls
-        = required
-        = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
-    .control-group
-      %label.control-label Date Added
-      .controls
-        = @data_file.created_at.to_s(:with_time)
-    .control-group
-      %label.control-label Added By
-      .controls
-        = (@data_file.created_by ? @data_file.created_by.email : "")
-
-    - unless @data_file.known_format?
+          = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
       .control-group
-        .date-format yyyy-mm-dd
-      .control-group
-        = label_tag "data_file_start_time", "Start Time", class: "control-label", :for => "file_#{@data_file.id}_start_time"
+        %label.control-label Date Added
         .controls
-          - if @data_file.start_time_is_not_nil?
-            = text_field_tag "date[start_time]", @data_file.start_time.utc.to_date,  :id => "file_#{@data_file.id}_start_time", :datepicker => true
-            .show{:id => "file_#{@data_file.id}_start_container"}
-              = select_hour @data_file.start_time.utc, {:field_name => "start_hr"}, {:id => "start_hr"}
-              = select_minute @data_file.start_time.utc, {:field_name => "start_min"}, {:id => "start_min"}
-              = select_second @data_file.start_time.utc, {:field_name => "start_sec"}, {:id => "start_sec"}
-          - else
-            = text_field_tag "date[start_time]", @data_file.start_time, :id => "file_#{@data_file.id}_start_time", :datepicker => true
-            .hidden{:id => "file_#{@data_file.id}_start_container"}
-              = select_hour @data_file.start_time, {:field_name => "start_hr"}
-              = select_minute @data_file.start_time, {:field_name => "start_min"}
-              = select_second @data_file.start_time, {:field_name => "start_sec"}
+          .record
+            = @data_file.created_at.to_s(:with_time)
       .control-group
-        = label_tag "data_file_end_time", "End Time", class: "control-label", :for => "file_#{@data_file.id}_end_time"
+        %label.control-label Added By
         .controls
-          -if @data_file.end_time_is_not_nil?
-            = text_field_tag "date[end_time]", @data_file.end_time.utc.to_date, :id => "file_#{@data_file.id}_end_time", :datepicker => true
-            .show{:id => "file_#{@data_file.id}_end_container"}
-              = select_hour @data_file.end_time.utc, {:field_name => "end_hr"}
-              = select_minute @data_file.end_time.utc, {:field_name => "end_min"}
-              = select_second @data_file.end_time.utc, {:field_name => "end_sec"}
-          - else
-            = text_field_tag "date[end_time]", @data_file.start_time, :id => "file_#{@data_file.id}_end_time", :datepicker => true
-            .hidden{:id => "file_#{@data_file.id}_end_container"}
-              = select_hour @data_file.end_time, {:field_name => "end_hr"}
-              = select_minute @data_file.end_time, {:field_name => "end_min"}
-              = select_second @data_file.end_time, {:field_name => "end_sec"}
-    .form-actions
-      .actions-pre
-        = cancel_button "Cancel", data_files_path
-      .actions
-        = f.submit "Update", :confirm => @data_file.published? ? "This file has already been published. Do you really want to edit the metadata for this file? " : nil
+          .record
+            = (@data_file.created_by ? @data_file.created_by.email : "")
+
+      - unless @data_file.known_format?
+        .control-group
+          .date-format yyyy-mm-dd
+        .control-group
+          = label_tag "data_file_start_time", "Start Time", class: "control-label", :for => "file_#{@data_file.id}_start_time"
+          .controls
+            - if @data_file.start_time_is_not_nil?
+              = text_field_tag "date[start_time]", @data_file.start_time.utc.to_date,  :id => "file_#{@data_file.id}_start_time", :datepicker => true
+              .show{:id => "file_#{@data_file.id}_start_container"}
+                = select_hour @data_file.start_time.utc, {:field_name => "start_hr"}, {:id => "start_hr"}
+                = select_minute @data_file.start_time.utc, {:field_name => "start_min"}, {:id => "start_min"}
+                = select_second @data_file.start_time.utc, {:field_name => "start_sec"}, {:id => "start_sec"}
+            - else
+              = text_field_tag "date[start_time]", @data_file.start_time, :id => "file_#{@data_file.id}_start_time", :datepicker => true
+              .hidden{:id => "file_#{@data_file.id}_start_container"}
+                = select_hour @data_file.start_time, {:field_name => "start_hr"}
+                = select_minute @data_file.start_time, {:field_name => "start_min"}
+                = select_second @data_file.start_time, {:field_name => "start_sec"}
+        .control-group
+          = label_tag "data_file_end_time", "End Time", class: "control-label", :for => "file_#{@data_file.id}_end_time"
+          .controls
+            -if @data_file.end_time_is_not_nil?
+              = text_field_tag "date[end_time]", @data_file.end_time.utc.to_date, :id => "file_#{@data_file.id}_end_time", :datepicker => true
+              .show{:id => "file_#{@data_file.id}_end_container"}
+                = select_hour @data_file.end_time.utc, {:field_name => "end_hr"}
+                = select_minute @data_file.end_time.utc, {:field_name => "end_min"}
+                = select_second @data_file.end_time.utc, {:field_name => "end_sec"}
+            - else
+              = text_field_tag "date[end_time]", @data_file.start_time, :id => "file_#{@data_file.id}_end_time", :datepicker => true
+              .hidden{:id => "file_#{@data_file.id}_end_container"}
+                = select_hour @data_file.end_time, {:field_name => "end_hr"}
+                = select_minute @data_file.end_time, {:field_name => "end_min"}
+                = select_second @data_file.end_time, {:field_name => "end_sec"}
+      .form-actions
+        .actions-pre
+          = cancel_button "Cancel", data_files_path
+        .actions
+          = f.submit "Update", :confirm => @data_file.published? ? "This file has already been published. Do you really want to edit the metadata for this file? " : nil

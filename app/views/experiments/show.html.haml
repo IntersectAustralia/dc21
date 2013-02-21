@@ -3,6 +3,7 @@
 
 .container
   = render 'actions'
+  %h2 Details for the #{@experiment.name} experiment
   = render_field "ID", @experiment.id
   = render_field "Parent", @experiment.parent_name
   = render_field "Name", @experiment.name

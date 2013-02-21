@@ -1,5 +1,6 @@
 .container
-  %h3 Please enter your email and password to log in
+  %h2 User log in
+  %strong Please enter your email and password to log in
   .control-group
     = f.label :email, "Email:"
     = f.text_field :email
@@ -8,7 +9,7 @@
     = f.password_field :password
   .form-actions
     .actions-pre
-      = link_to "Sign Up", new_user_registration_path, :class => "whitebutton"
+      = link_to "Sign Up", new_user_registration_path, :class => "btn"
     .actions
       = f.submit "Log in →", :class => ""
-      = link_to "Forgot your password?", new_user_password_path, :class => "whitebutton"
+      = link_to "Forgot your password?", new_user_password_path, :class => "btn"

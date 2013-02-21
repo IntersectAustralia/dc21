@@ -4,12 +4,14 @@
 .container
   = form_for(@user, :url => update_role_user_path(@user)) do |f|
     = render "shared/error_messages", :target => @user
+    %h2 Editing Role for #{@user.email}
     .rowform
       = f.label :role_id, "Role:"
       %span.input
         = f.collection_select(:role_id, @roles, :id, :name, {:include_blank => ""})
+
     .form-actions
       .actions-pre
         = cancel_button 'Back', @user
       .actions
-        = f.submit "Save"
+        = f.submit "Update"

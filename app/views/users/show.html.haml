@@ -2,8 +2,10 @@
   %h1 Admin / Access Requests / #{@user.email}
 
 .container
+
   = render 'actions'
 
+  %h2 User details for #{@user.email}
   = render_field "Email", @user.email
   = render_field "First name", @user.first_name
   = render_field "Last name", @user.last_name

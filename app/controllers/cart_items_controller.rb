@@ -1,5 +1,7 @@
 class CartItemsController < ApplicationController
 
+  layout 'data_files'
+
   def index
     @cart_items = current_user.cart_items
     session[:back]= request.referer
@@ -7,6 +9,7 @@ class CartItemsController < ApplicationController
 
   def new
     @cart_item = CartItem.new
+    set_tab :explore, :contentnavigation
   end
 
   def edit

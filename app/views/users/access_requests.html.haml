@@ -17,7 +17,7 @@
       %td.lastname= user.last_name
       %td.actions
         - if can?(:reject, user) then
-          = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "spam floatleft"
-          = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "reject floatleft"
+          = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "btn"
+          = link_to "Reject", reject_user_path(user), :method => :put, :id => "reject_#{user.id}", :class => "btn btn-danger"
         - if can?(:approve, user) then
-          = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "approve floatleft"
+          = link_to "Approve", edit_approval_user_path(user), :id => "approve_#{user.id}", :class => "btn btn-primary"

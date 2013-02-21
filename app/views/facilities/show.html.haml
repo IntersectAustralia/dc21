@@ -3,6 +3,7 @@
 
 .container
   = render 'actions'
+  %h2 Facility
   = render_field "Name", @facility.name
   = render_field "Code", @facility.code
   .description
@@ -17,5 +18,6 @@
 
   = render 'actions'
 
-%h2 Experiments
-= render 'experiments/list', :experiments => @facility.experiments
+.container
+  %h2 Experiments
+  = render 'experiments/list', :experiments => @facility.experiments

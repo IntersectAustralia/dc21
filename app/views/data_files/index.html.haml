@@ -44,19 +44,19 @@
           = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
           = text_field_tag "search[to_date]", @to_date, :id => :to_date, :datepicker => true, :size => 10, :maxlength => 10
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#filename_category.expand Filename:
         .filename
           = label_tag :filename, "Filename:"
           = text_field_tag "search[filename]", @filename, :id => :filename
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#description_category.expand Description:
         .description
           = label_tag :description, "Description:"
           = text_field_tag "search[description]", @description, :id => :description
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#type_category.expand Type:
         .type
@@ -79,7 +79,7 @@
                   .date-format yyyy-mm-dd
                   = label_tag "search_published_date", 'Published Date:', :class => :publish
                   = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
 
       .searchcategory
         %h4#tags_category.expand Tags:
@@ -87,7 +87,7 @@
           - tags.each_with_index do |tag, index|
             = label_tag "search_tag_#{index}", tag.name
             = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#facility.expand Facility:
         .facility
@@ -101,7 +101,7 @@
                   - if experiment.facility_id == facility.id
                     = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
                     = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#variable.expand Columns:
         .variable
@@ -115,13 +115,13 @@
                 - variable_info[1].each_with_index do |child_variable, index2|
                   = label_tag "search_variable_#{index}_#{index2}", child_variable, :class => :variable_child
                   = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#uploader.expand Added By:
         .uploader
           = label_tag "search[uploader_id]", "Added By:"
           = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
       .searchcategory
         %h4#upload_date.expand Date Added:
         .upload_date
@@ -130,7 +130,7 @@
           = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true, :size => 10, :maxlength => 10
           = label_tag :to_date, "To Date:"
           = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true, :size => 10, :maxlength => 10
-          .actions= submit_tag "Update Search Results", :class => "bluebutton"
+          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
 
 - unless @data_files.empty?
 
@@ -151,7 +151,7 @@
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
           -#= link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
-          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => "bluebutton" , :id => "add_all_to_cart"
+          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => "btn" , :id => "add_all_to_cart"
 
       - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
@@ -166,9 +166,9 @@
           %td.experiment= data_file.experiment_name
           %td.add_cart
             -if current_user.data_file_in_cart?(data_file)
-              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "bluebutton disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
+              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
             -else
-              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "bluebutton", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
+              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
       -# #helper_text.select
       -#   Select one or more files to download
 

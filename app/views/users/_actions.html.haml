@@ -7,22 +7,22 @@
   .actions
     - if @user.pending_approval?
       - if can?(:reject, @user) then
-        = link_to "Spam", reject_as_spam_user_path(@user), :method => :put, :class => "whitebutton"
-        = link_to "Reject", reject_user_path(@user), :method => :put, :class => "redbutton"
+        = link_to "Spam", reject_as_spam_user_path(@user), :method => :put, :class => "btn"
+        = link_to "Reject", reject_user_path(@user), :method => :put, :class => "btn btn-danger"
       - if can?(:approve, @user) then
-        = link_to "Approve", edit_approval_user_path(@user), :method => :get, :class => "bluebutton"
+        = link_to "Approve", edit_approval_user_path(@user), :method => :get, :class => "btn btn-primary"
 
     - if @user.approved?
       - if can?(:update_role, User)
-        = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
+        = link_to 'Edit role', edit_role_user_path(@user), :class => "btn btn-primary"
       - if can?(:deactivate, User)
         - if @user == current_user
-          = link_to "Deactivate", deactivate_user_path(@user), :confirm => "This is the user you are currently logged in as. Are you sure you want to deactivate it?" , :method => :put, :class => "redbutton"
+          = link_to "Deactivate", deactivate_user_path(@user), :confirm => "This is the user you are currently logged in as. Are you sure you want to deactivate it?" , :method => :put, :class => "btn btn-danger"
         - else
-          = link_to "Deactivate", deactivate_user_path(@user), :method => :put, :class => "redbutton"
+          = link_to "Deactivate", deactivate_user_path(@user), :method => :put, :class => "btn btn-danger"
 
     - if @user.deactivated?
       - if can?(:update_role, User)
-        = link_to 'Edit role', edit_role_user_path(@user), :class => "bluebutton"
+        = link_to 'Edit role', edit_role_user_path(@user), :class => "btn btn-primary"
       - if can?(:activate, User)
-        = link_to "Activate", activate_user_path(@user), :method => :put, :class => "bluebutton"
+        = link_to "Activate", activate_user_path(@user), :method => :put, :class => "btn btn-primary"

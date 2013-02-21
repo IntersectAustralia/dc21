@@ -239,7 +239,7 @@ h1
 h2
   +m-p-w-h-p-t-b-l-r-f(0 0 20px 0, 10px 0 0 0)
   +font("", normal, 1.5em, 30px)
-  +border(1px, solid, #D9D9D9, 1px 0 0 0)
+  +border(0px, solid, #D9D9D9, 0px 0 0 0)
 
 h3
   +font("", bold, 1em, 30px, $dark2)
@@ -273,7 +273,7 @@ li
 label
   +m-p-w-h-p-t-b-l-r-f(0 0 0 0, 10px 16px 10px 0, 150px)
   +inlineblock
-  +font("", bold, 1em, 18px)
+  +font("", bold, 16px, 24px)
   text-align: right
   wight-space: nowrap
   cursor: pointer
@@ -282,7 +282,7 @@ input[type=textarea], input[type=text], input[type=password], input[type=search]
   +m-p-w-h-p-t-b-l-r-f(0, 7px 10px 5px 10px, "", 18px)
   +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
   resize: none
-  +font("", "", 1rem, 18px)
+  +font("", "", 16px, 24px)
   &:hover
     +border(1px, solid, #B9B9B9)
   &:focus
@@ -291,7 +291,7 @@ input[type=textarea], input[type=text], input[type=password], input[type=search]
 
 input[type=password], input[type=text]
   //+m-p-w-h-p-t-b-l-r-f("", "", 400px)
-  +font("", "", 1rem, 28px, $dark1)
+  +font("", "", 16px, 24px, $dark1)
 
 textarea
   +m-p-w-h-p-t-b-l-r-f(3px 0, 7px 10px 5px 10px, "", 66px)
@@ -301,6 +301,7 @@ input, textarea, select, .uneditable-input
   +inlineblock
   +border(1px, solid, #d9d9d9, "", 2px, "", "", #C0C0C0)
   resize: none
+  font-size: 16px
   //+font("", "", 1.25rem, 1)
   //line-height: 18px
   &:hover
@@ -335,7 +336,7 @@ input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-s
 
 
 input[type="image"], input[type="checkbox"], input[type="radio"]
-  +m-p-w-h-p-t-b-l-r-f(3px 0, 0, auto, auto)
+  +m-p-w-h-p-t-b-l-r-f(7px 0, 0, auto, auto)
   *margin-top: 0 /* IE7 */
   +border("", "", "", "", 0)
   +font("", "", "", normal)
@@ -360,10 +361,10 @@ select, input[type="file"]
   /* In IE7, the height of the select element cannot be changed by height, only font-size */
   *margin-top: 4px
   /* For IE7, add top margin to align select with labels */
-  +font("", "", 1rem, 28px)
+  +font("", "", 14px, 24px)
 
 input[type="file"]
-  line-height: 18px \9
+  line-height: 24px
 
 select
   +m-p-w-h-p-t-b-l-r-f("", "", auto)
@@ -411,7 +412,7 @@ input, textarea
   -o-transition: border linear 0.2s, box-shadow linear 0.2s
   transition: border linear 0.2s, box-shadow linear 0.2s
 
-//input:focus, textarea:focus
+//ibluebuttonnput:focus, textarea:focus
   //border-color: rgba(82, 168, 236, 0.8)
   //+boxshadow( inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6))
   //outline: 0
@@ -1356,7 +1357,7 @@ table.activity, table.activity tbody
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 .contentnavigation
-  +m-p-w-h-p-t-b-l-r-f(0 0 20px 0)
+  +m-p-w-h-p-t-b-l-r-f(0 0 40px 0)
   +border(1px, solid, $dark4, 0 0 1px 0)
   display: block
 
@@ -1369,7 +1370,7 @@ table.activity, table.activity tbody
     a
       +m-p-w-h-p-t-b-l-r-f("", 10px 15px 10px 45px)
       +font("", normal, 1em, 20px, $dark3)
-      +textshadow-2
+      // +textshadow-2
       +inlineblock
       &:hover
         color: $dark2
@@ -1541,6 +1542,7 @@ form h3
     +m-p-w-h-p-t-b-l-r-f(0 0 0 170px)
     .record
       +m-p-w-h-p-t-b-l-r-f("", 5px 0 0 0)
+      line-height: 24px
     .alert
       +m-p-w-h-p-t-b-l-r-f(0 0 18px 0)
   .date-format

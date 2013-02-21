@@ -59,9 +59,10 @@ span.results
 
 
 .btn-group > .btn:first-child
-  border-bottom-left-radius: 4px
-  border-top-left-radius: 4px
   margin-left: 0
+  -webkit-border-radius: 2px
+  -moz-border-radius: 2px
+  border-radius: 2px
 
 .btn-group > .btn:last-child, .btn-group > .dropdown-toggle
   border-bottom-right-radius: 4px
@@ -77,8 +78,6 @@ span.results
 .btn:first-child
   button.btn, input.btn[type="submit"]
 
-.btn
-  border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25)
 
 .btn
   -moz-border-bottom-colors: none
@@ -90,20 +89,83 @@ span.results
   background-repeat: repeat-x
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #A2A2A2
   border-image: none
-  border-radius: 4px 4px 4px 4px
+  border-radius: 2px
   border-style: solid
   border-width: 1px
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05)
   color: #333333
   cursor: pointer
   display: inline-block
-  font-size: 14px
+  font-size: 12px
   line-height: 20px
   margin-bottom: 0
   padding: 4px 12px
   text-align: center
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75)
+  // text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75)
+  text-shadow: none
   vertical-align: middle
+
+.btn.disabled:hover
+  border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25)
+
+.btn.disabled,
+.btn[disabled]
+  color: #333333
+  background-color: #e6e6e6
+  *background-color: #d9d9d9
+  cursor: default
+  background-image: none
+  opacity: 0.65
+  filter: alpha(opacity=65)
+  -webkit-box-shadow: none
+  -moz-box-shadow: none
+  box-shadow: none
+
+.btn-primary, a.btn-primary, input[type="submit"]
+  color: #ffffff
+  font-size: 12px
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+  background-color: #4d90fe
+  *background-color: #0044cc
+  background-image: none
+  background-repeat: repeat-x
+  border-width: 1px
+  border-color: #0044cc #0044cc #002a80
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05)
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0)
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)
+
+  &:hover
+    color: #FFF
+    +gradient-blue-2
+    +border(1px, solid, $blue5)
+
+.btn-danger, a.btn-danger
+  color: #ffffff
+  font-size: 12px
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+  background-color: #ff5742
+  *background-color: #bd362f
+  background-image: none
+  background-repeat: repeat-x
+  border-color: #bd362f #bd362f #802420
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ffbd362f', GradientType=0)
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)
+
+  &:hover
+    color: #FFF
+    +gradient-red-2
+    +border(1px, solid, $red5)
+
+.btn-danger:hover, .btn-danger:active, .btn-danger.active, .btn-danger.disabled, .btn-danger[disabled]
+  color: #ffffff
+  background-color: #bd362f
+  *background-color: #a9302a
+
+.btn-danger:active, .btn-danger.active
+  background-color: #942a25 \9
 
 .dropdown-toggle
   height: 20px
@@ -646,6 +708,15 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
   height: 40px
   margin: 20px 0
 
+.controls select
+  margin-top: 3px
+
+#files_input
+  label.control-label
+    clear: both
+  .controls
+    margin-bottom: 10px
+
 
 /* line 10, /Users/mezdef/.rvm/gems/ruby-1.9.2-p290@dc21app/gems/bootstrap-sass-2.1.1.0/vendor/assets/stylesheets/bootstrap/_pagination.scss */
 .pagination ul 
@@ -771,8 +842,6 @@ h3.upload
       +font("", normal, 13px)
 
   #downloadtoggle, .facility.new.whitebutton, .data-results .whitebutton
-    margin: 0 0 0 10px
-    float: right
     a
       font-weight: normal
   #downloadtoggle
@@ -815,6 +884,8 @@ h3.upload
     +width(110px, 110px, 110px)
   td.email, th.email
     +width(130px, 130px, 130px)
+  td.type, th.type
+    +width(50px, 50px, 50px)
   td.experiment, th.experiment
     +width(100px, 100px, 100px)
   td.experiment, th.experiment

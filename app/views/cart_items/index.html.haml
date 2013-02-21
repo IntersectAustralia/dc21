@@ -1,23 +1,24 @@
 - remove_all_warning = "Do you really want to remove #{@cart_items.size} files from your cart?"
 
 - content_for :breadcrumb  do
-  %h1 View / Edit Cart
+  %h1 Cart / Edit Cart
 
 - if @cart_items.empty?
   %h3 Your cart is empty.
 - else
+
   .form-actions
     .actions-pre
       = cancel_button "Back", data_files_path
     .actions
-      = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
-      = link_to "Package",  new_package_path, :class => "bluebutton"
+      = link_to "Download", download_selected_data_files_path, :class => "btn btn-primary"
+      = link_to "Package",  new_package_path, :class => "btn btn-primary"
 
-  %h3.results
-    = @cart_items.size == 1 ? "Showing 1 file" : "Showing #{@cart_items.size} files"
-    %br
-    Total #{number_to_human_size(current_user.cart_size)}
-
+  %h2.results
+    Your cart 
+    = @cart_items.size == 1 ? "Showing 1 file" : "contains #{@cart_items.size} files"
+    for a 
+    total of #{number_to_human_size(current_user.cart_size)}
 
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
   %table#exploredata
@@ -29,7 +30,7 @@
       %th.sortable.type= "Type"
       %th.sortable.experiment=  "Experiment"
       %th.delete_cart
-        = link_to 'Remove All',  destroy_all_cart_items_path, :class =>  "redbutton", :confirm => remove_all_warning, :id => "remove_all_from_cart"
+        = link_to 'Remove All',  destroy_all_cart_items_path, :class =>  "btn btn-danger", :confirm => remove_all_warning, :id => "remove_all_from_cart"
     - @cart_items.each do |cart_item|
       %tr{:class => cycle('field_bg', 'field_nobg')}
         - data_file = DataFile.find(cart_item.data_file_id)
@@ -39,7 +40,7 @@
         %td.email= data_file.created_by.email if data_file.created_by
         %td.type= data_file.file_processing_status
         %td.experiment= data_file.experiment_name
-        %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "redbutton", :id => "remove_from_cart_#{cart_item.id}"
+        %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{cart_item.id}"
 
 
 .form-actions
@@ -47,6 +48,6 @@
     = cancel_button "Back", data_files_path
   .actions
     - unless @cart_items.empty?
-      = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
-      = link_to "Package",  download_selected_data_files_path, :class => "bluebutton"
+      = link_to "Download", download_selected_data_files_path, :class => "btn btn-primary"
+      = link_to "Package",  download_selected_data_files_path, :class => "btn btn-primary"
 

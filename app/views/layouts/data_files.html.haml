@@ -24,7 +24,7 @@
         =yield :pageactions
       - else
         .pageactions
-          = link_to "Upload", new_data_file_path, :id => "newdataentry", :class => "bluebutton"
+          = link_to "Upload", new_data_file_path, :id => "newdataentry", :class => "btn btn-primary"
       .btn-group.pull-right.dropdown
         %a#drop3.btn.dropdown-toggle{"data-toggle" => @cart_items.size > 0 ? 'dropdown' : 'dropdown disabled', :href => '#', :role => "button"}
           -if @cart_items.size == 1

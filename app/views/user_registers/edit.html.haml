@@ -5,6 +5,7 @@
 .container
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
     = render "shared/error_messages", :target => @user
+    %h2 Edit User Details
     = render :partial => 'personal_details', :locals => {:f => f}
 
     .form-actions
