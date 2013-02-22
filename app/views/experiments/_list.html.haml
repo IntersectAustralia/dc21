@@ -1,7 +1,8 @@
-.datacontroll
-  .data-results
-    .experiment.new.whitebutton.pull-right
+.form-actions
+  .actions-pre
+    .experiment.new.whitebutton.btn
       = link_to 'New Experiment', new_facility_experiment_path(@facility)
+  %h2 Experiments
 
 - if experiments.empty?
   There are no experiments to display.

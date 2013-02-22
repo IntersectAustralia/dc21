@@ -1,12 +1,16 @@
 .container
   %h2 User log in
-  %strong Please enter your email and password to log in
   .control-group
-    = f.label :email, "Email:"
-    = f.text_field :email
+    .controls
+      %strong Please enter your email and password to log in
   .control-group
-    = f.label :password, "Password:"
-    = f.password_field :password
+    = f.label :email, "Email:", :class => "control-label"
+    .controls
+      = f.text_field :email
+  .control-group
+    = f.label :password, "Password:", :class => "control-label"
+    .controls
+      = f.password_field :password
   .form-actions
     .actions-pre
       = link_to "Sign Up", new_user_registration_path, :class => "btn"
