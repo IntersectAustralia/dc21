@@ -1,6 +1,7 @@
 class PackagesController < DataFilesController
 
   def new
+    @back_request = request.referer
     @package = Package.new
     set_tab :dashboard, :contentnavigation
   end
@@ -19,6 +20,7 @@ class PackagesController < DataFilesController
     type= 'PACKAGE'
     tags = params[:tags]
     unless validate_inputs(ids, filename, experiment_id, type, description, tags)
+      @back_request = request.referer
       render 'packages/new'
       return
     end

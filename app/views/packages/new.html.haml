@@ -6,7 +6,7 @@
     %h3 You cannot create a package because your cart is empty.
     .form-actions
       .actions-pre
-        = cancel_button "Back", data_files_path
+        = cancel_button "Back", @back_request || data_files_path
   -else
     %h2 New Package
     = form_for(@package, :url => url_for(:controller => :packages, :action => :create), :html => {:multipart => true}) do |f|
@@ -37,6 +37,7 @@
               = label_tag "tag_#{tag.id}", tag.name
       .form-actions
         .actions
+          = cancel_button "Cancel", @back_request || data_files_path
           = f.submit "Save"
 
 

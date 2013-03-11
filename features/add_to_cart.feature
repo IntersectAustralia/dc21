@@ -64,8 +64,8 @@ Feature: View the list of data files
   Scenario: Cart details page should inform user if empty (and prevent download/package options)
     Given I am on the edit cart page
     Then I should see "Your cart is empty."
-    And I should not see "Download"
-    And I should not see "Package"
+    And I should not see "Download" within "#content_container"
+    And I should not see "Package" within "#content_container"
 
   Scenario: Cart details page should list all cart items
     Given I am on the list data files page
