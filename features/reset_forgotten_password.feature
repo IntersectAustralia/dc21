@@ -67,7 +67,8 @@ Feature: Reset forgotten password
     Given I am on the home page
     When I request a reset for ""
     Then I should see "Email can't be blank"
-    And I should see "Forgot Your Password?"
+    And I should see "Reset your password"
+    And I should see button "Send me reset password instructions"
 
    Scenario: New password and confirmation must match
      Given I have a user "georgina@intersect.org.au"

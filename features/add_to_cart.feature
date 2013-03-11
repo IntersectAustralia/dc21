@@ -79,6 +79,8 @@ Feature: View the list of data files
     And I should see "File was successfully removed from cart."
     And I should not see "sample.txt"
     And I should see "sample2.txt"
+    And I follow "Package"
+    And I should be on the create package page
 
   Scenario: Cart details persist after logout, and are retrieved when user next logs in
     Given I am on the list data files page

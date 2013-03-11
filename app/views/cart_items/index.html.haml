@@ -36,6 +36,7 @@
         - data_file = DataFile.find(cart_item.data_file_id)
         %td.filename= link_to data_file.filename, data_file_path(data_file)
         %td.date= data_file.created_at.to_s(:with_time)
+        %td.date= data_file.created_at.to_s(:with_time)
         %td.size= number_to_human_size(data_file.file_size)
         %td.email= data_file.created_by.email if data_file.created_by
         %td.type= data_file.file_processing_status
@@ -48,6 +49,6 @@
     = cancel_button "Back", data_files_path
   .actions
     - unless @cart_items.empty?
-      = link_to "Download", download_selected_data_files_path, :class => "btn btn-primary"
-      = link_to "Package",  download_selected_data_files_path, :class => "btn btn-primary"
+      = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
+      = link_to "Package",  new_package_path, :class => "bluebutton"
 

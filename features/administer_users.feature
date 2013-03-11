@@ -43,7 +43,7 @@ Feature: Administer users
     When I follow "View Details" for "raul@intersect.org.au"
     And I follow "Edit role"
     And I select "Administrator" from "Role"
-    And I press "Save"
+    And I press "Update"
     Then I should be on the user details page for raul@intersect.org.au
     And I should see "The role for raul@intersect.org.au was successfully updated."
     And I should see field "Role" with value "Administrator"
@@ -53,7 +53,7 @@ Feature: Administer users
     And I am on the list users page
     When I follow "Edit role" for "raul@intersect.org.au"
     And I select "Administrator" from "Role"
-    And I press "Save"
+    And I press "Update"
     Then I should be on the user details page for raul@intersect.org.au
     And I should see "The role for raul@intersect.org.au was successfully updated."
     And I should see field "Role" with value "Administrator"
@@ -73,7 +73,7 @@ Feature: Administer users
     When I follow "View Details" for "raul@intersect.org.au"
     And I follow "Edit role"
     And I select "" from "Role"
-    And I press "Save"
+    And I press "Update"
     Then I should see "Please select a role for the user."
 
   Scenario: Deactivate active user
