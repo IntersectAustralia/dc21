@@ -75,6 +75,34 @@ Given /^I have filled in the basic fields on the new experiment page under facil
   select "CC BY: Attribution", :from => "Access rights"
 end
 
+Given /^I have filled in no dates on the new experiment page under facility "([^"]*)"$/ do |facility|
+  visit facility_path(Facility.find_by_name!(facility))
+  click_link "New Experiment"
+  fill_in "Name", :with => "My experiment"
+  fill_in "Subject", :with => "My subject"
+  select "CC BY: Attribution", :from => "Access rights"
+end
+
+Given /^I have filled in end date before start date on the new experiment page under facility "([^"]*)"$/ do |facility|
+  visit facility_path(Facility.find_by_name!(facility))
+  click_link "New Experiment"
+  fill_in "Name", :with => "My experiment"
+  fill_in "Start date", :with => "2012-02-01"
+  fill_in "End date", :with => "2012-01-01"
+  fill_in "Subject", :with => "My subject"
+  select "CC BY: Attribution", :from => "Access rights"
+end
+
+Given /^I have filled in invalid dates on the new experiment page under facility "([^"]*)"$/ do |facility|
+  visit facility_path(Facility.find_by_name!(facility))
+  click_link "New Experiment"
+  fill_in "Name", :with => "My experiment"
+  fill_in "Start date", :with => "2012-02-44"
+  fill_in "End date", :with => "2012-03-44"
+  fill_in "Subject", :with => "My subject"
+  select "CC BY: Attribution", :from => "Access rights"
+end
+
 Given /^experiment "([^"]*)" has for code "([^"]*)"$/ do |exp, code|
   experiment = Experiment.find_by_name!(exp)
   experiment.experiment_for_codes.create!(:name => code, :url => "blah")

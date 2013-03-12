@@ -40,6 +40,7 @@ gem 'bootstrap-will_paginate'
 gem 'rake', '~> 0.9.2.2'
 gem 'bootstrap-sass'
 gem 'bootstrap-will_paginate'
+gem 'date_validator'
 
 group :development, :test do
   gem "rspec-rails"

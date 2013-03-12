@@ -6,20 +6,28 @@ class Experiment < ActiveRecord::Base
   has_many :experiment_parameters
 
   validates_presence_of :name
-  validates_presence_of :start_date
   validates_presence_of :subject
   validates_presence_of :facility_id
   validates_presence_of :access_rights
-
   validates_length_of :name, :subject, {:maximum => 255}
   validates_length_of :description, :maximum => 8192
 
-  validate :validate_start_before_end
-
-  def validate_start_before_end
-    if end_date && start_date
-      errors.add(:end_date, "cannot be before start date") if end_date < start_date
+  # Work around to check invalid dates
+  def self.validate_date(start_date, end_date)
+    if end_date.present?
+      validates :end_date, :date => {:message => 'must be a valid date'}
     end
+
+    if start_date.present?
+      validates :end_date, :date => {:after_or_equal_to => :start_date, :message => 'cannot be before start date' }
+      validates :start_date, :date => {:message => 'must be a valid date'}
+    else
+      validates_presence_of :start_date
+    end
+  end
+
+  def set_start_date(start_date)
+    self.start_date = start_date
   end
 
   def name_with_prefix

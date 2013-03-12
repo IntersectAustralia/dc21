@@ -21,6 +21,7 @@ class ExperimentsController < ApplicationController
   end
 
   def create
+    Experiment.validate_date(params[:experiment][:start_date], params[:experiment][:end_date])
     @experiment.set_for_codes(params[:for_codes])
     if @experiment.save
       redirect_to facility_experiment_path(@facility, @experiment), notice: SAVE_MESSAGE
@@ -32,6 +33,7 @@ class ExperimentsController < ApplicationController
   def update
     success = false
     Experiment.transaction do
+      Experiment.validate_date(params[:experiment][:start_date], params[:experiment][:end_date])
       @experiment.set_for_codes(params[:for_codes])
       success = @experiment.update_attributes(params[:experiment])
       raise ActiveRecord::Rollback unless success #tell AR to rollback the transaction but not pass on the error
