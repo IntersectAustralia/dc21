@@ -48,7 +48,9 @@ class Facility < ActiveRecord::Base
   validates_numericality_of :b_long, :allow_blank => true
 
   validates_presence_of :primary_contact
-  validates_length_of :description, :maximum => 8192
+  validates_length_of :description, :maximum => 10.kilobytes
+
+  before_validation :truncate_description
 
   #Scopes
   default_scope :order => 'name ASC'
@@ -96,6 +98,12 @@ class Facility < ActiveRecord::Base
   end
 
   private
+
+  def truncate_description
+    if description.length > 10.kilobytes
+      self.description = description.truncate(10.kilobytes)
+    end if description.present?
+  end
 
   def entity_url(host_url)
     Rails.application.routes.url_helpers.facility_url(self, :host => host_url)

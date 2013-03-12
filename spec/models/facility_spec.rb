@@ -32,7 +32,7 @@ describe Facility do
       should validate_uniqueness_of(:code)
     end
 
-    it { should ensure_length_of(:description).is_at_most 8192 }
+    it { should ensure_length_of(:description).is_at_most 10.kilobytes }
 
     it { should validate_presence_of(:primary_contact) }
 

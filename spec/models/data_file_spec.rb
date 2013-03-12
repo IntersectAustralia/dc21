@@ -7,7 +7,7 @@ describe DataFile do
     it { should validate_presence_of(:created_by_id) }
     it { should validate_presence_of(:file_processing_status) }
     it { should validate_presence_of(:experiment_id) }
-    it { should ensure_length_of(:file_processing_description).is_at_most(255) }
+    it { should ensure_length_of(:file_processing_description).is_at_most(10.kilobytes) }
     it "should validate uniqueness of filename" do
       Factory(:data_file)
       should validate_uniqueness_of(:filename)

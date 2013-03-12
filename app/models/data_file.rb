@@ -21,6 +21,7 @@ class DataFile < ActiveRecord::Base
   has_and_belongs_to_many :tags
 
   before_validation :strip_whitespaces
+  before_validation :truncate_file_processing_description
 
   validates_presence_of :filename
   validates_uniqueness_of :filename
@@ -28,7 +29,7 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
   validates_presence_of :experiment_id
-  validates_length_of :file_processing_description, :maximum => 255
+  validates_length_of :file_processing_description, :maximum => 10.kilobytes
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
   validate :end_time_not_before_start_time
 
@@ -261,6 +262,12 @@ class DataFile < ActiveRecord::Base
 
   def strip_whitespaces
     self.filename.strip! if self.filename
+  end
+
+  def truncate_file_processing_description
+    if file_processing_description.length > 10.kilobytes
+      self.file_processing_description = file_processing_description.truncate(10.kilobytes)
+    end if file_processing_description.present?
   end
 
   private

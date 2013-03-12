@@ -10,7 +10,9 @@ class Experiment < ActiveRecord::Base
   validates_presence_of :facility_id
   validates_presence_of :access_rights
   validates_length_of :name, :subject, {:maximum => 255}
-  validates_length_of :description, :maximum => 8192
+  validates_length_of :description, :maximum => 10.kilobytes
+
+  before_validation :truncate_description
 
   # Work around to check invalid dates
   def self.validate_date(start_date, end_date)
@@ -57,6 +59,14 @@ class Experiment < ActiveRecord::Base
 
   def access_rights_description
     AccessRightsLookup.new.get_name(self.access_rights)
+  end
+
+  private
+
+  def truncate_description
+    if description.length > 10.kilobytes
+      self.description = description.truncate(10.kilobytes)
+    end if description.present?
   end
 
 
