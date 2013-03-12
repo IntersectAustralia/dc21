@@ -20,7 +20,7 @@ class Toa5Parser
   def self.read_metadata(data_file)
     # returns data_file_attrs, "metadata_item" attrs as a hash, array of column details attrs
 
-    file = File.new(data_file.path)
+    file = File.new(data_file.path, 'r:iso8859-1')
 
     interesting_lines = extract_interesting_lines(file)
     header_line = interesting_lines[:line_1]
