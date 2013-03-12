@@ -1,6 +1,6 @@
 class Notifier < ActionMailer::Base
 
-  PREFIX = "HIE Data Manager - "
+  PREFIX = "HIEv - "
 
   def notify_user_of_approved_request(recipient)
     @user = recipient

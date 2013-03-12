@@ -57,7 +57,7 @@ Feature: Locking out users after multiple failed password attempts
     Then I should see "If the email address you entered was valid, you will receive an email with instructions about how to reset your password in a few minutes."
     And "shuqian@intersect.org.au" should receive an email
     When I open the email
-    Then I should see "Someone has requested a link to change your password on the HIE Data Manager site, and you can do this through the link below." in the email body
+    Then I should see "Someone has requested a link to change your password on the HIEv site, and you can do this through the link below." in the email body
     When I follow "Change my password" in the email
     And I fill in "Password" with "Pass.456"
     And I fill in "Password confirmation" with "Pass.456"
