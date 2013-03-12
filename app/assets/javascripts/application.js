@@ -93,6 +93,7 @@ $(function () {
   $('#add_all_to_cart').click(function (event) {
     if (!$(this).hasClass("disabled")) {
       if (confirm('Do you really want to add all files to your cart?')) {
+        $('#all_data_files_form').submit();
         $(this).addClass("disabled");
       }
       else {

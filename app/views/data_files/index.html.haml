@@ -140,9 +140,6 @@
 
     %table#exploredata.search
       %tr
-        -##%th.view.select
-          = (link_to "All", "javascript:selectToggle(false, 'datafiles');") + "/" + (link_to "None", "javascript:selectToggle(true, 'datafiles');")
-        -##%th.view View
         %th.sortable.filename= sortable "data_files.filename", "Filename"
         %th.sortable.date= sortable "data_files.created_at", "Date added"
         %th.sortable.size= sortable "data_files.file_size", "Size"
@@ -150,13 +147,11 @@
         %th.sortable.type= sortable "data_files.file_processing_status", "Type"
         %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
         %th.add_cart
-          -#= link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => @unadded_items? "bluebutton" : "bluebutton disabled" , :id => "add_all_to_cart"
-          = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => 'post', :class => "btn" , :id => "add_all_to_cart"
+          - unless @data_files.length < 1
+            = link_to 'Add All', "#", :class => "btn", :id => "add_all_to_cart"
 
       - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
-          -##%td.view.select= check_box_tag "ids[]",  "#{data_file.id}", false, :id => "download_checkbox_#{data_file.id}"
-          -##%td.view= link_to '', data_file, :class => "view", :id => "view_#{data_file.id}", :title => 'View'
 
           %td.filename= link_to data_file.filename, data_file_path(data_file)
           %td.date= data_file.created_at.to_s(:with_time)
@@ -169,7 +164,8 @@
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
             -else
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
-      -# #helper_text.select
-      -#   Select one or more files to download
 
     = will_paginate(@data_files_paginated)
+  = form_tag add_all_cart_items_path, :id => "all_data_files_form" do |f|
+    - @data_files.each do |data_file|
+      = hidden_field_tag "data_file_ids[]", data_file.id

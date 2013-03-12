@@ -6,7 +6,9 @@
 - else
   - content_for :breadcrumb  do
     %h1 Home / Dashboard
-
+  = form_tag add_all_cart_items_path, :id => "all_data_files_form" do |f|
+    - @data_files.each do |data_file|
+      = hidden_field_tag "data_file_ids[]", data_file.id
   .recentactivity
     %h2 Recent Activity
     %table#exploredata
@@ -17,8 +19,7 @@
         %th= "Added by"
         %th.add_cart
           - unless @data_files.length < 1
-            = link_to 'Add All', add_all_cart_items_path(:data_file_ids => @data_files.map(&:id)), :method => :post, :class => "btn", :id => "add_all_to_cart"
-
+            = link_to 'Add All', "#", :class => "btn", :id => "add_all_to_cart"
 
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
