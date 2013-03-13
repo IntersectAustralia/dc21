@@ -20,7 +20,6 @@ class PackagesController < DataFilesController
     type= 'PACKAGE'
     tags = params[:tags]
     unless validate_inputs(ids, filename, experiment_id, type, description, tags)
-      @back_request = request.referer
       render 'packages/new'
       return
     end

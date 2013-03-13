@@ -76,6 +76,36 @@ Feature: Create a package
       | Description | Here's a description   |
       | Experiment  | My Experiment   |
 
+  Scenario: Back button - hardcode url
+    When I am on the create package page
+    And I follow "Back"
+    Then I should be on the list data files page
+
+  Scenario: Back button goes back in history
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    Given I am on the new experiment page for facility 'ROS Weather Station'
+    And I press "Save Experiment"
+    Then I should see "Start date can't be blank"
+    And I follow "1 File in Cart"
+    And I follow "Package"
+    Then I should be on the create package page
+
+
+  Scenario: Back button resets link after errorneous package save
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    Given I am on the new experiment page for facility 'ROS Weather Station'
+    And I press "Save Experiment"
+    Then I should see "Start date can't be blank"
+    And I follow "1 File in Cart"
+    And I follow "Package"
+    Then I should be on the create package page
+    And I press "Save"
+    Then I should see "Please provide a filename"
+    And I follow "Back"
+    Then I should be on the list data files page
+
 
 
 
