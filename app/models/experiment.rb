@@ -16,7 +16,9 @@ class Experiment < ActiveRecord::Base
   before_validation :truncate_description
 
   validates_datetime :start_date, :allow_blank => true, :invalid_datetime_message => "must be a valid date"
-  validates_datetime :end_date, :on_or_after => :start_date, :allow_blank => true, :on_or_after_message => "cannot be before start date"
+  validates_datetime :end_date, :on_or_after => :start_date, :allow_blank => true,
+                     :on_or_after_message => "cannot be before start date",
+                     :invalid_datetime_message => "must be a valid date"
 
   # Validation of presence is triggered when date is invalid - rails returns nil so we filter out redundant messages
   def filter_errors
