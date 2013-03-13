@@ -66,7 +66,7 @@ class PackagesController < DataFilesController
           redirect_to  data_files_path, :notice => "This package is already submitted for publishing."
         else
           if @package.save! and publish_rif_cs
-              @package.set_to_published
+              @package.set_to_published(current_user)
               valid = true
           end
         end

@@ -37,6 +37,7 @@
     -if @data_file.is_package?
       = render_field "Published", @data_file.published ? "Yes" : "No"
       - if @data_file.published and !@data_file.published_date.nil?
+        = render_field "Published by", @data_file.published_by.full_name
         = render_field "Published date", @data_file.published_date.to_s(:with_time)
 
   .container

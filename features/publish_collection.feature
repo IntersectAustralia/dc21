@@ -7,16 +7,17 @@ Feature: Publish a PACKAGE
   Background:
     Given I have the usual roles
     And I have a user "georgina@intersect.org.au" with role "Administrator"
+    And I have a user "publisher@intersect.org.au" with role "Administrator"
     And I have a user "researcher@intersect.org.au" with role "Researcher"
     And I am logged in as "georgina@intersect.org.au"
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
     And I have data files
-      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      |
-      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |
-      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | georgina@intersect.org.au   | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |
-      | published.zip | PACKAGE                | 30/12/2011 12:34 | georgina@intersect.org.au   |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 |
-      | sample1.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false     |                     |
+      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      | published_by              |
+      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |                           |
+      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | georgina@intersect.org.au   | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |                           |
+      | published.zip | PACKAGE                | 30/12/2011 12:34 | georgina@intersect.org.au   |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au|
+      | sample1.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false     |                     |                           |
     And I have experiments
       | name              | facility            |
       | My Experiment     | ROS Weather Station |
@@ -69,6 +70,7 @@ Feature: Publish a PACKAGE
     Then I should see details displayed
       | Name           | published.zip    |
       | Published      | Yes              |
+      | Published by   | Fred Bloggs      |
       | Published date | 2012-12-27 13:05 |
     When I am on the data file details page for sample1.txt
     Then I should not see "Published:"

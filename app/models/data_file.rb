@@ -14,6 +14,7 @@ class DataFile < ActiveRecord::Base
   ALL_STATI = [STATUS_PACKAGE] + STATI + [STATUS_ERROR]
 
   belongs_to :created_by, :class_name => "User"
+  belongs_to :published_by, :class_name => "User"
   belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
@@ -215,9 +216,10 @@ class DataFile < ActiveRecord::Base
   end
 
 
-  def set_to_published
+  def set_to_published(current_user)
     self.published = true
     self.published_date = DateTime.now
+    self.published_by_id = current_user.id
     save!
   end
 

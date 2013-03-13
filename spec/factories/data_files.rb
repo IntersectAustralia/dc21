@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:filename) { |n| "file-#{n}" }
     path "a-path"
     association :created_by, :factory => :user
+    association :published_by, :factory => :user
     experiment_id -1
     file_processing_status "RAW"
     file_size 10000

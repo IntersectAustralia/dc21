@@ -20,6 +20,15 @@ Given /^I have data files$/ do |table|
       end
       attributes[:created_by] = user
     end
+    published_by_email = attributes.delete('published_by')
+    if published_by_email
+      user = User.find_by_email(published_by_email)
+      unless user
+        user = Factory(:user, :email => published_by_email)
+      end
+      attributes[:published_by] = user
+    end unless published_by_email.blank? or published_by_email.nil?
+
     tag_csv = attributes.delete('tags')
 
     df = Factory(:data_file, attributes)
