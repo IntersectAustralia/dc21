@@ -9,23 +9,20 @@ class Experiment < ActiveRecord::Base
   validates_presence_of :subject
   validates_presence_of :facility_id
   validates_presence_of :access_rights
+  validates_presence_of :start_date
   validates_length_of :name, :subject, {:maximum => 255}
   validates_length_of :description, :maximum => 10.kilobytes
 
   before_validation :truncate_description
 
-  # Work around to check invalid dates
-  def self.validate_date(start_date, end_date)
-    if end_date.present?
-      validates :end_date, :date => {:message => 'must be a valid date'}
-    end
+  validates_datetime :start_date, :allow_blank => true, :invalid_datetime_message => "must be a valid date"
+  validates_datetime :end_date, :on_or_after => :start_date, :allow_blank => true, :on_or_after_message => "cannot be before start date"
 
-    if start_date.present?
-      validates :end_date, :date => {:after_or_equal_to => :start_date, :message => 'cannot be before start date' }
-      validates :start_date, :date => {:message => 'must be a valid date'}
-    else
-      validates_presence_of :start_date
-    end
+  # Validation of presence is triggered when date is invalid - rails returns nil so we filter out redundant messages
+  def filter_errors
+    if errors.messages[:start_date].size > 1
+      errors.messages[:start_date].delete_at(errors.messages[:start_date].index("can't be blank"))
+    end unless errors.messages[:start_date].nil?
   end
 
   def set_start_date(start_date)
