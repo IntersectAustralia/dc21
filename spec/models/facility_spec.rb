@@ -32,8 +32,6 @@ describe Facility do
       should validate_uniqueness_of(:code)
     end
 
-    it { should ensure_length_of(:description).is_at_most 10.kilobytes }
-
     it { should validate_presence_of(:primary_contact) }
 
     it "should, validate that lat/longs are filled as pairs" do
@@ -63,6 +61,14 @@ describe Facility do
       should ensure_inclusion_of(:b_long).in_range(-180..180).with_message("must be a number between -180 and 180")
     end
 
+  end
+
+  describe "Description length" do
+    it "should truncate when the field is over 10 kilobytes" do
+      fac = Factory.create(:facility, :description => "x" * 20000)
+      fac.description.length.should eq 10240
+      Factory.build(:facility, :description => "x" * 10240).should be_valid
+    end
   end
 
   describe "Fixing location entry" do

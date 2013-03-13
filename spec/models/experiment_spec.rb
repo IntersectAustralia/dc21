@@ -15,7 +15,6 @@ describe Experiment do
     it { should validate_presence_of(:facility_id) }
     it { should validate_presence_of(:access_rights) }
     it { should ensure_length_of(:name).is_at_most 255 }
-    it { should ensure_length_of(:description).is_at_most 10.kilobytes }
     it { should ensure_length_of(:subject).is_at_most 255 }
 
     describe "should validate that end date is on or after start date (unless end date blank)" do
@@ -30,6 +29,14 @@ describe Experiment do
       it "should allow start date on nil end date" do
         Factory.build(:experiment, :start_date => "2011-12-01", :end_date => nil).should be_valid
       end
+    end
+  end
+
+  describe "Description length" do
+    it "should truncate when the field is over 10 kilobytes" do
+      exp = Factory.create(:experiment, :description => "x" * 20000)
+      exp.description.length.should eq 10240
+      Factory.build(:experiment, :description => "x" * 10240).should be_valid
     end
   end
 

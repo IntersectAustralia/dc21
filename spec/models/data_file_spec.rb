@@ -7,7 +7,7 @@ describe DataFile do
     it { should validate_presence_of(:created_by_id) }
     it { should validate_presence_of(:file_processing_status) }
     it { should validate_presence_of(:experiment_id) }
-    it { should ensure_length_of(:file_processing_description).is_at_most(10.kilobytes) }
+
     it "should validate uniqueness of filename" do
       Factory(:data_file)
       should validate_uniqueness_of(:filename)
@@ -31,6 +31,14 @@ describe DataFile do
       file.should_not be_valid
     end
 
+  end
+
+  describe "File processing description length" do
+    it "should truncate when the field is over 10 kilobytes" do
+      df = Factory.create(:data_file, :file_processing_description => "x" * 20000)
+      df.file_processing_description.length.should eq 10240
+      Factory.build(:data_file, :file_processing_description => "x" * 10240).should be_valid
+    end
   end
 
   describe "Callbacks" do
