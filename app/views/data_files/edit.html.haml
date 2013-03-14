@@ -101,4 +101,4 @@
         .actions-pre
           = cancel_button "Cancel", data_files_path
         .actions
-          = f.submit "Update", :confirm => @data_file.published? ? "This file has already been published. Do you really want to edit the metadata for this file? " : nil
+          = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil

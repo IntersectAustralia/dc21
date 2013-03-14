@@ -179,18 +179,31 @@ class DataFilesController < ApplicationController
     end
   end
 
-
   def destroy
     file = DataFile.find(params[:id])
-    if !file.published and file.destroy
-      begin
-        File.delete @data_file.path
-        redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
-      rescue Errno::ENOENT
-        redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
+    if file.is_package?
+      if file.destroy
+        begin
+          if archive_files(file)
+            redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully archived.")
+          end
+        rescue Errno::ENOENT
+          redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed but the files itself could not be archived. \nPlease copy this entire error for your system administrator.")
+        end
+      else
+        redirect_to(data_file_path(file), :alert => "Could not delete this file. You may not have permission to delete it.")
       end
     else
-      redirect_to(show_data_file_path(file), :alert => "Could not delete this file. It may be published, or you may not have permission to delete it.")
+      if file.destroy
+        begin
+          File.delete @data_file.path
+          redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
+        rescue Errno::ENOENT
+          redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
+        end
+      else
+        redirect_to(data_file_path(file), :alert => "Could not delete this file. It may be published, or you may not have permission to delete it.")
+      end
     end
   end
 
@@ -395,6 +408,35 @@ class DataFilesController < ApplicationController
         FileUtils.remove_entry_secure tempfile if File::exists?(tempfile)
       end
     end
+  end
+
+  def archive_files(data_file)
+    archive_dir = APP_CONFIG['archived_data_directory']
+    package_dir = File.join(archive_dir, "#{data_file.id}")
+    Dir.mkdir(package_dir) unless Dir.exists?(package_dir)
+    archive_rif_cs(data_file, package_dir) && archive_data(data_file, package_dir) ? true : false
+  end
+
+  def archive_rif_cs(data_file, package_dir)
+    published_dir = APP_CONFIG['published_rif_cs_directory']
+    unpublished_dir = APP_CONFIG['unpublished_rif_cs_directory']
+    file = "rif-cs-#{data_file.id}.xml"
+    archive_location = File.join(package_dir, file)
+
+    if data_file.is_published?
+      published_location = File.join(published_dir, file)
+      FileUtils.mv published_location, archive_location, :verbose => true
+    else
+      unpublished_location = File.join(unpublished_dir, file)
+      FileUtils.mv unpublished_location, archive_location, :verbose => true
+    end
+    true
+  end
+
+  def archive_data(data_file, package_dir)
+    archive_location = File.join(package_dir, data_file.filename)
+    FileUtils.mv(@data_file.path, archive_location)
+    true
   end
 
 end

@@ -52,6 +52,10 @@ class DataFile < ActiveRecord::Base
     super(options).merge(:url => url)
   end
 
+  def is_published?
+    published | false
+  end
+
   def self.with_data_in_range(from, to)
     if (from && to)
       where { (start_time < (to + 1.day)) & (end_time >= from) }

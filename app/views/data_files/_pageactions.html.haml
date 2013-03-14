@@ -12,13 +12,12 @@
 
 - publish_warning = []
 - publish_warning <<  "Do you really want to publish the file  #{@data_file.filename}?\n"
-- publish_warning <<  "Once published, this file cannot be deleted.\n"
-- publish_warning <<  "This action cannot be undone."
 
 
 
 .pageactions
-  - if !@data_file.published and ( can?(:manage, DataFile) || @data_file.created_by.eql?(current_user) )
+  -#- if !@data_file.published and ( can?(:manage, DataFile) || @data_file.created_by.eql?(current_user) )
+  - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
     = link_to "Delete This File", data_file_path(@data_file), :class => "btn btn-danger",
      :confirm => delete_warning, :method => :delete
   - if @data_file.is_package? and !@data_file.published
