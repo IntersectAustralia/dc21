@@ -1,12 +1,12 @@
 - content_for :breadcrumb  do
-  %h1 Facilities / Experiments / #{@experiment.name}
+  %h1 Facilities / Experiments / #{truncate(@experiment.name, :length => 60)}
 
 .container
   = render 'actions'
-  %h2 Details for the #{@experiment.name} experiment
+  %h2 Details for the #{breaking_word_wrap(@experiment.name, 50)} experiment
   = render_field "ID", @experiment.id
   = render_field "Parent", @experiment.parent_name
-  = render_field "Name", @experiment.name
+  = render_field "Name", breaking_word_wrap(@experiment.name, 60)
   = render_field "Description", @experiment.description
   = render_field "Start date", @experiment.start_date.to_s(:date_only) if @experiment.start_date
   = render_field "End date", @experiment.end_date.to_s(:date_only) if @experiment.end_date

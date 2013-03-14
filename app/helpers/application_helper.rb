@@ -78,4 +78,3 @@ def breaking_word_wrap(text, *args)
     line.length > options[:line_width] ? line.gsub(/(.{1,#{options[:line_width]}})(\s+|$)/, "\\1\n").strip : line
   end * "\n"
 end
-

@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Data / Edit / #{@data_file.filename}
+  %h1 Data / Edit / #{breaking_word_wrap(@data_file.filename, 20)}
 
 
 
@@ -8,7 +8,7 @@
     You do not have permission to edit this published file.
   - else
     = form_for (@data_file) do |f|
-      %h2 Editing Metadata of #{@data_file.filename}
+      %h2 Editing Metadata of #{breaking_word_wrap(@data_file.filename, 35)}
       = render "shared/error_messages", :target => @data_file
       .control-group
         %label.control-label{ :for => :data_file_filename } Name

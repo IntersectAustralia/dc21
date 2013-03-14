@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Data / View / #{breaking_word_wrap(@data_file.filename, 20)}
+  %h1 Data / View / #{truncate(@data_file.filename, :length =>60)}
 
 - content_for :pageactions do
   =render :partial => 'data_files/pageactions'
