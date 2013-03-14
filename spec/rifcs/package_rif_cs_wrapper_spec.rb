@@ -49,8 +49,7 @@ describe PackageRifCsWrapper do
       df2 = Factory(:data_file, :experiment_id => experiment2.id)
       df3 = Factory(:data_file, :experiment_id => experiment3.id)
       df4 = Factory(:data_file, :experiment_id => experiment3.id)
-      df5 = Factory(:data_file, :experiment_id => -1)
-      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4, df5], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes.size.should eq(3)
       wrapper.notes.include?('Primary contact for Fac1 is Fred Smith (fred@intersect.org.au')
       wrapper.notes.include?('Primary contact for Fac2 is Bob Jones (bob@intersect.org.au')
@@ -86,16 +85,6 @@ describe PackageRifCsWrapper do
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.local_subjects.should eq(["Bob", "Fred"])
     end
-
-    it "Should handle data files with the 'Other' experiment" do
-      exp1 = Factory(:experiment, :subject => "Fred")
-
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => -1)
-
-      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
-      wrapper.local_subjects.should eq(["Fred"])
-    end
   end
 
   describe "Rights" do
@@ -113,16 +102,6 @@ describe PackageRifCsWrapper do
 
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.access_rights.should eq(["Bob", "Fred"])
-    end
-
-    it "should should handle files with the 'other' experiment" do
-      exp1 = Factory(:experiment, :access_rights => "Fred")
-
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => -1)
-
-      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
-      wrapper.access_rights.should eq(["Fred"])
     end
   end
 
@@ -148,17 +127,6 @@ describe PackageRifCsWrapper do
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
     end
-
-    it "should handle files with the 'Other' experiment" do
-      exp1 = Factory(:experiment)
-      Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/02', :experiment => exp1)
-
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => -1)
-
-      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
-      wrapper.for_codes.should eq(%w(02))
-    end
   end
 
   describe "Locations" do
@@ -182,18 +150,6 @@ describe PackageRifCsWrapper do
 
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.locations.should eq([['not empty'], ['also not empty']])
-    end
-
-    it "should handle data files with the 'other' experiment" do
-      fac1 = Factory(:facility, :a_lat => 1.1, :a_long => -87.3)
-      exp1 = Factory(:experiment, :facility => fac1)
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => -1)
-
-      df1.experiment.should eq(exp1)
-      df2.experiment.should be_nil
-      wrapper = PackageRifCsWrapper.new(nil, [df1, df2], {})
-      wrapper.locations.should eq([[{:lat=>1.1, :long=>-87.3}]])
     end
   end
 

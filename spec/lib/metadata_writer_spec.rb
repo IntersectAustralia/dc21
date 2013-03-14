@@ -134,17 +134,6 @@ describe MetadataWriter do
         diff_html(output_html, 'spec/samples/readme_non_toa5_with_start_end.html')
       end
 
-      it 'should handle files with the "Other" experiment' do
-        @data_file1.experiment_id = -1
-        @data_file1.save!
-        @data_file1.reload
-        @data_file1 = DataFile.find(@data_file1.id)
-        @data_file1.experiment_id.should eq(-1)
-        @data_file1.experiment_name.should eq("Other")
-        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
-        diff_html(output_html, 'spec/samples/readme_file_with_other_experiment.html')
-      end
-
     end
   end
 end
