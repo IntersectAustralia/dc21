@@ -5,11 +5,12 @@ class DataFilesController < ApplicationController
   ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id data_files.file_size)
   SAVE_MESSAGE = 'The data file was saved successfully.'
 
-  before_filter :authenticate_user!
-  before_filter :sort_params, :only => [ :index, :search ]
-  before_filter :search_params, :only => [ :index, :search ]
-  before_filter :page_params, :only => [ :index ]
-  load_and_authorize_resource
+  before_filter :authenticate_user!, :except => [:download]
+  before_filter :sort_params, :only => [:index, :search]
+  before_filter :search_params, :only => [:index, :search]
+  before_filter :page_params, :only => [:index]
+  load_and_authorize_resource :except => [:download]
+  load_resource :only => [:download]
   set_tab :home
   helper_method :sort_column, :sort_direction
   layout 'data_files'
@@ -156,9 +157,11 @@ class DataFilesController < ApplicationController
 
   end
 
-
-
   def download
+    unless @data_file.published? and @data_file.is_package?
+      authenticate_user!
+      authorize! :download, @data_file
+    end
     send_data_file(@data_file)
   end
 

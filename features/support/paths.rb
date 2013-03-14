@@ -49,6 +49,9 @@ module NavigationHelpers
       when /the data file details page for (.*)$/
         data_file_path(DataFile.find_by_filename($1))
 
+      when /the data file download page for (.*)$/
+        download_data_file_path(DataFile.find_by_filename($1))
+
       when /the upload page/
         new_data_file_path
 

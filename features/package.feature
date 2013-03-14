@@ -70,11 +70,11 @@ Feature: Create a package
     And I press "Save"
     When I am on the data file details page for my_other_package.zip
     Then I should see details displayed
-      | Name  | my_other_package.zip   |
-      | Type        | PACKAGE |
-      | File format | BAGIT   |
-      | Description | Here's a description   |
-      | Experiment  | My Experiment   |
+      | Name        | my_other_package.zip |
+      | Type        | PACKAGE              |
+      | File format | BAGIT                |
+      | Description | Here's a description |
+      | Experiment  | My Experiment        |
 
   Scenario: Back button - hardcode url
     When I am on the create package page
@@ -91,8 +91,7 @@ Feature: Create a package
     And I follow "Package"
     Then I should be on the create package page
 
-
-  Scenario: Back button resets link after errorneous package save
+  Scenario: Back button resets link after erroneous package save
     Given I am on the list data files page
     And I add sample1.txt to the cart
     Given I am on the new experiment page for facility 'ROS Weather Station'

@@ -25,6 +25,52 @@ Feature: Download multiple files
     Then I should get a file with name "sample1.txt" and content type "text/plain"
     And the file should contain "Plain text file sample1.txt"
 
+  Scenario: Downloading regular file requires log in
+    Given I follow "Sign out"
+    And I am on the data file download page for sample1.txt
+    And I should see "You need to log in before continuing."
+
+  Scenario: Downloading unpublished package requires log in
+    Given I have facility "ROS Weather Station" with code "ROS_WS"
+    And I have experiments
+      | name              | facility            |
+      | My Experiment     | ROS Weather Station |
+    And I add "sample1.txt" to the cart
+    And I add "sample2.txt" to the cart
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Filename" with "my_package"
+    And I select "My Experiment" from "Experiment"
+    And I press "Save"
+    Then I should see "Package was successfully created."
+    And I follow "Sign out"
+    And I am on the data file download page for my_package.zip
+    And I should see "You need to log in before continuing."
+
+  Scenario: Downloading published package does not require log in
+    Given I have facility "ROS Weather Station" with code "ROS_WS"
+    And I have experiments
+      | name              | facility            |
+      | My Experiment     | ROS Weather Station |
+    And I add "sample1.txt" to the cart
+    And I add "sample2.txt" to the cart
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Filename" with "my_package"
+    And I select "My Experiment" from "Experiment"
+    And I press "Save"
+    Then I should see "Package was successfully created."
+    And I follow "Publish"
+    Then I should see "Package has been successfully submitted for publishing."
+    And I follow "Sign out"
+    And I am on the data file download page for my_package.zip
+    And show me the page
+    Then I should get a file with name "my_package.zip" and content type "application/octet-stream"
+    And I should receive a zip file matching "my_package/zip"
+
+
 # Scenario: Package a selection of files as a BagIt Zip
 #   When I add "sample1.txt" to the cart
 #   And I add "sample2.txt" to the cart
