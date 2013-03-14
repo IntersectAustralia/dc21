@@ -66,7 +66,6 @@ Feature: Download multiple files
     Then I should see "Package has been successfully submitted for publishing."
     And I follow "Sign out"
     And I am on the data file download page for my_package.zip
-    And show me the page
     Then I should get a file with name "my_package.zip" and content type "application/octet-stream"
     And I should receive a zip file matching "my_package/zip"
 

@@ -1,4 +1,5 @@
 Given /^user "([^"]*)" has an API token$/ do |email|
+  User.all
   user = User.find_by_email!(email)
   user.reset_authentication_token!
 end
