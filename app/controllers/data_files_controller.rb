@@ -62,8 +62,8 @@ class DataFilesController < ApplicationController
 
     if !params[:date].nil?
       attrs = params.delete(:date)
-      start_time = sanitise_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec])
-      end_time = sanitise_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec])
+      start_time = reformat_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec])
+      end_time = reformat_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec])
       params[:data_file][:start_time] = start_time
       params[:data_file][:end_time] = end_time
     end
@@ -134,9 +134,8 @@ class DataFilesController < ApplicationController
 
       attrs.merge!(params[:date][:files][id]) if  params[:date].present? && params[:date][:files][id].present?
 
-
-      attrs[:start_time] = sanitise_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
-      attrs[:end_time] = sanitise_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
+      attrs[:start_time] = reformat_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
+      attrs[:end_time] = reformat_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
 
       file = DataFile.find(id)
 
@@ -234,20 +233,13 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def sanitise_date_and_time(date, hr, min, sec)
-    return if date.blank?
-    adjusted_date = reformat_date_and_time(date, hr, min, sec)
-    adjusted_date << " UTC"
-    return DateTime.parse(adjusted_date)
-  end
-
   def reformat_date_and_time(date, hr, min, sec)
     return if date.blank?
     adjusted_date = date #so we can use << without modifying the original
     if hr.present? && min.present? && sec.present?
       adjusted_date << " " << hr << ":" << min << ":" << sec
     end
-    return adjusted_date
+    return adjusted_date << "UTC"
   end
 
   def do_search(search_params)

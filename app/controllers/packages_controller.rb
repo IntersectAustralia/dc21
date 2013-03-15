@@ -3,6 +3,10 @@ class PackagesController < DataFilesController
   def new
     @back_request = request.referer
     @package = Package.new
+    early_start_time = CartItem.data_file_with_earliest_start_time(current_user.id).first.data_file.start_time
+    late_end_time = CartItem.data_file_with_latest_end_time(current_user.id).first.data_file.start_time
+    @package.start_time = early_start_time
+    @package.end_time = late_end_time
     set_tab :dashboard, :contentnavigation
   end
 
@@ -75,6 +79,15 @@ class PackagesController < DataFilesController
     end
 
     redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing." : "Unable to publish package."
+  end
+
+  def reformat_date_and_time(date, hr, min, sec)
+    return if date.blank?
+    adjusted_date = date #so we can use << without modifying the original
+    if hr.present? && min.present? && sec.present?
+      adjusted_date << " " << hr << ":" << min << ":" << sec
+    end
+    return adjusted_date << "UTC"
   end
 
   def build_rif_cs(files)
