@@ -1,13 +1,19 @@
 class PackagesController < DataFilesController
 
   def new
-    @back_request = request.referer
-    @package = Package.new
-    early_start_time = CartItem.data_file_with_earliest_start_time(current_user.id).first.data_file.start_time
-    late_end_time = CartItem.data_file_with_latest_end_time(current_user.id).first.data_file.start_time
-    @package.start_time = early_start_time
-    @package.end_time = late_end_time
-    set_tab :dashboard, :contentnavigation
+    if current_user.data_files.empty?
+
+    else
+      @back_request = request.referer
+      @package = Package.new
+      early_start_time = CartItem.data_file_with_earliest_start_time(current_user.id).first.data_file.start_time
+      late_end_time = CartItem.data_file_with_latest_end_time(current_user.id).first.data_file.start_time
+      @package.start_time = early_start_time
+      @package.end_time = late_end_time
+      set_tab :dashboard, :contentnavigation
+    end
+
+
   end
 
   def edit
