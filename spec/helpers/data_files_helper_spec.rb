@@ -2,18 +2,13 @@ require 'spec_helper'
 
 describe DataFilesHelper do
   describe "Getting the grouped list of experiments for a data file" do
-    it "includes all facilities in alphabetic order, plus other" do
+    it "includes all facilities in alphabetic order" do
       Factory(:facility, name: "Fred")
       Factory(:facility, name: "Joe")
       Factory(:facility, name: "Alice")
-      other = Factory(:facility, id: -1, name: "Other")
-      Factory(:experiment, id: -1, name: "Other", facility: other)
 
       output = helper.grouped_experiments_for_select
-      output.collect(&:name).should eq(["Alice", "Fred", "Joe", "Other"])
-      output.last.experiments.size.should eq(1)
-      output.last.experiments.first.id.should eq(-1)
-      output.last.experiments.first.name.should eq("Other")
+      output.collect(&:name).should eq(["Alice", "Fred", "Joe"])
     end
   end
 end

@@ -183,24 +183,22 @@ class DataFile < ActiveRecord::Base
   end
 
   def experiment
-    # we don't use an association because of the special behaviour with using -1 for "Other"
-    return nil if experiment_id == -1 || experiment_id.nil?
+    return nil if experiment_id.nil?
     Experiment.find(experiment_id)
   end
 
   def experiment_name
-    return "Other" if experiment_id == -1
     return "" if experiment_id.nil?
     Experiment.find(experiment_id).name
   end
 
   def facility
-    return nil if experiment_id.nil? || experiment_id == -1
+    return nil if experiment_id.nil?
     Experiment.find(experiment_id).facility
   end
 
   def facility_name
-    return "" if experiment_id.nil? || experiment_id == -1
+    return "" if experiment_id.nil?
     Experiment.find(experiment_id).facility.name
   end
 
