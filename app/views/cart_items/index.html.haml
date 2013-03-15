@@ -34,12 +34,12 @@
     - @cart_items.each do |cart_item|
       %tr{:class => cycle('field_bg', 'field_nobg')}
         - data_file = DataFile.find(cart_item.data_file_id)
-        %td.filename= link_to truncate(data_file.filename, :length => 45), data_file_path(data_file)
+        %td.filename= link_to truncate(data_file.filename, :length => 30), data_file_path(data_file), :title => data_file.filename
         %td.date= data_file.created_at.to_s(:with_time)
         %td.size= number_to_human_size(data_file.file_size)
-        %td.email= truncate(data_file.created_by.email, :length => 25) if data_file.created_by
+        %td.email{:title => data_file.created_by.email}= truncate(data_file.created_by.email, :length => 25) if data_file.created_by
         %td.type= data_file.file_processing_status
-        %td.experiment= truncate(data_file.experiment_name, :length => 20)
+        %td.experiment{:title => data_file.experiment_name}= truncate(data_file.experiment_name, :length => 20)
         %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{cart_item.id}"
 
 

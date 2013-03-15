@@ -16,10 +16,10 @@
 
   - @users.each do |user|
     %tr{ :class => cycle('field_bg', 'field_nobg')}
-      %td.email= link_to user.email, user, :id => "view_#{user.id}", :title => 'View'
-      %td= user.first_name
-      %td= user.last_name
-      %td.role= user.role.name if user.role
+      %td.email= link_to user.email, user, :id => "view_#{user.id}", :title => user.email
+      %td{:title => user.first_name}= truncate(user.first_name, :length => 25)
+      %td{:title => user.last_name}= truncate(user.last_name, :length => 25)
+      %td.role{:title => user.role.name}= user.role.name if user.role
       %td.status= user.status_description
       %td.date
         - if user.last_sign_in_at.nil?

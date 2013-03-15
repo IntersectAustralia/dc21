@@ -38,8 +38,6 @@ gem 'will_paginate'
 gem 'bootstrap-sass'
 gem 'bootstrap-will_paginate'
 gem 'rake', '~> 0.9.2.2'
-gem 'bootstrap-sass'
-gem 'bootstrap-will_paginate'
 gem 'validates_timeliness', '~> 3.0'
 
 group :development, :test do

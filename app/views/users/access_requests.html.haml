@@ -12,9 +12,9 @@
     %th.actions Actions
   - @users.each do |user|
     %tr{:class => cycle('field_bg', 'field_nobg')}
-      %td.email= link_to user.email, user, :class => "email", :id => "view_#{user.id}", :title => 'View'
-      %td.firstname= user.first_name
-      %td.lastname= user.last_name
+      %td.email= link_to user.email, user, :class => "email", :id => "view_#{user.id}", :title => user.email
+      %td.firstname{:title => user.first_name}= user.first_name
+      %td.lastname{:title => user.last_name}= user.last_name
       %td.actions
         - if can?(:reject, user) then
           = link_to "Spam", reject_as_spam_user_path(user), :method => :put, :id => "reject_as_spam_#{user.id}", :class => "btn"

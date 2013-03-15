@@ -192,4 +192,3 @@ $(window).scroll(function (e) {
   }
 });
 
-

@@ -153,12 +153,12 @@
       - @data_files_paginated.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
 
-          %td.filename= link_to data_file.filename, data_file_path(data_file)
+          %td.filename{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
           %td.date= data_file.created_at.to_s(:with_time)
           %td.size= number_to_human_size(data_file.file_size)
-          %td.email= data_file.created_by.email if data_file.created_by
+          %td.email{:title => data_file.created_by.email}= data_file.created_by.email if data_file.created_by
           %td.type= data_file.file_processing_status
-          %td.experiment= data_file.experiment_name
+          %td.experiment{:title => data_file.experiment_name}= data_file.experiment_name
           %td.add_cart
             -if current_user.data_file_in_cart?(data_file)
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}

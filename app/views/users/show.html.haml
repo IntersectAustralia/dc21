@@ -7,8 +7,8 @@
 
   %h2 User details for #{@user.email}
   = render_field "Email", @user.email
-  = render_field "First name", @user.first_name
-  = render_field "Last name", @user.last_name
+  = render_field "First name", breaking_word_wrap(@user.first_name, 60)
+  = render_field "Last name", breaking_word_wrap(@user.last_name, 60)
 
   - if !@user.pending_approval?
     = render_field_with_block "Last Logged In" do

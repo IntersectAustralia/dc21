@@ -23,7 +23,7 @@
 
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
-          %td.filename= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}", :title => 'View'
+          %td.filename= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}", :title => data_file.filename
           %td= data_file.created_at.to_s(:with_time)
           %td= number_to_human_size(data_file.file_size)
           %td= data_file.created_by.email if data_file.created_by
