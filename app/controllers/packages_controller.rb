@@ -53,10 +53,13 @@ class PackagesController < DataFilesController
     @package.errors.add(:base, "Please provide a filename") if filename.nil? or filename.blank?
     @package.errors.add(:base, "Please select an experiment") if experiment_id.nil? or experiment_id.blank?
     @package.errors.add(:base, "Your cart is empty. Please add some files for packaging") if ids.nil? or ids.empty?
-    @package.errors.add(:base, "Description must not exceed 255 characters in length") if description.length > 255
     @package.experiment_id = experiment_id
     @package.file_processing_status = type
-    @package.file_processing_description = description
+    if description.length > 10.kilobytes
+      @package.file_processing_description = description.truncate(10.kilobytes)
+    else
+      @package.file_processing_description = description
+    end
     @package.tag_ids = tags
     !@package.errors.any?
   end
