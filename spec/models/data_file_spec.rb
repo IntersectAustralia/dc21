@@ -58,22 +58,14 @@ describe DataFile do
   end
 
   describe "Get experiment name" do
-    it "returns 'Other' if set to -1" do
-      Factory(:data_file, :experiment_id => -1).experiment_name.should eq("Other")
-    end
-
-    it "returns the experiment name if set to anything other than -1" do
+    it "returns the experiment name" do
       exp = Factory(:experiment, :name => "Fred")
       Factory(:data_file, :experiment_id => exp.id).experiment_name.should eq("Fred")
     end
   end
 
   describe "Get facility name" do
-    it "returns blank if experiment is 'Other'" do
-      Factory(:data_file, :experiment_id => -1).facility_name.should eq("")
-    end
-
-    it "returns the facility name if experiment is set to anything other than 'Other'" do
+    it "returns the facility name" do
       facility = Factory(:facility, :name => "Bob")
       exp = Factory(:experiment, :name => "Fred", :facility => facility)
       Factory(:data_file, :experiment_id => exp.id).facility_name.should eq("Bob")

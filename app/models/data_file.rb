@@ -32,12 +32,17 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :experiment_id
   validates_length_of :file_processing_description, :maximum => 10.kilobytes
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
-  validate :end_time_not_before_start_time
+  validates_datetime :start_time, :allow_blank => true, :invalid_datetime_message => "must be a valid time"
+  validates_datetime :end_time, :on_or_after => :start_time, :allow_blank => true,
+                     :on_or_after_message => "cannot be before start time",
+                     :invalid_datetime_message => "must be a valid time"
 
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
 
   scope :most_recent_first, order("created_at DESC")
+  scope :earliest_start_time, order("start_time ASC")
+  scope :latest_end_time, order("end_time DESC")
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
@@ -178,24 +183,22 @@ class DataFile < ActiveRecord::Base
   end
 
   def experiment
-    # we don't use an association because of the special behaviour with using -1 for "Other"
-    return nil if experiment_id == -1 || experiment_id.nil?
+    return nil if experiment_id.nil?
     Experiment.find(experiment_id)
   end
 
   def experiment_name
-    return "Other" if experiment_id == -1
     return "" if experiment_id.nil?
     Experiment.find(experiment_id).name
   end
 
   def facility
-    return nil if experiment_id.nil? || experiment_id == -1
+    return nil if experiment_id.nil?
     Experiment.find(experiment_id).facility
   end
 
   def facility_name
-    return "" if experiment_id.nil? || experiment_id == -1
+    return "" if experiment_id.nil?
     Experiment.find(experiment_id).facility.name
   end
 
@@ -277,11 +280,6 @@ class DataFile < ActiveRecord::Base
   end
 
   private
-
-  def end_time_not_before_start_time
-    return true unless start_time.present? && end_time.present?
-    errors.add(:end_time, "cannot be before start time") unless self.start_time <= self.end_time
-  end
 
   def fill_end_time_if_blank
     if start_time.present? && end_time.blank?
