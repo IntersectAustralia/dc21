@@ -55,11 +55,7 @@ class PackagesController < DataFilesController
     @package.errors.add(:base, "Your cart is empty. Please add some files for packaging") if ids.nil? or ids.empty?
     @package.experiment_id = experiment_id
     @package.file_processing_status = type
-    if description.length > 10.kilobytes
-      @package.file_processing_description = description.truncate(10.kilobytes)
-    else
-      @package.file_processing_description = description
-    end
+    @package.file_processing_description = description
     @package.tag_ids = tags
     !@package.errors.any?
   end

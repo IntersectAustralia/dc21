@@ -303,12 +303,7 @@ class DataFilesController < ApplicationController
     @data_file.errors.add(:base, "Please select at least one file to upload") if files.blank?
     @data_file.experiment_id = experiment_id
     @data_file.file_processing_status = type
-    if description.length > 10.kilobytes
-      @data_file.file_processing_description = description.truncate(10.kilobytes)
-    else
-      @data_file.file_processing_description = description
-    end
-
+    @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     !@data_file.errors.any?
   end
