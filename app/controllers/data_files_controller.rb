@@ -301,7 +301,6 @@ class DataFilesController < ApplicationController
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
     @data_file.errors.add(:base, "Please select the file type") if type.blank?
     @data_file.errors.add(:base, "Please select at least one file to upload") if files.blank?
-    @data_file.errors.add(:base, "Description must not exceed 255 characters in length") if description.length > 255
     @data_file.experiment_id = experiment_id
     @data_file.file_processing_status = type
     @data_file.file_processing_description = description
