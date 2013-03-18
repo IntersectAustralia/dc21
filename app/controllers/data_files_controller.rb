@@ -406,7 +406,8 @@ class DataFilesController < ApplicationController
 
   def archive_files(data_file)
     archive_dir = APP_CONFIG['archived_data_directory']
-    package_dir = File.join(archive_dir, "#{data_file.id}")
+    Dir.mkdir(archive_dir) unless Dir.exists?(archive_dir)
+    package_dir = File.join(archive_dir, data_file.id.to_s)
     Dir.mkdir(package_dir) unless Dir.exists?(package_dir)
     archive_rif_cs(data_file, package_dir) && archive_data(data_file, package_dir) ? true : false
   end
