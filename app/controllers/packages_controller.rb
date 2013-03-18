@@ -29,13 +29,21 @@ class PackagesController < DataFilesController
     description = params[:description]
     type= 'PACKAGE'
     tags = params[:tags]
-    unless validate_inputs(ids, filename, experiment_id, type, description, tags)
+
+    start_time = end_time = nil
+    unless params[:date].nil?
+      attrs = params[:date]
+      start_time = reformat_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
+      end_time = reformat_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
+    end
+
+    unless validate_inputs(ids, filename, experiment_id, type, description, tags, start_time, end_time)
       render 'packages/new'
       return
     end
     CustomDownloadBuilder.bagit_for_files_with_ids(ids)  do |zip_file|
       attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-      @package = attachment_builder.build_named_file(filename, zip_file, experiment_id, type, description, tags)
+      @package = attachment_builder.build_named_file(filename, zip_file, experiment_id, type, description, tags, start_time, end_time)
       unless @package.nil?
         files = []
         files << @package
@@ -53,16 +61,18 @@ class PackagesController < DataFilesController
     end
   end
 
-  def validate_inputs(ids, filename, experiment_id, type, description, tags)
+  def validate_inputs(ids, filename, experiment_id, type, description, tags, start_time, end_time)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @package = DataFile.new
     @package.errors.add(:base, "Please provide a filename") if filename.nil? or filename.blank?
-    @package.errors.add(:base, "Please select an experiment") if experiment_id.nil? or experiment_id.blank?
     @package.errors.add(:base, "Your cart is empty. Please add some files for packaging") if ids.nil? or ids.empty?
+    @package.errors.add(:base, "Please select an experiment") if experiment_id.nil? or experiment_id.blank?
     @package.experiment_id = experiment_id
     @package.file_processing_status = type
     @package.file_processing_description = description
     @package.tag_ids = tags
+    @package.start_time = start_time
+    @package.end_time = end_time
     !@package.errors.any?
   end
 

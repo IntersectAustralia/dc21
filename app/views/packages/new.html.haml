@@ -38,6 +38,40 @@
             %label.checkbox
               = check_box_tag "tags[]", tag.id, @package.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name
+
+      .control-group
+        .date-format yyyy-mm-dd
+      .control-group
+        = label_tag "package_start_time", "Start Time", class: "control-label", :for => "package_start_time"
+        .controls
+          - if @package.start_time_is_not_nil?
+            = text_field_tag "date[start_time]", @package.start_time.utc.to_date,  :id => "package_start_time", :datepicker => true
+            .show{:id => "package_start_container"}
+              = select_hour @package.start_time.utc, {:field_name => "start_hr"}, {:id => "start_hr"}
+              = select_minute @package.start_time.utc, {:field_name => "start_min"}, {:id => "start_min"}
+              = select_second @package.start_time.utc, {:field_name => "start_sec"}, {:id => "start_sec"}
+          - else
+            = text_field_tag "date[start_time]", @package.start_time, :id => "package_start_time", :datepicker => true
+            .show{:id => "package_start_container"}
+              = select_hour @package.start_time, {:field_name => "start_hr"}
+              = select_minute @package.start_time, {:field_name => "start_min"}
+              = select_second @package.start_time, {:field_name => "start_sec"}
+      .control-group
+        = label_tag "package_end_time", "End Time", class: "control-label", :for => "package_end_time"
+        .controls
+          -if @package.end_time_is_not_nil?
+            = text_field_tag "date[end_time]", @package.end_time.utc.to_date, :id => "package_end_time", :datepicker => true
+            .show{:id => "package_end_container"}
+              = select_hour @package.end_time.utc, {:field_name => "end_hr"}
+              = select_minute @package.end_time.utc, {:field_name => "end_min"}
+              = select_second @package.end_time.utc, {:field_name => "end_sec"}
+          - else
+            = text_field_tag "date[end_time]", @package.start_time, :id => "package_end_time", :datepicker => true
+            .show{:id => "package_end_container"}
+              = select_hour @package.end_time, {:field_name => "end_hr"}
+              = select_minute @package.end_time, {:field_name => "end_min"}
+              = select_second @package.end_time, {:field_name => "end_sec"}
+
       .form-actions
         .actions
           - if @back_request

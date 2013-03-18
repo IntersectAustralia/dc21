@@ -63,8 +63,7 @@
         .controls
           .record
             = (@data_file.created_by ? @data_file.created_by.email : "")
-
-      - unless @data_file.known_format?
+      - if @data_file.is_package? || !@data_file.known_format?
         .control-group
           .date-format yyyy-mm-dd
         .control-group

@@ -51,14 +51,16 @@ class RifCsGenerator
             xml.description right, type: 'rights'
           end
 
-          if wrapper_object.start_date || wrapper_object.end_date
+          if wrapper_object.start_time || wrapper_object.end_time
             xml.coverage do
               xml.temporal do
-                if wrapper_object.start_date
-                  xml.date wrapper_object.start_date.strftime('%Y-%m-%d'), type: 'dateFrom', date_format: 'WCCDTF'
+                if wrapper_object.start_time
+                  start_datetime = DateTime.parse(wrapper_object.start_time.to_s).strftime("%FT%T%:z")
+                  xml.date start_datetime, type: 'dateFrom', date_format: 'W3CDTF'
                 end
-                if wrapper_object.end_date
-                  xml.date wrapper_object.end_date.strftime('%Y-%m-%d'), type: 'dateTo', date_format: 'WCCDTF'
+                if wrapper_object.end_time
+                  end_datetime = DateTime.parse(wrapper_object.end_time.to_s).strftime("%FT%T%:z")
+                  xml.date end_datetime, type: 'dateTo', date_format: 'W3CDTF'
                 end
               end
             end
