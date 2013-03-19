@@ -28,7 +28,7 @@ class Package < DataFile
   private
 
   def self.create_temp_path(filename)
-    File.join(APP_CONFIG['files_root'], filename)
+    File.join(APP_CONFIG['files_root'], "#{filename}#{FILE_EXTENSION}" )
   end
 
   def self.reformat_time(params)
