@@ -7,6 +7,14 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
+  #TODO: Consider refactoring initialize with init
+  def init(current_user)
+    @files_root = APP_CONFIG['files_root']
+    @current_user = current_user
+    @file_type_determiner = FileTypeDeterminer.new
+    @metadata_extractor = MetadataExtractor.new
+  end
+
   def build(file, experiment_id, type, description, tags = [])
     build_named_file(file.original_filename, file, experiment_id, type, description, tags, nil, nil)
   end
@@ -19,6 +27,14 @@ class AttachmentBuilder
       data_file.add_message(:success, "File uploaded successfully.")
     end
     data_file
+  end
+
+  def build_package(package, zip_file)
+    store_package(package.filename, zip_file)
+    package.file_size = zip_file.size
+    package.save!
+    to_a = []
+    to_a << package
   end
 
   private
@@ -51,6 +67,11 @@ class AttachmentBuilder
     end
 
     data_file
+  end
+
+  def store_package(pkg_filename, data_file)
+    store_path = File.join(@files_root, pkg_filename)
+    FileUtils.cp(data_file.path, store_path)
   end
 
   def store_file(original_filename, file)

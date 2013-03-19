@@ -12,23 +12,24 @@
           = cancel_button "Back", data_files_path
   -else
     %h2 New Package
-    = form_for(@package, :url => url_for(:controller => :packages, :action => :create), :html => {:multipart => true}) do |f|
+    = form_for(@package, :url => packages_path) do |f|
       = render "shared/error_messages", :target => @package
+
       .control-group
-        = label_tag :filename, "Filename", class: "control-label"
+        = f.label :filename, "Filename", class: "control-label"
         .controls
           = required
-          = text_field_tag :filename
-          %t .zip
+          = f.text_field :filename
+          %span .zip
       .control-group
-        = label_tag :experiment_id, "Experiment", class: "control-label"
+        = f.label :experiment_id, "Experiment", class: "control-label"
         .controls
           = required
-          = select_tag :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @package.experiment_id), :include_blank => true
+          = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @package.experiment_id), :include_blank => true
       .control-group
-        = label_tag :description, "Description", class: "control-label"
+        = f.label :file_processing_description, "Description", class: "control-label"
         .controls
-          = text_area_tag :description, @package.file_processing_description
+          = f.text_area :file_processing_description
       .control-group#tags
         = label_tag :tags, "Tags", class: "control-label"
         .controls
@@ -38,7 +39,6 @@
             %label.checkbox
               = check_box_tag "tags[]", tag.id, @package.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name
-
       .control-group
         .date-format yyyy-mm-dd
       .control-group

@@ -12,8 +12,6 @@ class PackagesController < DataFilesController
       @package.end_time = late_end_time
       set_tab :dashboard, :contentnavigation
     end
-
-
   end
 
   def edit
@@ -21,59 +19,19 @@ class PackagesController < DataFilesController
   end
 
   def create
-    ids = []
-    current_user.data_files.each { |file| ids << file.id } if current_user.data_files.is_a?(Array)
-    name = params[:filename].strip
-    filename = "#{name}.zip" unless name.match(/\.zip$/) or name.empty?
-    experiment_id = params[:experiment_id]
-    description = params[:description]
-    type= 'PACKAGE'
-    tags = params[:tags]
-
-    start_time = end_time = nil
-    unless params[:date].nil?
-      attrs = params[:date]
-      start_time = reformat_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
-      end_time = reformat_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
-    end
-
-    unless validate_inputs(ids, filename, experiment_id, type, description, tags, start_time, end_time)
-      render 'packages/new'
-      return
-    end
-    CustomDownloadBuilder.bagit_for_files_with_ids(ids)  do |zip_file|
-      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-      @package = attachment_builder.build_named_file(filename, zip_file, experiment_id, type, description, tags, start_time, end_time)
-      unless @package.nil?
-        files = []
-        files << @package
-        build_rif_cs(files)
-
+    @package = Package.create_package(params, current_user)
+    if @package.save
+      data_file_ids = CartItem.data_ids_which_belong_to_user(current_user)
+      CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids) do |zip_file|
+        attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+        package = attachment_builder.build_package(@package, zip_file)
+        build_rif_cs(package) unless package.nil?
       end
-      respond_to do |format|
-        if @package
-          @data_file = @package
-          format.html { redirect_to data_file_path(@data_file), notice: 'Package was successfully created.' }
-        else
-          format.html { redirect_to  new_package_path, notice: 'Package could not be created.'}
-        end
-      end
+      redirect_to data_file_path(@package), notice: 'Package was successfully created.'
+    else
+      @package.reformat_on_error(params[:package][:filename])
+      render :action => 'new'
     end
-  end
-
-  def validate_inputs(ids, filename, experiment_id, type, description, tags, start_time, end_time)
-    # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
-    @package = DataFile.new
-    @package.errors.add(:base, "Please provide a filename") if filename.nil? or filename.blank?
-    @package.errors.add(:base, "Your cart is empty. Please add some files for packaging") if ids.nil? or ids.empty?
-    @package.errors.add(:base, "Please select an experiment") if experiment_id.nil? or experiment_id.blank?
-    @package.experiment_id = experiment_id
-    @package.file_processing_status = type
-    @package.file_processing_description = description
-    @package.tag_ids = tags
-    @package.start_time = start_time
-    @package.end_time = end_time
-    !@package.errors.any?
   end
 
   def publish
@@ -94,15 +52,6 @@ class PackagesController < DataFilesController
     end
 
     redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing." : "Unable to publish package."
-  end
-
-  def reformat_date_and_time(date, hr, min, sec)
-    return if date.blank?
-    adjusted_date = date #so we can use << without modifying the original
-    if hr.present? && min.present? && sec.present?
-      adjusted_date << " " << hr << ":" << min << ":" << sec
-    end
-    return adjusted_date << "UTC"
   end
 
   def build_rif_cs(files)

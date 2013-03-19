@@ -53,8 +53,8 @@ Feature: Create a package
     Then I should see "Filename"
     And I should see "Experiment"
     And I press "Save"
-    Then I should see "Please provide a filename"
-    And I should see "Please select an experiment"
+    Then I should see "Filename can't be blank"
+    And I should see "Experiment can't be blank"
 
   Scenario: New package - rendering correct data_file view screen
     Given I am on the list data files page
@@ -101,7 +101,7 @@ Feature: Create a package
     And I follow "Package"
     Then I should be on the create package page
     And I press "Save"
-    Then I should see "Please provide a filename"
+    Then I should see "Filename can't be blank"
     And I follow "Back"
     Then I should be on the list data files page
 
