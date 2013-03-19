@@ -109,52 +109,52 @@ $(function () {
     }
 
     $('#date').click(function (event) {
-        $('.searchcategory .date').slideToggle();
+        $('.searchcategory .date').toggle();
         $(this).toggleClass('current');
     });
 
     $('#time').click(function (event) {
-        $('.searchcategory .time').slideToggle();
+        $('.searchcategory .time').toggle();
         $(this).toggleClass('current');
     });
 
     $('#facility').click(function (event) {
-        $('.searchcategory .facility').slideToggle();
+        $('.searchcategory .facility').toggle();
         $(this).toggleClass('current');
     });
 
     $('#variable').click(function (event) {
-        $('.searchcategory .variable').slideToggle();
+        $('.searchcategory .variable').toggle();
         $(this).toggleClass('current');
     });
 
     $('#filename_category').click(function (event) {
-        $('.searchcategory .filename').slideToggle();
+        $('.searchcategory .filename').toggle();
         $(this).toggleClass('current');
     });
 
     $('#description_category').click(function (event) {
-        $('.searchcategory .description').slideToggle();
+        $('.searchcategory .description').toggle();
         $(this).toggleClass('current');
     });
 
     $('#type_category').click(function (event) {
-        $('.searchcategory .type').slideToggle();
+        $('.searchcategory .type').toggle();
         $(this).toggleClass('current');
     });
 
     $('#tags_category').click(function (event) {
-        $('.searchcategory .tags').slideToggle();
+        $('.searchcategory .tags').toggle();
         $(this).toggleClass('current');
     });
 
     $('#uploader').click(function (event) {
-        $('.searchcategory .uploader').slideToggle();
+        $('.searchcategory .uploader').toggle();
         $(this).toggleClass('current');
     });
 
     $('#upload_date').click(function (event) {
-        $('.searchcategory .upload_date').slideToggle();
+        $('.searchcategory .upload_date').toggle();
         $(this).toggleClass('current');
     });
 

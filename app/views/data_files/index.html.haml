@@ -5,132 +5,132 @@
 
 .datacontroll
   .leftsearch
-    %span.results
-      - pg_num = params[:page].nil? ? 0 : params[:page].to_i - 1
-      - if @data_files.empty?
-        No matching files
-      - elsif @data_files.size == 1
-        = "Showing 1 file"
-      - elsif @data_files.size <= @data_files.per_page
-        = "Showing all #{@data_files.size} files"
-      - else
-        - if @data_files_paginated.length == 1
-          = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
+    .btn-group.dropdown
+      -# %span.results
+      %a#drop4.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :role => "button"}
+        - pg_num = params[:page].nil? ? 0 : params[:page].to_i - 1
+        - if @data_files.empty?
+          No matching files
+        - elsif @data_files.size == 1
+          = "Showing 1 file"
+        - elsif @data_files.size <= @data_files.per_page
+          = "Showing all #{@data_files.size} files"
         - else
-          = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
+          - if @data_files_paginated.length == 1
+            = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
+          - else
+            = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
+        %span.caret
+      %ul#faceted_search.dropdown-menu.facetedsearch.search{"aria-labelledby" => "drop4", :role => "menu"}
+        .searchbox
+          = form_tag(search_data_files_path, :id => "search_form") do
+            =hidden_field_tag "direction", sort_direction
+            =hidden_field_tag "sort", sort_column
+            %li.searchcategory
+              %h4#date.expand Date:
+              .date
+                .date-format yyyy-mm-dd
+                = label_tag :from_date, "From Date:"
+                = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true, :size => 10, :maxlength => 10
+                = label_tag :to_date, "To Date:"
+                = text_field_tag "search[to_date]", @to_date, :id => :to_date, :datepicker => true, :size => 10, :maxlength => 10
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#filename_category.expand Filename:
+              .filename
+                = label_tag :filename, "Filename:"
+                = text_field_tag "search[filename]", @filename, :id => :filename
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#description_category.expand Description:
+              .description
+                = label_tag :description, "Description:"
+                = text_field_tag "search[description]", @description, :id => :description
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#type_category.expand Type:
+              .type
+                - DataFile::ALL_STATI.each_with_index do |status, index|
+                  - package = status.eql?('PACKAGE')
+                  .type_group
+                    - if package
+                      = link_to "+", "#", :id => "expand_package", :class => "expand_type"
+                    = label_tag "search_status_#{index}", status,  :class => package.eql?(true) ? :type_parent :  :type
+                    = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}",  :class => package.eql?(true) ? :type_parent : :type
+                    .type_children
+                      - if status.eql?('PACKAGE')
+                        = label_tag "search_status_published", 'Published:', :class => :publish_title
+                        = label_tag "search_status_published", 'Yes', :class => :publish_option
+                        - published = true unless @published.nil? or @published.empty?
+                        = check_box_tag "search[published][]", true, published, :id => "search_status_#{index}", :class => :publish
+                        = label_tag "search_status_unpublished", 'No', :class => :publish_option
+                        - unpublished = true unless @unpublished.nil? or @unpublished.empty?
+                        = check_box_tag "search[unpublished][]", true, unpublished, :id => "search_status_#{index}", :class => :publish
+                        .date-format yyyy-mm-dd
+                        = label_tag "search_published_date", 'Published Date:', :class => :publish
+                        = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+
+            .searchcategory
+              %h4#tags_category.expand Tags:
+              .tags
+                - tags.each_with_index do |tag, index|
+                  = label_tag "search_tag_#{index}", tag.name
+                  = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#facility.expand Facility:
+              .facility
+                - facilities.each_with_index do |facility, index|
+                  .facility_group
+                    = link_to "+", "#", :id => "expand_#{facility.name}", :class => "expand_facility"
+                    = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
+                    = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
+                    .facility_children
+                      - experiments.each_with_index do |experiment, e_index|
+                        - if experiment.facility_id == facility.id
+                          = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
+                          = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#variable.expand Columns:
+              .variable
+                -# variables contains something like [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
+                - variables.each_with_index do |variable_info, index|
+                  .variable_group
+                    = link_to "+", "#", :id => "expand_#{variable_info[0].parameterize("_")}", :class => "expand_variable"
+                    = label_tag "search_variable_#{index}", variable_info[0], :class => :variable_parent
+                    = check_box_tag "search[variable_parents][]", variable_info[0], @selected_parent_variables.include?(variable_info[0]), :id => "search_variable_#{index}", :class => :variable_parent
+                    .variable_children
+                      - variable_info[1].each_with_index do |child_variable, index2|
+                        = label_tag "search_variable_#{index}_#{index2}", child_variable, :class => :variable_child
+                        = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#uploader.expand Added By:
+              .uploader
+                = label_tag "search[uploader_id]", "Added By:"
+                = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#upload_date.expand Date Added:
+              .upload_date
+                .date-format yyyy-mm-dd
+                = label_tag :from_date, "From Date:"
+                = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true, :size => 10, :maxlength => 10
+                = label_tag :to_date, "To Date:"
+                = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true, :size => 10, :maxlength => 10
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+  - if @data_files.empty? || !@search.showing_all?
+    .clearresults
+      = link_to "Clear Search", clear_data_files_path, class: "btn pull-left clearsearch"
+
   .data-results
     - unless @data_files.empty? || @search.showing_all?
       -##.whitebutton
         %span= link_to 'Publish', '#', id: :publish_button
     = will_paginate(@data_files_paginated)
 
-
-    -##downloadtoggle.download.whitebutton
-      -#%span= link_to 'Download Files'
-
-.facetedsearch.search
-  - if @data_files.empty? || !@search.showing_all?
-    .clearresults
-      = link_to "Clear Search", clear_data_files_path, class: "btn pull-left clearsearch"
-  .searchbox
-    = form_tag(search_data_files_path, :id => "search_form") do
-      =hidden_field_tag "direction", sort_direction
-      =hidden_field_tag "sort", sort_column
-      .searchcategory
-        %h4#date.expand Date:
-        .date
-          .date-format yyyy-mm-dd
-          = label_tag :from_date, "From Date:"
-          = text_field_tag "search[from_date]", @from_date, :id => :from_date, :datepicker => true, :size => 10, :maxlength => 10
-          = label_tag :to_date, "To Date:"
-          = text_field_tag "search[to_date]", @to_date, :id => :to_date, :datepicker => true, :size => 10, :maxlength => 10
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#filename_category.expand Filename:
-        .filename
-          = label_tag :filename, "Filename:"
-          = text_field_tag "search[filename]", @filename, :id => :filename
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#description_category.expand Description:
-        .description
-          = label_tag :description, "Description:"
-          = text_field_tag "search[description]", @description, :id => :description
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#type_category.expand Type:
-        .type
-          - DataFile::ALL_STATI.each_with_index do |status, index|
-            - package = status.eql?('PACKAGE')
-            .type_group
-              - if package
-                = link_to "+", "#", :id => "expand_package", :class => "expand_type"
-              = label_tag "search_status_#{index}", status,  :class => package.eql?(true) ? :type_parent :  :type
-              = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}",  :class => package.eql?(true) ? :type_parent : :type
-              .type_children
-                - if status.eql?('PACKAGE')
-                  = label_tag "search_status_published", 'Published:', :class => :publish_title
-                  = label_tag "search_status_published", 'Yes', :class => :publish_option
-                  - published = true unless @published.nil? or @published.empty?
-                  = check_box_tag "search[published][]", true, published, :id => "search_status_#{index}", :class => :publish
-                  = label_tag "search_status_unpublished", 'No', :class => :publish_option
-                  - unpublished = true unless @unpublished.nil? or @unpublished.empty?
-                  = check_box_tag "search[unpublished][]", true, unpublished, :id => "search_status_#{index}", :class => :publish
-                  .date-format yyyy-mm-dd
-                  = label_tag "search_published_date", 'Published Date:', :class => :publish
-                  = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-
-      .searchcategory
-        %h4#tags_category.expand Tags:
-        .tags
-          - tags.each_with_index do |tag, index|
-            = label_tag "search_tag_#{index}", tag.name
-            = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#facility.expand Facility:
-        .facility
-          - facilities.each_with_index do |facility, index|
-            .facility_group
-              = link_to "+", "#", :id => "expand_#{facility.name}", :class => "expand_facility"
-              = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
-              = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
-              .facility_children
-                - experiments.each_with_index do |experiment, e_index|
-                  - if experiment.facility_id == facility.id
-                    = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
-                    = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#variable.expand Columns:
-        .variable
-          -# variables contains something like [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
-          - variables.each_with_index do |variable_info, index|
-            .variable_group
-              = link_to "+", "#", :id => "expand_#{variable_info[0].parameterize("_")}", :class => "expand_variable"
-              = label_tag "search_variable_#{index}", variable_info[0], :class => :variable_parent
-              = check_box_tag "search[variable_parents][]", variable_info[0], @selected_parent_variables.include?(variable_info[0]), :id => "search_variable_#{index}", :class => :variable_parent
-              .variable_children
-                - variable_info[1].each_with_index do |child_variable, index2|
-                  = label_tag "search_variable_#{index}_#{index2}", child_variable, :class => :variable_child
-                  = check_box_tag "search[variables][]", child_variable, @selected_variables.include?(child_variable), :id => "search_variable_#{index}_#{index2}", :class => :variable_child
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#uploader.expand Added By:
-        .uploader
-          = label_tag "search[uploader_id]", "Added By:"
-          = select_tag "search[uploader_id]", options_from_collection_for_select(User.alphabetical_by_first_name.approved, :id, :full_name, @uploader_id), :prompt => "Please select"
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-      .searchcategory
-        %h4#upload_date.expand Date Added:
-        .upload_date
-          .date-format yyyy-mm-dd
-          = label_tag :from_date, "From Date:"
-          = text_field_tag "search[upload_from_date]", @upload_from_date, :id => :upload_from_date, :datepicker => true, :size => 10, :maxlength => 10
-          = label_tag :to_date, "To Date:"
-          = text_field_tag "search[upload_to_date]", @upload_to_date, :id => :upload_to_date, :datepicker => true, :size => 10, :maxlength => 10
-          .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
 
 - unless @data_files.empty?
 

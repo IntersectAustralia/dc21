@@ -22,15 +22,19 @@ html[xmlns] .clearfix
 
 
 .datacontroll .leftsearch
-  width: 260px
+  width: 270px
   +inlineblock
+  float:left
 
 .clearresults
-  display: block
+  +inlineblock
   text-align: center
   +clearfix
-  padding: 10px 40px 9px 40px
-  border-top: 1px solid #DDD
+  margin: 0 20px
+  // border-top: 1px solid #DDD
+
+.clearresults a
+  height: 20px
 
 a.clearsearch
   font-size: 13px
@@ -38,6 +42,7 @@ a.clearsearch
 
 .leftsearch
   text-align: center
+  // float: left
 
 span.results
   font-family: Helvetica,Arial,sans-serif
@@ -56,7 +61,11 @@ span.results
   padding: 3px 20px
   white-space: nowrap
 
+#drop4
+  width: 244px
 
+.open #drop4
+  border: 1px solid #bbbbbb
 
 .btn-group > .btn:first-child
   margin-left: 0
@@ -579,23 +588,25 @@ th.actions, td.actions
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 .facetedsearch.search
-  +inlineblock
+  // +inlineblock
 .facetedsearch
-  +m-p-w-h-p-t-b-l-r-f(0 20px 20px 0, "", "", 100%)
-  min-width: 20px
-  display: none
-  +border(1px, solid, #DCDCDC, 0px 1px 1px 1px, 2px)
-  background: #FAFAFA
+  +m-p-w-h-p-t-b-l-r-f(-1px 0 0 0, 0 0 0px 0, 268px)
+  // min-width: 20px
+  // display: none
+  // +border(1px, solid, #DCDCDC, 0px 1px 1px 1px, 2px)
+  // background: #FAFAFA
+  text-align: left
   .searchbox
-    +m-p-w-h-p-t-b-l-r-f("", "", 260px)
+    +m-p-w-h-p-t-b-l-r-f("", "", 268px)
 
     .searchcategory
-      +m-p-w-h-p-t-b-l-r-f(0, 0, auto)
+      // +m-p-w-h-p-t-b-l-r-f(0, 0, auto)
 
       h4
         +m-p-w-h-p-t-b-l-r-f("", 10px 40px 9px 40px)
         +border(1px, solid, #E1E1E1, 1px 0 0px 0)
         color: $dark2
+        font-size: 14px
         +gradient-light-1
         cursor: pointer
         background: url("../images/icon_arrow_right_light.png") 15px center no-repeat
@@ -835,7 +846,7 @@ h3.upload
     +font("", normal, 13px)
     float: left
   .data-results
-    +m-p-w-h-p-t-b-l-r-f(0 0 0 20px, "", 770px)
+    +m-p-w-h-p-t-b-l-r-f(0 0 0 0, "", 770px)
     +inlineblock
     +clearfix
     h3.results
@@ -861,18 +872,18 @@ h3.upload
 
 .exploredata.search, #exploredata.search, #exploredata.search tbody
   +inlineblock
-  +width(770px, 770px, 770px)
+  +width(1060px, 1060px, 1060px)
   overflow: none
 #exploredata.search, #exploredata.search tbody
   display: table
   tr
-    +width(770px, 770px, 770px)
+    +width(1060px, 1060px, 1060px)
   td.view.select, th.view.select
     +width(40px, 40px, 40px)
   td.view, th.view
     +width(50px, 50px, 50px)
   td.filename, th.filename
-    +width(150px, 150px, 150px)
+    +width(420px, 420px, 420px)
     a
       +width(150px, 150px, 150px)
       white-space: nowrap

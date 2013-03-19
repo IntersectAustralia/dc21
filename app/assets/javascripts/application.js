@@ -42,6 +42,18 @@ $(function () {
     });
   }
 
+  // FACETED SEARCH
+
+  $("#drop4, .searchcategory").live("click", function () {
+    var facetedsearch = $("#faceted_search").height();
+    var contentcontainer = $("#content_container").height();
+    if (facetedsearch > contentcontainer) {
+      $("#content_container").height(facetedsearch +115);
+    } else {
+      $("#content_container").css("height", "auto");
+    }
+  });
+
 
   // CART MENU
   $('#drop3').click(function (event) {
