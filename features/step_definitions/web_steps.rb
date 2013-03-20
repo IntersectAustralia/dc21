@@ -280,3 +280,8 @@ end
 When /^I dismiss the popup$/ do
  page.driver.browser.switch_to.alert.dismiss
 end
+
+When /^I follow Showing$/ do
+  link = page.find("#drop4")
+  link.click
+end
