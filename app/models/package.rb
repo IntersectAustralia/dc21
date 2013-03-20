@@ -18,6 +18,7 @@ class Package < DataFile
     datafile.experiment_id = pkg[:experiment_id]
     datafile.published = false
     datafile.tag_ids = params[:tags]
+    datafile.external_id = pkg[:external_id]
     datafile
   end
 

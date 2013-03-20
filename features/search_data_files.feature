@@ -18,15 +18,15 @@ Feature: Search data files by date range
       | Video |
       | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | experiment    |
-      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | My Experiment |
-      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | My Experiment |
-      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | My Experiment |
-      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | My Experiment |
-      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | Other         |
-      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              | Experiment 2  |
-      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        | My Experiment |
-      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              | Experiment 2  |
+      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | experiment    | external_id | id |
+      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | My Experiment | test ID     |    |
+      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | My Experiment |             | 1  |
+      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | My Experiment |             |    |
+      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | My Experiment |             |    |
+      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | Other         |             |    |
+      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              | Experiment 2  |             |    |
+      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        | My Experiment |             |    |
+      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              | Experiment 2  |             |    |
     And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
     And file "mydata7.dat" has metadata item "station_name" with value "TC"
     And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
@@ -44,11 +44,11 @@ Feature: Search data files by date range
       | HFE Weather Station | HFE_WS |
       | Tree Chambers       | TC     |
     And I have column mappings
-      | code   | name        |
-      | Rnfll  | Rainfall    |
-      | Rnfl   | Rainfall    |
-      | temp   | Temperature |
-      | temp2  | Temperature |
+      | code  | name        |
+      | Rnfll | Rainfall    |
+      | Rnfl  | Rainfall    |
+      | temp  | Temperature |
+      | temp2 | Temperature |
       | temp3 | Temperature |
 
 
@@ -141,7 +141,7 @@ Feature: Search data files by date range
     And the "HFE Weather Station" checkbox should be checked
     And the "Tree Chambers" checkbox should not be checked
 
-    @wip
+  @wip
   Scenario: Search for files from specific facilities and by date range
     When I am on the list data files page
     And I check "HFE Weather Station"
@@ -164,15 +164,15 @@ Feature: Search data files by date range
       | Fourth Four   |
       | Fred Bloggs   |
       | Second Two    |
-      | Third Three   |        
+      | Third Three   |
     And nothing should be selected in the "Added By:" select
     And I select "First One" from "Added By:"
     And I press "Search"
     Then "First One" should be selected in the "Added By:" select
     And I should see "exploredata" table with
-      | Filename      |
-      | mydata7.dat   |
-      | mydata8.dat   |
+      | Filename    |
+      | mydata7.dat |
+      | mydata8.dat |
 
   @javascript
   Scenario: Search for files with certain columns (checking mapped column name)
@@ -181,9 +181,9 @@ Feature: Search data files by date range
     And I click on "Columns:"
     And I expand all the mapped columns
     Then I should see column checkboxes
-      | Rainfall    | Rnfl, Rnfll         |
+      | Rainfall    | Rnfl, Rnfll        |
       | Temperature | temp, temp2, temp3 |
-      | Unmapped    | Humi, humidity      |
+      | Unmapped    | Humi, humidity     |
     When I check "Humi"
     And I check "Rainfall"
     And I press "Search"
@@ -244,6 +244,24 @@ Feature: Search data files by date range
       | datafile2.dat |
       | mydata8.dat   |
     And the "Description" field should contain "word"
+
+  Scenario: Search for files by File ID
+    Given I am on the list data files page
+    When I fill in "File ID" with "1"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename    |
+      | mydata7.dat |
+    And the "File ID" field should contain "1"
+
+  Scenario: Search for files by ID
+    Given I am on the list data files page
+    When I fill in "id" with "test ID"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename    |
+      | mydata8.dat |
+    And the "id" field should contain "test ID"
 
   Scenario: Search for files by tags
     Given I am on the list data files page
@@ -349,9 +367,9 @@ Feature: Search data files by date range
     And I click on "Columns:"
     And I expand all the mapped columns
     Then I should see column checkboxes
-      | Rainfall    | Rnfl, Rnfll         |
+      | Rainfall    | Rnfl, Rnfll        |
       | Temperature | temp, temp2, temp3 |
-      | Unmapped    | Humi, humidity      |
+      | Unmapped    | Humi, humidity     |
     When I check "Rainfall"
     Then the "Rnfll" checkbox should be checked
     And the "Rnfl" checkbox should be checked
@@ -427,10 +445,10 @@ Feature: Search data files by date range
     And I follow Showing
     Then the "RAW" checkbox should be checked
     And I should see "exploredata" table with
-      | Filename      | Date added       | Type      |
-      | datafile5.dat | 2011-11-30 19:00 | RAW       |
-      | datafile2.dat | 2011-11-30 8:45  | RAW       |
-      | mydata8.dat   | 2011-11-08 10:15 | RAW       |
+      | Filename      | Date added       | Type |
+      | datafile5.dat | 2011-11-30 19:00 | RAW  |
+      | datafile2.dat | 2011-11-30 8:45  | RAW  |
+      | mydata8.dat   | 2011-11-08 10:15 | RAW  |
     And I should see "Clear Search"
     When I follow "Clear Search"
     Then I should not see "Clear Search"

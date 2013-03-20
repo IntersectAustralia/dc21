@@ -40,11 +40,17 @@ Feature: Create a package
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
+    And I fill in "ID" with "Package 1"
     And I fill in "Filename" with "my_package"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I press "Save"
     Then I should see "Package was successfully created."
+    When I am on the create package page
+    And I fill in "ID" with "Package 1"
+    And I press "Save"
+    Then I should see "ID 'Package 1' is already being used by my_package.zip"
+
 
   Scenario: New package - empty form submission
     Given I am on the list data files page

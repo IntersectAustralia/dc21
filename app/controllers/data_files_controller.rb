@@ -193,7 +193,7 @@ class DataFilesController < ApplicationController
           redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed but the files itself could not be archived. \nPlease copy this entire error for your system administrator.")
         end
       else
-        redirect_to(data_file_path(file), :alert => "Could not delete this file. You may not have permission to delete it.")
+        redirect_to(data_file_path(file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
     else
       if file.destroy
@@ -204,14 +204,13 @@ class DataFilesController < ApplicationController
           redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
         end
       else
-        redirect_to(data_file_path(file), :alert => "Could not delete this file. It may be published, or you may not have permission to delete it.")
+        redirect_to(data_file_path(file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
     end
   end
 
   def api_search
     do_api_search(params)
-    render :json => @data_files
   end
 
   private
@@ -255,6 +254,8 @@ class DataFilesController < ApplicationController
     @selected_parent_variables = @search.variable_parents
     @filename = @search.filename
     @description = @search.description
+    @file_id = @search.file_id
+    @id = @search.id
     @selected_stati = @search.stati
     @selected_tags = @search.tags
     @uploader_id = @search.uploader_id

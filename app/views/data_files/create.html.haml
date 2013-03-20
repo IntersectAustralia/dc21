@@ -27,6 +27,11 @@
           .controls
             = text_area_tag "files[#{file.id}][file_processing_description]", file.file_processing_description, :id => "file_#{file.id}_description"
 
+        .control-group
+          = label_tag "file_#{file.id}_external_id", "ID", class: "control-label"
+          .controls
+            = text_field_tag "files[#{file.id}][external_id]", file.external_id, :id => "file_#{file.id}_external_id"
+
         .control-group#tags
           = label_tag :tags, "Tags", class: "control-label"
           .controls

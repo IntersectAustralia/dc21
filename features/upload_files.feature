@@ -64,8 +64,8 @@ Feature: Upload files
     Given I am on the upload page
     Then the experiment select should contain
       | Flux Tower          | Flux Experiment 1, Flux Experiment 2, Flux Experiment 3 |
-      | ROS Weather Station | My Experiment,  Rain Experiment                         |
       | Other               | Other                                                   |
+      | ROS Weather Station | My Experiment,  Rain Experiment                         |
 
   Scenario: Tag checkboxes contain the appropriate items
     Given I am on the upload page

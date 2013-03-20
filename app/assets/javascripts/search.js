@@ -27,6 +27,22 @@ $(function () {
         $('.searchcategory .description').hide();
     }
 
+    // File ID
+    if ($.trim($('#file_id').val()).length > 0 ) {
+        $('#file_id_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .file_id').hide();
+    }
+
+    // ID
+    if ($.trim($('#id').val()).length > 0 ) {
+        $('#id_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .id').hide();
+    }
+
     // Type
     if ( $('.searchcategory .type input[type="checkbox"][checked]').length > 0 || $('#publish_date').val() ) {
         $('#type_category').toggleClass('current');
@@ -138,7 +154,17 @@ $(function () {
         $(this).toggleClass('current');
     });
 
-    $('#type_category').click(function (event) {
+    $('#file_id_category').click(function (event) {
+        $('.searchcategory .file_id').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#id_category').click(function (event) {
+        $('.searchcategory .id').toggle();
+        $(this).toggleClass('current');
+    });
+
+  $('#type_category').click(function (event) {
         $('.searchcategory .type').toggle();
         $(this).toggleClass('current');
     });

@@ -1,5 +1,7 @@
 Given /^I have data files$/ do |table|
   table.hashes.each do |attributes|
+    attributes.delete('id') if attributes['id'] == ''
+
     email = attributes.delete('uploaded_by')
     if attributes['format'] == ''
       attributes['format'] = nil
@@ -30,9 +32,7 @@ Given /^I have data files$/ do |table|
     end unless published_by_email.blank? or published_by_email.nil?
 
     tag_csv = attributes.delete('tags')
-
     df = Factory(:data_file, attributes)
-
     unless tag_csv.blank?
       tags = tag_csv.split(",").collect { |tag| tag.strip }
       tag_ids = Tag.where(:name => tags).collect(&:id)

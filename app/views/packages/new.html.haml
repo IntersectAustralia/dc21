@@ -27,6 +27,10 @@
           = required
           = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @package.experiment_id), :include_blank => true
       .control-group
+        = f.label :external_id, "ID", class: "control-label"
+        .controls
+          = f.text_field :external_id
+      .control-group
         = f.label :file_processing_description, "Description", class: "control-label"
         .controls
           = f.text_area :file_processing_description

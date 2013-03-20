@@ -35,12 +35,12 @@ module ApplicationHelper
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
     html = "<div class='control-group'>"
-    html << "<label class='control-label'>"
+    html << "<label class='control-label' title='#{h label}'>"
     html << (h label)
     html << ":"
     html << '</label>'
     html << "<div class='controls'>"
-    html << "<div class='record' id='#{div_id + '_display'}'>"
+    html << "<div class='record' id='#{div_id + '_display'}' title='#{content}'>"
     html << content
     html << '</div>'
     html << '</div>'

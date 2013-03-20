@@ -26,6 +26,14 @@ class DataFile < ActiveRecord::Base
 
   validates_presence_of :filename
   validates_uniqueness_of :filename
+
+  validates_uniqueness_of :external_id, :allow_blank => true, :allow_nil => true,
+                          :message => Proc.new { |error, attributes|
+                            "'#{attributes[:value]}' is already being used by #{DataFile.find_by_external_id(attributes[:value]).filename}."
+                          }
+
+  validates_length_of :external_id, :maximum => 1000
+
   validates_presence_of :path
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
@@ -50,8 +58,22 @@ class DataFile < ActiveRecord::Base
   scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
+  scope :with_external_id, lambda { |ext_id| where("data_files.external_id ILIKE ?", "%#{ext_id}%")}
 
   attr_accessor :messages, :url
+
+  before_destroy :check_external_id_blank
+
+  def check_external_id_blank
+    unless external_id.blank?
+      self.errors.add(:base, "The data file cannot be modified while ID is present.")
+    end
+    external_id.blank?
+  end
+
+  def uploader_email
+    created_by.present? ? created_by.email : ""
+  end
 
   def as_json(options = {})
     super(options).merge(:url => url)
@@ -232,7 +254,8 @@ class DataFile < ActiveRecord::Base
 
   def categorise_overlap(new_file)
     #assumes if we've got here then new_file is from same station and table and is RAW+toa5, this just about dates/times
-    #returns NONE, SAFE, UNSAFE
+    #returns NONE, SAFE, UNSAFE, UNSAFE_ID
+
 
     # new file ends before I start
     return 'NONE' if new_file.end_time < self.start_time
@@ -240,9 +263,9 @@ class DataFile < ActiveRecord::Base
     return 'NONE' if new_file.start_time > self.end_time
 
     # new file starts before or on my start, ends after or on my end - i.e. is identical or a superset and could be safe to replace me
-    if new_file.start_time <= self.start_time && new_file.end_time >= self.end_time
+    if new_file.start_time <= self.start_time && new_file.end_time >= self.end_time and FileOverlapContentChecker.new(self, new_file).content_matches
       # check that the content actually matches
-      return 'SAFE' if FileOverlapContentChecker.new(self, new_file).content_matches
+      return self.external_id.present? ? 'UNSAFE_ID' : 'SAFE'
     end
     # otherwise, must be unsafe
     'UNSAFE'
@@ -271,6 +294,7 @@ class DataFile < ActiveRecord::Base
 
   def strip_whitespaces
     self.filename.strip! if self.filename
+    self.external_id.squish! if self.external_id
   end
 
   def truncate_file_processing_description

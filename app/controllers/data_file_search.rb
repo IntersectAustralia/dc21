@@ -9,6 +9,8 @@ class DataFileSearch
   attr_accessor :variable_parents
   attr_accessor :filename
   attr_accessor :description
+  attr_accessor :file_id
+  attr_accessor :id
   attr_accessor :stati
   attr_accessor :tags
   attr_accessor :uploader_id
@@ -19,34 +21,27 @@ class DataFileSearch
   attr_accessor :published_date_check
 
   def initialize(search_params)
-    @search_params = search_params
-    @search_params ||= {}
+    @search_params = search_params || {}
 
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
     self.published_date_check = DateRange.new(@search_params[:published_date], "", true)
     handle_date_errors
 
-    self.facilities = @search_params[:facilities]
-    self.facilities ||= []
-    self.experiments = @search_params[:experiments]
-    self.experiments ||= []
-    self.variables = @search_params[:variables]
-    self.variables ||= []
-    self.variable_parents = @search_params[:variable_parents]
-    self.variable_parents ||= []
-    self.stati = @search_params[:stati]
-    self.stati ||= []
-    self.tags = @search_params[:tags]
-    self.tags ||= []
-    self.published = @search_params[:published]
-    self.published ||= []
-    self.unpublished = @search_params[:unpublished]
-    self.unpublished ||= []
+    self.facilities = @search_params[:facilities] || []
+    self.experiments = @search_params[:experiments] || []
+    self.variables = @search_params[:variables] || []
+    self.variable_parents = @search_params[:variable_parents]|| []
+    self.stati = @search_params[:stati]|| []
+    self.tags = @search_params[:tags]|| []
+    self.published = @search_params[:published]|| []
+    self.unpublished = @search_params[:unpublished]|| []
     self.published_date = @search_params[:published_date] unless @search_params[:published_date].nil? or @search_params[:published_date].empty? or published_date_check.error
     self.uploader_id = @search_params[:uploader_id]
     self.filename = @search_params[:filename]
     self.description = @search_params[:description]
+    self.file_id = @search_params[:file_id]
+    self.id = @search_params[:id]
 
     if !valid?
       self.date_range = DateRange.new(nil, nil, true)
@@ -65,6 +60,8 @@ class DataFileSearch
         tags.empty? &&
         filename.blank? &&
         description.blank? &&
+        file_id.blank? &&
+        id.blank? &&
         uploader_id.blank? &&
         upload_date_range.from_date.nil? &&
         upload_date_range.to_date.nil?
@@ -114,6 +111,12 @@ class DataFileSearch
     end
     unless description.blank?
       search_result = search_result.with_description_containing(description)
+    end
+    unless file_id.blank?
+      search_result = search_result.where(:id => file_id)
+    end
+    unless id.blank?
+      search_result = search_result.with_external_id(id)
     end
     unless uploader_id.nil? || uploader_id.empty?
       search_result = search_result.with_uploader(uploader_id)

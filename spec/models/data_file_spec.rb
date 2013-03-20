@@ -633,6 +633,24 @@ describe DataFile do
           existing.categorise_overlap(create_toa5_with_dates(start_time, end_time + 1.second)).should eq('SAFE')
         end
       end
+      describe "Should correctly identify files that are unsafe (i.e. are supersets AND content matches BUT have external ids)" do
+        before(:each) do
+          FileOverlapContentChecker.stub(:new).and_return(double(:content_matches => true))
+          existing.external_id = "Test ID"
+        end
+        it "exact same dates" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time)).should eq('UNSAFE_ID')
+        end
+        it "starts before, ends at same time" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.day, end_time)).should eq('UNSAFE_ID')
+        end
+        it "starts before, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time - 1.second, end_time + 1.day)).should eq('UNSAFE_ID')
+        end
+        it "starts at same time, ends after" do
+          existing.categorise_overlap(create_toa5_with_dates(start_time, end_time + 1.second)).should eq('UNSAFE_ID')
+        end
+      end
       describe "Should correctly identify files that are unsafe due to content mismatch (i.e. are supersets but content mismatched)" do
         before(:each) { FileOverlapContentChecker.stub(:new).and_return(double(:content_matches => false)) }
         it "exact same dates" do

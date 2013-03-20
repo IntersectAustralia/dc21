@@ -6,6 +6,8 @@ en:
     attributes:
       data_file:
         file_processing_status: 'File type'
+        external_id: 'ID'
+        id: 'File ID'
       facility:
         a_lat: 'Latitude'
         a_long: 'Longitude'

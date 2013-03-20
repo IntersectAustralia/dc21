@@ -59,6 +59,10 @@
           .record
             = @data_file.created_at.to_s(:with_time)
       .control-group
+        %label.control-label{ :for => :data_file_external_id} ID
+        .controls
+          = f.text_field :external_id
+      .control-group
         %label.control-label Added By
         .controls
           .record

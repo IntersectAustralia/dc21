@@ -36,7 +36,8 @@ Feature: Create and manage authentication tokens
     Then I should see no api token
 
   Scenario: Tokens can't be used on non-API actions
-    Given user "diego@intersect.org.au" has an API token
+    And I follow "Generate Token"
+    Then I should see the api token displayed for user "diego@intersect.org.au"
     When I make a request for the explore data page with the API token for "diego@intersect.org.au"
     Then I should get a 401 response code
 

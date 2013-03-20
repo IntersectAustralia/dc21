@@ -33,6 +33,8 @@
     = render_field "Facility", breaking_word_wrap(@data_file.facility_name, 60)
     = render_field "Date added", @data_file.created_at.to_s(:with_time)
     = render_field "Size", number_to_human_size(@data_file.file_size)
+    = render_field "File ID", @data_file.id
+    = render_field "ID", @data_file.external_id
     = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
     -if @data_file.is_package?
       = render_field "Published", @data_file.published ? "Yes" : "No"
