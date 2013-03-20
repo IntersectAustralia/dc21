@@ -29,6 +29,7 @@ Feature: Create a package
 
   Scenario: Package is now available as a file type to search on
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Type:"
     Then I should see "PACKAGE"
 

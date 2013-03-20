@@ -177,6 +177,7 @@ Feature: Search data files by date range
   @javascript
   Scenario: Search for files with certain columns (checking mapped column name)
     When I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     And I expand all the mapped columns
     Then I should see column checkboxes
@@ -192,6 +193,7 @@ Feature: Search data files by date range
       | datafile5.dat |
       | mydata8.dat   |
       | datafile4.dat |
+    Then I follow Showing
     Then the "Rainfall" checkbox should be checked
     And the "Humi" checkbox should be checked
     When I expand "Temperature"
@@ -200,6 +202,7 @@ Feature: Search data files by date range
   @javascript
   Scenario: Search for files with certain columns (checking raw column names)
     When I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     And I expand all the mapped columns
     When I check "Humi"
@@ -210,6 +213,7 @@ Feature: Search data files by date range
       | mydata6.dat   |
       | mydata8.dat   |
       | datafile4.dat |
+    Then I follow Showing
     And the "Humi" checkbox should be checked
     And the "Rnfll" checkbox should be checked
     Then the "Rainfall" checkbox should not be checked
@@ -270,6 +274,7 @@ Feature: Search data files by date range
   @javascript
   Scenario: Search for files by a lot of different things at once
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     And I expand all the mapped columns
     And I click on "Filename:"
@@ -295,7 +300,8 @@ Feature: Search data files by date range
   @javascript
   Scenario: Should be able to sort within search results
     Given I am on the list data files page
-    When I click on "Date:"
+    When I follow Showing
+    And I click on "Date:"
     And I fill in date search details between "2010-06-03" and "2010-06-10"
     And I press "Update Search Results"
     And I follow "Filename"
@@ -339,6 +345,7 @@ Feature: Search data files by date range
   @javascript
   Scenario: Checking and unchecking parent column names check/unchecks the children
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     And I expand all the mapped columns
     Then I should see column checkboxes
@@ -357,6 +364,7 @@ Feature: Search data files by date range
   @javascript
   Scenario: Unchecking child column name unchecks the parent
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     And I expand all the mapped columns
     When I check "Rainfall"
@@ -366,6 +374,7 @@ Feature: Search data files by date range
   @javascript
   Scenario: Checking child column name checks the parent if it completes the set
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     And I expand all the mapped columns
     When I check "Rnfll"
@@ -377,6 +386,7 @@ Feature: Search data files by date range
 
   Scenario: Expanding a parent column name should show the children
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Columns:"
     Then I should not see "Rnfl"
     Then I should not see "Rnfll"
@@ -390,9 +400,11 @@ Feature: Search data files by date range
   @javascript
   Scenario: Searched panel remains open after searching
     Given I am on the list data files page
+    And I follow Showing
     And I click on "Type:" within the search box
     And I check "RAW"
     And I press "Update Search Results"
+    And I follow Showing
     Then the "RAW" checkbox should be checked
 
   @javascript
@@ -408,9 +420,11 @@ Feature: Search data files by date range
       | mydata8.dat   | 2011-11-08 10:15 | RAW       |
       | datafile4.dat | 2011-11-01 10:15 | CLEANSED  |
       | datafile3.dat | 2010-01-30 10:15 | ERROR     |
+    And I follow Showing
     And I click on "Type:" within the search box
     And I check "RAW"
     And I press "Update Search Results"
+    And I follow Showing
     Then the "RAW" checkbox should be checked
     And I should see "exploredata" table with
       | Filename      | Date added       | Type      |
@@ -430,6 +444,7 @@ Feature: Search data files by date range
       | mydata8.dat   | 2011-11-08 10:15 | RAW       |
       | datafile4.dat | 2011-11-01 10:15 | CLEANSED  |
       | datafile3.dat | 2010-01-30 10:15 | ERROR     |
+    And I follow Showing
     When I click on "Type:" within the search box
     Then the "RAW" checkbox should not be checked
     When I follow "Dashboard"
@@ -445,5 +460,6 @@ Feature: Search data files by date range
       | mydata8.dat   | 2011-11-08 10:15 | RAW       |
       | datafile4.dat | 2011-11-01 10:15 | CLEANSED  |
       | datafile3.dat | 2010-01-30 10:15 | ERROR     |
+    And I follow Showing
     When I click on "Type:" within the search box
     Then the "RAW" checkbox should not be checked

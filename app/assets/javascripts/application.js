@@ -47,7 +47,7 @@ $(function () {
   $("#drop4, .searchcategory").live("click", function () {
     var facetedsearch = $("#faceted_search").height();
     var contentcontainer = $("#content_container").height();
-    if (facetedsearch > contentcontainer) {
+    if ((facetedsearch + 80) > contentcontainer) {
       $("#content_container").height(facetedsearch +115);
     } else {
       $("#content_container").css("height", "auto");

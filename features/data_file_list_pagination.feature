@@ -157,6 +157,7 @@ Feature: Paginating the list of data files
       | sample3.txt  | 2011-12-01 11:45 | georgina@intersect.org.au | RAW      | Experiment5   |
       | sample4.txt  | 2011-12-01 10:45 | matthew@intersect.org.au  | CLEANSED | Experiment1   |
 #    And I should not see link "2" in "the pagination area"
+    And I follow Showing
     When I click on "Type:" within the search box
     And I check "RAW"
     And I press "Update Search Results"
