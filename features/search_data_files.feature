@@ -481,3 +481,34 @@ Feature: Search data files by date range
     And I follow Showing
     When I click on "Type:" within the search box
     Then the "RAW" checkbox should not be checked
+
+  Scenario: Search for files by filename with regex
+    Given I am on the list data files page
+    When I fill in "Filename" with "^data.*\.dat"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      |
+      | datafile1.dat |
+      | datafile5.dat |
+      | datafile2.dat |
+      | datafile4.dat |
+      | datafile3.dat |
+    And the "Filename" field should contain "\^data.*\\\.dat"
+
+  Scenario: Search for files by description with regex
+    Given I am on the list data files page
+    When I fill in "Description" with "word$"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      |
+      | mydata6.dat   |
+      | datafile2.dat |
+    And the "Description" field should contain "word\$"
+
+  Scenario: Search for files by ID with wrong regex anchor
+    Given I am on the list data files page
+    When I fill in "id" with "test$"
+    And I press "Search"
+    Then I should see "No matching files"
+    And the "id" field should contain "test\$"
+

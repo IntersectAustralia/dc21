@@ -54,11 +54,11 @@ class DataFile < ActiveRecord::Base
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
-  scope :with_filename_containing, lambda { |name| where("data_files.filename ILIKE ?", "%#{name}%") }
-  scope :with_description_containing, lambda { |name| where("data_files.file_processing_description ILIKE ?", "%#{name}%") }
+  scope :with_filename_containing, lambda { |name| where("data_files.filename ~* ?", name) }
+  scope :with_description_containing, lambda { |desc| where("data_files.file_processing_description ~* ?", desc) }
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
-  scope :with_external_id, lambda { |ext_id| where("data_files.external_id ILIKE ?", "%#{ext_id}%")}
+  scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id)}
 
   attr_accessor :messages, :url
 
