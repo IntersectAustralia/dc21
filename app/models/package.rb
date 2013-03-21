@@ -26,6 +26,22 @@ class Package < DataFile
     self.filename = filename
   end
 
+  def set_times(user)
+    start_df = CartItem.data_file_with_earliest_start_time(user.id).first
+    if start_df.nil?
+      self.start_time = nil
+    else
+      self.start_time = start_df.data_file.start_time
+    end
+
+    end_df = CartItem.data_file_with_latest_end_time(user.id).first
+    if end_df.nil?
+      self.end_time = nil
+    else
+      self.end_time = end_df.data_file.end_time
+    end
+  end
+
   private
 
   def self.create_temp_path(filename)

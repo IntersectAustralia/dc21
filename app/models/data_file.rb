@@ -49,8 +49,8 @@ class DataFile < ActiveRecord::Base
   before_save :set_file_size_if_nil
 
   scope :most_recent_first, order("created_at DESC")
-  scope :earliest_start_time, order("start_time ASC")
-  scope :latest_end_time, order("end_time DESC")
+  scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
+  scope :latest_end_time, order("end_time DESC").where("end_time IS NOT NULL")
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
   scope :with_station_name_in, lambda { |station_names_array| includes(:metadata_items).merge(MetadataItem.for_key_with_value_in(MetadataKeys::STATION_NAME_KEY, station_names_array)) }
   scope :with_data_covering_date, lambda { |date| where { (start_time < (date + 1.day)) & (end_time >= (date)) } }
