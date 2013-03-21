@@ -1,13 +1,13 @@
 - content_for :breadcrumb  do
-  %h1 Facilities / Experiments / #{truncate(@experiment.name, :length => 45)}
+  %h1{:title => @experiment.name} Facilities / Experiments / #{truncate(@experiment.name, :length => 45)}
 
 .container
   = render 'actions'
-  %h2 Details for the #{breaking_word_wrap(@experiment.name, 50)} experiment
+  %h2{:title => @experiment.name} Details for the #{truncate(@experiment.name, :length =>50)} experiment
   = render_field "ID", @experiment.id
   = render_field "Parent", @experiment.parent_name
-  = render_field "Name", breaking_word_wrap(@experiment.name, 60)
-  = render_field "Description", breaking_word_wrap(@experiment.description, 60)
+  = render_field "Name", truncate(@experiment.name, :length => 60)
+  = render_field "Description", @experiment.description
   = render_field "Start date", @experiment.start_date.to_s(:date_only) if @experiment.start_date
   = render_field "End date", @experiment.end_date.to_s(:date_only) if @experiment.end_date
   = render_field "Subject", @experiment.subject

@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Data / View / #{truncate(@data_file.filename, :length =>45)}
+  %h1{:title => @data_file.filename} Data / View / #{truncate(@data_file.filename, :length =>45)}
 
 - content_for :pageactions do
   =render :partial => 'data_files/pageactions'
@@ -20,17 +20,17 @@
 #file_details
   .container
     %h2 Basic Information
-    = render_field "Name", breaking_word_wrap(@data_file.filename, 60)
+    = render_field "Name", @data_file.filename
     = render_field "Type", @data_file.file_processing_status
     = render_field "File format", @data_file.format_for_display
     .description
-      = render_field "Description", breaking_word_wrap(@data_file.file_processing_description, 60)
+      = render_field "Description",@data_file.file_processing_description
     = render_field_with_block "Tags" do
       - @data_file.tags.each do |tag|
         = tag.name
         %br/
-    = render_field "Experiment", breaking_word_wrap(@data_file.experiment_name, 60)
-    = render_field "Facility", breaking_word_wrap(@data_file.facility_name, 60)
+    = render_field "Experiment", @data_file.experiment_name
+    = render_field "Facility", @data_file.facility_name
     = render_field "Date added", @data_file.created_at.to_s(:with_time)
     = render_field "Size", number_to_human_size(@data_file.file_size)
     = render_field "File ID", @data_file.id
