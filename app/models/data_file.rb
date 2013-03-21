@@ -281,7 +281,7 @@ class DataFile < ActiveRecord::Base
     by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
     by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
 
-    DataFile.where(:id => (by_table_name & by_station_name).map(&:id))
+    DataFile.order(:created_at).where(:id => (by_table_name & by_station_name).map(&:id))
   end
 
   protected
