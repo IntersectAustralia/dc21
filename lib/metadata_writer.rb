@@ -3,11 +3,33 @@ class MetadataWriter
     experiments = data_files.map(&:experiment).uniq.delete_if { |exp| exp.nil? }
     facilities = experiments.map(&:facility).uniq
 
-    HTML_METADATA_HAML_ENGINE.render(Object.new, :data_files => data_files,
+    metadata_engine = use_template_if_exists
+    metadata_engine.render(Object.new, :data_files => data_files,
                                      :package => pkg,
                                      :experiments => experiments,
                                      :facilities => facilities,
                                      :metadata_helper => MetadataHelper.new)
+  end
+
+  private
+
+  # This will impact performance as it needs to check for changes
+  def self.use_template_if_exists
+    # Check if the actual configuration exists
+    external_template_file = APP_CONFIG['readme_template_file']
+    template_path = ""
+
+    if external_template_file.blank?
+      template_path = File.join(Rails.root, "app/templates/file_set_metadata.html.haml")
+    else
+      template_path = File.join(Rails.root, external_template_file)
+      unless File.exist? template_path
+        template_path = File.join(Rails.root, "app/templates/file_set_metadata.html.haml")
+      end
+    end
+
+    template = File.read(template_path)
+    metadata_engine = Haml::Engine.new(template)
   end
 end
 
