@@ -9,7 +9,7 @@ class DataFilesController < ApplicationController
   before_filter :sort_params, :only => [:index, :search]
   before_filter :search_params, :only => [:index, :search]
   before_filter :page_params, :only => [:index]
-  load_and_authorize_resource :except => [:download]
+  load_and_authorize_resource :except => [:download, :api_search]
   load_resource :only => [:download]
   set_tab :home
   helper_method :sort_column, :sort_direction
@@ -132,10 +132,11 @@ class DataFilesController < ApplicationController
 
     params[:files].each do |id, attrs|
 
-      attrs.merge!(params[:date][:files][id]) if  params[:date].present? && params[:date][:files][id].present?
-
-      attrs[:start_time] = reformat_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
-      attrs[:end_time] = reformat_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
+      if attrs[:start_time]
+        attrs.merge!(params[:date][:files][id]) if params[:date].present? && params[:date][:files][id].present?
+        attrs[:start_time] = reformat_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
+        attrs[:end_time] = reformat_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
+      end
 
       file = DataFile.find(id)
 
@@ -289,7 +290,10 @@ class DataFilesController < ApplicationController
   end
 
   def do_api_search(search_params)
+    authorize! :read, DataFile
     @search = DataFileSearch.new(search_params)
+    # prevents CanCan loading the id search param
+    @data_files = DataFile.scoped
     @data_files = @search.do_search(@data_files)
     @data_files.each do |data_file|
       data_file.url = download_data_file_url(data_file.id)

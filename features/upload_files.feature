@@ -130,7 +130,7 @@ Feature: Upload files
       | Tags        |               |
 
   Scenario: Upload multiple files
-    # This cannot be automated due to limitations with selenium+file uploads - see manual tests
+# This cannot be automated due to limitations with selenium+file uploads - see manual tests
 
   Scenario: Modify and save metadata after uploading
     Given I upload "samples/subsetted/range_oct_10_oct_12/weather_station_15_min.dat" with type "RAW" and description "new description" and experiment "My Experiment" and tags "Video"
@@ -147,14 +147,23 @@ Feature: Upload files
       | weather_station_15_min.dat | researcher@intersect.org.au | RAW  |
     And I follow the view link for data file "weather_station_15_min.dat"
     Then I should see details displayed
-      | Type        | RAW                          |
-      | Description | I'm changing the description |
-      | Experiment  | Flux Experiment 1            |
-      | Tags        | Gap-Filled\n\nPhoto          |
-
+      | Type             | RAW                           |
+      | Description      | I'm changing the description  |
+      | Experiment       | Flux Experiment 1             |
+      | Tags             | Gap-Filled\n\nPhoto           |
+      | Start time       | 2011-10-10  0:00:00           |
+      | End time         | 2011-10-12 23:45:00           |
+      | Sample interval  | 15 minutes                    |
+      | Datalogger model | CR3000                        |
+      | Station name     | ROS_WS                        |
+      | Serial number    | 4909                          |
+      | Os version       | CR3000.Std.11                 |
+      | Dld name         | CPU:weather_station_final.CR3 |
+      | Dld signature    | 30238                         |
+      | Table name       | Table15min                    |
 
   Scenario: Modify and save metadata after uploading (multiple files)
-    # This cannot be automated due to limitations with selenium+file uploads - see manual tests
+# This cannot be automated due to limitations with selenium+file uploads - see manual tests
 
   Scenario Outline: Possible outcomes for uploaded files
     Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_15_min.dat" with type "RAW"
@@ -189,7 +198,7 @@ Feature: Upload files
     | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
   Scenario: Upload multiple files where there's an overlap or name clash within the set of files being uploaded
-    # This cannot be automated due to limitations with selenium+file uploads - see manual tests
+# This cannot be automated due to limitations with selenium+file uploads - see manual tests
 
   Scenario: Must be logged in to view the upload page
     Then users should be required to login on the upload page
@@ -197,25 +206,6 @@ Feature: Upload files
   Scenario: Must be logged in to upload
     Given I am on the upload page
     When I attempt to upload "sample1.txt" directly I should get an error
-
-  Scenario: Can assign the "Other" experiment to a file
-    Given I am on the upload page
-    When I select "RAW" from "File type"
-    And I select "Other" from "Experiment"
-    And I fill in "Description" with "My descriptive description"
-    And I select "samples/sample1.txt" to upload
-    And I press "Upload"
-    Then the most recent file should have name "sample1.txt"
-    And the uploaded files display should include "sample1.txt" with file type "RAW"
-    And the uploaded files display should include "sample1.txt" with experiment "Other"
-    And the uploaded files display should include "sample1.txt" with messages "success"
-    And file "sample1.txt" should have type "RAW"
-    And file "sample1.txt" should have experiment "Other"
-    When I am on the list data files page
-    And I follow the view link for data file "sample1.txt"
-    Then I should see details displayed
-      | Experiment | Other |
-
 
   Scenario: Provide Metadata for uploaded non-toa5 files
     Given I am on the upload page
@@ -251,7 +241,6 @@ Feature: Upload files
     And I check "Photo"
     And I press "Upload"
     Then I should be on the data files page
-
     And I fill in "2010-06-03" for "Start Time"
     And I fill in "2010-06-10" for "End Time"
     And I press "Update"
@@ -278,7 +267,6 @@ Feature: Upload files
     And I press "Update"
     Then I should be on the bulk update page
     And I should see "Start time is required if End time specified"
-
 
   Scenario: End Time not required with start Time
     Given I am on the upload page
@@ -385,7 +373,7 @@ Feature: Upload files
     And I select "31" from "End Min"
     And I select "44" from "End Second"
 
-Scenario: The date format is on the date files page after uploading a file
+  Scenario: The date format is on the date files page after uploading a file
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
