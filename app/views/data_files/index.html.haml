@@ -143,6 +143,9 @@
         %span= link_to 'Publish', '#', id: :publish_button
     = will_paginate(@data_files_paginated)
 
+- if @data_files.empty? || !@search.showing_all?
+  .datacontroll
+    #searched_attrs= "Searching by: #{@search.searched_attributes}"
 
 - unless @data_files.empty?
 

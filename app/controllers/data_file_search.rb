@@ -19,6 +19,7 @@ class DataFileSearch
   attr_accessor :unpublished
   attr_accessor :published_date
   attr_accessor :published_date_check
+  attr_accessor :searched_attributes
 
   def initialize(search_params)
     @search_params = search_params || {}
@@ -87,39 +88,51 @@ class DataFileSearch
 
   def do_search(relation)
 
+    attrs_array = []
     search_result = relation
     if date_range.from_date || date_range.to_date
       search_result = search_result.with_data_in_range(date_range.from_date, date_range.to_date)
+      attrs_array << "Date"
     end
     if upload_date_range.from_date || upload_date_range.to_date
       search_result = search_result.with_uploaded_date_in_range(upload_date_range.from_date, upload_date_range.to_date)
+      attrs_array << "Date Added"
     end
     unless experiments.nil? || experiments.empty?
       search_result = search_result.with_experiment(experiments)
+      attrs_array << "Facility"
     end
     unless variables.nil? || variables.empty?
       search_result = search_result.with_any_of_these_columns(variables)
+      attrs_array << "Columns"
     end
     unless stati.nil? || stati.empty?
       search_result = search_result.with_status_in(stati)
+      attrs_array << "Type"
     end
     unless tags.nil? || tags.empty?
       search_result = search_result.with_any_of_these_tags(tags.collect { |tag| tag.to_i })
+      attrs_array << "Tags"
     end
     unless filename.blank?
       search_result = search_result.with_filename_containing(filename)
+      attrs_array << "Filename"
     end
     unless description.blank?
       search_result = search_result.with_description_containing(description)
+      attrs_array << "Description"
     end
     unless file_id.blank?
       search_result = search_result.where(:id => file_id)
+      attrs_array << "File ID"
     end
     unless id.blank?
       search_result = search_result.with_external_id(id)
+      attrs_array << "ID"
     end
     unless uploader_id.nil? || uploader_id.empty?
       search_result = search_result.with_uploader(uploader_id)
+      attrs_array << "Added By"
     end
     unless published.nil? || published.empty?
       search_result = search_result.with_published
@@ -131,6 +144,8 @@ class DataFileSearch
       date = Date.parse(published_date)
       search_result = search_result.with_published_date(date) unless date.nil?
     end
+
+    self.searched_attributes = attrs_array.join(", ")
     search_result
   end
 
