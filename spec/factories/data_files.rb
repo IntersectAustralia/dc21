@@ -10,4 +10,14 @@ FactoryGirl.define do
     file_processing_status "RAW"
     file_size 10000
   end
+
+  factory :package do
+    sequence(:filename) { |n| "file-#{n}" }
+    path "a-path"
+    association :created_by, :factory => :user
+    association :published_by, :factory => :user
+    association :experiment
+    file_processing_status "PACKAGE"
+    file_size 35642
+  end
 end

@@ -367,12 +367,6 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def send_bagit(ids)
-    CustomDownloadBuilder.bagit_for_files_with_ids(ids) do |zip_file|
-      send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "download_selected.zip"
-    end
-  end
-
   def sort_params
     if params["sort"]
       session["sort"] = params["sort"]

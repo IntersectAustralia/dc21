@@ -22,7 +22,7 @@ class PackagesController < DataFilesController
     @package = Package.create_package(params, current_user)
     if @package.save
       data_file_ids = CartItem.data_ids_which_belong_to_user(current_user)
-      CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids) do |zip_file|
+      CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
         package = attachment_builder.build_package(@package, zip_file)
         build_rif_cs(package) unless package.nil?

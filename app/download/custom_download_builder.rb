@@ -23,7 +23,7 @@ class CustomDownloadBuilder
   end
 
 
-  def self.bagit_for_files_with_ids(ids, &block)
+  def self.bagit_for_files_with_ids(ids, pkg, &block)
     temp_dir = Dir.mktmpdir
     zip_file = Tempfile.new("download_zip")
 
@@ -38,7 +38,7 @@ class CustomDownloadBuilder
         temp_path
       end
 
-      readme_html = MetadataWriter.generate_metadata_for(data_files)
+      readme_html = MetadataWriter.generate_metadata_for(data_files, pkg)
       File.open(readme_path, 'w+') { |f| f.write(readme_html) }
 
       bag.manifest!

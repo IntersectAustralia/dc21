@@ -1,14 +1,18 @@
 class MetadataWriter
-
-  def self.generate_metadata_for(data_files)
+  def self.generate_metadata_for(data_files, pkg)
     experiments = data_files.map(&:experiment).uniq.delete_if { |exp| exp.nil? }
     facilities = experiments.map(&:facility).uniq
 
-    HTML_METADATA_HAML_ENGINE.render(Object.new, :data_files => data_files, :experiments => experiments, :facilities => facilities, :metadata_url_helper => MetadataUrlHelper.new)
+    HTML_METADATA_HAML_ENGINE.render(Object.new, :data_files => data_files,
+                                     :package => pkg,
+                                     :experiments => experiments,
+                                     :facilities => facilities,
+                                     :metadata_helper => MetadataHelper.new)
   end
 end
 
-class MetadataUrlHelper
+class MetadataHelper
+  include ActionView::Helpers::NumberHelper
 
   def initialize
     url_options = Rails.application.config.action_mailer.default_url_options
@@ -33,5 +37,16 @@ class MetadataUrlHelper
 
   def data_file_download_url(data_file)
     Rails.application.routes.url_helpers.download_data_file_url(data_file, @host_details)
+  end
+
+  def split_or_truncate(description)
+    unless description.blank?
+      sentence = description.split('.')[0]
+      sentence.length > 80 ? sentence.truncate(80) : sentence
+    end
+  end
+
+  def readable_bytes(number)
+    number_to_human_size(number, :precision => 2)
   end
 end

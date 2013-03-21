@@ -72,12 +72,24 @@ describe MetadataWriter do
                           created_at: "2012-12-27 14:09:24",
                           file_processing_description: nil,
                           created_by: Factory(:user, first_name: 'Fred', last_name: 'Bloggs'))
+    # Package file
+    @pkg_creator =  Factory(:user, first_name: 'Bobby', last_name: 'Tops', email: 'bobby@intersect.org.au')
+    @pkg_creator.save!
+    @package = Factory(:package,
+                          filename: 'mypackage.zip',
+                          id: 3,
+                          experiment_id: @experiment.id,
+                          file_processing_status: 'PACKAGE',
+                          format: "BAGIT",
+                          created_at: "2012-12-27 14:09:24",
+                          file_processing_description: "This package contains a lot of cats. Be warned.",
+                          created_by: @pkg_creator)
   end
 
 
   describe 'Basic metadata generation' do
     it 'should produce HTML with file, facility and experiment metadata (without duplication of facilities and experiments)' do
-      output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+      output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
       diff_html(output_html, 'spec/samples/readme.html')
     end
 
@@ -91,7 +103,7 @@ describe MetadataWriter do
       it 'should handle missing primary contact' do
         @facility.aggregated_contactables.each { |contactable| contactable.delete }
         @facility.reload
-        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
         diff_html(output_html, 'spec/samples/readme_no_facility_contact.html')
       end
 
@@ -102,7 +114,7 @@ describe MetadataWriter do
         @facility.b_long = nil
         @facility.description = nil
         @facility.save!
-        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
         diff_html(output_html, 'spec/samples/readme_minimal_facility.html')
       end
     end
@@ -114,13 +126,13 @@ describe MetadataWriter do
         @experiment.experiment_for_codes.delete_all
         @experiment.save!
 
-        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
         diff_html(output_html, 'spec/samples/readme_minimal_experiment.html')
       end
 
       it 'should handle experiment with no parameters' do
         @experiment.experiment_parameters.delete_all
-        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
         diff_html(output_html, 'spec/samples/readme_no_experiment_parameters.html')
       end
     end
@@ -130,13 +142,14 @@ describe MetadataWriter do
         @data_file2.end_time = '2012-12-01 22:04:23 utc'
         @data_file2.format = nil
         @data_file2.save!
-        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2])
+        output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
         diff_html(output_html, 'spec/samples/readme_non_toa5_with_start_end.html')
       end
 
     end
   end
 end
+
 
 def diff_html(output_html, expected_file)
   expected_html = File.read(File.join(Rails.root, expected_file))
@@ -145,6 +158,8 @@ def diff_html(output_html, expected_file)
   actual_hash = Hash.from_xml(output_html)
   expected_hash = Hash.from_xml(expected_html)
 
+  clean_hash actual_hash
+  clean_hash expected_hash
   diff = expected_hash.diff(actual_hash)
   unless diff == {}
     puts "HTML did not match"
@@ -155,7 +170,17 @@ def diff_html(output_html, expected_file)
   end
 
   diff.should == {}
-
 end
 
+def clean_hash(hash)
+  hash.each do |k, v|
+    if v.kind_of? Hash
+      clean_hash(v)
+    else
+      unless v.blank?
+        hash[k] = v.to_s.gsub( /(?<!\n)\n(?!\n)/, '').gsub(/\s+/, '').strip
+      end
+    end
+  end
+end
 
