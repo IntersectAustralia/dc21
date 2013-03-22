@@ -27,7 +27,6 @@ class DataFileSearch
     self.date_range = DateRange.new(@search_params[:from_date], @search_params[:to_date], true)
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
     self.published_date_check = DateRange.new(@search_params[:published_date], "", true)
-    handle_date_errors
 
     self.facilities = @search_params[:facilities] || []
     self.experiments = @search_params[:experiments] || []
@@ -43,6 +42,11 @@ class DataFileSearch
     self.description = @search_params[:description]
     self.file_id = @search_params[:file_id]
     self.id = @search_params[:id]
+
+    error_text = []
+    handle_date_errors(error_text)
+    handle_regex_errors(error_text)
+    self.error = error_text.join(", ") unless error_text.empty?
 
     if !valid?
       self.date_range = DateRange.new(nil, nil, true)
@@ -72,18 +76,39 @@ class DataFileSearch
     self.error.blank?
   end
 
-  def handle_date_errors
-    error_text = []
-      if published_date_check.error
-        error_text << "Published Date: #{published_date_check.error}"
-      end
-      if date_range.error
-        error_text << "Date Range: #{date_range.error}"
-      end
-      if upload_date_range.error
-        error_text << "Upload Date Range: #{upload_date_range.error}"
-      end
-      self.error = error_text.join(", ") unless error_text.empty?
+  def handle_date_errors(error_text)
+    if published_date_check.error
+      error_text << "Published Date: #{published_date_check.error}"
+    end
+    if date_range.error
+      error_text << "Date Range: #{date_range.error}"
+    end
+    if upload_date_range.error
+      error_text << "Upload Date Range: #{upload_date_range.error}"
+    end
+  end
+
+  def handle_regex_errors(error_text)
+    begin
+     Regexp.try_convert(/#{filename}/)
+    rescue RegexpError => e
+      error_text << "Filename: #{e}"
+      self.filename = ""
+    end
+
+    begin
+      Regexp.try_convert(/#{description}/)
+    rescue RegexpError => e
+      error_text << "Description: #{e}"
+      self.description = ""
+    end
+
+    begin
+      Regexp.try_convert(/#{id}/)
+    rescue RegexpError => e
+      error_text << "ID: #{e}"
+      self.id = ""
+    end
   end
 
   def do_search(relation)
