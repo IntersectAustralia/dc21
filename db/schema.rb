@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130318003323) do
+ActiveRecord::Schema.define(:version => 20130322003823) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "data_file_id"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20130318003323) do
   end
 
   create_table "data_files", :force => true do |t|
-    t.string   "filename"
+    t.string   "filename",                    :default => ""
     t.string   "format"
     t.string   "path"
     t.datetime "created_at"
@@ -50,13 +50,13 @@ ActiveRecord::Schema.define(:version => 20130318003323) do
     t.datetime "end_time"
     t.integer  "interval"
     t.string   "file_processing_status"
-    t.text     "file_processing_description"
+    t.text     "file_processing_description", :default => ""
     t.integer  "experiment_id"
     t.integer  "file_size"
     t.boolean  "published",                   :default => false
     t.datetime "published_date"
     t.integer  "published_by_id"
-    t.text     "external_id"
+    t.text     "external_id",                 :default => ""
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

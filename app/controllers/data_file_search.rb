@@ -7,10 +7,7 @@ class DataFileSearch
   attr_accessor :experiments
   attr_accessor :variables
   attr_accessor :variable_parents
-  attr_accessor :filename
-  attr_accessor :description
   attr_accessor :file_id
-  attr_accessor :id
   attr_accessor :stati
   attr_accessor :tags
   attr_accessor :uploader_id
@@ -20,6 +17,12 @@ class DataFileSearch
   attr_accessor :published_date
   attr_accessor :published_date_check
   attr_accessor :searched_attributes
+  attr_accessor :filename
+  attr_accessor :description
+  attr_accessor :id
+  attr_accessor :filename_invalid
+  attr_accessor :description_invalid
+  attr_accessor :id_invalid
 
   def initialize(search_params)
     @search_params = search_params || {}
@@ -93,21 +96,21 @@ class DataFileSearch
      Regexp.try_convert(/#{filename}/)
     rescue RegexpError => e
       error_text << "Filename: #{e}"
-      self.filename = ""
+      self.filename_invalid = true
     end
 
     begin
       Regexp.try_convert(/#{description}/)
     rescue RegexpError => e
       error_text << "Description: #{e}"
-      self.description = ""
+      self.description_invalid = true
     end
 
     begin
       Regexp.try_convert(/#{id}/)
     rescue RegexpError => e
       error_text << "ID: #{e}"
-      self.id = ""
+      self.id_invalid = true
     end
   end
 
@@ -139,11 +142,11 @@ class DataFileSearch
       search_result = search_result.with_any_of_these_tags(tags.collect { |tag| tag.to_i })
       attrs_array << "Tags"
     end
-    unless filename.blank?
+    unless filename.blank? or filename_invalid
       search_result = search_result.with_filename_containing(filename)
       attrs_array << "Filename"
     end
-    unless description.blank?
+    unless description.blank? or description_invalid
       search_result = search_result.with_description_containing(description)
       attrs_array << "Description"
     end
@@ -151,7 +154,7 @@ class DataFileSearch
       search_result = search_result.where(:id => file_id)
       attrs_array << "File ID"
     end
-    unless id.blank?
+    unless id.blank? or id_invalid
       search_result = search_result.with_external_id(id)
       attrs_array << "ID"
     end
