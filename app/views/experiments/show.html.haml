@@ -15,7 +15,8 @@
   = render_field_with_block "FOR codes" do
     %ul#for_codes_list
       - @experiment.experiment_for_codes.each do |code|
-        %li= code.name
+        %li{:title => code.name}= code.name
+        %br
 
   = render 'actions'
 

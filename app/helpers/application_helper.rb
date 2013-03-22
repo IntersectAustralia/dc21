@@ -24,7 +24,8 @@ module ApplicationHelper
   # as above but takes a block for the field value
   def render_field_with_block(label, &block)
     content = with_output_buffer(&block)
-    render_field_content(label, content)
+    #render_field_content(label, content)
+    render_field_list(label, content)
   end
 
   def cancel_button(link_text, path, options = {})
@@ -48,6 +49,24 @@ module ApplicationHelper
     html.html_safe
   end
 
+  private
+  def render_field_list(label, content)
+    #lists for FOR codes, Tags in files and API token
+    div_id = label.tr(" ,", "_").downcase
+    html = "<div class='control-group'>"
+    html << "<label class='control-label' title='#{h label}'>"
+    html << (h label)
+    html << ":"
+    html << '</label>'
+    html << "<div class='controls'>"
+    html << "<div class='record' id='#{div_id + '_display'}'>"
+    html << content
+    html << '</div>'
+    html << '</div>'
+    html << '</div>'
+    html.html_safe
+
+  end
 
   def sortable(column, title = nil)
     title ||= column.titleize

@@ -13,7 +13,10 @@
       %br/
       = link_to 'Generate Token', users_generate_token_path, :class => 'btn btn-primary', :method => :put
     - else
-      = current_user.authentication_token
+
+      %span{:title => current_user.authentication_token}= current_user.authentication_token
+
+
       %br/
       = link_to 'Re-generate Token', users_generate_token_path, :class => 'btn btn-primary', :method => :put, :confirm => 'Are you sure you want to regenerate your token? You will need to update any scripts that used the previous token.'
       = link_to 'Delete Token', users_delete_token_path, :class => 'btn btn-danger', :method => :delete, :confirm => 'Are you sure you want to delete your token? You will no longer be able to perform API actions.'
