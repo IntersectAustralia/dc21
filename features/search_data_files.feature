@@ -512,3 +512,11 @@ Feature: Search data files by date range
     Then I should see "No matching files"
     And the "id" field should contain "test\$"
 
+  Scenario: Search for files by ID with invalid regex
+    Given I am on the list data files page
+    When I fill in "id" with "+w"
+    And I press "Search"
+    Then I should see "Showing all"
+    And I should see "ID: target of repeat operator is not specified: /+w/"
+    And the "id" field should contain "\+w"
+

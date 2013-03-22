@@ -14,6 +14,8 @@
 
 $(function () {
 
+  $(document).on('click.dropdown touchstart.dropdown.data-api', '#ui-datepicker-div', function (e) { e.stopPropagation() });
+
   // NOTIFICATIONS
 
   var alert = $('#alert');
@@ -155,7 +157,7 @@ $(function () {
     showOn:'both',
     changeMonth:true,
     changeYear:true,
-    currentText:'Today',
+    currentText:'Show current month',
     showButtonPanel:true,
     autoSize:true
   });
