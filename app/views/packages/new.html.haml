@@ -70,7 +70,7 @@
               = select_minute @package.end_time.utc, {:field_name => "end_min"}
               = select_second @package.end_time.utc, {:field_name => "end_sec"}
           - else
-            = text_field_tag "date[end_time]", @package.start_time, :id => "package_end_time", :datepicker => true
+            = text_field_tag "date[end_time]", @package.end_time, :id => "package_end_time", :datepicker => true
             .show{:id => "package_end_container"}
               = select_hour @package.end_time, {:field_name => "end_hr"}
               = select_minute @package.end_time, {:field_name => "end_min"}

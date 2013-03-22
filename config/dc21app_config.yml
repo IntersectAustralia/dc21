@@ -3,7 +3,7 @@ defaults: &defaults
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
   unpublished_rif_cs_directory: /data/dc21-data/unpublished_rif_cs
   archived_data_directory: /data/dc21-data/archived_data
-  readme_template_file: templates/readme_template.html.haml
+  default_readme_template_file: app/templates/file_set_metadata.html.haml
   extra_config_file_root: /data
   # the following are defaults that can be overridden in the dc21app_extra_config.yml which is kept separate from the
   # code in production servers
@@ -101,7 +101,6 @@ development:
 test:
   <<: *defaults
   files_root: /tmp
-  readme_template_file: /tmp/readme_template.html.haml
   published_zip_files_directory: /tmp/published_zip_files
   published_rif_cs_directory: /tmp/published_rif_cs
   unpublished_rif_cs_directory: /tmp/unpublished_rif_cs

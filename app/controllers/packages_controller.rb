@@ -1,3 +1,4 @@
+require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
 
   def new
@@ -19,12 +20,18 @@ class PackagesController < DataFilesController
     @package = Package.create_package(params, current_user)
     if @package.save
       data_file_ids = CartItem.data_ids_which_belong_to_user(current_user)
-      CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
-        attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-        package = attachment_builder.build_package(@package, zip_file)
-        build_rif_cs(package) unless package.nil?
+      begin
+        CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
+          attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+          package = attachment_builder.build_package(@package, zip_file)
+          build_rif_cs(package) unless package.nil?
+        end
+        redirect_to data_file_path(@package), notice: 'Package was successfully created.'
+      rescue ::TemplateError => e
+        logger.error e.message
+        redirect_to data_file_path(@package), alert: 'There were errors in the README.html template file.'
       end
-      redirect_to data_file_path(@package), notice: 'Package was successfully created.'
+
     else
       @package.reformat_on_error(params[:package][:filename])
       render :action => 'new'
@@ -36,7 +43,7 @@ class PackagesController < DataFilesController
       valid = false
       unless @package.nil?
         if @package.published.eql?(true)
-          redirect_to  data_files_path, :notice => "This package is already submitted for publishing."
+          redirect_to data_files_path, :notice => "This package is already submitted for publishing."
         else
           if @package.save! and publish_rif_cs
               @package.set_to_published(current_user)

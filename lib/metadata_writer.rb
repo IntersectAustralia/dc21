@@ -1,14 +1,22 @@
+require File.expand_path('../exceptions/template_error.rb', __FILE__)
+
 class MetadataWriter
   def self.generate_metadata_for(data_files, pkg)
     experiments = data_files.map(&:experiment).uniq.delete_if { |exp| exp.nil? }
     facilities = experiments.map(&:facility).uniq
 
     metadata_engine = use_template_if_exists
-    metadata_engine.render(Object.new, :data_files => data_files,
-                                     :package => pkg,
-                                     :experiments => experiments,
-                                     :facilities => facilities,
-                                     :metadata_helper => MetadataHelper.new)
+    begin
+      metadata_engine.render(Object.new, :data_files => data_files,
+                             :package => pkg,
+                             :experiments => experiments,
+                             :facilities => facilities,
+                             :metadata_helper => MetadataHelper.new)
+    rescue SyntaxError
+      raise TemplateError, "syntax error in external template file for HTML"
+    rescue NameError
+      raise TemplateError, "undefined variable in external template file for HTML"
+    end
   end
 
   private
@@ -17,14 +25,16 @@ class MetadataWriter
   def self.use_template_if_exists
     # Check if the actual configuration exists
     external_template_file = APP_CONFIG['readme_template_file']
+    external_template_directory = APP_CONFIG['readme_template_directory']
     template_path = ""
 
-    if external_template_file.blank?
-      template_path = File.join(Rails.root, "app/templates/file_set_metadata.html.haml")
+    if external_template_file.blank? or external_template_directory.blank?
+      template_path = File.join(Rails.root, APP_CONFIG['default_readme_template_file'])
     else
-      template_path = File.join(Rails.root, external_template_file)
+      Dir.mkdir(external_template_directory) unless Dir.exists? external_template_directory
+      template_path = File.join(external_template_directory, external_template_file)
       unless File.exist? template_path
-        template_path = File.join(Rails.root, "app/templates/file_set_metadata.html.haml")
+        template_path = File.join(Rails.root, APP_CONFIG['default_readme_template_file'])
       end
     end
 
