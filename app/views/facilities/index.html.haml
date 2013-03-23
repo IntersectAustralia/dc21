@@ -14,5 +14,5 @@
       %th= "Code"
     - @facilities.each do |facility|
       %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td= link_to facility.name, facility, :id => "view_#{facility.id}", :title => 'View'
-        %td= facility.code
+        %td{:title => facility.name}= link_to facility.name, facility, :id => "view_#{facility.id}"
+        %td{:title => facility.code}= truncate(facility.code, :length => 30)
