@@ -1236,7 +1236,7 @@ button.ui-datepicker-trigger
   .ui-widget-header
     +border(0px, solid, #D9D9D9)
     background: none
-    .ui-datepicker-next, .ui-date-picker-prev
+    .ui-datepicker-next, .ui-datepicker-prev
       &:hover
         background: none
         border: none
@@ -1245,7 +1245,8 @@ button.ui-datepicker-trigger
       background-position: -240px -96px
       &:hover
         background: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings-white.png)
-        
+        background-position: -240px -96px
+
     span.ui-icon-circle-triangle-e
       background: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings-white.png)
       background-position: -264px -96px
@@ -1260,7 +1261,7 @@ button.ui-datepicker-trigger
     +m-p-w-h-p-t-b-l-r-f(0, 5px 10px)
     cursor: pointer
     +inlineblock
-    +font("", "", 0.875em, 20px, $dark3, none, center)
+    +font("", bold, 0.875em, 20px, $dark3, none, center)
     +gradient-light-1
     +border(1px, solid, #dcdcdc, "", 2px)
     &:hover

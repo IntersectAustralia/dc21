@@ -14,18 +14,20 @@
 
 $(function () {
 
-  $(document).on('click.dropdown touchstart.dropdown.data-api', '#ui-datepicker-div', function (e) { e.stopPropagation() });
+  // datepicker event triggers for dropdowns
+
+  $(document).on('click.dropdown touchstart.dropdown.data-api', '.ui-datepicker, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-current', function (e) { e.stopPropagation() });
 
   // NOTIFICATIONS
 
-  var alert = $('#alert');
-  if (alert.length > 0) {
-    alert.slideDown();
+  var alert_div = $('#alert');
+  if (alert_div.length > 0) {
+    alert_div.slideDown();
     $('#content_wrapper').addClass('notification');
     $('#footer').addClass('notification');
 
     $("#close_alert").click(function () {
-      alert.slideUp();
+      alert_div.slideUp();
       $('#content_wrapper').removeClass('notification');
       $('#footer').removeClass('notification');
     });
@@ -53,6 +55,11 @@ $(function () {
       $("#content_container").height(facetedsearch +115);
     } else {
       $("#content_container").css("height", "auto");
+      facetedsearch = $("#faceted_search").height();
+      contentcontainer = $("#content_container").height();
+      if ((facetedsearch + 80) > contentcontainer) {
+        $("#content_container").height(facetedsearch +115);
+      }
     }
   });
 
