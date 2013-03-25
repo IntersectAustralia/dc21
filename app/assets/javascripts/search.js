@@ -164,8 +164,11 @@ $(function () {
         $(this).toggleClass('current');
     });
 
-  $('#type_category').click(function (event) {
-        $('.searchcategory .type').toggle();
+    $('#type_category').click(function (event) {
+        $('.searchcategory > .type').toggle();
+        $('.searchcategory > .type > .type_group > .type').each(function(index){
+            $(this).show();
+        });
         $(this).toggleClass('current');
     });
 
