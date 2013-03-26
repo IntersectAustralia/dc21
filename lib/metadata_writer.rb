@@ -39,7 +39,7 @@ class MetadataWriter
     end
 
     template = File.read(template_path)
-    metadata_engine = Haml::Engine.new(template)
+    Haml::Engine.new(template)
   end
 end
 
@@ -55,7 +55,7 @@ class MetadataHelper
   end
 
   def software_version
-    GIT_LATEST_TAG
+    File.open('app/views/shared/_tag.html.haml').read
   end
 
   def facility_url(facility)
@@ -83,6 +83,6 @@ class MetadataHelper
   end
 
   def readable_bytes(number)
-    size = number_to_human_size(number, :precision => 2).gsub(" ", "")
+    number_to_human_size(number, :precision => 2).gsub(" ", "")
   end
 end
