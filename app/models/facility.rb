@@ -63,6 +63,9 @@ class Facility < ActiveRecord::Base
     exps
   end
 
+  def rdfa_location
+    "#{a_lat}, #{a_long}, #{b_lat}, #{b_long}"
+  end
 
   #If we have exactly one complete point
   def location

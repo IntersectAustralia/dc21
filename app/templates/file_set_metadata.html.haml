@@ -46,7 +46,8 @@
               %tr
                 %td Software Version
                 %td
-                  %span{:property => "http://schema.org/softwareVersion"} 1.6b.05
+                  %span{:property => "http://schema.org/softwareVersion"}
+                    = metadata_helper.software_version
               %tr
                 %td URLs
                 %td
@@ -71,11 +72,11 @@
               %tr
                 %td Telephone
                 %td
-                  %span{:property => "http://schema.org/telephone"} +61 2 47554531
+                  %span{:property => "http://schema.org/telephone"} +61 2 4570 1125
               %tr
                 %td Email
                 %td
-                  %span{:property => "http://schema.org/Email"} hie@uws.edu.au
+                  %span{:property => "http://schema.org/Email"} hieinfo@lists.uws.edu.au
               %tr
                 %td Description
                 %td HIE to supply this text.
@@ -123,7 +124,7 @@
 
         %h1 Experiments
         - experiments.each do |experiment|
-          %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Event", :resource => "experiment_#{experiment.id}"}
+          %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Event", :resource => "#experiment_#{experiment.id}"}
             %a{:name => "experiment_#{experiment.id}"}
             %h2
               %span{:property => "http://schema.org/name"}
@@ -220,7 +221,7 @@
                   %td
                     %span{:resource => "#Location", :typeof => "http://schema.org/GeoShape"}
                       %span{:property => "http://schema.org/box"}
-                        = facility.location
+                        = facility.rdfa_location
                 %tr
                   %td Parent Organisation
                   %td
@@ -269,7 +270,8 @@
                 %tr
                   %td Name
                   %td
-                    %span{:property => "http://schema.org/name"} data_file.filename
+                    %span{:property => "http://schema.org/name"}
+                      = data_file.filename
                 %tr
                   %td Type
                   %td
@@ -311,7 +313,7 @@
                 %tr
                   %td Added by
                   %td
-                    %span{:href => "#{data_file.created_by.full_name}", :property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator"}
+                    %span{:href => "##{data_file.created_by.full_name}", :property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator"}
                       = data_file.created_by.full_name
                 %tr
                   %td Start date

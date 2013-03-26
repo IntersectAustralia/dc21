@@ -54,6 +54,10 @@ class MetadataHelper
     @host_details = {host: host, protocol: protocol, port: port}
   end
 
+  def software_version
+    GIT_LATEST_TAG
+  end
+
   def facility_url(facility)
     Rails.application.routes.url_helpers.facility_url(facility, @host_details)
   end
@@ -79,6 +83,6 @@ class MetadataHelper
   end
 
   def readable_bytes(number)
-    number_to_human_size(number, :precision => 2)
+    size = number_to_human_size(number, :precision => 2).gsub(" ", "")
   end
 end
