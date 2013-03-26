@@ -165,6 +165,7 @@ $(function () {
     changeMonth:true,
     changeYear:true,
     currentText:'Show current month',
+    closeText:'Close',
     showButtonPanel:true,
     autoSize:true
   });
