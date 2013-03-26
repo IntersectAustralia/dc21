@@ -21,7 +21,7 @@
     total of #{number_to_human_size(current_user.cart_size)}
 
   - @data_files = DataFile.find(@cart_items.map(&:data_file_id))
-  %table#exploredata
+  %table#exploredata.cart
     %tr
       %th.sortable.filename=  "Filename"
       %th.sortable.date=  "Date added"
@@ -34,12 +34,12 @@
     - @cart_items.each do |cart_item|
       %tr{:class => cycle('field_bg', 'field_nobg')}
         - data_file = DataFile.find(cart_item.data_file_id)
-        %td.filename= link_to truncate(data_file.filename, :length => 30), data_file_path(data_file), :title => data_file.filename
-        %td.date= data_file.created_at.to_s(:with_time)
-        %td.size= number_to_human_size(data_file.file_size)
-        %td.email{:title => data_file.created_by.email}= truncate(data_file.created_by.email, :length => 25) if data_file.created_by
-        %td.type= data_file.file_processing_status
-        %td.experiment{:title => data_file.experiment_name}= truncate(data_file.experiment_name, :length => 20)
+        %td.filename{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file), :title => data_file.filename
+        %td.date{:title => data_file.created_at.to_s(:with_time)}= data_file.created_at.to_s(:with_time)
+        %td.size{:title => number_to_human_size(data_file.file_size)}= number_to_human_size(data_file.file_size)
+        %td.email{:title => data_file.uploader_email}= data_file.uploader_email if data_file.created_by
+        %td.type{:title => data_file.file_processing_status}= data_file.file_processing_status
+        %td.experiment{:title => data_file.experiment_name}= data_file.experiment_name
         %td.delete_cart= link_to 'Remove', cart_item, :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{cart_item.id}"
 
 

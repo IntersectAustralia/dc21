@@ -10,9 +10,9 @@
 - else
   %table#facilities
     %tr
-      %th= "Name"
-      %th= "Code"
+      %th.name= "Name"
+      %th.code= "Code"
     - @facilities.each do |facility|
       %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td{:title => facility.name}= link_to facility.name, facility, :id => "view_#{facility.id}"
-        %td{:title => facility.code}= truncate(facility.code, :length => 30)
+        %td.name{:title => facility.name}= link_to facility.name, facility, :id => "view_#{facility.id}"
+        %td.code{:title => facility.code}= facility.code

@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1{:title => @data_file.filename} Data / Edit / #{truncate(@data_file.filename, :length =>45)}
+  %h1{:title => @data_file.filename} Data / Edit / #{@data_file.filename}
 
 
 
@@ -8,7 +8,7 @@
     You do not have permission to edit this published file.
   - else
     = form_for (@data_file) do |f|
-      %h2{:title => @data_file.filename} Editing Metadata of #{truncate(@data_file.filename, :length =>45)}
+      %h2{:title => @data_file.filename} Editing Metadata of #{@data_file.filename}
       = render "shared/error_messages", :target => @data_file
       .control-group
         %label.control-label{ :for => :data_file_filename } Name

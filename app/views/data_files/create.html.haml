@@ -7,7 +7,7 @@
   = form_tag(bulk_update_data_files_path, :method => :put) do
     - @uploaded_files.each do |file|
       .file-panel{:id => "file_panel_#{file.id}"}
-        %h2{:title => file.filename} #{truncate(file.filename, :length => 45)}
+        %h2{:title => file.filename} #{file.filename}
         %ul
           - if file.messages.is_a? Array
             - file.messages.each do |message_attrs|

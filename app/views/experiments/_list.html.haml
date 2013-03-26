@@ -15,6 +15,6 @@
 
     - experiments.each do |experiment|
       %tr
-        %td.name= link_to experiment.name , facility_experiment_path(@facility, experiment), :id => "view_#{experiment.id}", :title => experiment.name
+        %td.name= link_to experiment.name, facility_experiment_path(@facility, experiment), :id => "view_#{experiment.id}", :title => experiment.name
         %td.parent{:title => experiment.parent_name}= experiment.parent_name
         %td.description{:title => experiment.description}= experiment.description

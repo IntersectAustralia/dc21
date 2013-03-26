@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1{:title => @experiment.name} Facilities / Experiments / #{truncate(@experiment.name, :length => 45)} / Edit
+  %h1{:title => @experiment.name} Facilities / Experiments / #{@experiment.name} / Edit
 
 .container
   = render 'form'

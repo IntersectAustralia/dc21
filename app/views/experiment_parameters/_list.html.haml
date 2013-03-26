@@ -23,7 +23,7 @@
           %td= param.parameter_modification.name
           %td= param.amount
           %td= param.parameter_unit ? param.parameter_unit.name : ""
-          %td{:title => param.comments}= truncate(param.comments, :length => 30)
+          %td.comments{:title => param.comments}= param.comments
           %td
             = link_to 'Edit', edit_facility_experiment_experiment_parameter_path(facility, experiment, param), :id => "edit_experiment_parameter_#{param.id}", :class => "btn btn-primary"
             = link_to 'Delete', facility_experiment_experiment_parameter_path(facility, experiment, param), :confirm => 'Are you sure you want to delete this parameter?', :method => :delete, :id => "delete_experiment_parameter_#{param.id}", :class => "btn btn-danger"

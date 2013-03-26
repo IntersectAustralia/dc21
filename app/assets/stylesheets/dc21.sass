@@ -457,10 +457,20 @@ li
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
+#content h1
+  +width(890px,890px,890px)
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
 .container h2, .container_centered h2
   +m-p-w-h-p-t-b-l-r-f(0 0 20px 170px, 10px 0 0 0)
   +border(1px, solid, #D9D9D9, 1px 0 0 0)
   +font("", normal, 1.5em, 30px)
+  +width(630px,630px,630px)
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
 
 .container_home
   
@@ -573,6 +583,9 @@ th.role, td.role, th.status, td.status
 
 th.email, td.email
   +width(250px, 250px, 250px)
+
+th.name, td.name
+  +width(182px, 182px, 182px)
 
 th.date, td.date
   +width(140px, 140px, 140px)
@@ -715,7 +728,7 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
 
 // EXPLORE - DATA TABLE
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
-.searchcontrol
+.searchcontroll
   float: left
 
 .pagination
@@ -724,6 +737,12 @@ a.expand_variable, a.expand_facility, a.expand_type, a.expand_package
 
 .controls select
   margin-top: 3px
+  max-width: 570px
+
+.controls .record
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
 
 #files_input
   label.control-label
@@ -870,13 +889,40 @@ h3.upload
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis
-    
 
-.exploredata.search, #exploredata.search, #exploredata.search tbody
+#experiment_parameters
+
+  th, td
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+  th.comments, td.comments
+    +width(400px, 400px, 400px)
+
+#facilities
+  table-layout: fixed
+  tr
+    +width(1060px, 1060px, 1060px)
+  th.name, td.name
+    +width(766px, 766px, 766px)    
+    a
+      +width(766px, 766px, 766px)
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+ 
+  th.code, td.code
+    +width(274px, 274px, 274px)
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+.exploredata.search, #exploredata.search, #exploredata.search tbody, .exploredata.cart, #exploredata.cart, #exploredata.cart tbody
   +inlineblock
   +width(1060px, 1060px, 1060px)
   overflow: none
-#exploredata.search, #exploredata.search tbody
+
+#exploredata.search, #exploredata.search tbody, #exploredata.cart, #exploredata.cart tbody
   display: table
   tr
     +width(1060px, 1060px, 1060px)
@@ -1294,6 +1340,10 @@ button.ui-datepicker-trigger
 
 .file-panel
   +m-p-w-h-p-t-b-l-r-f(0 0 36px 0, 0)
+  h2
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 
 ul#files_to_download
   padding-left: 20px

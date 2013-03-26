@@ -16,9 +16,9 @@
 
   - @users.each do |user|
     %tr{ :class => cycle('field_bg', 'field_nobg')}
-      %td.email= link_to truncate(user.email, :length => 30), user, :id => "view_#{user.id}", :title => user.email
-      %td{:title => user.first_name}= truncate(user.first_name, :length => 20)
-      %td{:title => user.last_name}= truncate(user.last_name, :length => 20)
+      %td.email{:title => user.email}= link_to user.email, user, :id => "view_#{user.id}"
+      %td.name{:title => user.first_name}= user.first_name
+      %td.name{:title => user.last_name}= user.last_name
       %td.role= user.role.name if user.role
       %td.status= user.status_description
       %td.date
