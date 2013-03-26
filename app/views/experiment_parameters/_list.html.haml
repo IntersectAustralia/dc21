@@ -18,11 +18,11 @@
     %tbody
       - experiment.experiment_parameters.in_order.each do |param|
         %tr
-          %td= param.parameter_category.name
-          %td= param.parameter_sub_category.name
-          %td= param.parameter_modification.name
-          %td= param.amount
-          %td= param.parameter_unit ? param.parameter_unit.name : ""
+          %td{:title => param.parameter_category.name}= param.parameter_category.name
+          %td{:title => param.parameter_sub_category.name}= param.parameter_sub_category.name
+          %td{:title => param.parameter_modification.name}= param.parameter_modification.name
+          %td{:title => param.amount}= param.amount
+          %td{:title => param.parameter_unit}= param.parameter_unit ? param.parameter_unit.name : ""
           %td.comments{:title => param.comments}= param.comments
           %td
             = link_to 'Edit', edit_facility_experiment_experiment_parameter_path(facility, experiment, param), :id => "edit_experiment_parameter_#{param.id}", :class => "btn btn-primary"

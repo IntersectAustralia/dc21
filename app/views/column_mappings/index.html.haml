@@ -16,8 +16,8 @@
       %th.actions Actions
     - @column_mappings.each do |maps|
       %tr{:class => cycle('field_bg', 'field_nobg')}
-        %td.name= maps.name
-        %td.code= maps.code
+        %td.name{:title => maps.name}= maps.name
+        %td.code{:title => maps.code}= maps.code
         %td.actions
           = link_to '', maps, :method => :delete, :confirm => "Are you sure you want to delete this column mapping?", :id => "delete_#{maps.id}", :class => "delete", :title => "Delete"
 
