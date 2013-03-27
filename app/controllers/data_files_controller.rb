@@ -162,7 +162,11 @@ class DataFilesController < ApplicationController
       authenticate_user!
       authorize! :download, @data_file
     end
-    send_data_file(@data_file)
+    if APP_CONFIG['ip_addresses'].include? request.ip
+      send_data_file(@data_file)
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   def download_selected

@@ -20,6 +20,11 @@ defaults: &defaults
     - PROCESSED
     - CLEANSED
     - UNKNOWN
+
+  # The white list of IP addresses that are allowed to access the download page without authentication
+  ip_addresses:
+    - 127.0.0.1
+
   #IMPORTANT NOTE: the values below are only used on an initial build when database values are seeded. Modifying them later
   # will have no effect. To modify these later, you need to update the relevant rows in the database (ensuring
   # referential integrity is maintained). Refer to the user manual for details
