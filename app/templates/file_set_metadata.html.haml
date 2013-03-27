@@ -313,8 +313,15 @@
                 %tr
                   %td Added by
                   %td
-                    %span{:href => "##{data_file.created_by.full_name}", :property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator"}
-                      = data_file.created_by.full_name
+                    - if metadata_helper.has_node_user_from_data_files(data_file.created_by)
+                      %span{:href => "##{data_file.created_by.full_name}", :property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator"}
+                        = "#{data_file.created_by.full_name} (#{data_file.created_by.email})"
+                    - else
+                      %span{:property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator", :resource => "##{data_file.created_by.full_name}", :typeof => "http://schema.org/Person"}
+                        %span{:property => "http://schema.org/name"}
+                          = data_file.created_by.full_name
+                        %span{:property => "http://schema.org/email"}
+                          = "(#{data_file.created_by.email})"
                 %tr
                   %td Start date
                   %td
@@ -364,3 +371,4 @@
                       %td= column_details.get_mapped_name
                       %td= column_details.unit
                       %td= column_details.data_type
+

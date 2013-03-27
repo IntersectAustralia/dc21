@@ -164,7 +164,7 @@ def diff_html(output_html, expected_file)
   unless diff == {}
     puts "HTML did not match"
     puts "Expected:"
-    puts expected_html
+    #puts expected_html
     puts "Actual:"
     puts output_html
   end

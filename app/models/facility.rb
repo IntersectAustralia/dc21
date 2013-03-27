@@ -18,6 +18,12 @@ class Facility < ActiveRecord::Base
            :source => :user,
            :order => 'users.last_name, users.first_name'
 
+  has_many :aggregated_contacts,
+           :through => :aggregated_contactables,
+           :class_name => 'User',
+           :source => :user,
+           :order => 'users.last_name, users.first_name'
+
   accepts_nested_attributes_for :primary_contact
   accepts_nested_attributes_for :aggregated_contactables
   accepts_nested_attributes_for :contacts

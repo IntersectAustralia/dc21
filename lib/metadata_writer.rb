@@ -11,7 +11,7 @@ class MetadataWriter
                              :package => pkg,
                              :experiments => experiments,
                              :facilities => facilities,
-                             :metadata_helper => MetadataHelper.new)
+                             :metadata_helper => MetadataHelper.new(facilities))
     rescue SyntaxError
       raise TemplateError, "syntax error in external template file for HTML"
     rescue NameError
@@ -46,12 +46,17 @@ end
 class MetadataHelper
   include ActionView::Helpers::NumberHelper
 
-  def initialize
+  def initialize(facilities)
     url_options = Rails.application.config.action_mailer.default_url_options
     host = url_options[:host]
     protocol = url_options[:protocol]
     port = url_options[:port]
     @host_details = {host: host, protocol: protocol, port: port}
+    @facility_users = aggregate_facility_users(facilities)
+  end
+
+  def has_node_user_from_data_files(creator)
+    @facility_users.include? creator
   end
 
   def software_version
@@ -84,5 +89,17 @@ class MetadataHelper
 
   def readable_bytes(number)
     number_to_human_size(number, :precision => 2).gsub(" ", "")
+  end
+
+  private
+
+  def aggregate_facility_users(facilities)
+    facility_user_nodes = []
+    facilities.each do |facility|
+      facility.aggregated_contacts.each do |contact|
+        facility_user_nodes.push(contact) unless facility_user_nodes.include? contact
+      end
+    end
+    facility_user_nodes
   end
 end
