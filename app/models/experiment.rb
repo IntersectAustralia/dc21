@@ -5,6 +5,10 @@ class Experiment < ActiveRecord::Base
   has_many :experiment_for_codes, :order => "name ASC"
   has_many :experiment_parameters
 
+  validates :name, :presence => true,
+            :uniqueness => {:case_sensitive => false},
+            :length => {:maximum => 50}
+
   validates_presence_of :name
   validates_presence_of :subject
   validates_presence_of :facility_id
