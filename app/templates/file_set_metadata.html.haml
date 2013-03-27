@@ -6,7 +6,7 @@
 - # "package" which contains the package metadata for the zipped data_files
 - # "facilities" which is an array of Facility (rails model) objects associated with the chosen data files
 - # "experiments" which is an array of Experiment (rails model) objects for the chosen data files
-- # "metadata_helper" which is a MetadataUrlHelper object that can be used to find the URLs for the models
+- # "metadata_helper" which is a MetadataHelper object that can be used
 %html
   %head
     %title
@@ -23,6 +23,12 @@
         %h1 Package Creation Date
         %span{:property => "http://schema.org/dateCreated", :content => "#{package.created_at.try(:to_s, :date_only)}"}
           = package.created_at.try(:to_s, :ordinal_date)
+        %h1 Package File Name
+        %span{:property => "http://schema.org/name"}
+          = package.filename
+        %h1 ID
+        %span{:property => "http://schema.org/name"}
+          = package.external_id
         %h1 URL
         %a{:href => "#{metadata_helper.data_file_url(package)}", :property => "url"}
           = metadata_helper.data_file_url(package)

@@ -78,6 +78,7 @@ describe MetadataWriter do
     @package = Factory(:package,
                           filename: 'mypackage.zip',
                           id: 3,
+                          external_id: 'package_3',
                           experiment_id: @experiment.id,
                           file_processing_status: 'PACKAGE',
                           format: "BAGIT",
@@ -164,7 +165,7 @@ def diff_html(output_html, expected_file)
   unless diff == {}
     puts "HTML did not match"
     puts "Expected:"
-    #puts expected_html
+    puts expected_html
     puts "Actual:"
     puts output_html
   end
