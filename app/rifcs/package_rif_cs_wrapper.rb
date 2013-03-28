@@ -89,6 +89,7 @@ class PackageRifCsWrapper < RifCsWrapper
   def notes
     notes = []
     notes << "Published by #{options[:submitter].full_name} (#{options[:submitter].email})"
+    notes << "Unique ID: #{collection_object[:external_id]}" unless collection_object[:external_id].blank?
 
     facilities.each do |facility|
       contact = facility.primary_contact

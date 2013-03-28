@@ -31,8 +31,18 @@ describe PackageRifCsWrapper do
   end
 
   describe "Notes" do
+      package = Factory(:package,
+                          filename: 'mypackage.zip',
+                          id: 3,
+                          experiment_id: 4,
+                          file_processing_status: 'PACKAGE',
+                          format: "BAGIT",
+                          created_at: "2012-12-27 14:09:24",
+                          file_processing_description: "This package contains a lot of cats. Be warned.",
+                          created_by: Factory(:user))
+
     it "should include submitter in notes" do
-      wrapper = PackageRifCsWrapper.new(nil, [], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(package, [], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes[0].should eq('Published by Georgina Edwards (georgina@intersect.org.au)')
     end
 
@@ -49,7 +59,7 @@ describe PackageRifCsWrapper do
       df2 = Factory(:data_file, :experiment_id => experiment2.id)
       df3 = Factory(:data_file, :experiment_id => experiment3.id)
       df4 = Factory(:data_file, :experiment_id => experiment3.id)
-      wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes.size.should eq(3)
       wrapper.notes.include?('Primary contact for Fac1 is Fred Smith (fred@intersect.org.au')
       wrapper.notes.include?('Primary contact for Fac2 is Bob Jones (bob@intersect.org.au')
@@ -63,7 +73,7 @@ describe PackageRifCsWrapper do
       experiment = Factory(:experiment, :facility => facility)
 
       df1 = Factory(:data_file, :experiment_id => experiment.id)
-      wrapper = PackageRifCsWrapper.new(nil, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
+      wrapper = PackageRifCsWrapper.new(package, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       # this should never happen, its ok that nothing shows
       wrapper.notes.size.should eq(1)
     end
