@@ -35,6 +35,8 @@ describe MetadataWriter do
     @experiment.experiment_parameters.create!(parameter_category: cat2, parameter_sub_category: subcat2, parameter_modification: mod2, parameter_unit: mg, amount: 10, comments: 'my comment')
 
     # TOA5 file with full metadata
+    @created_by =  Factory(:user, :first_name => 'Fred', :last_name => 'Bloggs', :email => 'fred_bloggs@intersect.org.au')
+    @created_by.save!
     @data_file1 = Factory(:data_file,
                           id: 1,
                           filename: "datafile.jpg",
@@ -43,7 +45,7 @@ describe MetadataWriter do
                           format: FileTypeDeterminer::TOA5,
                           created_at: "2012-06-27 06:49:08",
                           file_processing_description: 'My file desc',
-                          created_by: Factory(:user, first_name: 'Fred', last_name: 'Bloggs'),
+                          created_by: @created_by,
                           interval: 900,
                           start_time: '2012-10-23 07:56:45 utc',
                           end_time: '2012-12-01 22:04:23 utc')
@@ -71,7 +73,7 @@ describe MetadataWriter do
                           format: nil,
                           created_at: "2012-12-27 14:09:24",
                           file_processing_description: nil,
-                          created_by: Factory(:user, first_name: 'Fred', last_name: 'Bloggs'))
+                          created_by: @created_by)
     # Package file
     @pkg_creator =  Factory(:user, first_name: 'Bobby', last_name: 'Tops', email: 'bobby@intersect.org.au')
     @pkg_creator.save!
@@ -169,7 +171,7 @@ def diff_html(output_html, expected_file)
     puts "Actual:"
     puts output_html
   end
-
+  
   diff.should == {}
 end
 
