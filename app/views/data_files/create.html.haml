@@ -38,9 +38,9 @@
             - if tags.empty?
               .record None
             - tags.each do |tag|
-              %label.checkbox
+              .record.checkbox
                 = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
-                = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name
+                = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
 
         - unless file.known_format?
           .control-group

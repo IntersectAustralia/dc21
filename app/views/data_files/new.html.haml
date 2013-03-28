@@ -26,9 +26,9 @@
         - if tags.empty?
           .record None
         - tags.each do |tag|
-          %label.checkbox
+          .record.checkbox
             = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
-            = label_tag "tag_#{tag.id}", tag.name
+            = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
     .control-group#files_input
       = label_tag "files_field_0", "Select file(s)", class: "control-label"
       .controls
