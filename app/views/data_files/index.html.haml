@@ -137,15 +137,16 @@
     .clearresults
       = link_to "Clear Search", clear_data_files_path, class: "btn pull-left clearsearch"
 
-  .data-results
-    - unless @data_files.empty? || @search.showing_all?
-      -##.whitebutton
-        %span= link_to 'Publish', '#', id: :publish_button
-    = will_paginate(@data_files_paginated)
+  - if @data_files.empty? || !@search.showing_all?
+    .datacontroll
+      #searched_attrs= "Searching by: #{@search.searched_attributes}"
 
-- if @data_files.empty? || !@search.showing_all?
-  .datacontroll
-    #searched_attrs= "Searching by: #{@search.searched_attributes}"
+
+.data-results
+  - unless @data_files.empty? || @search.showing_all?
+    -##.whitebutton
+      %span= link_to 'Publish', '#', id: :publish_button
+  = will_paginate(@data_files_paginated)
 
 - unless @data_files.empty?
 
