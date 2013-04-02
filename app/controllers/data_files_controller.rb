@@ -160,12 +160,21 @@ class DataFilesController < ApplicationController
   def download
     unless @data_file.published? and @data_file.is_package?
       authenticate_user!
-      authorize! :download, @data_file
+      authorize! :download, @data_file  
     end
-    if APP_CONFIG['ip_addresses'].include? request.ip
-      send_data_file(@data_file)
+
+    if current_user.present?
+      return send_data_file(@data_file)
     else
-      raise ActionController::RoutingError.new('Not Found')
+      unless APP_CONFIG['ip_addresses'].nil?
+        if APP_CONFIG['ip_addresses'].include? request.ip
+          return send_data_file(@data_file) 
+        else
+          raise ActionController::RoutingError.new('Not Found')
+        end
+      else
+        raise ActionController::RoutingError.new('Not Found')
+      end  
     end
   end
 
