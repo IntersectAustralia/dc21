@@ -6,6 +6,7 @@ class Experiment < ActiveRecord::Base
   has_many :experiment_parameters
 
   validates_presence_of :name
+  validates_uniqueness_of :name
   validates_presence_of :subject
   validates_presence_of :facility_id
   validates_presence_of :access_rights

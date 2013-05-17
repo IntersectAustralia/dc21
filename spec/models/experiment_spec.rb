@@ -16,7 +16,10 @@ describe Experiment do
     it { should validate_presence_of(:access_rights) }
     it { should ensure_length_of(:name).is_at_most 255 }
     it { should ensure_length_of(:subject).is_at_most 255 }
-
+    it "should validate uniqueness of experiment name" do
+      Factory(:experiment)
+      should validate_uniqueness_of(:name)
+    end
     describe "should validate that end date is on or after start date (unless end date blank)" do
       it "should allow end date on start date" do
         Factory.build(:experiment, :start_date => "2011-12-01", :end_date => "2011-12-01").should be_valid
