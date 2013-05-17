@@ -161,7 +161,7 @@ $(function () {
   // makes any input with attribute datepicker=true have a datepicker
   $('input[datepicker="true"]').datepicker({
     dateFormat:'yy-mm-dd',
-    showOn:'both',
+    showOn:'button',
     changeMonth:true,
     changeYear:true,
     currentText:'Show current month',
@@ -169,7 +169,6 @@ $(function () {
     showButtonPanel:true,
     autoSize:true
   });
-
 });
 
 
