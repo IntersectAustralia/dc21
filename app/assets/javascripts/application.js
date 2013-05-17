@@ -195,9 +195,11 @@ $(window).scroll(function (e) {
   if ($(this).scrollTop() > scrollHeader && $el.css('position') != 'fixed') {
     $('#content_wrapper').addClass('scrollheader');
     $('#footer').addClass('scrollheader');
+    $('#owner_logo_container').height(20);
   } else if ((position.top < scrollHeader) && ($el.css('position') != 'relative')) {
     $('#content_wrapper').removeClass('scrollheader');
     $('#footer').removeClass('scrollheader');
+    $('#owner_logo_container').height(60);
   }
   if (!checkonScroll) {
     return;
