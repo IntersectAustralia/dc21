@@ -54,6 +54,7 @@ class DataFilesController < ApplicationController
   end
 
   def edit
+    set_tab :explore, :contentnavigation
     @column_mappings = ColumnMapping.all
   end
 
