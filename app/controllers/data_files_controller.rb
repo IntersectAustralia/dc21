@@ -46,6 +46,7 @@ class DataFilesController < ApplicationController
   def show
     set_tab :explore, :contentnavigation
     @column_mappings = ColumnMapping.all
+    @back_request = request.referer
   end
 
   def new

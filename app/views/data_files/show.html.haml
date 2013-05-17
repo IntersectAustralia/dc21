@@ -59,7 +59,11 @@
 
 .form-actions
   .actions-pre
-    = cancel_button "Back", data_files_path
+    - if @back_request.nil?
+      = cancel_button "Back", data_files_path
+    -else
+      = cancel_button "Back", data_files_path unless @back_request.include? '/cart_items'
+      = cancel_button "Back", cart_items_path if @back_request.include? '/cart_items'
   .actions
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
       - if !@data_file.published or can?(:manage, @data_file)
