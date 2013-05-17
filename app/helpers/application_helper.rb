@@ -35,6 +35,7 @@ module ApplicationHelper
   private
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
+    value = content.gsub("\n", "<br />").html_safe 
     html = "<div class='control-group'>"
     html << "<label class='control-label' title='#{h label}'>"
     html << (h label)
@@ -42,7 +43,7 @@ module ApplicationHelper
     html << '</label>'
     html << "<div class='controls'>"
     html << "<div class='record' id='#{div_id + '_display'}' title='#{content}'>"
-    html << content
+    html << value
     html << '</div>'
     html << '</div>'
     html << '</div>'
