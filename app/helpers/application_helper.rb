@@ -17,6 +17,10 @@ module ApplicationHelper
     render_field_content(label, (h value)) unless value.blank?
   end
 
+  def render_description(label, value)
+    render_description_field(label, (h value))
+  end 
+
   def icon(type)
     "<img src='/images/icon_#{type}.png' border=0 class='icon' alt='#{type}' />".html_safe
   end
@@ -35,7 +39,6 @@ module ApplicationHelper
   private
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
-    value = content.gsub("\n", "<br />").html_safe 
     html = "<div class='control-group'>"
     html << "<label class='control-label' title='#{h label}'>"
     html << (h label)
@@ -43,6 +46,24 @@ module ApplicationHelper
     html << '</label>'
     html << "<div class='controls'>"
     html << "<div class='record' id='#{div_id + '_display'}' title='#{content}'>"
+    html << content
+    html << '</div>'
+    html << '</div>'
+    html << '</div>'
+    html.html_safe
+  end
+
+  private
+  def render_description_field(label, content)
+    div_id = label.tr(" ,", "_").downcase
+    value = content.gsub("\n", "<br />").html_safe 
+    html = "<div class='control-group'>"
+    html << "<label class='control-label' title='#{h label}'>"
+    html << (h label)
+    html << ":"
+    html << '</label>'
+    html << "<div class='controls'>"
+    html << "<div class='description' id='#{div_id + '_display'}' title='#{content}'>"
     html << value
     html << '</div>'
     html << '</div>'
