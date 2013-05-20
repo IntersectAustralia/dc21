@@ -145,7 +145,7 @@
                 %tr
                   %td Parent Facility
                   %td
-                    %a{:href => "#facility_1", :property => "http://purl.org/dc/terms/isPartOf"}
+                    %a{:href => "#facility_#{experiment.facility_id}", :property => "http://purl.org/dc/terms/isPartOf"}
                       = experiment.parent_name
                 %tr
                   %td Description
