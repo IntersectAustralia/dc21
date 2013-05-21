@@ -55,6 +55,7 @@ group :development, :test do
   gem 'spork', '~> 0.9.0.rc'
   gem "launchy"    # So you can do Then show me the page
   gem "debugger"
+  gem "zeus"
 end
 
 group :development do

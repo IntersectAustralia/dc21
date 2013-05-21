@@ -94,22 +94,23 @@ Feature: Overlapping Files
     Then I should see "<message>"
     And file "<new file>" should have type "<resulting type>"
     And there should be files named "<files afterwards>" in the system
+    And there should be files named "<deleted files>" that were deleted
   Examples:
-    | new file                                    | resulting type | files afterwards                 | message                                                                                                      | comment                             |
-    | samples/overlap_tests/6_oct.dat             | RAW            | 8_9_10_oct.dat, 6_oct.dat        | File uploaded successfully.                                                                                  | no overlap                          |
-    | samples/overlap_tests/6_7_oct.dat           | RAW            | 8_9_10_oct.dat, 6_7_oct.dat      | File uploaded successfully.                                                                                  | no overlap - adjacent               |
-    | samples/overlap_tests/6_7_8_oct.dat         | ERROR          | 8_9_10_oct.dat, 6_7_8_oct.dat    | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |
-    | samples/overlap_tests/6_7_8_9_oct.dat       | ERROR          | 8_9_10_oct.dat, 6_7_8_9_oct.dat, | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |
-    | samples/overlap_tests/6_7_8_9_10_oct.dat    | RAW            | 6_7_8_9_10_oct.dat               | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | safe - starts before, stops at same |
-    | samples/overlap_tests/6_7_8_9_10_11_oct.dat | RAW            | 6_7_8_9_10_11_oct.dat            | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | safe - starts before, stops after   |
-    | samples/overlap_tests/8_9_oct.dat           | ERROR          | 8_9_10_oct.dat, 8_9_oct.dat      | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |
-    | samples/overlap_tests/8_9_10_oct.dat        | RAW            | 8_9_10_oct.dat                   | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | exact match                         |
-    | samples/overlap_tests/8_9_10_11_oct.dat     | RAW            | 8_9_10_11_oct.dat                | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | safe - starts at same, ends after   |
-    | samples/overlap_tests/9_oct.dat             | ERROR          | 8_9_10_oct.dat, 9_oct.dat        | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |
-    | samples/overlap_tests/9_10_oct.dat          | ERROR          | 8_9_10_oct.dat, 9_10_oct.dat     | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |
-    | samples/overlap_tests/9_10_11_oct.dat       | ERROR          | 8_9_10_oct.dat, 9_10_11_oct.dat  | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |
-    | samples/overlap_tests/11_oct.dat            | RAW            | 8_9_10_oct.dat, 11_oct.dat       | File uploaded successfully.                                                                                  | no overlap - adjacent               |
-    | samples/overlap_tests/12_oct.dat            | RAW            | 8_9_10_oct.dat, 12_oct.dat       | File uploaded successfully.                                                                                  | no overlap                          |
+    | new file                                    | resulting type | files afterwards                 | message                                                                                                      | comment                             | deleted files|
+    | samples/overlap_tests/6_oct.dat             | RAW            | 8_9_10_oct.dat, 6_oct.dat        | File uploaded successfully.                                                                                  | no overlap                          |              |
+    | samples/overlap_tests/6_7_oct.dat           | RAW            | 8_9_10_oct.dat, 6_7_oct.dat      | File uploaded successfully.                                                                                  | no overlap - adjacent               |              |
+    | samples/overlap_tests/6_7_8_oct.dat         | ERROR          | 8_9_10_oct.dat, 6_7_8_oct.dat    | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |              |
+    | samples/overlap_tests/6_7_8_9_oct.dat       | ERROR          | 8_9_10_oct.dat, 6_7_8_9_oct.dat, | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |              |
+    | samples/overlap_tests/6_7_8_9_10_oct.dat    | RAW            | 6_7_8_9_10_oct.dat               | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | safe - starts before, stops at same |8_9_10_oct.dat|
+    | samples/overlap_tests/6_7_8_9_10_11_oct.dat | RAW            | 6_7_8_9_10_11_oct.dat            | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | safe - starts before, stops after   |8_9_10_oct.dat|
+    | samples/overlap_tests/8_9_oct.dat           | ERROR          | 8_9_10_oct.dat, 8_9_oct.dat      | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |              |
+    | samples/overlap_tests/8_9_10_oct.dat        | RAW            | 8_9_10_oct.dat                   | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | exact match                         |              |
+    | samples/overlap_tests/8_9_10_11_oct.dat     | RAW            | 8_9_10_11_oct.dat                | The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat                  | safe - starts at same, ends after   |8_9_10_oct.dat|
+    | samples/overlap_tests/9_oct.dat             | ERROR          | 8_9_10_oct.dat, 9_oct.dat        | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |              |
+    | samples/overlap_tests/9_10_oct.dat          | ERROR          | 8_9_10_oct.dat, 9_10_oct.dat     | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |              |
+    | samples/overlap_tests/9_10_11_oct.dat       | ERROR          | 8_9_10_oct.dat, 9_10_11_oct.dat  | File cannot safely replace existing files. File has been saved with type ERROR. Overlaps with 8_9_10_oct.dat | unsafe - doesn't cover              |              |
+    | samples/overlap_tests/11_oct.dat            | RAW            | 8_9_10_oct.dat, 11_oct.dat       | File uploaded successfully.                                                                                  | no overlap - adjacent               |              |
+    | samples/overlap_tests/12_oct.dat            | RAW            | 8_9_10_oct.dat, 12_oct.dat       | File uploaded successfully.                                                                                  | no overlap                          |              |
 
   Scenario Outline: Outcome of overlap scenarios where it could be safe but the content doesn't match
     Given I upload "samples/overlap_tests/8_9_10_oct.dat" with type "RAW" and description "orig desc" and experiment "My Experiment"
@@ -144,6 +145,7 @@ Feature: Overlapping Files
     Then I should see "The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat, 11_oct.dat"
     And file "8_9_10_11_oct.dat" should have type "RAW"
     And there should be files named "8_9_10_11_oct.dat" in the system
+    And there should be files named "8_9_10_oct.dat, 11_oct.dat" that were deleted
 
   Scenario: Overlap where new file safely overlaps one file but unsafely overlaps another
     Given I upload "samples/overlap_tests/8_9_10_oct.dat" with type "RAW" and description "D1" and experiment "My Experiment"
@@ -160,6 +162,7 @@ Feature: Overlapping Files
     Then I should see "The file replaced one or more other files with similar data. Replaced files: 8_9_10_oct.dat"
     And file "8_9_10_11_oct.dat" should have type "RAW"
     And there should be files named "8_9_10_11_oct.dat, 12_oct.dat" in the system
+    And there should be files named "8_9_10_oct.dat" that were deleted
 
   Scenario: Overlap where new file could safely overlaps multiple old files but an existing file has an ID
     Given I upload "samples/overlap_tests/8_9_10_oct.dat" with type "RAW" and description "D1" and experiment "My Experiment"

@@ -525,4 +525,15 @@ When /^there should be files named "([^"]*)" in the system$/ do |csv_files|
   names = csv_files.split(",").map(&:strip)
   DataFile.count.should eq(names.size), "Expected #{names.size} files but found #{DataFile.count}"
   DataFile.all.collect(&:filename).sort.should eq(names.sort)
+  names.each do |name|
+    File.exists?("#{APP_CONFIG['files_root']}/#{name}").should eq(true)
+  end
 end
+
+When /^there should be files named "([^"]*)" that were deleted$/ do |csv_files|
+  names = csv_files.split(",").map(&:strip)
+  names.each do |name|
+    File.exists?("#{APP_CONFIG['files_root']}/#{name}").should eq(false)
+  end
+end
+

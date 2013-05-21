@@ -53,6 +53,7 @@ class OverlapChecker
       users_with_replaced_files_in_cart = []
       safe.each do |df|
         users_with_replaced_files_in_cart += df.cart_items.collect(&:user)
+        File.delete df.path
         df.destroy
       end
 

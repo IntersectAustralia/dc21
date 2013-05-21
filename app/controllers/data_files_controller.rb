@@ -106,28 +106,6 @@ class DataFilesController < ApplicationController
 
   end
 
-  def api_create
-    begin
-      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-
-      file = params[:file]
-      type = params[:type]
-      experiment_id = params[:experiment_id]
-      tag_names = params[:tag_names]
-      errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
-
-      if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
-        messages = uploaded_file.messages.collect { |m| m[:message] }
-        render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
-      else
-        render :json => {:messages => errors}, :status => :bad_request
-      end
-    ensure
-      clean_up_temp_files([file])
-    end
-  end
-
   def bulk_update
     successful_complete_update = true
     @uploaded_files = []
@@ -157,27 +135,6 @@ class DataFilesController < ApplicationController
       render :create
     end
 
-  end
-
-  def download
-    unless @data_file.published? and @data_file.is_package?
-      authenticate_user!
-      authorize! :download, @data_file  
-    end
-
-    if current_user.present?
-      return send_data_file(@data_file)
-    else
-      unless APP_CONFIG['ip_addresses'].nil?
-        if APP_CONFIG['ip_addresses'].include? request.ip
-          return send_data_file(@data_file) 
-        else
-          raise ActionController::RoutingError.new('Not Found')
-        end
-      else
-        raise ActionController::RoutingError.new('Not Found')
-      end  
-    end
   end
 
   def download_selected
@@ -225,8 +182,51 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def download
+    unless @data_file.published? and @data_file.is_package?
+      authenticate_user!
+      authorize! :download, @data_file  
+    end
+
+    if current_user.present?
+      return send_data_file(@data_file)
+    else
+      unless APP_CONFIG['ip_addresses'].nil?
+        if APP_CONFIG['ip_addresses'].include? request.ip
+          return send_data_file(@data_file) 
+        else
+          raise ActionController::RoutingError.new('Not Found')
+        end
+      else
+        raise ActionController::RoutingError.new('Not Found')
+      end  
+    end
+  end
+
   def api_search
     do_api_search(params)
+  end
+
+  def api_create
+    begin
+      attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+
+      file = params[:file]
+      type = params[:type]
+      experiment_id = params[:experiment_id]
+      tag_names = params[:tag_names]
+      errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
+
+      if errors.empty?
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+        messages = uploaded_file.messages.collect { |m| m[:message] }
+        render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
+      else
+        render :json => {:messages => errors}, :status => :bad_request
+      end
+    ensure
+      clean_up_temp_files([file])
+    end
   end
 
   private
