@@ -311,7 +311,7 @@ class DataFilesController < ApplicationController
     @data_files = DataFile.scoped
     @data_files = @search.do_search(@data_files)
     @data_files.each do |data_file|
-      data_file.url = download_data_file_url(data_file.id)
+      data_file.url = download_data_file_url(data_file.id, :format => :json)
     end
   end
 

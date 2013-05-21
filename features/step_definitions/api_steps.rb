@@ -99,10 +99,28 @@ When /^I make a request for the explore data page with the API token for "([^"]*
   get data_files_path(:auth_token => user.authentication_token, :format => :json)
 end
 
+When /^I make a request for the data download page for "([^"]*)" with an invalid API token$/ do |data|
+  get download_data_file_path(:id => DataFile.find_by_filename(data).id, :auth_token => 'blah', :format => :json)
+end
+
+When /^I make a request for the data download page for "([^"]*)" without an API token$/ do |data|
+  get download_data_file_path(:id => DataFile.find_by_filename(data).id, :format => :json)
+end
+
 When /^I perform an API search with the following parameters as user "([^"]*)"$/ do |email, table|
   post_params = Hash[*table.raw.flatten]
   user = User.find_by_email!(email)
   post api_search_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
+end
+
+When /^I perform an API search without an API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_search_data_files_path(:format => :json), post_params
+end
+
+When /^I perform an API search with an invalid API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_search_data_files_path(:format => :json, :auth_token => 'blah'), post_params
 end
 
 When /^I should get a JSON response with$/ do |table|

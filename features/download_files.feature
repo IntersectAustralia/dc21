@@ -12,6 +12,14 @@ Feature: Download multiple files
       | sample3.txt | 30/12/2011 12:34 | georgina@intersect.org.au |                  |                     | samples/sample3.txt | 3  |
     And I am on the list data files page
 
+  Scenario: Try to download without an API token
+    When I make a request for the data download page for "sample1.txt" without an API token
+    Then I should get a 401 response code
+
+  Scenario: Try to download with an invalid API token
+    When I make a request for the data download page for "sample1.txt" with an invalid API token
+    Then I should get a 401 response code
+
   Scenario: Download a selection of files from the cart
     When I add "sample1.txt" to the cart
     And I add "sample2.txt" to the cart
@@ -68,17 +76,3 @@ Feature: Download multiple files
     And I am on the data file download page for my_package.zip
     Then I should get a file with name "my_package.zip" and content type "application/octet-stream"
     And I should receive a zip file matching "my_package/zip"
-
-
-# Scenario: Package a selection of files as a BagIt Zip
-#   When I add "sample1.txt" to the cart
-#   And I add "sample2.txt" to the cart
-#   And I click on "Package"
-#   Then I should receive a zip file matching "samples/bagit"
-
-# this functionality has been disabled for now - leaving here in case we re-instate it
-#  Scenario: Download a single file from the view data file details page
-#    When I am on the data file details page for sample1.txt
-#    When I click on "Download Data"
-#    Then I should get a file with name "sample1.txt" and content type "text/plain"
-#    And the file should contain "Plain text file sample1.txt"

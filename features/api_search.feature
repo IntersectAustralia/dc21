@@ -13,6 +13,16 @@ Feature: Perform searching via API
       | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     |
       | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |
 
+  Scenario: Try to search without an API token
+    When I perform an API search without an API token
+      | stati | RAW |
+    Then I should get a 401 response code
+
+  Scenario: Try to search with an invalid API token
+    When I perform an API search with an invalid API token
+      | stati | RAW |
+    Then I should get a 401 response code
+
   Scenario: Search via API
     When I perform an API search with the following parameters as user "researcher@intersect.org.au"
       | stati | RAW |
