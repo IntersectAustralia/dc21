@@ -74,8 +74,10 @@ Dc21app::Application.routes.draw do
 
   resources :for_codes, :only => [] do
     collection do
+      get :top_level
       get :second_level
       get :third_level
+      get :server_status
     end
   end
 

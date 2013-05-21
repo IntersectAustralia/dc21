@@ -1,17 +1,15 @@
 $(function () {
+  $("#mint-server-feedback").hide();
+
   $('#second_level').hide();
   $('#third_level').hide();
+
+  getTopLevel();
 
   $('select#for_code_select_1').change(function (e) {
     var new_value = $(this).val();
     if (new_value != "") {
-      $.getJSON('/for_codes/second_level', {top_level:$(this).val()}, function (result) {
-        $('select#for_code_select_2').html("<option value=''>Please select</option>");
-        $.each(result, function (item, value) {
-          $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_2");
-        });
-      });
-      $('#second_level').show();
+      getSecondLevel($(this).val());
     }
     else {
       $('select#for_code_select_2').html("<option value=''>Please select</option>");
@@ -24,13 +22,7 @@ $(function () {
   $('select#for_code_select_2').change(function (e) {
     var new_value = $(this).val();
     if (new_value != "") {
-      $.getJSON('/for_codes/third_level', {second_level:$(this).val()}, function (result) {
-        $('select#for_code_select_3').html("<option value=''>Please select</option>");
-        $.each(result, function (item, value) {
-          $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_3");
-        });
-      });
-      $('#third_level').show();
+      getThirdLevel($(this).val());
     }
     else {
       $('select#for_code_select_3').html("<option value=''>Please select</option>");
@@ -38,7 +30,97 @@ $(function () {
     }
   });
 
+  // AJAX calls to get FOR codes
+  function getTopLevel() {
+    $.ajax({
+      url: "/for_codes/top_level",
+      dataType: "json",
+      async: false,
+      success: function(result) {
+        $('select#for_code_select_1').html("<option value=''>Please select</option>");
+        $.each(result, function (item, value) {
+          $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_1");
+        });
+        handleError(false);
+      },
+      error: function() {
+        handleError(true);
+      }
+    })
+  }
+
+  function getSecondLevel(topLevelData) {
+    $.ajax({
+      url: "/for_codes/second_level",
+      dataType: "json",
+      data: {top_level: topLevelData},
+      async: false,
+      success: function(result) {
+        $('select#for_code_select_2').html("<option value=''>Please select</option>");
+        $.each(result, function (item, value) {
+          $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_2");
+        });
+        $('#second_level').show();
+        handleError(false);
+      },
+      error: function() {
+        handleError(true);
+      }
+    });
+  }
+
+  function getThirdLevel(secondLevelData) {
+    $.ajax({
+      url: "/for_codes/third_level",
+      dataType: "json",
+      data: {second_level: secondLevelData},
+      async: false,
+      success: function(result) {
+        $('select#for_code_select_3').html("<option value=''>Please select</option>");
+        $.each(result, function (item, value) {
+          $("<option value='" + value[1] + "'>" + value[0] + "</option>").appendTo("select#for_code_select_3");
+        });
+        $('#third_level').show();
+        handleError(false);
+      },
+      error: function() {
+        handleError(true);
+      }
+    });
+  }
+
+  function handleError(disable) {
+    if (disable) {
+      $("#mint-server-feedback").show();
+    } else {
+      $("#mint-server-feedback").hide();
+    }
+
+    $("add_for_code_link").prop('disabled', disable);
+  }
+
   $('#add_for_code_link').live('click', function () {
+    if (mintServer.getStatus().isUp()) {
+      addForCode();
+      handleError(false);
+    } else {
+      handleError(true)
+    }
+    return false;
+  });
+
+  $('.delete_for_code').live('click', function () {
+    if (mintServer.getStatus().isUp()) {
+      handleError(false);
+      $(this).parent().remove();
+      return false;
+    } else {
+      handleError(true);
+      return false;
+    }
+  });
+
+  function addForCode() {
     var for_code_1 = $('#for_code_select_1').val();
     var for_code_2 = $('#for_code_select_2').val();
     var for_code_3 = $('#for_code_select_3').val();
@@ -72,12 +154,35 @@ $(function () {
       $('select#for_code_select_3').html("<option value=''>Please select</option>");
       $('#third_level').hide();
     }
+  }
 
-    return false;
-  });
+  var mintServer = function mintServer() {
+    var status = null;
 
-  $('.delete_for_code').live('click', function () {
-    $(this).parent().remove();
-    return false;
-  });
+    var getStatus = function() {
+      $.ajax({
+        url: "/for_codes/server_status",
+        dataType: "text",
+        async: false,
+        success: function(data) {
+          status = data;
+        }
+      });
+      return this;
+    };
+
+    var isUp = function() {
+      if (status == "200")
+        return true;
+      else if (status == "404")
+        return false;
+      else
+        return false;
+    };
+
+    return {
+      getStatus: getStatus,
+      isUp: isUp
+    }
+  }();
 });

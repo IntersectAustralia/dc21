@@ -57,8 +57,11 @@
   .control-group
     = label_tag :for_code_select_1, "FOR codes", class: "control-label"
     .controls
+      #mint-server-feedback
+        .alert.alert-error
+          Unable to update FOR codes. The MINT application is not currently available - try again later.
       %span.input
-        = select_tag :for_code, options_for_select(for_codes), :prompt => "Please select", :id => :for_code_select_1
+        = select_tag :for_code, options_for_select([]), :prompt => "Please select", :id => :for_code_select_1
       #second_level
         %span.input
           = select_tag :for_code_level2, options_for_select([]), :prompt => "Please select", :id => :for_code_select_2
@@ -76,6 +79,7 @@
               = hidden_field_tag "for_codes[#{index}][url]", code.url
               = hidden_field_tag "for_codes[#{index}][name]", code.name
               = link_to "Delete", "#", :class => "delete_for_code"
+
   .form-actions
     .actions-pre
       = cancel_button 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment))

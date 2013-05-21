@@ -1,3 +1,5 @@
+require "net/http"
+
 class ForCodesLookup
   include HTTParty
 
@@ -13,7 +15,6 @@ class ForCodesLookup
     else
       ForCodesLookup.new
     end
-
   end
 
   def top_level_codes
@@ -29,9 +30,12 @@ class ForCodesLookup
   end
 
   private
+
   def get_codes(level)
-    response = self.class.get(FOR_CODES_PATH, :query => {:level => level, :count => 9999}, :timeout => 1000)
-    filter_codes(response)
+    if MintServerStatus.server_up?
+      response = self.class.get(FOR_CODES_PATH, :query => {:level => level, :count => 9999}, :timeout => 1000)
+      filter_codes(response)
+    end
   end
 
   def filter_codes(response)
