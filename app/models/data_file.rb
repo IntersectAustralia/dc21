@@ -26,6 +26,7 @@ class DataFile < ActiveRecord::Base
 
   validates_presence_of :filename
   validates_uniqueness_of :filename
+  validates_length_of :filename, :maximum => 200
 
   validates_uniqueness_of :external_id, :allow_blank => true, :allow_nil => true,
                           :message => Proc.new { |error, attributes|
@@ -35,6 +36,7 @@ class DataFile < ActiveRecord::Base
   validates_length_of :external_id, :maximum => 1000
 
   validates_presence_of :path
+  validates_length_of :path, :maximum => 260
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
   validates_presence_of :experiment_id
