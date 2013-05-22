@@ -81,11 +81,9 @@ Feature: View the list of facilities
       | Longitude                | 20.2      |
       | Latitude (bottom right)  | -30.3     |
       | Longitude (bottom right) | 40.4      |
-    And I add the following contacts:
-      | email                  | primary |
-      | one@intersect.org.au   | false   |
-      | two@intersect.org.au   | true    |
-      | three@intersect.org.au | false   |
+    And I select "two@intersect.org.au" from the primary select box
+    And I select and add "one@intersect.org.au" from the other contacts select box
+    And I select and add "three@intersect.org.au" from the other contacts select box
     And I press "Save Facility"
     Then I should see "Facility successfully added"
     And I should see details displayed
@@ -108,29 +106,22 @@ Feature: View the list of facilities
       | three@intersect.org.au | User       | Three     |
       | four@intersect.org.au  | User       | Four      |
 
-  #TODO refactor into just using a factory
     And I follow "New Facility"
     When I fill in the following:
       | Name | Facility0 |
       | Code | f0        |
-    And I add the following contacts:
-      | email                  | primary |
-      | one@intersect.org.au   | false   |
-      | two@intersect.org.au   | true    |
-      | three@intersect.org.au | false   |
+    And I select "two@intersect.org.au" from the primary select box
+    And I select and add "one@intersect.org.au" from the other contacts select box
+    And I select and add "three@intersect.org.au" from the other contacts select box
     And I press "Save Facility"
     And I follow "Edit Facility"
-    And I add the following contacts:
-      | email                 | primary |
-      | four@intersect.org.au | true    |
+    And I select "four@intersect.org.au" from the primary select box
     And I press "Update"
     Then I should see "Facility successfully updated"
     And I should see details displayed
       | Primary Contact | User Four (four@intersect.org.au)   |
       | Other Contact 1 | User One (one@intersect.org.au)     |
       | Other Contact 2 | User Three (three@intersect.org.au) |
-      | Other Contact 3 | User Two (two@intersect.org.au)     |
-
 
   Scenario: Create a new facility with invalid details
     Given I am on the facilities page

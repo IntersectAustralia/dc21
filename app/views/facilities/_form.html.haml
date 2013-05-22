@@ -52,37 +52,29 @@
       = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
 
   .control-group
-    = label_tag :contacts_select, 'Contacts', class: 'control-label'
+    = label_tag :primary_contact, 'Primary Contact', class: 'control-label'
     .controls
       = required
       %span.input
-      = select_tag :contacts_select,  options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
-      = link_to 'Add', '#', :class => "btn btn-primary", :id => 'add_contact'
-      %p.details
-        Choose from the list above, and select via radio button the primary contact. 
-      %ul#contacts_list
-        - if @facility.primary_contact.present?
-          - contact = @facility.primary_contact
-          - #TODO refactor this out into a helper
-          -#= build_contact_fields(contact)
-          %li{:id => "contact_#{contact.id}"}
-            = hidden_field_tag "contact_ids[]", contact.id
-            = radio_button_tag "contact_primary", contact.id, :checked => true
-            %span= contact.email
-            = link_to "Delete", '#', :class => 'delete_contact delete_link'
+      - if @facility.primary_contact.nil?
+        = select_tag :primary_contact_select, options_from_collection_for_select(User.approved, :id, :email)
+      - else
+        = select_tag :primary_contact_select, options_from_collection_for_select(User.approved, :id, :email, @facility.primary_contact.id)
 
+  .control-group
+    = label_tag :other_contacts, 'Other Contacts', class: 'control-label'
+    .controls
+      %span.input
+      = select_tag :other_contacts_select, options_from_collection_for_select(User.approved, :id, :email)
+      = link_to 'Add', '#', :class => "btn btn-primary", :id => 'facility_add_contact'
+
+      %ul#contacts_list
         - if @facility.contacts.present?
           - @facility.contacts.each do |contact|
-            - #TODO refactor this out into a helper
-            -#= build_contact_fields(contact)
             %li{:id => "contact_#{contact.id}"}
-              = hidden_field_tag "contact_ids[]", contact.id
-              = radio_button_tag "contact_primary", contact.id
+              = hidden_field_tag "facility[contact_ids][]", contact.id
               %span= contact.email
-              = link_to "Delete", '#', :class => 'delete_contact delete_link'
-
-
-
+              = link_to "Delete", "#", :class => 'delete_contact delete_link'
 
   .form-actions
     - if edit_mode

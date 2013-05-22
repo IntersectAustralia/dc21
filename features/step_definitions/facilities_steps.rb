@@ -29,5 +29,15 @@ When /^I add the following contacts:$/ do |table|
       step "I choose \"contact_primary_#{user.id}\""
     end
   end
+end
 
+When /^I select "([^"]*)" from the primary select box$/ do |option|
+  field = "primary_contact_select"
+  select(option, :from => field)
+end
+
+When /^I select and add "([^"]*)" from the other contacts select box$/ do |option|
+  field = "other_contacts_select"
+  select(option, :from => field)
+  click_link("facility_add_contact")
 end
