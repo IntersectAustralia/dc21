@@ -136,6 +136,6 @@ end
 When /^I should have file download link for each entry$/ do
   actual = JSON.parse(last_response.body)
   actual.each do |entry|
-    entry["url"].should eq(Rails.application.routes.url_helpers.download_data_file_url(entry["file_id"], :host => 'example.org'))
+    entry["url"].should eq(Rails.application.routes.url_helpers.download_data_file_url(entry["file_id"], :host => 'example.org', :format => :json))
   end
 end
