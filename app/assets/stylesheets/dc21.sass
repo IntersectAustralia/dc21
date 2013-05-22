@@ -1373,9 +1373,22 @@ ul#files_to_download
 .ie7 .searchcategory input.bluebutton
   width: 168px
 
+.ie7
+  table#exploredata.search
+    position: relative
+    overflow: hidden
+    table-layout: fixed
+  table
+    overflow: hidden
+    table-layout: fixed
+    td.add_cart
+      text-overflow: clip
+
+.ie7 .remove-all
+  line-height : 1
+
 .ie8 .footerwrapper
   display: relative
-
 
 .ie8
   table#exploredata
@@ -1408,7 +1421,12 @@ ul#files_to_download
   table
     overflow: hidden
     table-layout: fixed
+    td.add_cart
+      text-overflow: clip
 
 
 .ie9 input[type="password"], .ie9 input[type="text"]
   line-height: 18px
+
+.ie9 .remove-all
+  line-height : 1

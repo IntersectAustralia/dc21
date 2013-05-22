@@ -30,7 +30,7 @@
       %th.sortable.type= "Type"
       %th.sortable.experiment=  "Experiment"
       %th.delete_cart
-        = link_to 'Remove All',  destroy_all_cart_items_path, :class =>  "btn btn-danger", :confirm => remove_all_warning, :id => "remove_all_from_cart"
+        = link_to 'Remove All',  destroy_all_cart_items_path, :class =>  "btn btn-danger remove-all", :confirm => remove_all_warning, :id => "remove_all_from_cart"
     - @cart_items.each do |cart_item|
       %tr{:class => cycle('field_bg', 'field_nobg')}
         - data_file = DataFile.find(cart_item.data_file_id)
