@@ -45,7 +45,7 @@ module ApplicationHelper
     html << ":"
     html << '</label>'
     html << "<div class='controls'>"
-    html << "<div class='record' id='#{div_id + '_display'}' title='#{content}'>"
+    html << "<div class='record' id='#{div_id + '_display'}' title='#{string_escape  content}'>"
     html << content
     html << '</div>'
     html << '</div>'
@@ -56,15 +56,19 @@ module ApplicationHelper
   private
   def render_description_field(label, content)
     div_id = label.tr(" ,", "_").downcase
-    value = content.gsub("\n", "<br />").html_safe 
+    #value = content.gsub("\n", "<br />").html_safe
+    values = content.split("\n") 
     html = "<div class='control-group'>"
     html << "<label class='control-label' title='#{h label}'>"
     html << (h label)
     html << ":"
     html << '</label>'
     html << "<div class='controls'>"
-    html << "<div class='description' id='#{div_id + '_display'}' title='#{content}'>"
-    html << value
+    html << "<div class='description' id='#{div_id + '_display'}' title='#{string_escape content}'>"
+    values.each do |value|
+      html << value
+      html << '<br>'
+    end
     html << '</div>'
     html << '</div>'
     html << '</div>'
@@ -87,7 +91,11 @@ module ApplicationHelper
     html << '</div>'
     html << '</div>'
     html.html_safe
+  end
 
+  private
+  def string_escape(str)
+    str.gsub('\'', '&#39;')
   end
 
   def sortable(column, title = nil)
