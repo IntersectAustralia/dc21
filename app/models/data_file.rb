@@ -26,7 +26,7 @@ class DataFile < ActiveRecord::Base
 
   validates_presence_of :filename
   validates_uniqueness_of :filename
-  validates_length_of :filename, :maximum => 200
+  validates_length_of :filename, :maximum => 255 - APP_CONFIG['files_root'].length
 
   validates_uniqueness_of :external_id, :allow_blank => true, :allow_nil => true,
                           :message => Proc.new { |error, attributes|
