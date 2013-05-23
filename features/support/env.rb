@@ -30,6 +30,7 @@ Spork.prefork do
   # steps to use the XPath syntax.
   Capybara.default_selector = :css
   Capybara.ignore_hidden_elements = true
+  Capybara.server_boot_timeout = 50
 
 end
 
