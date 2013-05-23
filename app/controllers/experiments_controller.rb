@@ -4,6 +4,7 @@ class ExperimentsController < ApplicationController
   load_and_authorize_resource :through => :facility
 
   expose(:access_rights) { AccessRightsLookup.new.access_rights }
+  expose(:for_codes) { ForCodesLookup.get_instance.top_level_codes }
 
   set_tab :home
   set_tab :facilities, :contentnavigation
@@ -13,13 +14,24 @@ class ExperimentsController < ApplicationController
   end
 
   def new
+    @experiment = Experiment.new
+    @facility = Facility.find(params[:facility_id])
   end
 
   def edit
+    @experiment = Experiment.find(params[:id])
+    @facility = Facility.find(params[:facility_id])
   end
 
   def create
-    if @experiment.save
+    success = false
+    Experiment.transaction do
+      @experiment.set_for_codes(params[:for_codes])
+      success = @experiment.update_attributes(params[:experiment])
+      raise ActiveRecord::Rollback unless success
+    end
+
+    if success
       redirect_to facility_experiment_path(@facility, @experiment), notice: SAVE_MESSAGE
     else
       @experiment.filter_errors
@@ -30,15 +42,16 @@ class ExperimentsController < ApplicationController
   def update
     success = false
     Experiment.transaction do
+      @experiment.set_for_codes(params[:for_codes])
       success = @experiment.update_attributes(params[:experiment])
-      raise ActiveRecord::Rollback unless success #tell AR to rollback the transaction but not pass on the error
+      raise ActiveRecord::Rollback unless success
     end
 
     if success
       redirect_to facility_experiment_path(@facility, @experiment), notice: SAVE_MESSAGE
     else
       @experiment.filter_errors
-      render action: "edit"
+      render 'edit'
     end
   end
 

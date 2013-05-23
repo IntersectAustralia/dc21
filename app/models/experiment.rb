@@ -2,7 +2,7 @@ class Experiment < ActiveRecord::Base
 
   belongs_to :facility
   belongs_to :parent_experiment, :class_name => "Experiment"
-  has_many :experiment_for_codes, :order => "name ASC"
+  has_many :experiment_for_codes, :order => "name ASC", :dependent => :destroy
   has_many :experiment_parameters
 
   validates_presence_of :name

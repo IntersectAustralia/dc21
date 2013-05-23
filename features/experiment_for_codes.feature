@@ -46,6 +46,7 @@ Feature: Manage experiment metadata
   @javascript
   Scenario: Selecting FOR codes while creating an experiment
     Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
+    And I wait for MINT server
     Then the "FOR codes" select should contain
       | Please select               |
       | 01 - MATHEMATICAL SCIENCES  |
@@ -55,7 +56,9 @@ Feature: Manage experiment metadata
       | 05 - ENVIRONMENTAL SCIENCES |
       | 06 - BIOLOGICAL SCIENCES    |
     When I add for code "02 - PHYSICAL SCIENCES"
+    And I wait for MINT server
     And I add for code "05 - ENVIRONMENTAL SCIENCES", "0502 - ITEM 2"
+    And I wait for MINT server
     And I add for code "03 - CHEMICAL SCIENCES", "0303 - ITEM 3", "030302 - ITEM 2"
     And I press "Save Experiment"
     Then I should see for codes

@@ -178,3 +178,7 @@ Then /^I take a screenshot called "([^"]*)"$/ do |name|
   # only works when using selenium, probably should check and throw an error if not
   page.driver.browser.save_screenshot("screenshot-#{name}.png")
 end
+
+When /^I wait for MINT server$/ do
+  sleep(2)
+end
