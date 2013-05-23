@@ -6,15 +6,10 @@
 
 .form-actions
   .actions-pre
-    - if @back_request.nil?
+    - if @back_request.nil? or !@back_request.include? root_url
       = cancel_button "Back", data_files_path
     -else
-      - if @back_request.include? '/cart_items'
-        = cancel_button "Back", cart_items_path 
-      - elsif @back_request.include? '/home'
-        = cancel_button "Back", home_pages_path
-      - else
-        = cancel_button "Back", data_files_path
+      = cancel_button "Back", :back
   .actions
     - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
       - if !@data_file.published or can?(:manage, @data_file)
@@ -67,15 +62,10 @@
 
 .form-actions
   .actions-pre
-    - if @back_request.nil?
+    - if @back_request.nil? or !@back_request.include? root_url
       = cancel_button "Back", data_files_path
     -else
-      - if @back_request.include? '/cart_items'
-        = cancel_button "Back", cart_items_path 
-      - elsif @back_request.include? '/home'
-        = cancel_button "Back", home_pages_path
-      - else
-        = cancel_button "Back", data_files_path
+      = cancel_button "Back", :back
       
 
   .actions

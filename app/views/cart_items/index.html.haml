@@ -9,7 +9,10 @@
 
   .form-actions
     .actions-pre
-      = cancel_button "Back", data_files_path
+      - if session[:back].nil? or !session[:back].include? root_url
+        = cancel_button "Back", data_files_path
+      -else
+        = cancel_button "Back", :back
     .actions
       = link_to "Download", download_selected_data_files_path, :class => "btn btn-primary"
       = link_to "Package",  new_package_path, :class => "btn btn-primary"
@@ -45,7 +48,10 @@
 
 .form-actions
   .actions-pre
-    = cancel_button "Back", data_files_path
+    - if session[:back].nil? or !session[:back].include? root_url
+      = cancel_button "Back", data_files_path
+    -else
+      = cancel_button "Back", :back
   .actions
     - unless @cart_items.empty?
       = link_to "Download", download_selected_data_files_path, :class => "bluebutton"
