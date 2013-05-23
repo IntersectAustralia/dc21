@@ -7,7 +7,7 @@ $(document).ready(function(){
 
     var selector = "li#contact_" + contact_id;
 
-    if (!$(selector).length && isNotPrimary()) {
+    if (!$(selector).length && isNotPrimary() && contact_id != "") {
       addContact(contact_id, contact_email, selector);
     }
 
@@ -44,7 +44,7 @@ $(document).ready(function(){
     var id = "contact_" + contact_id;
 
     $('<li>').attr("id", id).appendTo("ul#contacts_list");
-    $('<input type=hidden>').attr({name: 'facility[contact_ids][]', value: contact_id}).appendTo(selector);
+    $('<input type=hidden>').attr({name: 'contact_ids[]', value: contact_id}).appendTo(selector);
     $(selector).append('<span>' + contact_email + '</span>');
     $(selector).append("<a href='#' class='delete_contact delete_link'> Delete</a>");
     $('<span>').attr({name: 'remove_contact', "class": 'remove_button'}).appendTo(selector);
