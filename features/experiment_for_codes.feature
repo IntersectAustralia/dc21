@@ -75,8 +75,11 @@ Feature: Manage experiment metadata
   @javascript
   Scenario: FOR codes chosen so far aren't lost on validation error
     Given I am on the new experiment page for facility 'ROS Weather Station'
+    And I wait for MINT server
     When I add for code "02 - PHYSICAL SCIENCES"
+    And I wait for MINT server
     And I add for code "05 - ENVIRONMENTAL SCIENCES", "0502 - ITEM 2"
+    And I wait for MINT server
     And I add for code "03 - CHEMICAL SCIENCES", "0303 - ITEM 3", "030302 - ITEM 2"
     And I press "Save Experiment"
     Then I should see "Name can't be blank"
@@ -127,6 +130,7 @@ Feature: Manage experiment metadata
   @javascript
   Scenario: Can delete FOR codes during create
     Given I have filled in the basic fields on the new experiment page under facility "ROS Weather Station"
+    And I wait for MINT server
     When I add for code "02 - PHYSICAL SCIENCES"
     And I add for code "05 - ENVIRONMENTAL SCIENCES"
     And I delete for code "02 - PHYSICAL SCIENCES"
@@ -139,7 +143,9 @@ Feature: Manage experiment metadata
     Given experiment "Weather Station" has for code "02 - PHYSICAL SCIENCES"
     Given experiment "Weather Station" has for code "05 - ENVIRONMENTAL SCIENCES"
     When I edit experiment "Weather Station"
+    And I wait for MINT server
     And I add for code "01 - MATHEMATICAL SCIENCES"
+    And I wait for MINT server
     And I add for code "03 - CHEMICAL SCIENCES", "0303 - ITEM 3", "030302 - ITEM 2"
     And I delete for code "02 - PHYSICAL SCIENCES"
     And I delete for code "01 - MATHEMATICAL SCIENCES"
