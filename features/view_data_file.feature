@@ -52,7 +52,7 @@ Feature: View the details of a data file
   Scenario: Navigate back to the list
     When I am on the data file details page for sample.txt
     And I follow "Back"
-    Then I should be on the list data files page
+    Then I should be on the home page
 
   Scenario: Must be logged in to view the details
     Then users should be required to login on the data file details page for sample.txt
