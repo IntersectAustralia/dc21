@@ -41,6 +41,7 @@
     = render_field "ID", @data_file.external_id
     = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
     -if @data_file.is_package?
+      = render_field "Title", @data_file.title
       = render_field "Published", @data_file.published ? "Yes" : "No"
       - if @data_file.published and !@data_file.published_date.nil?
         = render_field "Published by", @data_file.published_by.full_name

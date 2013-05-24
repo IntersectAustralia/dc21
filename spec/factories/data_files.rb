@@ -18,6 +18,7 @@ FactoryGirl.define do
     association :published_by, :factory => :user
     association :experiment
     file_processing_status "PACKAGE"
+    title "title"
     file_size 35642
   end
 end

@@ -1,7 +1,29 @@
 class Package < DataFile
 
+  validates_presence_of :title  
+  validates_presence_of :external_id
+  validates_length_of :title, :maximum => 10000
+  validates_uniqueness_of :external_id
+
   PACKAGE_FORMAT = 'BAGIT'
   FILE_EXTENSION = '.zip'
+
+  before_validation :set_external_id
+
+  default_scope where(:format => PACKAGE_FORMAT, :file_processing_status => "PACKAGE")
+
+  def set_external_id
+    if self.id.nil?
+      prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
+      prefix = prefix[0..99]
+      last_package = Package.where("external_id like '#{prefix}_%'").order(:external_id).last
+      if last_package
+       self.external_id = last_package.external_id.next.strip
+      else
+       self.external_id = "#{prefix}_0".strip
+      end
+    end
+  end
 
   def self.create_package(params, current_user)
     pkg = params[:package]
@@ -18,7 +40,7 @@ class Package < DataFile
     datafile.experiment_id = pkg[:experiment_id]
     datafile.published = false
     datafile.tag_ids = params[:tags]
-    datafile.external_id = pkg[:external_id]
+    datafile.title = pkg[:title]
     datafile
   end
 

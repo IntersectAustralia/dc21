@@ -1,4 +1,5 @@
 defaults: &defaults
+  hiev_handle_prefix: hiev
   notification_email_sender: noreply@intersect.org.au
   column_mappings:
     - Average Soil Temp

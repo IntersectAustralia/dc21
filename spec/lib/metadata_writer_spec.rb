@@ -65,7 +65,7 @@ describe MetadataWriter do
     Factory(:metadata_item, :key => 'something', :value => "Some value", :data_file => @data_file1)
 
     # Minimal metadata
-    @data_file2 = Factory(:data_file,
+    @data_file2 = FactoryGirl.create(:data_file,
                           filename: 'myfile.txt',
                           id: 2,
                           experiment_id: @experiment.id,
@@ -77,10 +77,11 @@ describe MetadataWriter do
     # Package file
     @pkg_creator =  Factory(:user, first_name: 'Bobby', last_name: 'Tops', email: 'bobby@intersect.org.au')
     @pkg_creator.save!
-    @package = Factory(:package,
+    @package = FactoryGirl.create(:package,
                           filename: 'mypackage.zip',
                           id: 3,
-                          external_id: 'package_3',
+                          external_id: "hiev_0",
+                          title: "Test Package Title",
                           experiment_id: @experiment.id,
                           file_processing_status: 'PACKAGE',
                           format: "BAGIT",

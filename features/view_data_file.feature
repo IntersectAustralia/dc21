@@ -24,6 +24,7 @@ Feature: View the details of a data file
       | Start time      | 2010-06-01  6:42:01   |
       | End time        | 2011-11-30 18:05:23   |
       | Sample interval | 5 minutes             |
+    And I should not see "Title"
     When I follow "Back"
     Then I should be on the list data files page
 

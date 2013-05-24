@@ -76,10 +76,11 @@ Feature: Publish a PACKAGE
     Then I should not see "Published:"
     And I should not see "Published date:"
 
-  Scenario: Publish button should only appear for packages
+  Scenario: Publish button should only appear for packages and only administrators are allowed to delete a package once published
     Given I am on the list data files page
     And I add sample1.txt to the cart
     When I am on the create package page
+    And I fill in "Title" with "Package Title"
     And I fill in "Filename" with "my_package"
     And I select "My Experiment" from "Experiment"
     And I press "Save"
@@ -92,6 +93,18 @@ Feature: Publish a PACKAGE
     And I confirm the popup
     And I should see "Package has been successfully submitted for publishing."
 
+    Given I logout
+    And I am logged in as "researcher@intersect.org.au"
+    And I am on the data file details page for my_package.zip
+    Then I should not see "Delete This File"
+    Then I logout
+    When I am logged in as "georgina@intersect.org.au"
+    And I am on the data file details page for my_package.zip
+    And I click on "Delete This File"
+    Then I confirm the popup
+    And I wait for the page
+    And I should see "The file 'my_package.zip' was successfully archived."
+
   Scenario: Only administrators are allowed to edit a package once published
     Given I logout
     And I am logged in as "researcher@intersect.org.au"
@@ -100,7 +113,7 @@ Feature: Publish a PACKAGE
     Then I logout
     When I am logged in as "georgina@intersect.org.au"
     And I am on the data file details page for published.zip
-
+    Then I should see "Edit Metadata"
 
 #
 #  Scenario: Publish button does not show prior to searching

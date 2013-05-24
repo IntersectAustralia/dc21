@@ -61,7 +61,11 @@
       .control-group
         %label.control-label{ :for => :data_file_external_id} ID
         .controls
-          = f.text_field :external_id
+          - if @data_file.is_package?
+            .record
+              = @data_file.external_id
+          - else
+            = f.text_field :external_id
       .control-group
         %label.control-label Added By
         .controls

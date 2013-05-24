@@ -99,19 +99,6 @@ Feature: Delete files containing erroneous data
       | Filename      | Added by                    |
       | datafile1.dat | researcher@intersect.org.au |
 
-  Scenario: Files with ID cannot be delete
-    Given I have data files
-      | filename      | created_at       | uploaded_by                 | start_time           | end_time               | external_id|
-      | datafile.dat  | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | blah       |
-    And I am on the data file details page for datafile.dat
-    And I follow "Delete"
-    And I should see "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it."
-    And I should be on the data file details page for datafile.dat
-    Then I am on the list data files page
-    And I should see only these rows in "exploredata" table
-      | Filename      | Added by                    |
-      | datafile.dat | researcher@intersect.org.au |
-
   Scenario: Normal cannot delete others' files because they don't have a link
     And I have data files
       | filename     | created_at       | uploaded_by                 | start_time           | end_time               |

@@ -10,7 +10,8 @@
 %html
   %head
     %title
-      = metadata_helper.split_or_truncate package.file_processing_description
+      = package.title
+      
   %body
     %article
       %h1
@@ -19,7 +20,7 @@
         %span{:property => "http://purl.org/dc/elements/1.1/type", :content => "http://purl.org/dc/dcmitype/Dataset"}
         %h1 Package Title
         %span{:property => "http://schema.org/name http://purl.org/dc/elements/1.1/title"}
-          = metadata_helper.split_or_truncate package.file_processing_description
+          = package.title
         %h1 Package Creation Date
         %span{:property => "http://schema.org/dateCreated", :content => "#{package.created_at.try(:to_s, :date_only)}"}
           = package.created_at.try(:to_s, :ordinal_date)

@@ -13,6 +13,18 @@ Feature: Edit data files metadata
         | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |          |
         | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |          |
 
+  Scenario: ID should be unique
+    Given I am logged in as "georgina@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "sample.txt"
+    And I fill in "ID" with "Package 1"
+    And I press "Update"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I fill in "ID" with "Package 1"
+    And I press "Update"
+    Then I should see "ID 'Package 1' is already being used by sample.txt"
+
   Scenario: Navigate from list and view edit data file page
     Given I am logged in as "georgina@intersect.org.au"
     When I am on the list data files page

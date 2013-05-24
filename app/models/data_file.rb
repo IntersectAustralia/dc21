@@ -64,14 +64,11 @@ class DataFile < ActiveRecord::Base
 
   attr_accessor :messages, :url
 
-  before_destroy :check_external_id_blank
-
-  def check_external_id_blank
-    unless external_id.blank?
-      self.errors.add(:base, "The data file cannot be modified while ID is present.")
-    end
-    external_id.blank?
-  end
+  # before_destroy :can_destroy
+  
+  # def can_destroy
+  #  is_package? and is_published?
+  # end
 
   def uploader_email
     created_by.present? ? created_by.email : ""

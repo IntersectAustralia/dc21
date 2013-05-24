@@ -11,13 +11,10 @@
 - delete_warning = delete_warning_beginning << delete_warning_contents << delete_warning_station << delete_warning_time << delete_warning_tail
 
 - publish_warning = []
-- publish_warning <<  "Do you really want to publish the file  #{@data_file.filename}?\n"
-
-
+- publish_warning <<  "Do you really want to publish the file #{@data_file.filename}?\n"
 
 .pageactions
-  -#- if !@data_file.published and ( can?(:manage, DataFile) || @data_file.created_by.eql?(current_user) )
-  - if can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)
+  - if can?(:destroy, @data_file)
     = link_to "Delete This File", data_file_path(@data_file), :class => "btn btn-danger",
      :confirm => delete_warning, :method => :delete
   - if @data_file.is_package? and !@data_file.published

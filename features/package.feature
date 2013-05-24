@@ -33,24 +33,30 @@ Feature: Create a package
     And I click on "Type:"
     Then I should see "PACKAGE"
 
-  Scenario: New package
+  Scenario: New package auto generates external ID
     Given I am on the list data files page
     And I add sample1.txt to the cart
     And I add sample2.txt to the cart
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
-    And I fill in "ID" with "Package 1"
-    And I fill in "Filename" with "my_package"
+    And I fill in "Title" with "Package 1"
+    And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I press "Save"
     Then I should see "Package was successfully created."
+    And I should see "hiev_0"
     When I am on the create package page
-    And I fill in "ID" with "Package 1"
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Title" with "Package 2"
+    And I fill in "Filename" with "my_package2"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
     And I press "Save"
-    Then I should see "ID 'Package 1' is already being used by my_package.zip"
-
+    Then I should see "Package was successfully created."
+    And I should see "hiev_1"
 
   Scenario: New package - empty form submission
     Given I am on the list data files page
@@ -62,6 +68,7 @@ Feature: Create a package
     And I press "Save"
     Then I should see "Filename can't be blank"
     And I should see "Experiment can't be blank"
+    And I should see "Title can't be blank"
 
   Scenario: New package - rendering correct data_file view screen
     Given I am on the list data files page
@@ -72,6 +79,7 @@ Feature: Create a package
     And I should see "Experiment"
     And I fill in "Filename" with "my_other_package"
     And I fill in "Description" with "Here's a description"
+    And I fill in "Title" with "Test title"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I press "Save"
@@ -82,6 +90,7 @@ Feature: Create a package
       | File format | BAGIT                |
       | Description | Here's a description |
       | Experiment  | My Experiment        |
+      | Title       | Test title           |
 
   Scenario: Back button - hardcode url
     When I am on the create package page
