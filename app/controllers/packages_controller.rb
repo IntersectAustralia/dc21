@@ -51,7 +51,8 @@ class PackagesController < DataFilesController
           end
         end
       end
-    rescue
+    rescue Errno::ENOENT => e
+      Rails.logger.error e
       valid = false
     end
 

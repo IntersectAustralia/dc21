@@ -26,7 +26,7 @@ class PackageRifCsWrapper < RifCsWrapper
   end
 
   def key
-    options[:collection_url]
+    external_id
   end
 
   def electronic_location

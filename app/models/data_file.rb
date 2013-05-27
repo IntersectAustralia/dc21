@@ -64,12 +64,6 @@ class DataFile < ActiveRecord::Base
 
   attr_accessor :messages, :url
 
-  # before_destroy :can_destroy
-  
-  # def can_destroy
-  #  is_package? and is_published?
-  # end
-
   def uploader_email
     created_by.present? ? created_by.email : ""
   end

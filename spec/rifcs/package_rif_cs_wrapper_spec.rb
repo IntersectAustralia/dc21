@@ -18,16 +18,19 @@ describe PackageRifCsWrapper do
     end
   end
 
-  describe "Key" do
-    it "Should return the collection url as provided to the wrapper" do
-      PackageRifCsWrapper.new(nil, [], {:collection_url => 'http://example.com/1'}).key.should eq('http://example.com/1')
-    end
-  end
-
   describe "Electronic location" do
     it "Should return the collection zip url as provided to the wrapper" do
       PackageRifCsWrapper.new(nil, [], {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
     end
+  end
+
+  it "Key should be external_id field" do
+    user = Factory(:user, :first_name => "postman", :last_name => "pac", :email => "postmanpac@intersect.org.au")
+    post_facility = Factory(:facility, :name =>'PFac', :primary_contact => user)
+    experiment = Factory(:experiment, :facility => post_facility)
+    package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user)
+    PackageRifCsWrapper.new(package, [], {}).key.should eq('hiev_0')
   end
 
   describe "Notes" do

@@ -76,7 +76,7 @@ Feature: Publish a PACKAGE
     Then I should not see "Published:"
     And I should not see "Published date:"
 
-  Scenario: Publish button should only appear for packages and only administrators are allowed to delete a package once published
+  Scenario: Publish button should only appear for packages
     Given I am on the list data files page
     And I add sample1.txt to the cart
     When I am on the create package page
@@ -89,21 +89,33 @@ Feature: Publish a PACKAGE
     Then I should not see "Publish"
     When I am on the data file details page for my_package.zip
     Then I should see "Publish"
-    And I follow "Publish"
-    And I confirm the popup
-    And I should see "Package has been successfully submitted for publishing."
 
+  Scenario: Researchers should be able to delete their own packages if they're not published
     Given I logout
     And I am logged in as "researcher@intersect.org.au"
-    And I am on the data file details page for my_package.zip
-    Then I should not see "Delete This File"
-    Then I logout
-    When I am logged in as "georgina@intersect.org.au"
-    And I am on the data file details page for my_package.zip
+    When I am on the data file details page for package1.zip
     And I click on "Delete This File"
     Then I confirm the popup
     And I wait for the page
-    And I should see "The file 'my_package.zip' was successfully archived."
+    And I should see "The file 'package1.zip' was successfully archived."
+
+  Scenario: Researchers should not be able to delete their own packages if they're published
+
+    When I am on the data file details page for package1.zip
+    And I follow "Publish"
+    Then I confirm the popup
+    And I should see "Package has been successfully submitted for publishing."
+    Given I logout
+    And I am logged in as "researcher@intersect.org.au"
+    When I am on the data file details page for package1.zip
+    And I should not see "Delete This File"
+    Given I logout
+    And I am logged in as "georgina@intersect.org.au"
+    When I am on the data file details page for package1.zip
+    And I click on "Delete This File"
+    Then I confirm the popup
+    And I wait for the page
+    And I should see "The file 'package1.zip' was successfully archived."
 
   Scenario: Only administrators are allowed to edit a package once published
     Given I logout

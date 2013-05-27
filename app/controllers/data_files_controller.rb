@@ -162,7 +162,8 @@ class DataFilesController < ApplicationController
           if archive_files(file)
             redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully archived.")
           end
-        rescue Errno::ENOENT
+        rescue Errno::ENOENT => e
+          Rails.logger.error e
           redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed but the files itself could not be archived. \nPlease copy this entire error for your system administrator.")
         end
       else
@@ -173,7 +174,8 @@ class DataFilesController < ApplicationController
         begin
           File.delete @data_file.path
           redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
-        rescue Errno::ENOENT
+        rescue Errno::ENOENT => e
+          Rails.logger.error e
           redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
         end
       else
@@ -440,10 +442,10 @@ class DataFilesController < ApplicationController
 
     if data_file.is_published?
       published_location = File.join(published_dir, file)
-      FileUtils.mv published_location, archive_location, :verbose => true
+      FileUtils.mv published_location, archive_location
     else
       unpublished_location = File.join(unpublished_dir, file)
-      FileUtils.mv unpublished_location, archive_location, :verbose => true
+      FileUtils.mv unpublished_location, archive_location
     end
     true
   end

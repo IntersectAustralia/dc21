@@ -8,7 +8,16 @@ Given /^I have data files$/ do |table|
     end
     if attributes['file_processing_status'] == ''
       attributes['file_processing_status'] = nil
+    elsif attributes['file_processing_status'] == 'PACKAGE'
+      attributes['format'] = Package::PACKAGE_FORMAT
     end
+
+    if attributes['path']
+      new_path = "#{APP_CONFIG['files_root']}/#{attributes['filename']}"
+      `cp #{attributes['path']} #{new_path}`
+      attributes['path'] = new_path
+    end
+
     exp = attributes.delete('experiment')
     unless exp.blank?
       experiment = Experiment.find_by_name(exp)
@@ -32,7 +41,21 @@ Given /^I have data files$/ do |table|
     end unless published_by_email.blank? or published_by_email.nil?
 
     tag_csv = attributes.delete('tags')
-    df = Factory(:data_file, attributes)
+
+    if attributes['file_processing_status'] == 'PACKAGE'
+      df = Factory(:package, attributes)
+    else
+      df = Factory(:data_file, attributes)
+    end
+
+    if df.is_package?
+      `touch #{df.path}`
+      dir = df.published ? APP_CONFIG['published_rif_cs_directory'] : APP_CONFIG['unpublished_rif_cs_directory']
+      Dir.mkdir(dir) unless Dir.exists?(dir)
+      output_location = File.join(dir, "rif-cs-#{df.id}.xml")
+      `touch #{output_location}`
+    end
+
     unless tag_csv.blank?
       tags = tag_csv.split(",").collect { |tag| tag.strip }
       tag_ids = Tag.where(:name => tags).collect(&:id)

@@ -31,6 +31,11 @@ Spork.prefork do
   Capybara.default_selector = :css
   Capybara.ignore_hidden_elements = true
   Capybara.server_boot_timeout = 50
+  `echo '' > #{Rails.root}/log/test.log`
+  `rm -r #{APP_CONFIG['files_root']}` if Dir.exists?(APP_CONFIG['files_root'])
+  `mkdir -p #{APP_CONFIG['published_rif_cs_directory']}`
+  `mkdir -p #{APP_CONFIG['unpublished_rif_cs_directory']}`
+  `mkdir -p #{APP_CONFIG['archived_data_directory']}`
 
 end
 

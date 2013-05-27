@@ -248,7 +248,7 @@ namespace :deploy do
     cat_migrations_output = capture("cd #{current_path} && rake db:cat_pending_migrations 2>&1", :env => {'RAILS_ENV' => stage}).chomp
     puts cat_migrations_output
 
-    if cat_migrations_output != '0 pending migration(s)'
+    unless cat_migrations_output[/0 pending migration\(s\)/]
       print "There are pending migrations. Are you sure you want to continue? [NO/yes] ".colorize(:red)
       abort "Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
     end

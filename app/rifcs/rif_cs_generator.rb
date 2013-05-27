@@ -24,7 +24,7 @@ class RifCsGenerator
         xml.originatingSource wrapper_object.originating_source
         xml.collection type: wrapper_object.collection_type do
           xml.name type: 'primary' do
-            xml.namePart wrapper_object.title
+            xml.namePart wrapper_object.filename
           end
 
           xml.location do

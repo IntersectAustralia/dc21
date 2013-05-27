@@ -80,7 +80,6 @@ describe MetadataWriter do
     @package = FactoryGirl.create(:package,
                           filename: 'mypackage.zip',
                           id: 3,
-                          external_id: "hiev_0",
                           title: "Test Package Title",
                           experiment_id: @experiment.id,
                           file_processing_status: 'PACKAGE',
