@@ -183,7 +183,11 @@ namespace :deploy do
 
   desc "Write the tag that was deployed to a file on the server so we can display it on the app"
   task :write_tag do
-    put branch, "#{release_path}/app/views/shared/_tag.html.haml"
+    if branch.eql?("HEAD")
+      put "<a href='https://github.com/IntersectAustralia/dc21/tree/#{`git log -1 --pretty="format:%H"`}'>HEAD</a>", "#{release_path}/app/views/shared/_tag.html.haml"
+    else
+      put branch, "#{release_path}/app/views/shared/_tag.html.haml"
+    end
   end
 
   # Load the schema
