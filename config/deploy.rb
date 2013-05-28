@@ -8,6 +8,7 @@ require 'colorize'
 load 'lib/intersect_capistrano_tasks'
 load 'lib/joai_capistrano_tasks'
 
+set :keep_releases, 5
 set :application, 'dc21app'
 set :stages, %w(qa staging production)
 set :default_stage, "qa"
