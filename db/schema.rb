@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522062514) do
+ActiveRecord::Schema.define(:version => 20130529055357) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "data_file_id"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20130522062514) do
     t.integer  "published_by_id"
     t.text     "external_id",                 :default => ""
     t.text     "title",                       :default => ""
+    t.integer  "package_id"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

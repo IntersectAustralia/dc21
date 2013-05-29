@@ -1,27 +1,29 @@
 class Package < DataFile
 
   validates_presence_of :title  
-  validates_presence_of :external_id
   validates_length_of :title, :maximum => 10000
+  validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > ")
 
   PACKAGE_FORMAT = 'BAGIT'
   FILE_EXTENSION = '.zip'
 
-  before_validation :set_external_id
-
   default_scope where(:format => PACKAGE_FORMAT, :file_processing_status => "PACKAGE")
 
-  def set_external_id
-    if self.external_id.blank?
-      prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
-      prefix = prefix[0..99]
-      last_package = Package.where("external_id like '#{prefix}_%'").order(:external_id).last
-      if last_package
-       self.external_id = last_package.external_id.next.strip
-      else
-       self.external_id = "#{prefix}_0".strip
-      end
+  before_create :prepare_package_id
+  after_create :set_external_id
+
+  def prepare_package_id 
+    if (@attributes["package_id"].nil? || @attributes["package_id"].to_i == 0)
+      @attributes.delete("package_id")
+      @changed_attributes.delete("package_id")
     end
+  end
+
+  def set_external_id
+    prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
+    prefix = prefix[0..99]
+    self.reload
+    self.update_attribute(:external_id, "#{prefix}_#{self.package_id}".strip)
   end
 
   def self.create_package(params, current_user)

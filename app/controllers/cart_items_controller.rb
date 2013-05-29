@@ -35,11 +35,11 @@ class CartItemsController < ApplicationController
       if !current_user.data_file_in_cart?(@data_file) and @cart_item.save
         format.html { redirect_to session[:return_to]||data_files_path,
             notice: 'File was successfully added to cart.' }
-        format.js { }
+        format.js { render :nothing => true }
       else
         format.html { redirect_to session[:return_to]||data_files_path,
             notice: 'File could not be added: It may already exist in your cart.' }
-        format.js { }
+        format.js { render :nothing => true }
       end
     end
   end

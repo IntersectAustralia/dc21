@@ -52,6 +52,9 @@ begin
 
   # In case we don't have ActiveRecord, append a no-op task that we can depend upon.
   task 'db:test:prepare' do
+    ActiveRecord::Base.connection.execute 'CREATE SEQUENCE package_id_seq;'
+    ActiveRecord::Base.connection.execute "ALTER TABLE data_files ALTER COLUMN package_id SET DEFAULT NEXTVAL('package_id_seq') - 1;"
+    ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;"
   end
 
   task :stats => 'cucumber:statsetup'

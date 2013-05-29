@@ -58,6 +58,15 @@ Feature: Create a package
     Then I should see "Package was successfully created."
     And I should see "hiev_1"
 
+  Scenario: Package filename should not allow illegal characters
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    And I add sample2.txt to the cart
+    When I am on the create package page
+    And I fill in "Filename" with "/ \ ? * : | < > "
+    And I press "Save"
+    Then I should see "cannot contain any of the following characters: / \ ? * : | < >"
+
   Scenario: New package - empty form submission
     Given I am on the list data files page
     And I add sample3.txt to the cart

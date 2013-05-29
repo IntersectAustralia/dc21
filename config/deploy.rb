@@ -204,6 +204,12 @@ namespace :deploy do
     run("cd #{current_path} && bundle exec rake db:populate", :env => {'RAILS_ENV' => "#{stage}"})
   end
 
+  # Run the performance test data populator
+  desc "Run the performance test data populator script to load test data into the db (WARNING: destructive!)"
+  task :performance_populate, :roles => :db do
+    run("cd #{current_path} && bundle exec rake performance", :env => {'RAILS_ENV' => "#{stage}"})
+  end
+
   # Seed the db
   desc "Run the seeds script to load seed data into the db (WARNING: destructive!)"
   task :seed, :roles => :db do

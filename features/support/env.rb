@@ -37,6 +37,10 @@ Spork.prefork do
   `mkdir -p #{APP_CONFIG['unpublished_rif_cs_directory']}`
   `mkdir -p #{APP_CONFIG['archived_data_directory']}`
 
+  # Reset custom package_id before each test
+  Before do  
+    ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;" 
+  end
 end
 
 Spork.each_run do

@@ -47,6 +47,12 @@ Spork.prefork do
     # automatically. This will be the default behavior in future versions of
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
+
+    # Reset custom package_id before each test
+    config.before(:each) {
+      Rails.env = "test"
+      ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;"
+    }
   end
   class Warden::SessionSerializer
     def serialize(record)
