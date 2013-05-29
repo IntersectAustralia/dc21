@@ -58,6 +58,35 @@ Feature: Create a package
     Then I should see "Package was successfully created."
     And I should see "hiev_1"
 
+  Scenario: External ID is not reused
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    And I add sample2.txt to the cart
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Title" with "Package 1"
+    And I fill in "Filename" with "my_package1"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    And I press "Save"
+    Then I should see "Package was successfully created."
+    And I should see "hiev_0"
+    And I follow "Delete This File"
+    And I confirm the popup
+    And I should see "The file 'my_package1.zip' was successfully archived."
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Title" with "Package 2"
+    And I fill in "Filename" with "my_package2"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    And I press "Save"
+    Then I should see "Package was successfully created."
+    And I should see "hiev_1"    
+    And I should not see "hiev_0"
+
   Scenario: Package filename should not allow illegal characters
     Given I am on the list data files page
     And I add sample1.txt to the cart
