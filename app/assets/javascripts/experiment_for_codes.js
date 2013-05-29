@@ -1,10 +1,12 @@
 $(function () {
-  $("#mint-server-feedback").hide();
+  if ($("#mint-server-feedback").length) {
+    $("#mint-server-feedback").hide();
 
-  $('#second_level').hide();
-  $('#third_level').hide();
+    $('#second_level').hide();
+    $('#third_level').hide();
 
-  getTopLevel();
+    getTopLevel();
+  }
 
   $('select#for_code_select_1').change(function (e) {
     var new_value = $(this).val();
