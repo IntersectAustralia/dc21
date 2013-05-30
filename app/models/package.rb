@@ -10,7 +10,7 @@ class Package < DataFile
   default_scope where(:format => PACKAGE_FORMAT, :file_processing_status => "PACKAGE")
 
   before_create :prepare_package_id
-  after_create :set_external_id
+  after_save :set_external_id
 
   def prepare_package_id 
     if (@attributes["package_id"].nil? || @attributes["package_id"].to_i == 0)
@@ -20,10 +20,12 @@ class Package < DataFile
   end
 
   def set_external_id
-    prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
-    prefix = prefix[0..99]
-    self.reload
-    self.update_attribute(:external_id, "#{prefix}_#{self.package_id}".strip)
+    if self.external_id.blank?
+      prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
+      prefix = prefix[0..99]
+      self.reload
+      self.update_attribute(:external_id, "#{prefix}_#{self.package_id}".strip)
+    end
   end
 
   def self.create_package(params, current_user)
