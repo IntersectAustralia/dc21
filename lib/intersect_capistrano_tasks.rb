@@ -6,12 +6,12 @@ namespace :backup do
   namespace :db do
     desc "make a database backup"
     task :dump do
-      run "cd #{current_path} && rake db:backup", :env => {'RAILS_ENV' => stage}
+      run "cd #{current_path} && bundle exec rake db:backup", :env => {'RAILS_ENV' => stage}
     end
 
     desc "trim database backups"
     task :trim do
-      run "cd #{current_path} && rake db:trim_backups", :env => {'RAILS_ENV' => stage}
+      run "cd #{current_path} && bundle exec rake db:trim_backups", :env => {'RAILS_ENV' => stage}
     end
   end
 end
@@ -103,7 +103,7 @@ namespace :deploy do
     #push and execute rake task
     begin
       put YAML::dump(user), output_file, :mode => 0664
-      run("cd #{current_path} && rake db:add_initial_user", :env => {'RAILS_ENV' => "#{stage}"})
+      run("cd #{current_path} && bundle exec rake db:add_initial_user", :env => {'RAILS_ENV' => "#{stage}"})
     ensure
       run "rm -f #{output_file}"
     end

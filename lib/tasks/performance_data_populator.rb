@@ -50,16 +50,23 @@ def create_performance_files
 	ColumnDetail.delete_all
 	MetadataItem.delete_all
 
-	# for 5 years 29524 files times 60
+	# for 5 years new files + 1 year backlog of 35429 files in total
+	# get monthly total * 72
 		$index = 1
 		# populate 203 RAW per month
 			# Auto-upload Eddy+ROS+WS+WTC Raw per month 70
-	60.times do
-		70.times do
+	72.times do
+		69.times do
 			puts "Uploading file "+ $index.to_s + ": EddyFlux_Delay_CSAT_20130331.dat"
 			upload_toa5_file("EddyFlux_Delay_CSAT_20130331.dat", "researcher0@intersect.org.au")
 			$index += 1
 		end
+
+		# This file has not been committed and should be manually placed in the server
+		puts "Uploading 110MB file "+ $index.to_s + ": EddyFlux_fast_std_20130417.dat"
+		upload_toa5_file("EddyFlux_fast_std_20130417.dat", "researcher0@intersect.org.au")
+		$index += 1
+		
 			# Auto-upload Face Raw per month 25
 		25.times do
 			puts "Uploading file "+ $index.to_s + ": Cntrl14_Table1_20130331.dat"
@@ -157,9 +164,12 @@ def upload_toa5_file(filename, uploader)
 	create_data_file_performance(filename, 'RAW', uploader)
 
 	t_file = Tempfile.new('filename_temp.txt')
-    File.open("#{Rails.root}/samples/#{filename}", 'r') do |f|
-      f.each_line{|line| t_file.puts line.gsub(/(^["])(\d\d\d\d)([-])/){|not_need| "\""+($2.to_i+1).to_s+'-'}}
-    end
-
-    FileUtils.mv(t_file.path, "#{Rails.root}/samples/#{filename}")
+	if File.exists?("#{Rails.root}/samples/#{filename}")
+	  File.open("#{Rails.root}/samples/#{filename}", 'r') do |f|
+	    f.each_line{|line| t_file.puts line.gsub(/(^["])(\d\d\d\d)([-])/){|not_need| "\""+($2.to_i+1).to_s+'-'}}
+	  end
+  	FileUtils.mv(t_file.path, "#{Rails.root}/samples/#{filename}")
+	else
+		puts "#{Rails.root}/samples/#{filename} does not exist!"
+	end
 end

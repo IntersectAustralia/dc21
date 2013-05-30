@@ -2,29 +2,21 @@ class Package < DataFile
 
   validates_presence_of :title  
   validates_length_of :title, :maximum => 10000
-  validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > ")
+  validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > "), :allow_blank => true
 
   PACKAGE_FORMAT = 'BAGIT'
   FILE_EXTENSION = '.zip'
 
   default_scope where(:format => PACKAGE_FORMAT, :file_processing_status => "PACKAGE")
 
-  before_create :prepare_package_id
-  after_save :set_external_id
-
-  def prepare_package_id 
-    if (@attributes["package_id"].nil? || @attributes["package_id"].to_i == 0)
-      @attributes.delete("package_id")
-      @changed_attributes.delete("package_id")
-    end
-  end
+  before_save :set_external_id
 
   def set_external_id
     if self.external_id.blank?
       prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
       prefix = prefix[0..99]
-      self.reload
-      self.update_attribute(:external_id, "#{prefix}_#{self.package_id}".strip)
+      package_id = self.class.connection.select_value("SELECT nextval('package_id_seq')").to_i - 1
+      self.update_attribute(:external_id, "#{prefix}_#{package_id}".strip)
     end
   end
 

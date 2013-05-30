@@ -58,7 +58,6 @@ ActiveRecord::Schema.define(:version => 20130529055357) do
     t.integer  "published_by_id"
     t.text     "external_id",                 :default => ""
     t.text     "title",                       :default => ""
-    t.integer  "package_id"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

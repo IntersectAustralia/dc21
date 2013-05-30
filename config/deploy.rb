@@ -256,7 +256,7 @@ namespace :deploy do
     update
     rebundle
 
-    cat_migrations_output = capture("cd #{current_path} && rake db:cat_pending_migrations 2>&1", :env => {'RAILS_ENV' => stage}).chomp
+    cat_migrations_output = capture("cd #{current_path} && bundle exec rake db:cat_pending_migrations 2>&1", :env => {'RAILS_ENV' => stage}).chomp
     puts cat_migrations_output
 
     unless cat_migrations_output[/0 pending migration\(s\)/]
