@@ -133,12 +133,14 @@ after 'deploy:setup' do
   server_setup.logging.rotation
   server_setup.config.apache
 end
+after "deploy:restart", "deploy:cleanup" 
 before 'deploy:update' do
   export_proxy
 end
 after 'deploy:update' do
   deploy.additional_symlinks
   deploy.write_tag
+  deploy.create_sequences
   deploy.restart
 end
 
@@ -195,6 +197,12 @@ namespace :deploy do
   desc "Load the schema into the database (WARNING: destructive!)"
   task :schema_load, :roles => :db do
     run("cd #{current_path} && bundle exec rake db:schema:load", :env => {'RAILS_ENV' => "#{stage}"})
+  end
+
+  # Create sequences
+  desc "Create sequences for packages"
+  task :create_sequences, :roles => :db do
+    run("cd #{current_path} && bundle exec rake db:create_sequences", :env => {'RAILS_ENV' => "#{stage}"})
   end
 
   # Run the sample data populator
