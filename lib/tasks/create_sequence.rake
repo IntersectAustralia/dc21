@@ -1,11 +1,12 @@
+
+require "#{Rails.root}/db/seed_helper.rb"
+
 begin  
   namespace :db do  
 
     desc "Create sequences"
     task :create_sequences => :environment do
-      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
-      result = ActiveRecord::Base.connection.execute "SELECT * FROM information_schema.sequences WHERE sequence_schema = 'public' AND sequence_name = 'package_id_seq';"
-      ActiveRecord::Base.connection.execute "CREATE SEQUENCE package_id_seq;" unless result.count
+      create_sequences
     end
 
     desc "Drop sequences"

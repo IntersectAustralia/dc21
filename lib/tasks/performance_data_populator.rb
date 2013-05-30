@@ -148,7 +148,7 @@ end
 
 def create_data_file_performance(filename, type, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
-  file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
+  file = Rack::Test::UploadedFile.new("#{APP_CONFIG['extra_config_file_root']}/perf_samples/#{filename}", "application/octet-stream")
   builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
   experiment_id = Experiment.first.id
 
@@ -161,15 +161,17 @@ def create_data_file_performance(filename, type, uploader)
 end
 
 def upload_toa5_file(filename, uploader)
-	create_data_file_performance(filename, 'RAW', uploader)
+	filepath = "#{APP_CONFIG['extra_config_file_root']}/perf_samples/#{filename}"
+	if File.exists?(filepath)
+		create_data_file_performance(filename, 'RAW', uploader)
 
-	t_file = Tempfile.new('filename_temp.txt')
-	if File.exists?("#{Rails.root}/samples/#{filename}")
-	  File.open("#{Rails.root}/samples/#{filename}", 'r') do |f|
+		t_file = Tempfile.new('filename_temp.txt')
+
+	  File.open(filepath, 'r') do |f|
 	    f.each_line{|line| t_file.puts line.gsub(/(^["])(\d\d\d\d)([-])/){|not_need| "\""+($2.to_i+1).to_s+'-'}}
 	  end
-  	FileUtils.mv(t_file.path, "#{Rails.root}/samples/#{filename}")
+  	FileUtils.mv(t_file.path, filepath)
 	else
-		puts "#{Rails.root}/samples/#{filename} does not exist!"
+		puts "#{filepath} does not exist!"
 	end
 end
