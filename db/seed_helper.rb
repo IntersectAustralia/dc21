@@ -41,5 +41,5 @@ end
 def create_sequences
   ActiveRecord::Base.establish_connection(Rails.env.to_sym)
   result = ActiveRecord::Base.connection.execute "SELECT * FROM information_schema.sequences WHERE sequence_schema = 'public' AND sequence_name = 'package_id_seq';"
-  ActiveRecord::Base.connection.execute "CREATE SEQUENCE package_id_seq;" unless result.count
+  ActiveRecord::Base.connection.execute "CREATE SEQUENCE package_id_seq;" if result.count == 0
 end
