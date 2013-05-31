@@ -2,10 +2,23 @@ require 'fileutils'
 require 'tempfile'
 
 def populate_performance_data
+	check_files
 	load_password
 	create_performance_users
 	create_performance_facilities
 	create_performance_files
+end
+
+def check_files
+  files = ["EddyFlux_Delay_CSAT_20130331.dat", "EddyFlux_fast_std_20130417.dat", "Cntrl14_Table1_20130331.dat","cntl_test.dat","node-v0.10.5.pkg","WTC02_Table1.dat","sample1.txt"]
+  absent = []
+  files.each do |file|
+  	absent << file unless File.exists?("#{APP_CONFIG['extra_config_file_root']}/perf_samples/#{file}")
+  end
+
+  if absent.count > 0
+  	raise IOError, "Missing files #{absent.join(', ')} in #{APP_CONFIG['extra_config_file_root']}/perf_samples/"
+  end
 end
 
 def create_test_files
@@ -168,7 +181,7 @@ def upload_toa5_file(filename, uploader)
 		t_file = Tempfile.new('filename_temp.txt')
 
 	  File.open(filepath, 'r') do |f|
-	    f.each_line{|line| t_file.puts line.gsub(/(^["])(\d\d\d\d)([-])/){|not_need| "\""+($2.to_i+1).to_s+'-'}}
+	    f.each_line{|line| t_file.puts line.gsub(/(^["])(\d+)([-])/){|not_need| "\""+($2.to_i+1).to_s+'-'}}
 	  end
   	FileUtils.mv(t_file.path, filepath)
 	else
