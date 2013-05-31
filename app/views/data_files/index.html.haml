@@ -140,7 +140,7 @@
   - if @data_files.empty? || !@search.showing_all?
     .datacontroll
       #searched_attrs= "Searching by: #{@search.searched_attributes}"
-
+%br
 
 .data-results
   - unless @data_files.empty? || @search.showing_all?
@@ -181,7 +181,7 @@
             -else
               = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
 
-    = will_paginate(@data_files_paginated)
-  = form_tag add_all_cart_items_path, :id => "all_data_files_form" do |f|
-    - @data_files.each do |data_file|
-      = hidden_field_tag "data_file_ids[]", data_file.id
+  /   = will_paginate(@data_files_paginated)
+  / = form_tag add_all_cart_items_path, :id => "all_data_files_form" do |f|
+  /   - @data_files.each do |data_file|
+  /     = hidden_field_tag "data_file_ids[]", data_file.id

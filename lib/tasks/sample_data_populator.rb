@@ -1,3 +1,6 @@
+#!/bin/env ruby
+# encoding: utf-8
+
 def populate_data
   load_password
   create_test_users
@@ -18,6 +21,11 @@ def create_test_files
   create_data_file("sample3.txt", "kali@intersect.org.au")
   create_data_file("WTC01_Table1.dat", "georgina@intersect.org.au")
   create_data_file("WTC02_Table1.dat", "admin@intersect.org.au")
+  create_data_file("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat", "admin@intersect.org.au")
+
+  test_file = DataFile.find_by_filename("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat")
+  test_file.file_processing_description = "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:”;’<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test"
+  test_file.save
 end
 
 def create_test_users
@@ -45,7 +53,10 @@ def create_data_file(filename, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
   builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
+  
   experiment_id = Experiment.first.id
+
+  experiment_id = Experiment.last.id if filename == "VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat"
 
   builder.build(file, experiment_id, DataFile::STATUS_RAW, "")
   df = DataFile.last
@@ -136,6 +147,21 @@ def create_facilities_and_experiments
   #other_experiment.id = -1
   #other_experiment.save!
   #other.save
+
+  fac = create_facility(:name => "TestLongFacilityNameForTestingTestLongFacilityName", 
+      :code => "TLFNFT", 
+      :primary_contact => user, 
+      :description => "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:”;’<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test",
+      :a_lat => -90,
+      :a_long => -180,
+      :b_lat => 90,
+      :b_long => 180)
+
+  fac.experiments.create(:name => "TestLongExperimentNameForTestingTestLongExperimentNameTest TestLongExperimentNameForTestingTestLongExperimentNameTest ", 
+      :start_date => "2012-01-01", 
+      :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", 
+      :subject => "Test1",
+      :description => "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:”;’<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test")
 
 end
 
