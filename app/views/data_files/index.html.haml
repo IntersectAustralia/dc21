@@ -71,16 +71,20 @@
                     = check_box_tag "search[stati][]", status, @selected_stati.include?(status), :id => "search_status_#{index}",  :class => package.eql?(true) ? :type_parent : :type
                     .type_children
                       - if status.eql?('PACKAGE')
-                        = label_tag "search_status_published", 'Published:', :class => :publish_title
-                        = label_tag "search_status_published", 'Yes', :class => :publish_option
+                        .publish_title Published:
+
+                        = label_tag "search_status_published_#{index}", 'Yes', :class => :publish_option
                         - published = true unless @published.nil? or @published.empty?
-                        = check_box_tag "search[published][]", true, published, :id => "search_status_#{index}", :class => :publish
-                        = label_tag "search_status_unpublished", 'No', :class => :publish_option
+                        = check_box_tag "search[published][]", true, published, :id => "search_status_published_#{index}", :class => :publish
+
+                        = label_tag "search_status_unpublished_#{index}", 'No', :class => :publish_option
                         - unpublished = true unless @unpublished.nil? or @unpublished.empty?
-                        = check_box_tag "search[unpublished][]", true, unpublished, :id => "search_status_#{index}", :class => :publish
+                        = check_box_tag "search[unpublished][]", true, unpublished, :id => "search_status_unpublished_#{index}", :class => :publish
+
                         .date-format yyyy-mm-dd
-                        = label_tag "search_published_date", 'Published Date:', :class => :publish
+                        = label_tag "publish_date", 'Published Date:', :class => :publish
                         = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
+
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
 
             .searchcategory

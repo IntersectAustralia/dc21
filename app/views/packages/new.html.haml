@@ -32,13 +32,13 @@
           = required
           = f.text_area :title
       .control-group
-        = f.label :external_id, "ID", class: "control-label"
+        .control-label ID
       .control-group
         = f.label :file_processing_description, "Description", class: "control-label"
         .controls
           = f.text_area :file_processing_description
       .control-group#tags
-        = label_tag :tags, "Tags", class: "control-label"
+        .control-label Tags
         .controls
           - if tags.empty?
             .record None

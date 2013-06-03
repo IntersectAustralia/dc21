@@ -40,10 +40,10 @@ module ApplicationHelper
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
     html = "<div class='control-group'>"
-    html << "<label class='control-label' title='#{h label}'>"
+    html << "<div class='control-label' title='#{h label}'>"
     html << (h label)
     html << ":"
-    html << '</label>'
+    html << '</div>'
     html << "<div class='controls'>"
     html << "<div class='record' id='#{div_id + '_display'}' title='#{string_escape  content}'>"
     html << content
@@ -59,10 +59,10 @@ module ApplicationHelper
     #value = content.gsub("\n", "<br />").html_safe
     values = content.split("\n") 
     html = "<div class='control-group'>"
-    html << "<label class='control-label' title='#{h label}'>"
+    html << "<div class='control-label' title='#{h label}'>"
     html << (h label)
     html << ":"
-    html << '</label>'
+    html << '</div>'
     html << "<div class='controls'>"
     html << "<div class='description' id='#{div_id + '_display'}' title='#{string_escape content}'>"
     values.each do |value|
@@ -80,10 +80,10 @@ module ApplicationHelper
     #lists for FOR codes, Tags in files and API token
     div_id = label.tr(" ,", "_").downcase
     html = "<div class='control-group'>"
-    html << "<label class='control-label' title='#{h label}'>"
+    html << "<div class='control-label' title='#{h label}'>"
     html << (h label)
     html << ":"
-    html << '</label>'
+    html << '</div>'
     html << "<div class='controls'>"
     html << "<div class='record' id='#{div_id + '_display'}'>"
     html << content

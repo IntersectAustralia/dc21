@@ -11,36 +11,42 @@
       %h2{:title => @data_file.filename} Editing Metadata of #{@data_file.filename}
       = render "shared/error_messages", :target => @data_file
       .control-group
-        %label.control-label{ :for => :data_file_filename } Name
         -if @data_file.is_package?
+          .control-label Name
           .controls
             .record
               = @data_file.filename
         -else
+          %label.control-label{ :for => :data_file_filename } Name
           .controls
             = required
             = f.text_field :filename
 
       .control-group
-        %label.control-label{ :for => :file_processing_status } File type
-        .controls
-          - if @data_file.is_raw_file? or @data_file.is_package?
+        - if @data_file.is_raw_file? or @data_file.is_package?
+          .control-label File type
+          .controls
             .record
               = @data_file.file_processing_status
-          - else
-            = required
-            = f.select :file_processing_status, options_for_select(DataFile::STATI_FOR_EDIT, @data_file.file_processing_status), :include_blank => true
+        - else
+          %label.control-label{:for => :file_processing_status} File type
+          .controls
+            .record
+              = required
+              = f.select :file_processing_status, options_for_select(DataFile::STATI_FOR_EDIT, @data_file.file_processing_status), :include_blank => true
+
       .control-group
-        %label.control-label File Format
+        .control-label File Format
         .controls
           .record
           = @data_file.format_for_display
+
       .control-group
-        %label.control-label{ :for => :data_file_file_processing_description } Description
+        %label.control-label{:for => :data_file_file_processing_description} Description
         .controls
           = f.text_area :file_processing_description
       .control-group#tags
-        %label.control-label{ :for => :tags } Tags
+        .control-label Tags
         .controls
           - if tags.empty?
             .record None
@@ -49,28 +55,30 @@
               = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
       .control-group
-        %label.control-label{ :for => :experiment} Experiment
+        %label.control-label{:for => :data_file_experiment_id} Experiment
         .controls
           = required
           = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
       .control-group
-        %label.control-label Date Added
+        .control-label Date Added
         .controls
           .record
             = @data_file.created_at.to_s(:with_time)
       .control-group
-        %label.control-label{ :for => :data_file_external_id} ID
-        .controls
-          - if @data_file.is_package?
-            .record
-              = @data_file.external_id
-          - else
+        - if @data_file.is_package?
+          .control-label ID
+          .record.controls
+            = @data_file.external_id
+        - else
+          %label.control-label{ :for => :data_file_external_id} ID
+          .controls
             = f.text_field :external_id
       .control-group
-        %label.control-label Added By
+        .control-label Added By
         .controls
           .record
             = (@data_file.created_by ? @data_file.created_by.email : "")
+
       - if @data_file.is_package? || !@data_file.known_format?
         .control-group
           .date-format yyyy-mm-dd

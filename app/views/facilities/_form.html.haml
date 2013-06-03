@@ -52,7 +52,7 @@
       = f.text_field :b_long, :placeholder => "Decimal, -180 to 180"
 
   .control-group
-    = label_tag :primary_contact, 'Primary Contact', class: 'control-label'
+    = label_tag :primary_contact_select, 'Primary Contact', class: 'control-label'
     .controls
       = required
       %span.input
@@ -62,7 +62,7 @@
         = select_tag :primary_contact_select, options_from_collection_for_select(User.approved, :id, :email, @facility.primary_contact.id)
 
   .control-group
-    = label_tag :other_contacts, 'Other Contacts', class: 'control-label'
+    = label_tag :other_contacts_select, 'Other Contacts', class: 'control-label'
     .controls
       %span.input
       = select_tag :other_contacts_select, options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
