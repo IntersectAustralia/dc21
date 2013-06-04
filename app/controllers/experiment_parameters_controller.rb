@@ -1,5 +1,4 @@
 class ExperimentParametersController < ApplicationController
-
   load_and_authorize_resource :facility
   load_and_authorize_resource :experiment, :through => :facility
   load_and_authorize_resource :through => :experiment

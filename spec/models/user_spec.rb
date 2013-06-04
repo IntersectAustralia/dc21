@@ -257,8 +257,8 @@ describe User do
       user.cart_items << data_file_1
       user.reload
 
-      user.data_file_in_cart?(data_file_1.id).should be_true
-      user.data_file_in_cart?(data_file_2.id).should be_false
+      user.cart_items.include?(data_file_1).should be_true
+      user.cart_items.include?(data_file_2).should be_false
     end
   end
   

@@ -1,6 +1,6 @@
 require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
-
+  
   def new
     if current_user.cart_items.empty?
 

@@ -150,7 +150,6 @@
   = will_paginate(@data_files_paginated, :params => params.merge({:search => nil, :sort => nil, :direction => nil}))
 
 - unless @data_files.empty?
-
   %table#exploredata.search
     %tr
       %th.sortable.filename= sortable "data_files.filename", "Filename"
@@ -162,6 +161,7 @@
       %th.add_cart
         - unless @data_files.length < 1
           = link_to 'Add All', add_all_cart_items_path, :class => "btn", :id => "add_all_to_cart"
+    - @cart_item_ids = cart_items.collect(&:id)
 
     - @data_files_paginated.each do |data_file|
       %tr{:class => cycle('field_bg', 'field_nobg')}
@@ -173,7 +173,7 @@
         %td.type{:title => data_file.file_processing_status}= data_file.file_processing_status
         %td.experiment{:title => data_file.experiment_name}= data_file.experiment_name
         %td.add_cart
-          -if current_user.data_file_in_cart?(data_file.id)
+          -if @cart_item_ids.include?(data_file.id)
             = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file.id), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
           -else
             = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file.id), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}

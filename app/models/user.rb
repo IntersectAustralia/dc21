@@ -157,10 +157,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def data_file_in_cart?(data_file_id)
-    cart_item_ids.include?(data_file_id)
-  end
-
   def cart_size
     sum = 0
     cart_items.each do |data_file|

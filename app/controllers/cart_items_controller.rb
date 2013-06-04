@@ -3,7 +3,7 @@ class CartItemsController < ApplicationController
   layout 'data_files'
 
   def index
-    @cart_items = current_user.cart_items.includes(:experiment, :created_by)
+    @cart_items = cart_items.includes(:experiment, :created_by)
     session[:back]= request.referer
   end
 
@@ -18,10 +18,10 @@ class CartItemsController < ApplicationController
   def add_single
     session[:return_to]= request.referer
     data_file_id = params[:data_file_ids].to_i
+    current_cart_ids = cart_items.collect(&:id)
 
     respond_to do |format|
-      if !current_user.data_file_in_cart?(data_file_id)
-        current_cart = current_user.cart_items
+      if !current_cart_ids.include?(data_file_id)
         current_user.cart_items << DataFile.find(data_file_id)
         format.html { redirect_to session[:return_to]||data_files_path,
             notice: 'File was successfully added to cart.' }
@@ -38,14 +38,16 @@ class CartItemsController < ApplicationController
     session[:return_to]= request.referer
     search = DataFileSearch.new(session[:search])
 
-    current_cart = current_user.cart_items
-    to_add = search.do_search(DataFile.scoped) - current_cart
+    to_add = search.do_search(DataFile.scoped) - cart_items
     count = to_add.count
 
-    user_id = current_user.id
-    values = to_add.collect(&:id).map {|data_file_id| "(#{data_file_id},#{user_id})"}.join(",")
-    # by default, ActiveRecord generates a query for each data_file_id inserted, which is unnecessary.
-    ActiveRecord::Base.connection.execute("INSERT INTO data_files_users (data_file_id, user_id) VALUES #{values}")
+
+    if count > 0
+      user_id = current_user.id
+      values = to_add.collect(&:id).map {|data_file_id| "(#{data_file_id},#{user_id})"}.join(",")
+      # by default, ActiveRecord generates a query for each data_file_id inserted, which is inefficient.
+      ActiveRecord::Base.connection.execute("INSERT INTO data_files_users (data_file_id, user_id) VALUES #{values}")
+    end
 
     respond_to do |format|
       format.html {redirect_to session[:return_to] || data_files_path,
@@ -66,7 +68,7 @@ class CartItemsController < ApplicationController
 
   def destroy_all
     session[:return_to]= request.referer
-    if current_user.cart_items.count == 0
+    if cart_items.count == 0
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
       ActiveRecord::Base.connection.execute("delete from data_files_users where user_id = #{current_user.id}")

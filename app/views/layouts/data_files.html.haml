@@ -7,7 +7,6 @@
   %html.ie8
 /[if IE 7]
   %html.ie7
-- @cart_items = current_user.cart_items
 - remove_all_warning = "Do you really want to remove all files from your cart?"
 
 :javascript
@@ -26,12 +25,12 @@
         .pageactions
           = link_to "Upload", new_data_file_path, :id => "newdataentry", :class => "btn btn-primary" unless current_page?(:controller => 'data_files', :action => 'new')
       .btn-group.pull-right.dropdown
-        %a#drop3.btn.dropdown-toggle{"data-toggle" => @cart_items.size > 0 ? 'dropdown' : 'dropdown disabled', :href => '#', :role => "button"}
-          -if @cart_items.size == 1
+        %a#drop3.btn.dropdown-toggle{"data-toggle" => cart_items.size > 0 ? 'dropdown' : 'dropdown disabled', :href => '#', :role => "button"}
+          -if cart_items.size == 1
             %b 1 File in Cart
             ( #{number_to_human_size(current_user.cart_size)} )
           -else
-            %b #{@cart_items.size} Files in Cart
+            %b #{cart_items.size} Files in Cart
             ( #{number_to_human_size(current_user.cart_size)} )
           %span.caret
         %ul#cart-actions.dropdown-menu{"aria-labelledby" => "drop3", :role => "menu"}

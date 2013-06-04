@@ -9,6 +9,8 @@ class DataFilesController < ApplicationController
   before_filter :sort_params, :only => [:index, :search]
   before_filter :search_params, :only => [:index, :search]
   before_filter :page_params, :only => [:index]
+
+
   load_and_authorize_resource :except => [:download, :api_search]
   load_resource :only => [:download]
   set_tab :home
@@ -19,7 +21,6 @@ class DataFilesController < ApplicationController
   expose(:facilities) { Facility.order(:name) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
   expose(:experiments) { Experiment.order(:name) }
-  expose(:column_mappings) { ColumnMapping.all }
 
   def index
     set_tab :explore, :contentnavigation
@@ -45,7 +46,6 @@ class DataFilesController < ApplicationController
 
   def show
     set_tab :explore, :contentnavigation
-    @column_mappings = ColumnMapping.all
     @back_request = request.referer
   end
 
@@ -56,7 +56,6 @@ class DataFilesController < ApplicationController
 
   def edit
     set_tab :explore, :contentnavigation
-    @column_mappings = ColumnMapping.all
   end
 
   def update
@@ -138,19 +137,13 @@ class DataFilesController < ApplicationController
   end
 
   def download_selected
-    files = current_user.cart_items
-
-    if files.empty?
+    if cart_items.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      unless files.empty?
-        if files.size == 1
-          send_data_file(files.first)
-        else
-          send_zip(files)
-        end
+      if cart_items.size == 1
+        send_data_file(cart_items.first)
       else
-        redirect_to(:back||data_files_path)
+        send_zip(cart_items)
       end
     end
   end
@@ -256,7 +249,7 @@ class DataFilesController < ApplicationController
   def do_search(search_params)
     @search = DataFileSearch.new(search_params)
 
-    @data_files = @search.do_search(@data_files).includes(:experiment => :facility)
+    @data_files = @search.do_search(@data_files)
 
     @from_date = @search.search_params[:from_date]
     @to_date = @search.search_params[:to_date]

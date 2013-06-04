@@ -7,12 +7,7 @@ class ColumnDetail < ActiveRecord::Base
   default_scope order(:position)
 
   def get_mapped_name
-    ColumnMapping.all.each do |map|
-      if map.code.downcase == self.name.downcase
-        return map.name
-      end
-    end
-    nil
+    ColumnMapping.where("code ilike '#{self.name}'").select('name').first.try(:name)
   end
 
 end
