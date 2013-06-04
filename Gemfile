@@ -57,6 +57,7 @@ group :development, :test do
   gem "launchy"    # So you can do Then show me the page
   gem "debugger"
   gem "zeus"
+  gem "ruby-prof"
 end
 
 group :development do

@@ -3,19 +3,9 @@ class CartItemsController < ApplicationController
   layout 'data_files'
 
   def index
-    @cart_items = current_user.cart_items
+    @cart_items = current_user.cart_items.includes(:experiment, :created_by)
     session[:back]= request.referer
   end
-
-  def new
-    @cart_item = CartItem.new
-    set_tab :explore, :contentnavigation
-  end
-
-  def edit
-    @cart_item = CartItem.find(params[:id])
-  end
-
 
   def create
     if params[:add_all] == 'true'
@@ -27,47 +17,46 @@ class CartItemsController < ApplicationController
 
   def add_single
     session[:return_to]= request.referer
-    @data_file = DataFile.find(params[:data_file_ids])
-    @cart_item = current_user.cart_items.build
-    @cart_item.data_file= @data_file
+    data_file_id = params[:data_file_ids].to_i
 
     respond_to do |format|
-      if !current_user.data_file_in_cart?(@data_file) and @cart_item.save
+      if !current_user.data_file_in_cart?(data_file_id)
+        current_cart = current_user.cart_items
+        current_user.cart_items << DataFile.find(data_file_id)
         format.html { redirect_to session[:return_to]||data_files_path,
             notice: 'File was successfully added to cart.' }
-        format.js { render :nothing => true }
+        format.js { render :nothing => true, :status => :ok }
       else
         format.html { redirect_to session[:return_to]||data_files_path,
             notice: 'File could not be added: It may already exist in your cart.' }
-        format.js { render :nothing => true }
+        format.js { render :nothing => true, :status => :not_modified }
       end
     end
   end
 
   def add_all
-    count = 0
     session[:return_to]= request.referer
-    params[:data_file_ids].each do |data_file_id|
-      @data_file = DataFile.find(data_file_id)
-      unless current_user.data_file_in_cart?(@data_file)
-        @cart_item = current_user.cart_items.build
-        @cart_item.data_file= @data_file
-        @cart_item.save
-        count = count + 1
-      end
-    end
+    search = DataFileSearch.new(session[:search])
+
+    current_cart = current_user.cart_items
+    to_add = search.do_search(DataFile.scoped) - current_cart
+    count = to_add.count
+
+    user_id = current_user.id
+    values = to_add.collect(&:id).map {|data_file_id| "(#{data_file_id},#{user_id})"}.join(",")
+    # by default, ActiveRecord generates a query for each data_file_id inserted, which is unnecessary.
+    ActiveRecord::Base.connection.execute("INSERT INTO data_files_users (data_file_id, user_id) VALUES #{values}")
+
     respond_to do |format|
-      format.html {  redirect_to session[:return_to]||data_files_path,
+      format.html {redirect_to session[:return_to] || data_files_path,
           notice: "#{count} files were added to your cart." }
     end
   end
 
   def destroy
     session[:return_to]= request.referer
-    @cart_item = CartItem.find(params[:id])
-    unless @cart_item.nil?
-      @cart_item.destroy
-    end
+
+    ActiveRecord::Base.connection.execute("delete from data_files_users where user_id = #{current_user.id} and data_file_id = #{params[:id]}")
 
     respond_to do |format|
       format.html { redirect_to session[:return_to]||data_files_path, notice: "File was successfully removed from cart." }
@@ -77,17 +66,13 @@ class CartItemsController < ApplicationController
 
   def destroy_all
     session[:return_to]= request.referer
-    if current_user.data_files.empty?
+    if current_user.cart_items.count == 0
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      current_user.cart_items.each do |cart_item|
-        unless cart_item.nil?
-          cart_item.destroy
-        end
-      end
+      ActiveRecord::Base.connection.execute("delete from data_files_users where user_id = #{current_user.id}")
       respond_to do |format|
         format.html { redirect_to session[:return_to]||data_files_path, notice: 'Your cart was cleared.' }
-        format.js {  }
+        format.js { render :nothing => true, :status => :ok }
       end
     end
   end

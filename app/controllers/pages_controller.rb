@@ -13,12 +13,6 @@ class PagesController < ApplicationController
       set_tab :home
       set_tab :dashboard, :contentnavigation
       @data_files = DataFile.most_recent_first.limit(5)
-      # @unadded_items = false
-      # @data_files.each do |data_file|
-      #   unless current_user.data_file_in_cart?(data_file)
-      #     @unadded_items = true
-      #   end
-      # end
       render :layout => 'data_files'
     end
   end

@@ -11,14 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522062514) do
-
-  create_table "cart_items", :force => true do |t|
-    t.integer  "data_file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
-  end
+ActiveRecord::Schema.define(:version => 20130604034330) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -64,6 +57,13 @@ ActiveRecord::Schema.define(:version => 20130522062514) do
     t.integer "data_file_id"
     t.integer "tag_id"
   end
+
+  create_table "data_files_users", :id => false, :force => true do |t|
+    t.integer "data_file_id", :null => false
+    t.integer "user_id",      :null => false
+  end
+
+  add_index "data_files_users", ["data_file_id", "user_id"], :name => "index_data_files_users_on_data_file_id_and_user_id"
 
   create_table "experiment_for_codes", :force => true do |t|
     t.integer  "experiment_id"

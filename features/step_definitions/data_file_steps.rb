@@ -481,8 +481,7 @@ end
 
 When /^I remove ([^"]*) from the cart$/ do |name|
   data_file = DataFile.find_by_filename(name)
-  cart_item = data_file.cart_items.first
-  click_link("remove_from_cart_#{cart_item.id}")
+  click_link("remove_from_cart_#{data_file.id}")
 end
 
 
@@ -534,14 +533,14 @@ end
 When /^the cart for "([^"]*)" contains "([^"]*)"$/ do |email, file_name|
   user = User.find_by_email!(email)
   file = DataFile.find_by_filename(file_name)
-  user.cart_items.create!(:data_file_id => file.id)
+  user.cart_items << file
 end
 
 When /^the cart for "([^"]*)" should contain only file "([^"]*)"$/ do |email, file_name|
   user = User.find_by_email!(email)
   file = DataFile.find_by_filename(file_name)
   user.cart_items.size.should eq(1)
-  user.cart_items.first.data_file_id.should eq(file.id)
+  user.cart_items.first.id.should eq(file.id)
 end
 
 When /^there should be files named "([^"]*)" in the system$/ do |csv_files|

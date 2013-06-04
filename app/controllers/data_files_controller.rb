@@ -138,19 +138,41 @@ class DataFilesController < ApplicationController
   end
 
   def download_selected
-    if current_user.data_files.empty?
+    files = current_user.cart_items
+
+    if files.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      ids = current_user.data_files.collect(&:id)
-      unless ids.empty?
-        if ids.size == 1
-          send_data_file(DataFile.find(ids.first))
+      unless files.empty?
+        if files.size == 1
+          send_data_file(files.first)
         else
-          send_zip(ids)
+          send_zip(files)
         end
       else
         redirect_to(:back||data_files_path)
       end
+    end
+  end
+
+  def download
+    unless @data_file.published? and @data_file.is_package?
+      authenticate_user!
+      authorize! :download, @data_file  
+    end
+
+    if current_user.present?
+      return send_data_file(@data_file)
+    else
+      unless APP_CONFIG['ip_addresses'].nil?
+        if APP_CONFIG['ip_addresses'].include? request.ip
+          return send_data_file(@data_file) 
+        else
+          raise ActionController::RoutingError.new('Not Found')
+        end
+      else
+        raise ActionController::RoutingError.new('Not Found')
+      end  
     end
   end
 
@@ -181,27 +203,6 @@ class DataFilesController < ApplicationController
       else
         redirect_to(data_file_path(file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
-    end
-  end
-
-  def download
-    unless @data_file.published? and @data_file.is_package?
-      authenticate_user!
-      authorize! :download, @data_file  
-    end
-
-    if current_user.present?
-      return send_data_file(@data_file)
-    else
-      unless APP_CONFIG['ip_addresses'].nil?
-        if APP_CONFIG['ip_addresses'].include? request.ip
-          return send_data_file(@data_file) 
-        else
-          raise ActionController::RoutingError.new('Not Found')
-        end
-      else
-        raise ActionController::RoutingError.new('Not Found')
-      end  
     end
   end
 
@@ -243,13 +244,6 @@ class DataFilesController < ApplicationController
     send_file data_file.path, file_params
   end
 
-  def cleanout_cart_items
-    file_id = params[:id]
-    CartItem.where(:data_file_id == file_id).each do |item|
-      item.destroy if item.user_id.eql?(current_user.id)
-    end
-  end
-
   def reformat_date_and_time(date, hr, min, sec)
     return if date.blank?
     adjusted_date = date #so we can use << without modifying the original
@@ -262,7 +256,7 @@ class DataFilesController < ApplicationController
   def do_search(search_params)
     @search = DataFileSearch.new(search_params)
 
-    @data_files = @search.do_search(@data_files)
+    @data_files = @search.do_search(@data_files).includes(:experiment => :facility)
 
     @from_date = @search.search_params[:from_date]
     @to_date = @search.search_params[:to_date]
@@ -294,12 +288,6 @@ class DataFilesController < ApplicationController
     else
       @data_files = @data_files.order(col + ' ' + sort_direction)
     end
-    # @unadded_items = false
-    # @data_files.each do |data_file|
-    #   unless current_user.data_file_in_cart?(data_file)
-    #     @unadded_items = true
-    #   end
-    # end
 
     if @search.error
       flash.now[:alert] = @search.error
@@ -311,7 +299,7 @@ class DataFilesController < ApplicationController
     @search = DataFileSearch.new(search_params)
     # prevents CanCan loading the id search param
     @data_files = DataFile.scoped
-    @data_files = @search.do_search(@data_files)
+    @data_files = @search.do_search(@data_files).includes(:experiment => :facility)
     @data_files.each do |data_file|
       data_file.url = download_data_file_url(data_file.id, :format => :json)
     end
@@ -381,8 +369,7 @@ class DataFilesController < ApplicationController
     Date.parse(string)
   end
 
-  def send_zip(ids)
-    files = DataFile.find(ids)
+  def send_zip(files)
     first_file_name = files.collect(&:filename).sort.first
     download_file_name = "#{first_file_name}.zip"
     CustomDownloadBuilder.zip_for_files(files) do |zip_file|

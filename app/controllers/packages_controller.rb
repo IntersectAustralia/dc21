@@ -2,7 +2,7 @@ require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
 
   def new
-    if current_user.data_files.empty?
+    if current_user.cart_items.empty?
 
     else
       @back_request = request.referer
@@ -19,7 +19,7 @@ class PackagesController < DataFilesController
   def create
     @package = Package.create_package(params, current_user)
     if @package.save
-      data_file_ids = CartItem.data_ids_which_belong_to_user(current_user)
+      data_file_ids = current_user.cart_item_ids
       begin
         CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
           attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)

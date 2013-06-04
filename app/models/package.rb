@@ -44,18 +44,18 @@ class Package < DataFile
   end
 
   def set_times(user)
-    start_df = CartItem.data_file_with_earliest_start_time(user.id).first
+    start_df = user.cart_items.earliest_start_time.first
     if start_df.nil?
       self.start_time = nil
     else
-      self.start_time = start_df.data_file.start_time
+      self.start_time = start_df.start_time
     end
 
-    end_df = CartItem.data_file_with_latest_end_time(user.id).first
+    end_df = user.cart_items.latest_end_time.first
     if end_df.nil?
       self.end_time = nil
     else
-      self.end_time = end_df.data_file.end_time
+      self.end_time = end_df.end_time
     end
   end
 

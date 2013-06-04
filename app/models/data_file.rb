@@ -18,7 +18,8 @@ class DataFile < ActiveRecord::Base
   belongs_to :experiment
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
-  has_many :cart_items, :dependent => :destroy
+  has_and_belongs_to_many :users
+
   has_and_belongs_to_many :tags
 
   before_validation :strip_whitespaces
@@ -197,24 +198,16 @@ class DataFile < ActiveRecord::Base
     return false
   end
 
-  def experiment
-    return nil if experiment_id.nil?
-    Experiment.find(experiment_id)
-  end
-
   def experiment_name
-    return "" if experiment_id.nil?
-    Experiment.find(experiment_id).name
+    experiment.name
   end
 
   def facility
-    return nil if experiment_id.nil?
-    Experiment.find(experiment_id).facility
+    experiment.facility
   end
 
   def facility_name
-    return "" if experiment_id.nil?
-    Experiment.find(experiment_id).facility.name
+    experiment.facility.name
   end
 
   def add_message(type, message)

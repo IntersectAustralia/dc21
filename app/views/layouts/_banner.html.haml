@@ -8,12 +8,10 @@
       .menu
         = tabs_tag(:builder => MenuTabBuilder) do |tab|
           - if !user_signed_in?
-          - else
-            = tab.home '', root_url, :id => "home"
-          - if !user_signed_in?
             = tab.login 'Log in', root_url
             = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
           - else
+            = tab.home '', root_url, :id => "home"
             - if can?(:read, User)
               = tab.admin 'Admin', users_path
             = tabs_tag(:builder => AccountTabBuilder) do |tab|

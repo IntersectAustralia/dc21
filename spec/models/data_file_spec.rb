@@ -53,7 +53,7 @@ describe DataFile do
     it { should belong_to(:created_by) }
     it { should have_many(:column_details) }
     it { should have_many(:metadata_items) }
-    it { should have_many(:cart_items) }
+    it { should have_and_belong_to_many(:users) }
     it { should have_and_belong_to_many(:tags) }
   end
 
@@ -571,9 +571,9 @@ describe DataFile do
       df2 = Factory(:data_file)
       user1 = Factory(:user)
       user2 = Factory(:user)
-      user1.cart_items.create!(:data_file_id => df1.id)
-      user1.cart_items.create!(:data_file_id => df2.id)
-      user2.cart_items.create!(:data_file_id => df1.id)
+      user1.cart_items << df1
+      user1.cart_items << df2
+      user2.cart_items << df1
 
       user1.cart_items.size.should eq(2)
       user2.cart_items.size.should eq(1)

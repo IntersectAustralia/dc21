@@ -52,7 +52,7 @@ class OverlapChecker
 
       users_with_replaced_files_in_cart = []
       safe.each do |df|
-        users_with_replaced_files_in_cart += df.cart_items.collect(&:user)
+        users_with_replaced_files_in_cart += df.users
         File.delete df.path
         df.destroy
       end
@@ -65,7 +65,7 @@ class OverlapChecker
       # replace old file(s) with new one in carts
       users_with_replaced_files_in_cart.uniq!
       users_with_replaced_files_in_cart.each do |user|
-        user.cart_items.create!(:data_file_id => @data_file.id)
+        user.cart_items << @data_file
       end
       info_message << " Carts have been updated." unless users_with_replaced_files_in_cart.empty?
       @data_file.add_message(:info, info_message)

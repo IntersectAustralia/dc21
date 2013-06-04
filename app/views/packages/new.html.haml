@@ -2,7 +2,7 @@
   %h1 Data / New Package
 
 .container
-  -if current_user.data_files.empty?
+  -if current_user.cart_items.empty?
     %h3 You cannot create a package because your cart is empty.
     .form-actions
       .actions-pre

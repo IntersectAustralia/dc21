@@ -2,11 +2,14 @@ require 'fileutils'
 require 'tempfile'
 
 def populate_performance_data
+	old_logger = ActiveRecord::Base.logger
+	ActiveRecord::Base.logger = nil
 	check_files
 	load_password
 	create_performance_users
 	create_performance_facilities
 	create_performance_files
+	ActiveRecord::Base.logger = old_logger
 end
 
 def check_files
@@ -63,7 +66,7 @@ def create_performance_files
 	ColumnDetail.delete_all
 	MetadataItem.delete_all
 
-	# for 5 years new files + 1 year backlog of 35429 files in total
+	# for 5 years new files + 1 year backlog of 35424 files in total
 	# get monthly total * 72
 		$index = 1
 		# populate 203 RAW per month
@@ -87,7 +90,7 @@ def create_performance_files
 			$index += 1
 		end
 
-			# Manual upload Raw  per month 108
+			# Manual upload Raw per month 108
 		108.times do
 			puts "Uploading file "+ $index.to_s + ": cntl_test.dat"
 			upload_toa5_file("cntl_test.dat", "researcher0@intersect.org.au")

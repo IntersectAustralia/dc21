@@ -3,11 +3,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
 
   belongs_to :role
-  has_many :cart_items
-  has_many :data_files, :through => :cart_items
+  has_and_belongs_to_many :cart_items, :uniq => true, :class_name => "DataFile"
 
   # Setup accessible attributes (status/approved flags should NEVER be accessible by mass assignment)
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :data_files, :data_file_ids
 
   validates_presence_of :first_name
   validates_presence_of :last_name
@@ -158,13 +157,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  def data_file_in_cart?(data_file)
-    data_files.include?(data_file)
+  def data_file_in_cart?(data_file_id)
+    cart_item_ids.include?(data_file_id)
   end
 
   def cart_size
     sum = 0
-    data_files.each do |data_file|
+    cart_items.each do |data_file|
       sum += data_file.file_size unless data_file.file_size.nil?
     end
     sum

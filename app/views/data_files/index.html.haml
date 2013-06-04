@@ -147,45 +147,35 @@
 %br
 
 .data-results
-  - unless @data_files.empty? || @search.showing_all?
-    -##.whitebutton
-      %span= link_to 'Publish', '#', id: :publish_button
-  = will_paginate(@data_files_paginated)
+  = will_paginate(@data_files_paginated, :params => params.merge({:search => nil, :sort => nil, :direction => nil}))
 
 - unless @data_files.empty?
 
-  = form_tag(download_selected_data_files_path, :method => :get, :name => "datafiles", :class => "exploredata search") do
-    = hidden_field_tag "searched_from_date", @from_date
-    = hidden_field_tag "searched_to_date", @to_date
+  %table#exploredata.search
+    %tr
+      %th.sortable.filename= sortable "data_files.filename", "Filename"
+      %th.sortable.date= sortable "data_files.created_at", "Date added"
+      %th.sortable.size= sortable "data_files.file_size", "Size"
+      %th.sortable.email= sortable "users.email", "Added by"
+      %th.sortable.type= sortable "data_files.file_processing_status", "Type"
+      %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
+      %th.add_cart
+        - unless @data_files.length < 1
+          = link_to 'Add All', add_all_cart_items_path, :class => "btn", :id => "add_all_to_cart"
 
-    %table#exploredata.search
-      %tr
-        %th.sortable.filename= sortable "data_files.filename", "Filename"
-        %th.sortable.date= sortable "data_files.created_at", "Date added"
-        %th.sortable.size= sortable "data_files.file_size", "Size"
-        %th.sortable.email= sortable "users.email", "Added by"
-        %th.sortable.type= sortable "data_files.file_processing_status", "Type"
-        %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
-        %th.add_cart
-          - unless @data_files.length < 1
-            = link_to 'Add All', "#", :class => "btn", :id => "add_all_to_cart"
+    - @data_files_paginated.each do |data_file|
+      %tr{:class => cycle('field_bg', 'field_nobg')}
 
-      - @data_files_paginated.each do |data_file|
-        %tr{:class => cycle('field_bg', 'field_nobg')}
+        %td.filename{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+        %td.date{:title => data_file.created_at.to_s(:with_time)}= data_file.created_at.to_s(:with_time)
+        %td.size{:title => number_to_human_size(data_file.file_size)}= number_to_human_size(data_file.file_size)
+        %td.email{:title => data_file.uploader_email}= data_file.uploader_email
+        %td.type{:title => data_file.file_processing_status}= data_file.file_processing_status
+        %td.experiment{:title => data_file.experiment_name}= data_file.experiment_name
+        %td.add_cart
+          -if current_user.data_file_in_cart?(data_file.id)
+            = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file.id), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
+          -else
+            = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file.id), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
 
-          %td.filename{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
-          %td.date{:title => data_file.created_at.to_s(:with_time)}= data_file.created_at.to_s(:with_time)
-          %td.size{:title => number_to_human_size(data_file.file_size)}= number_to_human_size(data_file.file_size)
-          %td.email{:title => data_file.uploader_email}= data_file.uploader_email
-          %td.type{:title => data_file.file_processing_status}= data_file.file_processing_status
-          %td.experiment{:title => data_file.experiment_name}= data_file.experiment_name
-          %td.add_cart
-            -if current_user.data_file_in_cart?(data_file)
-              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
-            -else
-              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
-
-    = will_paginate(@data_files_paginated)
-  = form_tag add_all_cart_items_path, :id => "all_data_files_form" do |f|
-    - @data_files.each do |data_file|
-      = hidden_field_tag "data_file_ids[]", data_file.id
+  = will_paginate(@data_files_paginated, :params => params.merge({:search => nil, :sort => nil, :direction => nil}))
