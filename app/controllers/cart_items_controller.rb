@@ -36,11 +36,15 @@ class CartItemsController < ApplicationController
 
   def add_all
     session[:return_to]= request.referer
-    search = DataFileSearch.new(session[:search])
+    
+    if params[:recent]
+      to_add = DataFile.most_recent_first.limit(5) - cart_items
+    else
+      search = DataFileSearch.new(session[:search])
+      to_add = search.do_search(DataFile.scoped) - cart_items
+    end
 
-    to_add = search.do_search(DataFile.scoped) - cart_items
     count = to_add.count
-
 
     if count > 0
       user_id = current_user.id

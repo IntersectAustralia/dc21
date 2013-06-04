@@ -106,7 +106,6 @@ Feature: View the list of data files
     And I should see "1 File in Cart"
     Then I am on the edit cart page
     When I remove sample.txt from the cart
-    # Then I should see "0 Files in Cart"
     Then I should see "Your cart is empty"
 
   Scenario: number of items in cart updates upon adding from list of files
