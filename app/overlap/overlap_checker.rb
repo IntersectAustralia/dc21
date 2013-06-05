@@ -15,23 +15,20 @@ class OverlapChecker
     # find files that need to be checked
     possible_files = @data_file.raw_toa5_files_with_same_station_name_and_table_name
 
+    # find files that start no later than current end time and
+    # end no earlier than current start time
+    start_time = @data_file.start_time
+    end_time = @data_file.end_time
+
+    possible_files = possible_files.where('end_time >= ? AND start_time <= ?', start_time, end_time)
     # categorise whether they overlap safely, unsafely or not at all
     unsafe = []
     safe = []
-    unsafe_id = []
+
     possible_files.each do |file|
       category = file.categorise_overlap(@data_file)
       unsafe << file if category == 'UNSAFE'
       safe << file if category == 'SAFE'
-      unsafe_id << file if category == 'UNSAFE_ID'
-    end
-
-    # check for unsafe files with ID issues
-    unless unsafe_id.empty?
-      @data_file.add_message(:error, 'File is safe but cannot replace existing files with IDs. File has been saved with type ERROR. Files with IDs: ' + unsafe_id.collect(&:filename).join(', '))
-      @data_file.file_processing_status = DataFile::STATUS_ERROR
-      @data_file.save!
-      return # we don't continue to destroy safe if there's unsafe overlaps
     end
 
     # check for bad overlaps first

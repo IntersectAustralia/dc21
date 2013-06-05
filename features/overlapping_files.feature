@@ -163,31 +163,3 @@ Feature: Overlapping Files
     And file "8_9_10_11_oct.dat" should have type "RAW"
     And there should be files named "8_9_10_11_oct.dat, 12_oct.dat" in the system
     And there should be files named "8_9_10_oct.dat" that were deleted
-
-  Scenario: Overlap where new file could safely overlaps multiple old files but an existing file has an ID
-    Given I upload "samples/overlap_tests/8_9_10_oct.dat" with type "RAW" and description "D1" and experiment "My Experiment"
-    And I am on the list data files page
-    And I follow "8_9_10_oct.dat"
-    And I follow "Edit Metadata"
-    And I fill in "ID" with "test"
-    And I press "Update"
-    And I upload "samples/overlap_tests/11_oct.dat" with type "RAW" and description "D2" and experiment "My Experiment"
-    When I upload "samples/overlap_tests/8_9_10_11_oct.dat" with type "RAW" and description "D3" and experiment "My Experiment"
-    Then I should see "File is safe but cannot replace existing files with IDs. File has been saved with type ERROR. Files with IDs: 8_9_10_oct.dat"
-    And file "8_9_10_11_oct.dat" should have type "ERROR"
-    And there should be files named "8_9_10_oct.dat, 11_oct.dat, 8_9_10_11_oct.dat" in the system
-
-  Scenario: Overlap where new file could safely overlaps one file but the existing file has an ID
-    Given I upload "samples/overlap_tests/8_9_10_oct.dat" with type "RAW" and description "D1" and experiment "My Experiment"
-    And I am on the list data files page
-    And I follow "8_9_10_oct.dat"
-    And I follow "Edit Metadata"
-    And I fill in "ID" with "test"
-    And I press "Update"
-    When I upload "samples/overlap_tests/8_9_10_oct.dat" with type "RAW" and description "D3" and experiment "My Experiment"
-    Then I should see "File is safe but cannot replace existing files with IDs. File has been saved with type ERROR. Files with IDs: 8_9_10_oct.dat"
-    And I should see "A file already existed with the same name. File has been renamed."
-    And I should see "8_9_10_oct_1.dat"
-    And file "8_9_10_oct_1.dat" should have type "ERROR"
-    And there should be files named "8_9_10_oct.dat, 8_9_10_oct_1.dat" in the system
-

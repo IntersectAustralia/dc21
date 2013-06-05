@@ -240,8 +240,7 @@ class DataFile < ActiveRecord::Base
 
   def categorise_overlap(new_file)
     #assumes if we've got here then new_file is from same station and table and is RAW+toa5, this just about dates/times
-    #returns NONE, SAFE, UNSAFE, UNSAFE_ID
-
+    #returns NONE, SAFE, UNSAFE
 
     # new file ends before I start
     return 'NONE' if new_file.end_time < self.start_time
@@ -251,7 +250,7 @@ class DataFile < ActiveRecord::Base
     # new file starts before or on my start, ends after or on my end - i.e. is identical or a superset and could be safe to replace me
     if new_file.start_time <= self.start_time && new_file.end_time >= self.end_time and FileOverlapContentChecker.new(self, new_file).content_matches
       # check that the content actually matches
-      return self.external_id.present? ? 'UNSAFE_ID' : 'SAFE'
+      return 'SAFE'
     end
     # otherwise, must be unsafe
     'UNSAFE'
@@ -261,13 +260,13 @@ class DataFile < ActiveRecord::Base
     station_name = metadata_items.find_by_key(MetadataKeys::STATION_NAME_KEY).try(:value)
     table_name = metadata_items.find_by_key(MetadataKeys::TABLE_NAME_KEY).try(:value)
 
-    toa5_files = DataFile.where(:format => FileTypeDeterminer::TOA5, :file_processing_status => STATUS_RAW)
-    toa5_files = DataFile.where(:id => (toa5_files - DataFile.where(:id => self.id)))
+    toa5_files = DataFile.where("format = ? AND file_processing_status = ? AND data_files.id != ?", FileTypeDeterminer::TOA5, STATUS_RAW, self.id)
 
     by_table_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::TABLE_NAME_KEY, :value => table_name})
     by_station_name = toa5_files.joins(:metadata_items).where(:metadata_items => {:key => MetadataKeys::STATION_NAME_KEY, :value => station_name})
 
-    DataFile.order(:created_at).where(:id => (by_table_name & by_station_name).map(&:id))
+    # DataFile.order(:created_at).where(:id => (by_table_name & by_station_name).map(&:id))
+    DataFile.order(:created_at).from("(#{by_table_name.to_sql} INTERSECT #{by_station_name.to_sql}) as data_files")
   end
 
   protected
