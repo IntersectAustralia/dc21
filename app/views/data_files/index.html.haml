@@ -103,10 +103,9 @@
                     = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
                     = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
                     .facility_children
-                      - experiments.each_with_index do |experiment, e_index|
-                        - if experiment.facility_id == facility.id
-                          = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
-                          = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
+                      - experiments.where(:facility_id => facility.id).each_with_index do |experiment, e_index|
+                        = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
+                        = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
               %h4#variable.expand Columns:

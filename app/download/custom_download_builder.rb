@@ -4,7 +4,7 @@ class CustomDownloadBuilder
 
   def self.zip_for_files(data_files, &block)
     temp_dir = Dir.mktmpdir
-    zip_file = Tempfile.new("download_zip")
+    zip_file = File.new(Dir::Tmpname.make_tmpname("/tmp/download_zip", nil), "w")
     begin
       file_paths = data_files.collect do |data_file|
         temp_path = File.join(temp_dir, data_file.filename)
@@ -17,7 +17,6 @@ class CustomDownloadBuilder
       block.yield(zip_file)
     ensure
       zip_file.close
-      zip_file.unlink
       FileUtils.remove_entry_secure temp_dir
     end
   end

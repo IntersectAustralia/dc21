@@ -158,11 +158,7 @@ class User < ActiveRecord::Base
   end
 
   def cart_size
-    sum = 0
-    cart_items.each do |data_file|
-      sum += data_file.file_size unless data_file.file_size.nil?
-    end
-    sum
+    cart_items.sum(:file_size)
   end
 
     private
