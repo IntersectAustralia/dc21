@@ -11,15 +11,15 @@
         - pg_num = params[:page].nil? ? 0 : params[:page].to_i - 1
         - if @data_files.empty?
           No matching files
-        - elsif @data_files.size == 1
+        - elsif @data_files.count == 1
           = "Showing 1 file"
-        - elsif @data_files.size <= @data_files.per_page
-          = "Showing all #{@data_files.size} files"
+        - elsif @data_files.count <= @data_files.per_page
+          = "Showing all #{@data_files.count} files"
         - else
           - if @data_files_paginated.length == 1
-            = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.size} files"
+            = "Showing #{@data_files.per_page * pg_num + 1} of #{@data_files.count} files"
           - else
-            = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.size} files"
+            = "Showing #{@data_files.per_page * pg_num + 1}-#{@data_files.per_page * pg_num + @data_files_paginated.size} of #{@data_files.count} files"
         %span.caret
       %ul#faceted_search.dropdown-menu.facetedsearch.search{"aria-labelledby" => "drop4", :role => "menu"}
         .searchbox
@@ -103,7 +103,7 @@
                     = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
                     = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
                     .facility_children
-                      - experiments.where(:facility_id => facility.id).each_with_index do |experiment, e_index|
+                      - facility.experiments.each_with_index do |experiment, e_index|
                         = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
                         = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
@@ -158,8 +158,7 @@
       %th.sortable.type= sortable "data_files.file_processing_status", "Type"
       %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
       %th.add_cart
-        - unless @data_files.length < 1
-          = link_to 'Add All', add_all_cart_items_path, :class => "btn", :id => "add_all_to_cart"
+        = link_to 'Add All', add_all_cart_items_path, :class => "btn", :id => "add_all_to_cart"
     - @cart_item_ids = cart_items.collect(&:id)
 
     - @data_files_paginated.each do |data_file|
@@ -168,9 +167,9 @@
         %td.filename{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
         %td.date{:title => data_file.created_at.to_s(:with_time)}= data_file.created_at.to_s(:with_time)
         %td.size{:title => number_to_human_size(data_file.file_size)}= number_to_human_size(data_file.file_size)
-        %td.email{:title => data_file.uploader_email}= data_file.uploader_email
+        %td.email{:title => data_file['uploader_email']}= data_file['uploader_email']
         %td.type{:title => data_file.file_processing_status}= data_file.file_processing_status
-        %td.experiment{:title => data_file.experiment_name}= data_file.experiment_name
+        %td.experiment{:title => data_file['experiment_name']}= data_file['experiment_name']
         %td.add_cart
           -if @cart_item_ids.include?(data_file.id)
             = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file.id), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}

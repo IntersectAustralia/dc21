@@ -62,6 +62,7 @@ class DataFile < ActiveRecord::Base
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
   scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id)}
+  scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email')
 
   attr_accessor :messages, :url
 

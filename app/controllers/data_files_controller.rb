@@ -18,21 +18,20 @@ class DataFilesController < ApplicationController
   layout 'data_files'
 
   expose(:tags) { Tag.order(:name) }
-  expose(:facilities) { Facility.order(:name) }
+  expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
-  expose(:experiments) { Experiment.order(:name) }
 
   def index
     set_tab :explore, :contentnavigation
     do_search(params[:search])
-    @data_files_paginated = @data_files.paginate(page: params[:page])
+    @data_files_paginated = @data_files.paginate(page: params[:page]).search_display_fields
   end
 
   def search
     session[:page] = nil
     set_tab :explore, :contentnavigation
     do_search(params[:search])
-    @data_files_paginated = @data_files.paginate(page: params[:page])
+    @data_files_paginated = @data_files.paginate(page: params[:page]).search_display_fields
     render :index
   end
 
@@ -40,7 +39,7 @@ class DataFilesController < ApplicationController
     session["search"] = nil
     set_tab :explore, :contentnavigation
     do_search(params[:search])
-    @data_files_paginated = @data_files.paginate(page: params[:page])
+    @data_files_paginated = @data_files.paginate(page: params[:page]).search_display_fields
     render :index
   end
 
@@ -292,7 +291,7 @@ class DataFilesController < ApplicationController
     @search = DataFileSearch.new(search_params)
     # prevents CanCan loading the id search param
     @data_files = DataFile.scoped
-    @data_files = @search.do_search(@data_files).includes(:experiment => :facility)
+    @data_files = @search.do_search(@data_files)
     @data_files.each do |data_file|
       data_file.url = download_data_file_url(data_file.id, :format => :json)
     end
