@@ -41,6 +41,7 @@ gem 'bootstrap-will_paginate'
 gem 'rake', '~> 0.9.2.2'
 gem 'validates_timeliness', '~> 3.0'
 gem 'rabl'
+gem 'elif'
 
 group :development, :test do
   gem "rspec-rails"

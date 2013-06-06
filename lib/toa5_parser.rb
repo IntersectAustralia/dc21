@@ -110,8 +110,18 @@ class Toa5Parser
       lines[:line_4] = line if counter == 4
       lines[:line_5] = line if counter == 5
       lines[:line_6] = line if counter == 6
-      lines[:last_line] = line unless line.blank?
+      break if counter >= 6
     end
+
+    # rather than reading through the whole file to get to the last line (which is slow), we use the ELIF gem to start
+    # from the bottom to get the last line (which is much faster)
+    Elif.foreach(file) do |line|
+      unless line.blank?
+        lines[:last_line] = line
+        break
+      end
+    end
+
     lines
   end
 
