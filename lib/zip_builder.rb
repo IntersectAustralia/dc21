@@ -1,4 +1,18 @@
 class ZipBuilder
+
+  def self.build_simple_zip_from_files(zip_path, file_details)
+    Zip::ZipFile.open(zip_path, Zip::ZipFile::CREATE) do |zipfile|
+      file_details.each do |file_details|
+        name = file_details[0]
+        path_to_file = file_details[1]
+        # Takes two arguments:
+        # - The name of the file as it will appear in the archive
+        # - The original file, including the path to find it
+        zipfile.add(name, path_to_file)
+      end
+    end
+  end
+
   def self.build_zip(zip_file, file_paths)
     Zip::ZipOutputStream.open(zip_file.path) do |zos|
       file_paths.each do |path|

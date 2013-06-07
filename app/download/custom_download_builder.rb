@@ -4,19 +4,14 @@ class CustomDownloadBuilder
 
   def self.zip_for_files(data_files, &block)
     temp_dir = Dir.mktmpdir
-    zip_file = File.new(Dir::Tmpname.make_tmpname("/tmp/download_zip", nil), "w")
+    zip_file_path = Dir::Tmpname.make_tmpname("/tmp/download_zip", nil)
     begin
-      file_paths = data_files.collect do |data_file|
-        temp_path = File.join(temp_dir, data_file.filename)
-        FileUtils.cp data_file.path, temp_path
-        temp_path
-      end
+      file_details = data_files.collect { |df| [df.filename, df.path] }
 
-      ZipBuilder.build_zip(zip_file, file_paths)
+      ZipBuilder.build_simple_zip_from_files(zip_file_path, file_details)
 
-      block.yield(zip_file)
+      block.yield(File.new(zip_file_path))
     ensure
-      zip_file.close
       FileUtils.remove_entry_secure temp_dir
     end
   end
