@@ -9,7 +9,7 @@ class CustomDownloadBuilder
       file_details = data_files.collect { |df| [df.filename, df.path] }
 
       ZipBuilder.build_simple_zip_from_files(zip_file_path, file_details)
-
+      File.chmod(00644, zip_file_path)
       block.yield(File.new(zip_file_path))
     ensure
       FileUtils.remove_entry_secure temp_dir
