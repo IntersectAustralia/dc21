@@ -139,7 +139,9 @@ class DataFilesController < ApplicationController
     if cart_items.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
-      if cart_items.size == 1
+      response.headers['Cache-Control'] = "no-store, no-cache, max-age=0, must-revalidate"
+      response.headers['Pragma'] = "no-cache"
+      if cart_items.count == 1
         send_data_file(cart_items.first)
       else
         send_zip(cart_items)
