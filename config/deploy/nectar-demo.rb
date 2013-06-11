@@ -1,9 +1,9 @@
 # Your HTTP server, Apache/etc
-set :web_server, '115.146.94.177'
+set :web_server, '115.146.93.207'
 # # This may be the same as your Web server
-set :app_server, '115.146.94.177'
+set :app_server, '115.146.93.207'
 # # This is where Rails migrations will run
-set :db_server, '115.146.94.177'
+set :db_server, '115.146.93.207'
 # # The user configured to run the rails app
 set :user, 'dc21'
 

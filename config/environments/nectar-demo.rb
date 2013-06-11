@@ -1,6 +1,6 @@
 Dc21app::Application.configure do
 
-  config.action_mailer.default_url_options = { :host => Socket.gethostname }
+  config.action_mailer.default_url_options = { :host => '115.146.93.207' }
 
   # email configuration
   config.action_mailer.delivery_method = :smtp
