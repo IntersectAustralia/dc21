@@ -119,3 +119,6 @@ qa:
 
 staging:
   <<: *defaults
+
+nectar-demo:
+  <<: *defaults
