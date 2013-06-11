@@ -29,6 +29,9 @@ production: &production
   pool: 5
   timeout: 5000
 
+nectar-demo:
+  <<: *production
+
 staging:
   <<: *production
 
