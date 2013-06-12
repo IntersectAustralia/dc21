@@ -68,6 +68,6 @@ end
 
 group :test do
   gem "metrical"
-  gem "simplecov", ">=0.3.8", :require => false
+  gem "simplecov", :require => false
   gem "simplecov-rcov", :require => false
 end
