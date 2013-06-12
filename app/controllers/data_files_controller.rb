@@ -141,6 +141,7 @@ class DataFilesController < ApplicationController
     else
       response.headers['Cache-Control'] = "no-store, no-cache, max-age=0, must-revalidate"
       response.headers['Pragma'] = "no-cache"
+      cookies[:fileDownload] = "true"
       if cart_items.count == 1
         send_data_file(cart_items.first)
       else

@@ -71,6 +71,16 @@ $(function () {
   });
 
   // CART CONTENTS
+  $("#cart_download").click(function (event) {
+    if (!$(this).hasClass("disabled")) {
+      $.fileDownload($(this).prop('href'), {
+          preparingMessageHtml: "We are preparing your download, please wait...",
+          failMessageHtml: "There was a problem generating your download, please try again."
+      });
+    }
+    return false; //this is critical to stop the click event which will trigger a normal file download!
+  });
+
   $("[id^=add_cart_item]").click(function (event) {
     if (!$(this).hasClass("disabled")) {
       $(this).addClass("disabled");
@@ -84,12 +94,7 @@ $(function () {
       else {
         $("#drop3").html("<b>"+cartcount + " Files in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
       }
-      //  disable 'add all' button if all others have been clicked
-      //var all_items = $("a[id^=add_cart_item]").length
-      //var used_items = $("a[id^=add_cart_item_disabled]").length
-      //if (used_items == all_items) {
-     //   $('#add_all_to_cart').addClass("disabled");
-      //}
+
       // enable cart menu dropdown, as it is no longer empty
       $("#drop3").attr("data-toggle", "dropdown");
       $("#notice").slideUp();
