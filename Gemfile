@@ -42,6 +42,8 @@ gem 'rake', '~> 0.9.2.2'
 gem 'validates_timeliness', '~> 3.0'
 gem 'rabl'
 gem 'elif'
+gem 'resque', :require => "resque/server"
+gem 'resque-status', :require => "resque/status_server"
 
 group :development, :test do
   gem "rspec-rails"

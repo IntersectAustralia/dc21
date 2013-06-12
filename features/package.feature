@@ -44,7 +44,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should see "hiev_0"
     When I am on the create package page
@@ -54,7 +54,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package2"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should see "hiev_1"
 
@@ -69,7 +69,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should see "hiev_0"
     And I follow "Delete This File"
@@ -82,7 +82,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package2"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should see "hiev_1"    
     And I should not see "hiev_0"
@@ -93,7 +93,7 @@ Feature: Create a package
     And I add sample2.txt to the cart
     When I am on the create package page
     And I fill in "Filename" with "/ \ ? * : | < > "
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "cannot contain any of the following characters: / \ ? * : | < >"
 
   Scenario: New package - empty form submission
@@ -103,7 +103,7 @@ Feature: Create a package
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Filename can't be blank"
     And I should see "Experiment can't be blank"
     And I should see "Title can't be blank"
@@ -120,7 +120,7 @@ Feature: Create a package
     And I fill in "Title" with "Test title"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
-    And I press "Save"
+    And I press "Create Package"
     When I am on the data file details page for my_other_package.zip
     Then I should see details displayed
       | Name        | my_other_package.zip |
@@ -154,7 +154,7 @@ Feature: Create a package
     And I follow "1 File in Cart"
     And I follow "Package"
     Then I should be on the create package page
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Filename can't be blank"
     And I follow "Back"
     Then I should be on the list data files page

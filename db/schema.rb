@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130604034330) do
+ActiveRecord::Schema.define(:version => 20130607070445) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(:version => 20130604034330) do
     t.integer  "published_by_id"
     t.text     "external_id",                 :default => ""
     t.text     "title",                       :default => ""
+    t.string   "transfer_status"
+    t.string   "uuid"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

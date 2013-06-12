@@ -9,7 +9,8 @@ Dc21app::Application.routes.draw do
   resources :cart_items, :only => [:index, :create, :destroy]  do
     collection do
       get :add_all
-      get :add_single
+      get :add_recent
+      post :add_single
       get :destroy_all
     end
   end
@@ -25,7 +26,7 @@ Dc21app::Application.routes.draw do
   end
 
   get "/data_files/search" => "data_files#index" #to stop weird errors when visiting via get
-
+  get "/column_mappings/render_field" => "column_mappings#render_field"
 
   resources :users, :only => [:show] do
     collection do
@@ -88,6 +89,14 @@ Dc21app::Application.routes.draw do
   end
 
   root :to => "pages#home"
+
+  resque_constraint = lambda do |request|
+    request.env['warden'].authenticate? and request.env['warden'].user.is_admin?
+  end
+
+  constraints resque_constraint do
+    mount Resque::Server, :at => "/resque"
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

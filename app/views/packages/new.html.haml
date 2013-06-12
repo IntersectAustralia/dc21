@@ -78,13 +78,17 @@
               = select_hour @package.end_time, {:field_name => "end_hr"}
               = select_minute @package.end_time, {:field_name => "end_min"}
               = select_second @package.end_time, {:field_name => "end_sec"}
-
+      .control-group
+        .controls
+          %label.checkbox
+            = check_box_tag "run_in_background", true, false, :id => "run_in_background"
+            = label_tag "run_in_background", "Run in background?"
       .form-actions
         .actions
           - if @back_request
             = cancel_button "Back", "#", {:id => "package_back"}
           - else
             = cancel_button "Back", data_files_path
-          = f.submit "Save"
+          = f.submit "Create Package"
 
 

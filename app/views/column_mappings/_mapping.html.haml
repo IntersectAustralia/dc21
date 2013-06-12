@@ -1,0 +1,3 @@
+%tr
+  %td= text_field "column_mappings[#{index}]", :code, :size => '20', :maxlength => '255'
+  %td= select_tag "column_mappings[#{index}][name]", options_for_select(APP_CONFIG['column_mappings'].sort { |a,b| a.downcase <=> b.downcase }), :include_blank => true

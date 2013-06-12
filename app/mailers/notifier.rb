@@ -36,4 +36,13 @@ class Notifier < ActionMailer::Base
           :subject => PREFIX + "Reset password instructions")
   end
 
+  def notify_user_of_completed_package(package)
+    @user = package.created_by
+    @package = package
+    mail( :to => @user.email,
+          :from => APP_CONFIG['notification_email_sender'],
+          :reply_to => APP_CONFIG['notification_email_sender'],
+          :subject => PREFIX + "Package completed")
+  end
+
 end

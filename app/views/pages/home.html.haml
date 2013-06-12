@@ -16,7 +16,7 @@
         %th= "Added by"
         %th.add_cart
           - unless @data_files.length < 1
-            = link_to 'Add All', add_all_cart_items_path(:recent => true), :class => "btn", :id => "add_all_to_cart"
+            = link_to 'Add All', add_recent_cart_items_path, :class => "btn", :id => "add_all_to_cart"
       - @cart_item_ids = cart_items.collect(&:id)
 
       - @data_files.each do |data_file|

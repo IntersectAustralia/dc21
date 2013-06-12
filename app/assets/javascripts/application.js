@@ -39,8 +39,9 @@ $(function () {
     $('#content_wrapper').addClass('notification');
     $('#footer').addClass('notification');
 
-    $("#close_notice").click(function () {
-      notice.slideUp();
+    $("#header").delegate("#close_notice", "click", function(){
+      $(this).parent().stop('true');
+      $(this).parent().slideUp();
       $('#content_wrapper').removeClass('notification');
       $('#footer').removeClass('notification');
     });
@@ -81,28 +82,53 @@ $(function () {
     return false; //this is critical to stop the click event which will trigger a normal file download!
   });
 
-  $("[id^=add_cart_item]").click(function (event) {
-    if (!$(this).hasClass("disabled")) {
-      $(this).addClass("disabled");
-      $(this).attr('id', "add_cart_item_disabled");
-      var cartcount = parseInt ($("#drop3").text().trim().split(" ")[0]) + 1;
-        window.cart_size += parseInt($(this).data('file-size'), 10);
-
-      if (cartcount == 1) {
-        $("#drop3").html("<b>"+cartcount + " File in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
-      }
-      else {
-        $("#drop3").html("<b>"+cartcount + " Files in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
-      }
-
-      // enable cart menu dropdown, as it is no longer empty
-      $("#drop3").attr("data-toggle", "dropdown");
-      $("#notice").slideUp();
-    }
-    else {
-      return false;
+  $("[id^=add_cart_item]").on('click', function(){
+    if (!$(this).hasClass('disabled')) {
+      var id = $(this).attr('data_file');
+      var file_size = $(this).attr('file_size');
+      $.ajax({
+        url: '/cart_items/add_single',
+        type: 'post',
+        async: false,
+        dataType: 'json',
+        data: {id: id, file_size: file_size},
+        success: function(data){
+          if (data.status == '200') {
+            var link_identifier = "#add_cart_item_" + id;
+            $(link_identifier).addClass("disabled");
+            $(link_identifier).attr('id', "add_cart_item_disabled");
+            incrementCartCount(file_size);
+            renderNotice(data.notice);
+            $("#drop3").attr("data-toggle", "dropdown");
+          } else if (data.status == '422') {
+            renderNotice(data.notice);
+          }
+        },
+        error: function(){
+          console.log("Something went wrong");
+        }
+      });
     }
   });
+
+  function incrementCartCount(file_size){
+    var cartCount = parseInt($("#drop3").attr('total_items'));
+    cartCount++;
+    $("#drop3").attr('total_items', cartCount);
+    window.cart_size += parseInt(file_size, 10);
+    if (cartCount == 1)
+      $("#drop3").html("<b>"+ cartCount + " File in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
+    else
+      $("#drop3").html("<b>"+ cartCount + " Files in Cart</b> " + "( " + bytesToSize(window.cart_size) + " )" + " <span class=\"caret\"></span>");
+  }
+
+  function renderNotice(html){
+    var $notice = $("#notice");
+    if($notice.length){
+      $notice.remove();
+    }
+    $("#header").prepend(html);
+  }
 
   function bytesToSize(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];

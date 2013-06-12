@@ -6,6 +6,10 @@ class DataFile < ActiveRecord::Base
   STATUS_RAW = 'RAW'
   STATUS_ERROR = 'ERROR'
   STATUS_PACKAGE = 'PACKAGE'
+
+  PACKAGE_COMPLETE = 'COMPLETE'
+  PACKAGE_NONE = 'NONE'
+
   # stati for selection when uploading
   STATI = [STATUS_RAW] + APP_CONFIG['file_types']
   # cannot change to 'RAW' or 'ERROR' during editing
@@ -51,7 +55,10 @@ class DataFile < ActiveRecord::Base
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
 
+  scope :completed_items, where("transfer_status = ? or uuid IS NULL", PACKAGE_COMPLETE)
+  scope :count_unadded_items, find_by_sql("SELECT * FROM data_files WHERE transfer_status != 'COMPLETE'")
   scope :most_recent_first, order("created_at DESC")
+  scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", PACKAGE_COMPLETE)
   scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
   scope :latest_end_time, order("end_time DESC").where("end_time IS NOT NULL")
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
@@ -76,6 +83,19 @@ class DataFile < ActiveRecord::Base
 
   def is_published?
     published | false
+  end
+
+  def is_complete?
+    transfer_status.eql? PACKAGE_COMPLETE
+  end
+
+  def normally_packaged?
+    transfer_status.eql? PACKAGE_NONE
+  end
+
+  def mark_as_complete
+    self.transfer_status = PACKAGE_COMPLETE
+    self.save!
   end
 
   def self.with_data_in_range(from, to)

@@ -1,6 +1,6 @@
 require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
-  
+
   def new
     if current_user.cart_items.empty?
 
@@ -18,15 +18,32 @@ class PackagesController < DataFilesController
 
   def create
     @package = Package.create_package(params, current_user)
+
+    if params[:run_in_background]
+      @package.transfer_status = "QUEUED"
+    else
+      @package.transfer_status = "NONE"
+    end
+
     if @package.save
       data_file_ids = current_user.cart_item_ids
       begin
-        CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
-          attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
-          package = attachment_builder.build_package(@package, zip_file)
-          build_rif_cs(package) unless package.nil?
+
+        if params[:run_in_background]
+          # Persist the job id in the db - we need to retrieve it per record basis
+          @package.uuid = PackageWorker.create({:package_id => @package.id, :data_file_ids => data_file_ids, :user_id => current_user.id})
+          @package.save
+          redirect_to data_file_path(@package), notice: 'Package is now queued for processing in the background.'
+        else
+          # Run normally
+          CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
+            attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+            package = attachment_builder.build_package(@package, zip_file)
+            build_rif_cs(package) unless package.nil?
+          end
+          redirect_to data_file_path(@package), notice: 'Package was successfully created.'
         end
-        redirect_to data_file_path(@package), notice: 'Package was successfully created.'
+
       rescue ::TemplateError => e
         logger.error e.message
         redirect_to data_file_path(@package), alert: 'There were errors in the README.html template file.'

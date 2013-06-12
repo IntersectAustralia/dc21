@@ -47,7 +47,6 @@ class Ability
 
     return unless user && user.role
 
-    #TODO: we have no rules about permissions for these yet
     can :manage, Facility
     can :manage, Experiment
     can :manage, ExperimentParameter

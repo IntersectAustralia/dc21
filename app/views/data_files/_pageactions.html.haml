@@ -1,4 +1,3 @@
-
 - station = @data_file.metadata_items.find_by_key("station_name")
 - if station.present?
   - fac = Facility.find_by_code(station.value)
@@ -8,7 +7,10 @@
 - delete_warning_station = station.present? ? "\n* sourced from #{station_text}" : ""
 - delete_warning_time = (@data_file.start_time.present? && @data_file.end_time.present?) ? "\n* from #{@data_file.start_time.utc.to_s(:with_seconds)} \n* to #{@data_file.end_time.utc.to_s(:with_seconds)}" : ""
 - delete_warning_tail = "? \nThis action cannot be undone."
+- delete_warning_incomplete = "\n\nBefore deleting this package, you should ensure the background job is terminated using the job admin screen."
 - delete_warning = delete_warning_beginning << delete_warning_contents << delete_warning_station << delete_warning_time << delete_warning_tail
+- unless @data_file.is_complete?
+  - delete_warning << delete_warning_incomplete
 
 - publish_warning = []
 - publish_warning <<  "Do you really want to publish the file #{@data_file.filename}?\n"

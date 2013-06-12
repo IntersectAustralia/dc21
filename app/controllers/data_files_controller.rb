@@ -54,6 +54,10 @@ class DataFilesController < ApplicationController
   end
 
   def edit
+    data_file = DataFile.find(params[:id])
+    if !data_file.is_complete? and data_file.is_package?
+      redirect_to data_file_path, notice: "Cannot edit - Creation status is not COMPLETE."
+    end
     set_tab :explore, :contentnavigation
   end
 
@@ -173,6 +177,13 @@ class DataFilesController < ApplicationController
 
   def destroy
     file = DataFile.find(params[:id])
+    if !file.is_complete? and file.is_package?
+      unless current_user.is_admin?
+        redirect_to data_file_path, notice: "Cannot delete - Creation status is not COMPLETE."
+        return
+      end
+    end
+
     if file.is_package?
       if file.destroy
         begin
