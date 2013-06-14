@@ -56,7 +56,7 @@ class DataFile < ActiveRecord::Base
   before_save :set_file_size_if_nil
 
   scope :completed_items, where("transfer_status = ? or uuid IS NULL", PACKAGE_COMPLETE)
-  scope :count_unadded_items, find_by_sql("SELECT * FROM data_files WHERE transfer_status != 'COMPLETE'")
+  scope :count_unadded_items,where("transfer_status != 'COMPLETE'")
   scope :most_recent_first, order("created_at DESC")
   scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", PACKAGE_COMPLETE)
   scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
