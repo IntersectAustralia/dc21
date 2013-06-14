@@ -12,6 +12,14 @@ require 'spork'
 ENV["RAILS_ENV"] ||= "test"
 
 
+def clear_data_files
+  `rm -r #{APP_CONFIG['files_root']}` if Dir.exists?(APP_CONFIG['files_root'])
+  `mkdir -p #{APP_CONFIG['published_rif_cs_directory']}`
+  `mkdir -p #{APP_CONFIG['unpublished_rif_cs_directory']}`
+  `mkdir -p #{APP_CONFIG['archived_data_directory']}`
+  `find /tmp/download_zip* -type f -exec rm -f '{}' \\;`
+end
+
 Spork.prefork do
   require 'cucumber/rails'
   require 'ruby-debug' if ENV["RDB"]
@@ -23,11 +31,13 @@ Spork.prefork do
   Capybara.default_selector = :css
   Capybara.ignore_hidden_elements = true
   Capybara.server_boot_timeout = 50
+
   `echo '' > #{Rails.root}/log/test.log`
-  `rm -r #{APP_CONFIG['files_root']}` if Dir.exists?(APP_CONFIG['files_root'])
-  `mkdir -p #{APP_CONFIG['published_rif_cs_directory']}`
-  `mkdir -p #{APP_CONFIG['unpublished_rif_cs_directory']}`
-  `mkdir -p #{APP_CONFIG['archived_data_directory']}`
+  clear_data_files
+
+  at_exit do
+    clear_data_files
+  end
 
   # Reset custom package_id before each test
   Before do  

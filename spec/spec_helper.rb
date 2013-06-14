@@ -1,6 +1,14 @@
 require 'rubygems'
 require 'spork'
 
+def clear_data_files
+  `rm -r #{APP_CONFIG['files_root']}` if Dir.exists?(APP_CONFIG['files_root'])
+  `mkdir -p #{APP_CONFIG['published_rif_cs_directory']}`
+  `mkdir -p #{APP_CONFIG['unpublished_rif_cs_directory']}`
+  `mkdir -p #{APP_CONFIG['archived_data_directory']}`
+  `find /tmp/download_zip* -type f -exec rm -f '{}' \\;`
+end
+
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
   # if you change any configuration or code from libraries loaded here, you'll
@@ -40,6 +48,15 @@ Spork.prefork do
     # automatically. This will be the default behavior in future versions of
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
+
+    config.before(:suite) {
+      `echo '' > #{Rails.root}/log/test.log`
+      clear_data_files
+    }
+
+    config.after(:suite) {
+      clear_data_files
+    }
 
     # Reset custom package_id before each test
     config.before(:each) {

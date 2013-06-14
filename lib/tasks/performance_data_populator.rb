@@ -24,12 +24,6 @@ def check_files
   end
 end
 
-def create_test_files
-	DataFile.delete_all
-	ColumnDetail.delete_all
-	MetadataItem.delete_all
- end
-
 def create_performance_users
 	User.delete_all
 	

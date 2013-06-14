@@ -22,10 +22,9 @@ set :bundle_flags, "--deployment"
 
 # Deploy using copy for now
 set :scm, 'git'
-#set :repository, 'ssh://git.intersect.org.au/git/dc21'
-set :repository, 'https://github.com/IntersectAustralia/dc21.git'
+set :repository, 'git://github.com/IntersectAustralia/dc21.git'
 set :deploy_via, :copy
-set :copy_exclude, [".git/*"]
+set :copy_exclude, ["samples/*", "features/*", "spec/*", "performance/*"]
 
 set :branch do
   default_tag = 'HEAD'
@@ -41,7 +40,7 @@ set(:user) { "#{defined?(user) ? user : 'devel'}" }
 set(:group) { "#{defined?(group) ? group : user}" }
 set(:user_home) { "/home/#{user}" }
 set(:deploy_to) { "#{user_home}/#{application}" }
-set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-samples'}" }
+set(:data_dir) { "#{defined?(data_dir) ? data_dir : '/data/dc21-data'}" }
 set(:aux_data_dir) { "#{defined?(aux_data_dir) ? aux_data_dir : '/data/dc21-data'}" }
 set(:rif_cs_dir) { "#{defined?(rif_cs_dir) ? rif_cs_dir : '/data/dc21-data/published_rif_cs/'}" }
 set(:unpublished_rif_cs_dir) { "#{defined?(unpublished_rif_cs_dir) ? unpublished_rif_cs_dir : '/data/dc21-data/unpublished_rif_cs/'}" }
@@ -86,11 +85,7 @@ namespace :server_setup do
       run "#{try_sudo} chown -R #{user}.#{group} #{shared_path}/db_dumps"
     end
   end
-  namespace :rvm do
-    task :trust_rvmrc do
-      run "rvm rvmrc trust #{release_path}"
-    end
-  end
+
   task :gem_install, :roles => :app do
     run "gem install bundler -v 1.0.20"
     run "gem install passenger -v 3.0.21"
@@ -250,6 +245,8 @@ namespace :deploy do
     end
 
     if input.match(/^yes/)
+      `rm -rf #{data_dir}`
+      server_setup.filesystem.dir_perms
       schema_load
       seed
       populate
