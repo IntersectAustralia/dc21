@@ -51,7 +51,7 @@ Feature: Download multiple files
     And I fill in "Filename" with "my_package"
     And I fill in "Title" with "Package Title"
     And I select "My Experiment" from "Experiment"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Package was successfully created."
     And I follow "Sign out"
     And I am on the data file download page for my_package.zip
@@ -70,7 +70,7 @@ Feature: Download multiple files
     And I fill in "Filename" with "my_package"
     And I fill in "Title" with "Package Title"
     And I select "My Experiment" from "Experiment"
-    And I press "Save"
+    And I press "Create Package"
     Then I should see "Package was successfully created."
     And I follow "Publish"
     Then I should see "Package has been successfully submitted for publishing."

@@ -488,7 +488,7 @@ end
 # rack-test compatible version of 'add to cart' that doesn't require javascript (selenium)
 When /^I add "([^"]*)" to the cart$/ do |name|
   data_file = DataFile.find_by_filename(name)
-  click_link("add_cart_item_#{data_file.id}")
+  User.where('current_sign_in_at is not null').first.cart_items << data_file
 end
 
 
