@@ -6,7 +6,7 @@ def clear_data_files
   `mkdir -p #{APP_CONFIG['published_rif_cs_directory']}`
   `mkdir -p #{APP_CONFIG['unpublished_rif_cs_directory']}`
   `mkdir -p #{APP_CONFIG['archived_data_directory']}`
-  `find /tmp/download_zip* -type f -exec rm -f '{}' \\;`
+  `find /tmp -name download_zip* -type f -exec rm -f '{}' \\; 2>/dev/null`
 end
 
 Spork.prefork do

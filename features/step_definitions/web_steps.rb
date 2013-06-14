@@ -118,11 +118,7 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
-  if page.respond_to? :should
-    page.should have_content(text)
-  else
-    assert page.has_content?(text)
-  end
+    page.text.include?(text).should be_true, "expected there to be content #{text.inspect} in #{page.text.inspect}"
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
@@ -136,11 +132,7 @@ Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
 end
 
 Then /^(?:|I )should not see "([^"]*)"$/ do |text|
-  if page.respond_to? :should
-    page.should have_no_content(text)
-  else
-    assert page.has_no_content?(text)
-  end
+  page.text.include?(text).should_not be_true, "expected there not to be content #{text.inspect} in #{page.text.inspect}"
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
