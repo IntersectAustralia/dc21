@@ -22,7 +22,7 @@ class CartItemsController < ApplicationController
     current_cart_items = cart_items.collect(&:id)
 
     respond_to do |format|
-      if data_file.is_complete? or !data_file.is_package?
+      if data_file.is_complete? or !data_file.is_package? or data_file.normally_packaged?
         if !current_cart_items.include? data_file.id
           current_user.cart_items << data_file
           format.html {
