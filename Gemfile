@@ -44,6 +44,7 @@ gem 'rabl'
 gem 'elif'
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
+gem 'daemons-rails'
 
 group :development, :test do
   gem "rspec-rails"
