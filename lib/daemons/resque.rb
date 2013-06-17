@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-# You might want to change this
-ENV["RAILS_ENV"] ||= "production"
+env = ENV["RAILS_ENV"] ||= "development"
 
 root = File.expand_path(File.dirname(__FILE__))
 root = File.dirname(root) until File.exists?(File.join(root, 'config'))
@@ -15,7 +14,7 @@ Signal.trap("TERM") do
 end
 
 while($running) do
-  exec("bundle exec rake resque:work QUEUE='*'")
+  exec("bundle exec rake resque:work QUEUE='*' RAILS_ENV=#{env}")
   Rails.logger.auto_flushing = true
   Rails.logger.info "Resque running.\n"
 end
