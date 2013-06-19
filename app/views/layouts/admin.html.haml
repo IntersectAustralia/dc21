@@ -22,6 +22,7 @@
             = tab.users 'Users', users_path, :id => "users"
             = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests"
             = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings"
+            = tab.resque 'Resque', resque_server_path, :id => "resque"
             = yield :actions
         = yield
   = render 'layouts/footer'
