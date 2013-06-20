@@ -24,7 +24,7 @@ set :bundle_flags, "--deployment"
 set :scm, 'git'
 set :repository, 'git://github.com/IntersectAustralia/dc21.git'
 set :deploy_via, :copy
-set :copy_exclude, ["samples/*", "features/*", "spec/*", "performance/*"]
+set :copy_exclude, ["features/*", "spec/*", "performance/*"]
 
 set :branch do
   default_tag = 'HEAD'
