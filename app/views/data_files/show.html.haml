@@ -44,7 +44,8 @@
     - job = Resque::Plugins::Status::Hash.get(@data_file.uuid) if @data_file.uuid.present?
     - if job.present?
       - if job.working?
-        = render_field "Packaging progress", "#{job.pct_complete}%"
+        -#= render_field "Packaging progress", "#{job.pct_complete}%"
+        = render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"
 
     = render_field "Size", number_to_human_size(@data_file.file_size)
     = render_field "File ID", @data_file.id

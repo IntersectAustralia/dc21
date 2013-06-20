@@ -98,6 +98,12 @@ class DataFile < ActiveRecord::Base
     self.save!
   end
 
+  def zip_progress
+    path = "#{File.join(APP_CONFIG['files_root'], "#{self.external_id}.tmp")}"
+    zip_file = File.open(path, 'r')
+    zip_file.size
+  end
+
   def self.with_data_in_range(from, to)
     if (from && to)
       where { (start_time < (to + 1.day)) & (end_time >= from) }
