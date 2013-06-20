@@ -39,13 +39,9 @@
     = render_field "Facility", @data_file.facility_name
     = render_field "Date added", @data_file.created_at.to_s(:with_time)
 
-    - unless @data_file.normally_packaged?
-      = render_field "Creation status", @data_file.transfer_status
-    - job = Resque::Plugins::Status::Hash.get(@data_file.uuid) if @data_file.uuid.present?
-    - if job.present?
-      - if job.working?
-        -#= render_field "Packaging progress", "#{job.pct_complete}%"
-        = render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"
+    = render_field "Creation status", @data_file.transfer_status
+    - unless @data_file.is_complete?
+      = render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"
 
     = render_field "Size", number_to_human_size(@data_file.file_size)
     = render_field "File ID", @data_file.id

@@ -18,16 +18,30 @@ class ZipBuilder
       file_paths.each do |path|
         if File.directory?(path)
           dir_name = File.basename(path)
-          all_files = Dir.foreach(path).reject { |f| f.starts_with?(".") } 
+          all_files = Dir.foreach(path).reject { |f| f.starts_with?(".") }
           all_files.each do |file|
             zos.put_next_entry("#{dir_name}/#{file}")
-            zos << File.open(File.join(path,file), 'rb') { |file| file.read }
+            file = File.open(File.join(path, file), 'rb')
+            write_to_zip(zos, file)
           end
         else
+          # Single file processing
           zos.put_next_entry(File.basename(path))
-          zos << File.open(path, 'rb') { |file| file.read }
+          file = File.open(path, 'rb')
+          write_to_zip(zos, file)
         end
       end
     end
+  end
+
+  def self.write_to_zip(zos, file)
+    chunk_size = 1024 * 1024
+    each_chunk(file, chunk_size) do |chunk|
+      zos << chunk
+    end
+  end
+
+  def self.each_chunk(file, chunk_size=1024)
+    yield file.read(chunk_size) until file.eof?
   end
 end

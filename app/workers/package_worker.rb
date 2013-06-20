@@ -4,11 +4,10 @@ class PackageWorker
 
   @queue = :package_queue
 
-  PACKAGE_COMPLETE = 'COMPLETE'
-  PACKAGE_FAILED = 'FAILED'
-
   def perform
     begin
+      @total_processed = 0
+
       package_id = options['package_id']
       data_file_ids = options['data_file_ids']
       user_id = options['user_id']
@@ -30,10 +29,10 @@ class PackageWorker
       pkg.mark_as_complete
       # Send email indicating its complete
       Notifier.notify_user_of_completed_package(pkg).deliver
+
     rescue Exception => e
-      # catch exception, set transfer status and rethrow so we can see what went wrong in the overview page
-      pkg.transfer_status = PACKAGE_FAILED
-      pkg.save
+      # Catch exception, set transfer status and rethrow so we can see what went wrong in the overview page
+      pkg.mark_as_failed
       raise e
     end
   end
@@ -62,7 +61,7 @@ class PackageWorker
     Dir.mkdir path
 
     zip_path = "#{File.join(APP_CONFIG['files_root'], "#{pkg.external_id}.tmp")}"
-    zip_file = File.new(zip_path, 'w+')
+    zip_file = File.new(zip_path, 'a+')
 
     begin
       bag = BagIt::Bag.new path
@@ -82,7 +81,7 @@ class PackageWorker
 
       bag.manifest!
 
-      build_zip(zip_file, Dir["#{path}/*"], total_filesize, zip_path)
+      build_zip(zip_file, Dir["#{path}/*"], total_filesize)
       block.yield(zip_file)
     rescue Exception => e
       raise e
@@ -93,7 +92,7 @@ class PackageWorker
     end
   end
 
-  def build_zip(zip_file, file_paths, total_filesize, zip_path)
+  def build_zip(zip_file, file_paths, total_filesize)
     Zip::ZipOutputStream.open(zip_file.path) do |zos|
       file_paths.each do |path|
         if File.directory?(path)
@@ -102,33 +101,26 @@ class PackageWorker
           all_files.each do |file|
             zos.put_next_entry("#{dir_name}/#{file}")
             file = File.open(File.join(path, file), 'rb')
-            write_to_zip(zos, file)
 
-            size = read_current_filesize(zip_path)
-            at(size, total_filesize, "At #{size} of #{total_filesize}")
+            write_to_zip(zos, file, total_filesize)
           end
         else
           # Single file processing
           zos.put_next_entry(File.basename(path))
           file = File.open(path, 'rb')
-          write_to_zip(zos, file)
 
-          size = read_current_filesize(zip_path)
-          at(size, total_filesize, "At #{size} of #{total_filesize}")
+          write_to_zip(zos, file, total_filesize)
         end
       end
     end
   end
 
-  def read_current_filesize(path)
-    zip_file = File.open(path, 'r')
-    zip_file.size
-  end
-
-  def write_to_zip(zos, file)
+  def write_to_zip(zos, file, total_filesize)
     chunk_size = 1024 * 1024
     each_chunk(file, chunk_size) do |chunk|
+      @total_processed = @total_processed + chunk_size
       zos << chunk
+      at(@total_processed, total_filesize, "At #{@total_processed} of #{total_filesize} bytes")
     end
   end
 

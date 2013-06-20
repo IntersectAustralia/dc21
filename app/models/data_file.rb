@@ -8,7 +8,9 @@ class DataFile < ActiveRecord::Base
   STATUS_PACKAGE = 'PACKAGE'
 
   PACKAGE_COMPLETE = 'COMPLETE'
-  PACKAGE_NONE = 'NONE'
+  PACKAGE_FAILED = 'FAILED'
+  PACKAGE_WORKING = 'WORKING'
+  PACKAGE_QUEUED = 'QUEUED'
 
   # stati for selection when uploading
   STATI = [STATUS_RAW] + APP_CONFIG['file_types']
@@ -55,8 +57,8 @@ class DataFile < ActiveRecord::Base
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
 
-  scope :completed_items, where("transfer_status = ? or uuid IS NULL", PACKAGE_COMPLETE)
-  scope :count_unadded_items,where("transfer_status != 'COMPLETE'")
+  scope :completed_items, where("transfer_status = ? OR uuid IS NULL", PACKAGE_COMPLETE)
+  scope :count_unadded_items,where("transfer_status != ?", PACKAGE_COMPLETE)
   scope :most_recent_first, order("created_at DESC")
   scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", PACKAGE_COMPLETE)
   scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
@@ -89,8 +91,9 @@ class DataFile < ActiveRecord::Base
     transfer_status.eql? PACKAGE_COMPLETE
   end
 
-  def normally_packaged?
-    transfer_status.eql? PACKAGE_NONE
+  def mark_as_queued
+    self.transfer_status = PACKAGE_QUEUED
+    self.save!
   end
 
   def mark_as_complete
@@ -98,10 +101,24 @@ class DataFile < ActiveRecord::Base
     self.save!
   end
 
+  def mark_as_working
+    self.transfer_status = PACKAGE_WORKING
+    self.save!
+  end
+
+  def mark_as_failed
+    self.transfer_status = PACKAGE_FAILED
+    self.save!
+  end
+
   def zip_progress
     path = "#{File.join(APP_CONFIG['files_root'], "#{self.external_id}.tmp")}"
-    zip_file = File.open(path, 'r')
-    zip_file.size
+    if File.exist?(path)
+      zip_file = File.open(path, 'r')
+      zip_file.size
+    else
+      0
+    end
   end
 
   def self.with_data_in_range(from, to)

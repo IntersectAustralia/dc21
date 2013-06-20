@@ -18,11 +18,16 @@ class CustomDownloadBuilder
 
 
   def self.bagit_for_files_with_ids(ids, pkg, &block)
-    temp_dir = Dir.mktmpdir
-    zip_file = Tempfile.new("download_zip")
+    path = "#{File.join(APP_CONFIG['files_root'], "#{pkg.external_id}_T")}"
+    Dir.mkdir path
+
+    zip_path = "#{File.join(APP_CONFIG['files_root'], "#{pkg.external_id}.tmp")}"
+    zip_file = File.new(zip_path, 'a+')
 
     begin
-      bag = BagIt::Bag.new temp_dir
+      pkg.mark_as_working
+
+      bag = BagIt::Bag.new path
       readme_path = File.join(bag.data_dir, "README.html")
 
       data_files = DataFile.find(ids)
@@ -37,12 +42,16 @@ class CustomDownloadBuilder
 
       bag.manifest!
 
-      ZipBuilder.build_zip(zip_file, Dir["#{temp_dir}/*"])
+      ZipBuilder.build_zip(zip_file, Dir["#{path}/*"])
       block.yield(zip_file)
+    rescue Exception => e
+      # Mark package then bubble exception
+      @package.mark_as_failed
+      raise e
     ensure
       zip_file.close
-      zip_file.unlink
-      FileUtils.remove_entry_secure temp_dir
+      FileUtils.rm_rf path
+      FileUtils.rm zip_path
     end
   end
 
