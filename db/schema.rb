@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607070445) do
+ActiveRecord::Schema.define(:version => 20130621072317) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(:version => 20130607070445) do
     t.string   "file_processing_status"
     t.text     "file_processing_description", :default => ""
     t.integer  "experiment_id"
-    t.integer  "file_size"
+    t.float    "file_size"
     t.boolean  "published",                   :default => false
     t.datetime "published_date"
     t.integer  "published_by_id"
