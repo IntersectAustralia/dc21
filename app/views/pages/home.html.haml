@@ -26,7 +26,7 @@
           %td.size{:title => number_to_human_size(data_file.file_size)}= number_to_human_size(data_file.file_size)
           %td.email{:title => data_file.uploader_email}= data_file.uploader_email
           %td.add_cart
-            -if @cart_item_ids.include?(data_file.id)
-              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class => "btn disabled" , :id => "add_cart_item_disabled", :remote => true, :data => {:file_size => data_file.file_size}
-            -else
-              = link_to 'Add to Cart', add_single_cart_items_path(:data_file_ids => data_file), :class =>  "btn", :id => "add_cart_item_#{data_file.id}", :remote => true, :data => {:file_size => data_file.file_size}
+            - if @cart_item_ids.include?(data_file.id)
+              %a.btn.disabled{:href => "#", :data_file => data_file.id, :file_size => data_file.file_size} Add to Cart
+            - else
+              %a.btn{:href => "#", :id => "add_cart_item_#{data_file.id}", :data_file => data_file.id, :file_size => data_file.file_size} Add to Cart
