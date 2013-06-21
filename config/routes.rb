@@ -28,6 +28,12 @@ Dc21app::Application.routes.draw do
   get "/data_files/search" => "data_files#index" #to stop weird errors when visiting via get
   get "/column_mappings/render_field" => "column_mappings#render_field"
 
+  resources :resque, :only => [] do
+    collection do
+      get :landing
+    end
+  end
+
   resources :users, :only => [:show] do
     collection do
       get :access_requests
