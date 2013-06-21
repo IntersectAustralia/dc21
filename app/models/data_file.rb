@@ -91,6 +91,10 @@ class DataFile < ActiveRecord::Base
     transfer_status.eql? PACKAGE_COMPLETE
   end
 
+  def modifiable?
+    transfer_status.eql? PACKAGE_COMPLETE or transfer_status.eql? PACKAGE_FAILED
+  end
+
   def mark_as_queued
     self.transfer_status = PACKAGE_QUEUED
     self.save!
