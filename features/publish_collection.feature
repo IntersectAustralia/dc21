@@ -83,6 +83,7 @@ Feature: Publish a PACKAGE
     And I fill in "Title" with "Package Title"
     And I fill in "Filename" with "my_package"
     And I select "My Experiment" from "Experiment"
+    And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
     When I am on the data file details page for sample1.txt
