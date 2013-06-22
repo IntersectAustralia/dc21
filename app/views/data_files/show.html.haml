@@ -40,7 +40,7 @@
     = render_field "Date added", @data_file.created_at.to_s(:with_time)
 
     = render_field "Creation status", @data_file.transfer_status
-    - if !@data_file.modifiable?
+    - if !@data_file.modifiable? and @data_file.is_package?
       = render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"
 
     = render_field "Size", number_to_human_size(@data_file.file_size)
