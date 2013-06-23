@@ -1,4 +1,5 @@
 require 'tempfile'
+require 'digest/md5'
 
 class DataFile < ActiveRecord::Base
   # raw and error are special status values that cannot be modified/removed
@@ -116,7 +117,8 @@ class DataFile < ActiveRecord::Base
   end
 
   def zip_progress
-    path = "#{File.join(APP_CONFIG['files_root'], "#{self.external_id}.tmp")}"
+    digest_filename = Digest::MD5.hexdigest(self.filename)
+    path = "#{File.join(APP_CONFIG['files_root'], "#{digest_filename}.tmp")}"
     if File.exist?(path)
       zip_file = File.open(path, 'r')
       zip_file.size
