@@ -1,4 +1,5 @@
 require 'bagit'
+require 'digest/md5'
 
 class CustomDownloadBuilder
 
@@ -18,10 +19,11 @@ class CustomDownloadBuilder
 
 
   def self.bagit_for_files_with_ids(ids, pkg, &block)
-    path = "#{File.join(APP_CONFIG['files_root'], "#{pkg.external_id}_T")}"
+    digest_filename = Digest::MD5.hexdigest(pkg.filename)
+    path = "#{File.join(APP_CONFIG['files_root'], "#{digest_filename}_tmp")}"
     Dir.mkdir path
 
-    zip_path = "#{File.join(APP_CONFIG['files_root'], "#{pkg.external_id}.tmp")}"
+    zip_path = "#{File.join(APP_CONFIG['files_root'], "#{digest_filename}.tmp")}"
     zip_file = File.new(zip_path, 'a+')
 
     begin
