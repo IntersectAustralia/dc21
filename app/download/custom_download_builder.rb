@@ -48,7 +48,7 @@ class CustomDownloadBuilder
       block.yield(zip_file)
     rescue Exception => e
       # Mark package then bubble exception
-      @package.mark_as_failed
+      pkg.mark_as_failed
       raise e
     ensure
       zip_file.close

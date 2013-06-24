@@ -23,7 +23,7 @@ class Package < DataFile
   def self.create_package(params, current_user)
     pkg = params[:package]
     reformat_time params
-    datafile = Package.new
+    datafile = DataFile.new
     datafile.filename = "#{pkg[:filename]}#{FILE_EXTENSION}" unless pkg[:filename].blank?
     datafile.format = PACKAGE_FORMAT
     datafile.path = create_temp_path(pkg[:filename])
@@ -36,6 +36,8 @@ class Package < DataFile
     datafile.published = false
     datafile.tag_ids = params[:tags]
     datafile.title = pkg[:title]
+    # Default status
+    datafile.transfer_status = PACKAGE_QUEUED
     datafile
   end
 

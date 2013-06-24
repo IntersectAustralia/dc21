@@ -18,10 +18,6 @@ class PackagesController < DataFilesController
 
   def create
     @package = Package.create_package(params, current_user)
-
-    # Default status
-    @package.transfer_status = "QUEUED"
-
     if @package.save
       data_file_ids = current_user.cart_item_ids
       begin
