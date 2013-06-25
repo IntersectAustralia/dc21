@@ -72,16 +72,6 @@ $(function () {
   });
 
   // CART CONTENTS
-  $("#cart_download").click(function (event) {
-    if (!$(this).hasClass("disabled")) {
-      $.fileDownload($(this).prop('href'), {
-          preparingMessageHtml: "We are preparing your download, please wait...",
-          failMessageHtml: "There was a problem generating your download, please try again."
-      });
-    }
-    return false; //this is critical to stop the click event which will trigger a normal file download!
-  });
-
   $("[id^=add_cart_item]").on('click', function(){
     if (!$(this).hasClass('disabled')) {
       var id = $(this).attr('data_file');
