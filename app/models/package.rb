@@ -23,7 +23,7 @@ class Package < DataFile
   def self.create_package(params, current_user)
     pkg = params[:package]
     reformat_time params
-    datafile = DataFile.new
+    datafile = Package.new
     datafile.filename = "#{pkg[:filename]}#{FILE_EXTENSION}" unless pkg[:filename].blank?
     datafile.format = PACKAGE_FORMAT
     datafile.path = create_temp_path(pkg[:filename])
@@ -34,15 +34,14 @@ class Package < DataFile
     datafile.file_processing_description = pkg[:file_processing_description]
     datafile.experiment_id = pkg[:experiment_id]
     datafile.published = false
-    datafile.tag_ids = params[:tags]
     datafile.title = pkg[:title]
-    # Default status
     datafile.transfer_status = PACKAGE_QUEUED
     datafile
   end
 
-  def reformat_on_error(filename)
-    self.filename = filename
+  def reformat_on_error(params)
+    self.filename = params[:package][:filename]
+    self.tag_ids = params[:tags]
   end
 
   def set_times(user)

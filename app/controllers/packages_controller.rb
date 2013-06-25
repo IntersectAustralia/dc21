@@ -19,6 +19,7 @@ class PackagesController < DataFilesController
   def create
     @package = Package.create_package(params, current_user)
     if @package.save
+      save_tags(@package, params[:tags])
       data_file_ids = current_user.cart_item_ids
       begin
         if params[:run_in_background]
@@ -43,7 +44,7 @@ class PackagesController < DataFilesController
       end
 
     else
-      @package.reformat_on_error(params[:package][:filename])
+      @package.reformat_on_error(params)
       render :action => 'new'
     end
   end
@@ -67,6 +68,15 @@ class PackagesController < DataFilesController
     end
 
     redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing." : "Unable to publish package."
+  end
+
+  private
+
+  # DC21-603 - inheritance and HABTM duplicates records. Will need to fix associations up later.
+  def save_tags(package, tags)
+    pkg = DataFile.find(package.id)
+    pkg.tag_ids = tags
+    pkg.save
   end
 
   def build_rif_cs(files)
