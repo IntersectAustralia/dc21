@@ -137,6 +137,7 @@ after 'deploy:update' do
   deploy.write_tag
   deploy.create_sequences
   deploy.restart
+  deploy.create_deployment_record
 end
 
 after 'deploy:finalize_update' do
@@ -291,6 +292,28 @@ namespace :deploy do
       print "\nALERT: Config file #{file_path} detected. Will not overwrite\n\n".colorize(:red)
     end
 
+  end
+
+  task :create_deployment_record do
+    require 'net/http'
+    require 'socket'
+
+    url = URI.parse('http://deployment-tracker.intersect.org.au/deployments/api_create')
+    post_args = {'app_name'=>application, 'deployer_machine'=>"#{ENV['USER']}@#{Socket.gethostname}", 'environment'=>rails_env, 'server_url'=>find_servers[0].to_s, 'time_deployed'=>Time.now.to_s, 'tag'=> branch}
+    begin
+      print "Sending Post request with args: #{post_args}\n"
+      resp, data = Net::HTTP.post_form(url, post_args)
+
+      case resp
+      when Net::HTTPSuccess
+        puts "Deployment record saved"
+      else
+        puts data
+      end
+
+    rescue StandardError => e
+      puts e.message
+    end
   end
 
 end
