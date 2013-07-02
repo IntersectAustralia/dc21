@@ -128,7 +128,7 @@ after 'deploy:setup' do
   server_setup.logging.rotation
   server_setup.config.apache
 end
-after "deploy:restart", "deploy:cleanup" 
+
 before 'deploy:update' do
   export_proxy
 end
@@ -136,8 +136,10 @@ after 'deploy:update' do
   deploy.additional_symlinks
   deploy.write_tag
   deploy.create_sequences
-  deploy.restart
   deploy.create_deployment_record
+  deploy.restart
+  deploy.cleanup
+
 end
 
 after 'deploy:finalize_update' do
@@ -298,8 +300,26 @@ namespace :deploy do
     require 'net/http'
     require 'socket'
 
+    branchName = branch.nil? ? "HEAD" : branch
+
+    availableTags = `git tag`.split( /\r?\n/ )
+    haveToShowHash = !availableTags.any? { |s| s.include?(branchName) }
+
+    current_deployed_version = branchName
+    if (haveToShowHash)
+      availableBranches = `git branch -a`.split( /\r?\n/ )
+      fullBranchName = (branchName.eql?("HEAD")) ? branchName : availableBranches.select { |s| s.include?(branchName) }.first.to_s.strip
+      fullBranchName.gsub!('*','').strip! if fullBranchName.include?('*')
+
+      current_deployed_version += " (sha1:" + `git rev-parse --short #{fullBranchName}`.strip + ")"
+    end
+
     url = URI.parse('http://deployment-tracker.intersect.org.au/deployments/api_create')
-    post_args = {'app_name'=>application, 'deployer_machine'=>"#{ENV['USER']}@#{Socket.gethostname}", 'environment'=>rails_env, 'server_url'=>find_servers[0].to_s, 'time_deployed'=>Time.now.to_s, 'tag'=> branch}
+    post_args = {'app_name'=>application, 
+      'deployer_machine'=>"#{ENV['USER']}@#{Socket.gethostname}", 
+      'environment'=>rails_env, 
+      'server_url'=>find_servers[0].to_s,
+      'tag'=> current_deployed_version}
     begin
       print "Sending Post request with args: #{post_args}\n"
       resp, data = Net::HTTP.post_form(url, post_args)

@@ -1,0 +1,19 @@
+common: &common
+  host: deployment-tracker.intersect.org.au
+
+development:
+  # <<: *common
+  host: localhost
+  port: 3001
+
+qa:
+  <<: *common
+
+staging:
+  <<: *common
+
+production:
+  <<: *common
+
+nectar-demo:
+  <<: *common
