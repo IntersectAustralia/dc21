@@ -140,4 +140,9 @@ Feature: View the list of data files
     And I should see "Your cart was cleared."
     And I should not see "0 files in cart."
 
-
+  Scenario: All Add to Cart on Dashboard
+    Given I am on the home page
+    Then I should see "Add All"
+    And I click on "Add All"
+    Then I confirm the popup
+    Then I should see "3 Files in Cart"
