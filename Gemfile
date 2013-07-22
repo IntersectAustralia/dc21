@@ -23,7 +23,7 @@ gem 'jquery-rails'
 gem "haml"
 gem "haml-rails"
 gem "tabs_on_rails"
-gem "devise"
+gem "devise", "~> 1.5.4"
 gem "cancan"
 gem "capistrano-ext"
 gem "capistrano"
