@@ -74,4 +74,4 @@ group :test do
 end
 
 # exception tracker
-gem 'whoops_rails_logger', git: 'https://github.com/IntersectAustralia/whoops_rails_logger.git'
+gem 'whoops_rails_logger', git: 'http://github.com/IntersectAustralia/whoops_rails_logger.git'
