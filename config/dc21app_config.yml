@@ -15,7 +15,7 @@ defaults: &defaults
     - Wind Speed
     - Sample
     - Rainfall
-  for_codes_lookup_base_url: http://jp-dc21-misc.intersect.org.au:9001
+  for_codes_lookup_base_url: http://ic2-dc21-mint-vm.intersect.org.au:9001
   for_codes_path: /mint/ANZSRC_FOR/opensearch/lookup
   file_types:
     - PROCESSED
