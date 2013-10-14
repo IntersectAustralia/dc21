@@ -13,13 +13,13 @@ def create_test_files
   DataFile.delete_all
   ColumnDetail.delete_all
   MetadataItem.delete_all
-  create_data_file("sample1.txt", "georgina@intersect.org.au")
+  create_data_file("sample1.txt", "researcher1@intersect.org.au")
   create_data_file("sample2.txt", "admin@intersect.org.au")
   create_data_file("weather_station_15_min.dat", "admin@intersect.org.au")
-  create_data_file("weather_station_05_min.dat", "matthew@intersect.org.au")
-  create_data_file("weather_station_table_2.dat", "kali@intersect.org.au")
-  create_data_file("sample3.txt", "kali@intersect.org.au")
-  create_data_file("WTC01_Table1.dat", "georgina@intersect.org.au")
+  create_data_file("weather_station_05_min.dat", "researcher1@intersect.org.au")
+  create_data_file("weather_station_table_2.dat", "researcher2@intersect.org.au")
+  create_data_file("sample3.txt", "researcher1@intersect.org.au")
+  create_data_file("WTC01_Table1.dat", "researcher2@intersect.org.au")
   create_data_file("WTC02_Table1.dat", "admin@intersect.org.au")
   create_data_file("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat", "admin@intersect.org.au")
 
@@ -31,9 +31,6 @@ end
 def create_test_users
   User.delete_all
   create_user(:email => "admin@intersect.org.au", :first_name => "Admin", :last_name => "User")
-  create_user(:email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")
-  create_user(:email => "matthew@intersect.org.au", :first_name => "Matthew", :last_name => "Hillman")
-  create_user(:email => "kali@intersect.org.au", :first_name => "Kali", :last_name => "Waterford")
   create_user(:email => "researcher1@intersect.org.au", :first_name => "Researcher", :last_name => "One")
   r2 = create_user(:email => "researcher2@intersect.org.au", :first_name => "Researcher", :last_name => "Two")
   r2.deactivate
@@ -41,9 +38,6 @@ def create_test_users
   create_unapproved_user(:email => "unapproved1@intersect.org.au", :first_name => "Unapproved", :last_name => "One")
   create_unapproved_user(:email => "unapproved2@intersect.org.au", :first_name => "Unapproved", :last_name => "Two")
   set_role("admin@intersect.org.au", "Administrator")
-  set_role("georgina@intersect.org.au", "Administrator")
-  set_role("matthew@intersect.org.au", "Administrator")
-  set_role("kali@intersect.org.au", "Administrator")
   set_role("researcher1@intersect.org.au", "Researcher")
   set_role("researcher2@intersect.org.au", "Researcher")
 
@@ -53,7 +47,7 @@ def create_data_file(filename, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
   file = Rack::Test::UploadedFile.new("#{Rails.root}/samples/#{filename}", "application/octet-stream")
   builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
-  
+
   experiment_id = Experiment.first.id
 
   experiment_id = Experiment.last.id if filename == "VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat"
@@ -148,18 +142,18 @@ def create_facilities_and_experiments
   #other_experiment.save!
   #other.save
 
-  fac = create_facility(:name => "TestLongFacilityNameForTestingTestLongFacilityName", 
-      :code => "TLFNFT", 
-      :primary_contact => user, 
+  fac = create_facility(:name => "TestLongFacilityNameForTestingTestLongFacilityName",
+      :code => "TLFNFT",
+      :primary_contact => user,
       :description => "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:”;’<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test",
       :a_lat => -90,
       :a_long => -180,
       :b_lat => 90,
       :b_long => 180)
 
-  fac.experiments.create(:name => "TestLongExperimentNameForTestingTestLongExperimentNameTest TestLongExperimentNameForTestingTestLongExperimentNameTest ", 
-      :start_date => "2012-01-01", 
-      :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", 
+  fac.experiments.create(:name => "TestLongExperimentNameForTestingTestLongExperimentNameTest TestLongExperimentNameForTestingTestLongExperimentNameTest ",
+      :start_date => "2012-01-01",
+      :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au",
       :subject => "Test1",
       :description => "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:”;’<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test")
 
