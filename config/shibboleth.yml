@@ -1,0 +1,15 @@
+development:
+  user-mapping:  {first_name: "HTTP_GIVENNAME", last_name: "HTTP_SURNAME", email: "HTTP_EMAIL"}
+  shibb_login_url: "https://localhost/Shibboleth.sso/Login"
+
+test:
+  user-mapping:  {first_name: "HTTP_GIVENNAME", last_name: "HTTP_SURNAME", email: "HTTP_EMAIL"}
+  shibb_login_url: "https://localhost/Shibboleth.sso/Login"
+
+staging:
+  user-mapping:  {first_name: "HTTP_GIVENNAME", last_name: "HTTP_SURNAME", email: "HTTP_EMAIL"}
+  shibb_login_url: "https://ic2-dc21-staging-vm.intersect.org.au/Shibboleth.sso/Login"
+
+production:
+  user-mapping:  {first_name: "HTTP_GIVENNAME", last_name: "HTTP_SURNAME", email: "HTTP_EMAIL"}
+  shibb_login_url: "https://CHANGEME/Shibboleth.sso/Login"

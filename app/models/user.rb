@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   # Include devise modules
-  devise :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
+  devise :shibboleth_authenticatable, :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
 
   belongs_to :role
   has_and_belongs_to_many :cart_items, :uniq => true, :class_name => "DataFile"
@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
       when 'R'
         "Rejected"
       else
-        "Unknown" 
+        "Unknown"
     end
   end
 

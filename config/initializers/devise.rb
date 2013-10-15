@@ -1,6 +1,11 @@
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
 Devise.setup do |config|
+  # ==> Shibboleth Configuration
+  config.shibboleth_logger = true
+  config.shibboleth_create_user = true
+  config.shibboleth_config = "#{Rails.root}/config/shibboleth.yml"
+
   # http://stackoverflow.com/questions/580314/overriding-a-module-method-from-a-gem-in-rails/1852448#1852448
   # verifies password before checking if account is active
   Devise::Models::Authenticatable.module_eval do
