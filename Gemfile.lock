@@ -1,12 +1,12 @@
 GIT
-  remote: http://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git
+  remote: https://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git
   revision: 767f3ba27169b54f5f621cd4ffba7bc63a528841
   specs:
     devise_shibboleth_authenticatable (0.6.1)
       devise (>= 1.5.4)
 
 GIT
-  remote: http://github.com/IntersectAustralia/whoops_rails_logger.git
+  remote: https://github.com/IntersectAustralia/whoops_rails_logger.git
   revision: 1f304e09b4367ece6fcccce570ac341bf54ec222
   specs:
     whoops_rails_logger (0.1.17)

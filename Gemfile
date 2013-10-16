@@ -45,7 +45,7 @@ gem 'elif'
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
 gem 'daemons-rails'
-gem "devise_shibboleth_authenticatable", git: 'http://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git'
+gem "devise_shibboleth_authenticatable", git: 'https://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git'
 
 group :development, :test do
   gem "rspec-rails"
@@ -75,4 +75,4 @@ group :test do
 end
 
 # exception tracker
-gem 'whoops_rails_logger', git: 'http://github.com/IntersectAustralia/whoops_rails_logger.git'
+gem 'whoops_rails_logger', git: 'https://github.com/IntersectAustralia/whoops_rails_logger.git'
