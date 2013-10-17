@@ -80,6 +80,9 @@ class Ability
       cannot :update, DataFile do |datafile|
         datafile.is_error_file?
       end
+
+      can :manage, SystemConfiguration
+
     end
 
   end

@@ -1,0 +1,18 @@
+- content_for :breadcrumb do
+  %h1 Admin / System Configuration / Edit
+
+.container
+  = form_for [:admin, @config], :url => {action: "update"} do |f|
+    -# = render "shared/error_messages", :target => @user
+    %h2 Edit System Configuration
+    .control-group
+      -# = f.label :name , "First Name", class: "control-label"
+      .controls
+        = required
+        = f.text_field :name
+
+    .form-actions
+      .actions-pre
+        = cancel_button 'Cancel', users_profile_path
+      .actions
+        = f.submit "Update"

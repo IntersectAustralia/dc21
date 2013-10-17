@@ -1,0 +1,6 @@
+- content_for :breadcrumb do
+  %h1 Admin / System Configuration
+
+.container
+  %p= @config.name
+  = link_to 'Edit System Configuration', edit_admin_config_path, :class => 'btn btn-primary'

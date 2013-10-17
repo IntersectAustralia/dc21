@@ -53,6 +53,10 @@ Dc21app::Application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resource :config, :controller => "config"
+  end
+
   resource :pages do
     get :home
     get :about
