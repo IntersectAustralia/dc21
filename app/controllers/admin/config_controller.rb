@@ -1,4 +1,4 @@
-class Admin::ConfigController < Admin::ApplicationController
+class Admin::ConfigController < ApplicationController
 
   # load_and_authorize_resource :system_configuration
   before_filter :authenticate_user!
