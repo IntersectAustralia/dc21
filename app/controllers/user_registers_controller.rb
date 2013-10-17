@@ -16,15 +16,6 @@ class UserRegistersController < Devise::RegistrationsController
     set_tab :editdetails, :contentnavigation
   end
 
-  def new
-    if params[:aaf]
-      @aaf_credentials = {email: request.headers['email'], first_name: request.headers['givenName'], last_name: request.headers['surname']}
-    else
-      @aaf_credentials = {}
-    end
-    super
-  end
-
   # Override the create method in the RegistrationsController to add the notification hook
   # https://github.com/plataformatec/devise/blob/v1.3.4/app/controllers/devise/registrations_controller.rb
   def create

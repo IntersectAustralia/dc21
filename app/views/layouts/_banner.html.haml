@@ -8,7 +8,10 @@
       .menu
         = tabs_tag(:builder => MenuTabBuilder) do |tab|
           - if !user_signed_in?
-            = tab.login 'Log in', root_url
+            - if @aaf_credentials[:email].present?
+              = tab.login "#{@aaf_credentials[:email]} (via AAF)", root_url
+            - else
+              = tab.login 'Log in', root_url
             = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
           - else
             = tab.home '', root_url, :id => "home"
