@@ -5,6 +5,7 @@ class UserRegistersController < Devise::RegistrationsController
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy, :edit_password, :update_password, :profile]
   layout 'application'
 
+  skip_before_filter :shib_sign_up, :only => [:new, :create]
   def profile
     set_tab :account
     set_tab :overview, :contentnavigation
@@ -13,6 +14,15 @@ class UserRegistersController < Devise::RegistrationsController
   def edit
     set_tab :account
     set_tab :editdetails, :contentnavigation
+  end
+
+  def new
+    if params[:aaf]
+      @aaf_credentials = {email: request.headers['email'], first_name: request.headers['givenName'], last_name: request.headers['surname']}
+    else
+      @aaf_credentials = {}
+    end
+    super
   end
 
   # Override the create method in the RegistrationsController to add the notification hook

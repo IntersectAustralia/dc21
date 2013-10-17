@@ -3,7 +3,7 @@
 Devise.setup do |config|
   # ==> Shibboleth Configuration
   config.shibboleth_logger = true
-  config.shibboleth_create_user = true
+  config.shibboleth_create_user = false
   config.shibboleth_config = "#{Rails.root}/config/shibboleth.yml"
 
   # http://stackoverflow.com/questions/580314/overriding-a-module-method-from-a-gem-in-rails/1852448#1852448

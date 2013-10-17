@@ -45,7 +45,7 @@ gem 'elif'
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
 gem 'daemons-rails'
-gem "devise_shibboleth_authenticatable", git: 'https://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git'
+gem "devise_shibboleth_authenticatable", github: 'IntersectAustralia/devise_shibboleth_authenticatable', :branch => 'master'
 
 group :development, :test do
   gem "rspec-rails"

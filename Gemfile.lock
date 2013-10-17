@@ -1,17 +1,10 @@
 GIT
-  remote: https://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git
+  remote: git://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git
   revision: 767f3ba27169b54f5f621cd4ffba7bc63a528841
+  branch: master
   specs:
-    devise_shibboleth_authenticatable (0.6.1)
+    devise_shibboleth_authenticatable (0.6.2)
       devise (>= 1.5.4)
-
-GIT
-  remote: https://github.com/IntersectAustralia/whoops_rails_logger.git
-  revision: 1f304e09b4367ece6fcccce570ac341bf54ec222
-  specs:
-    whoops_rails_logger (0.1.17)
-      rails (~> 3)
-      whoops_logger (= 0.1.4)
 
 GEM
   remote: http://rubygems.org/
