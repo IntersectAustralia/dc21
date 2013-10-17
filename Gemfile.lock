@@ -1,5 +1,5 @@
 GIT
-  remote: http://github.com/IntersectAustralia/whoops_rails_logger.git
+  remote: https://github.com/IntersectAustralia/whoops_rails_logger.git
   revision: 1f304e09b4367ece6fcccce570ac341bf54ec222
   specs:
     whoops_rails_logger (0.1.17)
