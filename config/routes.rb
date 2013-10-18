@@ -92,11 +92,12 @@ Dc21app::Application.routes.draw do
     end
   end
 
-  resources :facilities, :except => [:destroy] do
-    resources :experiments, :except => [:destroy] do
+  resources :facilities, :path => :org_level1, :except => [:destroy] do
+    resources :experiments, :path => :org_level2, :except => [:destroy] do
       resources :experiment_parameters, :except => [:show, :index]
     end
   end
+# SystemConfiguration.instance.level1_plural.gsub(/\s+/, "_").downcase.to_sym
 
   root :to => "pages#home"
 

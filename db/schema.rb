@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131017003700) do
+ActiveRecord::Schema.define(:version => 20131017055806) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -180,9 +180,13 @@ ActiveRecord::Schema.define(:version => 20131017003700) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "system_configurations", :force => true do |t|
-    t.string   "name",       :default => "Local System Name"
+    t.string   "name",          :default => "HIEv"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "level1",        :default => "Facility"
+    t.string   "level1_plural", :default => "Facilities"
+    t.string   "level2",        :default => "Experiment"
+    t.string   "level2_plural", :default => "Experiments"
   end
 
   create_table "tags", :force => true do |t|

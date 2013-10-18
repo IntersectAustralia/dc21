@@ -6,13 +6,33 @@
     -# = render "shared/error_messages", :target => @user
     %h2 Edit System Configuration
     .control-group
-      -# = f.label :name , "First Name", class: "control-label"
+      = f.label :name , "System Name", class: "control-label"
       .controls
         = required
         = f.text_field :name
+    .control-group
+      = f.label :name , "Org. L1 Singular", class: "control-label"
+      .controls
+        = required
+        = f.text_field :level1
+    .control-group
+      = f.label :name , "Org. L1 Plural", class: "control-label"
+      .controls
+        = required
+        = f.text_field :level1_plural
+    .control-group
+      = f.label :name , "Org. L2 Singular", class: "control-label"
+      .controls
+        = required
+        = f.text_field :level2
+    .control-group
+      = f.label :name , "Org. L2 Plural", class: "control-label"
+      .controls
+        = required
+        = f.text_field :level2_plural
 
     .form-actions
       .actions-pre
-        = cancel_button 'Cancel', users_profile_path
+        = cancel_button 'Cancel', admin_config_path
       .actions
         = f.submit "Update"

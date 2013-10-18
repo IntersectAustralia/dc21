@@ -6,7 +6,7 @@ class Admin::ConfigController < ApplicationController
   layout 'admin'
   set_tab :admin
 
-  def index
+  def show
     set_tab :systemconfig, :contentnavigation
   end
 
@@ -20,7 +20,7 @@ class Admin::ConfigController < ApplicationController
 
     respond_to do |format|
       if @config.update_attributes(params[:system_configuration])
-        format.html { redirect_to edit_admin_config_path, notice: 'System name updated.' }
+        format.html { redirect_to edit_admin_config_path, notice: 'System Configuration updated.' }
       else
         format.html { render action: 'edit' }
       end

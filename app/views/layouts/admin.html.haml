@@ -23,7 +23,7 @@
             = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests"
             = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings"
             = tab.resque 'Resque', landing_resque_index_path, :id => "resque"
-            = tab.systemconfig 'System Configuration', admin_config_path, :id => "resque"
+            = tab.systemconfig 'System Configuration', admin_config_path, :id => "config"
             = yield :actions
         = yield
   = render 'layouts/footer'

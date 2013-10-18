@@ -4,7 +4,7 @@
     .container
       .logo
         = link_to root_path, :id => :owner_logo_container do
-          <strong>HIEv</strong>
+          %strong=@config.name
       .menu
         = tabs_tag(:builder => MenuTabBuilder) do |tab|
           - if !user_signed_in?

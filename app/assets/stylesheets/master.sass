@@ -225,6 +225,8 @@ html, body
   +m-p-w-h-p-t-b-l-r-f("", "", 100%, 100%)
   +font("", "", 100%, 1.25em, $dark2, "")
   vertical-align: baseline
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
 
 body
   background: $blue6
@@ -1355,8 +1357,7 @@ table.activity, table.activity tbody
     +m-p-w-h-p-t-b-l-r-f(20px auto, "", 800px)
     +clearfix
 
-// BODY - TABBED CONTENT NAVIGATION
-/*///////////////////////////////////////////////////////////////////////////////////////////////*/
+/* BODY - TABBED CONTENT NAVIGATION //////////////////////////////////////////////////////////////*/
 
 .contentnavigation
   +m-p-w-h-p-t-b-l-r-f(0 0 40px 0)
@@ -1463,6 +1464,14 @@ table.activity, table.activity tbody
     a
       background: transparent url(../images/icon_facility_dark.png) 15px center no-repeat
 
+  li#config
+    a
+      background: transparent url(../images/icon_options_light.png) 15px center no-repeat
+      &:hover
+        background: transparent url(../images/icon_options_dark.png) 15px center no-repeat
+  li#config.active
+    a
+      background: transparent url(../images/icon_options_dark.png) 15px center no-repeat
 
   li.active
     background: #FFF
