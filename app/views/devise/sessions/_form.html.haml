@@ -1,5 +1,34 @@
 .container
-  %h2 User log in
+  %h2 AAF Login
+  - if @aaf_credentials[:email].present?
+    .control-group
+      .controls
+        %small
+          Note: You are logged in via AAF as
+          %strong #{@aaf_credentials[:email]}
+          , but you are not yet authorised to use HIEv.
+          %br
+          %br
+          You may log in with a different account below.
+  - else
+    .control-group
+      .controls
+        -#= link_to users_aaf_sign_in_path do
+          = image_tag(asset_path("/images/aaf_logo.gif"))
+        = link_to "Log in via AAF →", users_aaf_sign_in_path, :class => "btn aaf"
+
+    .control-group
+      .controls
+        %small
+          Note: This will take you to the AAF (Australian Access Federation) login page.
+          %br
+          %br
+          If you are not yet authorised to use HIEv you will be automatically redirected to the HIEv Registration Page after successfully authenticating with your AAF credentials.
+
+.container
+
+.container
+  %h2 User Login
   .control-group
     .controls
       %strong Please enter your email and password to log in

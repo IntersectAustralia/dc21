@@ -4,17 +4,17 @@ Feature: Edit data files metadata
   I want to edit the details of data files
 
   Background:
-      Given I have a user "georgina@intersect.org.au" with role "Administrator"
+      Given I have a user "admin@intersect.org.au" with role "Administrator"
       Given I have a user "researcher@intersect.org.au" with role "Researcher"
       And I have data files
         | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format   |
-        | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |          |
+        | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |          |
         | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5     |
         | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |          |
         | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |          |
 
   Scenario: ID should be unique
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
     And I fill in "ID" with "Package 1"
@@ -26,7 +26,7 @@ Feature: Edit data files metadata
     Then I should see "ID 'Package 1' is already being used by sample.txt"
 
   Scenario: Navigate from list and view edit data file page
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
     Then I should see "sample.txt"
@@ -36,7 +36,7 @@ Feature: Edit data files metadata
     Then I should be on the list data files page
 
   Scenario: Editing TOA-5 data file as superuser
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
     Then I should see "2"
@@ -69,7 +69,7 @@ Feature: Edit data files metadata
     And I should not see "Edit Metadata"
 
   Scenario: Editing non-TOA-5 data file as superuser
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
     And I fill in "Description" with "watermelons"
@@ -93,7 +93,7 @@ Feature: Edit data files metadata
     And I should see "2012-05-31 3:00:00"
 
   Scenario: Cancel edit data file
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample.txt"
     And I fill in "Description" with "watermelons"

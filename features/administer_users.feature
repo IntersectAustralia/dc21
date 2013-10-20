@@ -7,17 +7,17 @@ Feature: Administer users
     Given I have users
       | email                     | first_name | last_name |
       | raul@intersect.org.au     | Raul       | Carrizo   |
-      | georgina@intersect.org.au | Georgina   | Edwards   |
+      | admin@intersect.org.au | admin   | Edwards   |
     And I have the usual roles
-    And I am logged in as "georgina@intersect.org.au"
-    And "georgina@intersect.org.au" has role "Administrator"
+    And I am logged in as "admin@intersect.org.au"
+    And "admin@intersect.org.au" has role "Administrator"
 
   Scenario: View a list of users
     Given "raul@intersect.org.au" is deactivated
     When I am on the list users page
     Then I should see "users" table with
       | Email                     | First name | Last name | Role          | Status      |
-      | georgina@intersect.org.au | Georgina   | Edwards   | Administrator | Active      |
+      | admin@intersect.org.au | admin   | Edwards   | Administrator | Active      |
       | raul@intersect.org.au     | Raul       | Carrizo   |               | Deactivated |
 
   Scenario: View user details
@@ -33,7 +33,7 @@ Feature: Administer users
 
   Scenario: Go back from user details
     Given I am on the list users page
-    When I follow "View Details" for "georgina@intersect.org.au"
+    When I follow "View Details" for "admin@intersect.org.au"
     And I follow "Back"
     Then I should be on the list users page
 
@@ -93,14 +93,14 @@ Feature: Administer users
 
   Scenario: Can't deactivate the last administrator account
     Given I am on the list users page
-    When I follow "View Details" for "georgina@intersect.org.au"
+    When I follow "View Details" for "admin@intersect.org.au"
     And I follow "Deactivate"
     Then I should see "You cannot deactivate this account as it is the only account with Administrator privileges."
     And I should see field "Status" with value "Active"
 
   Scenario: Editing own role has alert
     Given I am on the list users page
-    When I follow "View Details" for "georgina@intersect.org.au"
+    When I follow "View Details" for "admin@intersect.org.au"
     And I follow "Edit role"
     Then I should see "You are changing the role of the user you are logged in as."
 

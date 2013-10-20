@@ -1,10 +1,10 @@
 development:
   user-mapping:  {first_name: "givenName", last_name: "surname", email: "email"}
-  shibb_login_url: "https://localhost/Shibboleth.sso/Login"
+  shibb_login_url: "https://sp.dc21.qa.intersect.org.au/Shibboleth.sso/Login"
 
 test:
   user-mapping:  {first_name: "givenName", last_name: "surname", email: "email"}
-  shibb_login_url: "https://localhost/Shibboleth.sso/Login"
+  shibb_login_url: "https://knt1-dc21-qa.intersect.org.au/Shibboleth.sso/Login"
 
 staging:
   user-mapping:  {first_name: "givenName", last_name: "surname", email: "email"}

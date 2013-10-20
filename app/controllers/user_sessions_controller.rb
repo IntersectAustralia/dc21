@@ -1,5 +1,4 @@
 class UserSessionsController < Devise::SessionsController
-
   def aaf_new
     resource = build_resource
     shib_config = YAML.load(ERB.new(File.read(::Devise.shibboleth_config || "#{Rails.root}/config/shibboleth.yml")).result)[Rails.env]

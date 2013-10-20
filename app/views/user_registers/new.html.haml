@@ -8,8 +8,7 @@
     = render :partial => 'personal_details', :locals  => {:f => f}
     = render :partial => 'account_details', :locals  => {:f => f}
     .form-actions
-      - if @aaf_credentials[:email].blank?
-        .actions-pre
-          = cancel_button 'Cancel', root_path
+      .actions-pre
+        = cancel_button 'Cancel', new_user_session_path
       .actions
         = f.submit "Submit Request", :class => ""

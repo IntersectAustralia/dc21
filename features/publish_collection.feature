@@ -6,17 +6,17 @@ Feature: Publish a PACKAGE
 
   Background:
     Given I have the usual roles
-    And I have a user "georgina@intersect.org.au" with role "Administrator"
+    And I have a user "admin@intersect.org.au" with role "Administrator"
     And I have a user "publisher@intersect.org.au" with role "Administrator"
     And I have a user "researcher@intersect.org.au" with role "Researcher"
-    And I am logged in as "georgina@intersect.org.au"
+    And I am logged in as "admin@intersect.org.au"
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
     And I have data files
       | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      | published_by              | transfer_status |
       | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |                           | COMPLETE        |
-      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | georgina@intersect.org.au   | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |                           | COMPLETE        |
-      | published.zip | PACKAGE                | 30/12/2011 12:34 | georgina@intersect.org.au   |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au| COMPLETE        |
+      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | admin@intersect.org.au   | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |                           | COMPLETE        |
+      | published.zip | PACKAGE                | 30/12/2011 12:34 | admin@intersect.org.au   |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au| COMPLETE        |
       | sample1.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false     |                     |                           | COMPLETE        |
     And I have experiments
       | name              | facility            |
@@ -34,7 +34,7 @@ Feature: Publish a PACKAGE
 #  Scenario: Search by date range then publish - zip should include full files (regardless of whether they fall outside date range)
 #    Given I do a date search for data files with dates "2011-10-10" and "2011-10-15"
 #    And I publish these search results as "My Collection Of Stuff" with description "Describe my collection of stuff"
-#    Then there should be a published collection record named "My Collection Of Stuff" with creator "georgina@intersect.org.au"
+#    Then there should be a published collection record named "My Collection Of Stuff" with creator "admin@intersect.org.au"
 #    And the RIF-CS file for the latest published collection should match "samples/rif-cs/range_oct_10_oct_15.xml"
 #    When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/range_oct_10_oct_15"
 #
@@ -45,7 +45,7 @@ Feature: Publish a PACKAGE
 #    And I check "RAW"
 #    And I press "Update Search Results"
 #    And I publish these search results as "Raw Stuff" with description ""
-#    Then there should be a published collection record named "Raw Stuff" with creator "georgina@intersect.org.au"
+#    Then there should be a published collection record named "Raw Stuff" with creator "admin@intersect.org.au"
 #    And the RIF-CS file for the latest published collection should match "samples/rif-cs/type_raw_search.xml"
 #    When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/type_raw"
 #
@@ -56,7 +56,7 @@ Feature: Publish a PACKAGE
 #    And I fill in "Filename" with "sample1"
 #    And I press "Update Search Results"
 #    And I publish these search results as "No Dates" with description ""
-#    Then there should be a published collection record named "No Dates" with creator "georgina@intersect.org.au"
+#    Then there should be a published collection record named "No Dates" with creator "admin@intersect.org.au"
 #    And the RIF-CS file for the latest published collection should match "samples/rif-cs/sample1-rif-cs.xml"
 #
 
@@ -111,7 +111,7 @@ Feature: Publish a PACKAGE
     When I am on the data file details page for package1.zip
     And I should not see "Delete This File"
     Given I logout
-    And I am logged in as "georgina@intersect.org.au"
+    And I am logged in as "admin@intersect.org.au"
     When I am on the data file details page for package1.zip
     And I click on "Delete This File"
     Then I confirm the popup
@@ -124,7 +124,7 @@ Feature: Publish a PACKAGE
     And I am on the data file details page for published.zip
     Then I should not see "Edit Metadata"
     Then I logout
-    When I am logged in as "georgina@intersect.org.au"
+    When I am logged in as "admin@intersect.org.au"
     And I am on the data file details page for published.zip
     Then I should see "Edit Metadata"
 
@@ -161,7 +161,7 @@ Feature: Publish a PACKAGE
 #    And I fill in "Name" with "changedit.dat"
 #    And I press "Update"
 #    # published collection should remain as before
-#    Then there should be a published collection record named "My Collection Of Stuff" with creator "georgina@intersect.org.au"
+#    Then there should be a published collection record named "My Collection Of Stuff" with creator "admin@intersect.org.au"
 #    And the RIF-CS file for the latest published collection should match "samples/rif-cs/range_oct_10_oct_15.xml"
 #    When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/range_oct_10_oct_15"
 

@@ -1,7 +1,7 @@
 Feature: Navigation between pages across the site
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
 
   Scenario: There should be tabs for dashboard, data files and facilities on home page
     Given I am on the home page
@@ -81,7 +81,7 @@ Feature: Navigation between pages across the site
   @javascript
   Scenario: Editing own user details
     Given I am on the home page
-    When I click on "georgina@intersect.org.au"
+    When I click on "admin@intersect.org.au"
     And I sleep briefly
     And I follow "Settings"
     Then I should be on the users profile page
@@ -89,6 +89,6 @@ Feature: Navigation between pages across the site
   @javascript
   Scenario: Logging out through dropdown
     Given I am on the home page
-    When I click on "georgina@intersect.org.au"
+    When I click on "admin@intersect.org.au"
     And I follow "Sign out"
     Then I should see "Logged out successfully."

@@ -4,14 +4,14 @@ Feature: View the details of a data file
   I want to view the details of a data file
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     And I have facility "My Test Facility" with code "MTF"
     And I have experiment "My Nice Experiment" which belongs to facility "MTF"
     And I have facility "Other" with code "Other Code"
     And I have experiment "Other" which belongs to facility "Other Code"
     And I have data files
       | filename     | created_at       | uploaded_by               | start_time           | end_time                | interval | experiment         | file_processing_description | file_processing_status | format |
-      | datafile.dat | 30/11/2011 10:15 | georgina@intersect.org.au |                      |                         |          | My Nice Experiment | Description of my file      | RAW                    |        |
+      | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au |                      |                         |          | My Nice Experiment | Description of my file      | RAW                    |        |
       | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au     | 1/6/2010 6:42:01 UTC | 30/11/2011 18:05:23 UTC | 300      | Other              |                             | UNKNOWN                | TOA5   |
 
   Scenario: Navigate from list and view a data file with start and end times
