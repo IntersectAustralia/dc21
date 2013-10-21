@@ -31,6 +31,10 @@ end
 def create_test_users
   User.delete_all
   create_user(:email => "admin@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "kali@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "shuqian@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "cindy@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "marc@intersect.org.au", :first_name => "Admin", :last_name => "User")
   create_user(:email => "researcher1@intersect.org.au", :first_name => "Researcher", :last_name => "One")
   r2 = create_user(:email => "researcher2@intersect.org.au", :first_name => "Researcher", :last_name => "Two")
   r2.deactivate
@@ -40,6 +44,10 @@ def create_test_users
   set_role("admin@intersect.org.au", "Administrator")
   set_role("researcher1@intersect.org.au", "Researcher")
   set_role("researcher2@intersect.org.au", "Researcher")
+  set_role("kali@intersect.org.au", "Administrator")
+  set_role("shuqian@intersect.org.au", "Administrator")
+  set_role("marc@intersect.org.au", "Administrator")
+  set_role("cindy@intersect.org.au", "Administrator")
 
 end
 
