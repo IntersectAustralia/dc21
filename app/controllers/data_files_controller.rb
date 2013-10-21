@@ -222,13 +222,15 @@ class DataFilesController < ApplicationController
 
       file = params[:file]
       type = params[:type]
+      facility_id = params[:org_level1_id] || params[:facility_id]
       experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
+      p facility_id
       p experiment_id
-      errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
+      errors, tag_ids = validate_api_inputs(file, type, facility_id, experiment_id, tag_names)
 
       if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+        uploaded_file = attachment_builder.build(file, facility_id, experiment_id, type, params[:description], tag_ids)
         messages = uploaded_file.messages.collect { |m| m[:message] }
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
       else

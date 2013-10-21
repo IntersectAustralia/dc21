@@ -30,7 +30,14 @@ When /^I submit an API upload request with the following parameters as user "([^
     experiment = Experiment.find_by_name!(params['experiment'])
     post_params[:experiment_id] = experiment.id
   end
+
+  unless params['org_level2'].blank?
+    experiment = Experiment.find_by_name!(params['org_level2'])
+    post_params[:org_level2_id] = experiment.id
+  end
+
   post_params[:experiment_id] = params['experiment_id'] unless params['experiment_id'].blank?
+  post_params[:org_level2_id] = params['org_level2_id'] unless params['org_level2_id'].blank?
   post_params[:tag_names] = params['tag_names'] unless params['tag_names'].blank?
 
   post_params[:type] = params['type']
