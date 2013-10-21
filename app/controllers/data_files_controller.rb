@@ -222,8 +222,9 @@ class DataFilesController < ApplicationController
 
       file = params[:file]
       type = params[:type]
-      experiment_id = params[:experiment_id]
+      experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
+      p experiment_id
       errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
 
       if errors.empty?
