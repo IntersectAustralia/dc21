@@ -132,7 +132,7 @@ Feature: Upload files via the API
     | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
 
-  Scenario Outline: Invalid input scenarios
+  Scenario Outline: Invalid input scenarios for Org_level2
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file       | <file>       |
       | type       | <type>       |

@@ -15,9 +15,6 @@ class Admin::ConfigController < ApplicationController
   end
 
   def update
-    puts @config.inspect
-    puts params.inspect
-
     respond_to do |format|
       if @config.update_attributes(params[:system_configuration])
         format.html { redirect_to admin_config_path, notice: 'System Configuration updated.' }
