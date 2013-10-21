@@ -137,6 +137,7 @@ after 'deploy:update' do
   deploy.write_tag
   deploy.create_sequences
   deploy.create_deployment_record
+  deploy.new_secret
   deploy.restart
   deploy.cleanup
 
@@ -150,7 +151,9 @@ after 'deploy:finalize_update' do
 end
 
 namespace :deploy do
-
+  task :new_secret, :roles => :app do
+     run("cd #{current_path} && rake app:generate_secret", :env => {'RAILS_ENV' => "#{stage}"})
+   end
   # Passenger specifics: restart by touching the restart.txt file
   task :start, :roles => :app, :except => {:no_release => true} do
     restart
@@ -315,9 +318,9 @@ namespace :deploy do
     end
 
     url = URI.parse('http://deployment-tracker.intersect.org.au/deployments/api_create')
-    post_args = {'app_name'=>application, 
-      'deployer_machine'=>"#{ENV['USER']}@#{Socket.gethostname}", 
-      'environment'=>rails_env, 
+    post_args = {'app_name'=>application,
+      'deployer_machine'=>"#{ENV['USER']}@#{Socket.gethostname}",
+      'environment'=>rails_env,
       'server_url'=>find_servers[0].to_s,
       'tag'=> current_deployed_version}
     begin
