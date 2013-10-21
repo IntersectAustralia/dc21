@@ -5,12 +5,12 @@ Feature: Approve access requests
 
   Background:
     Given I have the usual roles
-    And I have a user "georgina@intersect.org.au" with role "Administrator"
+    And I have a user "admin@intersect.org.au" with role "Administrator"
     And I have access requests
       | email                  | first_name | last_name        |
       | ryan@intersect.org.au  | Ryan       | Braganza         |
       | diego@intersect.org.au | Diego      | Alonso de Marcos |
-    And I am logged in as "georgina@intersect.org.au"
+    And I am logged in as "admin@intersect.org.au"
 
   Scenario: View a list of access requests
     Given I am on the access requests page

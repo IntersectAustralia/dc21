@@ -5,7 +5,7 @@ Feature: View the list of data files
   I want to view a list of data files
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     And I have data files
       | filename     |
       | datafile.dat |
@@ -87,7 +87,7 @@ Feature: View the list of data files
     And I add sample.txt to the cart
     Then I should see "1 File in Cart"
     And I logout
-    When I am logged in as "georgina@intersect.org.au"
+    When I am logged in as "admin@intersect.org.au"
     And I am on the list data files page
     Then I should see "1 File in Cart"
     And I should not see the add to cart link for sample.txt

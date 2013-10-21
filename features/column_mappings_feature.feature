@@ -3,7 +3,7 @@ Feature: Column Mappings
   I want to view a list of column mappings and be able to add/edit/delete them
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
 
   Scenario: View the list
     Given I have column mappings

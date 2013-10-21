@@ -441,7 +441,7 @@ input, textarea
 .input-xxlarge
   width: 530px
 
-input[class*="span"], select[class*="span"], textarea[class*="span"], .uneditable-input 
+input[class*="span"], select[class*="span"], textarea[class*="span"], .uneditable-input
   float: none
   margin-left: 0
 
@@ -588,7 +588,7 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
     +border(1px, solid, $blue4, 0 0 1px 0)
     cursor: pointer
 
-#alert 
+#alert
   p
     background-color: $red2
     +border(1px, solid, $red5, 0 0 1px 0)
@@ -787,7 +787,7 @@ p.details
     span
       +opacity-50
 
-.search.whitebutton 
+.search.whitebutton
   cursor: pointer
   label, span
     +m-p-w-h-p-t-b-l-r-f("", 0 0 0 25px, 85px)
@@ -797,7 +797,7 @@ p.details
     label, span
       background: url("../images/icon_search_dark.png") left center no-repeat
 
-input.search.bluebutton[type=submit] 
+input.search.bluebutton[type=submit]
   +m-p-w-h-p-t-b-l-r-f(0 0 0 -10px, "", 80px, 32px)
   +border("", "", "", "", 0 2px 2px 0)
   cursor: pointer
@@ -985,13 +985,26 @@ input[type=button]
   +border(1px, solid, #dcdcdc, 1px 1px 1px 0, 2px)
   +inlineblock
 
+
+.btn.aaf
+
+  +m-p-w-h-p-t-b-l-r-f("", 5px 10px)
+  +font("", normal, 0.875em, 18px, $light0, none, center)
+  +border(1px, solid, #424f5b, "", 2px)
+  +inlineblock
+  background: #424f5b url("/images/aaf.png") right no-repeat
+  padding-right: 32px
+  &:hover
+    background: #495663 url("/images/aaf.png") right no-repeat
+    +border(1px, solid, #495663)
+
 // TABLES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-/* Note: Table Data cells will stretch to fill 100% of a table's width. If the width specified on individual cells 
+/* Note: Table Data cells will stretch to fill 100% of a table's width. If the width specified on individual cells
  * dosen't add up to the total width, they  will expand to fit.
 
 table
@@ -1101,7 +1114,7 @@ table.activity, table.activity tbody
 // SCROLLING - HEADER
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-#content_wrapper.scrollheader 
+#content_wrapper.scrollheader
   #header
     position: fixed
     top: 0
@@ -1149,7 +1162,7 @@ table.activity, table.activity tbody
 // SCROLLING - ACCOUNT MENU
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-#content_wrapper.scrollheader 
+#content_wrapper.scrollheader
   #header #accountmenu_container
     top: 39px
 #content_wrapper.notification #header #accountmenu_container
@@ -1162,13 +1175,13 @@ table.activity, table.activity tbody
 // SCROLLING - ACCOUNT MENU
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-#content_wrapper.devinfo 
+#content_wrapper.devinfo
   #content
     padding: 0 0 100px 0
-#content_wrapper.devinfo.scrollheader 
+#content_wrapper.devinfo.scrollheader
   #content
     padding: 97px 0 100px 0
-#content_wrapper.devinfo.scrollheader.scrollnotification 
+#content_wrapper.devinfo.scrollheader.scrollnotification
   #content
     padding: 138px 0 100px 0
 
@@ -1241,7 +1254,7 @@ table.activity, table.activity tbody
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #header
-  #home 
+  #home
     a
       +m-p-w-h-p-t-b-l-r-f("", 6px 20px 8px 20px, 20px, 24px)
       background: url("../images/icon_home_light.png") center 8px no-repeat
@@ -1307,10 +1320,20 @@ table.activity, table.activity tbody
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #header
-  .menu 
+  .menu
     li#signup
       background: #4D90F3
       +border(1px, solid, #3079ed, "", 3px 3px 0 0)
+
+      a
+        +m-p-w-h-p-t-b-l-r-f("", 10px 20px 9px 20px, "", 18px)
+        color: #F7F7F7
+        text-shadow: 0 1px rgba(0, 0, 0, 0.1)
+
+    li#aaf_small
+      background: #424f5b url("/images/aaf.png") right no-repeat
+      padding-right: 24px
+      +border(1px, solid, #424f5b, "", 3px 3px 0 0)
 
       a
         +m-p-w-h-p-t-b-l-r-f("", 10px 20px 9px 20px, "", 18px)
@@ -1348,7 +1371,7 @@ table.activity, table.activity tbody
   +border("", "", "", "", 2px)
   background: $light0
 
-#content 
+#content
   .container
     +m-p-w-h-p-t-b-l-r-f(20px 0, "", 800px)
     +clearfix
@@ -1514,7 +1537,7 @@ table.activity, table.activity tbody
     +m-p-w-h-p-t-b-l-r-f(3px 6px 0 0, "", 14px, 14px)
     +inlineblock
     background: url(/images/intersect_logo.png) center
-    
+
   #dev
     cursor: pointer
     +inlineblock
@@ -1522,7 +1545,7 @@ table.activity, table.activity tbody
 // FOOTER - DEV INFO
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
-#footer 
+#footer
   #devinfo
     +m-p-w-h-p-t-b-l-r-f("", 0 0 13px 0, 100%, "", absolute, "", 25px)
     display: none
@@ -1551,7 +1574,7 @@ form h3
   +m-p-w-h-p-t-b-l-r-f(0 0 0 170px, 18px 0 10px 0)
   +border(1px, solid, #D9D9D9, 1px 0 0 0, 2px)
 
-  
+
 .control-group
   +m-p-w-h-p-t-b-l-r-f(0 0 9px 0)
   +clearfix
@@ -1996,5 +2019,7 @@ form h3
 
 .icon-resize-horizontal
   background-position: -456px -118px
+
+
 
 

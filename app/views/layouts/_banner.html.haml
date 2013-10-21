@@ -8,8 +8,13 @@
       .menu
         = tabs_tag(:builder => MenuTabBuilder) do |tab|
           - if !user_signed_in?
-            = tab.login 'Log in', root_url
-            = tab.signup "Sign Up", new_user_registration_path, :id => "signup"
+            - if @aaf_credentials[:email].present?
+              = tab.login 'Log in', new_user_session_path
+              = tab.aaf_login "#{@aaf_credentials[:email]} (via AAF)", root_url, id: "aaf_small"
+            - else
+              = tab.login 'Log in', new_user_session_path
+              = tab.aaf_login 'Log in via AAF', users_aaf_sign_in_url, id: "aaf_small"
+            = tab.signup "Sign Up", new_user_registration_path, id: "signup"
           - else
             = tab.home '', root_url, :id => "home"
             - if can?(:read, User)

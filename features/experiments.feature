@@ -4,7 +4,7 @@ Feature: Manage experiment parameter metadata
   I want to describe the parameters of my experiment
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
 
   Scenario: View the list
     Given I have facilities

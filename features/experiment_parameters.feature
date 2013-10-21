@@ -4,7 +4,7 @@ Feature: Manage experiment parameter metadata
   I want to describe the parameters of my experiment
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     And I have the standard set of experiment parameter lookup values
     And I have experiment "Weather Station Experiment"
     And I have experiment "Another Experiment"

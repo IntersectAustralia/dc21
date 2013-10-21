@@ -7,14 +7,14 @@ Feature: Reset forgotten password
     Given a clear email queue
 
   Scenario: Reset forgotten password
-    Given I have a user "georgina@intersect.org.au"
+    Given I have a user "admin@intersect.org.au"
     And I am on the home page
     When I follow "Forgot your password?"
-    And I fill in "Email" with "georgina@intersect.org.au"
+    And I fill in "Email" with "admin@intersect.org.au"
     And I press "Send me reset password instructions"
     Then I should see "If the email address you entered was valid, you will receive an email with instructions about how to reset your password in a few minutes."
     And I should be on the login page
-    And "georgina@intersect.org.au" should receive an email
+    And "admin@intersect.org.au" should receive an email
     When I open the email
     Then I should see "Someone has requested a link to change your password on the HIEv site, and you can do this through the link below." in the email body
     When I follow "Change my password" in the email
@@ -22,7 +22,7 @@ Feature: Reset forgotten password
     And I fill in "Password confirmation" with "Pass.456"
     And I press "Change Your Password"
     Then I should see "Your password was changed successfully. You are now signed in."
-    And I should be able to log in with "georgina@intersect.org.au" and "Pass.456"
+    And I should be able to log in with "admin@intersect.org.au" and "Pass.456"
     
   Scenario: Deactivated user gets an email saying they can't reset their password
     Given I have a deactivated user "deac@intersect.org.au"
@@ -71,9 +71,9 @@ Feature: Reset forgotten password
     And I should see button "Send me reset password instructions"
 
    Scenario: New password and confirmation must match
-     Given I have a user "georgina@intersect.org.au"
-     When I request a reset for "georgina@intersect.org.au"
-     And "georgina@intersect.org.au" should receive an email
+     Given I have a user "admin@intersect.org.au"
+     When I request a reset for "admin@intersect.org.au"
+     And "admin@intersect.org.au" should receive an email
      And I open the email
      And I follow "Change my password" in the email
      And I fill in "Password" with "Pass.456"
@@ -82,9 +82,9 @@ Feature: Reset forgotten password
      Then I should see "Password doesn't match confirmation"
 
    Scenario: New password must meet minimum requirements
-     Given I have a user "georgina@intersect.org.au"
-     When I request a reset for "georgina@intersect.org.au"
-     And "georgina@intersect.org.au" should receive an email
+     Given I have a user "admin@intersect.org.au"
+     When I request a reset for "admin@intersect.org.au"
+     And "admin@intersect.org.au" should receive an email
      And I open the email
      And I follow "Change my password" in the email
      And I fill in "Password" with "Pass"
@@ -93,9 +93,9 @@ Feature: Reset forgotten password
      Then I should see "Password must be between 6 and 20 characters long and contain at least one uppercase letter, one lowercase letter, one digit and one symbol"
 
   Scenario: Link in email should only work once
-    Given I have a user "georgina@intersect.org.au"
-    When I request a reset for "georgina@intersect.org.au"
-    And "georgina@intersect.org.au" should receive an email
+    Given I have a user "admin@intersect.org.au"
+    When I request a reset for "admin@intersect.org.au"
+    And "admin@intersect.org.au" should receive an email
     And I open the email
     And I follow "Change my password" in the email
     And I fill in "Password" with "Pass.456"
@@ -109,10 +109,10 @@ Feature: Reset forgotten password
     And I fill in "Password confirmation" with "Pass.000"
     And I press "Change Your Password"
     Then I should see "Reset password token is invalid"
-    And I should be able to log in with "georgina@intersect.org.au" and "Pass.456"
+    And I should be able to log in with "admin@intersect.org.au" and "Pass.456"
 
   Scenario: Can't go to get new password page without the token in the email
-    Given I have a user "georgina@intersect.org.au"
+    Given I have a user "admin@intersect.org.au"
     When I go to the reset password page
     When I fill in "Password" with "Pass.456"
     And I fill in "Password confirmation" with "Pass.456"

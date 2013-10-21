@@ -4,14 +4,14 @@ Feature: Viewing metadata from toa5 files
   I want to see information about toa5 files
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     And I have uploaded "toa5.dat"
 
   Scenario: View details
     When I am on the data file details page for toa5.dat
     Then I should see details displayed
       | Name             | toa5.dat                      |
-      | Added by         | georgina@intersect.org.au     |
+      | Added by         | admin@intersect.org.au     |
       | Start time       | 2011-10-06  0:40:00           |
       | End time         | 2011-11-03 11:55:00           |
       | File format      | TOA5                          |
