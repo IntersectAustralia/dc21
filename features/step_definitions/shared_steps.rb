@@ -39,6 +39,15 @@ def check_displayed_field(label, value)
   raise "Didn't find displayed field with label '#{label}'" unless found
 end
 
+Then /^(?:|I )should see the following:$/ do |fields|
+  fields.raw.each do |name, value|
+    field = find_field("#{name}")
+    if field.value != value
+      raise "Field '#{name}' contains value '#{field.value}' which does not match the expected value '#{value}'"
+    end
+  end
+end
+
 Then /^I should see button "([^"]*)"$/ do |arg1|
   page.should have_xpath("//input[@value='#{arg1}']")
 end

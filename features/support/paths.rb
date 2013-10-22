@@ -95,6 +95,9 @@ module NavigationHelpers
       when /the create package page/
         new_package_path
 
+      when /the edit system config page/
+        edit_admin_config_path
+
       else
         begin
           page_name =~ /^the (.*) page$/

@@ -3,30 +3,65 @@
 
 .container
   = form_for [:admin, @config], :url => {action: "update"} do |f|
-    -# = render "shared/error_messages", :target => @user
+    = render "shared/error_messages", :target => @config
     %h2 Edit System Configuration
     .control-group
-      = f.label :name , "System Name", class: "control-label"
+      = f.label :name , "Local System Name", class: "control-label"
       .controls
         = required
         = f.text_field :name
     .control-group
-      = f.label :name , "Org. L1 Singular", class: "control-label"
+      = f.label :research_centre_name , "Research Centre Name", class: "control-label"
+      .controls
+        = required
+        = f.text_field :research_centre_name
+    .control-group
+      = f.label :entity , "Overarching Entity", class: "control-label"
+      .controls
+        = required
+        = f.text_field :entity
+    .control-group
+      = f.label :address1 , "Address", class: "control-label"
+      .controls
+        = f.text_field :address1, placeholder: 'line 1'
+        %br
+        = f.text_field :address2, placeholder: 'line 2'
+        %br
+        = f.text_field :address3, placeholder: 'line 3'
+    .control-group
+      = f.label :telephone_number , "Telephone Numbers", class: "control-label"
+      .controls
+        = f.text_field :telephone_number
+    .control-group
+      = f.label :email , "Email", class: "control-label"
+      .controls
+        = f.text_field :email
+    .control-group
+      = f.label :description , "Description", class: "control-label"
+      .controls
+        = f.text_field :description
+    .control-group
+      = f.label :urls , "URLs", class: "control-label"
+      .controls
+        = f.text_field :urls
+
+    .control-group
+      = f.label :level1 , "Org. L1 Singular", class: "control-label"
       .controls
         = required
         = f.text_field :level1
     .control-group
-      = f.label :name , "Org. L1 Plural", class: "control-label"
+      = f.label :level1_plural , "Org. L1 Plural", class: "control-label"
       .controls
         = required
         = f.text_field :level1_plural
     .control-group
-      = f.label :name , "Org. L2 Singular", class: "control-label"
+      = f.label :level2 , "Org. L2 Singular", class: "control-label"
       .controls
         = required
         = f.text_field :level2
     .control-group
-      = f.label :name , "Org. L2 Plural", class: "control-label"
+      = f.label :level2_plural , "Org. L2 Plural", class: "control-label"
       .controls
         = required
         = f.text_field :level2_plural

@@ -15,12 +15,10 @@ class Admin::ConfigController < ApplicationController
   end
 
   def update
-    puts @config.inspect
-    puts params.inspect
 
     respond_to do |format|
       if @config.update_attributes(params[:system_configuration])
-        format.html { redirect_to edit_admin_config_path, notice: 'System Configuration updated.' }
+        format.html { redirect_to edit_admin_config_path, notice: 'System configuration updated successfully.' }
       else
         format.html { render action: 'edit' }
       end
@@ -37,10 +35,5 @@ class Admin::ConfigController < ApplicationController
       @config =  SystemConfiguration.instance
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def admin_group_params
-#      params[:group]
-      params.require(:name).permit!  #very bad lazy thing todo
-    end
 
 end

@@ -50,6 +50,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "factory_girl_rails", :require => false
   gem "shoulda-matchers"
+  gem 'selenium-webdriver', '~> 2.35.1'
 
   # cucumber gems
   gem "email_spec"

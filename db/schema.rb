@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131017055806) do
+ActiveRecord::Schema.define(:version => 20131017064217) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -180,13 +180,22 @@ ActiveRecord::Schema.define(:version => 20131017055806) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "system_configurations", :force => true do |t|
-    t.string   "name",          :default => "HIEv"
+    t.string   "name",                               :default => "HIEv"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "level1",        :default => "Facility"
-    t.string   "level1_plural", :default => "Facilities"
-    t.string   "level2",        :default => "Experiment"
-    t.string   "level2_plural", :default => "Experiments"
+    t.string   "research_centre_name", :limit => 80, :default => "Hawkesbury Institute for the Environment", :null => false
+    t.string   "entity",               :limit => 80, :default => "University of Western Sydney",             :null => false
+    t.string   "address1",             :limit => 80, :default => "Locked Bag 1797"
+    t.string   "address2",             :limit => 80, :default => "Penrith NSW, 2751"
+    t.string   "address3",             :limit => 80, :default => "Australia"
+    t.string   "telephone_number",     :limit => 80, :default => "+61 2 4570 1125"
+    t.string   "email",                :limit => 80, :default => "hieinfo@lists.uws.edu.au"
+    t.string   "description",          :limit => 80
+    t.string   "urls",                 :limit => 80, :default => "http://www.uws.edu.au/hie"
+    t.string   "level1",                             :default => "Facility"
+    t.string   "level1_plural",                      :default => "Facilities"
+    t.string   "level2",                             :default => "Experiment"
+    t.string   "level2_plural",                      :default => "Experiments"
   end
 
   create_table "tags", :force => true do |t|
