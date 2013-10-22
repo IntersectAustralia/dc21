@@ -10,7 +10,7 @@ Feature: Request an account
   Scenario: Request account
     Given I am on the request account page
     When I fill in the following:
-      | Email            | georgina@intersect.org.au |
+      | Email            | admin@intersect.org.au |
       | Password         | paS$w0rd                  |
       | Confirm Password | paS$w0rd                  |
       | First Name       | Fred                      |
@@ -24,7 +24,7 @@ Feature: Request an account
   Scenario: Email to superuser upon account request and clicking through to access requests page
     Given I am on the request account page
     When I fill in the following:
-      | Email            | georgina@intersect.org.au |
+      | Email            | admin@intersect.org.au |
       | Password         | paS$w0rd                  |
       | Confirm Password | paS$w0rd                  |
       | First Name       | Fred                      |
@@ -33,7 +33,7 @@ Feature: Request an account
     Then "diego.alonso@intersect.org.au" should receive an email with subject "HIEv - There has been a new access request"
     When they open the email
     Then they should see "An access request has been made with the following details:" in the email body
-    And they should see "Email: georgina@intersect.org.au" in the email body
+    And they should see "Email: admin@intersect.org.au" in the email body
     And they should see "First name: Fred" in the email body
     And they should see "Last name: Bloggs" in the email body
     And they should see "You can view unapproved access requests here" in the email body
@@ -45,12 +45,12 @@ Feature: Request an account
     Then I should be on the access requests page
     And I should see "access_requests" table with
       | First name | Last name | Email                     |
-      | Fred       | Bloggs    | georgina@intersect.org.au |
+      | Fred       | Bloggs    | admin@intersect.org.au |
 
   Scenario: Requesting an account with mismatched password confirmation should be rejected
     Given I am on the request account page
     When I fill in the following:
-      | Email            | georgina@intersect.org.au |
+      | Email            | admin@intersect.org.au |
       | Password         | paS$w0rd                  |
       | Confirm Password | pa                        |
       | First Name       | Fred                      |
@@ -61,7 +61,7 @@ Feature: Request an account
   Scenario: Password fields should be cleared out on validation error
     Given I am on the request account page
     When I fill in the following:
-      | Email            | georgina@intersect.org.au |
+      | Email            | admin@intersect.org.au |
       | Password         | paS$w0rd                  |
       | Confirm Password | paS$w0rd                  |
     And I press "Submit Request"
@@ -73,14 +73,14 @@ Feature: Request an account
   Scenario: Newly requested account should not be able to log in yet
     Given I am on the request account page
     And I fill in the following:
-      | Email            | georgina@intersect.org.au |
+      | Email            | admin@intersect.org.au |
       | Password         | paS$w0rd                  |
       | Confirm Password | paS$w0rd                  |
       | First Name       | Fred                      |
       | Last Name        | Bloggs                    |
     And I press "Submit Request"
     And I am on the login page
-    When I fill in "Email" with "georgina@intersect.org.au"
+    When I fill in "Email" with "admin@intersect.org.au"
     And I fill in "Password" with "paS$w0rd"
     And I press "Log in"
     Then I should see "Your account is not active."
@@ -91,7 +91,7 @@ Feature: Request an account
     And "fred@intersect.org.au" is deactivated
     And I am on the request account page
     When I fill in the following:
-      | Email            | georgina@intersect.org.au |
+      | Email            | admin@intersect.org.au |
       | Password         | paS$w0rd                  |
       | Confirm Password | paS$w0rd                  |
       | First Name       | Fred                      |

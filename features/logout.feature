@@ -4,9 +4,9 @@ Feature: Logging Out
   I want to logout
   
   Background:
-    Given I have a user "georgina@intersect.org.au"
+    Given I have a user "admin@intersect.org.au"
     And I am on the login page
-    And I am logged in as "georgina@intersect.org.au"
+    And I am logged in as "admin@intersect.org.au"
     And I should see "Logged in successfully."
   
   Scenario: Successful logout

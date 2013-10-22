@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/IntersectAustralia/devise_shibboleth_authenticatable.git
+  revision: c8e1b4338f25bc69f31dbbed23ba104831c52b64
+  branch: master
+  specs:
+    devise_shibboleth_authenticatable (0.6.2)
+      devise (>= 1.5.4)
+
+GIT
   remote: https://github.com/IntersectAustralia/whoops_rails_logger.git
   revision: 1f304e09b4367ece6fcccce570ac341bf54ec222
   specs:
@@ -45,7 +53,7 @@ GEM
     arrayfields (4.7.4)
     bagit (0.2.0)
       validatable (~> 1.6)
-    bcrypt-ruby (3.1.1)
+    bcrypt-ruby (3.1.2)
     bootstrap-sass (2.1.1.0)
     bootstrap-will_paginate (0.0.9)
       will_paginate
@@ -373,6 +381,7 @@ DEPENDENCIES
   debugger
   decent_exposure
   devise (~> 1.5.4)
+  devise_shibboleth_authenticatable!
   elif
   email_spec
   factory_girl_rails

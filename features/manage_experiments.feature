@@ -4,7 +4,7 @@ Feature: Manage experiment metadata
   I want to manage metadata about experiments
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
     And I have facilities
       | name                |
       | ROS Weather Station |

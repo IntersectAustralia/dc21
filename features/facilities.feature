@@ -3,7 +3,7 @@ Feature: View the list of facilities
   I want to view a list of facilities and be able to add/edit and view them
 
   Background:
-    Given I am logged in as "georgina@intersect.org.au"
+    Given I am logged in as "admin@intersect.org.au"
 
   Scenario: View the list
     Given I have facilities

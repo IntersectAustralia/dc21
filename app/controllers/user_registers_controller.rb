@@ -5,6 +5,7 @@ class UserRegistersController < Devise::RegistrationsController
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy, :edit_password, :update_password, :profile]
   layout 'application'
 
+  skip_before_filter :shib_sign_up, :only => [:new, :create]
   def profile
     set_tab :account
     set_tab :overview, :contentnavigation

@@ -1,3 +1,9 @@
+Given /^I log in via AAF as "([^"]*)"$/ do |email|
+  Capybara.current_session.driver.header 'email', email
+  Capybara.current_session.driver.header 'givenName', "Test"
+  Capybara.current_session.driver.header 'surname', "AAF"
+end
+
 Given /^I have a user "([^"]*)"$/ do |email|
   Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
 end

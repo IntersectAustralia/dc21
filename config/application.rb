@@ -12,13 +12,18 @@ end
 module Dc21app
   class Application < Rails::Application
     config.autoload_paths += %W( #{config.root}/lib )
-    config.generators do |g|  
+    config.generators do |g|
       g.stylesheets false
       g.test_framework :rspec
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
       g.view_specs false
       g.routing_specs false
       g.request_specs false
+    end
+
+    # http://stackoverflow.com/questions/6209663/how-to-skip-a-before-filter-for-devises-sessionscontroller
+    config.to_prepare do
+      Devise::SessionsController.skip_before_filter :shib_sign_up, only: [:new, :create]
     end
 
     # Settings in config/environments/* take precedence over those specified here.

@@ -5,31 +5,31 @@ Feature: Locking out users after multiple failed password attempts
 
   Background:
     Given I have the usual roles
-    And I have a user "georgina@intersect.org.au" with role "Administrator"
+    And I have a user "admin@intersect.org.au" with role "Administrator"
 
   Scenario: 3 consecutive failed logins results in account being locked.
-    When I attempt to login with "georgina@intersect.org.au" and "blah"
+    When I attempt to login with "admin@intersect.org.au" and "blah"
     Then I should see "Invalid email or password."
     And I should be on the login page
-    When I attempt to login with "georgina@intersect.org.au" and "blah"
+    When I attempt to login with "admin@intersect.org.au" and "blah"
     Then I should see "Invalid email or password."
     And I should be on the login page
-    When I attempt to login with "georgina@intersect.org.au" and "blah"
+    When I attempt to login with "admin@intersect.org.au" and "blah"
     Then I should see "You entered an incorrect password 3 times in a row. For security reasons your account has been locked for one hour."
 
   Scenario: A successful login after 2 failures resets the failure count to zero
-    When I attempt to login with "georgina@intersect.org.au" and "blah"
+    When I attempt to login with "admin@intersect.org.au" and "blah"
     Then I should see "Invalid email or password."
-    When I attempt to login with "georgina@intersect.org.au" and "blah"
+    When I attempt to login with "admin@intersect.org.au" and "blah"
     Then I should see "Invalid email or password."
-    And the failed attempt count for "georgina@intersect.org.au" should be "2"
-    When I attempt to login with "georgina@intersect.org.au" and "Pas$w0rd"
+    And the failed attempt count for "admin@intersect.org.au" should be "2"
+    When I attempt to login with "admin@intersect.org.au" and "Pas$w0rd"
     Then I should see "Logged in successfully."
-    And the failed attempt count for "georgina@intersect.org.au" should be "0"
+    And the failed attempt count for "admin@intersect.org.au" should be "0"
     When I follow "Sign out"
-    And I attempt to login with "georgina@intersect.org.au" and "blah"
+    And I attempt to login with "admin@intersect.org.au" and "blah"
     Then I should see "Invalid email or password."
-    And the failed attempt count for "georgina@intersect.org.au" should be "1"
+    And the failed attempt count for "admin@intersect.org.au" should be "1"
 
   Scenario: Can't login while locked even with correct password
     Given I have a locked user "shuqian@intersect.org.au"

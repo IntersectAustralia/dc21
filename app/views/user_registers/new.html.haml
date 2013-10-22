@@ -9,6 +9,6 @@
     = render :partial => 'account_details', :locals  => {:f => f}
     .form-actions
       .actions-pre
-        = cancel_button 'Cancel', root_path
+        = cancel_button 'Cancel', new_user_session_path
       .actions
         = f.submit "Submit Request", :class => ""
