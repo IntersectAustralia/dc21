@@ -12,7 +12,7 @@ Feature: Edit system configuration
     And "georgina@intersect.org.au" has role "Administrator"
     And "cindy@intersect.org.au" has role "Researcher"
 
-  # EYETRACKER-1
+  # EYETRACKER-1, # EYETRACKER-95
   Scenario: Edit system config fields as admin
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page

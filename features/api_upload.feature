@@ -91,6 +91,25 @@ Feature: Upload files via the API
     | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                             | "Video","Blah" | unknown tag                 |
     | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Incorrect format for tags - tags must be double-quoted and comma separated | "Video,"Blah"  | badly formatted tags        |
 
+  #EYETRACKER-95
+  Scenario Outline: Invalid input scenarios for Org_level2
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | <file>       |
+      | type       | <type>       |
+      | org_level2 | <org_level2> |
+      | tag_names  | <tag_names>  |
+    Then I should get a 400 response code
+    And I should get a JSON response with errors "<errors>"
+  Examples:
+    | file                                                          | type      | org_level2        | errors                                                                     | tag_names      | description                 |
+    |                                                               | RAW       | Flux Experiment 1 | File is required                                                           |                | missing file                |
+    | samples/full_files/weather_station/weather_station_05_min.dat |           | Flux Experiment 1 | File type is required                                                      |                | missing type                |
+    | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                                                  |                | missing experiment          |
+    | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required                           |                | missing experiment and type |
+    | samples/full_files/weather_station/weather_station_05_min.dat | BLAH      | Flux Experiment 1 | File type not recognised                                                   |                | invalid type                |
+    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                             | "Video","Blah" | unknown tag                 |
+    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Incorrect format for tags - tags must be double-quoted and comma separated | "Video,"Blah"  | badly formatted tags        |
+
   Scenario: Invalid input - experiment id not found
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file          | samples/full_files/weather_station/weather_station_05_min.dat |
@@ -130,22 +149,3 @@ Feature: Upload files via the API
     | RAW       | renamed              | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
     | PROCESSED | success              | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
     | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
-
-
-  Scenario Outline: Invalid input scenarios for Org_level2
-    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
-      | file       | <file>       |
-      | type       | <type>       |
-      | org_level2 | <org_level2> |
-      | tag_names  | <tag_names>  |
-    Then I should get a 400 response code
-    And I should get a JSON response with errors "<errors>"
-  Examples:
-    | file                                                          | type      | org_level2        | errors                                                                     | tag_names      | description                 |
-    |                                                               | RAW       | Flux Experiment 1 | File is required                                                           |                | missing file                |
-    | samples/full_files/weather_station/weather_station_05_min.dat |           | Flux Experiment 1 | File type is required                                                      |                | missing type                |
-    | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                                                  |                | missing experiment          |
-    | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required                           |                | missing experiment and type |
-    | samples/full_files/weather_station/weather_station_05_min.dat | BLAH      | Flux Experiment 1 | File type not recognised                                                   |                | invalid type                |
-    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                             | "Video","Blah" | unknown tag                 |
-    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Incorrect format for tags - tags must be double-quoted and comma separated | "Video,"Blah"  | badly formatted tags        |
