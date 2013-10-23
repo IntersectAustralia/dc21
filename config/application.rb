@@ -23,7 +23,7 @@ module Dc21app
 
     # http://stackoverflow.com/questions/6209663/how-to-skip-a-before-filter-for-devises-sessionscontroller
     config.to_prepare do
-      Devise::SessionsController.skip_before_filter :shib_sign_up, only: [:new, :create]
+      Devise::SessionsController.skip_before_filter :shib_sign_up_redirect, only: [:new, :create]
     end
 
     # Settings in config/environments/* take precedence over those specified here.

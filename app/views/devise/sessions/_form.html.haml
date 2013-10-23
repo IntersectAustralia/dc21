@@ -6,7 +6,12 @@
         %small
           Note: You are logged in via AAF as
           %strong #{@aaf_credentials[:email]}
-          , but you are not yet authorised to use HIEv.
+          ,
+          - if User.find_by_email(@aaf_credentials[:email])
+            but your #{@config.name} account request is pending approval.
+          - else
+            but you have not registered an account with #{@config.name}.
+
           %br
           %br
           You may log in with a different account below.
@@ -23,7 +28,7 @@
           Note: This will take you to the AAF (Australian Access Federation) login page.
           %br
           %br
-          If you are not yet authorised to use HIEv you will be automatically redirected to the HIEv Registration Page after successfully authenticating with your AAF credentials.
+          If you are not yet authorised to use #{@config.name} you will be automatically redirected to the #{@config.name} Registration Page after successfully authenticating with your AAF credentials.
 
 .container
 

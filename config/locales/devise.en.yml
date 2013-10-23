@@ -18,6 +18,7 @@ en:
       unconfirmed: 'You have to confirm your account before continuing.'
       locked: 'You entered an incorrect password 3 times in a row. For security reasons your account has been locked for one hour.'
       invalid: 'Invalid email or password.'
+      invalid_aaf: 'You must be an approved user to access this site.'
       invalid_token: 'Invalid authentication token.'
       timeout: 'Your session expired, please sign in again to continue.'
       inactive: 'Your account is not active.'
