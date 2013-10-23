@@ -137,7 +137,7 @@ GEM
       factory_girl (~> 2.2.0)
       railties (>= 3.0.0)
     fattr (2.2.0)
-    ffi (1.4.0)
+    ffi (1.9.0)
     flay (1.4.3)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
@@ -196,7 +196,7 @@ GEM
       rake
     mime-types (1.23)
     mono_logger (1.1.0)
-    multi_json (1.7.6)
+    multi_json (1.8.2)
     multi_xml (0.4.1)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -299,10 +299,10 @@ GEM
       sass (>= 3.1.4)
       sprockets (~> 2.0.0)
       tilt (~> 1.3.2)
-    selenium-webdriver (2.31.0)
+    selenium-webdriver (2.35.1)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
-      rubyzip
+      rubyzip (< 1.0.0)
       websocket (~> 1.0.4)
     sexp_processor (3.0.7)
     shoulda-matchers (1.1.0)
@@ -400,7 +400,7 @@ DEPENDENCIES
   resque
   resque-status
   rspec-rails
-  rubyzip
+  rubyzip (= 0.9.9)
   rvm-capistrano
   sass-rails (~> 3.1.4)
   selenium-webdriver

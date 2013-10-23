@@ -183,6 +183,10 @@ ActiveRecord::Schema.define(:version => 20131017064217) do
     t.string   "name",                               :default => "HIEv"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "level1",                             :default => "Facility"
+    t.string   "level1_plural",                      :default => "Facilities"
+    t.string   "level2",                             :default => "Experiment"
+    t.string   "level2_plural",                      :default => "Experiments"
     t.string   "research_centre_name", :limit => 80, :default => "Hawkesbury Institute for the Environment", :null => false
     t.string   "entity",               :limit => 80, :default => "University of Western Sydney",             :null => false
     t.string   "address1",             :limit => 80, :default => "Locked Bag 1797"
@@ -192,10 +196,6 @@ ActiveRecord::Schema.define(:version => 20131017064217) do
     t.string   "email",                :limit => 80, :default => "hieinfo@lists.uws.edu.au"
     t.string   "description",          :limit => 80
     t.string   "urls",                 :limit => 80, :default => "http://www.uws.edu.au/hie"
-    t.string   "level1",                             :default => "Facility"
-    t.string   "level1_plural",                      :default => "Facilities"
-    t.string   "level2",                             :default => "Experiment"
-    t.string   "level2_plural",                      :default => "Experiments"
   end
 
   create_table "tags", :force => true do |t|
