@@ -16,5 +16,5 @@ class SystemConfiguration < ActiveRecord::Base
   validates :entity, presence: true, length: {maximum: 80}
 
   validates :email, email:true
-  validates :telephone_number, format: { with: /\A[+]?\d+\Z/, message: "is not a valid phone number"}
+  #validates :telephone_number, format: { with: /\A[+]?[\s\d]+\Z/, message: "is not a valid phone number"}
 end
