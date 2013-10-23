@@ -102,7 +102,7 @@ Feature: Upload files
       | Type        | RAW                        |
       | Description | My descriptive description |
       | Experiment  | My Experiment              |
-      | Tags        | Gap-Filled\n\nPhoto        |
+      | Tags        | Gap-Filled\nPhoto        |
 
   Scenario: Upload a single file with no tags or description
     Given I am on the upload page
@@ -150,7 +150,7 @@ Feature: Upload files
       | Type             | RAW                           |
       | Description      | I'm changing the description  |
       | Experiment       | Flux Experiment 1             |
-      | Tags             | Gap-Filled\n\nPhoto           |
+      | Tags             | Gap-Filled\nPhoto           |
       | Start time       | 2011-10-10  0:00:00           |
       | End time         | 2011-10-12 23:45:00           |
       | Sample interval  | 15 minutes                    |
