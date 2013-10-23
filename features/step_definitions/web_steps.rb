@@ -270,7 +270,7 @@ Then /^The popup text should contain "([^"]*)"$/ do |text|
 end
 
 When /^I dismiss the popup$/ do
- page.driver.browser.switch_to.alert.dismiss
+  page.driver.browser.switch_to.alert.dismiss
 end
 
 When /^I follow Showing$/ do

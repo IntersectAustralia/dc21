@@ -101,8 +101,8 @@ Feature: Delete files containing erroneous data
 
   Scenario: Files with ID can be deleted
     Given I have data files
-      | filename      | created_at       | uploaded_by                 | start_time           | end_time               | external_id|
-      | datafile.dat  | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | blah       |
+      | filename     | created_at       | uploaded_by                 | start_time           | end_time               | external_id |
+      | datafile.dat | 30/11/2011 10:15 | researcher@intersect.org.au | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | blah        |
     And I am on the data file details page for datafile.dat
     And I follow "Delete"
     And I should see "The file 'datafile.dat' was successfully removed"

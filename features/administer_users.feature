@@ -5,9 +5,9 @@ Feature: Administer users
 
   Background:
     Given I have users
-      | email                     | first_name | last_name |
-      | raul@intersect.org.au     | Raul       | Carrizo   |
-      | admin@intersect.org.au | admin   | Edwards   |
+      | email                  | first_name | last_name |
+      | raul@intersect.org.au  | Raul       | Carrizo   |
+      | admin@intersect.org.au | admin      | Edwards   |
     And I have the usual roles
     And I am logged in as "admin@intersect.org.au"
     And "admin@intersect.org.au" has role "Administrator"
@@ -16,9 +16,9 @@ Feature: Administer users
     Given "raul@intersect.org.au" is deactivated
     When I am on the list users page
     Then I should see "users" table with
-      | Email                     | First name | Last name | Role          | Status      |
-      | admin@intersect.org.au | admin   | Edwards   | Administrator | Active      |
-      | raul@intersect.org.au     | Raul       | Carrizo   |               | Deactivated |
+      | Email                  | First name | Last name | Role          | Status      |
+      | admin@intersect.org.au | admin      | Edwards   | Administrator | Active      |
+      | raul@intersect.org.au  | Raul       | Carrizo   |               | Deactivated |
 
   Scenario: View user details
     Given "raul@intersect.org.au" has role "Researcher"

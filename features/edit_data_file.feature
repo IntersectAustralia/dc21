@@ -4,14 +4,14 @@ Feature: Edit data files metadata
   I want to edit the details of data files
 
   Background:
-      Given I have a user "admin@intersect.org.au" with role "Administrator"
-      Given I have a user "researcher@intersect.org.au" with role "Researcher"
-      And I have data files
-        | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format   |
-        | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au   |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |          |
-        | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5     |
-        | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |          |
-        | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |          |
+    Given I have a user "admin@intersect.org.au" with role "Administrator"
+    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    And I have data files
+      | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format |
+      | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |
+      | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |        |
+      | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |        |
 
   Scenario: ID should be unique
     Given I am logged in as "admin@intersect.org.au"

@@ -72,3 +72,19 @@ Feature: Logging In
     Then I should see "Logged in successfully."
     And I should be on the home page
 
+  Scenario: Sign up should still work if request headers are empty strings
+    Given the Shibboleth headers are empty
+    And I am on the request account page
+    And I should be on the request account page
+    When I fill in the following:
+      | Email            | unregistered@intersect.org.au |
+      | Password         | paS$w0rd                      |
+      | Confirm Password | paS$w0rd                      |
+      | First Name       | Fred                          |
+      | Last Name        | Bloggs                        |
+    And I press "Submit Request"
+    Then I should see "Thanks for requesting an account. You will receive an email when your request has been approved."
+    And I should not see "Your account is not active"
+    And I should be on the home page
+    And I should see "Please enter your email and password to log in"
+

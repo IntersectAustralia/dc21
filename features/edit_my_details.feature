@@ -2,7 +2,7 @@ Feature: Edit my details
   In order to keep my details up to date
   As a user
   I want to edit my details
-  
+
   Background:
     Given I have a user "admin@intersect.org.au" with name "admin" "Edwards"
     And I am logged in as "admin@intersect.org.au"

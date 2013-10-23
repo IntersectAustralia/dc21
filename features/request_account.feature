@@ -11,10 +11,10 @@ Feature: Request an account
     Given I am on the request account page
     When I fill in the following:
       | Email            | admin@intersect.org.au |
-      | Password         | paS$w0rd                  |
-      | Confirm Password | paS$w0rd                  |
-      | First Name       | Fred                      |
-      | Last Name        | Bloggs                    |
+      | Password         | paS$w0rd               |
+      | Confirm Password | paS$w0rd               |
+      | First Name       | Fred                   |
+      | Last Name        | Bloggs                 |
     And I press "Submit Request"
     Then I should see "Thanks for requesting an account. You will receive an email when your request has been approved."
     And I should not see "Your account is not active"
@@ -25,10 +25,10 @@ Feature: Request an account
     Given I am on the request account page
     When I fill in the following:
       | Email            | admin@intersect.org.au |
-      | Password         | paS$w0rd                  |
-      | Confirm Password | paS$w0rd                  |
-      | First Name       | Fred                      |
-      | Last Name        | Bloggs                    |
+      | Password         | paS$w0rd               |
+      | Confirm Password | paS$w0rd               |
+      | First Name       | Fred                   |
+      | Last Name        | Bloggs                 |
     And I press "Submit Request"
     Then "diego.alonso@intersect.org.au" should receive an email with subject "HIEv - There has been a new access request"
     When they open the email
@@ -44,17 +44,17 @@ Feature: Request an account
     And I press "Log in"
     Then I should be on the access requests page
     And I should see "access_requests" table with
-      | First name | Last name | Email                     |
+      | First name | Last name | Email                  |
       | Fred       | Bloggs    | admin@intersect.org.au |
 
   Scenario: Requesting an account with mismatched password confirmation should be rejected
     Given I am on the request account page
     When I fill in the following:
       | Email            | admin@intersect.org.au |
-      | Password         | paS$w0rd                  |
-      | Confirm Password | pa                        |
-      | First Name       | Fred                      |
-      | Last Name        | Bloggs                    |
+      | Password         | paS$w0rd               |
+      | Confirm Password | pa                     |
+      | First Name       | Fred                   |
+      | Last Name        | Bloggs                 |
     And I press "Submit Request"
     Then I should see "Password doesn't match confirmation"
 
@@ -62,8 +62,8 @@ Feature: Request an account
     Given I am on the request account page
     When I fill in the following:
       | Email            | admin@intersect.org.au |
-      | Password         | paS$w0rd                  |
-      | Confirm Password | paS$w0rd                  |
+      | Password         | paS$w0rd               |
+      | Confirm Password | paS$w0rd               |
     And I press "Submit Request"
     Then I should see "First name can't be blank"
     And I should see "Last name can't be blank"
@@ -74,10 +74,10 @@ Feature: Request an account
     Given I am on the request account page
     And I fill in the following:
       | Email            | admin@intersect.org.au |
-      | Password         | paS$w0rd                  |
-      | Confirm Password | paS$w0rd                  |
-      | First Name       | Fred                      |
-      | Last Name        | Bloggs                    |
+      | Password         | paS$w0rd               |
+      | Confirm Password | paS$w0rd               |
+      | First Name       | Fred                   |
+      | Last Name        | Bloggs                 |
     And I press "Submit Request"
     And I am on the login page
     When I fill in "Email" with "admin@intersect.org.au"
@@ -92,10 +92,10 @@ Feature: Request an account
     And I am on the request account page
     When I fill in the following:
       | Email            | admin@intersect.org.au |
-      | Password         | paS$w0rd                  |
-      | Confirm Password | paS$w0rd                  |
-      | First Name       | Fred                      |
-      | Last Name        | Bloggs                    |
+      | Password         | paS$w0rd               |
+      | Confirm Password | paS$w0rd               |
+      | First Name       | Fred                   |
+      | Last Name        | Bloggs                 |
     And I press "Submit Request"
     Then "diego.alonso@intersect.org.au" should receive an email with subject "HIEv - There has been a new access request"
     Then "fred@intersect.org.au" should receive no emails

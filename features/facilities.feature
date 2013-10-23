@@ -176,7 +176,7 @@ Feature: View the list of facilities
     And I follow the view link for facility "Facility0"
     And I follow "Edit Facility"
     And I fill in the following:
-      | Code |                                                                                                                                                                                                                                                                                                                                                                                  |
+      | Code |  |
     And I press "Update"
     Then I should see "Code can't be blank"
 

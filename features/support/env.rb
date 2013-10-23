@@ -40,8 +40,8 @@ Spork.prefork do
   end
 
   # Reset custom package_id before each test
-  Before do  
-    ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;" 
+  Before do
+    ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;"
   end
 end
 

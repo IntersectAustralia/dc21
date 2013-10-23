@@ -88,10 +88,11 @@ Feature: Upload files via the API
     | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                                                  |                | missing experiment          |
     | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required                           |                | missing experiment and type |
     | samples/full_files/weather_station/weather_station_05_min.dat | BLAH      | Flux Experiment 1 | File type not recognised                                                   |                | invalid type                |
-    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                             | "Video","Blah" | unknown tag                 |
+    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                         | "Video","Blah" | unknown tag                 |
     | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Incorrect format for tags - tags must be double-quoted and comma separated | "Video,"Blah"  | badly formatted tags        |
 
-  #EYETRACKER-95
+#EYETRACKER-95
+
   Scenario Outline: Invalid input scenarios for Org_level2
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file       | <file>       |
@@ -107,7 +108,7 @@ Feature: Upload files via the API
     | samples/full_files/weather_station/weather_station_05_min.dat | PROCESSED |                   | Experiment id is required                                                  |                | missing experiment          |
     | samples/full_files/weather_station/weather_station_05_min.dat |           |                   | Experiment id is required, File type is required                           |                | missing experiment and type |
     | samples/full_files/weather_station/weather_station_05_min.dat | BLAH      | Flux Experiment 1 | File type not recognised                                                   |                | invalid type                |
-    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                             | "Video","Blah" | unknown tag                 |
+    | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Unknown tag 'Blah'                                                         | "Video","Blah" | unknown tag                 |
     | samples/full_files/weather_station/weather_station_05_min.dat | RAW       | Flux Experiment 1 | Incorrect format for tags - tags must be double-quoted and comma separated | "Video,"Blah"  | badly formatted tags        |
 
   Scenario: Invalid input - experiment id not found

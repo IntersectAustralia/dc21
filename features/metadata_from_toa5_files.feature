@@ -11,7 +11,7 @@ Feature: Viewing metadata from toa5 files
     When I am on the data file details page for toa5.dat
     Then I should see details displayed
       | Name             | toa5.dat                      |
-      | Added by         | admin@intersect.org.au     |
+      | Added by         | admin@intersect.org.au        |
       | Start time       | 2011-10-06  0:40:00           |
       | End time         | 2011-11-03 11:55:00           |
       | File format      | TOA5                          |

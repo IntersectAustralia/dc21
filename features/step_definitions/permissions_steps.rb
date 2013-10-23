@@ -1,8 +1,8 @@
 Then /^I should get the following security outcomes$/ do |table|
   table.hashes.each do |hash|
     page_to_visit = hash[:page]
-    outcome       = hash[:outcome]
-    message       = hash[:message]
+    outcome = hash[:outcome]
+    message = hash[:message]
     visit path_to(page_to_visit)
     if outcome == "error"
       page.should have_content(message)

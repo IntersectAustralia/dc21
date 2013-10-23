@@ -13,11 +13,11 @@ Feature: Publish a PACKAGE
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
     And I have data files
-      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      | published_by              | transfer_status |
-      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |                           | COMPLETE        |
-      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | admin@intersect.org.au   | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |                           | COMPLETE        |
-      | published.zip | PACKAGE                | 30/12/2011 12:34 | admin@intersect.org.au   |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au| COMPLETE        |
-      | sample1.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false     |                     |                           | COMPLETE        |
+      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      | published_by               | transfer_status |
+      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |                            | COMPLETE        |
+      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | admin@intersect.org.au      | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |                            | COMPLETE        |
+      | published.zip | PACKAGE                | 30/12/2011 12:34 | admin@intersect.org.au      |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au | COMPLETE        |
+      | sample1.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt   | 4  | false     |                     |                            | COMPLETE        |
     And I have experiments
       | name              | facility            |
       | My Experiment     | ROS Weather Station |

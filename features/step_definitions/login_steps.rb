@@ -4,6 +4,12 @@ Given /^I log in via AAF as "([^"]*)"$/ do |email|
   Capybara.current_session.driver.header 'surname', "AAF"
 end
 
+Given /^the Shibboleth headers are empty$/ do
+  Capybara.current_session.driver.header 'email', ""
+  Capybara.current_session.driver.header 'givenName', ""
+  Capybara.current_session.driver.header 'surname', ""
+end
+
 Given /^I have a user "([^"]*)"$/ do |email|
   Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
 end
@@ -39,7 +45,7 @@ def set_user_role(user, role_name)
 end
 
 Given /^I have a user "([^"]*)" with role "([^"]*)"$/ do |email, role|
-  user            = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
+  user = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
   set_user_role(user, role)
 end
 
