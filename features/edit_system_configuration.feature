@@ -48,3 +48,12 @@ Feature: Edit system configuration
       | Local System Name     | Hello |
       | Research Centre Name  | World |
       | Entity                | !     |
+
+  # EYETRACKER-95
+  Scenario: Check that the System Name is visible when logged out
+    Given I am logged in as "georgina@intersect.org.au"
+    And I am on the edit system config page
+    When I fill in "Name" with "Hello world"
+    And I press "Update"
+    And I follow "Sign out"
+    Then I should see "Hello world"
