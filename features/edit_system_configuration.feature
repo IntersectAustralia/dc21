@@ -20,13 +20,26 @@ Feature: Edit system configuration
     And I press "Update"
     Then I should see "System configuration updated successfully."
 
-  # EYETRACKER-1
+  Scenario: View system config fields as admin
+    Given I am logged in as "georgina@intersect.org.au"
+    And I am on the system config page
+    Then I should see details displayed
+      | Local System Name     | HIEv                                          |
+      | Research Centre Name  | Hawkesbury Institute for the Environment      |
+      | Overarching Entity    | University of Western Sydney                  |
+      | Address               | Locked Bag 1797, Penrith NSW, 2751, Australia |
+      | Telephone Numbers     | +61 2 4570 1125                               |
+      | Email                 | hieinfo@lists.uws.edu.au                      |
+      | Description           |                                               |
+      | URLs                  | http://www.uws.edu.au/hie                     |
+
   Scenario: Access system config edit page as non-admin
     Given I am logged in as "cindy@intersect.org.au"
     And I am on the edit system config page
     Then I should see "You are not authorized to access this page."
+    And I am on the system config page
+    Then I should see "You are not authorized to access this page."
 
-  # EYETRACKER-1
   Scenario: Check all mandatory fields are filled in
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
@@ -35,7 +48,6 @@ Feature: Edit system configuration
     Then I should not see "System configuration updated successfully."
     And I should see "Please correct the following before continuing: Name can't be blank"
 
-  # EYETRACKER-1
   Scenario: Check edited changes are kept after update
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
@@ -48,6 +60,16 @@ Feature: Edit system configuration
       | Local System Name     | Hello |
       | Research Centre Name  | World |
       | Entity                | !     |
+    And I am on the system config page
+    Then I should see details displayed
+      | Local System Name     | Hello                                         |
+      | Research Centre Name  | World                                         |
+      | Overarching Entity    | !                                             |
+      | Address               | Locked Bag 1797, Penrith NSW, 2751, Australia |
+      | Telephone Numbers     | +61 2 4570 1125                               |
+      | Email                 | hieinfo@lists.uws.edu.au                      |
+      | Description           |                                               |
+      | URLs                  | http://www.uws.edu.au/hie                     |
 
   # EYETRACKER-95
   Scenario: Check that the System Name is visible when logged out

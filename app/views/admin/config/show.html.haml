@@ -5,10 +5,17 @@
   %h2
     = @config.name 
     System Configuration
-  = render_field "System Name", @config.name
-  = render_field "Org. L1 Singluar", @config.level1
+  = render_field "Local System Name", @config.name
+  = render_field "Research Centre Name", @config.research_centre_name
+  = render_field "Overarching Entity", @config.entity
+  = render_field "Address", @config.address1 + ', ' + @config.address2 + ', ' + @config.address3
+  = render_field "Telephone Numbers", @config.telephone_number
+  = render_field "Email", @config.email
+  = render_field "Description", @config.description
+  = render_field "URLs", @config.urls
+  = render_field "Org. L1 Singular", @config.level1
   = render_field "Org. L1 Plural", @config.level1_plural
-  = render_field "Org. L2 Singluar", @config.level2
+  = render_field "Org. L2 Singular", @config.level2
   = render_field "Org. L2 Plural", @config.level2_plural
 
 .form-actions

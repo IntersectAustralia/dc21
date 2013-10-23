@@ -98,6 +98,9 @@ module NavigationHelpers
       when /the edit system config page/
         edit_admin_config_path
 
+      when /the system config page/
+        admin_config_path
+
       else
         begin
           page_name =~ /^the (.*) page$/
