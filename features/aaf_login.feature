@@ -87,7 +87,8 @@ Feature: Logging In
       | Last Name        | Bloggs                        |
     And I press "Submit Request"
     Then I should see "Thanks for requesting an account. You will receive an email when your request has been approved."
-    And I should see "Your account is not active."
+    And I should not see "Your account is not active."
     And I should be on the home page
+    Then I should see "Note: This will take you to the AAF (Australian Access Federation) login page."
     And I should see "Please enter your email and password to log in"
 

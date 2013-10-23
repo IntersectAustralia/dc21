@@ -12,10 +12,12 @@ class ApplicationController < ActionController::Base
   end
 
   def shib_flash
-    if !user_signed_in? && @aaf_credentials[:email].present? && User.find_by_email(@aaf_credentials[:email]).blank?
-      flash.now[:alert] = t "devise.failure.invalid_aaf"
-    else
-      flash.now[:alert] = t "devise.failure.inactive"
+    if !user_signed_in? && @aaf_credentials[:email].present?
+      if User.find_by_email(@aaf_credentials[:email]).blank?
+        flash.now[:alert] = t "devise.failure.invalid_aaf"
+      else
+        flash.now[:alert] = t "devise.failure.inactive"
+      end
     end
   end
 
