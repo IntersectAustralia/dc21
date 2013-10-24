@@ -17,7 +17,7 @@ group :assets do
 end
 
 gem 'newrelic_rpm'
-# gem 'therubyracer'
+gem 'therubyracer'
 gem 'bagit'
 gem 'jquery-rails'
 gem "haml"
