@@ -1,5 +1,5 @@
 class UserSessionsController < Devise::SessionsController
-  skip_before_filter :shib_sign_up
+  skip_before_filter :shib_sign_up_redirect
   def aaf_new
     resource = build_resource
     shib_config = YAML.load(ERB.new(File.read(::Devise.shibboleth_config || "#{Rails.root}/config/shibboleth.yml")).result)[Rails.env]
