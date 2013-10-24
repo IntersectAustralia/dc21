@@ -143,6 +143,10 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}".strip
   end
 
+  def aaf_logged_in?(aaf_email)
+    aaf_email.present? && self.email.eql?(aaf_email)
+  end
+
   def status_description
     case self.status
       when 'A'

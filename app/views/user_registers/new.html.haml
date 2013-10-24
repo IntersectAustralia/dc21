@@ -1,6 +1,17 @@
 -# - content_for :breadcrumb  do
 -#   %h1 Sign Up
 
+- if @aaf_credentials[:email].present?
+  .container
+    .control-group
+      .controls
+        %small
+          You are logged in via AAF as
+          %strong #{@aaf_credentials[:email]}
+          \.
+          %br
+          %br
+        = link_to "← Sign out", users_aaf_sign_out_path, :class => "btn aaf"
 .container
   %h2 User Sign Up
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|

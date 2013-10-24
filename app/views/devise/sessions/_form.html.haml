@@ -11,15 +11,15 @@
             but your #{@config.name} account request is pending approval.
           - else
             but you have not registered an account with #{@config.name}.
-
           %br
           %br
-          You may log in with a different account below.
+          You may log in with a different account below or sign out of AAF.
+          %br
+          %br
+        = link_to "← Sign out", users_aaf_sign_out_path, :class => "btn aaf"
   - else
     .control-group
       .controls
-        -#= link_to users_aaf_sign_in_path do
-          = image_tag(asset_path("/images/aaf_logo.gif"))
         = link_to "Log in via AAF →", users_aaf_sign_in_path, :class => "btn aaf"
 
     .control-group

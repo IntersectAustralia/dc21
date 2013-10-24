@@ -19,7 +19,7 @@ module ApplicationHelper
 
   def render_description(label, value)
     render_description_field(label, (h value))
-  end 
+  end
 
   def icon(type)
     "<img src='/images/icon_#{type}.png' border=0 class='icon' alt='#{type}' />".html_safe
@@ -57,7 +57,7 @@ module ApplicationHelper
   def render_description_field(label, content)
     div_id = label.tr(" ,", "_").downcase
     #value = content.gsub("\n", "<br />").html_safe
-    values = content.split("\n") 
+    values = content.split("\n")
     html = "<div class='control-group'>"
     html << "<div class='control-label' title='#{h label}'>"
     html << (h label)
