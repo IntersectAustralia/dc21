@@ -75,6 +75,8 @@ group :test do
   gem "simplecov-rcov", :require => false
 end
 
+gem "json-jwt"
+
 # exception tracker
 gem 'whoops_rails_logger', git: 'https://github.com/IntersectAustralia/whoops_rails_logger.git'
 gem 'acts_as_singleton'
