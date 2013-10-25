@@ -22,7 +22,7 @@
           = f.text_field :filename
           %span .zip
       .control-group
-        = f.label :experiment_id, "Experiment", class: "control-label"
+        = f.label :experiment_id, "#{@config.level2}", class: "control-label"
         .controls
           = required
           = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @package.experiment_id), :include_blank => true

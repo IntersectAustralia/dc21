@@ -33,14 +33,14 @@ class Experiment < ActiveRecord::Base
   end
 
   def name_with_prefix
-    "Experiment - #{name}"
+    "#{SystemConfiguration.instance.level2} - #{name}"
   end
 
   def parent_name
     if parent_experiment
       parent_experiment.name_with_prefix
     else
-      "Facility - #{facility.name}"
+      "#{SystemConfiguration.instance.level1} - #{facility.name}"
     end
   end
 

@@ -18,7 +18,7 @@
             .record= "#{file.file_processing_status}"
 
         .control-group
-          = label_tag "file_#{file.id}_experiment", "Experiment", class: "control-label"
+          = label_tag "file_#{file.id}_experiment", "#{@config.level2}", class: "control-label"
           .controls
             = select_tag "files[#{file.id}][experiment_id]", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), :id => "file_#{file.id}_experiment"
 

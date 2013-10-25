@@ -81,3 +81,16 @@ Feature: Edit system configuration
     And I press "Update"
     And I follow "Sign out"
     Then I should see "Hello world"
+
+  # EYETRACKER-101
+  Scenario: Check a long level 2 name is truncated with ellipsis on white button
+    Given I am logged in as "georgina@intersect.org.au"
+    And I have facilities
+      | name      | code |
+      | Facility0 | f0   |
+    And I am on the edit system config page
+    When I fill in "Org. L2 Singular" with "long_name_of_20_char"
+    And I press "Update"
+    And I am on the facilities page
+    And I follow the view link for facility "Facility0"
+    Then I should see "New long_na..."

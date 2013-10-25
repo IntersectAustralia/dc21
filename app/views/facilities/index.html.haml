@@ -1,9 +1,9 @@
 - content_for :breadcrumb  do
-  %h1 Facilities
+  %h1 #{@config.level1_plural}
 
 .datacontroll
   .facility.new.whitebutton.btn
-    = link_to "New Facility", new_facility_path
+    = link_to "New #{@config.level1}", new_facility_path
 
 - if @facilities.empty?
   %h3 There are no facilities to display

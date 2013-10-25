@@ -52,7 +52,7 @@
           = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
             = tab.dashboard 'Dashboard', home_pages_path, :id => "dashboard"
             = tab.explore 'Explore Data', data_files_path, :id => "data"
-            = tab.facilities 'Facilities', facilities_path, :id => "facilities"
+            = tab.facilities "#{@config.level1_plural}", facilities_path, :id => "facilities"
             = yield :actions
 
 

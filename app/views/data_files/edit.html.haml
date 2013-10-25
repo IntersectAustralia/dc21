@@ -55,7 +55,7 @@
               = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
       .control-group
-        %label.control-label{:for => :data_file_experiment_id} Experiment
+        %label.control-label{:for => :data_file_experiment_id} #{@config.level2}
         .controls
           = required
           = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true

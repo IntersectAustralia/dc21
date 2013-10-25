@@ -30,7 +30,7 @@
       %th.sortable.size= "Size"
       %th.sortable.email=  "Added by"
       %th.sortable.type= "Type"
-      %th.sortable.experiment=  "Experiment"
+      %th.sortable.experiment=  "#{@config.level2}"
       %th.delete_cart
         = link_to 'Remove All',  destroy_all_cart_items_path, :class =>  "btn btn-danger remove-all", :confirm => remove_all_warning, :id => "remove_all_from_cart"
     - @cart_items.each do |data_file|

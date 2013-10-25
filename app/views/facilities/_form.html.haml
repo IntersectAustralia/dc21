@@ -1,8 +1,8 @@
 = form_for(@facility) do |f|
   - if edit_mode
-    %h2 Edit Facility
+    %h2 Edit #{@config.level1}
   - else
-    %h2 New Facility
+    %h2 New #{@config.level1}
 
   = render "shared/error_messages", :target => @facility
 
@@ -86,4 +86,4 @@
       .actions-pre
         = cancel_button 'Cancel', facilities_path, :class => "btn"
       .actions
-        = f.submit "Save Facility", :class => ""
+        = f.submit "Save #{@config.level1}", :class => ""

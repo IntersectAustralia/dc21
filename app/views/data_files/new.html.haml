@@ -12,7 +12,7 @@
         = required
         = select_tag :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
     .control-group
-      = label_tag :experiment_id, "Experiment", class: "control-label"
+      = label_tag :experiment_id, "#{@config.level2}", class: "control-label"
       .controls
         = required
         = select_tag :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true

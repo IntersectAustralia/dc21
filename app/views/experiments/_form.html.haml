@@ -1,8 +1,8 @@
 = form_for [@facility, @experiment] do |f|
   - if @experiment.new_record?
-    %h2 New Experiment
+    %h2 New #{@config.level2}
   - else
-    %h2 Edit Experiment
+    %h2 Edit #{@config.level2}
 
   = render "shared/error_messages", :target => @experiment
 
@@ -14,7 +14,7 @@
     .controls
       = required
       %span.input
-        = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "Facility - #{@facility.name}"}
+        = f.collection_select :parent_experiment_id, @facility.experiments_excluding_me(@experiment), :id, :name_with_prefix, {:include_blank => "#{@config.level1} - #{@facility.name}"}
 
   .control-group
     = f.label :name, "Name", class: "control-label"
@@ -84,4 +84,4 @@
     .actions-pre
       = cancel_button 'Cancel', (@experiment.new_record? ? @facility : facility_experiment_path(@facility, @experiment))
     .actions
-      = f.submit 'Save Experiment', :class => ""
+      = f.submit "Save #{@config.level2}", :class => ""

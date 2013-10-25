@@ -35,8 +35,8 @@
       - @data_file.tags.each do |tag|
         %span{:title => tag.name}= tag.name
         %br/
-    = render_field "Experiment", @data_file.experiment_name
-    = render_field "Facility", @data_file.facility_name
+    = render_field "#{@config.level2}", @data_file.experiment_name
+    = render_field "#{@config.level1}", @data_file.facility_name
     = render_field "Date added", @data_file.created_at.to_s(:with_time)
     - if @data_file.is_package?
       = render_field "Creation status", @data_file.transfer_status

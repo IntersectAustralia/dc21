@@ -1,8 +1,8 @@
 .form-actions
   .actions-pre
     .experiment.new.whitebutton.btn
-      = link_to 'New Experiment', new_facility_experiment_path(@facility)
-  %h2 Experiments
+      = link_to "New #{@config.level2.truncate(10)}", new_facility_experiment_path(@facility)
+  %h2 #{@config.level2_plural}
 
 - if experiments.empty?
   There are no experiments to display.

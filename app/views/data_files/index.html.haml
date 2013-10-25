@@ -95,7 +95,7 @@
                   = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
-              %h4#facility.expand Facility:
+              %h4#facility.expand #{@config.level1}:
               .facility
                 - facilities.each_with_index do |facility, index|
                   .facility_group
@@ -156,7 +156,7 @@
       %th.sortable.size= sortable "data_files.file_size", "Size"
       %th.sortable.email= sortable "users.email", "Added by"
       %th.sortable.type= sortable "data_files.file_processing_status", "Type"
-      %th.sortable.experiment= sortable "data_files.experiment_id", "Experiment"
+      %th.sortable.experiment= sortable "data_files.experiment_id", "#{@config.level2}"
       %th.add_cart
         = link_to 'Add All', add_all_cart_items_path, :class => "btn", :id => "add_all_to_cart"
     - @cart_item_ids = cart_items.collect(&:id)

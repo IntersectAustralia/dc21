@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 Facilities / New
+  %h1 #{@config.level1_plural} / New
 
 .container
   = render :partial => 'facilities/form', :locals => {:edit_mode => false}

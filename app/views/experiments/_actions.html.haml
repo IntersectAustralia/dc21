@@ -2,4 +2,4 @@
   .actions-pre
     = cancel_button 'Back', facility_path(@facility)
   .actions
-    = link_to "Edit Experiment", edit_facility_experiment_path(@facility, @experiment), :class => "btn btn-primary"
+    = link_to "Edit #{@config.level2}", edit_facility_experiment_path(@facility, @experiment), :class => "btn btn-primary"
