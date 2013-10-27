@@ -66,7 +66,7 @@ describe SystemConfiguration do
       config = SystemConfiguration.instance
       result = config.update_attributes({:name => '<>?/.,:', :description => '+_)(*&^%$#@!`~17-=][{}|:;?>\\<,./`'})
       result.should be_true
-      config.errors[:email].should eq []
+      config.errors[:email].should be_empty
     end
 
     it "should fail if email is not valid" do
@@ -80,22 +80,18 @@ describe SystemConfiguration do
       config = SystemConfiguration.instance
       result = config.update_attributes({:email => ''})
       result.should be_true
-      config.errors[:email].should eq []
+      config.errors[:email].should be_empty
     end
 
     it "should fail if org level2 value equals level1" do
       config = SystemConfiguration.instance
       result = config.update_attributes({:level1 => 'same name', :level2 => 'same name'})
       result.should be_false
-      config.errors[:level1].should eq ["singular cannot be the same as Level 2 singular or plural"]
+      config.errors[:level1].should eq ["singular cannot be the same as Level 2 singular"]
 
       result = config.update_attributes({:level1_plural => 'same name'})
       result.should be_false
-      config.errors[:level1_plural].should eq ["cannot be the same as Level 1 singular"]
-
-      result = config.update_attributes({:level2_plural => 'same name'})
-      result.should be_false
-      config.errors[:level2_plural].should eq ["cannot be the same as Level 2 singular"]
+      config.errors[:level1_plural].should eq ["cannot be the same as Level 2 singular"]
     end
 
     it "should fail if a line in the address field is longer than 80 characters" do
@@ -117,17 +113,17 @@ describe SystemConfiguration do
       config = SystemConfiguration.instance
       result = config.update_attributes({:address1 => ''})
       result.should be_true
-      config.errors[:address1].should eq []
+      config.errors[:address1].should be_empty
 
       config = SystemConfiguration.instance
       result = config.update_attributes({:address2 => ''})
       result.should be_true
-      config.errors[:address2].should eq []
+      config.errors[:address2].should be_empty
 
       config = SystemConfiguration.instance
       result = config.update_attributes({:address3 => ''})
       result.should be_true
-      config.errors[:address3].should eq []
+      config.errors[:address3].should be_empty
     end
     it "should fail if URL is longer than 80 characters" do
       config = SystemConfiguration.instance
@@ -140,27 +136,21 @@ describe SystemConfiguration do
       config = SystemConfiguration.instance
       result = config.update_attributes({:urls => ''})
       result.should be_true
-      config.errors[:urls].should eq []
+      config.errors[:urls].should be_empty
     end
 
     it "should pass if telephone number is blank" do
       config = SystemConfiguration.instance
       result = config.update_attributes({:telephone_number => ''})
       result.should be_true
-      config.errors[:telephone_number].should eq []
+      config.errors[:telephone_number].should be_empty
     end
 
     it "should pass if description is blank" do
       config = SystemConfiguration.instance
       result = config.update_attributes({:description => ''})
       result.should be_true
-      config.errors[:description].should eq []
+      config.errors[:description].should be_empty
     end
-    #it "should fail if telephone is not a number" do
-    #  config = SystemConfiguration.instance
-    #  result = config.update_attributes({:telephone_number => 'not a number'})
-    #  result.should be_false
-    #  config.errors[:telephone_number].should eq ["is not a valid phone number"]
-    #end
   end
 end

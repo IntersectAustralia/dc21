@@ -16,18 +16,15 @@ class SystemConfiguration < ActiveRecord::Base
   validate :level2_cannot_equal_level1_fields
 
   def level2_cannot_equal_level1_fields
-    if self.level1 != '' && self.level1 == self.level1_plural
-      errors.add(:level1_plural, "cannot be the same as Level 1 singular")
+    if self.level1.eql? self.level2
+      errors.add(:level1, "singular cannot be the same as Level 2 singular")
+    elsif self.level1.eql? self.level2_plural
+      errors.add(:level1, "singular cannot be the same as Level 2 plural")
     end
-
-    if self.level2 != '' && self.level2 == self.level2_plural
-      errors.add(:level2_plural, "cannot be the same as Level 2 singular")
-    end
-
-    if self.level1 == self.level2 || self.level1 == self.level2_plural
-      errors.add(:level1, "singular cannot be the same as Level 2 singular or plural")
-    elsif self.level1_plural == self.level2 || self.level1_plural == self.level2_plural
-      errors.add(:level1_plural, "cannot be the same as Level 2 singular or plural")
+    if self.level1_plural.eql? self.level2
+      errors.add(:level1_plural, "cannot be the same as Level 2 singular")
+    elsif self.level1_plural.eql? self.level2_plural
+      errors.add(:level1_plural, "cannot be the same as Level 2 plural")
     end
   end
 

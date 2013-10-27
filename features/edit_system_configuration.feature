@@ -45,9 +45,22 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in "Name" with ""
+    And I fill in "Research Centre Name" with ""
+    And I fill in "Entity" with ""
+    And I fill in "Org. L1 Singular" with ""
+    And I fill in "Org. L1 Plural" with ""
+    And I fill in "Org. L2 Singular" with ""
+    And I fill in "Org. L1 Plural" with ""
     And I press "Update"
     Then I should not see "System configuration updated successfully."
-    And I should see "Please correct the following before continuing: Name can't be blank"
+    And I should see "Please correct the following before continuing:"
+    And I should see "Name can't be blank"
+    And I should see "Research centre name can't be blank"
+    And I should see "Entity can't be blank"
+    And I should see "Level1 can't be blank"
+    And I should see "Level1 plural can't be blank"
+    And I should see "Level2 can't be blank"
+    And I should see "Level2 plural can't be blank"
 
   Scenario: Check edited changes are kept after update
     Given I am logged in as "georgina@intersect.org.au"
