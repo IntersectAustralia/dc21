@@ -156,7 +156,7 @@
       %th.sortable.size= sortable "data_files.file_size", "Size"
       %th.sortable.email= sortable "users.email", "Added by"
       %th.sortable.type= sortable "data_files.file_processing_status", "Type"
-      %th.sortable.experiment= sortable "data_files.experiment_id", "#{@config.level2}"
+      %th.sortable.experiment= sortable "data_files.experiment_id", "#{@config.level2}".truncate(13)
       %th.add_cart
         = link_to 'Add All', add_all_cart_items_path, :class => "btn", :id => "add_all_to_cart"
     - @cart_item_ids = cart_items.collect(&:id)
