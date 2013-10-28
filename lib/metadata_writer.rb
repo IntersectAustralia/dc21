@@ -9,6 +9,7 @@ class MetadataWriter
     begin
       metadata_engine.render(Object.new, :data_files => data_files,
                              :package => pkg,
+                             :config => SystemConfiguration.instance,
                              :experiments => experiments,
                              :facilities => facilities,
                              :metadata_helper => MetadataHelper.new(facilities))
