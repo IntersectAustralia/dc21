@@ -50,7 +50,7 @@ Feature: Edit system configuration
     And I fill in "Org. L1 Singular" with ""
     And I fill in "Org. L1 Plural" with ""
     And I fill in "Org. L2 Singular" with ""
-    And I fill in "Org. L1 Plural" with ""
+    And I fill in "Org. L2 Plural" with ""
     And I press "Update"
     Then I should not see "System configuration updated successfully."
     And I should see "Please correct the following before continuing:"
