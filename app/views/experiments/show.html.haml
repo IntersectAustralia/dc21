@@ -21,5 +21,6 @@
   = render 'actions'
 
 
-%h2 Parameters
-= render 'experiment_parameters/list', experiment: @experiment, facility: @facility
+- if @config.level2_parameters
+  %h2 Parameters
+  = render 'experiment_parameters/list', experiment: @experiment, facility: @facility

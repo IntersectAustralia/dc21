@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131017064217) do
+ActiveRecord::Schema.define(:version => 20131028012031) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(:version => 20131017064217) do
     t.string   "email",                :limit => 80, :default => "hieinfo@lists.uws.edu.au"
     t.string   "description",          :limit => 80
     t.string   "urls",                 :limit => 80, :default => "http://www.uws.edu.au/hie"
+    t.boolean  "level2_parameters",                  :default => true
   end
 
   create_table "tags", :force => true do |t|

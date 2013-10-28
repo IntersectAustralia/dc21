@@ -65,6 +65,10 @@
       .controls
         = required
         = f.text_field :level2_plural
+    .control-group
+      = f.label :level2_parameters, "L2 Parameters", class: "control-label"
+      .controls
+        = f.check_box :level2_parameters, {}, 'true', 'false'
 
     .form-actions
       .actions-pre
