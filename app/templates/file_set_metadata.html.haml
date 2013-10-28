@@ -49,7 +49,8 @@
               %tr
                 %td Generating Software Application
                 %td
-                  %span{:property => "http://schema.org/name"} HIEv
+                  %span{:property => "http://schema.org/name"}
+                    = config.name
               %tr
                 %td Software Version
                 %td
@@ -67,31 +68,41 @@
               %tr
                 %td Research Centre Name
                 %td
-                  %span{:property => "http://schema.org/name"} Hawkesbury Institute for the Environment
+                  %span{:property => "http://schema.org/name"}
+                    = config.research_centre_name
               %tr
                 %td Overarching Entity
                 %td
-                  %span{:property => "http://schema.org/founder"} University of Western Sydney
+                  %span{:property => "http://schema.org/founder"}
+                    = config.entity
               %tr
                 %td Address
                 %td
-                  %span{:property => "http://schema.org/address"} Locked Bag 1797, Penrith NSW, 2751, AUSTRALIA
+                  %span{:property => "http://schema.org/address"}
+                    = config.address1
+                    ,
+                    = config.address2
+                    ,
+                    = config.address3
               %tr
                 %td Telephone
                 %td
-                  %span{:property => "http://schema.org/telephone"} +61 2 4570 1125
+                  %span{:property => "http://schema.org/telephone"}
+                    = config.telephone_number
               %tr
                 %td Email
                 %td
-                  %span{:property => "http://schema.org/Email"} hieinfo@lists.uws.edu.au
+                  %span{:property => "http://schema.org/Email"}
+                    = config.email
               %tr
                 %td Description
-                %td HIE to supply this text.
+                %td
+                  = config.description
               %tr
                 %td URLs
                 %td
-                  %span{:property => "http://schema.org/url"} http://www.uws.edu.au/hie
-                  %span{:property => "http://schema.org/url"} http://www.uws.edu.au
+                  %span{:property => "http://schema.org/url"}
+                    = config.urls
 
 
         %h1 Summary of Files
@@ -101,8 +112,10 @@
               %th Name
               %th Type
               %th Size
-              %th Experiment
-              %th Facility
+              %th
+                = config.level2
+              %th
+                = config.level1
               %th Download
               %th View
           %tbody
@@ -129,10 +142,11 @@
                 %td
                   %a{:href => metadata_helper.data_file_url(data_file)} View
 
-        %h1 Experiments
+        %h1
+          = config.level2_plural
         - experiments.each do |experiment|
           %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Event", :resource => "#experiment_#{experiment.id}"}
-            %a{:name => "experiment_#{experiment.id}"}
+            %a{:name => "#{config.level2.delete(' ').camelize}_#{experiment.id}"}
             %h2
               %span{:property => "http://schema.org/name"}
                 = experiment.name
@@ -142,12 +156,13 @@
                   %td ID
                   %td
                     %span{:property => "http://schema.org/name"}
-                      = "experiment_#{experiment.id}"
+                      = "#{config.level2.delete(' ').camelize}_#{experiment.id}"
                 %tr
-                  %td Parent Facility
                   %td
-                    %a{:href => "#facility_#{experiment.facility_id}", :property => "http://purl.org/dc/terms/isPartOf"}
-                      = experiment.parent_name
+                    Parent
+                    = config.level1
+                  %td
+                    %a{:href => "#facility_#{experiment.facility_id}", :property => "http://purl.org/dc/terms/isPartOf"}= experiment.parent_name
                 %tr
                   %td Description
                   %td
@@ -204,7 +219,7 @@
                           %td= param.amount
                           %td= param.parameter_unit ? param.parameter_unit.name : ""
                           %td= param.comments
-        %h1 Facilities
+        %h1= config.level1_plural
         - facilities.each do |facility|
           %section{:property => "http://purl.org/dc/terms/references", :resource => "#facility_#{facility.id}", :typeof => "http://schema.org/Place"}
             %a{:name => "facility_#{facility.id}"}
@@ -232,7 +247,8 @@
                 %tr
                   %td Parent Organisation
                   %td
-                    %a{:href => "#HIE", :property => "http://purl.org/dc/terms/isPartOf"} Hawkesbury Institute for the Environment
+                    %a{:href => "#HIE", :property => "http://purl.org/dc/terms/isPartOf"}
+                      = config.research_centre_name
                 %tr
                   %td Primary Contact
                   %td
@@ -303,12 +319,14 @@
                   %td
                     = data_file.tags.map { |tag| tag.name }.join(", ")
                 %tr
-                  %td Experiment
+                  %td
+                    = config.level2
                   %td
                     %a{:href => "#experiment_#{data_file.experiment_id}", :property => "http://purl.org/dc/elements/1.1/relation"}
                       = data_file.experiment.name
                 %tr
-                  %td Facility
+                  %td
+                    = config.level1
                   %td
                     %a{:href => "#facility_#{data_file.experiment.facility_id}", :property => "http://purl.org/dc/elements/1.1/source"}
                       = data_file.experiment.facility.name

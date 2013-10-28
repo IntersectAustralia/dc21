@@ -4,6 +4,24 @@ describe MetadataWriter do
 
   # set up fully populated example entities
   before(:each) do
+    @config = SystemConfiguration.instance
+    @config.update_attributes({
+                      name: 'HIEv',
+                      research_centre_name: 'Hawkesbury Institute for the Environment',
+                      entity: 'University of Western Sydney',
+                      address1: 'Locked Bag 1797',
+                      address2: 'Penrith NSW, 2751',
+                      address3: 'AUSTRALIA',
+                      telephone_number: '+61 2 4570 1125',
+                      email: 'hieinfo@lists.uws.edu.au',
+                      description: 'HIE to supply this text.',
+                      urls: 'http://www.uws.edu.au/hie http://www.uws.edu.au',
+                      level1: 'Facility',
+                      level1_plural: 'Facilities',
+                      level2: 'Experiment',
+                      level2_plural: 'Experiments'
+    })
+
     @primary_contact = Factory(:user, first_name: 'Prim', last_name: 'Contact', email: 'prim@intersect.org.au')
     @facility = Factory(:facility,
                         name: 'Whole Tree Chambers',
