@@ -98,12 +98,41 @@ Feature: Edit system configuration
   # EYETRACKER-101
   Scenario: Check a long level 2 name is truncated with ellipsis on white button
     Given I am logged in as "georgina@intersect.org.au"
-    And I have facilities
-      | name      | code |
-      | Facility0 | f0   |
+    And I have facility "Facility0" with code "f0"
     And I am on the edit system config page
     When I fill in "Org. L2 Singular" with "long_name_of_20_char"
     And I press "Update"
     And I am on the facilities page
     And I follow the view link for facility "Facility0"
     Then I should see "New long_na..."
+
+  # EYETRACKER-87
+  Scenario: Check level 2 Parameters is initially enabled
+    Given I am logged in as "georgina@intersect.org.au"
+    And I have facility "Facility0" with code "f0"
+    And I have experiment "Experiment 1" which belongs to facility "f0"
+    And I am on the system config page
+    Then I should see "L2 Parameters:Enabled"
+    When I am on the edit system config page
+    Then the "L2 Parameters" checkbox should be checked
+    When I am on the facilities page
+    And I follow the view link for facility "Facility0"
+    And I follow the view link for experiment "Experiment 1"
+    Then I should see "Parameters"
+    And I should see "New Parameter"
+
+  Scenario: Disabling level 2 Parameters is saved on update
+    Given I am logged in as "georgina@intersect.org.au"
+    And I have facility "Facility0" with code "f0"
+    And I have experiment "Experiment 1" which belongs to facility "f0"
+    When I am on the edit system config page
+    And I uncheck "L2 Parameters"
+    And I press "Update"
+    Then the "L2 Parameters" checkbox should not be checked
+    When I am on the system config page
+    Then I should see "L2 Parameters:Disabled"
+    When I am on the facilities page
+    And I follow the view link for facility "Facility0"
+    And I follow the view link for experiment "Experiment 1"
+    Then I should not see "Parameters"
+    And I should not see "New Parameter"
