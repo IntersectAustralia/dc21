@@ -85,8 +85,7 @@ Feature: Edit system configuration
       | Description          |                                               |
       | URLs                 | http://www.uws.edu.au/hie                     |
 
-# EYETRACKER-95
-
+  # EYETRACKER-95
   Scenario: Check that the System Name is visible when logged out
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
@@ -95,7 +94,20 @@ Feature: Edit system configuration
     And I follow "Sign out"
     Then I should see "Hello world"
 
-  # EYETRACKER-101
+# EYETRACKER-95
+  Scenario: Check that the footer contains Intersect Australia and the system name
+    When I am on the new user session page
+    Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
+    Given I am logged in as "georgina@intersect.org.au"
+    And I am on the edit system config page
+    When I fill in "Name" with "Hi World"
+    And I press "Update"
+    And show me the page
+    Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
+    When I follow "Sign out"
+    Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
+
+# EYETRACKER-101
   Scenario: Check a long level 2 name is truncated with ellipsis on white button
     Given I am logged in as "georgina@intersect.org.au"
     And I have facility "Facility0" with code "f0"
@@ -121,6 +133,7 @@ Feature: Edit system configuration
     Then I should see "Parameters"
     And I should see "New Parameter"
 
+  # EYETRACKER-87
   Scenario: Disabling level 2 Parameters is saved on update
     Given I am logged in as "georgina@intersect.org.au"
     And I have facility "Facility0" with code "f0"
