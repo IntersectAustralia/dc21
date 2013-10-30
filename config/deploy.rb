@@ -54,6 +54,28 @@ set :normalize_asset_timestamps, false
 
 default_run_options[:pty] = true
 
+# Capistrano hooks
+before 'deploy:setup' do
+  server_setup.deploy_config
+  server_setup.aaf_install
+  server_setup.gem_install
+  server_setup.passenger
+  postgresql.init_db
+  joai.setup
+  # resque.setup
+end
+
+after 'deploy:setup' do
+  server_setup.filesystem.dir_perms
+  server_setup.filesystem.mkdir_db_dumps
+  server_setup.logging.rotation
+  server_setup.config.apache
+  server_setup.config.cron
+end
+
+before 'deploy:update' do
+  export_proxy
+end
 
 after 'deploy:update' do
   deploy.additional_symlinks

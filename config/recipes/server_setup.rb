@@ -1,30 +1,5 @@
 set :rpms, "gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git postgresql-server postgresql postgresql-devel libpq-dev"
 
-# Capistrano hooks
-before 'deploy:setup' do
-  server_setup.deploy_config
-  server_setup.rpm_install
-  server_setup.aaf_install
-  server_setup.rvm_install
-  server_setup.gem_install
-  server_setup.passenger
-  postgresql.init_db
-  joai.setup
-  # resque.setup
-end
-
-after 'deploy:setup' do
-  server_setup.filesystem.dir_perms
-  server_setup.filesystem.mkdir_db_dumps
-  server_setup.logging.rotation
-  server_setup.config.apache
-  server_setup.config.cron
-end
-
-before 'deploy:update' do
-  export_proxy
-end
-
 namespace :server_setup do
 
   task :deploy_config do
@@ -69,7 +44,7 @@ namespace :server_setup do
 
     booleans = config['booleans']
 
-    run "#{try_sudo} cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
+    run "cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
 
     # Update AAF
     if booleans['use_test_AAF'].eql?(true)
@@ -150,7 +125,7 @@ namespace :server_setup do
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
     end
     task :cron do
-      run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f '{}' \;"; } | crontab -'
+      run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f \'{}\' \;"; } | crontab -'
     end
   end
 
