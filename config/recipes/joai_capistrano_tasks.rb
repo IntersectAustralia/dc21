@@ -61,7 +61,7 @@ namespace :joai do
   end
 
   desc "Fully deploy joai"
-  task :deploy do
+  task :setup do
     copy
     tomcat_install
     joai_user

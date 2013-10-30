@@ -9,7 +9,8 @@ before 'deploy:setup' do
   server_setup.gem_install
   server_setup.passenger
   postgresql.init_db
-  resque.setup
+  joai.setup
+  # resque.setup
 end
 
 after 'deploy:setup' do
@@ -55,6 +56,10 @@ namespace :server_setup do
     run "#{try_sudo} wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo -P /etc/yum.repos.d"
     run "#{try_sudo} yum install -y shibboleth"
 
+    #upload configs
+    upload("config/deploy_files/shibboleth/shibboleth2.xml", "#{user_home}", :via => :scp)
+    run "#{try_sudo} mv shibboleth2.xml /etc/shibboleth/shibboleth2.xml"
+
     #set up certificate
     require "yaml"
 
@@ -76,14 +81,6 @@ namespace :server_setup do
     sudo "service shibd start"
 
   end
-
-  # task :aaf_display_key do
-  #   #show cert or secret token
-  #   run "#{try_sudo} cd /etc/shibboleth && ./keygen.sh -f -h #{web_server} -e https://#{web_server}/shibboleth"
-
-  # end
-
-  # after 'deploy:first_time', 'server_setup:aaf_display_key'
 
   task :rpm_install, :roles => :app do
     run "#{try_sudo} yum install -y #{rpms}"
