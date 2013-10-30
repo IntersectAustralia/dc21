@@ -192,6 +192,7 @@ namespace :deploy do
   desc "Runs all the first time setup tasks"
   task :first_time, :except => {:no_release => true} do
     deploy.setup
+    server_setup.set_proxies
     deploy.update
     deploy.schema_load
     deploy.seed
