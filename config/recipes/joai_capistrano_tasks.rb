@@ -24,6 +24,7 @@ namespace :joai do
 
   desc "Unpack tomcat and install in usr directory"
   task :tomcat_install do
+    sudo "yum -y install java-1.6.0-openjdk java-1.6.0-openjdk-devel"
     run "cd #{remote_directory} && tar xvfz #{tomcat_bundle}"
     run "#{try_sudo} mv #{remote_directory}/#{tomcat_package} #{catalina_home}"
     run "#{try_sudo} mv #{remote_directory}/#{tomcat_service} /etc/init.d"
@@ -50,7 +51,7 @@ namespace :joai do
         puts "Passwords don't match".red
       end
     end
-    
+
     tmp_oai_user_file = Tempfile.new('foo')
     `cat #{tomcat_user_file} | sed 's/---/#{password}/' > #{tmp_oai_user_file.path}`
     upload(tmp_oai_user_file.path, "#{tomcat_conf}/tomcat-users.xml", :via => :scp)
@@ -64,5 +65,6 @@ namespace :joai do
     copy
     tomcat_install
     joai_user
+    sudo "service tomcat start"
   end
 end

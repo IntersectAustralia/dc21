@@ -197,6 +197,7 @@ namespace :deploy do
     deploy.schema_load
     deploy.seed
     deploy.generate_initial_user
+    joai.deploy
     deploy.restart
 
   end
