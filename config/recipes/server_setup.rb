@@ -51,10 +51,29 @@ namespace :server_setup do
   end
 
   task :aaf_install do
+
     run "#{try_sudo} wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo -P /etc/yum.repos.d"
     run "#{try_sudo} yum install -y shibboleth"
+
     #set up certificate
-    run "#{try_sudo} cd /etc/shibboleth && ./keygen.sh -f -h #{web_server} -e https://#{web_server}/shibboleth"
+    require "yaml"
+
+    config = YAML::load_file('config/deploy_config.yml')
+
+    hostname = config['hostname']
+
+    booleans = config['booleans']
+
+    run "#{try_sudo} cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
+
+    # Update AAF
+    if booleans['use_test_AAF'].eql?(true)
+      run "#{try_sudo} wget https://ds.test.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
+    else
+      run "#{try_sudo} wget https://ds.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
+    end
+
+    sudo "service shibd start"
 
   end
 
