@@ -17,6 +17,7 @@ after 'deploy:setup' do
   server_setup.filesystem.mkdir_db_dumps
   server_setup.logging.rotation
   server_setup.config.apache
+  server_setup.config.cron
 end
 
 before 'deploy:update' do
@@ -50,16 +51,20 @@ namespace :server_setup do
   end
 
   task :aaf_install do
-    run "#{try_sudo} yum install -y #{rpms}"
+    run "#{try_sudo} wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo -P /etc/yum.repos.d"
+    run "#{try_sudo} yum install -y shibboleth"
     #set up certificate
-  end
-
-  task :aaf_display_key do
-    #show cert or secret token
+    run "#{try_sudo} cd /etc/shibboleth && ./keygen.sh -f -h #{web_server} -e https://#{web_server}/shibboleth"
 
   end
 
-  after 'deploy:first_time', 'server_setup:aaf_display_key'
+  # task :aaf_display_key do
+  #   #show cert or secret token
+  #   run "#{try_sudo} cd /etc/shibboleth && ./keygen.sh -f -h #{web_server} -e https://#{web_server}/shibboleth"
+
+  # end
+
+  # after 'deploy:first_time', 'server_setup:aaf_display_key'
 
   task :rpm_install, :roles => :app do
     run "#{try_sudo} yum install -y #{rpms}"
@@ -127,6 +132,9 @@ namespace :server_setup do
       src = "apache_config/httpd/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
+    end
+    task :cron do
+      run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f '{}' \;"; } | crontab -'
     end
   end
 
