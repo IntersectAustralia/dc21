@@ -1,7 +1,6 @@
 require "highline/import"
 require 'colorize'
 
-
 namespace :backup do
   namespace :db do
     desc "make a database backup"

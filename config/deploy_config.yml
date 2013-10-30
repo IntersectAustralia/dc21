@@ -1,0 +1,4 @@
+hostname: HOSTNAME
+db_password: DB_PASSWORD
+booleans: # true or false
+  use_test_AAF: true

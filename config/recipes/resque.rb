@@ -6,7 +6,7 @@ namespace :resque do
 
   desc "Install and set up Resque"
   task :setup do
-
+    #TODO
   end
 
   desc "Start resque processes"

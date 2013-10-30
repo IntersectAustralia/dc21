@@ -1,13 +1,16 @@
 defaults: &defaults
+
+  # DO NOT CHANGE THESE
   files_root: /data/dc21-data
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
   unpublished_rif_cs_directory: /data/dc21-data/unpublished_rif_cs
   archived_data_directory: /data/dc21-data/archived_data
   default_readme_template_file: app/templates/file_set_metadata.html.haml
-  extra_config_file_root: /data
+  data_root: /data
+
+  # Anything below this can be configured
   hiev_handle_prefix: hiev
-  # the following are defaults that can be overridden in the dc21app_extra_config.yml which is kept separate from the
-  # code in production servers
+
   notification_email_sender: noreply@intersect.org.au
   column_mappings:
     - Average Soil Temp

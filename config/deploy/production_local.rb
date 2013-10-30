@@ -10,6 +10,14 @@ set :rails_env, "production"
 set :stage, "production"
 
 # Your HTTP server, Apache/etc
+set :web_server, 'HOSTNAME'
+# # This may be the same as your Web server
+set :app_server, 'HOSTNAME'
+# # This is where Rails migrations will run
+set :db_server, 'HOSTNAME'
+# # The user configured to run the rails app
+
+# Your HTTP server, Apache/etc
 role :web, ''
 # This may be the same as your Web server
 role :app, ''

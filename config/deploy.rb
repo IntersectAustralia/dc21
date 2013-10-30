@@ -15,7 +15,7 @@ load 'config/recipes/shared_file'
 
 set :keep_releases, 5
 set :application, 'dc21app'
-set :stages, %w(qa staging production nectar-demo production_local)
+set :stages, %w(qa staging production_local)
 set :default_stage, "qa"
 
 set :shared_children, shared_children + %w(log_archive)
@@ -187,24 +187,6 @@ namespace :deploy do
     backup.db.trim
     migrate
     restart
-  end
-
-  desc 'Create extra config in central location'
-  task :create_templates do
-    require "yaml"
-
-    config = YAML::load_file('config/dc21app_config.yml')
-    file_path = "#{config[stage.to_s]['extra_config_file_root']}/dc21app_extra_config.yml"
-    output = capture("ls #{config[stage.to_s]['extra_config_file_root']}").strip
-
-    if output[/dc21app_extra_config\.yml/].nil?
-      run "#{try_sudo} chown -R #{user}.#{group} #{config[stage.to_s]['extra_config_file_root']}"
-      run("cp #{release_path}/deploy_templates/dc21app_extra_config.yml #{config[stage.to_s]['extra_config_file_root']}", :env => {'RAILS_ENV' => "#{stage}"})
-      print "\nNOTICE: Please update #{file_path} with the appropriate values and restart the server\n\n".colorize(:green)
-    else
-      print "\nALERT: Config file #{file_path} detected. Will not overwrite\n\n".colorize(:red)
-    end
-
   end
 
   desc "Runs all the first time setup tasks"

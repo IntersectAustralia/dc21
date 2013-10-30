@@ -3,6 +3,10 @@ current_path = ARGV.shift
 hostname = ARGV.shift
 environment = ARGV.shift
 
+#TODO
+ssl_crt
+ssl_key
+
 gem_home = ENV['GEM_HOME']
 rvm_home = ENV['rvm_path']
 

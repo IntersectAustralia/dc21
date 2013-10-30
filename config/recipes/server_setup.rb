@@ -2,7 +2,9 @@ set :rpms, "gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-de
 
 # Capistrano hooks
 before 'deploy:setup' do
+  server_setup.deploy_config
   server_setup.rpm_install
+  server_setup.aaf_install
   server_setup.rvm_install
   server_setup.gem_install
   server_setup.passenger
@@ -22,6 +24,43 @@ before 'deploy:update' do
 end
 
 namespace :server_setup do
+
+  task :deploy_config do
+    require "yaml"
+
+    config = YAML::load_file('config/deploy_config.yml')
+
+    hostname = config['hostname']
+    db_password = config['db_password']
+
+    # Update hostnames
+    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{hostname}')\" config/deploy_files/shibboleth/shibboleth2.xml config/deploy/production_local.rb")
+    # Update DB password
+    system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{db_password}')\" config/database.yml")
+
+    booleans = config['booleans']
+
+    # Update AAF
+    if booleans['use_test_AAF'].eql?(true)
+      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
+    else
+      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
+    end
+
+  end
+
+  task :aaf_install do
+    run "#{try_sudo} yum install -y #{rpms}"
+    #set up certificate
+  end
+
+  task :aaf_display_key do
+    #show cert or secret token
+
+  end
+
+  after 'deploy:first_time', 'server_setup:aaf_display_key'
+
   task :rpm_install, :roles => :app do
     run "#{try_sudo} yum install -y #{rpms}"
   end
