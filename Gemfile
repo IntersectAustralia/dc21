@@ -79,4 +79,5 @@ gem "json-jwt"
 
 # exception tracker
 gem 'whoops_rails_logger', git: 'https://github.com/IntersectAustralia/whoops_rails_logger.git'
+gem 'create_deployment_record', git: 'https://github.com/IntersectAustralia/create_deployment_record.git'
 gem 'acts_as_singleton'

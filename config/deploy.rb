@@ -3,14 +3,19 @@ require 'capistrano/ext/multistage'
 require 'bundler/capistrano'
 require 'capistrano_colors'
 require 'colorize'
+require 'deploy/create_deployment_record'
 
 # Extra capistrano tasks
-load 'lib/intersect_capistrano_tasks'
-load 'lib/joai_capistrano_tasks'
+load 'config/recipes/intersect_capistrano_tasks'
+load 'config/recipes/joai_capistrano_tasks'
+load 'config/recipes/resque'
+load 'config/recipes/postgresql'
+load 'config/recipes/server_setup'
+load 'config/recipes/shared_file'
 
 set :keep_releases, 5
 set :application, 'dc21app'
-set :stages, %w(qa staging production nectar-demo)
+set :stages, %w(qa staging production nectar-demo production_local)
 set :default_stage, "qa"
 
 set :shared_children, shared_children + %w(log_archive)
@@ -49,89 +54,7 @@ set :normalize_asset_timestamps, false
 
 default_run_options[:pty] = true
 
-namespace :server_setup do
-  task :set_proxies do
-    unless proxy.nil?
-      run "echo 'export http_proxy=\"#{proxy}\"' >> ~#{user}/.bashrc", :shell => bash
-      run "echo 'export HTTP_PROXY=$http_proxy' >> ~#{user}/.bashrc", :shell => bash
 
-      run "echo 'echo \'export http_proxy=\"#{proxy}\"\' >> /etc/bashrc' | #{try_sudo} /bin/bash", :shell => bash
-      run "echo 'echo \'export HTTP_PROXY=$http_proxy\' >> /etc/bashrc' | #{try_sudo} /bin/bash" , :shell => bash
-
-      run "echo 'proxy=\"#{proxy}\"' >> ~#{user}/.curlrc", :shell => bash
-      run "echo '---' >> ~#{user}/.gemrc", :shell => bash
-      run "echo 'http-proxy: \"#{proxy}\"' >> ~#{user}/.gemrc", :shell => bash
-    end
-  end
-  namespace :filesystem do
-    task :dir_perms, :roles => :app do
-      run "[[ -d #{data_dir} ]] || #{try_sudo} mkdir -p #{data_dir}"
-      run "#{try_sudo} chown -R #{user}.#{group} #{data_dir}"
-      run "[[ -d #{aux_data_dir} ]] || #{try_sudo} mkdir -p #{aux_data_dir}"
-      run "#{try_sudo} chown -R #{user}.#{group} #{aux_data_dir}"
-      run "[[ -d #{rif_cs_dir} ]] || #{try_sudo} mkdir -p #{rif_cs_dir}"
-      run "#{try_sudo} chown -R #{user}.#{group} #{rif_cs_dir}"
-      run "[[ -d #{unpublished_rif_cs_dir} ]] || #{try_sudo} mkdir -p #{unpublished_rif_cs_dir}"
-      run "#{try_sudo} chown -R #{user}.#{group} #{unpublished_rif_cs_dir}"
-      run "[[ -d #{archived_dir} ]] || #{try_sudo} mkdir -p #{archived_dir}"
-      run "#{try_sudo} chown -R #{user}.#{group} #{archived_dir}"
-      run "[[ -d #{deploy_to} ]] || #{try_sudo} mkdir #{deploy_to}"
-      run "#{try_sudo} chown -R #{user}.#{group} #{deploy_to}"
-      run "#{try_sudo} chmod 0711 #{user_home}"
-    end
-
-    task :mkdir_db_dumps, :roles => :app do
-      run "#{try_sudo} mkdir -p #{shared_path}/db_dumps"
-      run "#{try_sudo} chown -R #{user}.#{group} #{shared_path}/db_dumps"
-    end
-  end
-
-  task :gem_install, :roles => :app do
-    run "gem install bundler -v 1.0.20"
-    run "gem install passenger -v 3.0.21"
-  end
-  task :passenger, :roles => :app do
-    run "passenger-install-apache2-module -a"
-  end
-  namespace :config do
-    task :apache do
-      run "mkdir -p apache_config"
-      upload "config/httpd", "apache_config", :via => :scp, :recursive => true
-
-      run "cd apache_config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
-      src = "apache_config/httpd/apache_insertion.conf"
-      dest = "/etc/httpd/conf.d/rails_#{application}.conf"
-      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
-    end
-  end
-  namespace :logging do
-    task :rotation, :roles => :app do
-      src = "#{release_path}/config/#{application}.logrotate"
-      dest = "/etc/logrotate.d/#{application}"
-      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest}; /bin/true"
-      src = "#{release_path}/config/httpd/httpd.logrotate"
-      dest = "/etc/logrotate.d/httpd"
-      run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest}; /bin/true"
-    end
-  end
-end
-
-before 'deploy:setup' do
-  server_setup.rvm.trust
-  server_setup.gem_install
-  server_setup.passenger
-end
-after 'deploy:setup' do
-  server_setup.filesystem.dir_perms
-  server_setup.filesystem.mkdir_db_dumps
-
-  server_setup.logging.rotation
-  server_setup.config.apache
-end
-
-before 'deploy:update' do
-  export_proxy
-end
 after 'deploy:update' do
   deploy.additional_symlinks
   deploy.write_tag
@@ -140,20 +63,16 @@ after 'deploy:update' do
   deploy.new_secret
   deploy.restart
   deploy.cleanup
-
 end
 
 after 'deploy:finalize_update' do
-  generate_database_yml
   deploy.create_templates
-  #solved in Capfile
-  #run "cd #{release_path}; RAILS_ENV=#{stage} rake assets:precompile"
 end
 
 namespace :deploy do
   task :new_secret, :roles => :app do
-     run("cd #{current_path} && bundle exec rake app:generate_secret", :env => {'RAILS_ENV' => "#{stage}"})
-   end
+    run("cd #{current_path} && bundle exec rake app:generate_secret", :env => {'RAILS_ENV' => "#{stage}"})
+  end
   # Passenger specifics: restart by touching the restart.txt file
   task :start, :roles => :app, :except => {:no_release => true} do
     restart
@@ -168,11 +87,6 @@ namespace :deploy do
   # Remote bundle install
   task :rebundle do
     run "cd #{current_path} && bundle install"
-    restart
-  end
-
-  task :bundle_update do
-    run "cd #{current_path} && bundle update"
     restart
   end
 
@@ -223,12 +137,6 @@ namespace :deploy do
   desc "Run the seeds script to load seed data into the db (WARNING: destructive!)"
   task :seed, :roles => :db do
     run("cd #{current_path} && bundle exec rake db:seed", :env => {'RAILS_ENV' => "#{stage}"})
-  end
-
-  # Add an initial user
-  desc "Adds an initial user to the app"
-  task :add_initial_user, :roles => :db do
-
   end
 
   desc "Full redepoyment, it runs deploy:update and deploy:refresh_db"
@@ -299,44 +207,15 @@ namespace :deploy do
 
   end
 
-  task :create_deployment_record do
-    require 'net/http'
-    require 'socket'
+  desc "Runs all the first time setup tasks"
+  task :first_time, :except => {:no_release => true} do
+    deploy.setup
+    deploy.update
+    deploy.schema_load
+    deploy.seed
+    deploy.generate_initial_user
+    deploy.restart
 
-    branchName = branch.nil? ? "HEAD" : branch
-
-    availableTags = `git tag`.split( /\r?\n/ )
-    haveToShowHash = !availableTags.any? { |s| s.include?(branchName) }
-
-    current_deployed_version = branchName
-    if (haveToShowHash)
-      availableBranches = `git branch -a`.split( /\r?\n/ )
-      fullBranchName = (branchName.eql?("HEAD")) ? branchName : availableBranches.select { |s| s.include?(branchName) }.first.to_s.strip
-      fullBranchName.gsub!('*','').strip! if fullBranchName.include?('*')
-
-      current_deployed_version += " (sha1:" + `git rev-parse --short #{fullBranchName}`.strip + ")"
-    end
-
-    url = URI.parse('http://deployment-tracker.intersect.org.au/deployments/api_create')
-    post_args = {'app_name'=>application,
-      'deployer_machine'=>"#{ENV['USER']}@#{Socket.gethostname}",
-      'environment'=>rails_env,
-      'server_url'=>find_servers[0].to_s,
-      'tag'=> current_deployed_version}
-    begin
-      print "Sending Post request with args: #{post_args}\n"
-      resp, data = Net::HTTP.post_form(url, post_args)
-
-      case resp
-      when Net::HTTPSuccess
-        puts "Deployment record saved"
-      else
-        puts data
-      end
-
-    rescue StandardError => e
-      puts e.message
-    end
   end
 
 end

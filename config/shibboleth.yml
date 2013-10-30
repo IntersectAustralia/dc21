@@ -16,4 +16,4 @@ staging:
 
 production:
   user-mapping:  {first_name: "givenName", last_name: "surname", email: "email"}
-  shibb_login_url: "https://CHANGEME/Shibboleth.sso/Login"
+  shibb_login_url: "https://HOSTNAME/Shibboleth.sso/Login"

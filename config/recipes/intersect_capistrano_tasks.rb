@@ -29,26 +29,6 @@ task :do_set_password, :roles => :app do
   put YAML::dump(buffer), "#{shared_path}/env_config/sample_password.yml", :mode => 0664
 end
 
-desc "After updating code we need to populate a new database.yml"
-task :generate_database_yml, :roles => :app do
-  require "yaml"
-
-  set :production_database_password, proc { Capistrano::CLI.password_prompt("Database password: ") }
-
-  buffer = YAML::load_file('config/database.yml')
-  # get rid of unneeded configurations
-  buffer.delete('test')
-  buffer.delete('development')
-  buffer.delete('cucumber')
-  buffer.delete('spec')
-
-  # Populate production password
-  buffer[rails_env]['password'] = production_database_password
-
-  put YAML::dump(buffer), "#{release_path}/config/database.yml", :mode => 0664
-end
-
-
 namespace :deploy do
 
   #There's a little bit of reinventing the wheel here (user validation), but we don't want to boot up the rails app in the middle of a deploy

@@ -7,6 +7,12 @@ GIT
       devise (>= 1.5.4)
 
 GIT
+  remote: https://github.com/IntersectAustralia/create_deployment_record.git
+  revision: 2691c636980859fab18415b708ab89b2a0022784
+  specs:
+    create_deployment_record (0.1.5)
+
+GIT
   remote: https://github.com/IntersectAustralia/whoops_rails_logger.git
   revision: 1f304e09b4367ece6fcccce570ac341bf54ec222
   specs:
@@ -381,6 +387,7 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 3.1.1)
   colorize
+  create_deployment_record!
   cucumber
   cucumber-rails
   daemons-rails
