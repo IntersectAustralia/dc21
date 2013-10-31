@@ -77,6 +77,8 @@ namespace :server_setup do
       run "[[ -d #{deploy_to} ]] || #{try_sudo} mkdir #{deploy_to}"
       run "#{try_sudo} chown -R #{user}.#{group} #{deploy_to}"
       run "#{try_sudo} chmod 0711 #{user_home}"
+      run "[[ -d /home/#{user}/tmp ]] || #{try_sudo} mkdir -p /home/#{user}/tmp"
+      run "#{try_sudo} chown -R #{user}.#{group} /home/#{user}/tmp"
     end
 
     task :mkdir_db_dumps, :roles => :app do

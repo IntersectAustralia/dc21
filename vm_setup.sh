@@ -1,8 +1,10 @@
+sudo rpm -Uvh http://mirrors.kernel.org/fedora-epel/6/i386/epel-release-6-8.noarch.rpm http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+
 sudo yum install -y gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git postgresql-server postgresql postgresql-devel libpq-dev
 
 mkdir code_base && cd code_base
-wget https://github.com/IntersectAustralia/dc21/archive/new_deploy.zip -O master.zip
-unzip master.zip && mv dc21-new_deploy dc21-master && cd dc21-master
+wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O dc21.zip
+unzip dc21.zip && mv dc21-$DC21_TAG dc21 && cd dc21
 
 curl -L http://get.rvm.io | bash -s stable --ruby=1.9.2-p290
 source ~/.rvm/scripts/rvm

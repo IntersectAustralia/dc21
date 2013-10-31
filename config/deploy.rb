@@ -87,10 +87,6 @@ after 'deploy:update' do
   deploy.cleanup
 end
 
-after 'deploy:finalize_update' do
-  deploy.create_templates
-end
-
 namespace :deploy do
   task :new_secret, :roles => :app do
     run("cd #{current_path} && bundle exec rake app:generate_secret", :env => {'RAILS_ENV' => "#{stage}"})
