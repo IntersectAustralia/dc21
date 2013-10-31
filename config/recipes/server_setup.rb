@@ -1,22 +1,13 @@
 namespace :server_setup do
 
   task :deploy_config do
-    require "yaml"
-
-    config = YAML::load_file('config/deploy_config.yml')
-
-    hostname = config['hostname']
-    db_password = config['db_password']
-
     # Update hostnames
-    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{hostname}')\" config/deploy_files/shibboleth/shibboleth2.xml config/deploy/production_local.rb")
+    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" config/deploy_files/shibboleth/shibboleth2.xml config/deploy/production_local.rb")
     # Update DB password
-    system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{db_password}')\" config/database.yml")
-
-    booleans = config['booleans']
+    system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" config/database.yml")
 
     # Update AAF
-    if booleans['use_test_AAF'].eql?(true)
+    if ENV['DC21_AAF_TYPE'].eql?("test")
       system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
     else
       system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
@@ -34,18 +25,13 @@ namespace :server_setup do
     run "#{try_sudo} mv shibboleth2.xml /etc/shibboleth/shibboleth2.xml"
 
     #set up certificate
-    require "yaml"
 
-    config = YAML::load_file('config/deploy_config.yml')
-
-    hostname = config['hostname']
-
-    booleans = config['booleans']
+    hostname = ENV['DC21_HOST']
 
     run "cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
 
     # Update AAF
-    if booleans['use_test_AAF'].eql?(true)
+    if ENV['DC21_AAF_TYPE'].eql?("test")
       run "#{try_sudo} wget https://ds.test.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
     else
       run "#{try_sudo} wget https://ds.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
