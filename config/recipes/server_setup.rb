@@ -1,5 +1,3 @@
-set :rpms, "gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git postgresql-server postgresql postgresql-devel libpq-dev"
-
 namespace :server_setup do
 
   task :deploy_config do
@@ -55,10 +53,6 @@ namespace :server_setup do
 
     sudo "service shibd start"
 
-  end
-
-  task :rpm_install, :roles => :app do
-    run "#{try_sudo} yum install -y #{rpms}"
   end
 
   task :rvm_install, :roles => :app do

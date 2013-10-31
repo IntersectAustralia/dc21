@@ -20,7 +20,7 @@ set :default_stage, "qa"
 
 set :shared_children, shared_children + %w(log_archive)
 set :bash, '/bin/bash'
-set :shell, bash # This is don in two lines to allow rpm_install to refer to bash (as shell just launches cap shell)
+set :shell, bash
 set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
 
 set :bundle_flags, "--deployment"
