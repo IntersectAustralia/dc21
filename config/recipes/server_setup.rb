@@ -21,8 +21,8 @@ namespace :server_setup do
     run "#{try_sudo} yum install -y shibboleth"
 
     #upload configs
-    upload("config/deploy_files/shibboleth/shibboleth2.xml", "#{user_home}", :via => :scp)
-    run "#{try_sudo} mv shibboleth2.xml /etc/shibboleth/shibboleth2.xml"
+    upload("config/deploy_files/shibboleth", "/tmp/", :via => :scp), :recursive => true
+    run "#{try_sudo} mv /tmp/shibboleth/* /etc/shibboleth/"
 
     #set up certificate
 
@@ -79,6 +79,7 @@ namespace :server_setup do
       run "#{try_sudo} chmod 0711 #{user_home}"
       run "[[ -d /home/#{user}/tmp ]] || #{try_sudo} mkdir -p /home/#{user}/tmp"
       run "#{try_sudo} chown -R #{user}.#{group} /home/#{user}/tmp"
+
     end
 
     task :mkdir_db_dumps, :roles => :app do
@@ -98,16 +99,20 @@ namespace :server_setup do
 
   namespace :config do
     task :apache do
-      run "mkdir -p apache_config"
-      upload "config/httpd", "apache_config", :via => :scp, :recursive => true
 
-      run "cd apache_config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
-      src = "apache_config/httpd/apache_insertion.conf"
+      upload("config/deploy_files/apache", "/tmp/", :via => :scp), :recursive => true
+      run "#{try_sudo} mv /tmp/apache/httpd.conf /etc/httpd/conf/httpd.conf"
+      run "#{try_sudo} mv /tmp/apache/* /etc/httpd/conf.d/"
+
+      run "mkdir -p apache_config"
+      upload "config/httpd", "/tmp/apache_config", :via => :scp, :recursive => true
+      run "cd /tmp/apache_config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
+      src = "/tmp/apache_config/httpd/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
       sudo "chkconfig httpd on"
-
     end
+
     task :cron do
       run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f \'{}\' \;"; } | crontab -'
     end
