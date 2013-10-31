@@ -3,10 +3,6 @@ current_path = ARGV.shift
 hostname = ARGV.shift
 environment = ARGV.shift
 
-#TODO
-ssl_crt
-ssl_key
-
 gem_home = ENV['GEM_HOME']
 rvm_home = ENV['rvm_path']
 
@@ -55,8 +51,8 @@ PassengerTempDir #{current_path}/tmp/pids
 
     SSLProtocol all -SSLv2
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
-    SSLCertificateFile /etc/httpd/ssl/#{ssl_crt}
-    SSLCertificateKeyFile /etc/httpd/ssl/#{ssl_key}
+    SSLCertificateFile /etc/httpd/ssl/server.crt
+    SSLCertificateKeyFile /etc/httpd/ssl/server.key
 
 </VirtualHost>
 
