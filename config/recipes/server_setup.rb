@@ -87,10 +87,10 @@ namespace :server_setup do
 
   task :gem_install, :roles => :app do
     run "gem install bundler -v 1.0.20"
-    run "gem install passenger -v 3.0.21"
   end
 
   task :passenger, :roles => :app do
+    run "gem install passenger -v 3.0.21"
     run "passenger-install-apache2-module -a"
   end
 
