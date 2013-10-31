@@ -105,6 +105,8 @@ namespace :server_setup do
       src = "apache_config/httpd/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
+      sudo "chkconfig httpd on"
+
     end
     task :cron do
       run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f \'{}\' \;"; } | crontab -'

@@ -62,7 +62,7 @@ before 'deploy:setup' do
   server_setup.passenger
   postgresql.setup
   joai.setup
-  # resque.setup
+  resque.setup
 end
 
 after 'deploy:setup' do
