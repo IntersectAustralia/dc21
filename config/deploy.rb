@@ -8,8 +8,8 @@ require 'deploy/create_deployment_record'
 # Extra capistrano tasks
 load 'config/recipes/intersect_capistrano_tasks'
 load 'config/recipes/joai_capistrano_tasks'
-load 'config/recipes/resque'
 load 'config/recipes/postgresql'
+load 'config/recipes/resque'
 load 'config/recipes/server_setup'
 load 'config/recipes/shared_file'
 
@@ -60,7 +60,7 @@ before 'deploy:setup' do
   server_setup.aaf_install
   server_setup.gem_install
   server_setup.passenger
-  postgresql.init_db
+  postgresql.setup
   joai.setup
   # resque.setup
 end

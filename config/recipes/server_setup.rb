@@ -7,7 +7,7 @@ namespace :server_setup do
     system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" config/database.yml")
 
     # Update AAF
-    if ENV['DC21_AAF_TYPE'].eql?("test")
+    if ENV['DC21_AAF_TEST'].eql?("true")
       system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
     else
       system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
@@ -31,7 +31,7 @@ namespace :server_setup do
     run "cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
 
     # Update AAF
-    if ENV['DC21_AAF_TYPE'].eql?("test")
+    if ENV['DC21_AAF_TEST'].eql?("true")
       run "#{try_sudo} wget https://ds.test.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
     else
       run "#{try_sudo} wget https://ds.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
