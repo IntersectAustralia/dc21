@@ -106,8 +106,8 @@ namespace :server_setup do
 
       run "mkdir -p apache_config"
       upload "config/httpd", "/tmp/apache_config", :via => :scp, :recursive => true
-      run "cd /tmp/apache_config/httpd && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
-      src = "/tmp/apache_config/httpd/apache_insertion.conf"
+      run "cd /tmp/apache_config/ && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
+      src = "/tmp/apache_config/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
       sudo "chkconfig httpd on"
