@@ -21,7 +21,7 @@ namespace :server_setup do
     run "#{try_sudo} yum install -y shibboleth"
 
     #upload configs
-    upload("config/deploy_files/shibboleth", "/tmp/", :via => :scp), :recursive => true
+    upload "config/deploy_files/shibboleth", "/tmp/", :via => :scp, :recursive => true
     run "#{try_sudo} mv /tmp/shibboleth/* /etc/shibboleth/"
 
     #set up certificate
@@ -100,7 +100,7 @@ namespace :server_setup do
   namespace :config do
     task :apache do
 
-      upload("config/deploy_files/apache", "/tmp/", :via => :scp), :recursive => true
+      upload "config/deploy_files/apache", "/tmp/", :via => :scp, :recursive => true
       run "#{try_sudo} mv /tmp/apache/httpd.conf /etc/httpd/conf/httpd.conf"
       run "#{try_sudo} mv /tmp/apache/* /etc/httpd/conf.d/"
 
