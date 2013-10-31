@@ -1,3 +1,27 @@
+status=0
+if [ -z "$DC21_TAG" ]; then
+  echo "Please define DC21_TAG"
+  status=1
+fi
+
+if [ -z "$DC21_DB_PWD" ]; then
+  echo "Please define DC21_DB_PWD"
+  status=1
+fi
+
+if [ -z "$DC21_HOST" ]; then
+  echo "Please define DC21_HOST"
+  status=1
+fi
+
+if [ -z "$DC21_AAF_TEST" ]; then
+  echo "DC21_AAF_TEST is not defined. Using PRODUCTION AAF Registry."
+fi
+
+if [ "$status" -ne 0 ]; then
+  exit $status
+fi
+
 sudo rpm -Uvh http://mirrors.kernel.org/fedora-epel/6/i386/epel-release-6-8.noarch.rpm http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 
 sudo yum install -y gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git postgresql-server postgresql postgresql-devel libpq-dev
