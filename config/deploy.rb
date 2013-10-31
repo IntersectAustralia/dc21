@@ -81,7 +81,6 @@ after 'deploy:update' do
   deploy.additional_symlinks
   deploy.write_tag
   deploy.create_sequences
-  deploy.create_deployment_record
   deploy.new_secret
   deploy.restart
   deploy.cleanup
@@ -215,9 +214,6 @@ namespace :deploy do
     deploy.schema_load
     deploy.seed
     deploy.generate_initial_user
-
-    deploy.restart
-
   end
 
 end

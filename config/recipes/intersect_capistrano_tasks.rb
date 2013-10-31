@@ -34,7 +34,7 @@ namespace :deploy do
   desc "On a new deploy we need an initial user and password"
   task :generate_initial_user do
     require 'rails' # So we can use bits of our validator
-    require "#{File.dirname(__FILE__)}/../lib/password_format_validator"
+    require "#{File.dirname(__FILE__)}/../../lib/password_format_validator"
 
     output_file = "#{current_path}/config/initial_user.yml"
     user_happy = false
