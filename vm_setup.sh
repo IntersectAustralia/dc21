@@ -4,10 +4,11 @@ sudo yum install -y gcc gcc-c++ patch readline readline-devel zlib zlib-devel li
 
 mkdir code_base
 cd code_base
-wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O dc21.zip
-unzip dc21.zip
-mv dc21-$DC21_TAG dc21
-cd dc21
+wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O ~/code_base/dc21.zip
+unzip ~/code_base/dc21.zip
+rm ~/code_base/dc21.zip
+mv ~/code_base/dc21-$DC21_TAG ~/code_base/dc21
+cd ~/code_base/dc21
 
 curl -L http://get.rvm.io | bash -s stable --ruby=1.9.2-p290
 source ~/.rvm/scripts/rvm
