@@ -2,16 +2,16 @@ namespace :server_setup do
 
   task :deploy_config do
     # Update hostnames
-    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" config/deploy_files/shibboleth/shibboleth2.xml config/deploy/production_local.rb")
+    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" #{repository}/config/deploy_files/shibboleth/shibboleth2.xml #{repository}/config/deploy/production_local.rb")
     # Update DB password
-    system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" config/database.yml")
+    system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{repository}/config/database.yml")
     # Update branch
-    system ("ruby -pi.bak -e \"gsub(/TAG/, '#{ENV['DC21_TAG']}')\" config/deploy/production_local.rb")
+    system ("ruby -pi.bak -e \"gsub(/TAG/, '#{ENV['DC21_TAG']}')\" #{repository}/config/deploy/production_local.rb")
     # Update AAF
     if ENV['DC21_AAF_TEST'].eql?("true")
-      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
+      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" #{repository}/config/deploy_files/shibboleth/shibboleth2.xml")
     else
-      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")
+      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" #{repository}/config/deploy_files/shibboleth/shibboleth2.xml")
     end
 
   end
