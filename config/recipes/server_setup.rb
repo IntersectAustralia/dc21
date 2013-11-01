@@ -100,6 +100,7 @@ namespace :server_setup do
   namespace :config do
     task :apache do
 
+      #copy apache config files
       upload "config/deploy_files/apache", "/tmp/", :via => :scp, :recursive => true
       run "#{try_sudo} mv /tmp/apache/httpd.conf /etc/httpd/conf/httpd.conf"
       run "#{try_sudo} mv /tmp/apache/* /etc/httpd/conf.d/"
@@ -109,7 +110,12 @@ namespace :server_setup do
       src = "/tmp/apache_config/apache_insertion.conf"
       dest = "/etc/httpd/conf.d/rails_#{application}.conf"
       run "cmp -s #{src} #{dest} > /dev/null; [ $? -ne 0 ] && #{try_sudo} cp #{src} #{dest} ; /bin/true"
+
+      #add SSL folders
+      run "#{try_sudo} mkdir -p /etc/httpd/ssl"
+
       sudo "chkconfig httpd on"
+
     end
 
     task :cron do
