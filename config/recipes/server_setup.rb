@@ -5,7 +5,8 @@ namespace :server_setup do
     system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" config/deploy_files/shibboleth/shibboleth2.xml config/deploy/production_local.rb")
     # Update DB password
     system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" config/database.yml")
-
+    # Update branch
+    system ("ruby -pi.bak -e \"gsub(/TAG/, '#{ENV['DC21_TAG']}')\" config/deploy/production_local.rb")
     # Update AAF
     if ENV['DC21_AAF_TEST'].eql?("true")
       system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" config/deploy_files/shibboleth/shibboleth2.xml")

@@ -8,6 +8,7 @@ set :copy_dir, "/home/#{user}/tmp/"
 set :remote_copy_dir, "/tmp"
 set :rails_env, "production"
 set :stage, "production"
+set :branch, 'TAG'
 
 # Your HTTP server, Apache/etc
 set :web_server, 'HOSTNAME'
