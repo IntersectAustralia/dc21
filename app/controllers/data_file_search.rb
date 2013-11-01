@@ -5,6 +5,7 @@ class DataFileSearch
   attr_accessor :date_range
   attr_accessor :facilities
   attr_accessor :experiments
+  attr_accessor :org_level2
   attr_accessor :variables
   attr_accessor :variable_parents
   attr_accessor :file_id
@@ -31,8 +32,11 @@ class DataFileSearch
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
     self.published_date_check = DateRange.new(@search_params[:published_date], "", true)
 
-    self.facilities = @search_params[:facilities] || []
-    self.experiments = @search_params[:experiments] || []
+    self.facilities = @search_params[:facilities]
+    self.facilities ||= @search_params[:org_level1] || []
+    self.experiments = @search_params[:experiments]
+    self.experiments ||= @search_params[:org_level2] || []
+    self.experiments = Facility.find(facilities).experiments.all.collect(&:id) if !facilities.blank? && experiments.blank?
     self.variables = @search_params[:variables] || []
     self.variable_parents = @search_params[:variable_parents]|| []
     self.stati = @search_params[:stati]|| []
@@ -116,6 +120,7 @@ class DataFileSearch
 
   def do_search(relation)
 
+    @config = SystemConfiguration.instance
     attrs_array = []
     search_result = relation
     if date_range.from_date || date_range.to_date
@@ -128,7 +133,7 @@ class DataFileSearch
     end
     unless experiments.nil? || experiments.empty?
       search_result = search_result.with_experiment(experiments)
-      attrs_array << "Facility"
+      attrs_array << @config.level2_plural
     end
     unless variables.nil? || variables.empty?
       search_result = search_result.with_any_of_these_columns(variables)
