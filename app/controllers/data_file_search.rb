@@ -32,7 +32,8 @@ class DataFileSearch
     self.upload_date_range = DateRange.new(@search_params[:upload_from_date], @search_params[:upload_to_date], true)
     self.published_date_check = DateRange.new(@search_params[:published_date], "", true)
 
-    self.facilities = @search_params[:facilities] || []
+    self.facilities = @search_params[:facilities]
+    self.facilities ||= @search_params[:org_level1] || []
     self.experiments = @search_params[:experiments]
     self.experiments ||= @search_params[:org_level2] || []
     self.experiments = Facility.find(facilities).experiments.all.collect(&:id) if !facilities.blank? && experiments.blank?
