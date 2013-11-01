@@ -50,3 +50,4 @@ echo "Please copy the following certificate to register for AAF"
 sudo cat /etc/shibboleth/sp-cert.pem
 
 echo "Please remember to add your SSL certificate and key to /etc/httpd/ssl/server.crt and /etc/httpd/ssl/server.key respectively"
+echo "After adding your SSL certificate, run `sudo service httpd restart`."

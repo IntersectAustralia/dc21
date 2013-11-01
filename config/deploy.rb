@@ -213,6 +213,7 @@ namespace :deploy do
     deploy.schema_load
     deploy.seed
     deploy.generate_initial_user
+    deploy.start
   end
 
 end
