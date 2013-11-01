@@ -43,10 +43,10 @@ cd .
 gem install bundler -v 1.0.20
 bundle install
 
-cap production_local deploy:deploy_config
+cap production_local server_setup:deploy_config
 cap production_local deploy:first_time
 
-echo "Please use this to register for AAF"
+echo "Please copy the following certificate to register for AAF"
 sudo cat /etc/shibboleth/sp-cert.pem
 
 echo "Please remember to add your SSL certificate and key to /etc/httpd/ssl/server.crt and /etc/httpd/ssl/server.key respectively"
