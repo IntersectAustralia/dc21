@@ -104,7 +104,6 @@ namespace :server_setup do
       run "#{try_sudo} mv /tmp/apache/httpd.conf /etc/httpd/conf/httpd.conf"
       run "#{try_sudo} mv /tmp/apache/* /etc/httpd/conf.d/"
 
-      run "mkdir -p apache_config"
       upload "config/httpd", "/tmp/apache_config", :via => :scp, :recursive => true
       run "cd /tmp/apache_config/ && ruby passenger_setup.rb \"#{rvm_ruby_string}\" \"#{current_path}\" \"#{web_server}\" \"#{stage}\""
       src = "/tmp/apache_config/apache_insertion.conf"
