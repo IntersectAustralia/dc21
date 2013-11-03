@@ -15,14 +15,14 @@ class AttachmentBuilder
     @metadata_extractor = MetadataExtractor.new
   end
 
-  def build(file, experiment_id, type, description, tags = [])
-    build_named_file(file.original_filename, file, experiment_id, type, description, tags, nil, nil)
+  def build(file, experiment_id, type, description, tags = [], labels = [])
+    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, nil, nil)
   end
 
 
-  def build_named_file(original_filename, file, experiment_id, type, description, tags = [], start_time, end_time)
+  def build_named_file(original_filename, file, experiment_id, type, description, tags = [], labels = [], start_time, end_time)
     path, new_filename = store_file(original_filename, file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, original_filename, file.size, start_time, end_time)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, labels, original_filename, file.size, start_time, end_time)
     if data_file.messages.blank?
       data_file.add_message(:success, "File uploaded successfully.")
     end
@@ -39,7 +39,7 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, description, tags, original_filename, size, start_time, end_time)
+  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path,
@@ -52,6 +52,7 @@ class AttachmentBuilder
                              :start_time => start_time,
                              :end_time => end_time)
     data_file.tag_ids = tags
+    data_file.label_ids = labels
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format

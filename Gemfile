@@ -46,6 +46,7 @@ gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
 gem 'daemons-rails'
 gem "devise_shibboleth_authenticatable", github: 'IntersectAustralia/devise_shibboleth_authenticatable', :branch => 'master'
+gem "select2-rails"
 
 group :development, :test do
   gem "rspec-rails"
