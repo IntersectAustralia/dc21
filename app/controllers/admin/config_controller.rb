@@ -18,7 +18,7 @@ class Admin::ConfigController < ApplicationController
 
     respond_to do |format|
       if @config.update_attributes(params[:system_configuration])
-        format.html { redirect_to edit_admin_config_path, notice: 'System configuration updated successfully.' }
+        format.html { redirect_to admin_config_path, notice: 'System configuration updated successfully.' }
       else
         format.html { render action: 'edit' }
       end

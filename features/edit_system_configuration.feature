@@ -102,7 +102,6 @@ Feature: Edit system configuration
     And I am on the edit system config page
     When I fill in "Name" with "Hi World"
     And I press "Update"
-    And show me the page
     Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
     When I follow "Sign out"
     Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
@@ -143,7 +142,7 @@ Feature: Edit system configuration
     And I press "Update"
     Then the "L2 Parameters" checkbox should not be checked
     When I am on the system config page
-    Then I should see "L2 Parameters:Disabled"
+    Then I should see field "L2 Parameters" with value "Disabled"
     When I am on the facilities page
     And I follow the view link for facility "Facility0"
     And I follow the view link for experiment "Experiment 1"
