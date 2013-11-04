@@ -10,6 +10,7 @@ class DataFileSearch
   attr_accessor :file_id
   attr_accessor :stati
   attr_accessor :tags
+  attr_accessor :labels
   attr_accessor :uploader_id
   attr_accessor :upload_date_range
   attr_accessor :published
@@ -40,6 +41,7 @@ class DataFileSearch
     self.variable_parents = @search_params[:variable_parents]|| []
     self.stati = @search_params[:stati]|| []
     self.tags = @search_params[:tags]|| []
+    self.labels = @search_params[:labels]|| []
     self.published = @search_params[:published]|| []
     self.unpublished = @search_params[:unpublished]|| []
     self.published_date = @search_params[:published_date] unless @search_params[:published_date].nil? or @search_params[:published_date].empty? or published_date_check.error
@@ -69,6 +71,7 @@ class DataFileSearch
         variables.empty? &&
         stati.empty? &&
         tags.empty? &&
+        labels.empty? &&
         filename.blank? &&
         description.blank? &&
         file_id.blank? &&
@@ -145,6 +148,10 @@ class DataFileSearch
     unless tags.nil? || tags.empty?
       search_result = search_result.with_any_of_these_tags(tags.collect { |tag| tag.to_i })
       attrs_array << "Tags"
+    end
+    unless labels.nil? || labels.empty?
+      search_result = search_result.with_any_of_these_labels(labels.collect { |label| label.to_i })
+      attrs_array << "Labels"
     end
     unless filename.blank? or filename_invalid
       search_result = search_result.with_filename_containing(filename)

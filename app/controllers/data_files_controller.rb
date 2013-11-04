@@ -18,6 +18,7 @@ class DataFilesController < ApplicationController
   layout 'data_files'
 
   expose(:tags) { Tag.order(:name) }
+  expose(:labels) { Label.order(:name).collect(&:name ) }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 
@@ -63,6 +64,8 @@ class DataFilesController < ApplicationController
 
   def update
     @data_file.tag_ids = params[:tags]
+    l = params[:data_file].delete(:label_list)
+    @data_file.label_ids = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
 
     if !params[:date].nil?
       attrs = params.delete(:date)
@@ -91,8 +94,8 @@ class DataFilesController < ApplicationController
       description = params[:description]
       type = params[:file_processing_status]
       tags = params[:tags]
-
-      unless validate_inputs(files, experiment_id, type, description, tags)
+      labels = parse_labels(params[:label_list].split(','), errors)
+      unless validate_inputs(files, experiment_id, type, description, tags, labels)
         render :new
         return
       end
@@ -100,7 +103,7 @@ class DataFilesController < ApplicationController
       @uploaded_files = []
       attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
       files.each do |file|
-        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags)
+        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels)
       end
     ensure
       clean_up_temp_files(files)
@@ -224,10 +227,11 @@ class DataFilesController < ApplicationController
       type = params[:type]
       experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
-      errors, tag_ids = validate_api_inputs(file, type, experiment_id, tag_names)
+      label_names = params[:label_names]
+      errors, tag_ids, label_ids = validate_api_inputs(file, type, experiment_id, tag_names, label_names)
 
       if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids)
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description], tag_ids, label_ids)
         messages = uploaded_file.messages.collect { |m| m[:message] }
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
       else
@@ -276,6 +280,7 @@ class DataFilesController < ApplicationController
     @id = @search.id
     @selected_stati = @search.stati
     @selected_tags = @search.tags
+    @selected_labels = @search.labels
     @uploader_id = @search.uploader_id
     @upload_from_date = @search.search_params[:upload_from_date]
     @upload_to_date = @search.search_params[:upload_to_date]
@@ -311,7 +316,7 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def validate_inputs(files, experiment_id, type, description, tags)
+  def validate_inputs(files, experiment_id, type, description, tags, labels)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -327,10 +332,12 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_status = type
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
+    @data_file.label_ids = labels
+    @data_file.label_array = label_array
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, tag_names)
+  def validate_api_inputs(file, type, experiment_id, tag_names, label_names)
     errors = []
     errors << 'Experiment id is required' if experiment_id.blank?
     errors << 'File is required' if file.blank?
@@ -340,7 +347,8 @@ class DataFilesController < ApplicationController
     errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
 
     tag_ids = parse_tags(tag_names, errors)
-    [errors, tag_ids]
+    label_ids = parse_labels(label_names, errors)
+    [errors, tag_ids, label_ids]
   end
 
   def parse_tags(tag_names, errors)
@@ -360,6 +368,25 @@ class DataFilesController < ApplicationController
       errors << 'Incorrect format for tags - tags must be double-quoted and comma separated'
     end
     tag_ids
+  end
+
+  def parse_labels(label_names, errors)
+    return [] if label_names.blank?
+    label_ids = []
+    begin
+      label_names_array = CSV.parse_line(label_names)
+      label_names_array.each do |label_name|
+        label = Label.find_by_name(label_name)
+        if label
+          label_ids << label.id
+        else
+          Label.create :name => label_name
+        end
+      end
+    rescue CSV::MalformedCSVError
+      errors << 'Incorrect format for labels - labels must be double-quoted and comma separated'
+    end
+    label_ids
   end
 
   def sort_column

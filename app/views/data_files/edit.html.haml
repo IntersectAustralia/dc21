@@ -79,6 +79,11 @@
           .record
             = (@data_file.created_by ? @data_file.created_by.email : "")
 
+      .control-group#labels
+        .control-label Labels
+        .controls
+          = f.text_field :label_list
+
       - if @data_file.is_package? || !@data_file.known_format?
         .control-group
           .date-format yyyy-mm-dd
@@ -117,3 +122,6 @@
           = cancel_button "Cancel", data_files_path
         .actions
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
+
+:javascript
+    $('#data_file_label_list').select2({tags: #{labels.to_json}, tokenSeparators: [',']})

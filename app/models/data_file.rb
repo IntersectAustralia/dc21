@@ -28,6 +28,7 @@ class DataFile < ActiveRecord::Base
   has_and_belongs_to_many :users
 
   has_and_belongs_to_many :tags, :uniq => true
+  has_and_belongs_to_many :labels, :uniq => true
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -92,6 +93,15 @@ class DataFile < ActiveRecord::Base
     transfer_status.eql? PACKAGE_COMPLETE
   end
 
+  def label_list
+    self.labels.map { |l| l.name }.join(", ")
+  end
+
+  def label_list=(new_value)
+    label_names = new_value.split(/,\s+/)
+    self.labels = label_names.map { |name| Label.where('name = ?', name).first or Label.create(:name => name) }
+  end
+
   def modifiable?
     transfer_status.eql? PACKAGE_COMPLETE or transfer_status.eql? PACKAGE_FAILED
   end
@@ -152,6 +162,10 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
+  def self.with_any_of_these_labels(labels)
+    data_file_ids = DataFile.unscoped.select("DISTINCT(data_files.id").joins(:labels).where("data_files_labels.label_id" => labels).collect(&:id)
+    where(:id => data_file_ids)
+  end
 
   def self.with_any_of_these_columns(column_names)
     data_file_ids = ColumnDetail.unscoped.select("DISTINCT(data_file_id)").where(:name => column_names).collect(&:data_file_id)
