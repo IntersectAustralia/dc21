@@ -10,7 +10,7 @@
 %html
   %head
     %title
-      = package.title
+      &= package.title
       
   %body
     %article
@@ -20,22 +20,22 @@
         %span{:property => "http://purl.org/dc/elements/1.1/type", :content => "http://purl.org/dc/dcmitype/Dataset"}
         %h1 Package Title
         %span{:property => "http://schema.org/name http://purl.org/dc/elements/1.1/title"}
-          = package.title
+          &= package.title
         %h1 Package Creation Date
         %span{:property => "http://schema.org/dateCreated", :content => "#{package.created_at.try(:to_s, :date_only)}"}
           = package.created_at.try(:to_s, :ordinal_date)
         %h1 Package File Name
         %span{:property => "http://schema.org/name"}
-          = package.filename
+          &= package.filename
         %h1 ID
         %span{:property => "http://schema.org/name"}
-          = package.external_id
+          &= package.external_id
         %h1 URL
         %a{:href => "#{metadata_helper.data_file_url(package)}", :property => "url"}
-          = metadata_helper.data_file_url(package)
+          &= metadata_helper.data_file_url(package)
         %h1 Description
         %span{:property => "http://schema.org/description"}
-          = package.file_processing_description
+          &= package.file_processing_description
         %h1 Start time
         %span{:property => "http://schema.org/startDate", :content => "#{package.start_time.try(:to_s, :w3c)}"}
           = package.start_time.try(:to_s, :long_date)
@@ -50,12 +50,12 @@
                 %td Generating Software Application
                 %td
                   %span{:property => "http://schema.org/name"}
-                    = config.name
+                    &= config.name
               %tr
                 %td Software Version
                 %td
                   %span{:property => "http://schema.org/softwareVersion"}
-                    = metadata_helper.software_version
+                    &= metadata_helper.software_version
               %tr
                 %td URLs
                 %td
@@ -69,40 +69,43 @@
                 %td Research Centre Name
                 %td
                   %span{:property => "http://schema.org/name"}
-                    = config.research_centre_name
+                    &= config.research_centre_name
               %tr
                 %td Overarching Entity
                 %td
                   %span{:property => "http://schema.org/founder"}
-                    = config.entity
+                    &= config.entity
               %tr
                 %td Address
                 %td
                   %span{:property => "http://schema.org/address"}
-                    = config.address1
-                    ,
-                    = config.address2
-                    ,
-                    = config.address3
+                    - if config[:address1].present?
+                      &= config.address1
+                    - if config[:address2].present?
+                      ,
+                      &= config.address2
+                    - if config[:address3].present?
+                      ,
+                      &= config.address3
               %tr
                 %td Telephone
                 %td
                   %span{:property => "http://schema.org/telephone"}
-                    = config.telephone_number
+                    &= config.telephone_number
               %tr
                 %td Email
                 %td
                   %span{:property => "http://schema.org/Email"}
-                    = config.email
+                    &= config.email
               %tr
                 %td Description
                 %td
-                  = config.description
+                  &= config.description
               %tr
                 %td URLs
                 %td
                   %span{:property => "http://schema.org/url"}
-                    = config.urls
+                    &= config.urls
 
 
         %h1 Summary of Files
@@ -113,9 +116,9 @@
               %th Type
               %th Size
               %th
-                = config.level2
+                &= config.level2
               %th
-                = config.level1
+                &= config.level1
               %th Download
               %th View
           %tbody
@@ -123,18 +126,18 @@
               %tr
                 %td
                   %a{:href => "#datafile_#{data_file.id}"}= data_file.filename
-                %td= data_file.file_processing_status
-                %td= metadata_helper.readable_bytes(data_file.file_size)
+                %td&= data_file.file_processing_status
+                %td&= metadata_helper.readable_bytes(data_file.file_size)
                 - if data_file.experiment
                   %td
                     %a{:href => "#experiment_#{data_file.experiment_id}"}
-                      = data_file.experiment_name
+                      &= data_file.experiment_name
                 - else
-                  %td= data_file.experiment_name
+                  %td&= data_file.experiment_name
                 - if data_file.facility
                   %td
                     %a{:href => "#facility_#{data_file.facility.id}"}
-                      = data_file.facility_name
+                      &= data_file.facility_name
                 - else
                   %td
                 %td
@@ -143,13 +146,13 @@
                   %a{:href => metadata_helper.data_file_url(data_file)} View
 
         %h1
-          = config.level2_plural
+          &= config.level2_plural
         - experiments.each do |experiment|
           %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Event", :resource => "#experiment_#{experiment.id}"}
             %a{:name => "#{config.level2.delete(' ').camelize}_#{experiment.id}"}
             %h2
               %span{:property => "http://schema.org/name"}
-                = experiment.name
+                &= experiment.name
             %table
               %tbody
                 %tr
@@ -160,14 +163,14 @@
                 %tr
                   %td
                     Parent
-                    = config.level1
+                    &= config.level1
                   %td
-                    %a{:href => "#facility_#{experiment.facility_id}", :property => "http://purl.org/dc/terms/isPartOf"}= experiment.parent_name
+                    %a{:href => "#facility_#{experiment.facility_id}", :property => "http://purl.org/dc/terms/isPartOf"}&= experiment.parent_name
                 %tr
                   %td Description
                   %td
                     %span{:property => "http://schema.org/description"}
-                      = experiment.description
+                      &= experiment.description
                 %tr
                   %td Start date
                   %td
@@ -182,7 +185,7 @@
                   %td Subject
                   %td
                     %span{:property => "http://purl.org/dc/terms/subject"}
-                      = experiment.subject
+                      &= experiment.subject
                 %tr
                   %td Access Rights
                   %td
@@ -192,7 +195,7 @@
                   %td
                     - experiment.experiment_for_codes.each do |for_code|
                       %span{:href => "#{for_code.url}", :property => "http://purl.org/dc/elements/1.1/subject"}
-                        = for_code.name
+                        &= for_code.name
                       %br
                 %tr
                   %td Persistent URL
@@ -213,51 +216,51 @@
                     %tbody
                       - experiment.experiment_parameters.each do |param|
                         %tr
-                          %td= param.parameter_category.name
-                          %td= param.parameter_sub_category.name
-                          %td= param.parameter_modification.name
-                          %td= param.amount
+                          %td&= param.parameter_category.name
+                          %td&= param.parameter_sub_category.name
+                          %td&= param.parameter_modification.name
+                          %td&= param.amount
                           %td= param.parameter_unit ? param.parameter_unit.name : ""
-                          %td= param.comments
-        %h1= config.level1_plural
+                          %td&= param.comments
+        %h1&= config.level1_plural
         - facilities.each do |facility|
           %section{:property => "http://purl.org/dc/terms/references", :resource => "#facility_#{facility.id}", :typeof => "http://schema.org/Place"}
             %a{:name => "facility_#{facility.id}"}
             %h2
               %span{:property => "http://schema.org/name"}
-                = facility.name
+                &= facility.name
             %table
               %tbody
                 %tr
                   %td Code
                   %td
                     %span{:property => "http://schema.org/name"}
-                      = facility.code
+                      &= facility.code
                 %tr
                   %td Description
                   %td
                     %span{:property => "http://schema.org/description"}
-                      = facility.description
+                      &= facility.description
                 %tr
                   %td Location
                   %td
                     %span{:resource => "#Location", :typeof => "http://schema.org/GeoShape"}
                       %span{:property => "http://schema.org/box"}
-                        = facility.rdfa_location
+                        &= facility.rdfa_location
                 %tr
                   %td Parent Organisation
                   %td
                     %a{:href => "#HIE", :property => "http://purl.org/dc/terms/isPartOf"}
-                      = config.research_centre_name
+                      &= config.research_centre_name
                 %tr
                   %td Primary Contact
                   %td
                     - if facility.primary_contact
                       %span{:property => "http://schema.org/contactPoint", :resource => "##{facility.primary_contact.full_name}", :typeof => "http://schema.org/Person"}
                         %span{:property => "http://schema.org/name"}
-                          = facility.primary_contact.full_name
+                          &= facility.primary_contact.full_name
                         %span{:property => "http://schema.org/email"}
-                          = "(#{facility.primary_contact.email})"
+                          &= "(#{facility.primary_contact.email})"
                     - else
                       %span{:property => "http://schema.org/contactPoint", :resource => "", :typeof => "http://schema.org/Person"}
                         %span{:property => "http://schema.org/name"}
@@ -265,18 +268,18 @@
                 - facility.contacts.each_with_index do |contact, index|
                   %tr
                     %td
-                      = "Other Contact #{index + 1}"
+                      &= "Other Contact #{index + 1}"
                     %td
                       %span{:property => "http://schema.org/contactPoints", :resource => "##{contact.full_name}", :typeof => "http://schema.org/Person"}
                         %span{:property => "http://schema.org/name"}
-                          = contact.full_name
+                          &= contact.full_name
                         %span{:property => "http://schema.org/email"}
-                          = "(#{contact.email})"
+                          &= "(#{contact.email})"
                 %tr
                   %td Persistent URL
                   %td
                     %a{:href => "#{metadata_helper.facility_url(facility)}"}
-                      = metadata_helper.facility_url(facility)
+                      &= metadata_helper.facility_url(facility)
 
         %h1 Files
         - data_files.each do |data_file|
@@ -286,7 +289,7 @@
                 %span{:content => "en", :property => "http://schema.org/inLanguage"}
                   %a{:name => "datafile_#{data_file.id}"}
             %h2
-              = data_file.filename
+              &= data_file.filename
             %h3 Basic Information
             %table
               %tbody
@@ -294,42 +297,42 @@
                   %td Name
                   %td
                     %span{:property => "http://schema.org/name"}
-                      = data_file.filename
+                      &= data_file.filename
                 %tr
                   %td Type
                   %td
-                    = data_file.file_processing_status
+                    &= data_file.file_processing_status
                 %tr
                   %td Size
                   %td
                     %span{:content => "#{metadata_helper.readable_bytes(data_file.file_size)}", :property => "http://schema.org/contentSize"}
-                      = metadata_helper.readable_bytes(data_file.file_size)
+                      &= metadata_helper.readable_bytes(data_file.file_size)
                 %tr
                   %td File format
                   %td
                     %span{:property => "http://schema.org/fileFormat"}
-                      = data_file.format
+                      &= data_file.format
                 %tr
                   %td Description
                   %td
                     %span{:property => "http://schema.org/description"}
-                      = data_file.file_processing_description
+                      &= data_file.file_processing_description
                 %tr
                   %td Tags
                   %td
-                    = data_file.tags.map { |tag| tag.name }.join(", ")
+                    &= data_file.tags.map { |tag| tag.name }.join(", ")
                 %tr
                   %td
-                    = config.level2
+                    &= config.level2
                   %td
                     %a{:href => "#experiment_#{data_file.experiment_id}", :property => "http://purl.org/dc/elements/1.1/relation"}
-                      = data_file.experiment.name
+                      &= data_file.experiment.name
                 %tr
                   %td
-                    = config.level1
+                    &= config.level1
                   %td
                     %a{:href => "#facility_#{data_file.experiment.facility_id}", :property => "http://purl.org/dc/elements/1.1/source"}
-                      = data_file.experiment.facility.name
+                      &= data_file.experiment.facility.name
                 %tr
                   %td Date added
                   %td
@@ -340,28 +343,28 @@
                   %td
                     - if metadata_helper.has_node_user_from_data_files(data_file.created_by)
                       %span{:href => "##{data_file.created_by.full_name}", :property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator"}
-                        = "#{data_file.created_by.full_name} (#{data_file.created_by.email})"
+                        &= "#{data_file.created_by.full_name} (#{data_file.created_by.email})"
                     - else
                       %span{:property => "http://schema.org/author http://purl.org/dc/elements/1.1/creator", :resource => "##{data_file.created_by.full_name}", :typeof => "http://schema.org/Person"}
                         %span{:property => "http://schema.org/name"}
-                          = data_file.created_by.full_name
+                          &= data_file.created_by.full_name
                         %span{:property => "http://schema.org/email"}
-                          = "(#{data_file.created_by.email})"
+                          &= "(#{data_file.created_by.email})"
                 %tr
                   %td Start date
                   %td
                     %span{:content => "#{data_file.start_time.try(:to_s, :date_only)}", :property => "http://schema.org/startDate"}
-                      = data_file.start_time.try(:to_formatted_s, :ordinal_date)
+                      &= data_file.start_time.try(:to_formatted_s, :ordinal_date)
                 %tr
                   %td End date
                   %td
                     %span{:content => "#{data_file.end_time.try(:to_s, :date_only)}", :property => "http://schema.org/endDate"}
-                      = data_file.end_time.try(:to_formatted_s, :ordinal_date)
+                      &= data_file.end_time.try(:to_formatted_s, :ordinal_date)
                 %tr
                   %td Persistent URL
                   %td
                     %a{:href => "#{metadata_helper.data_file_url(data_file)}"}
-                      = metadata_helper.data_file_url(data_file)
+                      &= metadata_helper.data_file_url(data_file)
 
             - if data_file.known_format?
               %h3 Information From The File
@@ -377,8 +380,8 @@
                   %td= data_file.interval.nil? ? "" : ActionController::Base.helpers.distance_of_time_in_words(data_file.interval)
                 - data_file.metadata_items.order(:key).each do |item|
                   %tr
-                    %td= item.key.humanize
-                    %td= item.value
+                    %td&= item.key.humanize
+                    %td&= item.value
 
             - unless data_file.column_details.empty?
               %h3 Columns
@@ -392,8 +395,8 @@
                 %tbody
                   - data_file.column_details.each do |column_details|
                     %tr
-                      %td= column_details.name
-                      %td= column_details.get_mapped_name
-                      %td= column_details.unit
-                      %td= column_details.data_type
+                      %td&= column_details.name
+                      %td&= column_details.get_mapped_name
+                      %td&= column_details.unit
+                      %td&= column_details.data_type
 
