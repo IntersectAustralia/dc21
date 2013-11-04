@@ -94,7 +94,7 @@ class DataFilesController < ApplicationController
       description = params[:description]
       type = params[:file_processing_status]
       tags = params[:tags]
-      labels = parse_labels(params[:label_list].split(','), errors)
+      labels = params[:label_list].present? ? parse_labels(params[:label_list].split(','), errors) : []
       unless validate_inputs(files, experiment_id, type, description, tags, labels)
         render :new
         return
@@ -333,7 +333,6 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     @data_file.label_ids = labels
-    @data_file.label_array = label_array
     !@data_file.errors.any?
   end
 
@@ -376,12 +375,7 @@ class DataFilesController < ApplicationController
     begin
       label_names_array = CSV.parse_line(label_names)
       label_names_array.each do |label_name|
-        label = Label.find_by_name(label_name)
-        if label
-          label_ids << label.id
-        else
-          Label.create :name => label_name
-        end
+        label_ids << Label.find_or_create_by_name(label_name).id
       end
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for labels - labels must be double-quoted and comma separated'

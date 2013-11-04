@@ -70,11 +70,7 @@ Feature: Edit system configuration
       | Research Centre Name | World |
       | Entity               | !     |
     And I press "Update"
-    Then I should see the following:
-      | Local System Name    | Hello |
-      | Research Centre Name | World |
-      | Entity               | !     |
-    And I am on the system config page
+    And I should be on the system config page
     Then I should see details displayed
       | Local System Name    | Hello                                         |
       | Research Centre Name | World                                         |
@@ -140,6 +136,8 @@ Feature: Edit system configuration
     When I am on the edit system config page
     And I uncheck "L2 Parameters"
     And I press "Update"
+    When I should be on the system config page
+    When I am on the edit system config page
     Then the "L2 Parameters" checkbox should not be checked
     When I am on the system config page
     Then I should see field "L2 Parameters" with value "Disabled"
