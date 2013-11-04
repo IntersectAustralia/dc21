@@ -116,6 +116,14 @@ end
 
 When /^I perform an API search with the following parameters as user "([^"]*)"$/ do |email, table|
   post_params = Hash[*table.raw.flatten]
+  if post_params['labels']
+    labels = post_params.delete('labels')
+    post_params['labels'] = labels.split(", ")
+  end
+  if post_params['tags']
+    tags = post_params.delete('tags')
+    post_params['tags'] = Tag.where(name: tags.split(", ")).collect(&:id)
+  end
   user = User.find_by_email!(email)
   post api_search_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end

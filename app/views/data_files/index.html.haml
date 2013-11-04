@@ -95,6 +95,12 @@
                   = check_box_tag "search[tags][]", tag.id, @selected_tags.include?(tag.id.to_s), :id => "search_tag_#{index}"
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
+              %h4#labels_category.expand Labels:
+              .labels
+                = label_tag "search[labels]", "Labels:"
+                = select_tag "search[labels]", options_for_select(labels, @selected_labels), :multiple => true, :id => "search_labels"
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
               %h4#facility.expand #{@config.level1}:
               .facility
                 - facilities.each_with_index do |facility, index|
@@ -177,3 +183,6 @@
             %a.btn{:href => "#", :id => "add_cart_item_#{data_file.id}", :data_file => data_file.id, :file_size => data_file.file_size} Add to Cart
 
   = will_paginate(@data_files_paginated, :params => params.merge({:search => nil, :sort => nil, :direction => nil}))
+
+:javascript
+  $('#search_labels').select2();

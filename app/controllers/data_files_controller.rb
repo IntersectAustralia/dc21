@@ -18,7 +18,7 @@ class DataFilesController < ApplicationController
   layout 'data_files'
 
   expose(:tags) { Tag.order(:name) }
-  expose(:labels) { Label.order(:name).collect(&:name ) }
+  expose(:labels) { Label.order(:name).collect(&:name) }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 
@@ -160,7 +160,7 @@ class DataFilesController < ApplicationController
   def download
     unless @data_file.published? and @data_file.is_package?
       authenticate_user!
-      authorize! :download, @data_file  
+      authorize! :download, @data_file
     end
 
     if current_user.present?
@@ -168,13 +168,13 @@ class DataFilesController < ApplicationController
     else
       unless APP_CONFIG['ip_addresses'].nil?
         if APP_CONFIG['ip_addresses'].include? request.ip
-          return send_data_file(@data_file) 
+          return send_data_file(@data_file)
         else
           raise ActionController::RoutingError.new('Not Found')
         end
       else
         raise ActionController::RoutingError.new('Not Found')
-      end  
+      end
     end
   end
 
@@ -325,7 +325,7 @@ class DataFilesController < ApplicationController
 
     files.each do |file|
       @data_file.errors.add(:base, "Filename is too long (maximum is 200 characters)") if file.original_filename.length > 200
-      @data_file.errors.add(:base, "Path is too long (maximum is 260 characters)") if APP_CONFIG['files_root'].length + file.original_filename.length > 260 
+      @data_file.errors.add(:base, "Path is too long (maximum is 260 characters)") if APP_CONFIG['files_root'].length + file.original_filename.length > 260
     end
 
     @data_file.experiment_id = experiment_id

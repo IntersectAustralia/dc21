@@ -150,7 +150,7 @@ class DataFileSearch
       attrs_array << "Tags"
     end
     unless labels.nil? || labels.empty?
-      search_result = search_result.with_any_of_these_labels(labels.collect { |label| label.to_i })
+      search_result = search_result.with_any_of_these_labels(labels)
       attrs_array << "Labels"
     end
     unless filename.blank? or filename_invalid

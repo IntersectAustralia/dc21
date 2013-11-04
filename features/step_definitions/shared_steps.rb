@@ -160,8 +160,8 @@ end
 
 Then /^"([^"]*)" should be selected in the "([^"]*)" select$/ do |expected_option, select_label|
   field = find_field(select_label)
-  option = field.find("option[selected]")
-  option.text.should eq(expected_option)
+  options = field.all("option[selected]").collect(&:text)
+  options.include?(expected_option).should be_true
 end
 
 Then /^nothing should be selected in the "([^"]*)" select$/ do |select_label|
