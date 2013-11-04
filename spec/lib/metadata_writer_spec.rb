@@ -70,6 +70,7 @@ describe MetadataWriter do
     photo = Tag.create!(name: 'Photo')
     video = Tag.create!(name: 'Video')
     @data_file1.tag_ids = [photo.id, video.id]
+    @data_file1.labels << Label.create!(name: "Label 1")
     @data_file1.save!
 
     Factory(:column_detail, :name => "Rnfll", :unit => 'Deg C', :data_type => 'Avg', :position => 1, :data_file => @data_file1)
@@ -92,6 +93,8 @@ describe MetadataWriter do
                           created_at: "2012-12-27 14:09:24",
                           file_processing_description: nil,
                           created_by: @created_by)
+    @data_file2.labels << Label.create!(name: "Label 2")
+    @data_file2.labels << Label.create!(name: "Label 3")
     # Package file
     @pkg_creator =  Factory(:user, first_name: 'Bobby', last_name: 'Tops', email: 'bobby@intersect.org.au')
     @pkg_creator.save!
@@ -105,6 +108,9 @@ describe MetadataWriter do
                           created_at: "2012-12-27 14:09:24",
                           file_processing_description: "This package contains a lot of cats. Be warned.",
                           created_by: @pkg_creator)
+    @package.labels << Label.create!(name: "Package Label 1")
+    @package.labels << Label.create!(name: "Package Label 2")
+
   end
 
 
@@ -189,7 +195,7 @@ def diff_html(output_html, expected_file)
     puts "Actual:"
     puts output_html
   end
-  
+
   diff.should == {}
 end
 

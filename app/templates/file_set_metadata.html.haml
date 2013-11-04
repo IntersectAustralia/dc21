@@ -11,7 +11,6 @@
   %head
     %title
       &= package.title
-      
   %body
     %article
       %h1
@@ -36,6 +35,9 @@
         %h1 Description
         %span{:property => "http://schema.org/description"}
           &= package.file_processing_description
+        %h1 Labels
+        %span
+          &= package.labels.collect(&:name).join(", ")
         %h1 Start time
         %span{:property => "http://schema.org/startDate", :content => "#{package.start_time.try(:to_s, :w3c)}"}
           = package.start_time.try(:to_s, :long_date)
@@ -318,9 +320,13 @@
                     %span{:property => "http://schema.org/description"}
                       &= data_file.file_processing_description
                 %tr
+                  %td Labels
+                  %td
+                    &= data_file.labels.collect(&:name).join(", ")
+                %tr
                   %td Tags
                   %td
-                    &= data_file.tags.map { |tag| tag.name }.join(", ")
+                    &= data_file.tags.collect(&:name).join(", ")
                 %tr
                   %td
                     &= config.level2
