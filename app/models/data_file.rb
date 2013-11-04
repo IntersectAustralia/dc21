@@ -162,8 +162,8 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
-  def self.with_any_of_these_labels(labels)
-    data_file_ids = DataFile.unscoped.select("DISTINCT(data_files.id").joins(:labels).where("data_files_labels.label_id" => labels).collect(&:id)
+  def self.with_any_of_these_labels(label_params)
+    data_file_ids = DataFile.unscoped.joins(:labels).select("DISTINCT(data_files.id)").where{labels.name >> label_params}.collect(&:id)
     where(:id => data_file_ids)
   end
 
