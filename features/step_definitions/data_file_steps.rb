@@ -41,11 +41,23 @@ Given /^I have data files$/ do |table|
     end unless published_by_email.blank? or published_by_email.nil?
 
     tag_csv = attributes.delete('tags')
+    label_csv = attributes.delete('labels')
 
     if attributes['file_processing_status'] == 'PACKAGE'
       df = Factory(:package, attributes)
     else
       df = Factory(:data_file, attributes)
+    end
+
+    unless tag_csv.blank?
+      tags = tag_csv.split(",").collect { |tag| tag.strip }
+      tag_ids = Tag.where(:name => tags).collect(&:id)
+      df.tag_ids = tag_ids
+    end
+
+    unless label_csv.blank?
+      labels = label_csv.split(",").collect { |label| label.strip }
+      labels.map { |label| df.labels << Label.find_or_create_by_name(label)}
     end
 
     if df.is_package?
@@ -56,11 +68,6 @@ Given /^I have data files$/ do |table|
       `touch #{output_location}`
     end
 
-    unless tag_csv.blank?
-      tags = tag_csv.split(",").collect { |tag| tag.strip }
-      tag_ids = Tag.where(:name => tags).collect(&:id)
-      df.tag_ids = tag_ids
-    end
 
   end
 end

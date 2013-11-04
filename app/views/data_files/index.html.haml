@@ -97,6 +97,7 @@
             .searchcategory
               %h4#labels_category.expand Labels:
               .labels
+                = label_tag "search[labels]", "Labels:"
                 = select_tag "search[labels]", options_for_select(labels, @selected_labels), :multiple => true, :id => "search_labels"
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
