@@ -342,7 +342,7 @@ class DataFilesController < ApplicationController
     errors << 'File is required' if file.blank?
     errors << 'File type is required' if type.blank?
     errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
-    errors << 'Supplied experiment id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
+    errors << 'Supplied org level 2 id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
     errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
 
     tag_ids = parse_tags(tag_names, errors)

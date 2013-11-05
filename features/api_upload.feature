@@ -142,7 +142,15 @@ Feature: Upload files via the API
       | type          | RAW                                                           |
       | experiment_id | 999999999                                                     |
     Then I should get a 400 response code
-    And I should get a JSON response with errors "Supplied experiment id does not exist"
+    And I should get a JSON response with errors "Supplied org level 2 id does not exist"
+
+  Scenario: Invalid input - org level 2 id not found
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file          | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type          | RAW                                                           |
+      | org_level2_id | 999999999                                                     |
+    Then I should get a 400 response code
+    And I should get a JSON response with errors "Supplied org level 2 id does not exist"
 
   Scenario: Invalid input - file parameter is not a valid file
     When I submit an API upload request with an invalid file as user "researcher@intersect.org.au"
