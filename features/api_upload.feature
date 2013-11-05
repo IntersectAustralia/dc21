@@ -36,6 +36,31 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have type "RAW"
     And file "weather_station_05_min.dat" should have automatically extracted metadata
 
+  # EYETRACKER-106
+  Scenario: Successful upload TOA5 file with minimum required metadata with Org Level 2 identifier
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | org_level2 | Flux Experiment 1                                             |
+    Then I should get a 200 response code
+    And I should get a JSON response with filename "weather_station_05_min.dat" and type "RAW" with the success message
+    And file "weather_station_05_min.dat" should have experiment "Flux Experiment 1"
+    And file "weather_station_05_min.dat" should have type "RAW"
+    And file "weather_station_05_min.dat" should have automatically extracted metadata
+
+  # EYETRACKER-106
+  Scenario: Org level 2 identifier takes precedence
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | org_level2 | Flux Experiment 2                                             |
+      | experiment | Flux Experiment 1                                             |
+    Then I should get a 200 response code
+    And I should get a JSON response with filename "weather_station_05_min.dat" and type "RAW" with the success message
+    And file "weather_station_05_min.dat" should have experiment "Flux Experiment 2"
+    And file "weather_station_05_min.dat" should have type "RAW"
+    And file "weather_station_05_min.dat" should have automatically extracted metadata
+
   Scenario: Optional description can be supplied on upload
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file        | samples/full_files/weather_station/weather_station_05_min.dat |
