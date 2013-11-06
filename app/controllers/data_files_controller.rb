@@ -64,8 +64,6 @@ class DataFilesController < ApplicationController
 
   def update
     @data_file.tag_ids = params[:tags]
-    l = params[:data_file].delete(:label_list)
-    @data_file.label_ids = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
 
     if !params[:date].nil?
       attrs = params.delete(:date)
@@ -126,8 +124,6 @@ class DataFilesController < ApplicationController
 
       file = DataFile.find(id)
 
-      l = attrs.delete(:label_list)
-      file.label_ids = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
       successful_update = file.update_attributes(attrs)
       successful_complete_update &= successful_update
       unless successful_update

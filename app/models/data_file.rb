@@ -98,8 +98,8 @@ class DataFile < ActiveRecord::Base
   end
 
   def label_list=(new_value)
-    label_names = new_value.split(/,\s+/)
-    self.labels = label_names.map { |name| Label.where('name = ?', name).first or Label.create(:name => name) }
+    label_names = new_value.split(/,\s*/)
+    self.labels = label_names.map { |name| Label.find_or_create_by_name(name) }
   end
 
   def modifiable?

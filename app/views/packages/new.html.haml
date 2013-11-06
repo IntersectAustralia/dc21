@@ -47,7 +47,7 @@
               = check_box_tag "tags[]", tag.id, @package.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name
       .control-group#labels
-        %label.control-label Labels
+        %label.control-label{:for => :package_label_list} Labels
         .controls
           = f.text_field :label_list
       .control-group

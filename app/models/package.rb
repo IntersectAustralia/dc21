@@ -35,6 +35,7 @@ class Package < DataFile
     datafile.experiment_id = pkg[:experiment_id]
     datafile.published = false
     datafile.title = pkg[:title]
+    datafile.label_list = pkg[:label_list]
     datafile.transfer_status = PACKAGE_QUEUED
     datafile
   end
