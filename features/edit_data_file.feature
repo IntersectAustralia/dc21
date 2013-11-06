@@ -7,11 +7,13 @@ Feature: Edit data files metadata
     Given I have a user "admin@intersect.org.au" with role "Administrator"
     Given I have a user "researcher@intersect.org.au" with role "Researcher"
     And I have data files
-      | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format |
-      | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |
-      | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |        |
-      | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |        |
+      | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format | label_list  |
+      | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |             |
+      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |             |
+      | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |        |             |
+      | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |        |             |
+      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au  |               |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN        |        | this3, that2, test1 |
+
 
   Scenario: ID should be unique
     Given I am logged in as "admin@intersect.org.au"
@@ -25,6 +27,7 @@ Feature: Edit data files metadata
     And I press "Update"
     Then I should see "ID 'Package 1' is already being used by sample.txt"
 
+  @javascript
   Scenario: Navigate from list and view edit data file page
     Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
@@ -32,6 +35,7 @@ Feature: Edit data files metadata
     Then I should see "sample.txt"
     And I should see "3"
     And I should see "sean@intersect.org.au"
+    And I should see select2 field "data_file_label_list" with value ""
     When I follow "Cancel"
     Then I should be on the list data files page
 
@@ -119,3 +123,26 @@ Feature: Edit data files metadata
     When I am on the list data files page
     And I edit data file "file.txt"
     Then I should see "yyyy-mm-dd"
+
+  #EYETRACKER-88
+  @javascript
+  Scenario: Add a new label to data file
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I should see select2 field "data_file_label_list" with value ""
+    And I fill in "data_file_label_list" with "bebb@, Abba, cuba"
+    And I press "Update"
+    Then I should see field "Labels" with value "Abba, bebb@, cuba"
+
+  #EYETRACKER-88
+  @javascript
+  Scenario: Delete an existing label from data file
+    Given I am logged in as "admin@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file_with_labels.txt"
+    And I should see select2 field "data_file_label_list" with value "test1,that2,this3"
+    And I remove "that2" from "data_file_label_list" select2 field
+    And I check select2 field "data_file_label_list" updated value to "test1,this3"
+    And I press "Update"
+    Then I should see field "Labels" with value "test1, this3"

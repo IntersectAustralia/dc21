@@ -54,6 +54,10 @@
             .record.checkbox
               = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
+      .control-group#labels
+        %label.control-label Labels
+        .controls
+          = f.text_field :label_list
       .control-group
         %label.control-label{:for => :data_file_experiment_id} #{@config.level2}
         .controls
@@ -78,7 +82,6 @@
         .controls
           .record
             = (@data_file.created_by ? @data_file.created_by.email : "")
-
       .control-group#labels
         .control-label Labels
         .controls
@@ -117,6 +120,7 @@
                 = select_hour @data_file.end_time, {:field_name => "end_hr"}
                 = select_minute @data_file.end_time, {:field_name => "end_min"}
                 = select_second @data_file.end_time, {:field_name => "end_sec"}
+
       .form-actions
         .actions-pre
           = cancel_button "Cancel", data_files_path

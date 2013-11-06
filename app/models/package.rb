@@ -42,6 +42,7 @@ class Package < DataFile
   def reformat_on_error(params)
     self.filename = params[:package][:filename]
     self.tag_ids = params[:tags]
+    self.label_ids = params[:label_list]
   end
 
   def set_times(user)

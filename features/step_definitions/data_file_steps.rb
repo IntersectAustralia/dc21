@@ -292,6 +292,14 @@ Then /^the uploaded files display should include "([^"]*)" with description "([^
     field.text.should eq(desc)
   end
 end
+Then /^the uploaded files display should include "([^"]*)" with labels "([^"]*)"$/ do |filename, labels|
+  with_scope("the file area for '#{filename}'") do
+    page.should have_content(filename)
+    field = find_field("Labels")
+    field.value.should eq(labels)
+  end
+end
+
 
 Then /^the uploaded files display should include "([^"]*)" with tags "([^"]*)"$/ do |filename, tags|
   with_scope("the file area for '#{filename}'") do

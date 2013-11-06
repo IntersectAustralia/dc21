@@ -439,3 +439,17 @@ Feature: Upload files
     And file "sample1_2.txt" should have experiment "My Experiment"
     And file "sample1_2.txt" should have tags "Gap-Filled,Photo"
     And file "sample1_2.txt" should have description "My descriptive description"
+
+    #EYETRACKER-88
+    Scenario: Add new labels to file upload
+      Given I am on the upload page
+      When I select "RAW" from "File type"
+      And I select "My Experiment" from "Experiment"
+      And I fill in "data_file_label_list" with "bebba,Abba,cuba"
+      And I select "samples/sample1.txt" to upload
+      And I press "Upload"
+      And the uploaded files display should include "sample1.txt" with labels "Abba,bebba,cuba"
+      And I fill in "Labels" with "bebba,Abba"
+      And I press "Update"
+      And I am on the data file details page for sample1.txt
+      Then I should see field "Labels" with value "Abba, bebba"

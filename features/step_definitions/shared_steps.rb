@@ -191,3 +191,39 @@ end
 When /^I wait for MINT server$/ do
   sleep(2)
 end
+
+When /^I remove "([^"]*)" from "([^"]*)" select2 field/ do |label_text, select2_id|
+  select2_delete label_text, select2_id
+end
+
+def select2_delete(text, id)
+  page.find("#s2id_#{id}").click
+  page.all(".select2-search-choice").find do |l|
+    if l.text == text
+      l.find("a").click
+      return
+    end
+  end
+end
+
+When /^I check select2 field "([^"]*)" updated value to "([^"]*)"$/ do |name, value|
+  field = page.find("##{name}")
+  select2_check value, field
+end
+
+def select2_check(new_value, field)
+  i = 0
+  while i < 10 # times out after 5s
+    if field.value == new_value
+      return
+    else
+      sleep(0.5)
+    end
+    i += 1
+  end
+end
+
+Then /^I should see select2 field "([^"]*)" with value "([^"]*)"$/ do |name, value|
+  field = page.find("##{name}")
+  field.value.should eq value
+end

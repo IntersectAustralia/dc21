@@ -20,6 +20,7 @@ class PackagesController < DataFilesController
     @package = Package.create_package(params, current_user)
     if @package.save
       save_tags(@package, params[:tags])
+      save_labels(@package, params[:package][:label_list])
       data_file_ids = current_user.cart_item_ids
       begin
         if params[:run_in_background]
@@ -76,6 +77,11 @@ class PackagesController < DataFilesController
   def save_tags(package, tags)
     pkg = DataFile.find(package.id)
     pkg.tag_ids = tags
+    pkg.save
+  end
+  def save_labels(package, labels)
+    pkg = DataFile.find(package.id)
+    pkg.label_ids = labels.split(',').map{|name| Label.find_or_create_by_name(name).id}
     pkg.save
   end
 

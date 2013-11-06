@@ -94,7 +94,8 @@ class DataFilesController < ApplicationController
       description = params[:description]
       type = params[:file_processing_status]
       tags = params[:tags]
-      labels = params[:label_list].present? ? parse_labels(params[:label_list].split(','), errors) : []
+      l = params[:data_file].delete(:label_list)
+      labels = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
       unless validate_inputs(files, experiment_id, type, description, tags, labels)
         render :new
         return
@@ -125,6 +126,8 @@ class DataFilesController < ApplicationController
 
       file = DataFile.find(id)
 
+      l = attrs.delete(:label_list)
+      file.label_ids = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
       successful_update = file.update_attributes(attrs)
       successful_complete_update &= successful_update
       unless successful_update

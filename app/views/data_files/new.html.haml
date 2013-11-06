@@ -29,6 +29,10 @@
           .record.checkbox
             = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
             = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
+    .control-group#labels
+      %label.control-label Labels
+      .controls
+        = f.text_field :label_list
     .control-group#files_input
       = label_tag "files_field_0", "Select file(s)", class: "control-label"
       .controls
@@ -38,3 +42,5 @@
       .actions
         = f.submit "Upload", :class => 'btn'
 
+:javascript
+    $('#data_file_label_list').select2({tags: #{labels.to_json}, tokenSeparators: [',']})

@@ -41,6 +41,10 @@
               .record.checkbox
                 = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
                 = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
+        .control-group#labels
+          = label_tag "files[#{file.id}][label_list]", "Labels:", class: "control-label"
+          .controls
+            = text_field_tag "files[#{file.id}][label_list]", file.labels.collect(&:name).join(','), :class => 'select2_labels'
 
         - unless file.time_parsable?
           .control-group
@@ -65,3 +69,6 @@
     .form-actions
       .actions
         = submit_tag "Update"
+
+:javascript
+    $('.select2_labels').select2({tags: #{labels.to_json}, tokenSeparators: [',']})

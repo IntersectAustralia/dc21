@@ -46,6 +46,10 @@
             %label.checkbox
               = check_box_tag "tags[]", tag.id, @package.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
               = label_tag "tag_#{tag.id}", tag.name
+      .control-group#labels
+        %label.control-label Labels
+        .controls
+          = f.text_field :label_list
       .control-group
         .date-format yyyy-mm-dd
       .control-group
@@ -91,4 +95,5 @@
             = cancel_button "Back", data_files_path
           = f.submit "Create Package"
 
-
+:javascript
+    $('#package_label_list').select2({tags: #{labels.to_json}, tokenSeparators: [',']})
