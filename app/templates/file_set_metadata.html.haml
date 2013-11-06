@@ -372,7 +372,7 @@
                     %a{:href => "#{metadata_helper.data_file_url(data_file)}"}
                       &= metadata_helper.data_file_url(data_file)
 
-            - if data_file.known_format?
+            - if data_file.time_parsable?
               %h3 Information From The File
               %table
                 %tr

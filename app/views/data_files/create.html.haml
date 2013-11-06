@@ -42,7 +42,7 @@
                 = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
                 = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
 
-        - unless file.known_format?
+        - unless file.time_parsable?
           .control-group
             .date-format yyyy-mm-dd
           .control-group

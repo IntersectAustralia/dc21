@@ -221,8 +221,8 @@ class DataFile < ActiveRecord::Base
     !self.end_time.nil?
   end
 
-  def known_format?
-    !self.format.nil?
+  def time_parsable?
+    self.is_package? || self.is_toa5?
   end
 
   def is_raw_file?
@@ -230,7 +230,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_package?
-    self.file_processing_status.eql? STATUS_PACKAGE
+    self.format.eql?(FileTypeDeterminer::BAGIT)
   end
 
   def is_toa5?

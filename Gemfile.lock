@@ -183,7 +183,7 @@ GEM
       fattr (>= 2.1.0)
       map (>= 2.0.0)
     map (4.7.1)
-    method_source (0.8.1)
+    method_source (0.8.2)
     metric_fu (2.1.1)
       Saikuro (>= 1.1.0)
       activesupport (>= 2.0.0)
@@ -201,6 +201,7 @@ GEM
       metric_fu (~> 2.1.1)
       rake
     mime-types (1.23)
+    mimetype-fu (0.1.2)
     mono_logger (1.1.0)
     multi_json (1.8.2)
     multi_xml (0.4.1)
@@ -403,6 +404,7 @@ DEPENDENCIES
   json-jwt
   launchy
   metrical
+  mimetype-fu
   newrelic_rpm
   pg
   rabl

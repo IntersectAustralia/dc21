@@ -428,11 +428,12 @@ describe DataFile do
 
   end
 
-  describe "Is known format method" do
-    it "should return true only if format attribute is set" do
-      Factory(:data_file, :format => nil).known_format?.should be_false
-      Factory(:data_file, :format => 'asdf').known_format?.should be_true
-      Factory(:data_file, :format => "TOA5").known_format?.should be_true
+  describe "Is time parsable method" do
+    it "should return true only if format attribute is TOA5 or BAGIT" do
+      Factory(:data_file, :format => nil).time_parsable?.should be_false
+      Factory(:data_file, :format => 'asdf').time_parsable?.should be_false
+      Factory(:data_file, :format => "TOA5").time_parsable?.should be_true
+      Factory(:data_file, :format => "BAGIT").time_parsable?.should be_true
     end
   end
 

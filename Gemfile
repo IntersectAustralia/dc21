@@ -77,6 +77,7 @@ group :test do
 end
 
 gem "json-jwt"
+gem 'mimetype-fu', :require => 'mimetype_fu'
 
 # exception tracker
 gem 'whoops_rails_logger', git: 'https://github.com/IntersectAustralia/whoops_rails_logger.git'

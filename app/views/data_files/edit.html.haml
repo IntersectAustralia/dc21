@@ -84,7 +84,7 @@
         .controls
           = f.text_field :label_list
 
-      - if @data_file.is_package? || !@data_file.known_format?
+      - unless @data_file.is_toa5?
         .control-group
           .date-format yyyy-mm-dd
         .control-group

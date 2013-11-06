@@ -24,7 +24,7 @@ def create_test_files
   create_data_file("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat", "admin@intersect.org.au")
 
   test_file = DataFile.find_by_filename("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat")
-  test_file.file_processing_description = "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:”;’<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test"
+  test_file.file_processing_description = "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:\";'<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test"
   test_file.save
 end
 
