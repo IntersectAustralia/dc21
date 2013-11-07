@@ -174,6 +174,7 @@ Feature: Create a package
     And I add sample1.txt to the cart
     When I am on the create package page
     And I fill in "package_label_list" with "bebb@,Abba,cuba"
+    And I check select2 field "package_label_list" updated value to "test1,that2,this3"
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
@@ -188,7 +189,9 @@ Feature: Create a package
     And I add sample1.txt to the cart
     When I am on the create package page
     And I fill in "package_label_list" with "test1,that2,this3"
+    And I check select2 field "package_label_list" updated value to "test1,that2,this3"
     And I fill in "package_label_list" with "this3,test1"
+    And I check select2 field "package_label_list" updated value to "test1,this3"
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"

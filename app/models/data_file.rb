@@ -94,7 +94,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def label_list
-    self.labels.map { |l| l.name }.join(", ")
+    self.labels.collect(&:name).join(", ")
   end
 
   def label_list=(new_value)
