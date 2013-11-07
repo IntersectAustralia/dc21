@@ -120,7 +120,7 @@ namespace :server_setup do
     end
 
     task :cron do
-      run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f \'{}\' \;"; } | crontab -'
+      run 'crontab -l | { cat; echo "0 */4 * * * find /tmp/download_zip* -atime +0 -type f -exec rm -f \'{}\' \; 2>/dev/null"; } | crontab -'
     end
   end
 
