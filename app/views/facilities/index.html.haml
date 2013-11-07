@@ -6,7 +6,7 @@
     = link_to "New #{@config.level1}", new_facility_path
 
 - if @facilities.empty?
-  %h3 There are no #{@config.level1_plural} to display
+  %h3 There are no #{@config.level1_plural.downcase} to display
 - else
   %table#facilities
     %tr
