@@ -5,7 +5,7 @@
   %h2 #{@config.level2_plural}
 
 - if experiments.empty?
-  There are no experiments to display.
+  There are no #{@config.level2_plural} to display.
 - else
   %table#experiments
     %tr
