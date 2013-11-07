@@ -174,7 +174,7 @@ Feature: Create a package
     Given I am on the list data files page
     And I add sample1.txt to the cart
     When I am on the create package page
-    And I fill in "package_label_list" with "bebb@, Abba, cuba"
+    And I fill in "package_label_list" with "bebb@,Abba,cuba"
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
@@ -189,7 +189,7 @@ Feature: Create a package
     When I am on the create package page
     And I fill in "package_label_list" with "test1,that2,this3"
     And I should see select2 field "package_label_list" with value "test1,that2,this3"
-    And I remove "that2" from "package_label_list" select2 field
+    And I fill in "package_label_list" with "this3,test1"
     And I check select2 field "package_label_list" updated value to "test1,this3"
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
