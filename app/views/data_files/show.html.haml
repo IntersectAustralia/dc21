@@ -39,7 +39,7 @@
     = render_field "#{@config.level2}", @data_file.experiment_name
     = render_field "#{@config.level1}", @data_file.facility_name
     = render_field "Date added", @data_file.created_at.to_s(:with_time)
-    - if @data_file.is_package?
+    - if @data_file.processed_by_resque?
       = render_field "Creation status", @data_file.transfer_status
     - if !@data_file.modifiable? and @data_file.is_package?
       = render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"

@@ -2,6 +2,7 @@ class FileTypeDeterminer
 
   TOA5 = "TOA5"
   BAGIT = "BAGIT"
+  OCR_TYPES = %w{image/jpeg image/png}
 
   def identify_file(data_file)
     return TOA5 if is_toa5?(data_file)

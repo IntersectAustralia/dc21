@@ -1,6 +1,6 @@
 class Package < DataFile
 
-  validates_presence_of :title  
+  validates_presence_of :title
   validates_length_of :title, :maximum => 10000
   validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > "), :allow_blank => true
 
@@ -36,7 +36,7 @@ class Package < DataFile
     datafile.published = false
     datafile.title = pkg[:title]
     datafile.label_list = pkg[:label_list]
-    datafile.transfer_status = PACKAGE_QUEUED
+    datafile.transfer_status = RESQUE_QUEUED
     datafile
   end
 

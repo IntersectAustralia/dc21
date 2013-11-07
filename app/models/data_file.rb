@@ -8,10 +8,10 @@ class DataFile < ActiveRecord::Base
   STATUS_ERROR = 'ERROR'
   STATUS_PACKAGE = 'PACKAGE'
 
-  PACKAGE_COMPLETE = 'COMPLETE'
-  PACKAGE_FAILED = 'FAILED'
-  PACKAGE_WORKING = 'WORKING'
-  PACKAGE_QUEUED = 'QUEUED'
+  RESQUE_COMPLETE = 'COMPLETE'
+  RESQUE_FAILED = 'FAILED'
+  RESQUE_WORKING = 'WORKING'
+  RESQUE_QUEUED = 'QUEUED'
 
   # stati for selection when uploading
   STATI = [STATUS_RAW] + APP_CONFIG['file_types']
@@ -59,10 +59,10 @@ class DataFile < ActiveRecord::Base
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
 
-  scope :completed_items, where("transfer_status = ? OR uuid IS NULL", PACKAGE_COMPLETE)
-  scope :count_unadded_items,where("transfer_status != ?", PACKAGE_COMPLETE)
+  scope :completed_items, where("transfer_status = ? OR uuid IS NULL", RESQUE_COMPLETE)
+  scope :count_unadded_items,where("transfer_status != ?", RESQUE_COMPLETE)
   scope :most_recent_first, order("created_at DESC")
-  scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", PACKAGE_COMPLETE)
+  scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", RESQUE_COMPLETE)
   scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
   scope :latest_end_time, order("end_time DESC").where("end_time IS NOT NULL")
   # search scopes are using squeel - see http://erniemiller.org/projects/squeel/ for details of syntax
@@ -90,7 +90,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_complete?
-    transfer_status.eql? PACKAGE_COMPLETE
+    transfer_status.eql? RESQUE_COMPLETE
   end
 
   def label_list
@@ -103,26 +103,26 @@ class DataFile < ActiveRecord::Base
   end
 
   def modifiable?
-    transfer_status.eql? PACKAGE_COMPLETE or transfer_status.eql? PACKAGE_FAILED
+    transfer_status.eql? RESQUE_COMPLETE or transfer_status.eql? RESQUE_FAILED
   end
 
   def mark_as_queued
-    self.transfer_status = PACKAGE_QUEUED
+    self.transfer_status = RESQUE_QUEUED
     self.save!
   end
 
   def mark_as_complete
-    self.transfer_status = PACKAGE_COMPLETE
+    self.transfer_status = RESQUE_COMPLETE
     self.save!
   end
 
   def mark_as_working
-    self.transfer_status = PACKAGE_WORKING
+    self.transfer_status = RESQUE_WORKING
     self.save!
   end
 
   def mark_as_failed
-    self.transfer_status = PACKAGE_FAILED
+    self.transfer_status = RESQUE_FAILED
     self.save!
   end
 
@@ -231,6 +231,10 @@ class DataFile < ActiveRecord::Base
 
   def is_package?
     self.format.eql?(FileTypeDeterminer::BAGIT)
+  end
+
+  def processed_by_resque?
+    self.uuid.present?
   end
 
   def is_toa5?

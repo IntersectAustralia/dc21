@@ -7,14 +7,6 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  #TODO: Consider refactoring initialize with init
-  def init(current_user)
-    @files_root = APP_CONFIG['files_root']
-    @current_user = current_user
-    @file_type_determiner = FileTypeDeterminer.new
-    @metadata_extractor = MetadataExtractor.new
-  end
-
   def build(file, experiment_id, type, description, tags = [], labels = [])
     build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, nil, nil)
   end
