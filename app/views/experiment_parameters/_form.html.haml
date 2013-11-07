@@ -1,7 +1,7 @@
 = form_for [@facility, @experiment, @experiment_parameter] do |f|
   = render 'shared/error_messages', target: @experiment_parameter
 
-  %h2 New Paramater
+  %h2 New Parameter
   .control-group
     = label_tag :parameter_category_select, "Category", class: "control-label"
     .controls
