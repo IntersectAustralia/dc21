@@ -177,7 +177,9 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
+    And I uncheck "Run in background?"
     And I press "Create Package"
+    When I should be on the data file details page for my_package1.zip
     Then I should see field "Labels" with value "Abba, bebb@, cuba"
 
   #EYETRACKER-88
@@ -190,5 +192,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
+    And I uncheck "Run in background?"
     And I press "Create Package"
+    When I should be on the data file details page for my_package1.zip
     Then I should see field "Labels" with value "test1, this3"
