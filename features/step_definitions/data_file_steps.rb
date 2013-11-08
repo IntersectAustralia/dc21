@@ -27,7 +27,10 @@ Given /^I have data files$/ do |table|
     exp = attributes.delete('experiment')
     unless exp.blank?
       experiment = Experiment.find_by_name(exp)
-      experiment = Factory(:experiment, :name => exp, facility_id: facility.id) unless experiment
+      experiment = Factory(:experiment, :name => exp) unless experiment
+
+      experiment.update_attribute(:facility_id, facility.id) if facility
+
       attributes["experiment_id"] = experiment.id
     end
     if email
