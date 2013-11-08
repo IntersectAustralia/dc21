@@ -45,6 +45,10 @@
         %label.control-label{:for => :data_file_file_processing_description} Description
         .controls
           = f.text_area :file_processing_description
+      .control-group
+        %label.control-label{:for => :data_file_converted_text} Converted Text
+        .controls
+          = f.text_area :converted_text
       .control-group#tags
         .control-label Tags
         .controls

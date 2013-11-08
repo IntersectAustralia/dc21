@@ -1,5 +1,5 @@
 #!/usr/bin/ruby -w
-#require 'tesseract'
+require 'tesseract'
 
 class OCRWorker
   include Resque::Plugins::Status
@@ -19,6 +19,11 @@ class OCRWorker
       df.save
 
       # build tesseract txt file
+      e = Tesseract::Engine.new {|e|
+        e.language = :eng
+        e.blacklist = ''
+      }
+      df.converted_text = e.text_for(df.path).strip
       # create attachment
 
       #attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)

@@ -59,6 +59,8 @@ GEM
     bootstrap-will_paginate (0.0.9)
       will_paginate
     builder (3.0.4)
+    call-me (0.0.2.3)
+      refining
     cancan (1.6.7)
     capistrano (2.9.0)
       highline
@@ -139,6 +141,10 @@ GEM
       railties (>= 3.0.0)
     fattr (2.2.0)
     ffi (1.9.0)
+    ffi-extra (0.1.0)
+      ffi
+    ffi-inline (0.0.4.3)
+      ffi (>= 0.4.0)
     flay (1.4.3)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
@@ -161,6 +167,7 @@ GEM
       multi_json
       multi_xml
     i18n (0.6.4)
+    iso-639 (0.2.4)
     jquery-rails (1.0.19)
       railties (~> 3.0)
       thor (~> 0.14)
@@ -269,6 +276,7 @@ GEM
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
     ref (1.0.5)
+    refining (0.0.5.5)
     resque (1.24.1)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
@@ -339,6 +347,11 @@ GEM
     syntax (1.0.0)
     tabs_on_rails (2.0.2)
     term-ansicolor (1.0.7)
+    tesseract-ocr (0.1.5)
+      call-me
+      ffi-extra
+      ffi-inline
+      iso-639
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
       ref
@@ -425,6 +438,7 @@ DEPENDENCIES
   spork (~> 0.9.0.rc)
   squeel
   tabs_on_rails
+  tesseract-ocr
   therubyracer
   uglifier (>= 1.0.3)
   validates_timeliness (~> 3.0)
