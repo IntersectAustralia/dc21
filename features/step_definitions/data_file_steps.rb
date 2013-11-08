@@ -2,6 +2,12 @@ Given /^I have data files$/ do |table|
   table.hashes.each do |attributes|
     attributes.delete('id') if attributes['id'] == ''
 
+    facility = attributes.delete('facility')
+    unless facility.blank?
+      facility = Facility.find_by_id(facility)
+      facility = Factory(:facility, :id => facility) unless facility
+    end
+
     email = attributes.delete('uploaded_by')
     if attributes['format'] == ''
       attributes['format'] = nil
