@@ -148,7 +148,9 @@ When /^I should get a JSON response with$/ do |table|
   actual.size.should eq(table.hashes.size)
   count = 0
   table.hashes.each do |attributes|
-    actual[count]["filename"].should eq(attributes["filename"])
+    attributes.each do |key, value|
+      actual[count][key].should eq(value)
+    end
     count += 1
   end
 end
