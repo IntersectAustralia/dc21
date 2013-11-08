@@ -2,7 +2,7 @@ namespace :server_setup do
 
   task :deploy_config do
     # Update hostnames
-    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" #{repository}/config/deploy_files/shibboleth/shibboleth2.xml #{repository}/config/deploy/production_local.rb #{repository}/config/deploy/shibboleth.yml")
+    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" #{repository}/config/deploy_files/shibboleth/shibboleth2.xml #{repository}/config/deploy/production_local.rb #{repository}/config/shibboleth.yml")
     # Update DB password
     system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{repository}/config/database.yml")
     # Update branch

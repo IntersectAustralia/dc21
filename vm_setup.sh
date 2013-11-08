@@ -29,14 +29,18 @@ sudo setenforce 0
 
 mkdir code_base
 cd code_base
-wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O ~/code_base/dc21.zip
-unzip ~/code_base/dc21.zip
-rm ~/code_base/dc21.zip
-mv ~/code_base/dc21-$DC21_TAG ~/code_base/dc21
-cd ~/code_base/dc21
+wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O $HOME/code_base/dc21.zip
+unzip $HOME/code_base/dc21.zip
+rm $HOME/code_base/dc21.zip
+mv $HOME/code_base/dc21-$DC21_TAG $HOME/code_base/dc21
+cd $HOME/code_base/dc21
 
 curl -L http://get.rvm.io | bash -s stable --ruby=1.9.2-p290
-source ~/.rvm/scripts/rvm
+source $HOME/.rvm/scripts/rvm
+echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> $HOME/.bashrc
+source $HOME/.bash_profile
+source $HOME/.bashrc
+cd .
 rvm use 1.9.2-p290
 rvm gemset create dc21app
 cd .
