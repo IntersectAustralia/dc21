@@ -205,6 +205,14 @@ namespace :deploy do
     restart
   end
 
+  desc "Restart all services"
+  task :start_services do
+    sudo "service redis restart"
+    sudo "service postgresql restart"
+    sudo "service shibd restart"
+    sudo "service httpd restart"
+  end
+
   desc "Runs all the first time setup tasks"
   task :first_time, :except => {:no_release => true} do
     deploy.setup
@@ -213,6 +221,7 @@ namespace :deploy do
     deploy.schema_load
     deploy.seed
     deploy.generate_initial_user
+    deploy.start_services
     deploy.start
   end
 
