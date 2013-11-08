@@ -8,7 +8,12 @@ defaults: &defaults
   default_readme_template_file: app/templates/file_set_metadata.html.haml
   data_root: /data
 
-  # Anything below this can be configured
+########################## Start of editable configuration
+# The server will need to be restarted if you make any changes
+
+  readme_template_directory: ""
+  readme_template_file: ""
+
   hiev_handle_prefix: hiev
 
   notification_email_sender: noreply@intersect.org.au
@@ -28,6 +33,8 @@ defaults: &defaults
   # The white list of IP addresses that are allowed to access the download page without authentication
   ip_addresses:
     - 127.0.0.1
+
+########################## End of editable configuration
 
   #IMPORTANT NOTE: the values below are only used on an initial build when database values are seeded. Modifying them later
   # will have no effect. To modify these later, you need to update the relevant rows in the database (ensuring
