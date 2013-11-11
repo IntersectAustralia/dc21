@@ -27,8 +27,8 @@ sudo rpm -Uvh http://mirrors.kernel.org/fedora-epel/6/i386/epel-release-6-8.noar
 sudo yum install -y gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git postgresql-server postgresql postgresql-devel libpq-dev
 sudo setenforce 0
 
-mkdir code_base
-cd code_base
+mkdir $HOME/code_base
+cd $HOME/code_base
 wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O $HOME/code_base/dc21.zip
 unzip $HOME/code_base/dc21.zip
 rm $HOME/code_base/dc21.zip
@@ -40,10 +40,9 @@ source $HOME/.rvm/scripts/rvm
 echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> $HOME/.bashrc
 source $HOME/.bash_profile
 source $HOME/.bashrc
-cd .
+cd $HOME/code_base/dc21
 rvm use 1.9.2-p290
 rvm gemset create dc21app
-cd .
 gem install bundler -v 1.0.20
 bundle install
 
