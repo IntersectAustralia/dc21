@@ -453,3 +453,38 @@ Feature: Upload files
       And I press "Update"
       And I am on the data file details page for sample1.txt
       Then I should see field "Labels" with value "Abba, bebba"
+
+    #EYETRACKER-7
+    Scenario: Check UUID is created for an uploaded image file
+      Given I am on the upload page
+      When I select "RAW" from "File type"
+      And I select "My Experiment" from "Experiment"
+      And I select "samples/Test_OCR.jpg" to upload
+      And I press "Upload"
+      Then the most recent file should have name "Test_OCR.jpg"
+      And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
+      And the uploaded files display should include "Test_OCR.jpg" with messages "success"
+      And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
+      And file "Test_OCR.jpg" should have type "RAW"
+      And file "Test_OCR.jpg" should have experiment "My Experiment"
+      And file "Test_OCR.jpg" should have a UUID created
+      When I am on the list data files page
+      Then I should see "exploredata" table with
+        | Filename      | Added by                    | Type |
+        | Test_OCR.jpg  | researcher@intersect.org.au | RAW  |
+
+    #EYETRACKER-7
+    Scenario: Check UUID is blank for uploaded none image files
+      Given I am on the upload page
+      When I select "RAW" from "File type"
+      And I select "My Experiment" from "Experiment"
+      And I select "samples/sample1.txt" to upload
+      And I press "Upload"
+      Then the most recent file should have name "sample1.txt"
+      And the uploaded files display should include "sample1.txt" with file type "RAW"
+      And the uploaded files display should include "sample1.txt" with messages "success"
+      And the uploaded files display should include "sample1.txt" with experiment "My Experiment"
+      And file "sample1.txt" should have type "RAW"
+      And file "sample1.txt" should have experiment "My Experiment"
+      And file "sample1.txt" should not have a UUID created
+

@@ -368,6 +368,14 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
   DataFile.find_by_filename!(filename).experiment_name.should eq(experiment)
 end
 
+Then /^file "([^"]*)" should have a UUID created$/ do |filename|
+  DataFile.find_by_filename!(filename).uuid.should_not be_empty
+end
+
+Then /^file "([^"]*)" should not have a UUID created$/ do |filename|
+  DataFile.find_by_filename!(filename).uuid.should be_nil
+end
+
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |file, type, description, experiment|
   upload(file.strip, type, description, experiment, "")
 end
