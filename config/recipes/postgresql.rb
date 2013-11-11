@@ -10,7 +10,7 @@ namespace :postgresql do
     run %Q{echo "host all all 127.0.0.1/32 password" | #{try_sudo} tee -a /var/lib/pgsql/data/pg_hba.conf}
     run %Q{echo "host all all ::1/128 password" | #{try_sudo} tee -a /var/lib/pgsql/data/pg_hba.conf}
 
-    sudo "chkconfig postgresql start"
+    sudo "service postgresql restart"
     sudo "chkconfig postgresql on"
 
     buffer = YAML::load_file('config/database.yml')
