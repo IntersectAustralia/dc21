@@ -131,9 +131,9 @@ Feature: Edit data files metadata
     When I am on the list data files page
     And I edit data file "file.txt"
     And I should see select2 field "data_file_label_list" with value ""
-    And I fill in "data_file_label_list" with "bebb@,Abba,cuba,<script></script>"
+    And I fill in "data_file_label_list" with "bebb@,Abba,cuba,AA<script></script>"
     And I press "Update"
-    Then I should see field "Labels" with value "<script></script>, Abba, bebb@, cuba"
+    Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cuba"
 
   #EYETRACKER-88
   @javascript
