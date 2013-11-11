@@ -445,10 +445,10 @@ Feature: Upload files
       Given I am on the upload page
       When I select "RAW" from "File type"
       And I select "My Experiment" from "Experiment"
-      And I fill in "data_file_label_list" with "bebba,Abba,cuba"
+      And I fill in "data_file_label_list" with "bebba,Abba,cuba,<script></script>"
       And I select "samples/sample1.txt" to upload
       And I press "Upload"
-      And the uploaded files display should include "sample1.txt" with labels "Abba,bebba,cuba"
+      And the uploaded files display should include "sample1.txt" with labels "<script></script>,Abba,bebba,cuba"
       And I fill in "Labels" with "bebba,Abba"
       And I press "Update"
       And I am on the data file details page for sample1.txt

@@ -173,15 +173,15 @@ Feature: Create a package
     Given I am on the list data files page
     And I add sample1.txt to the cart
     When I am on the create package page
-    And I fill in "package_label_list" with "bebb@,Abba,cuba"
-    And I check select2 field "package_label_list" updated value to "test1,that2,this3"
+    And I fill in "package_label_list" with "bebb@,Abba,cuba,<script></script>"
+    And I check select2 field "package_label_list" updated value to "Abba,bebb@,cuba,<script></script>"
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
-    Then I should see field "Labels" with value "Abba, bebb@, cuba"
+    Then I should see field "Labels" with value "<script></script>, Abba, bebb@, cuba"
 
   #EYETRACKER-88
   Scenario: Delete an existing label when creating package

@@ -57,7 +57,7 @@
       .control-group#labels
         %label.control-label{:for => :data_file_label_list} Labels
         .controls
-          = f.text_field :label_list
+          = f.text_field :label_list, data: {labels: labels}
       .control-group
         %label.control-label{:for => :data_file_experiment_id} #{@config.level2}
         .controls
@@ -124,4 +124,4 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
-    $('#data_file_label_list').select2({tags: #{labels.to_json}, tokenSeparators: [',']})
+    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: [',']})
