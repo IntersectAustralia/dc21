@@ -44,6 +44,7 @@ When /^I submit an API upload request with the following parameters as user "([^
   post_params[:experiment_id] = params['experiment_id'] unless params['experiment_id'].blank?
   post_params[:org_level2_id] = params['org_level2_id'] unless params['org_level2_id'].blank?
   post_params[:tag_names] = params['tag_names'] unless params['tag_names'].blank?
+  post_params[:label_names] = params['labels'] unless params['labels'].blank?
 
   post_params[:type] = params['type']
   post_params[:description] = params['description'] if params['description']

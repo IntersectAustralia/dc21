@@ -449,7 +449,7 @@ Feature: Upload files
       And I select "samples/sample1.txt" to upload
       And I press "Upload"
       And the uploaded files display should include "sample1.txt" with labels "AA<script></script>,Abba,bebba,cuba"
-      And I fill in "Labels" with "bebba,Abba"
+      And I fill in "Labels" with "bebba|Abba"
       And I press "Update"
       And I am on the data file details page for sample1.txt
       Then I should see field "Labels" with value "Abba, bebba"

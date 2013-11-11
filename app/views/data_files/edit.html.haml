@@ -128,4 +128,4 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
-    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: [',']})
+    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'})

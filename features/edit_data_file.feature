@@ -12,7 +12,7 @@ Feature: Edit data files metadata
       | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |             |
       | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |        |             |
       | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |        |             |
-      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au  |               |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN        |        | this3, that2, test1 |
+      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au  |               |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN        |        | this3,that2,test1 |
 
 
   Scenario: ID should be unique
@@ -131,9 +131,10 @@ Feature: Edit data files metadata
     When I am on the list data files page
     And I edit data file "file.txt"
     And I should see select2 field "data_file_label_list" with value ""
-    And I fill in "data_file_label_list" with "bebb@,Abba,cuba,AA<script></script>"
+    And I fill in "data_file_label_list" with "bebb@|Abba|cu,ba|AA<script></script>"
     And I press "Update"
-    Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cuba"
+    Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cu,ba"
+
 
   #EYETRACKER-88
   @javascript
@@ -141,7 +142,7 @@ Feature: Edit data files metadata
     Given I am logged in as "admin@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file_with_labels.txt"
-    And I should see select2 field "data_file_label_list" with value "test1,that2,this3"
+    And I should see select2 field "data_file_label_list" with value "test1|that2|this3"
     And I remove "that2" from "data_file_label_list" select2 field
     And I check select2 field "data_file_label_list" updated value to "test1,this3"
     And I press "Update"

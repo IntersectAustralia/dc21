@@ -183,3 +183,24 @@ Feature: Upload files via the API
     | RAW       | renamed              | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
     | PROCESSED | success              | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
     | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+
+  #EYETRACKER-88
+  Scenario: Add a list of labels to files uploaded through the API
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | labels     | "Label1","Label_2","label 3"                                   |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have 3 labels
+    And file "weather_station_05_min.dat" should have labels "Label1|Label_2|label 3"
+
+  #EYETRACKER-88
+  Scenario: Labels containing commas work ok
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | labels     | "Photo","Contains, a comma"                                   |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have 2 labels

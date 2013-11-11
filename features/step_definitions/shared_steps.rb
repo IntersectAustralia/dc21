@@ -227,3 +227,13 @@ Then /^I should see select2 field "([^"]*)" with value "([^"]*)"$/ do |name, val
   field = page.find("##{name}")
   field.value.should eq value
 end
+
+Then /^file "([^"]*)" should have labels "([^"]*)"$/ do |file, labels|
+  file = DataFile.find_by_filename!(file)
+  file.labels.collect(&:name).sort.should eq(labels.split("|").sort)
+end
+
+Then /^file "([^"]*)" should have (\d+) labels/ do |file, count|
+  file = DataFile.find_by_filename!(file)
+  file.labels.count.should eq(count.to_i)
+end

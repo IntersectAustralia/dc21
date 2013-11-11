@@ -50,7 +50,7 @@ Given /^I have data files$/ do |table|
     end unless published_by_email.blank? or published_by_email.nil?
 
     tag_csv = attributes.delete('tags')
-    label_csv = attributes.delete('labels')
+    label_csv = attributes.delete('label_list')
 
     if attributes['file_processing_status'] == 'PACKAGE'
       df = Factory(:package, attributes)

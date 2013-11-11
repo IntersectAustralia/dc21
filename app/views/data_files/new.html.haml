@@ -43,4 +43,4 @@
         = f.submit "Upload", :class => 'btn'
 
 :javascript
-    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: [',']})
+    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'})
