@@ -1,5 +1,5 @@
 #!/usr/bin/ruby -w
-require 'tesseract'
+
 
 class OCRWorker
   include Resque::Plugins::Status
@@ -17,6 +17,8 @@ class OCRWorker
       df.transfer_status = job.status.to_s.upcase
 
       df.save
+
+      require 'tesseract'
 
       # build tesseract txt file
       e = Tesseract::Engine.new {|e|
