@@ -18,6 +18,8 @@ class OCRWorker
 
       df.save
 
+      ENV['CFLAGS'] = '-I/usr/local/include/'
+      ENV['LDFLAGS'] = '-L/usr/local/lib/'
       require 'tesseract'
 
       # build tesseract txt file
