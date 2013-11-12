@@ -48,6 +48,7 @@ cd $HOME/code_base/leptonica-1.69 && ./configure && make && sudo make install
 cd $HOME/code_base/tesseract-ocr/ && ./autogen.sh && ./configure && make && sudo make install && sudo mv $HOME/code_base/tesseract-ocr/tessdata/eng.* /usr/local/share/tessdata/
 sudo ldconfig
 
+cd $HOME/code_base
 git clone git://github.com/IntersectAustralia/dc21.git -b new_deploy
 cd $HOME/code_base/dc21
 
