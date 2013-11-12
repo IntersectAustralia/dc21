@@ -27,6 +27,7 @@ sudo rpm -Uvh http://mirrors.kernel.org/fedora-epel/6/i386/epel-release-6-8.noar
 
 sudo yum install -y gcc gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel unzip libffi-devel openssl openssl-devel make bzip2 autoconf automake libtool bison httpd httpd-devel apr-devel apr-util-devel mod_ssl mod_xsendfile curl curl-devel openssl openssl-devel tzdata libxml2 libxml2-devel libxslt libxslt-devel sqlite-devel git postgresql-server postgresql postgresql-devel
 sudo setenforce 0
+sudo service sshd start
 
 rm -rf $HOME/code_base
 mkdir $HOME/code_base
@@ -47,10 +48,7 @@ cd $HOME/code_base/leptonica-1.69 && ./configure && make && sudo make install
 cd $HOME/code_base/tesseract-ocr/ && ./autogen.sh && ./configure && make && sudo make install && sudo mv $HOME/code_base/tesseract-ocr/tessdata/eng.* /usr/local/share/tessdata/
 sudo ldconfig
 
-wget https://github.com/IntersectAustralia/dc21/archive/$DC21_TAG.zip -O $HOME/code_base/dc21.zip
-unzip $HOME/code_base/dc21.zip
-rm $HOME/code_base/dc21.zip
-mv $HOME/code_base/dc21-$DC21_TAG $HOME/code_base/dc21
+git clone git://github.com/IntersectAustralia/dc21.git -b new_deploy
 cd $HOME/code_base/dc21
 
 curl -L http://get.rvm.io | bash -s stable --ruby=1.9.2-p290

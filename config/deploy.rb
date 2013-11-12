@@ -15,7 +15,7 @@ load 'config/recipes/shared_file'
 
 set :keep_releases, 5
 set :application, 'dc21app'
-set :stages, %w(qa staging production_local)
+set :stages, %w(qa staging production production_local)
 set :default_stage, "qa"
 
 set :shared_children, shared_children + %w(log_archive)
@@ -29,6 +29,7 @@ set :bundle_flags, "--deployment"
 set :scm, 'git'
 set :repository, 'git://github.com/IntersectAustralia/dc21.git'
 set :deploy_via, :copy
+set :copy_cache, true
 set :copy_exclude, ["features/*", "spec/*", "performance/*"]
 
 set :branch do
@@ -81,8 +82,8 @@ after 'deploy:update' do
   deploy.write_tag
   deploy.create_sequences
   deploy.new_secret
-  deploy.restart
   deploy.cleanup
+  deploy.restart
 end
 
 namespace :deploy do
@@ -189,7 +190,6 @@ namespace :deploy do
   task :safe do # TODO roles?
     require 'colorize'
     update
-    rebundle
 
     cat_migrations_output = capture("cd #{current_path} && bundle exec rake db:cat_pending_migrations 2>&1", :env => {'RAILS_ENV' => stage}).chomp
     puts cat_migrations_output
@@ -202,7 +202,6 @@ namespace :deploy do
     backup.db.dump
     backup.db.trim
     migrate
-    restart
   end
 
   desc "Restart all services"

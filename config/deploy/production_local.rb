@@ -1,14 +1,11 @@
 set :user, 'dc21'
 set :deploy_base, "/home/#{user}"
-set :deploy_via, :copy
-set :scm, :none
-set :repository, "/home/#{user}/code_base/dc21"
 set :use_sudo, true
 set :copy_dir, "/home/#{user}/tmp"
 set :remote_copy_dir, "/tmp"
 set :rails_env, "production"
 set :stage, "production"
-set :branch, 'TAG'
+set :branch, ENV['DC21_TAG'] unless ENV['DC21_TAG']
 
 # Your HTTP server, Apache/etc
 set :web_server, 'HOSTNAME'
