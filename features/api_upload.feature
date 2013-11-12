@@ -204,3 +204,4 @@ Feature: Upload files via the API
       | labels     | "Photo","Contains, a comma"                                   |
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 2 labels
+    And file "weather_station_05_min.dat" should have labels "Contains, a comma|Photo"
