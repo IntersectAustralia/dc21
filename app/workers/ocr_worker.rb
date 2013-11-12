@@ -18,21 +18,21 @@ class OCRWorker
 
       df.save
 
-      ENV['CFLAGS'] = '-I/usr/local/include/'
-      ENV['LDFLAGS'] = '-L/usr/local/lib/'
-      require 'tesseract'
+      # ENV['CFLAGS'] = '-I/usr/local/include/'
+      # ENV['LDFLAGS'] = '-L/usr/local/lib/'
+      # require 'tesseract'
 
       # build tesseract txt file
-      e = Tesseract::Engine.new {|e|
-        e.language = :eng
-        e.blacklist = ''
-      }
-      df.converted_text = e.text_for(df.path).strip
+      # e = Tesseract::Engine.new {|e|
+      #   e.language = :eng
+      #   e.blacklist = ''
+      # }
+      tmp = Tempfile.new('dc21_ocr')
+      df.converted_text = `tesseract #{df.path} #{tmp.path} && cat #{tmp.path}.txt`
       # create attachment
 
       #attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
       #files = attachment_builder.build(file, experiment_id, type, description, tags, labels)
-
 
       df.save
 
