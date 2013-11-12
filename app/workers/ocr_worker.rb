@@ -28,7 +28,8 @@ class OCRWorker
       #   e.blacklist = ''
       # }
       tmp = Tempfile.new('dc21_ocr')
-      df.converted_text = `tesseract #{df.path} #{tmp.path} && cat #{tmp.path}.txt`
+      system *%W(tesseract #{df.path} #{tmp.path})
+      df.converted_text = `cat "#{tmp.path}.txt"`
       # create attachment
 
       #attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
