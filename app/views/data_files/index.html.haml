@@ -86,7 +86,13 @@
                         = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
 
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-
+            .searchcategory
+              %h4#automation_stati_category.expand Automation Status:
+              .automation_stati
+                - DataFile::AUTOMATION_STATI.each_with_index do |status, index|
+                  = label_tag "search_automation_status_#{index}", status
+                  = check_box_tag "search[automation_stati][]", status, @selected_automation_stati.include?(status), :id => "search_automation_status_#{index}"
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
               %h4#tags_category.expand Tags:
               .tags

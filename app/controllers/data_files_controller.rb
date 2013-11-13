@@ -278,6 +278,7 @@ class DataFilesController < ApplicationController
     @file_id = @search.file_id
     @id = @search.id
     @selected_stati = @search.stati
+    @selected_automation_stati = @search.automation_stati
     @selected_tags = @search.tags
     @selected_labels = @search.labels
     @uploader_id = @search.uploader_id

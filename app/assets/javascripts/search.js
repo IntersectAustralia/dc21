@@ -62,6 +62,14 @@ $(function () {
         }
     });
 
+    // Automation Status
+    if ( $('.searchcategory .automation_stati input[type="checkbox"][checked]').length > 0 ) {
+        $('#automation_stati_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .automation_stati').hide();
+    }
+
     // Tags
     if ( $('.searchcategory .tags input[type="checkbox"][checked]').length > 0 ) {
         $('#tags_category').toggleClass('current');
@@ -177,6 +185,11 @@ $(function () {
         $('.searchcategory > .type > .type_group > .type').each(function(index){
             $(this).show();
         });
+        $(this).toggleClass('current');
+    });
+
+    $('#automation_stati_category').click(function (event) {
+        $('.searchcategory .automation_stati').toggle();
         $(this).toggleClass('current');
     });
 

@@ -9,6 +9,7 @@ class DataFileSearch
   attr_accessor :variable_parents
   attr_accessor :file_id
   attr_accessor :stati
+  attr_accessor :automation_stati
   attr_accessor :tags
   attr_accessor :labels
   attr_accessor :uploader_id
@@ -40,6 +41,7 @@ class DataFileSearch
     self.variables = @search_params[:variables] || []
     self.variable_parents = @search_params[:variable_parents]|| []
     self.stati = @search_params[:stati]|| []
+    self.automation_stati = @search_params[:automation_stati] || []
     self.tags = @search_params[:tags]|| []
     self.labels = @search_params[:labels]|| []
     self.published = @search_params[:published]|| []
@@ -70,6 +72,7 @@ class DataFileSearch
         experiments.empty? &&
         variables.empty? &&
         stati.empty? &&
+        automation_stati.empty? &&
         tags.empty? &&
         labels.empty? &&
         filename.blank? &&
@@ -144,6 +147,10 @@ class DataFileSearch
     unless stati.nil? || stati.empty?
       search_result = search_result.with_status_in(stati)
       attrs_array << "Type"
+    end
+    unless automation_stati.nil? || automation_stati.empty?
+      search_result = search_result.with_transfer_status_in(automation_stati)
+      attrs_array << "Status"
     end
     unless tags.nil? || tags.empty?
       search_result = search_result.with_any_of_these_tags(tags.collect { |tag| tag.to_i })

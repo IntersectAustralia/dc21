@@ -130,6 +130,10 @@ When /^I perform an API search with the following parameters as user "([^"]*)"$/
     tags = post_params.delete('tags')
     post_params['tags'] = Tag.where(name: tags.split(", ")).collect(&:id)
   end
+  if post_params['automation_stati']
+    automation_stati = post_params.delete('automation_stati')
+    post_params['automation_stati'] = automation_stati.split(", ")
+  end
   user = User.find_by_email!(email)
   post api_search_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end

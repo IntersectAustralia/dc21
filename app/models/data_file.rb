@@ -19,6 +19,8 @@ class DataFile < ActiveRecord::Base
   STATI_FOR_EDIT = STATI - [STATUS_RAW]
   # for searching we include error as well
   ALL_STATI = [STATUS_PACKAGE] + STATI + [STATUS_ERROR]
+  # for searching auto processing jobs
+  AUTOMATION_STATI = [RESQUE_COMPLETE, RESQUE_FAILED, RESQUE_WORKING, RESQUE_QUEUED]
 
   belongs_to :created_by, :class_name => "User"
   belongs_to :published_by, :class_name => "User"
@@ -71,6 +73,7 @@ class DataFile < ActiveRecord::Base
   scope :with_filename_containing, lambda { |name| where("data_files.filename ~* ?", name) }
   scope :with_description_containing, lambda { |desc| where("data_files.file_processing_description ~* ?", desc) }
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
+  scope :with_transfer_status_in, lambda { |automation_stati| where { transfer_status.in automation_stati} }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
   scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id)}
   scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email')

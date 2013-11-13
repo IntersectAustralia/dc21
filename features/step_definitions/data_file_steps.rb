@@ -17,6 +17,9 @@ Given /^I have data files$/ do |table|
     elsif attributes['file_processing_status'] == 'PACKAGE'
       attributes['format'] = Package::PACKAGE_FORMAT
     end
+    if attributes['transfer_status'] == ''
+      attributes['transfer_status'] = nil
+    end
 
     if attributes['path']
       new_path = "#{APP_CONFIG['files_root']}/#{attributes['filename']}"
