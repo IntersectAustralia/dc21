@@ -49,6 +49,8 @@ if [ $? -ne 0 ]; then
 
   cd $HOME/code_base/tesseract-ocr/ && ./autogen.sh && ./configure && make && sudo make install && sudo mv $HOME/code_base/tesseract-ocr/tessdata/eng.* /usr/local/share/tessdata/
   sudo ldconfig
+else
+  echo "$(tput setaf 2)Tesseract detected, nothing to do.$(tput sgr0)"
 fi
 
 cd $HOME/code_base
