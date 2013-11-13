@@ -35,7 +35,7 @@ set :copy_exclude, ["features/*", "spec/*", "performance/*"]
 set :branch do
   default_tag = 'HEAD'
 
-  puts "Availible tags:".yellow
+  puts "    Availible tags:".yellow
   puts `git tag`
   tag = Capistrano::CLI.ui.ask "Tag to deploy (make sure to push the branch/tag first) or HEAD?: [#{default_tag}] ".yellow
   tag = default_tag if tag.empty?
@@ -171,7 +171,7 @@ namespace :deploy do
     if stage.eql?(:qa)
       input = "yes"
     else
-      puts "This step (deploy:refresh_db) will erase all data and start from scratch.\nYou probably don't want to do it. Are you sure?' [NO/yes]".colorize(:red)
+      puts "    This step (deploy:refresh_db) will erase all data and start from scratch.\nYou probably don't want to do it. Are you sure?' [NO/yes]".red
       input = STDIN.gets.chomp
     end
 
@@ -182,7 +182,7 @@ namespace :deploy do
       seed
       populate
     else
-      puts "Skipping database nuke"
+      puts "    Skipping database nuke".blue
     end
   end
 
@@ -192,11 +192,11 @@ namespace :deploy do
     update
 
     cat_migrations_output = capture("cd #{current_path} && bundle exec rake db:cat_pending_migrations 2>&1", :env => {'RAILS_ENV' => stage}).chomp
-    puts cat_migrations_output
+    puts cat_migrations_output.blue
 
     unless cat_migrations_output[/0 pending migration\(s\)/]
-      print "There are pending migrations. Are you sure you want to continue? [NO/yes] ".colorize(:red)
-      abort "Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
+      print "    There are pending migrations. Are you sure you want to continue? [NO/yes] ".red
+      abort "    Exiting because you didn't type 'yes'" unless STDIN.gets.chomp == 'yes'
     end
 
     backup.db.dump
@@ -206,6 +206,7 @@ namespace :deploy do
 
   desc "Restart all services"
   task :start_services, on_error: :continue do
+    sudo "service tomcat restart"
     sudo "service redis restart"
     sudo "service postgresql restart"
     sudo "service shibd restart"
@@ -214,6 +215,7 @@ namespace :deploy do
 
   desc "Print all services"
   task :check_services, on_error: :continue do
+    sudo "service tomcat status"
     sudo "service redis status"
     sudo "service postgresql status"
     sudo "service shibd status"

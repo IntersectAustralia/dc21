@@ -20,7 +20,7 @@ role :web, ''
 # This may be the same as your Web server
 role :app, ''
 # This is where Rails migrations will run
-role :db,  '', :primary => true
+role :db, '', :primary => true
 
 # If you are using RHEL/CentOS 6 or later, set this to true
 set :el6, true

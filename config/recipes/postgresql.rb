@@ -23,7 +23,7 @@ namespace :postgresql do
       sudo %Q{psql -c "create user #{postgresql_user} with SUPERUSER password '#{postgresql_password}';"}, as: "postgres"
       sudo %Q{psql -c "create database #{postgresql_database};"}, as: "postgres"
     rescue Capistrano::Error => error
-      puts "Error occured while setting up Postgres database: #{error}"
+      puts "    Error occured while setting up Postgres database: #{error}".red
     end
   end
 

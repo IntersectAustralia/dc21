@@ -6,9 +6,14 @@ namespace :resque do
 
   desc "Install and set up Resque"
   task :setup do
-    sudo "yum -y install redis"
-    sudo "service redis start"
-    sudo "chkconfig redis on"
+    status = capture "#{try_sudo} service redis status"
+    if status[/unrecognized/]
+      sudo "yum -y install redis"
+      sudo "service redis start"
+      sudo "chkconfig redis on"
+    else
+      puts "    Redis installed already.".green
+    end
   end
 
   desc "Start resque processes"

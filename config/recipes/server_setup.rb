@@ -3,7 +3,7 @@ namespace :server_setup do
   task :deploy_config do
     code_base = "/home/#{user}/code_base/dc21"
     # Update hostnames
-    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST']}')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml #{code_base}/config/deploy/production_local.rb #{code_base}/config/shibboleth.yml")
+    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml #{code_base}/config/deploy/production_local.rb #{code_base}/config/shibboleth.yml")
     # Update DB password
     system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{code_base}/config/database.yml")
     # Update AAF
@@ -17,16 +17,20 @@ namespace :server_setup do
 
   task :aaf_install do
 
-    run "#{try_sudo} wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo -P /etc/yum.repos.d"
-    run "#{try_sudo} yum install -y shibboleth"
-
+    status = capture "#{try_sudo} service shibd status"
+    if status[/unrecognized/]
+      run "#{try_sudo} wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo -P /etc/yum.repos.d"
+      run "#{try_sudo} yum install -y shibboleth"
+    else
+      puts "    Shibboleth installed already.".green
+    end
     #upload configs
     upload "config/deploy_files/shibboleth", "/tmp/", :via => :scp, :recursive => true
     run "#{try_sudo} mv /tmp/shibboleth/* /etc/shibboleth/"
 
     #set up certificate
 
-    hostname = ENV['DC21_HOST']
+    hostname = ENV['DC21_HOST'] || web_server
 
     run "cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
 
@@ -39,13 +43,6 @@ namespace :server_setup do
 
     sudo "service shibd start"
 
-  end
-
-  task :rvm_install, :roles => :app do
-    run "curl -L http://get.rvm.io | bash -s stable --ruby=1.9.2-p290"
-    run "source ~/.rvm/scripts/rvm"
-    run "rvm use 1.9.2-p290"
-    run "rvm gemset create dc21app"
   end
 
   task :set_proxies do

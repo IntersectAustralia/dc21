@@ -25,7 +25,7 @@ namespace :shared_file do
       servers.each do |server|
         shared_files.each do |file_path|
           top.upload(file_path, File.join(shared_file_path, file_path))
-          puts "    Uploaded #{file_path} to #{File.join(shared_file_path, file_path)}"
+          puts "    Uploaded #{file_path} to #{File.join(shared_file_path, file_path)}".green
         end
       end
 

@@ -45,10 +45,10 @@ namespace :joai do
         if first_password =~ /^[a-zA-Z0-9]{6,}$/
           password = first_password
         else
-          puts "Wrong password"
+          puts "    Wrong password"
         end
       else
-        puts "Passwords don't match".red
+        puts "    Passwords don't match".red
       end
     end
 
@@ -62,9 +62,14 @@ namespace :joai do
 
   desc "Fully deploy joai"
   task :setup do
-    copy
-    tomcat_install
-    joai_user
+    status = capture "#{try_sudo} service tomcat status"
+    if status[/unrecognized/]
+      copy
+      tomcat_install
+      joai_user
+    else
+      puts "    Tomcat installed already.".green
+    end
     sudo "service tomcat start"
   end
 end
