@@ -102,7 +102,7 @@ Feature: Upload files
       | Type        | RAW                        |
       | Description | My descriptive description |
       | Experiment  | My Experiment              |
-      | Tags        | Gap-Filled\nPhoto        |
+      | Tags        | Gap-Filled\nPhoto          |
 
   Scenario: Upload a single file with no tags or description
     Given I am on the upload page
@@ -150,7 +150,7 @@ Feature: Upload files
       | Type             | RAW                           |
       | Description      | I'm changing the description  |
       | Experiment       | Flux Experiment 1             |
-      | Tags             | Gap-Filled\nPhoto           |
+      | Tags             | Gap-Filled\nPhoto             |
       | Start time       | 2011-10-10  0:00:00           |
       | End time         | 2011-10-12 23:45:00           |
       | Sample interval  | 15 minutes                    |
@@ -440,51 +440,92 @@ Feature: Upload files
     And file "sample1_2.txt" should have tags "Gap-Filled,Photo"
     And file "sample1_2.txt" should have description "My descriptive description"
 
-    #EYETRACKER-88
-    Scenario: Add new labels to file upload
-      Given I am on the upload page
-      When I select "RAW" from "File type"
-      And I select "My Experiment" from "Experiment"
-      And I fill in "data_file_label_list" with "bebba,Abba,cuba,AA<script></script>"
-      And I select "samples/sample1.txt" to upload
-      And I press "Upload"
-      And the uploaded files display should include "sample1.txt" with labels "AA<script></script>,Abba,bebba,cuba"
-      And I fill in "Labels" with "bebba|Abba"
-      And I press "Update"
-      And I am on the data file details page for sample1.txt
-      Then I should see field "Labels" with value "Abba, bebba"
+#EYETRACKER-88
 
-    #EYETRACKER-7
-    Scenario: Check UUID is created for an uploaded image file
-      Given I am on the upload page
-      When I select "RAW" from "File type"
-      And I select "My Experiment" from "Experiment"
-      And I select "samples/Test_OCR.jpg" to upload
-      And I press "Upload"
-      Then the most recent file should have name "Test_OCR.jpg"
-      And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
-      And the uploaded files display should include "Test_OCR.jpg" with messages "success"
-      And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
-      And file "Test_OCR.jpg" should have type "RAW"
-      And file "Test_OCR.jpg" should have experiment "My Experiment"
-      And file "Test_OCR.jpg" should have a UUID created
-      When I am on the list data files page
-      Then I should see "exploredata" table with
-        | Filename      | Added by                    | Type |
-        | Test_OCR.jpg  | researcher@intersect.org.au | RAW  |
+  Scenario: Add new labels to file upload
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "data_file_label_list" with "bebba,Abba,cuba,AA<script></script>"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    And the uploaded files display should include "sample1.txt" with labels "AA<script></script>,Abba,bebba,cuba"
+    And I fill in "Labels" with "bebba|Abba"
+    And I press "Update"
+    And I am on the data file details page for sample1.txt
+    Then I should see field "Labels" with value "Abba, bebba"
 
-    #EYETRACKER-7
-    Scenario: Check UUID is blank for uploaded none image files
-      Given I am on the upload page
-      When I select "RAW" from "File type"
-      And I select "My Experiment" from "Experiment"
-      And I select "samples/sample1.txt" to upload
-      And I press "Upload"
-      Then the most recent file should have name "sample1.txt"
-      And the uploaded files display should include "sample1.txt" with file type "RAW"
-      And the uploaded files display should include "sample1.txt" with messages "success"
-      And the uploaded files display should include "sample1.txt" with experiment "My Experiment"
-      And file "sample1.txt" should have type "RAW"
-      And file "sample1.txt" should have experiment "My Experiment"
-      And file "sample1.txt" should not have a UUID created
+#EYETRACKER-7
+
+  Scenario: Check UUID is created for an uploaded image file
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.jpg" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR.jpg"
+    And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
+    And the uploaded files display should include "Test_OCR.jpg" with messages "success"
+    And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
+    And file "Test_OCR.jpg" should have type "RAW"
+    And file "Test_OCR.jpg" should have experiment "My Experiment"
+    And file "Test_OCR.jpg" should have a UUID created
+    When I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename     | Added by                    | Type |
+      | Test_OCR.jpg | researcher@intersect.org.au | RAW  |
+
+#EYETRACKER-8
+
+  Scenario: Check UUID is created for an uploaded mp3 or wav file
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_SR.wav" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_SR.wav"
+    And the uploaded files display should include "Test_SR.wav" with file type "RAW"
+    And the uploaded files display should include "Test_SR.wav" with messages "success"
+    And the uploaded files display should include "Test_SR.wav" with experiment "My Experiment"
+    And file "Test_SR.wav" should have type "RAW"
+    And file "Test_SR.wav" should have experiment "My Experiment"
+    And file "Test_SR.wav" should have a UUID created
+    When I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename    | Added by                    | Type |
+      | Test_SR.wav | researcher@intersect.org.au | RAW  |
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_SR.mp3" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_SR.mp3"
+    And the uploaded files display should include "Test_SR.mp3" with file type "RAW"
+    And the uploaded files display should include "Test_SR.mp3" with messages "success"
+    And the uploaded files display should include "Test_SR.mp3" with experiment "My Experiment"
+    And file "Test_SR.mp3" should have type "RAW"
+    And file "Test_SR.mp3" should have experiment "My Experiment"
+    And file "Test_SR.mp3" should have a UUID created
+    When I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename    | Added by                    | Type |
+      | Test_SR.mp3 | researcher@intersect.org.au | RAW  |
+      | Test_SR.wav | researcher@intersect.org.au | RAW  |
+
+
+#EYETRACKER-7
+
+  Scenario: Check UUID is blank for uploaded none image files
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    Then the most recent file should have name "sample1.txt"
+    And the uploaded files display should include "sample1.txt" with file type "RAW"
+    And the uploaded files display should include "sample1.txt" with messages "success"
+    And the uploaded files display should include "sample1.txt" with experiment "My Experiment"
+    And file "sample1.txt" should have type "RAW"
+    And file "sample1.txt" should have experiment "My Experiment"
+    And file "sample1.txt" should not have a UUID created
 

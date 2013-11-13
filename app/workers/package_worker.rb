@@ -8,15 +8,15 @@ class PackageWorker
   @queue = :package_queue
 
   def perform
+    pkg = DataFile.find(options['package_id'])
+
     begin
       @total_processed = 0
 
-      package_id = options['package_id']
       data_file_ids = options['data_file_ids']
       user_id = options['user_id']
 
       user = User.find(user_id)
-      pkg = DataFile.find(package_id)
 
       job = Resque::Plugins::Status::Hash.get(pkg.uuid)
       pkg.transfer_status = job.status.to_s.upcase

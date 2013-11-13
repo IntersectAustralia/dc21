@@ -1,16 +1,14 @@
 #!/usr/bin/ruby -w
 
-
-class OCRWorker
+class SRWorker
   include Resque::Plugins::Status
 
-  @queue = :ocr_queue
+  @queue = :sr_queue
 
   def perform
     df = DataFile.find(options['data_file_id'])
-
     begin
-      @total_processed = 0
+
       user = df.created_by
 
       job = Resque::Plugins::Status::Hash.get(df.uuid)
@@ -18,9 +16,7 @@ class OCRWorker
 
       df.save
 
-      tmp = Tempfile.new('dc21_ocr')
-      system *%W(tesseract #{df.path} #{tmp.path})
-      df.converted_text = `cat "#{tmp.path}.txt"`
+      df.file_processing_description = df.file_processing_description + "\n This was processed by SRWorker at #{Time.now}."
 
       df.save
 

@@ -1,10 +1,19 @@
 defaults: &defaults
+
   files_root: /data/dc21-data
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
   unpublished_rif_cs_directory: /data/dc21-data/unpublished_rif_cs
   archived_data_directory: /data/dc21-data/archived_data
   default_readme_template_file: app/templates/file_set_metadata.html.haml
   extra_config_file_root: /data
+
+  ocr_types:
+    - image/jpeg
+    - image/png
+  sr_types:
+    - audio/mpeg
+    - audio/x-wav
+
   hiev_handle_prefix: hiev
   # the following are defaults that can be overridden in the dc21app_extra_config.yml which is kept separate from the
   # code in production servers
