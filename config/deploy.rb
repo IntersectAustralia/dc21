@@ -15,7 +15,7 @@ load 'config/recipes/shared_file'
 
 set :keep_releases, 5
 set :application, 'dc21app'
-set :stages, %w(qa staging production production_local)
+set :stages, %w(qa staging production local)
 set :default_stage, "qa"
 
 set :shared_children, shared_children + %w(log_archive)

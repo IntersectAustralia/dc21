@@ -2,15 +2,19 @@ namespace :server_setup do
 
   task :deploy_config do
     code_base = "/home/#{user}/code_base/dc21"
-    # Update hostnames
-    system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml #{code_base}/config/deploy/production_local.rb #{code_base}/config/shibboleth.yml")
-    # Update DB password
-    system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{code_base}/config/database.yml")
-    # Update AAF
-    if ENV['DC21_AAF_TEST'].eql?("true")
-      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml")
+    if File.directory?(code_base)
+      # Update hostnames
+      system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml #{code_base}/config/deploy/local.rb #{code_base}/config/shibboleth.yml")
+      # Update DB password
+      system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{code_base}/config/database.yml")
+      # Update AAF
+      if ENV['DC21_AAF_TEST'].eql?("true")
+        system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml")
+      else
+        system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml")
+      end
     else
-      system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml")
+      raise "Your system is not set up for local deployment.".red
     end
 
   end

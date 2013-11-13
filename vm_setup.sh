@@ -75,7 +75,7 @@ bundle install
 status=$?
 
 if [ $status -eq 0 ]; then
-  cap production_local server_setup:deploy_config
+  cap local server_setup:deploy_config
 else
   echo "$(tput setaf 1)ERROR $status: Bundle install failed$(tput sgr0)"
   exit $status;
@@ -83,7 +83,7 @@ fi
 
 status=$?
 if [ $status -eq 0 ]; then
-  cap production_local deploy:first_time
+  cap local deploy:first_time
 else
   echo "$(tput setaf 1)ERROR $status: deploy config set up failed.$(tput sgr0)"
   exit $status;

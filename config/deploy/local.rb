@@ -4,7 +4,7 @@ set :use_sudo, true
 set :copy_dir, "/home/#{user}/tmp"
 set :remote_copy_dir, "/tmp"
 set :rails_env, "production"
-set :stage, "production"
+set :stage, ENV['DC21_STAGE'] || "production"
 set :branch, ENV['DC21_TAG'] unless ENV['DC21_TAG']
 
 # Your HTTP server, Apache/etc
