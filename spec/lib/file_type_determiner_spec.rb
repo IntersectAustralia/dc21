@@ -37,6 +37,11 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'really-a-jpg.dat')
   end
 
+  let(:wav) do
+    path = Rails.root.join('samples', 'Test_SR.wav')
+    Factory(:data_file, :path => path, :filename => 'Test_SR.wav')
+  end
+
   let(:file_type_determiner) {
     FileTypeDeterminer.new
   }
@@ -62,23 +67,30 @@ describe FileTypeDeterminer do
       format = file_type_determiner.identify_file(toa5_csv)
       format.should eq(FileTypeDeterminer::TOA5)
     end
+
+    it "should identify WAV file" do
+      format = file_type_determiner.identify_file(wav)
+      format.should eq('audio/x-wav')
+    end
   end
 
   describe "Unidentifiable files" do
 
     it "should NOT identify files with DAT extension but no TOA5 header" do
       format = file_type_determiner.identify_file(unknown_dat)
-      format.should be_nil
+      format.should eq("text/plain")
     end
 
     it "should NOT identify files with DAT extension but which are empty" do
       format = file_type_determiner.identify_file(empty_dat)
-      format.should be_nil
+      format.should_not eq(FileTypeDeterminer::TOA5)
+      format.should_not be_nil
     end
 
     it "should NOT identify files with DAT extension but no TOA5 header - binary format" do
       format = file_type_determiner.identify_file(jpg)
-      format.should be_nil
+      format.should eq('image/jpeg')
     end
+
   end
 end

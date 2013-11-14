@@ -6,9 +6,9 @@ class FileTypeDeterminer
   def identify_file(data_file)
     return TOA5 if is_toa5?(data_file)
     return BAGIT if is_bagit?(data_file)
-    mime = File.mime_type?(data_file.path)
+    mime = File.mime_type?(File.new(data_file.path))
     unless mime[/unknown/]
-      return mime
+      return mime[/^\w+\/[^;]+/]
     end
 
     return nil

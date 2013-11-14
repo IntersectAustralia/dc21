@@ -71,7 +71,6 @@ group :development do
 end
 
 group :test do
-  gem "metrical"
   gem "simplecov", :require => false
   gem "simplecov-rcov", :require => false
 end
