@@ -647,6 +647,10 @@ th.actions, td.actions
           background: url("../images/icon_arrow_right_light.png") 15px center no-repeat
           -moz-background-size: 6px
           background-size: 6px
+      button[type="button"].ui-datepicker-trigger
+        margin: 1px 0 1px -31px
+
+      line-height: 10px
 
     .date, .time, .facility, .variable, .filename, .description, .file_id, .id, .type, .tags, .labels, .uploader, .upload_date, .automation_stati
       +m-p-w-h-p-t-b-l-r-f(10px 0)
@@ -1253,6 +1257,18 @@ ul.alert
     padding: 5px 0 0 5px
     .record
       padding: 0px
+    input[type="text"], input[type="password"]
+      width: 603px
+    input[type="password"]
+      font: small-caption
+      font-size: 16px
+    input[type="text"].hasDatepicker
+      width: 273px
+    textarea
+      width: 603px
+
+    #system_configuration_address1, #system_configuration_address2, #system_configuration_address3
+      margin-bottom: 3px
 
 .formerror
   margin: 0 0 20px 0
