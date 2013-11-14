@@ -6,7 +6,7 @@ Dc21app::Application.routes.draw do
     end
   end
 
-  resources :cart_items, :only => [:index, :create, :destroy]  do
+  resources :cart_items, :only => [:index, :create, :destroy] do
     collection do
       get :add_all
       get :add_recent
@@ -73,7 +73,7 @@ Dc21app::Application.routes.draw do
       put :bulk_update
       post :search
       post :api_create
-      post :api_search, :defaults => { :format => 'json' }
+      post :api_search, :defaults => {:format => 'json'}
       get :clear
     end
   end
@@ -99,7 +99,6 @@ Dc21app::Application.routes.draw do
       resources :experiment_parameters, :except => [:show, :index]
     end
   end
-# SystemConfiguration.instance.level1_plural.gsub(/\s+/, "_").downcase.to_sym
 
   root :to => "pages#home"
 

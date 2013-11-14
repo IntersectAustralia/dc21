@@ -16,23 +16,23 @@ def check_files
   files = ["EddyFlux_Delay_CSAT_20130331.dat", "EddyFlux_fast_std_20130417.dat", "Cntrl14_Table1_20130331.dat","cntl_test.dat","node-v0.10.5.pkg","WTC02_Table1.dat","sample1.txt"]
   absent = []
   files.each do |file|
-  	absent << file unless File.exists?("#{APP_CONFIG['extra_config_file_root']}/perf_samples/#{file}")
+  	absent << file unless File.exists?("#{APP_CONFIG['data_root']}/perf_samples/#{file}")
   end
 
   if absent.count > 0
-  	raise IOError, "Missing files #{absent.join(', ')} in #{APP_CONFIG['extra_config_file_root']}/perf_samples/"
+  	raise IOError, "Missing files #{absent.join(', ')} in #{APP_CONFIG['data_root']}/perf_samples/"
   end
 end
 
 def create_performance_users
 	User.delete_all
-	
+
 	# populate 25 researchers
 	$index = 0
 	while $index < 25 do
 		create_user(:email => "researcher"+$index.to_s+"@intersect.org.au", :first_name => "Researcher", :last_name => "User")
 		set_role("researcher"+$index.to_s+"@intersect.org.au", "Researcher")
-		puts "Creating user: researcher"+ $index.to_s  
+		puts "Creating user: researcher"+ $index.to_s
 		$index += 1
 	end
 
@@ -41,7 +41,7 @@ def create_performance_users
 	while $index < 5 do
 		create_user(:email => "admin"+$index.to_s+"@intersect.org.au", :first_name => "Admin", :last_name => "User")
 		set_role("admin"+$index.to_s+"@intersect.org.au", "Administrator")
-		puts "Creating user: admin"+ $index.to_s  
+		puts "Creating user: admin"+ $index.to_s
 		$index += 1
 	end
 
@@ -50,7 +50,7 @@ def create_performance_users
 	while $index < 4 do
 		create_user(:email => "uploader"+$index.to_s+"@intersect.org.au", :first_name => "Uploader", :last_name => "User")
 		set_role("uploader"+$index.to_s+"@intersect.org.au", "API Uploader")
-		puts "Creating user: uploader"+ $index.to_s  
+		puts "Creating user: uploader"+ $index.to_s
 		$index += 1
 	end
 end
@@ -76,7 +76,7 @@ def create_performance_files
 		puts "Uploading 110MB file "+ $index.to_s + ": EddyFlux_fast_std_20130417.dat"
 		upload_toa5_file("EddyFlux_fast_std_20130417.dat", "researcher0@intersect.org.au")
 		$index += 1
-		
+
 			# Auto-upload Face Raw per month 25
 		25.times do
 			puts "Uploading file "+ $index.to_s + ": Cntrl14_Table1_20130331.dat"
@@ -133,7 +133,7 @@ def create_performance_facilities
 		end
 		$index += 1
 	end
-	
+
 	# Total number of manual experiments 50
 	# Total number of Experiments 200
 	"Creating facility: Test Facility"
@@ -158,7 +158,7 @@ end
 
 def create_data_file_performance(filename, type, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
-  file = Rack::Test::UploadedFile.new("#{APP_CONFIG['extra_config_file_root']}/perf_samples/#{filename}", "application/octet-stream")
+  file = Rack::Test::UploadedFile.new("#{APP_CONFIG['data_root']}/perf_samples/#{filename}", "application/octet-stream")
   builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
   experiment_id = Experiment.first.id
 
@@ -171,7 +171,7 @@ def create_data_file_performance(filename, type, uploader)
 end
 
 def upload_toa5_file(filename, uploader)
-	filepath = "#{APP_CONFIG['extra_config_file_root']}/perf_samples/#{filename}"
+	filepath = "#{APP_CONFIG['data_root']}/perf_samples/#{filename}"
 	if File.exists?(filepath)
 		create_data_file_performance(filename, 'RAW', uploader)
 

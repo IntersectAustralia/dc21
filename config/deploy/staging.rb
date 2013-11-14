@@ -17,4 +17,4 @@ set :proxy, nil
 
 role :web, web_server
 role :app, app_server
-role :db,  db_server, :primary => true
+role :db, db_server, :primary => true

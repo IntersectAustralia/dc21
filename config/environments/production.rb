@@ -2,15 +2,15 @@ Dc21app::Application.configure do
 
   GA.tracker = "UA-16667092-16"
 
-  config.action_mailer.default_url_options = { :host => Socket.gethostname }
+  config.action_mailer.default_url_options = {:host => Socket.gethostname}
 
   # email configuration
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-    :address => 'localhost',
-    :port => 25,
-    :authentication => :plain
+      :address => 'localhost',
+      :port => 25,
+      :authentication => :plain
   }
 
   # Settings specified here will take precedence over those in config/application.rb
@@ -19,7 +19,7 @@ Dc21app::Application.configure do
   config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)

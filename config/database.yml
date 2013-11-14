@@ -25,7 +25,7 @@ production: &production
   host: localhost
   database: dc21
   username: dc21
-  password: placeholdertext
+  password: DB_PASSWORD
   pool: 5
   timeout: 5000
 

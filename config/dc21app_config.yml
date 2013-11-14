@@ -1,11 +1,13 @@
 defaults: &defaults
 
+########################## Start of standard configuration
+# The server will need to be restarted if you make any changes
+# Modify this section AT YOUR OWN RISK!
   files_root: /data/dc21-data
   published_rif_cs_directory: /data/dc21-data/published_rif_cs
   unpublished_rif_cs_directory: /data/dc21-data/unpublished_rif_cs
   archived_data_directory: /data/dc21-data/archived_data
   default_readme_template_file: app/templates/file_set_metadata.html.haml
-  extra_config_file_root: /data
 
   ocr_types:
     - image/jpeg
@@ -14,9 +16,18 @@ defaults: &defaults
     - audio/mpeg
     - audio/x-wav
 
+  data_root: /data
+
+########################## End of standard configuration
+
+########################## Start of editable configuration
+# The server will need to be restarted if you make any changes
+
+  readme_template_directory: ""
+  readme_template_file: ""
+
   hiev_handle_prefix: hiev
-  # the following are defaults that can be overridden in the dc21app_extra_config.yml which is kept separate from the
-  # code in production servers
+
   notification_email_sender: noreply@intersect.org.au
   column_mappings:
     - Average Soil Temp
@@ -34,6 +45,8 @@ defaults: &defaults
   # The white list of IP addresses that are allowed to access the download page without authentication
   ip_addresses:
     - 127.0.0.1
+
+########################## End of editable configuration
 
   #IMPORTANT NOTE: the values below are only used on an initial build when database values are seeded. Modifying them later
   # will have no effect. To modify these later, you need to update the relevant rows in the database (ensuring

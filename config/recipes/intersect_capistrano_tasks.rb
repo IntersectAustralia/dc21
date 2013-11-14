@@ -1,7 +1,6 @@
 require "highline/import"
 require 'colorize'
 
-
 namespace :backup do
   namespace :db do
     desc "make a database backup"
@@ -29,33 +28,13 @@ task :do_set_password, :roles => :app do
   put YAML::dump(buffer), "#{shared_path}/env_config/sample_password.yml", :mode => 0664
 end
 
-desc "After updating code we need to populate a new database.yml"
-task :generate_database_yml, :roles => :app do
-  require "yaml"
-
-  set :production_database_password, proc { Capistrano::CLI.password_prompt("Database password: ") }
-
-  buffer = YAML::load_file('config/database.yml')
-  # get rid of unneeded configurations
-  buffer.delete('test')
-  buffer.delete('development')
-  buffer.delete('cucumber')
-  buffer.delete('spec')
-
-  # Populate production password
-  buffer[rails_env]['password'] = production_database_password
-
-  put YAML::dump(buffer), "#{release_path}/config/database.yml", :mode => 0664
-end
-
-
 namespace :deploy do
 
   #There's a little bit of reinventing the wheel here (user validation), but we don't want to boot up the rails app in the middle of a deploy
   desc "On a new deploy we need an initial user and password"
   task :generate_initial_user do
     require 'rails' # So we can use bits of our validator
-    require "#{File.dirname(__FILE__)}/../lib/password_format_validator"
+    require "#{File.dirname(__FILE__)}/../../lib/password_format_validator"
 
     output_file = "#{current_path}/config/initial_user.yml"
     user_happy = false
@@ -63,11 +42,11 @@ namespace :deploy do
     until user_happy
       normal_attrs = [:first_name, :last_name, :email]
       user = {}
-      puts 'Enter details for a new admin user:'.yellow
-      puts "Warning: Everything you enter will be temporarily stored on the server in:".red,
+      puts '    Enter details for a new admin user:'.yellow
+      puts "    Warning: Everything you enter will be temporarily stored on the server in:".red,
            output_file,
-           "This file will be deleted if deployment completes successfully,".red,
-           "however you should ensure that file is removed if this step fails.".red
+           "    This file will be deleted if deployment completes successfully,".red,
+           "    however you should ensure that file is removed if this step fails.".red
 
 
       normal_attrs.each do |attr|
@@ -90,9 +69,9 @@ namespace :deploy do
         end
       end
 
-      puts "Name: #{user[:first_name] + ' ' + user[:last_name]}",
-           "Email: #{user[:email]}",
-           "Password: <hidden>"
+      puts "    Name: #{user[:first_name] + ' ' + user[:last_name]}",
+           "    Email: #{user[:email]}",
+           "    Password: <hidden>"
       user_happy = agree "Is this okay?"
 
     end
