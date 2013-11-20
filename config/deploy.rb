@@ -6,12 +6,7 @@ require 'colorize'
 require 'deploy/create_deployment_record'
 
 # Extra capistrano tasks
-load 'config/recipes/intersect_capistrano_tasks'
-load 'config/recipes/joai_capistrano_tasks'
-load 'config/recipes/postgresql'
-load 'config/recipes/resque'
-load 'config/recipes/server_setup'
-load 'config/recipes/shared_file'
+Dir["config/recipes/*.rb"].each {|file| load file }
 
 set :keep_releases, 5
 set :application, 'dc21app'
@@ -202,6 +197,17 @@ namespace :deploy do
     backup.db.dump
     backup.db.trim
     migrate
+  end
+
+  namespace :assets do
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      from = source.next_revision(current_revision)
+      if capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
+        run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
+      else
+        logger.info "Skipping asset pre-compilation because there were no asset changes"
+      end
+    end
   end
 
   desc "Restart all services"
