@@ -2,6 +2,7 @@ namespace :server_setup do
 
   task :deploy_config do
     code_base = "/home/#{user}/code_base/dc21"
+    p code_base
     if File.directory?(code_base)
       # Update hostnames
       system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml #{code_base}/config/deploy/local.rb #{code_base}/config/shibboleth.yml")
