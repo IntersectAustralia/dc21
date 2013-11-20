@@ -1,4 +1,4 @@
-set :user, 'dc21'
+set :user, 'devel'
 set :deploy_base, "/home/#{user}"
 set :use_sudo, true
 set :copy_dir, "/home/#{user}/tmp"

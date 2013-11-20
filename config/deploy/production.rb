@@ -5,7 +5,7 @@ set :app_server, 'HOSTNAME'
 # # This is where Rails migrations will run
 set :db_server, 'HOSTNAME'
 # # The user configured to run the rails app
-set :user, 'dc21'
+set :user, 'devel'
 
 # If you are using RHEL/CentOS 6 or later, set this to true
 set :el6, true
