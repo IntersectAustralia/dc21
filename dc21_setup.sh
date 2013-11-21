@@ -3,10 +3,10 @@ export DC21_HOST=localhost DC21_DB_PWD=dc21_test DC21_AAF_TEST=true DC21_TAG=sna
 spawn bash <(curl -s https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh)
 
 expect -re " password for devel:"
-send "$password\r"
+send "$PASSWORD\r"
 
 expect "Password: "
-send "$password\r"
+send "$PASSWORD\r"
 
 expect "New jOAI password (at least six alphanumeric characters):"
 send "$JOAI\r"
@@ -15,24 +15,24 @@ expect "Confirm password: "
 send "$JOAI\r"
 
 expect "First name:"
-send "$first_name\r"
+send "$FIRST_NAME\r"
 
 expect "Last name:"
-send "$last_name\r"
+send "$LAST_NAME\r"
 
 expect "Email:"
-send "$email\r"
+send "$EMAIL\r"
 
 expect "New user password (input will be hidden): "
-send "$user_pass\r"
+send "$USER_PASS\r"
 
 expect "Confirm password: "
-send "$user_pass\r"
+send "$USER_PASS\r"
 
 expect "Is this okay?"
-send "$yes_no\r"
+send "$YES_NO\r"
 
 expect -re " password for devel:"
-send "$password\r"
+send "$PASSWORD\r"
 interact
 EOD
