@@ -35,3 +35,4 @@ send "$yes_no\r"
 expect -re " password for devel:"
 send "$password\r"
 interact
+EOD>>
