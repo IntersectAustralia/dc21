@@ -1,40 +1,42 @@
 export DC21_HOST=localhost DC21_DB_PWD=dc21_test DC21_AAF_TEST=true DC21_TAG=snap-deploy PASSWORD="FT^yhu8ik" JOAI="Pass123" FIRST_NAME="John" LAST_NAME="Smith" EMAIL="admin@intersect.org.au" USER_PASS="Pass.123" YES_NO="yes"
 wget https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh
 /usr/bin/expect -<<EOD
+set timeout -1
 spawn bash vm_setup.sh
 
-expect -re -timeout -1 " password for devel:"
+expect -re " password for devel:"
 send "$PASSWORD\r"
 
-expect -ex -timeout -1 "Password: "
+expect -ex "Password: "
 send "$PASSWORD\r"
 
-expect -ex -timeout -1 "New jOAI password (at least six alphanumeric characters):"
+expect -ex "New jOAI password (at least six alphanumeric characters):"
 send "$JOAI\r"
 
-expect -ex -timeout -1 "Confirm password: "
+expect -ex "Confirm password: "
 send "$JOAI\r"
 
-expect -ex -timeout -1 "First name:"
+expect -ex "First name:"
 send "$FIRST_NAME\r"
 
-expect -ex -timeout -1 "Last name:"
+expect -ex "Last name:"
 send "$LAST_NAME\r"
 
-expect -ex -timeout -1 "Email:"
+expect -ex "Email:"
 send "$EMAIL\r"
 
-expect -ex -timeout -1 "New user password (input will be hidden): "
+expect -ex "New user password (input will be hidden): "
 send "$USER_PASS\r"
 
-expect -ex -timeout -1 "Confirm password: "
+expect -ex "Confirm password: "
 send "$USER_PASS\r"
 
-expect -ex -timeout -1 "Is this okay?"
+expect -ex "Is this okay?"
 send "$YES_NO\r"
 
-expect -re -timeout -1 " password for devel:"
+expect -re " password for devel:"
 send "$PASSWORD\r"
 
-interact
+expect
+
 EOD
