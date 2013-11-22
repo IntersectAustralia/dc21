@@ -1,6 +1,7 @@
 export DC21_HOST=localhost DC21_DB_PWD=dc21_test DC21_AAF_TEST=true DC21_TAG=snap-deploy PASSWORD="FT^yhu8ik" JOAI="Pass123" FIRST_NAME="John" LAST_NAME="Smith" EMAIL="admin@intersect.org.au" USER_PASS="Pass.123" YES_NO="yes"
+wget https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh
 /usr/bin/expect -<<EOD
-spawn `sh <(curl -s https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh)`
+spawn bash vm_setup.sh
 
 expect -re " password for devel:"
 send "$PASSWORD\r"
@@ -34,5 +35,6 @@ send "$YES_NO\r"
 
 expect -re " password for devel:"
 send "$PASSWORD\r"
-interact
+
+expect
 EOD
