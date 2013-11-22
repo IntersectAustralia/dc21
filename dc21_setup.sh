@@ -3,7 +3,7 @@ wget https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh
 /usr/bin/expect -<<EOD
 spawn bash vm_setup.sh
 
-expect -ex -timeout -1 " password for devel:"
+expect -re -timeout -1 " password for devel:"
 send "$PASSWORD\r"
 
 expect -ex -timeout -1 "Password: "
@@ -33,7 +33,7 @@ send "$USER_PASS\r"
 expect -ex -timeout -1 "Is this okay?"
 send "$YES_NO\r"
 
-expect -ex -timeout -1 " password for devel:"
+expect -re -timeout -1 " password for devel:"
 send "$PASSWORD\r"
 
 interact
