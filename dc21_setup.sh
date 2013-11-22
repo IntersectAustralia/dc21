@@ -3,37 +3,37 @@ wget https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh
 /usr/bin/expect -<<EOD
 spawn bash vm_setup.sh
 
-expect -ex " password for devel:"
+expect -ex -timeout -1 " password for devel:"
 send "$PASSWORD\r"
 
-expect -ex "Password: "
+expect -ex -timeout -1 "Password: "
 send "$PASSWORD\r"
 
-expect -ex "New jOAI password (at least six alphanumeric characters):"
+expect -ex -timeout -1 "New jOAI password (at least six alphanumeric characters):"
 send "$JOAI\r"
 
-expect -ex "Confirm password: "
+expect -ex -timeout -1 "Confirm password: "
 send "$JOAI\r"
 
-expect -ex "First name:"
+expect -ex -timeout -1 "First name:"
 send "$FIRST_NAME\r"
 
-expect -ex "Last name:"
+expect -ex -timeout -1 "Last name:"
 send "$LAST_NAME\r"
 
-expect -ex "Email:"
+expect -ex -timeout -1 "Email:"
 send "$EMAIL\r"
 
-expect -ex "New user password (input will be hidden): "
+expect -ex -timeout -1 "New user password (input will be hidden): "
 send "$USER_PASS\r"
 
-expect -ex "Confirm password: "
+expect -ex -timeout -1 "Confirm password: "
 send "$USER_PASS\r"
 
-expect -ex "Is this okay?"
+expect -ex -timeout -1 "Is this okay?"
 send "$YES_NO\r"
 
-expect -ex " password for devel:"
+expect -ex -timeout -1 " password for devel:"
 send "$PASSWORD\r"
 
 interact
