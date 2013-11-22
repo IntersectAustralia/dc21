@@ -3,38 +3,42 @@ wget https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh
 /usr/bin/expect -<<EOD
 spawn bash vm_setup.sh
 
-expect -re " password for devel:"
-send "$PASSWORD\r"
-
-expect "Password: "
-send "$PASSWORD\r"
-
-expect "New jOAI password (at least six alphanumeric characters):"
-send "$JOAI\r"
-
-expect "Confirm password: "
-send "$JOAI\r"
-
-expect "First name:"
-send "$FIRST_NAME\r"
-
-expect "Last name:"
-send "$LAST_NAME\r"
-
-expect "Email:"
-send "$EMAIL\r"
-
-expect "New user password (input will be hidden): "
-send "$USER_PASS\r"
-
-expect "Confirm password: "
-send "$USER_PASS\r"
-
-expect "Is this okay?"
-send "$YES_NO\r"
-
-expect -re " password for devel:"
-send "$PASSWORD\r"
-
-expect
+expect {
+    -re " password for devel:" {
+        send "$PASSWORD\r"
+        exp_continue
+    }
+    "Password: " {
+        send "$PASSWORD\r"
+        exp_continue
+    }
+    "New jOAI password (at least six alphanumeric characters):" {
+         send "$JOAI\r"
+         exp_continue
+    }
+    "Confirm password: " {
+         send "$JOAI\r"
+         exp_continue
+    }
+    "First name:" {
+         send "$FIRST_NAME\r"
+         exp_continue
+    }
+    "Last name:" {
+         send "$LAST_NAME\r"
+         exp_continue
+    }
+    "Email:" {
+         send "$EMAIL\r"
+         exp_continue
+    }
+    "New user password (input will be hidden): " {
+         send "$USER_PASS\r"
+         exp_continue
+    }
+    "Is this okay?" {
+         send "YES_NO\r"
+         exp_continue
+    }
+}
 EOD
