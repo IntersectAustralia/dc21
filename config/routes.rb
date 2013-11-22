@@ -67,6 +67,7 @@ Dc21app::Application.routes.draw do
   resources :data_files do
     member do
       get :download
+      get :process_ocr
     end
     collection do
       get :download_selected

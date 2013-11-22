@@ -110,6 +110,15 @@ class DataFilesController < ApplicationController
 
   end
 
+  def process_ocr
+    file = DataFile.find(params[:id])
+    format = file.format
+    MetadataExtractor.new.extract_metadata(file, format)
+    p file.uuid
+    p file.format
+    redirect_to data_file_path(file)
+  end
+
   def bulk_update
     successful_complete_update = true
     @uploaded_files = []
