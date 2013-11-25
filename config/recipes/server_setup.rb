@@ -116,6 +116,7 @@ namespace :server_setup do
 
       #add SSL folders
       run "#{try_sudo} mkdir -p /etc/httpd/ssl"
+      run "#{try_sudo} openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt"
 
       sudo "chkconfig httpd on"
 

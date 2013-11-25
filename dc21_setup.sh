@@ -15,6 +15,28 @@ send "$JOAI\r"
 expect -ex "Confirm password: "
 send "$JOAI\r"
 
+
+expect -re "Country Name (2 letter code)"
+send "$SSL_COUNTRY_CODE\r"
+
+expect -re "State or Province Name (full name)"
+send "$SSL_STATE_CODE\r"
+
+expect -re "Locality Name (eg, city)"
+send "$SSL_CITY\r"
+
+expect -re "Organization Name (eg, company)"
+send "$SSL_ORGANIZATION_NAME\r"
+
+expect -re "Organizational Unit Name (eg, section)"
+send "$SSL_ORGANIZATION_UNIT_NAME\r"
+
+expect -re "Common Name (eg, your name or your server's hostname)"
+send "$DC21_HOST\r"
+
+expect -re "Email Address"
+send "$SSL_EMAIL\r"
+
 expect -ex "First name:"
 send "$FIRST_NAME\r"
 

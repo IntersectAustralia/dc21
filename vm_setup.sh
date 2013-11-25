@@ -99,9 +99,6 @@ status=$?
 if [ $status -eq 0 ]; then
   echo "$(tput setaf 3)Please copy the following certificate to register for AAF$(tput sgr0)"
   sudo cat /etc/shibboleth/sp-cert.pem
-
-  echo "$(tput setaf 3)Please remember to add your SSL certificate and key to /etc/httpd/ssl/server.crt and /etc/httpd/ssl/server.key respectively$(tput sgr0)"
-  echo "$(tput setaf 3)After adding your SSL certificate, run 'sudo service httpd restart'.$(tput sgr0)"
 else
   echo "$(tput setaf 1)ERROR $status: The local deploy process failed. Please investigate and try again.$(tput sgr0)"
   exit $status;
