@@ -104,4 +104,6 @@ else
   exit $status;
 fi
 
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
+sudo service httpd restart
 

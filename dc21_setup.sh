@@ -15,27 +15,6 @@ send "$JOAI\r"
 expect -ex "Confirm password: "
 send "$JOAI\r"
 
-expect -ex "Country Name (2 letter code) \[XX\]:"
-send "$SSL_COUNTRY_CODE\r"
-
-expect -ex "State or Province Name (full name) \[\]:"
-send "$SSL_STATE_CODE\r"
-
-expect -ex "Locality Name (eg, city) \[Default City\]:"
-send "$SSL_CITY\r"
-
-expect -ex "Organization Name (eg, company) \[Default Company Ltd\]:"
-send "$SSL_ORGANIZATION_NAME\r"
-
-expect -ex "Organizational Unit Name (eg, section) \[\]:"
-send "$SSL_ORGANIZATION_UNIT_NAME\r"
-
-expect -ex "Common Name (eg, your name or your server's hostname) \[\]:"
-send "$DC21_HOST\r"
-
-expect -ex "Email Address \[\]:"
-send "$SSL_EMAIL\r"
-
 expect -ex "First name:"
 send "$FIRST_NAME\r"
 
@@ -56,6 +35,27 @@ send "$YES_NO\r"
 
 expect -re " password for devel:"
 send "$PASSWORD\r"
+
+expect -ex "Country Name (2 letter code) \[XX\]:"
+send "$SSL_COUNTRY_CODE\r"
+
+expect -ex "State or Province Name (full name) \[\]:"
+send "$SSL_STATE_CODE\r"
+
+expect -ex "Locality Name (eg, city) \[Default City\]:"
+send "$SSL_CITY\r"
+
+expect -ex "Organization Name (eg, company) \[Default Company Ltd\]:"
+send "$SSL_ORGANIZATION_NAME\r"
+
+expect -ex "Organizational Unit Name (eg, section) \[\]:"
+send "$SSL_ORGANIZATION_UNIT_NAME\r"
+
+expect -ex "Common Name (eg, your name or your server's hostname) \[\]:"
+send "$DC21_HOST\r"
+
+expect -ex "Email Address \[\]:"
+send "$SSL_EMAIL\r"
 
 expect
 
