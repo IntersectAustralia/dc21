@@ -110,13 +110,11 @@ class DataFilesController < ApplicationController
 
   end
 
-  def process_ocr
+  def process_metadata_extraction
     file = DataFile.find(params[:id])
     format = file.format
     MetadataExtractor.new.extract_metadata(file, format)
-    p file.uuid
-    p file.format
-    redirect_to data_file_path(file)
+    redirect_to data_file_path(file), :notice => "Data file has been queued for processing."
   end
 
   def bulk_update

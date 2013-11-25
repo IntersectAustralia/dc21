@@ -20,7 +20,7 @@
       = link_to 'Remove from Cart', cart_item_path(@data_file), :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{@data_file.id}"
     - else
       = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "btn", :method => "post"
-    = link_to "Start Metadata extraction", process_ocr_data_file_path(@data_file), :class => "btn btn-primary"
+    = link_to "Start Metadata extraction", process_metadata_extraction_data_file_path(@data_file), :class => "btn btn-primary"
 
 
 #file_details
