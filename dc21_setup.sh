@@ -15,7 +15,6 @@ send "$JOAI\r"
 expect -ex "Confirm password: "
 send "$JOAI\r"
 
-
 expect -re "Country Name (2 letter code)"
 send "$SSL_COUNTRY_CODE\r"
 
