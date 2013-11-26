@@ -120,6 +120,15 @@
                 = select_hour @data_file.end_time, {:field_name => "end_hr"}
                 = select_minute @data_file.end_time, {:field_name => "end_min"}
                 = select_second @data_file.end_time, {:field_name => "end_sec"}
+      %h2{:title => @data_file.filename} Editing File Relationships of #{@data_file.filename}
+      .control-group
+        = f.label :parent_ids, "Parents:", class: "control-label"
+        .controls
+          = f.collection_select :parent_ids, DataFile.order(:filename), :id, :filename, {}, :multiple => true
+      .control-group
+        = f.label :child_ids, "Children:", class: "control-label"
+        .controls
+          = f.collection_select :child_ids, DataFile.order(:filename), :id, :filename, {}, :multiple => true
 
       .form-actions
         .actions-pre
@@ -128,4 +137,25 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
-    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'})
+  var invalid = ["#{@data_file.id}"];
+
+  $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'});
+  $('#data_file_parent_ids').select2({
+    matcher: function(term, text, option) {
+      return text.toUpperCase().indexOf(term.toUpperCase())==0 && validDataFile($(option).val());
+    }
+  });
+
+  $('#data_file_child_ids').select2({
+    matcher: function(term, text, option) {
+      return text.toUpperCase().indexOf(term.toUpperCase())==0 && validDataFile($(option).val());
+    }
+  });
+
+  function validDataFile(id) {
+    invalid = ["#{@data_file.id}"];
+    $.merge(invalid, $('#data_file_child_ids').val() || []);
+    $.merge(invalid, $('#data_file_parent_ids').val() || []);
+    $.unique(invalid);
+    return $.inArray(id, invalid) == -1;
+  }
