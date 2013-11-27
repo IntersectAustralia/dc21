@@ -5,6 +5,7 @@ Feature: Upload files
 
   Background:
     Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    And I have a user "admin@intersect.org.au" with role "Administrator"
     And I am logged in as "researcher@intersect.org.au"
     And I have facility "ROS Weather Station" with code "ROS_WS"
     And I have facility "Flux Tower" with code "FLUX"
@@ -457,9 +458,14 @@ Feature: Upload files
 
 #EYETRACKER-7
 
-  Scenario: Check UUID is created for an uploaded image file
-    Given I am on the upload page
-    When I select "RAW" from "File type"
+  Scenario: Check UUID is created for an uploaded jpeg or png image file
+    Given I logout
+    And I am logged in as "admin@intersect.org.au"
+    When I am on the edit system config page
+    And I check "Auto OCR on Upload"
+    And I press "Update"
+    When I am on the upload page
+    And I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_OCR.jpg" to upload
     And I press "Upload"
@@ -473,13 +479,37 @@ Feature: Upload files
     When I am on the list data files page
     Then I should see "exploredata" table with
       | Filename     | Added by                    | Type |
-      | Test_OCR.jpg | researcher@intersect.org.au | RAW  |
+      | Test_OCR.jpg | admin@intersect.org.au | RAW  |
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.png" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR.png"
+    And the uploaded files display should include "Test_OCR.png" with file type "RAW"
+    And the uploaded files display should include "Test_OCR.png" with messages "success"
+    And the uploaded files display should include "Test_OCR.png" with experiment "My Experiment"
+    And file "Test_OCR.png" should have type "RAW"
+    And file "Test_OCR.png" should have experiment "My Experiment"
+    And file "Test_OCR.png" should have a UUID created
+    When I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename     | Added by                    | Type |
+      | Test_OCR.png | admin@intersect.org.au | RAW  |
+      | Test_OCR.jpg | admin@intersect.org.au | RAW  |
 
 #EYETRACKER-8
 
   Scenario: Check UUID is created for an uploaded mp3 or wav file
-    Given I am on the upload page
-    When I select "RAW" from "File type"
+    Given I logout
+    And I am logged in as "admin@intersect.org.au"
+    When I am on the edit system config page
+    And I check "Auto Speech Recognition on Upload"
+    And I select "audio/mpeg" from "system_configuration_supported_sr_types"
+    And I select "audio/x-wav" from "system_configuration_supported_sr_types"
+    And I press "Update"
+    When I am on the upload page
+    And I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_SR.wav" to upload
     And I press "Upload"
@@ -492,8 +522,8 @@ Feature: Upload files
     And file "Test_SR.wav" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Type |
-      | Test_SR.wav | researcher@intersect.org.au | RAW  |
+      | Filename    | Added by               | Type |
+      | Test_SR.wav | admin@intersect.org.au | RAW  |
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
@@ -509,8 +539,8 @@ Feature: Upload files
     When I am on the list data files page
     Then I should see "exploredata" table with
       | Filename    | Added by                    | Type |
-      | Test_SR.mp3 | researcher@intersect.org.au | RAW  |
-      | Test_SR.wav | researcher@intersect.org.au | RAW  |
+      | Test_SR.mp3 | admin@intersect.org.au | RAW  |
+      | Test_SR.wav | admin@intersect.org.au | RAW  |
 
 
 #EYETRACKER-7
@@ -529,3 +559,115 @@ Feature: Upload files
     And file "sample1.txt" should have experiment "My Experiment"
     And file "sample1.txt" should not have a UUID created
 
+  #EYETRACKER-138
+  Scenario: Check UUID created for uploaded image file conforming to auto OCR processing config
+    Given I logout
+    And I am logged in as "admin@intersect.org.au"
+    When I am on the edit system config page
+    And I check "Auto OCR on Upload"
+    And I press "Update"
+    When I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.jpg" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR.jpg"
+    And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
+    And the uploaded files display should include "Test_OCR.jpg" with messages "success"
+    And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
+    And file "Test_OCR.jpg" should have type "RAW"
+    And file "Test_OCR.jpg" should have experiment "My Experiment"
+    And file "Test_OCR.jpg" should have a UUID created
+    When I am on the list data files page
+    Then I should see "exploredata" table with
+      | Filename     | Added by               | Type |
+      | Test_OCR.jpg | admin@intersect.org.au | RAW  |
+
+  #EYETRACKER-138
+  Scenario: Check UUID is blank for uploaded image file not conforming to auto OCR processing config
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.jpg" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR.jpg"
+    And file "Test_OCR.jpg" should not have a UUID created
+    When I logout
+    And I am logged in as "admin@intersect.org.au"
+    And I am on the edit system config page
+    And I check "Auto OCR on Upload"
+    And I select "image/bmp" from "system_configuration_supported_ocr_types"
+    And I press "Update"
+    And I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.tiff" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR.tiff"
+    And file "Test_OCR.tiff" should not have a UUID created
+    When I am on the edit system config page
+    And I uncheck "Auto OCR on Upload"
+    And I press "Update"
+    And I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.jpg" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR_1.jpg"
+    And file "Test_OCR_1.jpg" should not have a UUID created
+    When I am on the edit system config page
+    And I check "Auto OCR on Upload"
+    And I fill in "Auto OCR Regular Expression" with "a"
+    And I press "Update"
+    And I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.jpg" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR_2.jpg"
+    And file "Test_OCR_2.jpg" should not have a UUID created
+
+  #EYETRACKER-138
+  Scenario: Check UUID is blank for uploaded audio file not conforming to auto SR processing config
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_SR.mp3" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_SR.mp3"
+    And file "Test_SR.mp3" should not have a UUID created
+    When I logout
+    And I am logged in as "admin@intersect.org.au"
+    And I am on the edit system config page
+    And I check "Auto Speech Recognition on Upload"
+    And I select "audio/x-wav" from "system_configuration_supported_sr_types"
+    And I press "Update"
+    And I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/toa5.dat" to upload
+    And I press "Upload"
+    Then the most recent file should have name "toa5.dat"
+    And file "toa5.dat" should not have a UUID created
+    When I am on the edit system config page
+    And I uncheck "Auto Speech Recognition on Upload"
+    And I select "audio/mpeg" from "system_configuration_supported_sr_types"
+    And I press "Update"
+    And I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_SR.mp3" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_SR_1.mp3"
+    And file "Test_SR_1.mp3" should not have a UUID created
+    When I am on the edit system config page
+    And I check "Auto Speech Recognition on Upload"
+    And I fill in "Auto Speech Recognition Regular Expression" with "a"
+    And I press "Update"
+    And I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_SR.mp3" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_SR_2.mp3"
+    And file "Test_SR_2.mp3" should not have a UUID created

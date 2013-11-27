@@ -56,8 +56,8 @@ class DataFilesController < ApplicationController
 
   def edit
     data_file = DataFile.find(params[:id])
-    if !data_file.modifiable? and data_file.is_package? and !current_user.is_admin?
-      redirect_to data_file_path, notice: "Cannot edit - Creation status is not COMPLETE."
+    if !data_file.modifiable? and data_file.processed_by_resque? and !current_user.is_admin?
+      redirect_to data_file_path, alert: "Cannot edit - Creation status is not COMPLETE."
     end
     set_tab :explore, :contentnavigation
   end
@@ -113,7 +113,7 @@ class DataFilesController < ApplicationController
   def process_metadata_extraction
     file = DataFile.find(params[:id])
     format = file.format
-    MetadataExtractor.new.extract_metadata(file, format)
+    MetadataExtractor.new.extract_metadata(file, format, true)
     redirect_to data_file_path(file), :notice => "Data file has been queued for processing."
   end
 
@@ -186,9 +186,9 @@ class DataFilesController < ApplicationController
 
   def destroy
     file = DataFile.find(params[:id])
-    if !file.modifiable? and file.is_package?
+    if !file.modifiable? and file.processed_by_resque?
       unless current_user.is_admin?
-        redirect_to data_file_path, notice: "Cannot delete - Creation status is not COMPLETE."
+        redirect_to data_file_path, alert: "Cannot delete - Creation status is not COMPLETE."
         return
       end
     end

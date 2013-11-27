@@ -110,7 +110,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def modifiable?
-    transfer_status.eql? RESQUE_COMPLETE or transfer_status.eql? RESQUE_FAILED
+    transfer_status.eql? RESQUE_COMPLETE or transfer_status.eql? RESQUE_FAILED or transfer_status.blank?
   end
 
   def mark_as_queued

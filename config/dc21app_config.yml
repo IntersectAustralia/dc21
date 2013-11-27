@@ -9,12 +9,6 @@ defaults: &defaults
   archived_data_directory: /data/dc21-data/archived_data
   default_readme_template_file: app/templates/file_set_metadata.html.haml
 
-  ocr_types:
-    - image/jpeg
-    - image/png
-  sr_types:
-    - audio/mpeg
-    - audio/x-wav
 
   data_root: /data
 

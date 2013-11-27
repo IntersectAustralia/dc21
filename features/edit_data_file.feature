@@ -147,3 +147,31 @@ Feature: Edit data files metadata
     And I check select2 field "data_file_label_list" updated value to "test1,this3"
     And I press "Update"
     Then I should see field "Labels" with value "test1, this3"
+
+  #EYETRACKER-138
+  Scenario: Non-admin users cannot rename output file with status QUEUED or WORKING
+    Given I have data files
+      | filename         | created_at        | uploaded_by                 | transfer_status | uuid | start_time           | end_time               | experiment | file_processing_status |
+      | OCR_queued.JPG   | 26/11/2013 12:53  | researcher@intersect.org.au | QUEUED          | 1    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | Expt1      | RAW                    |
+      | OCR_working.PNG  | 26/11/2013 12:55  | researcher@intersect.org.au | WORKING         | 2    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | Expt1      | RAW                    |
+    And I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "OCR_queued.JPG"
+    Then I should see "Cannot edit - Creation status is not COMPLETE."
+    When I am on the list data files page
+    And I edit data file "OCR_working.PNG"
+    Then I should see "Cannot edit - Creation status is not COMPLETE."
+    When I logout
+    And I am logged in as "admin@intersect.org.au"
+    And I am on the list data files page
+    And I edit data file "OCR_queued.JPG"
+    And I fill in "Description" with "Test updating processing data file"
+    And I press "Update"
+    Then I should see "The data file was saved successfully."
+    And I should see field "Description" with value "Test updating processing data file"
+    When I am on the list data files page
+    And I edit data file "OCR_working.PNG"
+    And I fill in "Description" with "Testing updates"
+    And I press "Update"
+    Then I should see "The data file was saved successfully."
+    And I should see field "Description" with value "Testing updates"

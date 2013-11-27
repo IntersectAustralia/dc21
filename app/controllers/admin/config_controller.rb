@@ -17,6 +17,12 @@ class Admin::ConfigController < ApplicationController
   def update
 
     respond_to do |format|
+      if params[:system_configuration][:supported_ocr_types].nil?
+        params[:system_configuration].merge!(:supported_ocr_types => [])
+      end
+      if params[:system_configuration][:supported_sr_types].nil?
+        params[:system_configuration].merge!(:supported_sr_types => [])
+      end
       if @config.update_attributes(params[:system_configuration])
         format.html { redirect_to admin_config_path, notice: 'System configuration updated successfully.' }
       else

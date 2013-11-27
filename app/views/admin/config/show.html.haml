@@ -2,9 +2,7 @@
   %h1 Admin / System Configuration
 
 .container
-  %h2
-    = @config.name 
-    System Configuration
+  %h2 System Configuration
   = render_field "Local System Name", @config.name
   = render_field "Research Centre Name", @config.research_centre_name
   = render_field "Overarching Entity", @config.entity
@@ -18,6 +16,14 @@
   = render_field "Org. L2 Singular", @config.level2
   = render_field "Org. L2 Plural", @config.level2_plural
   = render_field "L2 Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
+
+  %h2 Automatic Processing
+  = render_field "Auto OCR on Upload", @config.auto_ocr_on_upload ? 'Enabled':'Disabled'
+  = render_field "Auto OCR Regular Expression", @config.auto_ocr_regex
+  = render_field "Auto OCR Supported MIME Types", @config.ocr_types
+  = render_field "Auto Speech Recognition on Upload", @config.auto_sr_on_upload ? 'Enabled':'Disabled'
+  = render_field "Auto Speech Recognition Regular Expression", @config.auto_sr_regex
+  = render_field "Auto Speech Recognition Supported MIME Types", @config.sr_types
 
 .form-actions
   .actions-pre

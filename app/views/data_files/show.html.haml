@@ -13,9 +13,8 @@
     -else
       = cancel_button "Back", :back
   .actions
-    - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
-      - if !@data_file.published or can?(:manage, @data_file)
-        = link_to "Edit Metadata", edit_data_file_path, :class => "btn btn-primary"
+    - if can?(:update, @data_file)
+      = link_to "Edit Metadata", edit_data_file_path, :class => "btn btn-primary"
     - if @cart_item_ids.include?(@data_file.id)
       = link_to 'Remove from Cart', cart_item_path(@data_file), :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{@data_file.id}"
     - else
@@ -31,7 +30,6 @@
     = render_field "File format", @data_file.format_for_display
     .description
       = render_description "Description", @data_file.file_processing_description
-    = render_description "Converted Text", @data_file.converted_text
 
     = render_field_with_block "Tags" do
       - @data_file.tags.each do |tag|
@@ -79,9 +77,8 @@
       = cancel_button "Back", :back
 
   .actions
-    - if (can?(:manage, DataFile) || @data_file.created_by.eql?(current_user)) and !@data_file.is_error_file?
-      - if !@data_file.published or can?(:manage, @data_file)
-        = link_to "Edit Metadata", edit_data_file_path, :class => "btn btn-primary"
+    - if can?(:update, @data_file)
+      = link_to "Edit Metadata", edit_data_file_path, :class => "btn btn-primary"
     - if @cart_item_ids.include?(@data_file.id)
       = link_to 'Remove from Cart', cart_item_path(@data_file), :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{@data_file.id}"
     - else

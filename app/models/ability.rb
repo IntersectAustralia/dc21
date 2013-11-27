@@ -62,7 +62,7 @@ class Ability
          :api_create,
          :api_search], DataFile
     can :destroy, DataFile, :created_by_id => user.id, :published => false
-    can :update, DataFile, :created_by_id => user.id
+    can :update, DataFile, :created_by_id => user.id, :published => false
     cannot :update, DataFile do |datafile|
       datafile.is_error_file?
     end

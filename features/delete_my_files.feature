@@ -137,3 +137,24 @@ Feature: Delete files containing erroneous data
     And I should see only these rows in "exploredata" table
       | Filename      | Added by                    |
       | datafile1.dat | other_user@intersect.org.au |
+
+  #EYETRACKER-138
+  Scenario: Non-admin users cannot delete output file with status QUEUED or WORKING
+    Given I have data files
+      | filename         | created_at        | uploaded_by                 | transfer_status | uuid | start_time           | end_time               | published |
+      | OCR_queued.JPG   | 26/11/2013 12:53  | researcher@intersect.org.au | QUEUED          | 1    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | false     |
+      | OCR_working.PNG  | 26/11/2013 12:55  | researcher@intersect.org.au | WORKING         | 2    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | false     |
+    When I am on the data file details page for OCR_queued.JPG
+    And I follow "Delete"
+    Then I should see "Cannot delete - Creation status is not COMPLETE."
+    When I am on the data file details page for OCR_working.PNG
+    And I follow "Delete"
+    Then I should see "Cannot delete - Creation status is not COMPLETE."
+    When I logout
+    And I am logged in as "administrator@intersect.org.au"
+    And I am on the data file details page for OCR_queued.JPG
+    And I follow "Delete"
+    Then I should see "The file 'OCR_queued.JPG' was successfully removed from the system"
+    When I am on the data file details page for OCR_working.PNG
+    And I follow "Delete"
+    Then I should see "The file 'OCR_working.PNG' was successfully removed from the system"

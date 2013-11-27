@@ -372,7 +372,7 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
 end
 
 Then /^file "([^"]*)" should have a UUID created$/ do |filename|
-  DataFile.find_by_filename!(filename).uuid.should_not be_empty
+  DataFile.find_by_filename!(filename).uuid.should_not be_nil
 end
 
 Then /^file "([^"]*)" should not have a UUID created$/ do |filename|
