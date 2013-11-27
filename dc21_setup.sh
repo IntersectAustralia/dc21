@@ -6,7 +6,7 @@ spawn bash vm_setup.sh
 expect -re " password for devel:"
 send "$PASSWORD\r"
 
-expect -ex "Password: "
+expect -re " password for devel:"
 send "$PASSWORD\r"
 
 expect -ex "New jOAI password (at least six alphanumeric characters):"
