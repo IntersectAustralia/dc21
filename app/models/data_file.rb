@@ -22,6 +22,25 @@ class DataFile < ActiveRecord::Base
   # for searching auto processing jobs
   AUTOMATION_STATI = [RESQUE_COMPLETE, RESQUE_FAILED, RESQUE_WORKING, RESQUE_QUEUED]
 
+
+  has_many :parent_child_relationships,
+           :class_name => "DataFileRelationship",
+           :foreign_key => :child_id,
+           :dependent => :destroy
+  has_many :parents,
+           :through => :parent_child_relationships,
+           :source => :parent,
+           :conditions => proc  { "parent_id <> child_id" }
+
+  has_many :child_parent_relationships,
+           :class_name => "DataFileRelationship",
+           :foreign_key => :parent_id,
+           :dependent => :destroy
+  has_many :children,
+           :through => :child_parent_relationships,
+           :source => :child,
+           :conditions => proc  { "child_id <> parent_id" }
+
   belongs_to :created_by, :class_name => "User"
   belongs_to :published_by, :class_name => "User"
   belongs_to :experiment
@@ -62,7 +81,7 @@ class DataFile < ActiveRecord::Base
   before_save :set_file_size_if_nil
 
   scope :completed_items, where("transfer_status = ? OR uuid IS NULL", RESQUE_COMPLETE)
-  scope :count_unadded_items,where("transfer_status != ?", RESQUE_COMPLETE)
+  scope :count_unadded_items, where("transfer_status != ?", RESQUE_COMPLETE)
   scope :most_recent_first, order("created_at DESC")
   scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", RESQUE_COMPLETE)
   scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
@@ -73,9 +92,9 @@ class DataFile < ActiveRecord::Base
   scope :with_filename_containing, lambda { |name| where("data_files.filename ~* ?", name) }
   scope :with_description_containing, lambda { |desc| where("data_files.file_processing_description ~* ?", desc) }
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
-  scope :with_transfer_status_in, lambda { |automation_stati| where { transfer_status.in automation_stati} }
+  scope :with_transfer_status_in, lambda { |automation_stati| where { transfer_status.in automation_stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
-  scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id)}
+  scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id) }
   scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email')
 
   attr_accessor :messages, :url
@@ -170,7 +189,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.with_any_of_these_labels(label_params)
-    data_file_ids = DataFile.unscoped.joins(:labels).select("DISTINCT(data_files.id)").where{labels.name >> label_params}.collect(&:id)
+    data_file_ids = DataFile.unscoped.joins(:labels).select("DISTINCT(data_files.id)").where { labels.name >> label_params }.collect(&:id)
     where(:id => data_file_ids)
   end
 
@@ -184,16 +203,16 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.with_published
-    where{(file_processing_status != 'PACKAGE') | (published)}
+    where { (file_processing_status != 'PACKAGE') | (published) }
   end
 
   def self.with_unpublished
-    where{(file_processing_status != 'PACKAGE') | (published == false)}
+    where { (file_processing_status != 'PACKAGE') | (published == false) }
   end
 
   def self.with_published_date(date)
 
-    where {(file_processing_status != 'PACKAGE') | (published_date >= date.midnight) & (published_date < (date + 1).midnight)}
+    where { (file_processing_status != 'PACKAGE') | (published_date >= date.midnight) & (published_date < (date + 1).midnight) }
   end
 
   def self.searchable_column_names

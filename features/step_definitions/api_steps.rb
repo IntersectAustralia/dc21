@@ -122,6 +122,14 @@ end
 
 When /^I perform an API search with the following parameters as user "([^"]*)"$/ do |email, table|
   post_params = Hash[*table.raw.flatten]
+  if post_params['facilities']
+    facilities = post_params.delete('facilities')
+    post_params['facilities'] = Facility.where(name: facilities.split(", ")).collect(&:id)
+  end
+  if post_params['experiments']
+    experiments = post_params.delete('experiments')
+    post_params['experiments'] = Experiment.where(name: experiments.split(", ")).collect(&:id)
+  end
   if post_params['labels']
     labels = post_params.delete('labels')
     post_params['labels'] = labels.split(", ")

@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(:version => 20131125065051) do
     t.datetime "updated_at"
   end
 
+  create_table "data_file_relationships", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "child_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "data_files", :force => true do |t|
     t.string   "filename",                    :default => ""
     t.string   "format"

@@ -192,6 +192,14 @@ When /^I wait for MINT server$/ do
   sleep(2)
 end
 
+When /^I wait for (\d+) seconds$/ do |num|
+  sleep(num.to_i)
+end
+
+When /^I choose "(.*?)" in the select2 menu$/ do |value|
+  page.find('.select2-result-label', text: value).click
+end
+
 When /^I remove "([^"]*)" from "([^"]*)" select2 field/ do |label_text, select2_id|
   select2_delete label_text, select2_id
 end

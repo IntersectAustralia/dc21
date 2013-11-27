@@ -65,12 +65,20 @@ class DataFilesController < ApplicationController
   def update
     @data_file.tag_ids = params[:tags]
 
+
     if !params[:date].nil?
       attrs = params.delete(:date)
       start_time = reformat_date_and_time(attrs[:start_time], attrs[:start_hr], attrs[:start_min], attrs[:start_sec])
       end_time = reformat_date_and_time(attrs[:end_time], attrs[:end_hr], attrs[:end_min], attrs[:end_sec])
       params[:data_file][:start_time] = start_time
       params[:data_file][:end_time] = end_time
+    end
+
+    if params[:data_file][:parent_ids]
+      params[:data_file][:parent_ids] = params[:data_file][:parent_ids].split(",")
+    end
+    if params[:data_file][:child_ids]
+      params[:data_file][:child_ids] = params[:data_file][:child_ids].split(",")
     end
 
     old_filename = @data_file.filename

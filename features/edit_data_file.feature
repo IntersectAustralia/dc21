@@ -7,12 +7,12 @@ Feature: Edit data files metadata
     Given I have a user "admin@intersect.org.au" with role "Administrator"
     Given I have a user "researcher@intersect.org.au" with role "Researcher"
     And I have data files
-      | filename     | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment         | file_processing_description | file_processing_status | format | label_list  |
-      | datafile.dat | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment | Description of my file      | RAW                    |        |             |
-      | sample.txt   | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other              |                             | UNKNOWN                | TOA5   |             |
-      | file.txt     | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment   | desc.                       | UNKNOWN                |        |             |
-      | error.txt    | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1              | desc.                       | ERROR                  |        |             |
-      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au  |               |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN        |        | this3,that2,test1 |
+      | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        |
+      | datafile.dat         | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment   | Description of my file            | RAW                    |        |                   |
+      | sample.txt           | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other                |                                   | UNKNOWN                | TOA5   |                   |
+      | file.txt             | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment     | desc.                             | UNKNOWN                |        |                   |
+      | error.txt            | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1                | desc.                             | ERROR                  |        |                   |
+      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 |
 
 
   Scenario: ID should be unique
@@ -124,7 +124,8 @@ Feature: Edit data files metadata
     And I edit data file "file.txt"
     Then I should see "yyyy-mm-dd"
 
-  #EYETRACKER-88
+#EYETRACKER-88
+
   @javascript
   Scenario: Add a new label to data file
     Given I am logged in as "researcher@intersect.org.au"
@@ -136,7 +137,8 @@ Feature: Edit data files metadata
     Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cu,ba"
 
 
-  #EYETRACKER-88
+#EYETRACKER-88
+
   @javascript
   Scenario: Delete an existing label from data file
     Given I am logged in as "admin@intersect.org.au"
@@ -148,12 +150,13 @@ Feature: Edit data files metadata
     And I press "Update"
     Then I should see field "Labels" with value "test1, this3"
 
-  #EYETRACKER-138
+#EYETRACKER-138
+
   Scenario: Non-admin users cannot rename output file with status QUEUED or WORKING
     Given I have data files
-      | filename         | created_at        | uploaded_by                 | transfer_status | uuid | start_time           | end_time               | experiment | file_processing_status |
-      | OCR_queued.JPG   | 26/11/2013 12:53  | researcher@intersect.org.au | QUEUED          | 1    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | Expt1      | RAW                    |
-      | OCR_working.PNG  | 26/11/2013 12:55  | researcher@intersect.org.au | WORKING         | 2    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | Expt1      | RAW                    |
+      | filename        | created_at       | uploaded_by                 | transfer_status | uuid | start_time           | end_time               | experiment | file_processing_status |
+      | OCR_queued.JPG  | 26/11/2013 12:53 | researcher@intersect.org.au | QUEUED          | 1    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | Expt1      | RAW                    |
+      | OCR_working.PNG | 26/11/2013 12:55 | researcher@intersect.org.au | WORKING         | 2    | 1/6/2010 6:42:01 UTC | 10/6/2010 18:05:23 UTC | Expt1      | RAW                    |
     And I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "OCR_queued.JPG"

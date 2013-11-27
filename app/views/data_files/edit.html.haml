@@ -116,6 +116,22 @@
                 = select_hour @data_file.end_time, {:field_name => "end_hr"}
                 = select_minute @data_file.end_time, {:field_name => "end_min"}
                 = select_second @data_file.end_time, {:field_name => "end_sec"}
+      %h2{:title => @data_file.filename} Editing File Relationships of #{@data_file.filename}
+      .control-group
+        = label_tag "experiment_id", "Filter Files", class: "control-label"
+        .controls
+          - dfs = @data_file.experiment.data_files.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
+          = select_tag "experiment_id", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), data: {df: dfs}
+          %br/
+          Filter data files by #{@config.level2.downcase}
+      .control-group
+        = f.label :parent_ids, "Parents", class: "control-label"
+        .controls
+          = f.hidden_field :parent_ids, data: {placeholder: 'Select parent data files...', values: @data_file.parents.collect{|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}}, class: "file_relation_select"
+      .control-group
+        = f.label :child_ids, "Children", class: "control-label"
+        .controls
+          = f.hidden_field :child_ids, data: {placeholder: 'Select child data files...', values: @data_file.children.collect{|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}}, class: "file_relation_select"
 
       .form-actions
         .actions-pre
@@ -124,4 +140,49 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
-    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'})
+  $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'});
+
+  var invalid = ["#{@data_file.id}"];
+  var parents = $('#data_file_parent_ids').data('values');
+  var children = $('#data_file_child_ids').data('values');
+
+  var interim_data = _.indexBy(_.union(parents, children, $('#experiment_id').data('df')), 'id')
+  var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
+
+  $('#experiment_id').change(function() {
+    $.post( "/data_files/api_search.json", { experiments: [$('#experiment_id').val()] }, function( data ) {
+      var new_data = _.map(data, function(df){
+                       return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
+                     });
+      interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
+      DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
+    }, "json");
+  });
+
+  $('.file_relation_select').select2({
+    multiple: true,
+    query: function (query){
+        var data = {results: []};
+
+        $.each(DC21.preload_data, function(){
+          if (validDataFile(this.id) && this.exp_id.toString() == $('#experiment_id').val()){
+            if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
+                data.results.push({id: this.id, text: this.text });
+            }
+          }
+        });
+
+        query.callback(data);
+    }
+  });
+
+  $('#data_file_parent_ids').select2('data', parents);
+  $('#data_file_child_ids').select2('data', children);
+
+  function validDataFile(id) {
+    invalid = ["#{@data_file.id}"];
+    $.merge(invalid, $('#data_file_child_ids').val().split(",") || []);
+    $.merge(invalid, $('#data_file_parent_ids').val().split(",") || []);
+    $.unique(invalid);
+    return $.inArray(id.toString(), invalid) == -1;
+  }

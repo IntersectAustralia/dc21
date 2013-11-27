@@ -59,11 +59,16 @@ class CartItemsController < ApplicationController
 
   def add_all
     session[:return_to]= request.referer
-
-    search = DataFileSearch.new(session[:search])
-    to_add = search.do_search(DataFile.scoped.completed_items) - cart_items
-
-    unadded_items_count = DataFile.count_unadded_items.count
+    if params[:related]
+      data_file = DataFile.find(params[:related])
+      ids = [data_file.id] + data_file.parent_ids + data_file.child_ids
+      to_add = DataFile.scoped.completed_items.where(id: ids) - cart_items
+      unadded_items_count = DataFile.where(id: ids).count_unadded_items.count
+    else
+      search = DataFileSearch.new(session[:search])
+      to_add = search.do_search(DataFile.scoped.completed_items) - cart_items
+      unadded_items_count = DataFile.count_unadded_items.count
+    end
     added_items_count = to_add.count
 
     if added_items_count > 0
