@@ -295,6 +295,7 @@ GEM
     uglifier (1.0.4)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
+    underscore-rails (1.5.2)
     url_safe_base64 (0.2.2)
     validatable (1.6.7)
     validates_timeliness (3.0.14)
@@ -370,6 +371,7 @@ DEPENDENCIES
   tabs_on_rails
   therubyracer
   uglifier (>= 1.0.3)
+  underscore-rails
   validates_timeliness (~> 3.0)
   whoops_rails_logger!
   will_paginate

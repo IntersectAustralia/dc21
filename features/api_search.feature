@@ -11,12 +11,12 @@ Feature: Perform searching via API
       | Video |
       | Audio |
     And I have data files
-      | filename    | created_at       | uploaded_by               | file_processing_status | file_processing_description | experiment  | id | external_id | tags         | label_list   | facility | transfer_status |
-      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | ends with a                 | Experiment4 | 4  | sean        | Photo, Video | sean     | 10       | COMPLETE            |
-      | sample2.txt | 01/12/2011 12:45 | kali@intersect.org.au     | CLEANSED               | ends with A                 | Experiment2 | 2  | kali        | Photo        | kali     | 10       | FAILED              |
-      | sample3.txt | 01/12/2011 11:45 | georgina@intersect.org.au | RAW                    | nothing common              | Experiment5 | 5  | georgina    | Video        | georgina | 20       | WORKING             |
-      | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     | Audio        | matthew  | 20       | QUEUED              |
-      | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |              | admin    | 30       | WORKING             |
+      | filename    | created_at       | uploaded_by               | file_processing_status | file_processing_description | experiment  | id | external_id | tags         | label_list | facility | transfer_status |
+      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | ends with a                 | Experiment4 | 4  | sean        | Photo, Video | sean       | fac10    | COMPLETE        |
+      | sample2.txt | 01/12/2011 12:45 | kali@intersect.org.au     | CLEANSED               | ends with A                 | Experiment2 | 2  | kali        | Photo        | kali       | fac10    | FAILED          |
+      | sample3.txt | 01/12/2011 11:45 | georgina@intersect.org.au | RAW                    | nothing common              | Experiment5 | 5  | georgina    | Video        | georgina   | fac20    | WORKING         |
+      | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     | Audio        | matthew    | fac20    | QUEUED          |
+      | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |              | admin      | fac30    | WORKING         |
 
   Scenario: Try to search without an API token
     When I perform an API search without an API token
@@ -36,6 +36,27 @@ Feature: Perform searching via API
       | filename    |
       | sample1.txt |
       | sample3.txt |
+      | sample5.txt |
+    And I should have file download link for each entry
+
+  Scenario: Search by experiment via API
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | experiments | Experiment4, Experiment1 |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample1.txt |
+      | sample4.txt |
+    And I should have file download link for each entry
+
+  Scenario: Search by facility via API
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | facilities | fac10, fac30 |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample1.txt |
+      | sample2.txt |
       | sample5.txt |
     And I should have file download link for each entry
 
@@ -104,7 +125,8 @@ Feature: Perform searching via API
       | sample4.txt |
     And I should have file download link for each entry
 
-  #EYETRACKER-91
+#EYETRACKER-91
+
   Scenario: Search by Labels via API
     When I perform an API search with the following parameters as user "researcher@intersect.org.au"
       | labels | sean, admin |
@@ -115,7 +137,8 @@ Feature: Perform searching via API
       | sample5.txt |
     And I should have file download link for each entry
 
-  #EYETRACKER-135
+#EYETRACKER-135
+
   Scenario: Search by Automation Stati via API
     When I perform an API search with the following parameters as user "researcher@intersect.org.au"
       | automation_stati | FAILED, QUEUED |

@@ -2,10 +2,21 @@ Given /^I have data files$/ do |table|
   table.hashes.each do |attributes|
     attributes.delete('id') if attributes['id'] == ''
 
-    facility = attributes.delete('facility')
-    unless facility.blank?
-      facility = Facility.find_by_id(facility)
-      facility = Factory(:facility, :id => facility) unless facility
+    fac = attributes.delete('facility')
+    unless fac.blank?
+      facility = Facility.find_by_name(fac)
+      facility = Factory(:facility, :name => fac) unless facility
+    end
+
+    exp = attributes.delete('experiment')
+    unless exp.blank?
+      experiment = Experiment.find_by_name(exp)
+      if facility
+        experiment = Factory(:experiment, :name => exp, facility_id: facility.id) unless experiment
+      else
+        experiment = Factory(:experiment, :name => exp) unless experiment
+      end
+      attributes["experiment_id"] = experiment.id
     end
 
     email = attributes.delete('uploaded_by')
@@ -27,15 +38,7 @@ Given /^I have data files$/ do |table|
       attributes['path'] = new_path
     end
 
-    exp = attributes.delete('experiment')
-    unless exp.blank?
-      experiment = Experiment.find_by_name(exp)
-      experiment = Factory(:experiment, :name => exp) unless experiment
 
-      experiment.update_attribute(:facility_id, facility.id) if facility
-
-      attributes["experiment_id"] = experiment.id
-    end
     if email
       user = User.find_by_email(email)
       unless user

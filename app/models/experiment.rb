@@ -4,6 +4,7 @@ class Experiment < ActiveRecord::Base
   belongs_to :parent_experiment, :class_name => "Experiment"
   has_many :experiment_for_codes, :order => "name ASC", :dependent => :destroy
   has_many :experiment_parameters
+  has_many :data_files
 
   validates_presence_of :name
   validates_uniqueness_of :name
