@@ -16,7 +16,7 @@ class SRWorker
 
       df.save
 
-      df.file_processing_description = df.file_processing_description + "\n This was processed by SRWorker at #{Time.now}."
+      df.file_processing_description = df.file_processing_description.to_s + "\n This was processed by SRWorker at #{Time.now}."
 
       Dir.mktmpdir { |dir|
         type = 'PROCESSED'
