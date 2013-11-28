@@ -2,19 +2,34 @@ class SystemConfiguration < ActiveRecord::Base
 
   acts_as_singleton
   validates_presence_of :level1, :level1_plural, :level2, :level2_plural
-  validates_length_of :level1, :level1_plural, :level2, :level2_plural, :maximum=>20
-  validates_length_of :address1, :address2, :address3, :telephone_number, :urls, :maximum=>80
-  validates_length_of :description, :maximum=>10000
-  validates_length_of :auto_ocr_regex, :auto_sr_regex, :maximum=>1000
+  validates_length_of :level1, :level1_plural, :level2, :level2_plural, :maximum => 20
+  validates_length_of :address1, :address2, :address3, :telephone_number, :urls, :maximum => 80
+  validates_length_of :description, :maximum => 10000
+  validates_length_of :auto_ocr_regex, :auto_sr_regex, :maximum => 1000
 
-  validates :name, presence:true, length: {maximum: 20}
-  validates :research_centre_name, presence:true, length: {maximum: 80}
+  validates :name, presence: true, length: {maximum: 20}
+  validates :research_centre_name, presence: true, length: {maximum: 80}
   validates :entity, presence: true, length: {maximum: 80}
   validates :email, length: {maximum: 80}
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, allow_blank: true
   #validates :telephone_number, format: { with: /\A[+]?[\s\d]+\Z/, message: "is not a valid phone number"}
 
   validate :level2_cannot_equal_level1_fields
+  validate :valid_regex
+
+  def valid_regex
+    begin
+      Regexp.try_convert(/#{self.auto_ocr_regex}/)
+    rescue RegexpError => e
+      errors.add(:auto_ocr_regex, e.to_s)
+    end
+
+    begin
+      Regexp.try_convert(/#{self.auto_sr_regex}/)
+    rescue RegexpError => e
+      errors.add(:auto_sr_regex, e.to_s)
+    end
+  end
 
   def level2_cannot_equal_level1_fields
     if self.level1.eql? self.level2
@@ -76,7 +91,7 @@ class SystemConfiguration < ActiveRecord::Base
   end
 
   def mime_types
-    File::EXTENSIONS.values.uniq
+    EXTENSIONS.values.uniq
   end
 
   def supported_ocr_types=(array)
@@ -84,7 +99,7 @@ class SystemConfiguration < ActiveRecord::Base
   end
 
   def supported_ocr_types
-   self.ocr_types.split(", ")
+    self.ocr_types.split(", ")
   end
 
   def supported_sr_types=(array)

@@ -36,10 +36,10 @@ class SRWorker
 
     rescue Exception => e
       # Catch exception, set transfer status and rethrow so we can see what went wrong in the overview page
+      df.mark_as_failed
       df.file_processing_description = df.file_processing_description.to_s + "SR ERROR: #{e.message}"
       df.save
       Rails.logger.info "SR ERROR: #{e.message}"
-      df.mark_as_failed
       raise e
     end
   end
