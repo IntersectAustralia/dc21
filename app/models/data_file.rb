@@ -309,6 +309,14 @@ class DataFile < ActiveRecord::Base
     experiment.facility_id
   end
 
+  def ocr_supported?
+    SystemConfiguration.instance.ocr_types.include?(format)
+  end
+
+  def sr_supported?
+    SystemConfiguration.instance.sr_types.include?(format)
+  end
+
   def add_message(type, message)
     self.messages ||= []
     self.messages << {:type => type, :message => message}

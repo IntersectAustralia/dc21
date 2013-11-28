@@ -15,11 +15,14 @@
   .actions
     - if can?(:update, @data_file)
       = link_to "Edit Metadata", edit_data_file_path, :class => "btn btn-primary"
+    - if @data_file.ocr_supported?
+      = link_to "OCR", process_metadata_extraction_data_file_path(@data_file), :class => "btn btn-primary"
+    - elsif @data_file.sr_supported?
+      = link_to "SR", process_metadata_extraction_data_file_path(@data_file), :class => "btn btn-primary"
     - if @cart_item_ids.include?(@data_file.id)
       = link_to 'Remove from Cart', cart_item_path(@data_file), :method => :delete, :class =>  "btn btn-danger", :id => "remove_from_cart_#{@data_file.id}"
     - else
       = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "btn", :method => "post"
-    = link_to "Start Metadata extraction", process_metadata_extraction_data_file_path(@data_file), :class => "btn btn-primary"
 
 
 #file_details
