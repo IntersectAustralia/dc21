@@ -310,11 +310,11 @@ class DataFile < ActiveRecord::Base
   end
 
   def ocr_supported?
-    SystemConfiguration.instance.ocr_types.include?(format)
+    SystemConfiguration.instance.ocr_types.present? && SystemConfiguration.instance.supported_ocr_types.include?(format)
   end
 
   def sr_supported?
-    SystemConfiguration.instance.sr_types.include?(format)
+    SystemConfiguration.instance.sr_types.present? && SystemConfiguration.instance.supported_sr_types.include?(format)
   end
 
   def add_message(type, message)
