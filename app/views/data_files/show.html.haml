@@ -55,18 +55,13 @@
         = render_field "Published by", @data_file.published_by.full_name
         = render_field "Published date", @data_file.published_date.to_s(:with_time)
 
-  .container
-    - if @data_file.is_toa5?
-      %h2 Information From The File
-      = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
-      = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
-      = render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
-      = render "file_format_specific_details"
-    - else
-      - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
-      - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
-      = render_field "Start time", start_date
-      = render_field "End time", end_date
+    - unless @data_file.is_toa5?
+      .container
+        - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
+        - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
+        = render_field "Start time", start_date
+        = render_field "End time", end_date
+
   .container
     %h2
       File Relationships
@@ -87,6 +82,14 @@
           %br/
       - else
         No children files defined.
+
+    - if @data_file.is_toa5?
+      .container
+        %h2 Information From The File
+        = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
+        = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
+        = render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
+        = render "file_format_specific_details"
 
 
 

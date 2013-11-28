@@ -127,11 +127,11 @@
       .control-group
         = f.label :parent_ids, "Parents", class: "control-label"
         .controls
-          = f.hidden_field :parent_ids, value: nil, data: {placeholder: 'Select parent data files...', values: @data_file.parents.collect{|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}}, class: "file_relation_select"
+          = f.hidden_field :parent_ids, value: nil, data: {placeholder: 'Select parent data files...', values: @data_file.parents.relationship_fields}, class: "file_relation_select"
       .control-group
         = f.label :child_ids, "Children", class: "control-label"
         .controls
-          = f.hidden_field :child_ids, value: nil, data: {placeholder: 'Select child data files...', values: @data_file.children.collect{|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}}, class: "file_relation_select"
+          = f.hidden_field :child_ids, value: nil, data: {placeholder: 'Select child data files...', values: @data_file.children.relationship_fields}, class: "file_relation_select"
 
       .form-actions
         .actions-pre

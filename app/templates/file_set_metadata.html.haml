@@ -372,6 +372,15 @@
                     %a{:href => "#{metadata_helper.data_file_url(data_file)}"}
                       &= metadata_helper.data_file_url(data_file)
 
+                %tr
+                  %td Parents
+                  %td&= data_file.parents.collect(&:filename).join(", ")
+
+                %tr
+                  %td Children
+                  %td&= data_file.children.collect(&:filename).join(", ")
+
+
             - if data_file.time_parsable?
               %h3 Information From The File
               %table
@@ -405,4 +414,3 @@
                       %td&= column_details.get_mapped_name
                       %td&= column_details.unit
                       %td&= column_details.data_type
-

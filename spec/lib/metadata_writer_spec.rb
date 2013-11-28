@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'colorize'
 
 describe MetadataWriter do
 
@@ -95,6 +96,7 @@ describe MetadataWriter do
                           created_by: @created_by)
     @data_file2.labels << Label.create!(name: "Label 2")
     @data_file2.labels << Label.create!(name: "Label 3")
+    @data_file2.parents << @data_file1
     # Package file
     @pkg_creator =  Factory(:user, first_name: 'Bobby', last_name: 'Tops', email: 'bobby@intersect.org.au')
     @pkg_creator.save!
@@ -189,11 +191,11 @@ def diff_html(output_html, expected_file)
   clean_hash expected_hash
   diff = expected_hash.diff(actual_hash)
   unless diff == {}
-    puts "HTML did not match"
-    puts "Expected:"
-    puts expected_html
-    puts "Actual:"
-    puts output_html
+    puts "HTML did not match".red
+    puts "Expected:".yellow
+    puts expected_html.yellow
+    puts "Actual #{expected_file}:".blue
+    puts output_html.blue
   end
 
   diff.should == {}

@@ -26,7 +26,7 @@ Feature: Edit data file relationships
     And I should see "3"
     And I should see "sean@intersect.org.au"
     And "Other" should be selected in the "Experiment" select
-    # test that you can't add current data file
+  # test that you can't add current data file
     When I fill in "Parents" with "sample.txt"
     Then I should see "No matches found"
     When I fill in "Children" with "datafile.dat"
@@ -37,12 +37,22 @@ Feature: Edit data file relationships
     And I fill in "Children" with "error.txt"
     And I should see "error.txt"
     And I choose "error.txt" in the select2 menu
-    # test that data file from other experiment can't be added to parent
+  # test that data file from other experiment can't be added to parent
     When I fill in "Parents" with "error"
     Then I should see "No matches found"
 
     And I press "Update"
-    And I should see "error.txt"
+  # test that child file displays parent file as well
+    And I should be on the data file details page for sample.txt
+    And I should see details displayed
+      | Parents  | No parent files defined. |
+      | Children | error.txt                |
+    And I follow "error.txt"
+    And I should be on the data file details page for error.txt
+    And I should see details displayed
+      | Parents  | sample.txt                 |
+      | Children | No children files defined. |
+
 
   @javascript
   Scenario: Add related files excludes error/incomplete files
