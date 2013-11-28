@@ -33,7 +33,7 @@ class OCRWorker
 
     rescue Exception => e
       # Catch exception, set transfer status and rethrow so we can see what went wrong in the overview page
-      df.file_processing_description << "OCR ERROR: #{e.message}"
+      df.file_processing_description = df.file_processing_description.to_s + "OCR ERROR: #{e.message}"
       df.save
       Rails.logger.info "OCR ERROR: #{e.message}"
       df.mark_as_failed
