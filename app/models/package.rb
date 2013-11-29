@@ -2,7 +2,6 @@ class Package < DataFile
 
   validates_presence_of :title
   validates_length_of :title, :maximum => 10000
-  validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > "), :allow_blank => true
 
   PACKAGE_FORMAT = 'BAGIT'
   FILE_EXTENSION = '.zip'

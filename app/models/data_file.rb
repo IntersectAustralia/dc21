@@ -72,6 +72,7 @@ class DataFile < ActiveRecord::Base
   validates_presence_of :experiment_id
   validates_length_of :file_processing_description, :maximum => 10.kilobytes
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
+  validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > "), :allow_blank => true
   validates_datetime :start_time, :allow_blank => true, :invalid_datetime_message => "must be a valid time"
   validates_datetime :end_time, :on_or_after => :start_time, :allow_blank => true,
                      :on_or_after_message => "cannot be before start time",

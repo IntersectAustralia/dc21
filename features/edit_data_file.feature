@@ -178,3 +178,11 @@ Feature: Edit data files metadata
     And I press "Update"
     Then I should see "The data file was saved successfully."
     And I should see field "Description" with value "Testing updates"
+
+#EYETRACKER-155
+  Scenario: Package filename should not allow illegal characters
+    Given I am logged in as "admin@intersect.org.au"
+    And I am on the edit data file page for sample.txt
+    And I fill in "Name" with "/ \ ? * : | < > "
+    And I press "Update"
+    Then I should see "cannot contain any of the following characters: / \ ? * : | < >"
