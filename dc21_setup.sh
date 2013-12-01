@@ -1,62 +1,50 @@
 wget https://raw.github.com/IntersectAustralia/dc21/snap-deploy/vm_setup.sh
 /usr/bin/expect -<<EOD
 set timeout -1
+set already_confirmed_password 0
+
 spawn bash vm_setup.sh
 
-expect -re " password for devel:"
-send "$PASSWORD\r"
+expect {
+    "password for devel:" { send "$PASSWORD\r" ; exp_continue}
 
-expect -ex "Password: "
-send "$PASSWORD\r"
+    "Password: " {send "$PASSWORD\r" ; exp_continue}
 
-expect -ex "New jOAI password (at least six alphanumeric characters):"
-send "$JOAI\r"
+    "New jOAI password (at least six alphanumeric characters):" {send "$JOAI\r"; exp_continue}
 
-expect -ex "Confirm password: "
-send "$JOAI\r"
+    "First name:" {send "$FIRST_NAME\r" ; exp_continue}
 
-expect -ex "First name:"
-send "$FIRST_NAME\r"
+    "Last name:" {send "$LAST_NAME\r" ; exp_continue}
 
-expect -ex "Last name:"
-send "$LAST_NAME\r"
+    "Email:" {send "$EMAIL\r" ; exp_continue}
 
-expect -ex "Email:"
-send "$EMAIL\r"
+    "New user password (input will be hidden): " {send "$USER_PASS\r" ; exp_continue}
 
-expect -ex "New user password (input will be hidden): "
-send "$USER_PASS\r"
+    "Confirm password: " {
+        if {\$already_confirmed_password == 0} {
+            set already_confirmed_password 1
+            send "$JOAI\r" ; exp_continue
+        } else {
+            send "$USER_PASS\r" ; exp_continue
+        }
+    }
 
-expect -ex "Confirm password: "
-send "$USER_PASS\r"
+    "Is this okay?" {send "$YES_NO\r" ; exp_continue}
 
-expect -ex "Is this okay?"
-send "$YES_NO\r"
+    "Country Name (2 letter code)" {send "$SSL_COUNTRY_CODE\r" ; exp_continue}
 
-expect -re " password for devel:"
-send "$PASSWORD\r"
+    "State or Province Name (full name)" {send "$SSL_STATE_CODE\r" ; exp_continue}
 
-expect -ex "Country Name (2 letter code) \[XX\]:"
-send "$SSL_COUNTRY_CODE\r"
+    "Locality Name (eg, city)" {send "$SSL_CITY\r" ; exp_continue}
 
-expect -ex "State or Province Name (full name) \[\]:"
-send "$SSL_STATE_CODE\r"
+    "Organization Name (eg, company)" {send "$SSL_ORGANIZATION_NAME\r" ; exp_continue}
 
-expect -ex "Locality Name (eg, city) \[Default City\]:"
-send "$SSL_CITY\r"
+    "Organizational Unit Name (eg, section)" {send "$SSL_ORGANIZATION_UNIT_NAME\r" ; exp_continue}
 
-expect -ex "Organization Name (eg, company) \[Default Company Ltd\]:"
-send "$SSL_ORGANIZATION_NAME\r"
+    "Common Name (eg, your name or your server's hostname)" {send "$DC21_HOST\r" ; exp_continue}
 
-expect -ex "Organizational Unit Name (eg, section) \[\]:"
-send "$SSL_ORGANIZATION_UNIT_NAME\r"
+    "Email Address" {send "$SSL_EMAIL\r" ; exp_continue}
 
-expect -ex "Common Name (eg, your name or your server's hostname) \[\]:"
-send "$DC21_HOST\r"
-
-expect -ex "Email Address \[\]:"
-send "$SSL_EMAIL\r"
-
-expect
+}
 
 EOD
