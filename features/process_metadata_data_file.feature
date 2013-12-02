@@ -40,8 +40,8 @@ Feature: Process Data files
     And I should see "Data file has been queued for processing."
     And I should not see "Creation status"
     And I should see details displayed
-      | Parents  | No parent files defined.             |
-      | Children | Test_OCR.jpg.txt\nTest_OCR.jpg_1.txt |
+      | Parents  | No parent files defined.             |    |
+      | Children | Test_OCR.jpg.txt\nTest_OCR.jpg_1.txt | no |
     Then file "Test_OCR.jpg_1.txt" should have a UUID created
 
 # EYETRACKER-137 EYETRACKER-151 EYETRACKER-140
@@ -61,6 +61,6 @@ Feature: Process Data files
     And I should see "Data file has been queued for processing."
     And I should not see "Creation status"
     And I should see details displayed
-      | Parents  | No parent files defined.           |
-      | Children | Test_SR.wav.txt\nTest_SR.wav_1.txt |
+      | Parents  | No parent files defined.           |    |
+      | Children | Test_SR.wav.txt\nTest_SR.wav_1.txt | no |
     Then file "Test_SR.wav_1.txt" should have a UUID created
