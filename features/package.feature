@@ -61,6 +61,44 @@ Feature: Create a package
     Then I should see "Package was successfully created."
     And I should see "hiev_1"
 
+#EYETRACKER-140
+  Scenario: New package creates parent relationships
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    And I add sample2.txt to the cart
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I should see select2 field "package_label_list" with value ""
+    And I fill in "Title" with "Package 1"
+    And I fill in "Filename" with "my_package1"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    # running in background
+    And I press "Create Package"
+    Then I should see "Package is now queued for processing in the background."
+    And I should be on the data file details page for my_package1.zip
+    And I should see "hiev_0"
+    And I should see details displayed
+      | Parents  | sample1.txt\nsample2.txt    |
+      | Children | No children files defined.  |
+    When I am on the create package page
+    Then I should see "Filename"
+    And I should see "Experiment"
+    And I fill in "Title" with "Package 2"
+    And I fill in "Filename" with "my_package2"
+    And I select "My Experiment" from "Experiment"
+    And I check "Video"
+    And I uncheck "Run in background?"
+    # running in forergound
+    And I press "Create Package"
+    Then I should see "Package was successfully created."
+    And I should be on the data file details page for my_package2.zip
+    And I should see "hiev_1"
+    And I should see details displayed
+      | Parents  | sample1.txt\nsample2.txt    |
+      | Children | No children files defined.  |
+
   Scenario: External ID is not reused
     Given I am on the list data files page
     And I add sample1.txt to the cart

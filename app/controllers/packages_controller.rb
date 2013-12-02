@@ -21,6 +21,7 @@ class PackagesController < DataFilesController
     if @package.save
       save_tags(@package, params[:tags])
       data_file_ids = current_user.cart_item_ids
+      @package.parent_ids = data_file_ids
       begin
         if params[:run_in_background]
           # Persist the job id in the db - we need to retrieve it per record basis
