@@ -8,11 +8,13 @@ class MetadataExtractor
       builder = AttachmentBuilder.new(APP_CONFIG['files_root'], data_file.created_by, FileTypeDeterminer.new, MetadataExtractor.new)
       output_file = builder.build_output_data_file(data_file, '.txt')
       output_file.uuid = OCRWorker.create({output_id: output_file.id, parent_id: data_file.id})
+      output_file.parents << data_file
       output_file.save
     elsif config.auto_sr?(data_file, force)
       builder = AttachmentBuilder.new(APP_CONFIG['files_root'], data_file.created_by, FileTypeDeterminer.new, MetadataExtractor.new)
       output_file = builder.build_output_data_file(data_file, '.txt')
       output_file.uuid = SRWorker.create({output_id: output_file.id, parent_id: data_file.id})
+      output_file.parents << data_file
       output_file.save
     end
   end
