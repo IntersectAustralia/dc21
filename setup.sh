@@ -8,6 +8,8 @@ spawn bash vm_setup.sh
 expect {
     "password for devel:" { send "$PASSWORD\r" ; exp_continue}
 
+    "Password: <hidden>" {send ""; exp_continue}
+
     "Password: " {send "$PASSWORD\r" ; exp_continue}
 
     "New jOAI password (at least six alphanumeric characters):" {send "$JOAI\r"; exp_continue}
