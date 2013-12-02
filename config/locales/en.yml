@@ -15,7 +15,7 @@ en:
         b_long: 'Longitude (bottom right)'
       system_configuration:
         auto_ocr_regex: 'Auto OCR Regular Expression:'
-        auto_sr_regex: 'Auto Speech Recognition Regular Expression:'
+        auto_sr_regex: 'Auto SR Regular Expression:'
     errors:
       models:
         facility:

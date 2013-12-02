@@ -504,7 +504,7 @@ Feature: Upload files
     Given I logout
     And I am logged in as "admin@intersect.org.au"
     When I am on the edit system config page
-    And I check "Auto Speech Recognition on Upload"
+    And I check "Auto SR on Upload"
     And I select "audio/mpeg" from "system_configuration_supported_sr_types"
     And I select "audio/x-wav" from "system_configuration_supported_sr_types"
     And I press "Update"
@@ -639,7 +639,7 @@ Feature: Upload files
     When I logout
     And I am logged in as "admin@intersect.org.au"
     And I am on the edit system config page
-    And I check "Auto Speech Recognition on Upload"
+    And I check "Auto SR on Upload"
     And I select "audio/x-wav" from "system_configuration_supported_sr_types"
     And I press "Update"
     And I am on the upload page
@@ -650,7 +650,7 @@ Feature: Upload files
     Then the most recent file should have name "toa5.dat"
     And file "toa5.dat" should not have a UUID created
     When I am on the edit system config page
-    And I uncheck "Auto Speech Recognition on Upload"
+    And I uncheck "Auto SR on Upload"
     And I select "audio/mpeg" from "system_configuration_supported_sr_types"
     And I press "Update"
     And I am on the upload page
@@ -661,8 +661,8 @@ Feature: Upload files
     Then the most recent file should have name "Test_SR_1.mp3"
     And file "Test_SR_1.mp3" should not have a UUID created
     When I am on the edit system config page
-    And I check "Auto Speech Recognition on Upload"
-    And I fill in "Auto Speech Recognition Regular Expression" with "a"
+    And I check "Auto SR on Upload"
+    And I fill in "Auto SR Regular Expression" with "a"
     And I press "Update"
     And I am on the upload page
     And I select "RAW" from "File type"

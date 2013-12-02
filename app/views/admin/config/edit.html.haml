@@ -70,7 +70,7 @@
       .controls
         = f.check_box :level2_parameters, {}, 'true', 'false'
 
-    %h2 Edit Automatic Processing
+    %h2 Edit OCR Processing
     .control-group
       = f.label :auto_ocr_on_upload, "Auto OCR on Upload", class: "control-label"
       .controls
@@ -80,19 +80,36 @@
       .controls
         = f.text_field :auto_ocr_regex
     .control-group#ocr_types
-      = f.label :supported_ocr_types, "Auto OCR Supported MIME Types", class: "control-label"
+      = f.label :supported_ocr_types, "OCR Supported MIME Types", class: "control-label"
       .controls
         = f.select :supported_ocr_types, options_for_select(@config.mime_types, @config.supported_ocr_types), {}, {:multiple => true}
     .control-group
-      = f.label :auto_sr_on_upload, "Auto Speech Recognition on Upload", class: "control-label"
+      .controls
+        %i Note: Tesseract will be used if the ABBYY details are not provided.
+    .control-group
+      = f.label :ocr_cloud_host, "ABBYY Host", class: "control-label"
+      .controls
+        = f.text_field :ocr_cloud_host, placeholder: "eg. cloud.ocrsdk.com"
+    .control-group
+      = f.label :ocr_cloud_id, "ABBYY ID", class: "control-label"
+      .controls
+        = f.text_field :ocr_cloud_id
+    .control-group
+      = f.label :ocr_cloud_token, "ABBYY Password", class: "control-label"
+      .controls
+        = f.text_field :ocr_cloud_token
+
+    %h2 Edit Speech Recognition Processing
+    .control-group
+      = f.label :auto_sr_on_upload, "Auto SR on Upload", class: "control-label"
       .controls
         = f.check_box :auto_sr_on_upload, {}, 'true', 'false'
     .control-group
-      = f.label :auto_sr_regex, "Auto Speech Recognition Regular Expression", class: "control-label"
+      = f.label :auto_sr_regex, "Auto SR Regular Expression", class: "control-label"
       .controls
         = f.text_field :auto_sr_regex
     .control-group#sr_types
-      = f.label :supported_sr_types, "Auto Speech Recognition Supported MIME Types", class: "control-label"
+      = f.label :supported_sr_types, "SR Supported MIME Types", class: "control-label"
       .controls
         = f.select :supported_sr_types, options_for_select(@config.mime_types, @config.supported_sr_types), {}, {:multiple => true, :include_hidden => true}
 

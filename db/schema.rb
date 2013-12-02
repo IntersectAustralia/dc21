@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131125065051) do
+ActiveRecord::Schema.define(:version => 20131128224002) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -219,6 +219,9 @@ ActiveRecord::Schema.define(:version => 20131125065051) do
     t.text     "auto_sr_regex"
     t.text     "ocr_types",                          :default => "image/jpeg, image/png"
     t.text     "sr_types",                           :default => "audio/x-wav, audio/mpeg"
+    t.string   "ocr_cloud_host",                     :default => "cloud.ocrsdk.com"
+    t.string   "ocr_cloud_id"
+    t.string   "ocr_cloud_token"
   end
 
   create_table "tags", :force => true do |t|

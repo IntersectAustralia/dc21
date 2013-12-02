@@ -29,6 +29,22 @@ class AttachmentBuilder
     to_a << package
   end
 
+
+  def build_output_data_file(parent, ext)
+    tmp = Tempfile.new(["temp", ext])
+
+    path, new_filename = store_file("#{parent.filename}#{ext}", tmp)
+
+    DataFile.create(:path => path,
+                    :filename => new_filename,
+                    :created_by => parent.created_by,
+                    :format => File.mime_type?(path),
+                    :file_size => tmp.size,
+                    :transfer_status => DataFile::RESQUE_QUEUED,
+                    :file_processing_status => "PROCESSED",
+                    :experiment_id => parent.experiment_id)
+  end
+
   private
 
   def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time)

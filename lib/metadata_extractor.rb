@@ -5,14 +5,15 @@ class MetadataExtractor
     if type == FileTypeDeterminer::TOA5
       Toa5Parser.extract_metadata(data_file)
     elsif config.auto_ocr?(data_file, force)
-      data_file.transfer_status = DataFile::RESQUE_QUEUED
-      data_file.uuid = OCRWorker.create({:data_file_id => data_file.id})
-      data_file.save
+      builder = AttachmentBuilder.new(APP_CONFIG['files_root'], data_file.created_by, FileTypeDeterminer.new, MetadataExtractor.new)
+      output_file = builder.build_output_data_file(data_file, '.txt')
+      output_file.uuid = OCRWorker.create({output_id: output_file.id, parent_id: data_file.id})
+      output_file.save
     elsif config.auto_sr?(data_file, force)
-      data_file.transfer_status = DataFile::RESQUE_QUEUED
-      data_file.uuid = SRWorker.create({:data_file_id => data_file.id})
-      data_file.save
+      builder = AttachmentBuilder.new(APP_CONFIG['files_root'], data_file.created_by, FileTypeDeterminer.new, MetadataExtractor.new)
+      output_file = builder.build_output_data_file(data_file, '.txt')
+      output_file.uuid = SRWorker.create({output_id: output_file.id, parent_id: data_file.id})
+      output_file.save
     end
   end
-
 end

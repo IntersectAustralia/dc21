@@ -21,18 +21,29 @@ Feature: Edit system configuration
     And I press "Update"
     Then I should see "System configuration updated successfully."
 
+# EYETRACKER-151
+
   Scenario: View system config fields as admin
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the system config page
     Then I should see details displayed
-      | Local System Name    | HIEv                                          |
-      | Research Centre Name | Hawkesbury Institute for the Environment      |
-      | Overarching Entity   | University of Western Sydney                  |
-      | Address              | Locked Bag 1797, Penrith NSW, 2751, Australia |
-      | Telephone Numbers    | +61 2 4570 1125                               |
-      | Email                | hieinfo@lists.uws.edu.au                      |
-      | Description          |                                               |
-      | URLs                 | http://www.uws.edu.au/hie                     |
+      | Local System Name           | HIEv                                          |
+      | Research Centre Name        | Hawkesbury Institute for the Environment      |
+      | Overarching Entity          | University of Western Sydney                  |
+      | Address                     | Locked Bag 1797, Penrith NSW, 2751, Australia |
+      | Telephone Numbers           | +61 2 4570 1125                               |
+      | Email                       | hieinfo@lists.uws.edu.au                      |
+      | Description                 |                                               |
+      | URLs                        | http://www.uws.edu.au/hie                     |
+      | Auto OCR on Upload          | Disabled                                      |
+      | Auto OCR Regular Expression |                                               |
+      | OCR Supported MIME Types    | image/jpeg, image/png                         |
+      | ABBYY Host                  | cloud.ocrsdk.com                              |
+      | ABBYY ID                    |                                               |
+      | ABBYY Password              |                                               |
+      | Auto SR on Upload           | Disabled                                      |
+      | Auto SR Regular Expression  |                                               |
+      | SR Supported MIME Types     | audio/x-wav, audio/mpeg                       |
 
   Scenario: Access system config edit page as non-admin
     Given I am logged in as "cindy@intersect.org.au"
@@ -159,7 +170,7 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in "Auto OCR Regular Expression" with "(unmatched"
-    When I fill in "Auto Speech Recognition Regular Expression" with "+w"
+    When I fill in "Auto SR Regular Expression" with "+w"
     And I press "Update"
     And I should see "Auto OCR Regular Expression: end pattern with unmatched parenthesis: /(unmatched/"
-    And I should see "Auto Speech Recognition Regular Expression: target of repeat operator is not specified: /+w/"
+    And I should see "Auto SR Regular Expression: target of repeat operator is not specified: /+w/"

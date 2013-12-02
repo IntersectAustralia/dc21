@@ -31,7 +31,7 @@ def check_displayed_field(label, value)
   found = false
   fields.each do |row|
     if row[0] == (label + ":")
-      row[1].should eq(value)
+      row[1].gsub(/\n+/, "\n").should eq(value.gsub(/\n+/, "\n"))
       found = true
     end
   end
