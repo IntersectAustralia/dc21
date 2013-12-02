@@ -60,7 +60,7 @@ after 'multistage:ensure' do
     config/dc21app_config.yml
     config/shibboleth.yml
     public/favicon.ico
-    public/images/icon_logo_dc21.png
-    public/images/icon_logo_small_dc21.png
+    public/icon_app.png
+    public/icon_app_small.png
 )
 end
