@@ -456,7 +456,7 @@ Feature: Upload files
     And I am on the data file details page for sample1.txt
     Then I should see field "Labels" with value "Abba, bebba"
 
-#EYETRACKER-7
+#EYETRACKER-7 EYETRACKER-140 EYETRACKER-169
 
   Scenario: Check UUID is created for an uploaded jpeg or png image file
     Given I logout
@@ -469,36 +469,49 @@ Feature: Upload files
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_OCR.jpg" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_OCR.jpg"
+    Then the most recent file should have name "Test_OCR.jpg.txt"
     And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
     And the uploaded files display should include "Test_OCR.jpg" with messages "success"
     And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
     And file "Test_OCR.jpg" should have type "RAW"
     And file "Test_OCR.jpg" should have experiment "My Experiment"
-    And file "Test_OCR.jpg" should have a UUID created
+    And I am on the data file details page for Test_OCR.jpg
+    And I should see details displayed
+      | Parents  | No parent files defined. |
+      | Children | Test_OCR.jpg.txt         |
+    And I should not see "Creation status"
+    And file "Test_OCR.jpg.txt" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename     | Added by                    | Type |
-      | Test_OCR.jpg | admin@intersect.org.au | RAW  |
+      | Filename         | Added by               | Type      |
+      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED |
+      | Test_OCR.jpg     | admin@intersect.org.au | RAW       |
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_OCR.png" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_OCR.png"
+    Then the most recent file should have name "Test_OCR.png.txt"
     And the uploaded files display should include "Test_OCR.png" with file type "RAW"
     And the uploaded files display should include "Test_OCR.png" with messages "success"
     And the uploaded files display should include "Test_OCR.png" with experiment "My Experiment"
     And file "Test_OCR.png" should have type "RAW"
     And file "Test_OCR.png" should have experiment "My Experiment"
-    And file "Test_OCR.png" should have a UUID created
+    And I am on the data file details page for Test_OCR.png
+    And I should see details displayed
+      | Parents  | No parent files defined. |
+      | Children | Test_OCR.png.txt         |
+    And I should not see "Creation status"
+    And file "Test_OCR.png.txt" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename     | Added by                    | Type |
-      | Test_OCR.png | admin@intersect.org.au | RAW  |
-      | Test_OCR.jpg | admin@intersect.org.au | RAW  |
+      | Filename         | Added by               | Type      |
+      | Test_OCR.png.txt | admin@intersect.org.au | PROCESSED |
+      | Test_OCR.png     | admin@intersect.org.au | RAW       |
+      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED |
+      | Test_OCR.jpg     | admin@intersect.org.au | RAW       |
 
-#EYETRACKER-8
+#EYETRACKER-8 EYETRACKER-140 EYETRACKER-169
 
   Scenario: Check UUID is created for an uploaded mp3 or wav file
     Given I logout
@@ -513,34 +526,47 @@ Feature: Upload files
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_SR.wav" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_SR.wav"
+    Then the most recent file should have name "Test_SR.wav.txt"
     And the uploaded files display should include "Test_SR.wav" with file type "RAW"
     And the uploaded files display should include "Test_SR.wav" with messages "success"
     And the uploaded files display should include "Test_SR.wav" with experiment "My Experiment"
     And file "Test_SR.wav" should have type "RAW"
     And file "Test_SR.wav" should have experiment "My Experiment"
-    And file "Test_SR.wav" should have a UUID created
+   And I am on the data file details page for Test_SR.wav
+   And I should see details displayed
+     | Parents  | No parent files defined. |
+     | Children | Test_SR.wav.txt          |
+   And I should not see "Creation status"
+   And file "Test_SR.wav.txt" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by               | Type |
-      | Test_SR.wav | admin@intersect.org.au | RAW  |
+      | Filename        | Added by               | Type      |
+      | Test_SR.wav.txt | admin@intersect.org.au | PROCESSED |
+      | Test_SR.wav     | admin@intersect.org.au | RAW       |
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_SR.mp3" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_SR.mp3"
+    Then the most recent file should have name "Test_SR.mp3.txt"
     And the uploaded files display should include "Test_SR.mp3" with file type "RAW"
     And the uploaded files display should include "Test_SR.mp3" with messages "success"
     And the uploaded files display should include "Test_SR.mp3" with experiment "My Experiment"
     And file "Test_SR.mp3" should have type "RAW"
     And file "Test_SR.mp3" should have experiment "My Experiment"
-    And file "Test_SR.mp3" should have a UUID created
-    When I am on the list data files page
+  And I am on the data file details page for Test_SR.mp3
+  And I should see details displayed
+    | Parents  | No parent files defined. |
+    | Children | Test_SR.mp3.txt          |
+  And I should not see "Creation status"
+  And file "Test_SR.mp3.txt" should have a UUID created
+ When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename    | Added by                    | Type |
-      | Test_SR.mp3 | admin@intersect.org.au | RAW  |
-      | Test_SR.wav | admin@intersect.org.au | RAW  |
+      | Filename        | Added by               | Type      |
+      | Test_SR.mp3.txt | admin@intersect.org.au | PROCESSED |
+      | Test_SR.mp3     | admin@intersect.org.au | RAW       |
+      | Test_SR.wav.txt | admin@intersect.org.au | PROCESSED |
+      | Test_SR.wav     | admin@intersect.org.au | RAW       |
 
 
 #EYETRACKER-7
@@ -559,7 +585,7 @@ Feature: Upload files
     And file "sample1.txt" should have experiment "My Experiment"
     And file "sample1.txt" should not have a UUID created
 
-  #EYETRACKER-138
+  #EYETRACKER-138  EYETRACKER-169
   Scenario: Check UUID created for uploaded image file conforming to auto OCR processing config
     Given I logout
     And I am logged in as "admin@intersect.org.au"
@@ -571,16 +597,17 @@ Feature: Upload files
     And I select "My Experiment" from "Experiment"
     And I select "samples/Test_OCR.jpg" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_OCR.jpg"
+    Then the most recent file should have name "Test_OCR.jpg.txt"
     And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
     And the uploaded files display should include "Test_OCR.jpg" with messages "success"
     And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
     And file "Test_OCR.jpg" should have type "RAW"
     And file "Test_OCR.jpg" should have experiment "My Experiment"
-    And file "Test_OCR.jpg" should have a UUID created
+    And file "Test_OCR.jpg.txt" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
       | Filename     | Added by               | Type |
+      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED  |
       | Test_OCR.jpg | admin@intersect.org.au | RAW  |
 
   #EYETRACKER-138
