@@ -93,7 +93,7 @@ class OCRWorker
           tmp = Tempfile.new('dc21_ocr')
           if system *%W(tesseract #{parent.path} #{tmp.path})
             system *%W(mv #{tmp.path}.txt #{output_file.path})
-            ocr_type = "Tesseract"
+            ocr_type = %x(tesseract -v 2>&1).split("\n")[0].camelize
           else
             raise "Tesseract does not support #{parent.path} (#{parent.format})"
           end
