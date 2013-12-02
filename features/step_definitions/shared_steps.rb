@@ -22,16 +22,20 @@ end
 Then /^I should see details displayed$/ do |table|
   # as above, this assumes you're using the helper to render the field and therefore have the usual div/label/span setup
   table.raw.each do |row|
-    check_displayed_field(row[0], row[1])
+    check_displayed_field(row[0], row[1], row[2])
   end
 end
 
-def check_displayed_field(label, value)
+def check_displayed_field(label, value, ordered=nil)
   fields = all(".control-group").map { |div| div.all('label, div').map { |cell| cell.text.strip } }
   found = false
   fields.each do |row|
     if row[0] == (label + ":")
-      row[1].gsub(/\n+/, "\n").should eq(value.gsub(/\n+/, "\n"))
+      if ordered.eql?("no")
+        (row[1].split(/\n+/) - value.split(/\n+/)).should be_empty
+      else
+        row[1].gsub(/\n+/, "\n").should eq(value.gsub(/\n+/, "\n"))
+      end
       found = true
     end
   end
