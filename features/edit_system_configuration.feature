@@ -38,7 +38,7 @@ Feature: Edit system configuration
       | Auto OCR on Upload          | Disabled                                      |
       | Auto OCR Regular Expression |                                               |
       | OCR Supported MIME Types    | image/jpeg, image/png                         |
-      | ABBYY Host                  | cloud.ocrsdk.com                              |
+      | ABBYY Host                  |                                               |
       | ABBYY ID                    |                                               |
       | ABBYY Password              |                                               |
       | Auto SR on Upload           | Disabled                                      |
