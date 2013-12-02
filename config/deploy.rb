@@ -16,7 +16,7 @@ set :default_stage, "qa"
 set :shared_children, shared_children + %w(log_archive)
 set :bash, '/bin/bash'
 set :shell, bash
-set :rvm_ruby_string, 'ruby-1.9.2-p290@dc21app'
+set :rvm_ruby_string, 'ruby-1.9.3-p448@dc21app'
 
 set :bundle_flags, "--deployment"
 

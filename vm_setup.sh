@@ -60,13 +60,13 @@ cd $HOME/code_base/dc21
 # Set up RVM
 type -P $HOME/.rvm/scripts/rvm > /dev/null
 if [ $? -ne 0 ]; then
-  curl -L http://get.rvm.io | bash -s stable --ruby=1.9.2-p290
+  curl -L http://get.rvm.io | bash -s stable --ruby=1.9.3-p448
   status=$?
   if [ $status -eq 0 ]; then
     source $HOME/.rvm/scripts/rvm
     echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> $HOME/.bashrc
   else
-    echo "$(tput setaf 1)ERROR $status: RVM install failed. Manually install RVM/Ruby 1.9.2-p290 and rerun the vm_setup script.$(tput sgr0)"
+    echo "$(tput setaf 1)ERROR $status: RVM install failed. Manually install RVM/Ruby 1.9.3-p448 and rerun the vm_setup script.$(tput sgr0)"
     exit $status;
   fi
 fi
@@ -75,7 +75,7 @@ fi
 source $HOME/.bash_profile
 source $HOME/.bashrc
 cd $HOME/code_base/dc21
-rvm use 1.9.2-p290@dc21app --create
+rvm use 1.9.3-p448@dc21app --create
 gem install bundler -v 1.0.20
 bundle install
 status=$?
