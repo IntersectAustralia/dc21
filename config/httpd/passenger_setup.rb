@@ -15,12 +15,12 @@ PassengerRoot #{gem_home}/gems/passenger-#{version}
 PassengerRuby #{wrapper_path}/ruby
 PassengerTempDir #{current_path}/tmp/pids
 
-<VirtualHost #{environment.eql?('production') ? hostname : '*'}:80>
+<VirtualHost *:80>
     ServerName #{hostname}
      Redirect permanent / https://#{hostname}/
 </VirtualHost>
 
-<VirtualHost #{environment.eql?('production') ? hostname : '*'}:443>
+<VirtualHost *:443>
     ServerName #{hostname}
     RailsEnv #{environment}
     DocumentRoot #{current_path}/public
