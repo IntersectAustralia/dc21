@@ -39,7 +39,7 @@ Feature: Edit system configuration
       | Auto OCR Regular Expression |                                               |
       | OCR Supported MIME Types    | image/jpeg, image/png                         |
       | ABBYY Host                  |                                               |
-      | ABBYY ID                    |                                               |
+      | ABBYY App Name              |                                               |
       | ABBYY Password              |                                               |
       | Auto SR on Upload           | Disabled                                      |
       | Auto SR Regular Expression  |                                               |
@@ -77,20 +77,47 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in the following:
-      | Local System Name    | Hello |
-      | Research Centre Name | World |
-      | Entity               | !     |
+      | Local System Name           | Hello                      |
+      | Research Centre Name        | World                      |
+      | Entity                      | !                          |
+      | Address                     | Test 1                     |
+      | Telephone Numbers           | +61 2 23456789             |
+      | Email                       | test@test.org.au           |
+      | Description                 |                            |
+      | URLs                        | http://www.test.edu.au/hie |
+      | Auto OCR on Upload          | on                         |
+      | Auto OCR Regular Expression | 1234                       |
+      | OCR Supported MIME Types    | image/jpeg                 |
+      | OCR Supported MIME Types    | image/png                  |
+      | OCR Supported MIME Types    | audio/x-wav                |
+      | ABBYY Host                  | Test ABBYY Host            |
+      | ABBYY App Name              | Test ABBYY App Name        |
+      | ABBYY Password              | Test ABBYY Password        |
+      | Auto SR on Upload           | on                         |
+      | Auto SR Regular Expression  | 1234                       |
+      | SR Supported MIME Types     | audio/x-wav                |
+      | SR Supported MIME Types     | audio/mpeg                 |
+      | SR Supported MIME Types     | image/jpeg                 |
     And I press "Update"
     And I should be on the system config page
     Then I should see details displayed
-      | Local System Name    | Hello                                         |
-      | Research Centre Name | World                                         |
-      | Overarching Entity   | !                                             |
-      | Address              | Locked Bag 1797, Penrith NSW, 2751, Australia |
-      | Telephone Numbers    | +61 2 4570 1125                               |
-      | Email                | hieinfo@lists.uws.edu.au                      |
-      | Description          |                                               |
-      | URLs                 | http://www.uws.edu.au/hie                     |
+      | Local System Name           | Hello                                |
+      | Research Centre Name        | World                                |
+      | Overarching Entity          | !                                    |
+      | Address                     | Test 1, Penrith NSW, 2751, Australia |
+      | Telephone Numbers           | +61 2 23456789                       |
+      | Email                       | test@test.org.au                     |
+      | Description                 |                                      |
+      | URLs                        | http://www.test.edu.au/hie           |
+      | Auto OCR on Upload          | Enabled                              |
+      | Auto OCR Regular Expression | 1234                                 |
+      | OCR Supported MIME Types    | audio/x-wav, image/jpeg, image/png   |
+      | ABBYY Host                  | Test ABBYY Host                      |
+      | ABBYY App Name              | Test ABBYY App Name                  |
+      | ABBYY Password              | Test ABBYY Password                  |
+      | Auto SR on Upload           | Enabled                              |
+      | Auto SR Regular Expression  | 1234                                 |
+      | SR Supported MIME Types     | audio/mpeg, audio/x-wav, image/jpeg  |
 
 # EYETRACKER-95
 
