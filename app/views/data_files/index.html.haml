@@ -112,11 +112,11 @@
                 - facilities.each_with_index do |facility, index|
                   .facility_group
                     = link_to "+", "#", :id => "expand_#{facility.name}", :class => "expand_facility"
-                    = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent
+                    = label_tag "search_facility_#{index}", facility.name, :class => :facility_parent, :title => facility.name
                     = check_box_tag "search[facilities][]", facility.id, @selected_facilities.include?(facility.id.to_s), :id => "search_facility_#{index}", :class => :facility_parent
                     .facility_children
                       - facility.experiments.each_with_index do |experiment, e_index|
-                        = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment
+                        = label_tag "search_experiment_#{index}_#{e_index}", experiment.name, :class => :experiment, :title => experiment.name
                         = check_box_tag "search[experiments][]", experiment.id, @selected_experiments.include?(experiment.id.to_s), :id => "search_experiment_#{index}_#{e_index}", :class => :experiment
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
