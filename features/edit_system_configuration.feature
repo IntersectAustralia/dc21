@@ -133,14 +133,14 @@ Feature: Edit system configuration
 
   Scenario: Check that the footer contains Intersect Australia and the system name
     When I am on the new user session page
-    Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
+    Then I should see "Developed by Intersect Australia Ltd. Powered by DC21 Version:"
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in "Name" with "Hi World"
     And I press "Update"
-    Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
+    Then I should see "Developed by Intersect Australia Ltd. Powered by DC21 Version:"
     When I follow "Sign out"
-    Then I should see "Developed by Intersect Australia Ltd. Powered by HIEv Version:"
+    Then I should see "Developed by Intersect Australia Ltd. Powered by DC21 Version:"
 
 # EYETRACKER-101
 

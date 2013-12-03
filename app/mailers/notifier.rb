@@ -50,4 +50,13 @@ class Notifier < ActionMailer::Base
           :subject => "#{SYSTEM_NAME} - Package completed")
   end
 
+  def notify_user_reset_password_instructions(recipient)
+    @user = recipient
+    @system_name = SYSTEM_NAME
+    mail( :to => @user.email,
+          :from => APP_CONFIG['notification_email_sender'],
+          :reply_to => APP_CONFIG['notification_email_sender'],
+          :subject => "#{SYSTEM_NAME} - Reset password instructions")
+  end
+
 end
