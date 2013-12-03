@@ -12,7 +12,7 @@ class Package < DataFile
 
   def set_external_id
     if self.external_id.blank?
-      prefix = APP_CONFIG['hiev_handle_prefix'] || "hiev"
+      prefix = APP_CONFIG['handle_prefix'] || "hiev"
       prefix = prefix[0..99]
       package_id = self.class.connection.select_value("SELECT nextval('package_id_seq')").to_i - 1
       self.update_attribute(:external_id, "#{prefix}_#{package_id}".strip)

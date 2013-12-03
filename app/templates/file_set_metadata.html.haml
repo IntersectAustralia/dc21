@@ -4,6 +4,7 @@
 - # You have access to the following locals:
 - # "data_files" which is an array of DataFile (rails model) objects chosen for the package
 - # "package" which contains the package metadata for the zipped data_files
+- # "config" which contains the system configuration properties
 - # "facilities" which is an array of Facility (rails model) objects associated with the chosen data files
 - # "experiments" which is an array of Experiment (rails model) objects for the chosen data files
 - # "metadata_helper" which is a MetadataHelper object that can be used
@@ -45,7 +46,7 @@
         %span{:property => "http://schema.org/endDate", :content => "#{package.end_time.try(:to_s, :w3c)}"}
           = package.end_time.try(:to_s, :long_date)
         %h1 Software Information
-        %section{:property => "http://purl.org/dc/terms/creator", :typeof => "http://schema.org/softwareApplication", :resource => "#HIEv"}
+        %section{:property => "http://purl.org/dc/terms/creator", :typeof => "http://schema.org/softwareApplication", :resource => "##{config.name}"}
           %table
             %tbody
               %tr
@@ -64,7 +65,7 @@
                   %span{:property => "http://schema.org/url"} https://github.com/IntersectAustralia/dc21
                   %span{:property => "http://schema.org/url"} www.intersect.org.au
         %h1 Organisational Information
-        %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Organisation", :resource => "#HIE"}
+        %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Organisation", :resource => "##{config.name}"}
           %table
             %tbody
               %tr
