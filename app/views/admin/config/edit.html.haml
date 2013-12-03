@@ -112,7 +112,7 @@
       = f.label :supported_sr_types, "SR Supported MIME Types", class: "control-label"
       .controls
         = f.select :supported_sr_types, options_for_select(@config.mime_types, @config.supported_sr_types), {}, {:multiple => true, :include_hidden => true}
-      .form-actions
+    .form-actions
       .actions-pre
         = cancel_button 'Cancel', admin_config_path
       .actions
