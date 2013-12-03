@@ -25,7 +25,7 @@
     .controls
       %i Note: Tesseract will be used if the ABBYY details are not provided.
   = render_field "ABBYY Host", @config.ocr_cloud_host
-  = render_field "ABBYY ID", @config.ocr_cloud_id
+  = render_field "ABBYY App Name", @config.ocr_cloud_id
   = render_field "ABBYY Password", @config.ocr_cloud_token
   %h2 Speech Recognition Processing
   = render_field "Auto SR on Upload", @config.auto_sr_on_upload ? 'Enabled':'Disabled'

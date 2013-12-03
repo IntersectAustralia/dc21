@@ -91,6 +91,8 @@ When /^(?:|I )fill in the following:$/ do |fields|
     field = find_field(name)
     if field.tag_name.downcase == "select"
       select(value, :from => name)
+    elsif field[:type].eql?("checkbox")
+      value.eql?("on") ? check(name) : uncheck(name)
     else
       fill_in(name, :with => value)
     end

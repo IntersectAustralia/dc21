@@ -91,13 +91,13 @@
       .controls
         = f.text_field :ocr_cloud_host, placeholder: "eg. cloud.ocrsdk.com"
     .control-group
-      = f.label :ocr_cloud_id, "ABBYY ID", class: "control-label"
+      = f.label :ocr_cloud_id, "ABBYY App Name", class: "control-label"
       .controls
-        = f.text_field :ocr_cloud_id
+        = f.text_field :ocr_cloud_id, placeholder: "eg. DC21 OCR"
     .control-group
       = f.label :ocr_cloud_token, "ABBYY Password", class: "control-label"
       .controls
-        = f.text_field :ocr_cloud_token
+        = f.text_field :ocr_cloud_token, placeholder: "This will be emailed to you when you register an application with ABBYY."
 
     %h2 Edit Speech Recognition Processing
     .control-group
@@ -112,8 +112,7 @@
       = f.label :supported_sr_types, "SR Supported MIME Types", class: "control-label"
       .controls
         = f.select :supported_sr_types, options_for_select(@config.mime_types, @config.supported_sr_types), {}, {:multiple => true, :include_hidden => true}
-
-    .form-actions
+      .form-actions
       .actions-pre
         = cancel_button 'Cancel', admin_config_path
       .actions

@@ -95,18 +95,18 @@ class SystemConfiguration < ActiveRecord::Base
   end
 
   def supported_ocr_types=(array)
-    self.ocr_types = array.join(", ")
+    self.ocr_types = array.sort.join(", ")
   end
 
   def supported_ocr_types
-    self.ocr_types.split(", ")
+    self.ocr_types.split(", ").sort
   end
 
   def supported_sr_types=(array)
-    self.sr_types = array.join(", ")
+    self.sr_types = array.sort.join(", ")
   end
 
   def supported_sr_types
-    self.sr_types.split(", ")
+    self.sr_types.split(", ").sort
   end
 end
