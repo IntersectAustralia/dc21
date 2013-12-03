@@ -28,6 +28,7 @@ class SRWorker
       output_file.mark_as_failed
       # Catch exception, set transfer status and rethrow so we can see what went wrong in the overview page
       output_file.file_processing_description = "SR ERROR: #{e.message}"
+      output_file.file_processing_status = DataFile::STATUS_ERROR
       output_file.save
       Rails.logger.info "SR ERROR: #{e.message}"
       raise e

@@ -113,6 +113,7 @@ class OCRWorker
       output_file.mark_as_failed
       # Catch exception, set transfer status and rethrow so we can see what went wrong in the overview page
       output_file.file_processing_description = "OCR ERROR: #{e.message}"
+      output_file.file_processing_status = DataFile::STATUS_ERROR
       output_file.save
       Rails.logger.info "OCR ERROR: #{e.message}"
       raise e
