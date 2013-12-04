@@ -18,7 +18,7 @@ class DataFilesController < ApplicationController
   layout 'data_files'
 
   expose(:tags) { Tag.order(:name) }
-  expose(:labels) { Label.order(:name).collect(&:name) }
+  expose(:labels) { Label.joins(:data_file_labels).collect(&:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 

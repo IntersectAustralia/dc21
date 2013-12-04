@@ -49,7 +49,9 @@ class DataFile < ActiveRecord::Base
   has_and_belongs_to_many :users
 
   has_and_belongs_to_many :tags, :uniq => true
-  has_and_belongs_to_many :labels, :uniq => true
+
+  has_many :data_file_labels
+  has_many :labels, :through => :data_file_labels, :uniq => true
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description

@@ -240,6 +240,15 @@ Then /^I should see select2 field "([^"]*)" with value "([^"]*)"$/ do |name, val
   field.value.should eq value
 end
 
+Then /^I should see the choice "([^"]*)" in the select2 menu$/ do |value|
+  field = page.find(".select2-result-label", text: value)
+  field.should_not be_nil
+end
+
+Then /^I should not see the choice "([^"]*)" in the select2 menu$/ do |value|
+  page.should have_no_xpath("//*[@class='select2-result-label' and text()='#{value}']")
+end
+
 Then /^file "([^"]*)" should have labels "([^"]*)"$/ do |file, labels|
   file = DataFile.find_by_filename!(file)
   file.labels.collect(&:name).sort.should eq(labels.split("|").sort)
@@ -248,4 +257,10 @@ end
 Then /^file "([^"]*)" should have (\d+) labels/ do |file, count|
   file = DataFile.find_by_filename!(file)
   file.labels.count.should eq(count.to_i)
+end
+
+Given /^I have labels (.+)$/ do |label_names|
+  label_names.split(', ').each do |label_name|
+    Factory(:label, :name => label_name)
+  end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131128224002) do
+ActiveRecord::Schema.define(:version => 20131202055117) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -30,6 +30,11 @@ ActiveRecord::Schema.define(:version => 20131128224002) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "data_file_labels", :id => false, :force => true do |t|
+    t.integer "data_file_id"
+    t.integer "label_id"
   end
 
   create_table "data_file_relationships", :force => true do |t|
@@ -60,11 +65,6 @@ ActiveRecord::Schema.define(:version => 20131128224002) do
     t.text     "title",                       :default => ""
     t.string   "transfer_status"
     t.string   "uuid"
-  end
-
-  create_table "data_files_labels", :id => false, :force => true do |t|
-    t.integer "data_file_id"
-    t.integer "label_id"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

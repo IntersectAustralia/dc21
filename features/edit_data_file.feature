@@ -186,3 +186,43 @@ Feature: Edit data files metadata
     And I fill in "Name" with "/ \ ? * : | < > "
     And I press "Update"
     Then I should see "cannot contain any of the following characters: / \ ? * : | < >"
+
+#EYETRACKER-144
+  @javascript
+  Scenario: Remove unused labels from users view
+    Given I have labels "label_1, label_2, label_3, label_4, label_5, terrier"
+    And I have data files
+      | filename      | created_at       | uploaded_by                  | file_processing_status | experiment    | label_list |
+      | datafile1.dat | 04/12/2013 11:53 | researcher@intersect.org.au  | RAW                    | My Experiment | label_1    |
+      | sample2.txt   | 01/12/2011 13:45 | researcher@intersect.org.au  | CLEANSED               | Experiment 2  | label_5    |
+    And I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "sample2.txt"
+    And I fill in "Labels" with "lab"
+    Then I should see the choice "label_1" in the select2 menu
+    And I choose "label_1" in the select2 menu
+    And I fill in "Labels" with "th"
+    Then I should see the choice "that2" in the select2 menu
+    And I should see the choice "this3" in the select2 menu
+    When I choose "this3" in the select2 menu
+    And I fill in "Labels" with "label_2"
+    And I choose "label_2" in the select2 menu
+    And I remove "label_5" from "data_file_label_list" select2 field
+    And I wait for 1 seconds
+    And I press "Update"
+    Then I should see field "Labels" with value "label_1, label_2, this3"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I fill in "Labels" with "l"
+    Then I should see the choice "l" in the select2 menu
+    And I should see the choice "label_1" in the select2 menu
+    And I should see the choice "label_2" in the select2 menu
+    And I should not see the choice "label_3" in the select2 menu
+    And I should not see the choice "label_4" in the select2 menu
+    And I should not see the choice "label_5" in the select2 menu
+    When I fill in "Labels" with "t"
+    Then I should see the choice "t" in the select2 menu
+    And I should see the choice "test1" in the select2 menu
+    And I should see the choice "that2" in the select2 menu
+    And I should see the choice "this3" in the select2 menu
+    And I should not see the choice "terrier" in the select2 menu
