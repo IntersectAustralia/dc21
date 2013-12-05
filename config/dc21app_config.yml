@@ -20,7 +20,7 @@ defaults: &defaults
   readme_template_directory: ""
   readme_template_file: ""
 
-  handle_prefix: hiev
+  handle_prefix: dc21
 
   notification_email_sender: noreply@intersect.org.au
   column_mappings:
