@@ -698,3 +698,35 @@ Feature: Upload files
     And I press "Upload"
     Then the most recent file should have name "Test_SR_2.mp3"
     And file "Test_SR_2.mp3" should not have a UUID created
+
+  #EYETRACKER-186
+  Scenario: OCR regular expression matching should be case insensitive
+    Given I logout
+    And I am logged in as "admin@intersect.org.au"
+    And I am on the edit system config page
+    And I check "Auto OCR on Upload"
+    And I fill in "Auto OCR Regular Expression" with "tEST"
+    And I press "Update"
+    When I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_OCR.jpg" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_OCR.jpg.txt"
+    And file "Test_OCR.jpg.txt" should have a UUID created
+
+#EYETRACKER-186
+  Scenario: SR regular expression matching should be case insensitive
+    Given I logout
+    And I am logged in as "admin@intersect.org.au"
+    And I am on the edit system config page
+    And I check "Auto SR on Upload"
+    And I fill in "Auto SR Regular Expression" with "sr"
+    And I press "Update"
+    When I am on the upload page
+    And I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I select "samples/Test_SR.wav" to upload
+    And I press "Upload"
+    Then the most recent file should have name "Test_SR.wav.txt"
+    And file "Test_SR.wav.txt" should have a UUID created

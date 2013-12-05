@@ -152,5 +152,19 @@ describe SystemConfiguration do
       result.should be_true
       config.errors[:description].should be_empty
     end
+
+    it "should match lower or upper case filenames to regular expression" do
+      config = SystemConfiguration.instance
+      config.update_attributes({:auto_ocr_on_upload => true, :auto_ocr_regex => 'tEsT', :auto_sr_on_upload => true, :auto_sr_regex => 'MP3'})
+      ocr_df = Factory.create(:data_file, :filename => 'TeSt1234.jpg', :format => 'image/jpeg')
+      ocr_df2 = Factory.create(:data_file, :filename => 'blaTEST678.png', :format => 'image/png')
+      sr_df = Factory.create(:data_file, :filename => 'abcdefg.mp3', :format => 'audio/mpeg')
+      sr_df2 = Factory.create(:data_file, :filename => 'AbcTest.mp3', :format => 'audio/x-wav')
+
+      config.auto_ocr?(ocr_df).should be_true
+      config.auto_ocr?(ocr_df2).should be_true
+      config.auto_sr?(sr_df).should be_true
+      config.auto_sr?(sr_df2).should be_true
+    end
   end
 end

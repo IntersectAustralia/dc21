@@ -50,7 +50,7 @@ class SystemConfiguration < ActiveRecord::Base
       Rails.logger.info "Auto OCR on upload is checked at #{time}"
       if self.ocr_types.include?(data_file.format)
         Rails.logger.info "File type #{data_file.format} is supported (#{time})"
-        if self.auto_ocr_regex.blank? or Regexp.new(self.auto_ocr_regex).match(data_file.filename) or force
+        if self.auto_ocr_regex.blank? or Regexp.new(self.auto_ocr_regex, Regexp::IGNORECASE).match(data_file.filename) or force
           Rails.logger.info "File #{data_file.filename} matches regular expression /#{self.auto_ocr_regex}/ (#{time})"
           Rails.logger.info "Auto OCR ResQue job triggered for file #{data_file.filename} at #{time}"
           return true
@@ -73,7 +73,7 @@ class SystemConfiguration < ActiveRecord::Base
       Rails.logger.info "Auto SR on upload is checked at #{time}"
       if self.sr_types.include?(data_file.format)
         Rails.logger.info "File type #{data_file.format} is supported (#{time})"
-        if self.auto_sr_regex.blank? or Regexp.new(self.auto_sr_regex).match(data_file.filename) or force
+        if self.auto_sr_regex.blank? or Regexp.new(self.auto_sr_regex, Regexp::IGNORECASE).match(data_file.filename) or force
           Rails.logger.info "File #{data_file.filename} matches to regular expression /#{self.auto_sr_regex}/ (#{time})"
           Rails.logger.info "Auto SR ResQue job triggered for file #{data_file.filename} at #{time}"
           return true
