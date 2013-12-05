@@ -48,7 +48,7 @@ Feature: Create a package
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
-    And I should see "hiev_0"
+    And I should see "dc21_0"
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
@@ -59,7 +59,7 @@ Feature: Create a package
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
-    And I should see "hiev_1"
+    And I should see "dc21_1"
 
 #EYETRACKER-140
   Scenario: New package creates parent relationships
@@ -78,7 +78,7 @@ Feature: Create a package
     And I press "Create Package"
     Then I should see "Package is now queued for processing in the background."
     And I should be on the data file details page for my_package1.zip
-    And I should see "hiev_0"
+    And I should see "dc21_0"
     And I should see details displayed
       | Parents  | sample1.txt\nsample2.txt    |
       | Children | No children files defined.  |
@@ -94,7 +94,7 @@ Feature: Create a package
     And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should be on the data file details page for my_package2.zip
-    And I should see "hiev_1"
+    And I should see "dc21_1"
     And I should see details displayed
       | Parents  | sample1.txt\nsample2.txt    |
       | Children | No children files defined.  |
@@ -113,7 +113,7 @@ Feature: Create a package
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
-    And I should see "hiev_0"
+    And I should see "dc21_0"
     And I follow "Delete This File"
     And I confirm the popup
     And I should see "The file 'my_package1.zip' was successfully archived."
@@ -127,8 +127,8 @@ Feature: Create a package
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
-    And I should see "hiev_1"
-    And I should not see "hiev_0"
+    And I should see "dc21_1"
+    And I should not see "dc21_0"
 
   Scenario: Package filename should not allow illegal characters
     Given I am on the list data files page

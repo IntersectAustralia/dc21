@@ -30,7 +30,7 @@ describe PackageRifCsWrapper do
     experiment = Factory(:experiment, :facility => post_facility)
     package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
                         file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user)
-    PackageRifCsWrapper.new(package, [], {}).key.should eq('hiev_0')
+    PackageRifCsWrapper.new(package, [], {}).key.should eq('dc21_0')
   end
 
   describe "Notes" do
