@@ -14,7 +14,7 @@ Signal.trap("TERM") do
 end
 
 while($running) do
-  exec("bundle exec rake resque:work QUEUE='package_queue,sr_queue,ocr_queue' RAILS_ENV=#{env}")
+  exec("bundle exec rake resque:work QUEUE='sr_poll' RAILS_ENV=#{env} INTERVAL=60")
   Rails.logger.auto_flushing = true
-  Rails.logger.info "Resque processor running.\n"
+  Rails.logger.info "Resque poller running.\n"
 end

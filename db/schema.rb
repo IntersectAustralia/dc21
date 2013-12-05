@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131202055117) do
+ActiveRecord::Schema.define(:version => 20131203002118) do
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -222,6 +222,9 @@ ActiveRecord::Schema.define(:version => 20131202055117) do
     t.string   "ocr_cloud_host"
     t.string   "ocr_cloud_id"
     t.string   "ocr_cloud_token"
+    t.string   "sr_cloud_host"
+    t.string   "sr_cloud_id"
+    t.string   "sr_cloud_token"
   end
 
   create_table "tags", :force => true do |t|

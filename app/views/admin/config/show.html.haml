@@ -26,11 +26,15 @@
       %i Note: Tesseract will be used if the ABBYY details are not provided.
   = render_field "ABBYY Host", @config.ocr_cloud_host
   = render_field "ABBYY App Name", @config.ocr_cloud_id
-  = render_field "ABBYY Password", @config.ocr_cloud_token
+  = render_field "ABBYY Password", '*****'
+
   %h2 Speech Recognition Processing
   = render_field "Auto SR on Upload", @config.auto_sr_on_upload ? 'Enabled':'Disabled'
   = render_field "Auto SR Regular Expression", @config.auto_sr_regex
   = render_field "SR Supported MIME Types", @config.sr_types
+  = render_field "Koemei Host", @config.sr_cloud_host
+  = render_field "Koemei Login", @config.sr_cloud_id
+  = render_field "Koemei Password", '*****'
 
 .form-actions
   .actions-pre

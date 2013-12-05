@@ -17,13 +17,22 @@ class Admin::ConfigController < ApplicationController
   def update
 
     respond_to do |format|
-      if params[:system_configuration][:supported_ocr_types].nil?
-        params[:system_configuration].merge!(:supported_ocr_types => [])
+      attributes = params[:system_configuration]
+
+      if attributes[:supported_ocr_types].nil?
+        attributes[:supported_ocr_types] = []
       end
-      if params[:system_configuration][:supported_sr_types].nil?
-        params[:system_configuration].merge!(:supported_sr_types => [])
+      if attributes[:supported_sr_types].nil?
+        attributes[:supported_sr_types] = []
       end
-      if @config.update_attributes(params[:system_configuration])
+      if attributes[:ocr_cloud_token].blank?
+        attributes.delete(:ocr_cloud_token)
+      end
+      if attributes[:sr_cloud_token].blank?
+        attributes.delete(:sr_cloud_token)
+      end
+
+      if @config.update_attributes(attributes)
         format.html { redirect_to admin_config_path, notice: 'System configuration updated successfully.' }
       else
         format.html { render action: 'edit' }

@@ -43,9 +43,11 @@ gem 'rake', '~> 0.9.2.2'
 gem 'validates_timeliness', '~> 3.0'
 gem 'rabl'
 gem 'elif'
+
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
 gem 'daemons-rails'
+
 gem "devise_shibboleth_authenticatable", github: 'IntersectAustralia/devise_shibboleth_authenticatable', :branch => 'master'
 gem "select2-rails"
 
@@ -54,6 +56,7 @@ group :development, :test do
   gem "factory_girl_rails", :require => false
   gem "shoulda-matchers"
   gem 'selenium-webdriver'
+  gem "mailcatcher"
 
   # cucumber gems
   gem "email_spec"

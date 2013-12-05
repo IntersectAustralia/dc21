@@ -23,7 +23,7 @@ set :bundle_flags, "--deployment"
 # Deploy using copy for now
 set :scm, 'git'
 set :repository, 'git://github.com/IntersectAustralia/dc21.git'
-set :deploy_via, :copy
+set :deploy_via, :remote_cache
 set :copy_cache, true
 set :copy_exclude, ["features/*", "spec/*", "performance/*"]
 

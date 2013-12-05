@@ -12,7 +12,7 @@ Feature: Edit system configuration
     And "georgina@intersect.org.au" has role "Administrator"
     And "cindy@intersect.org.au" has role "Researcher"
 
-# EYETRACKER-1, # EYETRACKER-95
+# EYETRACKER-1 EYETRACKER-95
 
   Scenario: Edit system config fields as admin
     Given I am logged in as "georgina@intersect.org.au"
@@ -21,7 +21,7 @@ Feature: Edit system configuration
     And I press "Update"
     Then I should see "System configuration updated successfully."
 
-# EYETRACKER-151
+# EYETRACKER-151 EYETRACKER-152 EYETRACKER-185
 
   Scenario: View system config fields as admin
     Given I am logged in as "georgina@intersect.org.au"
@@ -40,10 +40,13 @@ Feature: Edit system configuration
       | OCR Supported MIME Types    | image/jpeg, image/png                         |
       | ABBYY Host                  |                                               |
       | ABBYY App Name              |                                               |
-      | ABBYY Password              |                                               |
+      | ABBYY Password              | *****                                         |
       | Auto SR on Upload           | Disabled                                      |
       | Auto SR Regular Expression  |                                               |
       | SR Supported MIME Types     | audio/x-wav, audio/mpeg                       |
+      | Koemei Host                 |                                               |
+      | Koemei Login                |                                               |
+      | Koemei Password             | *****                                         |
 
   Scenario: Access system config edit page as non-admin
     Given I am logged in as "cindy@intersect.org.au"
@@ -73,6 +76,7 @@ Feature: Edit system configuration
     And I should see "Level2 can't be blank"
     And I should see "Level2 plural can't be blank"
 
+  # EYETRACKER-151 EYETRACKER-152 EYETRACKER-185
   Scenario: Check edited changes are kept after update
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
@@ -98,6 +102,10 @@ Feature: Edit system configuration
       | SR Supported MIME Types     | audio/x-wav                |
       | SR Supported MIME Types     | audio/mpeg                 |
       | SR Supported MIME Types     | image/jpeg                 |
+      | Koemei Host                 | www.koemei.com             |
+      | Koemei Login                | test@intersect.org.au      |
+      | Koemei Password             | Test Koemei Password       |
+
     And I press "Update"
     And I should be on the system config page
     Then I should see details displayed
@@ -114,10 +122,25 @@ Feature: Edit system configuration
       | OCR Supported MIME Types    | audio/x-wav, image/jpeg, image/png   |
       | ABBYY Host                  | Test ABBYY Host                      |
       | ABBYY App Name              | Test ABBYY App Name                  |
-      | ABBYY Password              | Test ABBYY Password                  |
+      | ABBYY Password              | *****                                |
       | Auto SR on Upload           | Enabled                              |
       | Auto SR Regular Expression  | 1234                                 |
       | SR Supported MIME Types     | audio/mpeg, audio/x-wav, image/jpeg  |
+      | Koemei Host                 | www.koemei.com                       |
+      | Koemei Login                | test@intersect.org.au                |
+      | Koemei Password             | *****                                |
+    And the system configuration should have
+      | ocr_cloud_token | Test ABBYY Password  |
+      | sr_cloud_token  | Test Koemei Password |
+    And I am on the edit system config page
+    When I fill in the following:
+      | ABBYY Password  |  |
+      | Koemei Password |  |
+      And I press "Update"
+      And I should be on the system config page
+      And the system configuration should have
+      | ocr_cloud_token | Test ABBYY Password  |
+      | sr_cloud_token  | Test Koemei Password |
 
 # EYETRACKER-95
 

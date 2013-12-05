@@ -52,7 +52,7 @@ module Dc21app
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password, :password_confirmation]
+    config.filter_parameters += [:password, :password_confirmation, :ocr_cloud_token, :sr_cloud_token]
 
     # Enable the asset pipeline
     config.assets.enabled = true
