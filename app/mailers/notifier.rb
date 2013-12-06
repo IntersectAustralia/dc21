@@ -8,7 +8,7 @@ class Notifier < ActionMailer::Base
   def notify_user_of_approved_request(recipient)
     @user = recipient
     @system_name = system_name
-    mail( :to => @user.email, 
+    mail( :to => @user.email,
           :from => APP_CONFIG['notification_email_sender'],
           :reply_to => APP_CONFIG['notification_email_sender'],
           :subject => "#{system_name} - Your access request has been approved")
@@ -17,7 +17,7 @@ class Notifier < ActionMailer::Base
   def notify_user_of_rejected_request(recipient)
     @user = recipient
     @system_name = system_name
-    mail( :to => @user.email, 
+    mail( :to => @user.email,
           :from => APP_CONFIG['notification_email_sender'],
           :reply_to => APP_CONFIG['notification_email_sender'],
           :subject => "#{system_name} - Your access request has been rejected")
@@ -51,6 +51,16 @@ class Notifier < ActionMailer::Base
           :from => APP_CONFIG['notification_email_sender'],
           :reply_to => APP_CONFIG['notification_email_sender'],
           :subject => "#{system_name} - Package completed")
+  end
+
+  def notify_user_of_completed_processing(data_file)
+    @user = data_file.created_by
+    @system_name = system_name
+    @data_file = data_file
+    mail( :to => @user.email,
+          :from => APP_CONFIG['notification_email_sender'],
+          :reply_to => APP_CONFIG['notification_email_sender'],
+          :subject => "#{system_name} - Processing completed")
   end
 
   def notify_user_reset_password_instructions(recipient)

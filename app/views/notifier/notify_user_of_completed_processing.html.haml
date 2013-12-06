@@ -1,0 +1,8 @@
+%p Hello #{@user.first_name} #{@user.last_name},
+%p The processing of file #{@data_file.filename} is now complete.
+%p You can view the file at #{data_file_url(@data_file)}
+
+%p
+  - @data_file.file_processing_description.split("\n").each do |line|
+    = line
+    %br/

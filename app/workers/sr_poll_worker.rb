@@ -54,9 +54,10 @@ class SRPollWorker
 
             output_file.file_size = File.size(output_file.path)
             output_file.save
+            Notifier.notify_user_of_completed_processing(output_file).deliver
           else
-            Rails.logger.info "Polling again in 1 minute"
-            sleep(60)
+            Rails.logger.info "Polling again in 15 seconds"
+            sleep(15)
             #Add delay before running next poller
             SRPollWorker.create({output_id: output_file.id, parent_id: parent.id, media_id: media_id})
           end

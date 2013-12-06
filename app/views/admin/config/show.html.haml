@@ -1,6 +1,11 @@
 - content_for :breadcrumb do
   %h1 Admin / System Configuration
 
+.form-actions
+  .actions-pre
+  .actions
+    = link_to 'Edit System Configuration', edit_admin_config_path, :class => 'btn btn-primary'
+
 .container
   %h2 System Configuration
   = render_field "Local System Name", @config.name

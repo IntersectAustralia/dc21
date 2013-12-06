@@ -110,6 +110,7 @@ class OCRWorker
       output_file.save
 
       output_file.mark_as_complete
+      Notifier.notify_user_of_completed_processing(output_file).deliver
 
     rescue Exception => e
       output_file.mark_as_failed

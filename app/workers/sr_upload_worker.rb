@@ -34,16 +34,18 @@ class SRUploadWorker
         Rails.logger.info "Uploading file.."
         begin
           Rails.logger.info url
-          upload_response = RestClient.post("#{url}/media", :media => File.new(parent.path, 'rb'))
+          # Get media id from response xml to check task status later
+          upload_xml = REXML::Document.new(RestClient.post("#{url}/media", :media => File.new(parent.path, 'rb')))
+          Rails.logger.info upload_xml
+          media_id = upload_xml.elements['mediaItem/id'].text
+
+          Rails.logger.info REXML::Document.new(RestClient.post("#{url}/media/#{media_id}/transcribe", {}))
+
+          SRPollWorker.create({output_id: output_file.id, parent_id: parent.id, media_id: media_id})
+
         rescue RestClient::ExceptionWithResponse => e
           output_response_error(e)
-        else
-          # Get media id from response xml to check task status later
-          Rails.logger.info upload_response
-          upload_xml = REXML::Document.new(upload_response)
-          media_id = upload_xml.elements['mediaItem/id'].text
         end
-        SRPollWorker.create({output_id: output_file.id, parent_id: parent.id, media_id: media_id})
       else
         raise "Koemei account details have not been completely specified."
       end
