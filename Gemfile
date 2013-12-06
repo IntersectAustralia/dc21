@@ -46,6 +46,7 @@ gem 'elif'
 
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
+gem 'resque-scheduler', :require => 'resque_scheduler'
 gem 'daemons-rails'
 
 gem "devise_shibboleth_authenticatable", github: 'IntersectAustralia/devise_shibboleth_authenticatable', :branch => 'master'

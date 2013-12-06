@@ -18,12 +18,12 @@ namespace :resque do
 
   desc "Start resque processes"
   task :start, on_error: :continue do
-    run "cd #{current_path} && RAILS_ENV=production bundle exec rake daemon:resque:start --trace"
+    run "cd #{current_path} && RAILS_ENV=production bundle exec rake daemons:start --trace"
   end
 
   desc "Quit running workers"
   task :stop, on_error: :continue do
-    run "cd #{current_path} && RAILS_ENV=production bundle exec rake daemon:resque:stop --trace"
+    run "cd #{current_path} && RAILS_ENV=production bundle exec rake daemons:stop --trace"
   end
 
   desc "Restart running workers"

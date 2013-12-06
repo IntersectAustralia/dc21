@@ -40,8 +40,11 @@ class SRUploadWorker
           media_id = upload_xml.elements['mediaItem/id'].text
 
           Rails.logger.info REXML::Document.new(RestClient.post("#{url}/media/#{media_id}/transcribe", {}))
+          output_file.file_processing_description = "#{parent.filename} has been uploaded to Koemei and is being transcribed.\n" <<
+          "Koemei Media ID: #{media_id}\n"
+          output_file.save
 
-          SRPollWorker.create({output_id: output_file.id, parent_id: parent.id, media_id: media_id})
+          Resque.enqueue_in(15.minutes, SRPollWorker, {output_id: output_file.id, parent_id: parent.id, media_id: media_id})
 
         rescue RestClient::ExceptionWithResponse => e
           output_response_error(e)
