@@ -96,12 +96,18 @@ class DataFilesController < ApplicationController
       files = []
       params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
 
-      experiment_id = params[:experiment_id]
+      experiment_id = params[:data_file][:experiment_id]
       description = params[:description]
       type = params[:file_processing_status]
       tags = params[:tags]
       l = params[:data_file].delete(:label_list)
       labels = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
+
+      parents = []
+      if params[:data_file][:parent_ids]
+        parents = params[:data_file][:parent_ids].split(",")
+      end
+
       unless validate_inputs(files, experiment_id, type, description, tags, labels)
         render :new
         return
@@ -110,7 +116,7 @@ class DataFilesController < ApplicationController
       @uploaded_files = []
       attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
       files.each do |file|
-        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels)
+        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, parents)
       end
     ensure
       clean_up_temp_files(files)
@@ -135,6 +141,10 @@ class DataFilesController < ApplicationController
         attrs.merge!(params[:date][:files][id]) if params[:date].present? && params[:date][:files][id].present?
         attrs[:start_time] = reformat_date_and_time(attrs[:start_time], attrs.delete(:start_hr), attrs.delete(:start_min), attrs.delete(:start_sec))
         attrs[:end_time] = reformat_date_and_time(attrs[:end_time], attrs.delete(:end_hr), attrs.delete(:end_min), attrs.delete(:end_sec))
+      end
+
+      if attrs[:parent_ids]
+        attrs[:parent_ids] = attrs[:parent_ids].split(",")
       end
 
       file = DataFile.find(id)

@@ -66,9 +66,79 @@
                 = select_minute @end_time, {:field_name => "files[#{file.id}][end_min]"}, {:id => "file_#{file.id}_end_min"}
                 = select_second @end_time, {:field_name => "files[#{file.id}][end_sec]"}, {:id => "file_#{file.id}_end_sec"}
 
+          %h2 New File Relationships
+          .control-group
+            = label_tag "experiment_id_#{file.id}", "Filter Files", class: "control-label"
+            .controls
+              - dfs = file.experiment.data_files.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
+              = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), data: {df: dfs}, file_id: file.id
+              %br/
+              Filter data files by #{@config.level2.downcase}
+          .control-group
+            = label_tag "parent_ids_#{file.id}", "Parents", class: "control-label"
+            .controls
+              = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields}, name: "files[#{file.id}][parent_ids]"
     .form-actions
       .actions
         = submit_tag "Update"
 
 :javascript
-    $('.select2_labels').select2({tags: $('.select2_labels').data('labels'), tokenSeparators: ['|'], separator: '|'})
+  function Parent($id) {
+    var file_id = $id.attr('file_id');
+    var data = $id.data('df');
+
+    ////////// START PARENTS //////////
+    var $parent_selector = $('#parent_ids_' + file_id);
+    var parents = $parent_selector.data('values');
+
+    $parent_selector.select2({
+      multiple: true,
+      query: function (query){
+          var data = {results: []};
+
+          $.each(DC21.preload_data, function(){
+            if (validDataFile(this.id) && this.exp_id.toString() == $id.val()){
+              if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
+                  data.results.push({id: this.id, text: this.text });
+              }
+            }
+          });
+
+          query.callback(data);
+      }
+    });
+
+    function validDataFile(id) {
+      invalid = [file_id];
+      $.merge(invalid, $parent_selector.val().split(",") || []);
+      $.unique(invalid);
+      return $.inArray(id.toString(), invalid) == -1;
+    }
+
+    $parent_selector.select2('data', parents);
+    ////////// END PARENTS //////////
+
+    var interim_data =  _.indexBy(_.union(parents, data), 'id')
+    var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
+
+    $id.change(function() {
+      $.post("/data_files/api_search.json", { experiments: [$id.val()] }, function(data) {
+        var new_data = _.map(data, function(df){
+          return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
+        });
+
+        interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
+        DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
+      },
+      "json");
+    });
+  }
+
+  $('.select2_labels').select2({tags: $('.select2_labels').data('labels'), tokenSeparators: ['|'], separator: '|'})
+
+  ////////// INIT //////////
+  $('select[id^="experiment_id_"]').each(function(index) {
+    new Parent($(this));
+  });
+
+

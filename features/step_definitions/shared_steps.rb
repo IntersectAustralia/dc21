@@ -208,6 +208,11 @@ When /^I remove "([^"]*)" from "([^"]*)" select2 field/ do |label_text, select2_
   select2_delete label_text, select2_id
 end
 
+When /^I remove "([^"]*)" from the parent select2 field/ do |label_text|
+  selector = page.find('li', :text => label_text)
+  selector.find('.select2-search-choice-close').click
+end
+
 def select2_delete(text, id)
   page.find("#s2id_#{id}").click
   page.all(".select2-search-choice").find do |l|

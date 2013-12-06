@@ -95,3 +95,71 @@ Feature: Edit data file relationships
       | Parents  | No parent files defined.   |
       | Children | No children files defined. |
 
+#EYETRACKER-170
+  @javascript
+  Scenario: Single upload new parent relationship
+    Given I am logged in as "admin@intersect.org.au"
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "Other" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I select "My Nice Experiment" from "Filter Files"
+    And I should not see "Children"
+    When I fill in "Parents" with "datafile.dat"
+    And I wait for 2 seconds
+    And I choose "datafile.dat" in the select2 menu
+    And I press "Upload"
+    Then the most recent file should have name "sample1.txt"
+    And the uploaded files display should include "sample1.txt" with file type "RAW"
+    And the uploaded files display should include "sample1.txt" with messages "success"
+    And the uploaded files display should include "sample1.txt" with experiment "Other"
+    And the uploaded files display should include "sample1.txt" with description "My descriptive description"
+    And file "sample1.txt" should have type "RAW"
+    And file "sample1.txt" should have experiment "Other"
+    And file "sample1.txt" should have description "My descriptive description"
+    And file "sample1.txt" should have parent "datafile.dat"
+    Then I press "Update"
+    When I am on the list data files page
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Parents     | datafile.dat                |
+      | Children    | No children files defined.  |
+
+#EYETRACKER-170
+  @javascript
+  Scenario: Remove parent after uploading parent relationship
+    Given I am logged in as "admin@intersect.org.au"
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "Other" from "Experiment"
+    And I fill in "Description" with "My descriptive description"
+    And I select "samples/sample1.txt" to upload
+    And I select "My Nice Experiment" from "Filter Files"
+    And I should not see "Children"
+    When I fill in "Parents" with "datafile.dat"
+    And I wait for 2 seconds
+    And I choose "datafile.dat" in the select2 menu
+    And I press "Upload"
+    Then the most recent file should have name "sample1.txt"
+    And the uploaded files display should include "sample1.txt" with file type "RAW"
+    And the uploaded files display should include "sample1.txt" with messages "success"
+    And the uploaded files display should include "sample1.txt" with experiment "Other"
+    And the uploaded files display should include "sample1.txt" with description "My descriptive description"
+    And file "sample1.txt" should have type "RAW"
+    And file "sample1.txt" should have experiment "Other"
+    And file "sample1.txt" should have description "My descriptive description"
+    And file "sample1.txt" should have parent "datafile.dat"
+    And I remove "datafile.dat" from the parent select2 field
+    And I wait for 2 seconds
+    Then I press "Update"
+    When I am on the list data files page
+    And I follow the view link for data file "sample1.txt"
+    Then I should see details displayed
+      | Parents     | No parent files defined.    |
+      | Children    | No children files defined.  |
+
+#EYETRACKER-170
+  Scenario: Multiple mass upload parent relationship
+# This cannot be automated due to limitations with selenium+file uploads - see manual tests
+

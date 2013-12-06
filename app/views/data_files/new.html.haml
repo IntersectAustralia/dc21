@@ -12,10 +12,10 @@
         = required
         = select_tag :file_processing_status, options_for_select(DataFile::STATI, @data_file.file_processing_status), :include_blank => true
     .control-group
-      = label_tag :experiment_id, "#{@config.level2}", class: "control-label"
+      = label_tag :data_file_experiment_id, "#{@config.level2}", class: "control-label"
       .controls
         = required
-        = select_tag :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
+        = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
     .control-group
       = label_tag :description, "Description", class: "control-label"
       .controls
@@ -38,9 +38,55 @@
       .controls
         = required
         = file_field_tag "files[]", {:id => "files_field_0", :multiple => "multiple"}
+
+    %h2 New File Relationships
+    .control-group
+      = label_tag "experiment_id", "Filter Files", class: "control-label"
+      .controls
+        - dfs = DataFile.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
+        = select_tag 'experiment_id', option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, nil), data: {df: dfs}
+        %br/
+        Filter data files by #{@config.level2.downcase}
+    .control-group
+      = f.label :parent_ids, "Parents", class: "control-label"
+      .controls
+        = f.hidden_field :parent_ids, value: nil, data: {placeholder: 'Select parent data files...', values: @data_file.parents.relationship_fields}, class: "file_relation_select"
+
     .form-actions
       .actions
         = f.submit "Upload", :class => 'btn'
 
 :javascript
-    $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'})
+  $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'});
+
+  var parents = $('#data_file_parent_ids').data('values');
+  var interim_data = _.indexBy(_.union(parents, $('#experiment_id').data('df')), 'id')
+  var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
+
+  $('#experiment_id').change(function() {
+    $.post( "/data_files/api_search.json", { experiments: [$('#experiment_id').val()] }, function( data ) {
+      var new_data = _.map(data, function(df){
+                       return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
+                     });
+      interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
+      DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
+    }, "json");
+  });
+
+  $('.file_relation_select').select2({
+    multiple: true,
+    query: function (query){
+        var data = {results: []};
+        $.each(DC21.preload_data, function(){
+          if (this.exp_id.toString() == $('#experiment_id').val()){
+            if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
+                data.results.push({id: this.id, text: this.text });
+            }
+          }
+        });
+
+        query.callback(data);
+    }
+  });
+
+  $('#data_file_parent_ids').select2('data', parents);

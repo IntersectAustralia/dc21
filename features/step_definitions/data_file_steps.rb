@@ -395,6 +395,11 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
   DataFile.find_by_filename!(filename).experiment_name.should eq(experiment)
 end
 
+Then /^file "([^"]*)" should have parent "([^"]*)"$/ do |filename, parent_file|
+  parent = DataFile.find_all_by_filename(parent_file)
+  DataFile.find_by_filename!(filename).parents.should eq(parent)
+end
+
 Then /^file "([^"]*)" should have a UUID created$/ do |filename|
   DataFile.find_by_filename!(filename).uuid.should_not be_nil
 end

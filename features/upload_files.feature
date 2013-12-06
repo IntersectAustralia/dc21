@@ -25,7 +25,6 @@ Feature: Upload files
       | Gap-Filled |
 
   @wip @javascript
-
   Scenario: Additional file select box appears after previous one is used
     Given I am on the upload page
     When I select "RAW" from "File type"
