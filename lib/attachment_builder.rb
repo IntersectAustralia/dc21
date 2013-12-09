@@ -7,14 +7,14 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type, description, tags = [], labels = [])
-    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, nil, nil)
+  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [])
+    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, parents, nil, nil)
   end
 
 
-  def build_named_file(original_filename, file, experiment_id, type, description, tags = [], labels = [], start_time, end_time)
+  def build_named_file(original_filename, file, experiment_id, type, description, tags = [], labels = [], parent_files = [], start_time, end_time)
     path, new_filename = store_file(original_filename, file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, labels, original_filename, file.size, start_time, end_time)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, labels, original_filename, file.size, start_time, end_time, parent_files)
     if data_file.messages.blank?
       data_file.add_message(:success, "File uploaded successfully.")
     end
@@ -47,7 +47,7 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time)
+  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time, parent_filenames)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path,
@@ -61,6 +61,11 @@ class AttachmentBuilder
                              :end_time => end_time)
     data_file.tag_ids = tags
     data_file.label_ids = labels
+    pids = []
+    DataFile.where(:filename => parent_filenames).select('id').each do |data_file|
+      pids << data_file.id
+    end
+    data_file.parent_ids = pids #DataFile.where(:filename => parent_filenames).select('id')
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format

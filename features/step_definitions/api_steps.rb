@@ -49,6 +49,8 @@ When /^I submit an API upload request with the following parameters as user "([^
   post_params[:type] = params['type']
   post_params[:description] = params['description'] if params['description']
 
+  post_params[:parent_filenames] = params['parent_filenames'].split(",") unless params['parent_filenames'].blank?
+
   user = User.find_by_email!(email)
   post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end

@@ -190,7 +190,7 @@ Feature: Upload files via the API
       | file       | samples/full_files/weather_station/weather_station_05_min.dat |
       | type       | RAW                                                           |
       | experiment | Flux Experiment 1                                             |
-      | labels     | "Label1","Label_2","label 3"                                   |
+      | labels     | "Label1","Label_2","label 3"                                  |
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 3 labels
     And file "weather_station_05_min.dat" should have labels "Label1|Label_2|label 3"
@@ -205,3 +205,31 @@ Feature: Upload files via the API
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 2 labels
     And file "weather_station_05_min.dat" should have labels "Contains, a comma|Photo"
+
+  #EYETRACKER-172
+  Scenario: Assign valid parent relationships on API file upload
+    Given I have uploaded "full_files/weather_station/weather_station_15_min.dat" with type "RAW"
+    And I have uploaded "sample1.txt" with type "PROCESSED"
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type              | RAW                                                           |
+      | experiment        | Flux Experiment 1                                             |
+      | parent_filenames  | weather_station_15_min.dat,sample1.txt                        |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have 2 parent files
+    And file "weather_station_05_min.dat" should have parent files "weather_station_15_min.dat,sample1.txt"
+    And file "sample1.txt" should have 1 children files
+    And file "sample1.txt" should have children files "weather_station_05_min.dat"
+    And file "weather_station_15_min.dat" should have 1 children files
+    And file "weather_station_15_min.dat" should have children files "weather_station_05_min.dat"
+
+  #EYETRACKER-172
+  Scenario: Assign parent relationships on non-existing files on API file upload
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type              | RAW                                                           |
+      | experiment        | Flux Experiment 1                                             |
+      | parent_filenames  | weather_station_15_min.dat,sample1.txt                        |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have 0 parent files
+    And file "weather_station_05_min.dat" should have parent files ""

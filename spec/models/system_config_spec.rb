@@ -153,6 +153,7 @@ describe SystemConfiguration do
       config.errors[:description].should be_empty
     end
 
+    #EYETRACKER-186
     it "should match lower or upper case filenames to regular expression" do
       config = SystemConfiguration.instance
       config.update_attributes({:auto_ocr_on_upload => true, :auto_ocr_regex => 'tEsT', :auto_sr_on_upload => true, :auto_sr_regex => 'MP3'})

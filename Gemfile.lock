@@ -358,7 +358,7 @@ DEPENDENCIES
   cucumber-rails
   daemons-rails
   database_cleaner
-  debugger
+  debugger (~> 1.6.3)
   decent_exposure
   devise (~> 1.5.4)
   devise_shibboleth_authenticatable!
