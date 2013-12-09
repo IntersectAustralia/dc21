@@ -61,11 +61,7 @@ class AttachmentBuilder
                              :end_time => end_time)
     data_file.tag_ids = tags
     data_file.label_ids = labels
-    pids = []
-    DataFile.where(:filename => parent_filenames).select('id').each do |data_file|
-      pids << data_file.id
-    end
-    data_file.parent_ids = pids #DataFile.where(:filename => parent_filenames).select('id')
+    data_file.parent_ids = DataFile.where(:filename => parent_filenames).pluck(:id)
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format
