@@ -82,6 +82,7 @@ class AttachmentBuilder
   def store_package(pkg_filename, data_file)
     store_path = File.join(@files_root, pkg_filename)
     FileUtils.cp(data_file.path, store_path)
+    File.chmod(0644, store_path)
   end
 
   def store_file(original_filename, file)
@@ -89,7 +90,7 @@ class AttachmentBuilder
     store_path = File.join(@files_root, filename)
 
     FileUtils.cp(file.path, store_path)
-
+    File.chmod(0644, store_path)
     [store_path, filename]
   end
 
