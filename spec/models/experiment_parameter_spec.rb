@@ -41,7 +41,7 @@ describe ExperimentParameter do
       a_b_b = Factory(:experiment_parameter, :parameter_category => cat_a, :parameter_sub_category => subcat_b, :parameter_modification => mod_b)
       a_a_b = Factory(:experiment_parameter, :parameter_category => cat_a, :parameter_sub_category => subcat_a, :parameter_modification => mod_b)
 
-      ExperimentParameter.in_order.collect(&:id).should eq([a_a_a.id, a_a_b.id, a_b_a.id, a_b_b.id, b_a_a.id])
+      ExperimentParameter.in_order.pluck(:id).should eq([a_a_a.id, a_a_b.id, a_b_a.id, a_b_b.id, b_a_a.id])
     end
   end
 end

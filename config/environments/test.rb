@@ -40,4 +40,7 @@ Dc21app::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  #Rails 3.2
+  config.assets.allow_debugging = true
 end

@@ -5,8 +5,7 @@ require 'capistrano_colors'
 require 'colorize'
 require 'deploy/create_deployment_record'
 
-# Extra capistrano tasks
-Dir["config/recipes/*.rb"].each {|file| load file }
+
 
 set :keep_releases, 5
 set :application, 'dc21app'
@@ -47,6 +46,9 @@ set(:rif_cs_dir) { "#{defined?(rif_cs_dir) ? rif_cs_dir : '/data/dc21-data/publi
 set(:unpublished_rif_cs_dir) { "#{defined?(unpublished_rif_cs_dir) ? unpublished_rif_cs_dir : '/data/dc21-data/unpublished_rif_cs/'}" }
 set(:archived_dir) { "#{defined?(archived_dir) ? archived_dir : '/data/dc21-data/archived_data/'}" }
 set :normalize_asset_timestamps, false
+
+# Extra capistrano tasks
+Dir["config/recipes/*.rb"].each {|file| load file }
 
 default_run_options[:pty] = true
 
@@ -163,7 +165,7 @@ namespace :deploy do
     require 'colorize'
 
     # Prompt to refresh_db on unless we're in QA
-    if stage.eql?(:qa)
+    if stage.to_sym.eql?(:qa)
       input = "yes"
     else
       puts "    This step (deploy:refresh_db) will erase all data and start from scratch.\nYou probably don't want to do it. Are you sure?' [NO/yes]".red

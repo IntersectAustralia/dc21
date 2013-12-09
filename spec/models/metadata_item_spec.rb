@@ -19,10 +19,10 @@ describe MetadataItem do
       item_4 = Factory(:metadata_item, :key => "anotherkey", :value => "ABC").id
       item_5 = Factory(:metadata_item, :key => "mykey", :value => "ABC").id
       item_6 = Factory(:metadata_item, :key => "anotherkey", :value => "DEF").id
-      MetadataItem.for_key_with_value_in("mykey", ["ABC", "DEF"]).collect(&:id).sort.should eq([item_1, item_2, item_5])
-      MetadataItem.for_key_with_value_in("mykey", ["DEF"]).collect(&:id).sort.should eq([item_2])
-      MetadataItem.for_key_with_value_in("nokey", ["DEF"]).collect(&:id).sort.should eq([])
-      MetadataItem.for_key_with_value_in("anotherkey", ["DEF"]).collect(&:id).sort.should eq([item_6])
+      MetadataItem.for_key_with_value_in("mykey", ["ABC", "DEF"]).pluck(:id).sort.should eq([item_1, item_2, item_5])
+      MetadataItem.for_key_with_value_in("mykey", ["DEF"]).pluck(:id).sort.should eq([item_2])
+      MetadataItem.for_key_with_value_in("nokey", ["DEF"]).pluck(:id).sort.should eq([])
+      MetadataItem.for_key_with_value_in("anotherkey", ["DEF"]).pluck(:id).sort.should eq([item_6])
     end
   end
 end

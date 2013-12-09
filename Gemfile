@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.12'
+gem 'rails', '3.2.16'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -11,8 +11,8 @@ gem "rubyzip", '0.9.9', :require => 'zip/zip'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.1.4'
-  gem 'coffee-rails', '~> 3.1.1'
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
   gem 'underscore-rails'
 end
@@ -21,7 +21,7 @@ gem 'newrelic_rpm'
 gem 'therubyracer'
 gem 'bagit'
 gem 'jquery-rails'
-gem "haml"
+gem "haml", "~> 3.1.8"
 gem "haml-rails"
 gem "tabs_on_rails"
 gem "devise", "~> 1.5.4"
@@ -63,7 +63,7 @@ group :development, :test do
   gem "email_spec"
   gem "cucumber"
   gem "cucumber-rails", :require => false
-  gem "capybara"
+  gem "capybara", '~> 1.1.4'
   gem "database_cleaner"
   gem 'spork', '~> 0.9.0.rc'
   gem "launchy"    # So you can do Then show me the page
@@ -80,7 +80,6 @@ group :test do
   gem "simplecov-rcov", :require => false
 end
 
-gem "json-jwt"
 gem 'mimetype-fu', :require => 'mimetype_fu'
 
 # exception tracker

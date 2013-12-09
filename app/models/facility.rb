@@ -5,7 +5,7 @@ class Facility < ActiveRecord::Base
   has_many :aggregated_contactables, :class_name => "FacilityContact"
   has_one :primary_contactable, :class_name => "FacilityContact", :conditions => {:primary => true}, :dependent => :destroy
   has_many :contactables, :class_name => "FacilityContact", :conditions => {:primary => false}, :dependent => :destroy
-  
+
 
   has_one :primary_contact,
           :through => :primary_contactable,
@@ -61,12 +61,9 @@ class Facility < ActiveRecord::Base
   #Scopes
   default_scope :order => 'name ASC'
 
-
   #Methods
   def experiments_excluding_me(experiment)
-    exps = Array.new(self.experiments)
-    exps.delete(experiment)
-    exps
+    self.experiments.where{id != experiment.id}
   end
 
   def rdfa_location
@@ -117,7 +114,7 @@ class Facility < ActiveRecord::Base
   def entity_url(host_url)
     Rails.application.routes.url_helpers.facility_url(self, :host => host_url)
   end
-  
+
   def remove_white_spaces
     self.name = self.name.to_s.strip
     self.code = self.code.to_s.strip

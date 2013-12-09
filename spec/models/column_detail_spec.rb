@@ -15,10 +15,10 @@ describe ColumnDetail do
       c1 = Factory(:column_detail, :position => 12)
       c2 = Factory(:column_detail, :position => 3)
       c3 = Factory(:column_detail, :position => 5)
-      ColumnDetail.all.collect(&:id).should eq([c2.id, c3.id, c1.id])
+      ColumnDetail.pluck(:id).should eq([c2.id, c3.id, c1.id])
     end
   end
- 
+
   describe "Connected Mappings" do
     it "should return matching column mapping if it exists" do
       mapping = Factory(:column_mapping, :code => "test", :name => "My Mapping")

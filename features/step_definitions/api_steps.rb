@@ -1,5 +1,4 @@
 Given /^user "([^"]*)" has an API token$/ do |email|
-  User.all.collect(&:email)
   user = User.find_by_email!(email)
   user.reset_authentication_token!
 end
@@ -126,11 +125,11 @@ When /^I perform an API search with the following parameters as user "([^"]*)"$/
   post_params = Hash[*table.raw.flatten]
   if post_params['facilities']
     facilities = post_params.delete('facilities')
-    post_params['facilities'] = Facility.where(name: facilities.split(", ")).collect(&:id)
+    post_params['facilities'] = Facility.where(name: facilities.split(", ")).pluck(:id)
   end
   if post_params['experiments']
     experiments = post_params.delete('experiments')
-    post_params['experiments'] = Experiment.where(name: experiments.split(", ")).collect(&:id)
+    post_params['experiments'] = Experiment.where(name: experiments.split(", ")).pluck(:id)
   end
   if post_params['labels']
     labels = post_params.delete('labels')
@@ -138,7 +137,7 @@ When /^I perform an API search with the following parameters as user "([^"]*)"$/
   end
   if post_params['tags']
     tags = post_params.delete('tags')
-    post_params['tags'] = Tag.where(name: tags.split(", ")).collect(&:id)
+    post_params['tags'] = Tag.where(name: tags.split(", ")).pluck(:id)
   end
   if post_params['automation_stati']
     automation_stati = post_params.delete('automation_stati')

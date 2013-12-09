@@ -37,7 +37,7 @@ class DataFileSearch
     self.facilities ||= @search_params[:org_level1] || []
     self.experiments = @search_params[:experiments]
     self.experiments ||= @search_params[:org_level2] || []
-    self.experiments = Experiment.where(:facility_id => facilities).collect(&:id) if !facilities.blank? && experiments.blank?
+    self.experiments = Experiment.where(:facility_id => facilities).pluck(:id) if !facilities.blank? && experiments.blank?
     self.variables = @search_params[:variables] || []
     self.variable_parents = @search_params[:variable_parents]|| []
     self.stati = @search_params[:stati]|| []

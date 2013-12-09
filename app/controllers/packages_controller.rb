@@ -21,6 +21,7 @@ class PackagesController < DataFilesController
     if @package.save
       save_tags(@package, params[:tags])
       data_file_ids = current_user.cart_item_ids
+      @package.label_list = params[:package][:label_list] if params[:package][:label_list]
       @package.parent_ids = data_file_ids
       begin
         if params[:run_in_background]

@@ -5,7 +5,7 @@ namespace :joai do
   set :webapp_dir, "#{catalina_home}/webapps"
   set :tomcat_conf, "#{catalina_home}/conf"
 
-  set :remote_directory, "/home/dc21/joai"
+  set :remote_directory, "/home/#{user}/joai"
   set :tomcat_bundle, "tomcat-joai.tar.gz"
   set :tomcat_package, 'apache-tomcat-6.0.35'
 

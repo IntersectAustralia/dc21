@@ -251,7 +251,7 @@ end
 
 Then /^file "([^"]*)" should have labels "([^"]*)"$/ do |file, labels|
   file = DataFile.find_by_filename!(file)
-  file.labels.collect(&:name).sort.should eq(labels.split("|").sort)
+  file.labels.pluck(:name).sort.should eq(labels.split("|").sort)
 end
 
 Then /^file "([^"]*)" should have (\d+) labels/ do |file, count|

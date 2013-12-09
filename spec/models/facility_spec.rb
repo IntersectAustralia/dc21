@@ -127,11 +127,11 @@ describe Facility do
 
     it "Should return all persisted experiments if the one passed in is not yet persisted" do
       experiment = @facility.experiments.build
-      @facility.experiments_excluding_me(experiment).collect(&:id).should eq([@exp3.id, @exp1.id, @exp2.id])
+      @facility.experiments_excluding_me(experiment).pluck(:id).should eq([@exp3.id, @exp1.id, @exp2.id])
     end
 
     it "Should exclude the one passed in if it is persisted" do
-      @facility.experiments_excluding_me(@exp2).collect(&:id).should eq([@exp3.id, @exp1.id])
+      @facility.experiments_excluding_me(@exp2).pluck(:id).should eq([@exp3.id, @exp1.id])
     end
   end
 

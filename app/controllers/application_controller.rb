@@ -42,4 +42,15 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
+
+  before_filter :clean_select_multiple_params
+  def clean_select_multiple_params hash = params
+    hash.each do |k, v|
+      case v
+      when Array then v.reject!(&:blank?)
+      when Hash then clean_select_multiple_params(v)
+      end
+    end
+  end
+
 end

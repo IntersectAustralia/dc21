@@ -44,7 +44,7 @@
         .control-group#labels
           = label_tag "files[#{file.id}][label_list]", "Labels:", class: "control-label"
           .controls
-            = text_field_tag "files[#{file.id}][label_list]", file.labels.collect(&:name).join(','), :class => 'select2_labels', data: {labels: labels}
+            = text_field_tag "files[#{file.id}][label_list]", file.labels.pluck(:name).join(','), :class => 'select2_labels', data: {labels: labels}
 
         - unless file.time_parsable?
           .control-group

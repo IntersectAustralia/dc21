@@ -38,7 +38,7 @@
           &= package.file_processing_description
         %h1 Labels
         %span
-          &= package.labels.collect(&:name).join(", ")
+          &= package.labels.pluck(:name).join(", ")
         %h1 Start time
         %span{:property => "http://schema.org/startDate", :content => "#{package.start_time.try(:to_s, :w3c)}"}
           = package.start_time.try(:to_s, :long_date)
@@ -323,11 +323,11 @@
                 %tr
                   %td Labels
                   %td
-                    &= data_file.labels.collect(&:name).join(", ")
+                    &= data_file.labels.pluck(:name).join(", ")
                 %tr
                   %td Tags
                   %td
-                    &= data_file.tags.collect(&:name).join(", ")
+                    &= data_file.tags.pluck(:name).join(", ")
                 %tr
                   %td
                     &= config.level2
@@ -375,11 +375,11 @@
 
                 %tr
                   %td Parents
-                  %td&= data_file.parents.collect(&:filename).join(", ")
+                  %td&= data_file.parents.pluck(:filename).join(", ")
 
                 %tr
                   %td Children
-                  %td&= data_file.children.collect(&:filename).join(", ")
+                  %td&= data_file.children.pluck(:filename).join(", ")
 
 
             - if data_file.time_parsable?

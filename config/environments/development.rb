@@ -35,4 +35,8 @@ Dc21app::Application.configure do
   config.assets.debug = true
 
   #WillPaginate.per_page = 2
+
+  #Rails 3.2
+  config.active_record.mass_assignment_sanitizer = :strict
+  config.active_record.auto_explain_threshold_in_seconds = 0.5
 end

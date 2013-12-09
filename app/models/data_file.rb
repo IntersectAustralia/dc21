@@ -50,7 +50,7 @@ class DataFile < ActiveRecord::Base
 
   has_and_belongs_to_many :tags, :uniq => true
 
-  has_many :data_file_labels
+  has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
   before_validation :strip_whitespaces
@@ -120,11 +120,11 @@ class DataFile < ActiveRecord::Base
   end
 
   def label_list
-    self.labels.collect(&:name).join("|")
+    self.labels.pluck(:name).join("|")
   end
 
   def label_list_display
-    self.labels.collect(&:name).join(", ")
+    self.labels.pluck(:name).join(", ")
   end
 
   def label_list=(new_value)
@@ -188,17 +188,17 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.with_any_of_these_tags(tags)
-    data_file_ids = DataFile.unscoped.select("DISTINCT(data_files.id)").joins(:tags).where("data_files_tags.tag_id" => tags).collect(&:id)
+    data_file_ids = DataFile.unscoped.joins(:tags).where("data_files_tags.tag_id" => tags).pluck(:id).uniq
     where(:id => data_file_ids)
   end
 
   def self.with_any_of_these_labels(label_params)
-    data_file_ids = DataFile.unscoped.joins(:labels).select("DISTINCT(data_files.id)").where { labels.name >> label_params }.collect(&:id)
+    data_file_ids = DataFile.unscoped.joins(:labels).where { labels.name >> label_params }.pluck(:id).uniq
     where(:id => data_file_ids)
   end
 
   def self.with_any_of_these_columns(column_names)
-    data_file_ids = ColumnDetail.unscoped.select("DISTINCT(data_file_id)").where(:name => column_names).collect(&:data_file_id)
+    data_file_ids = ColumnDetail.unscoped.where(:name => column_names).pluck(:data_file_id).uniq
     where(:id => data_file_ids)
   end
 
@@ -225,7 +225,7 @@ class DataFile < ActiveRecord::Base
     mapped_codes = mapped.keys
     mapped_names = mapped.values
 
-    existing_values = ColumnDetail.unscoped.select("DISTINCT(name)").collect(&:name)
+    existing_values = ColumnDetail.unscoped.pluck(:name).uniq
     existing_values.delete_if { |name| mapped_codes.include?(name) }
     (mapped_names + existing_values).uniq.sort
   end

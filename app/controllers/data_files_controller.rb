@@ -18,7 +18,7 @@ class DataFilesController < ApplicationController
   layout 'data_files'
 
   expose(:tags) { Tag.order(:name) }
-  expose(:labels) { Label.joins(:data_file_labels).collect(&:name).uniq }
+  expose(:labels) { Label.joins(:data_file_labels).pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 
@@ -413,7 +413,7 @@ class DataFilesController < ApplicationController
   end
 
   def send_zip(files)
-    first_file_name = files.collect(&:filename).sort.first
+    first_file_name = files.pluck(:filename).sort.first
     download_file_name = "#{first_file_name}.zip"
     CustomDownloadBuilder.zip_for_files(files) do |zip_file|
       send_file zip_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => download_file_name

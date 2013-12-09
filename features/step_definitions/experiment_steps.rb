@@ -127,7 +127,7 @@ end
 Then /^experiment "([^"]*)" should have for codes$/ do |experiment_name, table|
   experiment = Experiment.find_by_name!(experiment_name)
   expected_codes = table.raw.collect { |row| row[0] }
-  actual_codes = experiment.experiment_for_codes.collect(&:name)
+  actual_codes = experiment.experiment_for_codes.pluck(:name)
   actual_codes.should eq(expected_codes)
 end
 

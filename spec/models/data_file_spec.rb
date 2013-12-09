@@ -109,9 +109,9 @@ describe DataFile do
         f5 = Factory(:data_file, :filename => "ABC.txt").id
         f6 = Factory(:data_file, :filename => "AB.bl").id
 
-        DataFile.with_filename_containing("blAH").order(:id).collect(&:id).should eq([f1, f2, f3, f4])
-        DataFile.with_filename_containing("BL").order(:id).collect(&:id).should eq([f1, f2, f3, f4, f6])
-        DataFile.with_filename_containing("ABC").order(:id).collect(&:id).should eq([f4, f5])
+        DataFile.with_filename_containing("blAH").order(:id).pluck(:id).should eq([f1, f2, f3, f4])
+        DataFile.with_filename_containing("BL").order(:id).pluck(:id).should eq([f1, f2, f3, f4, f6])
+        DataFile.with_filename_containing("ABC").order(:id).pluck(:id).should eq([f4, f5])
         DataFile.with_filename_containing("DEF").should be_empty
       end
     end
@@ -127,9 +127,9 @@ describe DataFile do
         f5 = Factory(:data_file, :experiment_id => ex2.id).id
         f6 = Factory(:data_file, :experiment_id => ex2.id).id
 
-        DataFile.with_experiment([ex1.id]).order(:id).collect(&:id).should eq([f1, f2, f3])
-        DataFile.with_experiment([ex2.id]).order(:id).collect(&:id).should eq([f4, f5, f6])
-        DataFile.with_experiment([ex1.id, ex2.id]).order(:id).collect(&:id).should eq([f1, f2, f3, f4, f5, f6])
+        DataFile.with_experiment([ex1.id]).order(:id).pluck(:id).should eq([f1, f2, f3])
+        DataFile.with_experiment([ex2.id]).order(:id).pluck(:id).should eq([f4, f5, f6])
+        DataFile.with_experiment([ex1.id, ex2.id]).order(:id).pluck(:id).should eq([f1, f2, f3, f4, f5, f6])
       end
     end
 
@@ -144,8 +144,8 @@ describe DataFile do
         f5 = Factory(:data_file, :created_by_id => u2.id).id
         f6 = Factory(:data_file, :created_by_id => u2.id).id
 
-        DataFile.with_uploader(u1.id).order(:id).collect(&:id).should eq([f1, f2, f3])
-        DataFile.with_uploader(u2.id).order(:id).collect(&:id).should eq([f4, f5, f6])
+        DataFile.with_uploader(u1.id).order(:id).pluck(:id).should eq([f1, f2, f3])
+        DataFile.with_uploader(u2.id).order(:id).pluck(:id).should eq([f4, f5, f6])
       end
     end
 
@@ -158,9 +158,9 @@ describe DataFile do
         f5 = Factory(:data_file, :file_processing_description => "ABC").id
         f6 = Factory(:data_file, :file_processing_description => "AB.bl").id
 
-        DataFile.with_description_containing("blAH").order(:id).collect(&:id).should eq([f1, f2, f3, f4])
-        DataFile.with_description_containing("BL").order(:id).collect(&:id).should eq([f1, f2, f3, f4, f6])
-        DataFile.with_description_containing("ABC").order(:id).collect(&:id).should eq([f4, f5])
+        DataFile.with_description_containing("blAH").order(:id).pluck(:id).should eq([f1, f2, f3, f4])
+        DataFile.with_description_containing("BL").order(:id).pluck(:id).should eq([f1, f2, f3, f4, f6])
+        DataFile.with_description_containing("ABC").order(:id).pluck(:id).should eq([f4, f5])
         DataFile.with_description_containing("DEF").should be_empty
       end
     end
@@ -174,8 +174,8 @@ describe DataFile do
         f5 = Factory(:data_file, :file_processing_status => 'CLEANSED').id
         f6 = Factory(:data_file, :file_processing_status => DataFile::STATUS_RAW).id
 
-        DataFile.with_status_in([DataFile::STATUS_RAW, 'CLEANSED']).order(:id).collect(&:id).should eq([f3, f5, f6])
-        DataFile.with_status_in([DataFile::STATUS_ERROR]).order(:id).collect(&:id).should eq([f1])
+        DataFile.with_status_in([DataFile::STATUS_RAW, 'CLEANSED']).order(:id).pluck(:id).should eq([f3, f5, f6])
+        DataFile.with_status_in([DataFile::STATUS_ERROR]).order(:id).pluck(:id).should eq([f1])
       end
     end
 
@@ -192,9 +192,9 @@ describe DataFile do
         f5 = Factory(:data_file, :tag_ids => [t1, t2, t3]).id
         f6 = Factory(:data_file, :tag_ids => [t3]).id
 
-        DataFile.with_any_of_these_tags([t1]).order(:id).collect(&:id).should eq([f2, f3, f5])
-        DataFile.with_any_of_these_tags([t2]).order(:id).collect(&:id).should eq([f2, f4, f5])
-        DataFile.with_any_of_these_tags([t1, t2]).order(:id).collect(&:id).should eq([f2, f3, f4, f5])
+        DataFile.with_any_of_these_tags([t1]).order(:id).pluck(:id).should eq([f2, f3, f5])
+        DataFile.with_any_of_these_tags([t2]).order(:id).pluck(:id).should eq([f2, f4, f5])
+        DataFile.with_any_of_these_tags([t1, t2]).order(:id).pluck(:id).should eq([f2, f3, f4, f5])
       end
     end
   end
@@ -295,11 +295,11 @@ describe DataFile do
     it "when searching with start date only should return all files which end on or after the given date" do
       search_result = DataFile.with_data_in_range(Date.parse("2011-03-01"), nil)
       search_result.size.should eq(5)
-      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f3], @files[:f4], @files[:f6], @files[:f7]])
+      search_result.pluck(:id).sort.should eq([@files[:f2], @files[:f3], @files[:f4], @files[:f6], @files[:f7]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-04-30"), nil)
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6]])
+      search_result.pluck(:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-05-01"), nil)
       search_result.size.should eq(0)
@@ -308,15 +308,15 @@ describe DataFile do
     it "when searching with end date only should return all files that start on or before the given date" do
       search_result = DataFile.with_data_in_range(nil, Date.parse("2011-03-01"))
       search_result.size.should eq(5)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f4], @files[:f5]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f4], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(nil, Date.parse("2011-02-28"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f5]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(nil, Date.parse("2011-01-01"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f5]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(nil, Date.parse("2010-12-31"))
       search_result.size.should eq(0)
@@ -329,28 +329,28 @@ describe DataFile do
       search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2011-01-01"))
 
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f5]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f5]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2010-01-01"), Date.parse("2011-02-01"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f5]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f5]])
 
       #single day
       search_result = DataFile.with_data_in_range(Date.parse("2011-02-01"), Date.parse("2011-02-01"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-02-15"), Date.parse("2011-03-15"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f4]])
+      search_result.pluck(:id).sort.should eq([@files[:f1], @files[:f2], @files[:f3], @files[:f4]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-04-01"), Date.parse("2011-12-12"))
       search_result.size.should eq(4)
-      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6], @files[:f7]])
+      search_result.pluck(:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6], @files[:f7]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-04-30"), Date.parse("2011-12-12"))
       search_result.size.should eq(3)
-      search_result.collect(&:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6]])
+      search_result.pluck(:id).sort.should eq([@files[:f2], @files[:f4], @files[:f6]])
 
       search_result = DataFile.with_data_in_range(Date.parse("2011-05-01"), Date.parse("2011-12-12"))
       search_result.size.should eq(0)
@@ -415,11 +415,11 @@ describe DataFile do
     end
 
     it "should work with single column name" do
-      DataFile.with_any_of_these_columns(["Rnfll"]).collect(&:id).sort.should eq([@f1.id, @f3.id])
+      DataFile.with_any_of_these_columns(["Rnfll"]).pluck(:id).sort.should eq([@f1.id, @f3.id])
     end
 
     it "should work with multiple column names" do
-      DataFile.with_any_of_these_columns(["Rnfll", "Temp"]).collect(&:id).sort.should eq([@f1.id, @f3.id, @f4.id])
+      DataFile.with_any_of_these_columns(["Rnfll", "Temp"]).pluck(:id).sort.should eq([@f1.id, @f3.id, @f4.id])
     end
 
     it "should be empty if no matches" do
@@ -604,7 +604,7 @@ describe DataFile do
         no_station_table = Factory(:data_file, times.merge(:format => FileTypeDeterminer::TOA5, :file_processing_status => 'RAW'))
         not_raw = create_toa5('s1', 't1', 'PROCESSED')
 
-        toa1.raw_toa5_files_with_same_station_name_and_table_name.collect(&:id).sort.should eq([same1.id, same2.id].sort)
+        toa1.raw_toa5_files_with_same_station_name_and_table_name.pluck(:id).sort.should eq([same1.id, same2.id].sort)
       end
     end
     describe "Categorising overlap" do

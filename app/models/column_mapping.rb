@@ -16,9 +16,9 @@ class ColumnMapping < ActiveRecord::Base
   # followed by an array of the raw codes that are mapped to that name
   # e.g. [["Temperature", ["temp", "ptemp"]], ["Humidity", "humi", "humidi", "humidity"]]
   def self.mapped_column_names_for_search
-    mapped_codes = select("code").collect(&:code)
+    mapped_codes = pluck(:code)
 
-    unmapped_columns = ColumnDetail.unscoped.select("DISTINCT(name)").collect(&:name)
+    unmapped_columns = ColumnDetail.unscoped.pluck(:name).uniq
     unmapped_columns.delete_if { |name| mapped_codes.include?(name) }
 
     grouped = order(:code).group_by(&:name)
