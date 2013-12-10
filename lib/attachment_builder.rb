@@ -47,7 +47,7 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time, parent_filenames)
+  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time, parent_file_ids)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(:path => path,
@@ -61,7 +61,7 @@ class AttachmentBuilder
                              :end_time => end_time)
     data_file.tag_ids = tags
     data_file.label_ids = labels
-    data_file.parent_ids = DataFile.where(:filename => parent_filenames).pluck(:id)
+    data_file.parent_ids = parent_file_ids
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format

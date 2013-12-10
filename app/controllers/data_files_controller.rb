@@ -242,11 +242,11 @@ class DataFilesController < ApplicationController
       experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
       label_names = params[:label_names]
-      parent_filenames = params[:parent_filenames] || []
+      parent_file_ids = DataFile.where(:filename => params[:parent_filenames]).pluck(:id)
       errors, tag_ids, label_ids = validate_api_inputs(file, type, experiment_id, tag_names, label_names)
 
       if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_filenames)
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids)
         messages = uploaded_file.messages.collect { |m| m[:message] }
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
       else
