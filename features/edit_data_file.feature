@@ -145,7 +145,7 @@ Feature: Edit data files metadata
     When I am on the list data files page
     And I edit data file "file_with_labels.txt"
     And I should see select2 field "data_file_label_list" with value "test1|that2|this3"
-    And I remove "that2" from "data_file_label_list" select2 field
+    And I remove "that2" from the select2 field
     And I check select2 field "data_file_label_list" updated value to "test1,this3"
     And I press "Update"
     Then I should see field "Labels" with value "test1, this3"
@@ -207,7 +207,7 @@ Feature: Edit data files metadata
     When I choose "this3" in the select2 menu
     And I fill in "Labels" with "label_2"
     And I choose "label_2" in the select2 menu
-    And I remove "label_5" from "data_file_label_list" select2 field
+    And I remove "label_5" from the select2 field
     And I wait for 1 seconds
     And I press "Update"
     Then I should see field "Labels" with value "label_1, label_2, this3"

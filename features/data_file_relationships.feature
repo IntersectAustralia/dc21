@@ -83,11 +83,11 @@ Feature: Edit data file relationships
     And I should see "file.txt"
     And I should see "error.txt"
     And I should see "file_with_labels.txt"
-    And I remove "datafile.dat" from the parent select2 field
-    And I remove "sample.txt" from the children select2 field
-    And I remove "file.txt" from the children select2 field
-    And I remove "error.txt" from the children select2 field
-    And I remove "file_with_labels.txt" from the children select2 field
+    And I remove "datafile.dat" from the select2 field
+    And I remove "sample.txt" from the select2 field
+    And I remove "file.txt" from the select2 field
+    And I remove "error.txt" from the select2 field
+    And I remove "file_with_labels.txt" from the select2 field
     And I wait for 2 seconds
     And I press "Update"
     And I should be on the data file details page for related.txt
@@ -151,7 +151,7 @@ Feature: Edit data file relationships
     And file "sample1.txt" should have experiment "Other"
     And file "sample1.txt" should have description "My descriptive description"
     And file "sample1.txt" should have parent "datafile.dat"
-    And I remove "datafile.dat" from the parent select2 field
+    And I remove "datafile.dat" from the select2 field
     And I wait for 2 seconds
     Then I press "Update"
     When I am on the list data files page

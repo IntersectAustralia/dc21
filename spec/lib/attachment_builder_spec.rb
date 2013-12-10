@@ -17,7 +17,7 @@ describe AttachmentBuilder do
   describe "Building attachments" do
 
     it "should create new data file object with correct experiment, type, description and size" do
-      file_type_determiner = mock(FileTypeDeterminer)
+      file_type_determiner = double(FileTypeDeterminer)
       file_type_determiner.should_receive(:identify_file).and_return(nil)
       user = Factory(:user)
       ab = AttachmentBuilder.new(files_root, user, file_type_determiner, nil)
@@ -34,8 +34,8 @@ describe AttachmentBuilder do
     end
 
     it "should extract metadata if file type is recognised" do
-      file_type_determiner = mock(FileTypeDeterminer)
-      metadata_extractor = mock(MetadataExtractor)
+      file_type_determiner = double(FileTypeDeterminer)
+      metadata_extractor = double(MetadataExtractor)
       file_type_determiner.should_receive(:identify_file).and_return(FileTypeDeterminer::TOA5)
       metadata_extractor.should_receive(:extract_metadata)
 
@@ -50,8 +50,8 @@ describe AttachmentBuilder do
     end
 
     it "should not extract metadata if file type is unknown" do
-      file_type_determiner = mock(FileTypeDeterminer)
-      metadata_extractor = mock(MetadataExtractor)
+      file_type_determiner = double(FileTypeDeterminer)
+      metadata_extractor = double(MetadataExtractor)
       file_type_determiner.should_receive(:identify_file).and_return(nil)
       metadata_extractor.should_not_receive(:extract_metadata)
 
@@ -67,7 +67,7 @@ describe AttachmentBuilder do
 
     describe "file name should be suffixed with a number if it already exists" do
       let(:file_type_determiner) do
-        file_type_determiner = mock(FileTypeDeterminer)
+        file_type_determiner = double(FileTypeDeterminer)
         file_type_determiner.should_receive(:identify_file).and_return(nil)
         file_type_determiner
       end

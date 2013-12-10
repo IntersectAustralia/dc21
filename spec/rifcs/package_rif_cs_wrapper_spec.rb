@@ -145,16 +145,16 @@ describe PackageRifCsWrapper do
 
   describe "Locations" do
     it "should gather all locations from facilities associated with the files" do
-      df1 = mock(:data_file)
-      df2 = mock(:data_file)
-      df3 = mock(:data_file)
-      df4 = mock(:data_file)
+      df1 = double(:data_file)
+      df2 = double(:data_file)
+      df3 = double(:data_file)
+      df4 = double(:data_file)
 
-      f1 = mock(:facility)
+      f1 = double(:facility)
       f1.stub(:location_as_points).and_return([])
-      f2 = mock(:facility)
+      f2 = double(:facility)
       f2.stub(:location_as_points).and_return(['not empty'])
-      f3 = mock(:facility)
+      f3 = double(:facility)
       f3.stub(:location_as_points).and_return(['also not empty'])
 
       df1.stub_chain(:experiment, :facility).and_return(f1)
