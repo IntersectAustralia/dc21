@@ -91,11 +91,11 @@ describe DataFile do
 
   describe "File format for display" do
     it "should return 'Unknown' if no format set" do
-      Factory(:data_file, :format => nil).format_for_display.should eq("Unknown")
+      Factory(:data_file, :format => FileTypeDeterminer::UNKNOWN).format.should eq("Unknown")
     end
 
     it "should return the format if set" do
-      Factory(:data_file, :format => "TOA5").format_for_display.should eq("TOA5")
+      Factory(:data_file, :format => "TOA5").format.should eq("TOA5")
     end
   end
 
@@ -195,6 +195,22 @@ describe DataFile do
         DataFile.with_any_of_these_tags([t1]).order(:id).pluck(:id).should eq([f2, f3, f5])
         DataFile.with_any_of_these_tags([t2]).order(:id).pluck(:id).should eq([f2, f4, f5])
         DataFile.with_any_of_these_tags([t1, t2]).order(:id).pluck(:id).should eq([f2, f3, f4, f5])
+      end
+    end
+
+    describe "Find files with matching file formats" do
+      it "should find matching files" do
+        f1 = Factory(:data_file, :format => FileTypeDeterminer::UNKNOWN).id
+        f2 = Factory(:data_file, :format => FileTypeDeterminer::TOA5).id
+        f3 = Factory(:data_file, :format => FileTypeDeterminer::BAGIT).id
+        f4 = Factory(:data_file, :format => 'image/png').id
+        f5 = Factory(:data_file, :format => 'video/mpeg').id
+        f6 = Factory(:data_file, :format => 'audio/mpeg').id
+        f7 = Factory(:data_file, :format => 'image/jpeg').id
+
+        DataFile.with_any_of_these_file_formats([FileTypeDeterminer::TOA5]).order(:id).pluck(:id).should eq([f2])
+        DataFile.with_any_of_these_file_formats([FileTypeDeterminer::UNKNOWN, 'audio/mpeg']).order(:id).pluck(:id).should eq([f1, f6])
+        DataFile.with_any_of_these_file_formats(['video/mpeg', FileTypeDeterminer::BAGIT, 'image/jpeg']).order(:id).pluck(:id).should eq([f3, f5, f7])
       end
     end
   end

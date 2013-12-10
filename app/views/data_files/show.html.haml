@@ -30,7 +30,7 @@
     %h2 Basic Information
     = render_field "Name", @data_file.filename
     = render_field "Type", @data_file.file_processing_status
-    = render_field "File format", @data_file.format_for_display
+    = render_field "File format", @data_file.format
     .description
       = render_description "Description", @data_file.file_processing_description
 

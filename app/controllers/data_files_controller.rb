@@ -307,6 +307,7 @@ class DataFilesController < ApplicationController
     @selected_automation_stati = @search.automation_stati
     @selected_tags = @search.tags
     @selected_labels = @search.labels
+    @selected_file_formats = @search.file_formats
     @uploader_id = @search.uploader_id
     @upload_from_date = @search.search_params[:upload_from_date]
     @upload_to_date = @search.search_params[:upload_to_date]

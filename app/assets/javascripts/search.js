@@ -86,6 +86,15 @@ $(function () {
         $('.searchcategory .labels').hide();
     }
 
+    // File Format
+    if ( $('.searchcategory .file_formats option[selected]').length > 0 ) {
+        $('#file_format_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .file_formats').hide();
+    }
+
+
     // Facility
     if ( $('.searchcategory .facility input[type="checkbox"][checked]').length > 0 ) {
         $('#facility').toggleClass('current');
@@ -200,6 +209,11 @@ $(function () {
 
     $('#labels_category').click(function (event) {
         $('.searchcategory .labels').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#file_formats_category').click(function (event) {
+        $('.searchcategory .file_formats').toggle();
         $(this).toggleClass('current');
     });
 

@@ -197,6 +197,11 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
+  def self.with_any_of_these_file_formats(file_formats)
+    data_file_ids = DataFile.unscoped.where(:format => file_formats).pluck(:id)
+    where(:id => data_file_ids)
+  end
+
   def self.with_any_of_these_columns(column_names)
     data_file_ids = ColumnDetail.unscoped.where(:name => column_names).pluck(:data_file_id).uniq
     where(:id => data_file_ids)
@@ -237,10 +242,6 @@ class DataFile < ActiveRecord::Base
 
   def add_metadata_item(key, value)
     self.metadata_items.create!(:key => key, :value => value)
-  end
-
-  def format_for_display
-    self.format.nil? ? "Unknown" : self.format
   end
 
   def start_time_is_not_nil?

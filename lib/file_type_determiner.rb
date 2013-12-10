@@ -2,6 +2,9 @@ class FileTypeDeterminer
 
   TOA5 = "TOA5"
   BAGIT = "BAGIT"
+  UNKNOWN = "Unknown"
+  # for searching file formats
+  ALL_FORMATS = [TOA5, BAGIT, UNKNOWN] + EXTENSIONS.values.uniq
 
   def identify_file(data_file)
     return TOA5 if is_toa5?(data_file)
@@ -11,7 +14,7 @@ class FileTypeDeterminer
       return mime[/^\w+\/[^;]+/]
     end
 
-    return nil
+    return UNKNOWN
   end
 
   private
