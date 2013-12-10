@@ -204,23 +204,14 @@ When /^I choose "(.*?)" in the select2 menu$/ do |value|
   page.find('.select2-result-label', text: value).click
 end
 
-When /^I remove "([^"]*)" from "([^"]*)" select2 field/ do |label_text, select2_id|
-  select2_delete label_text, select2_id
+When /^I remove "([^"]*)" from the children select2 field/ do |label_text|
+  selector = page.find('li', :text => label_text)
+  selector.find('.select2-search-choice-close').click
 end
 
 When /^I remove "([^"]*)" from the parent select2 field/ do |label_text|
   selector = page.find('li', :text => label_text)
   selector.find('.select2-search-choice-close').click
-end
-
-def select2_delete(text, id)
-  page.find("#s2id_#{id}").click
-  page.all(".select2-search-choice").find do |l|
-    if l.text == text
-      l.find("a").click
-      return
-    end
-  end
 end
 
 When /^I check select2 field "([^"]*)" updated value to "([^"]*)"$/ do |name, value|
