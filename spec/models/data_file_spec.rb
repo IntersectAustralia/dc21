@@ -198,6 +198,7 @@ describe DataFile do
       end
     end
 
+    #EYETRACKER-134
     describe "Find files with matching file formats" do
       it "should find matching files" do
         f1 = Factory(:data_file, :format => FileTypeDeterminer::UNKNOWN).id

@@ -554,7 +554,7 @@ Feature: Search data files by date range
     And I should see "ID: target of repeat operator is not specified: /+w/"
     And the "id" field should contain "\+w"
 
-#EYETRACKER-172
+#EYETRACKER-134
   Scenario: Search for files by file formats
     Given I am on the list data files page
     When I select "BAGIT" from "File Formats:"
