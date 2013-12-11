@@ -83,9 +83,15 @@
         = submit_tag "Update"
 
 :javascript
+  $('.select2_labels').select2({tags: $('.select2_labels').data('labels'), tokenSeparators: ['|'], separator: '|'});
+
+  ////////// PARENT 'CLASS' //////////
   function Parent($id) {
     var file_id = $id.attr('file_id');
     var data = $id.data('df');
+
+    ////////// TRACK INVALID DATA FILES //////////
+    var invalid_dfs = [];
 
     ////////// START PARENTS //////////
     var $parent_selector = $('#parent_ids_' + file_id);
@@ -98,26 +104,59 @@
 
           $.each(DC21.preload_data, function(){
             if (validDataFile(this.id) && this.exp_id.toString() == $id.val()){
-              if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
+              if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0){
                   data.results.push({id: this.id, text: this.text });
               }
             }
           });
-
           query.callback(data);
       }
     });
 
+    $parent_selector.on('select2-selecting', function(event){
+      // Reference to the parent object of the specified ID
+      // only when it is part of the set of uploaded data files
+      // console.log("Focused object : " + invalid_dfs);
+      var id = event.val;
+      if ($.inArray(id, uploaded_data_files)) {
+        parent_objects[id].data_file.set_invalid(file_id);
+      }
+    });
+
+    $parent_selector.on('select2-removed', function(event){
+      var id = event.val;
+      if ($.inArray(id, uploaded_data_files)) {
+        parent_objects[id].data_file.remove_invalid(file_id);
+      }
+    });
+
+    function removeFromSelected(id) {
+      invalid_dfs = $.grep(invalid_dfs, function(value) {
+        return value != id
+      });
+    }
+
     function validDataFile(id) {
-      invalid = [file_id];
+      // Merge selected data files with the current file id as invalid data files for select
+      invalid = _.union(file_id, invalid_dfs);
       $.merge(invalid, $parent_selector.val().split(",") || []);
       $.unique(invalid);
       return $.inArray(id.toString(), invalid) == -1;
     }
 
     $parent_selector.select2('data', parents);
-    ////////// END PARENTS //////////
 
+    ////////// SET/REMOVE INVALID LIST //////////
+    this.set_invalid = function(id) {
+      $.merge(invalid_dfs, [id] || []);
+      // console.log("Referenced object : " + invalid_dfs);
+    }
+
+    this.remove_invalid = function(id) {
+      removeFromSelected(id);
+    }
+
+    ////////// ON CHANGE EXPERIMENT //////////
     var interim_data =  _.indexBy(_.union(parents, data), 'id')
     var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
 
@@ -134,11 +173,17 @@
     });
   }
 
-  $('.select2_labels').select2({tags: $('.select2_labels').data('labels'), tokenSeparators: ['|'], separator: '|'})
-
   ////////// INIT //////////
+  parent_objects = {}
+  uploaded_data_files = [];
   $('select[id^="experiment_id_"]').each(function(index) {
-    new Parent($(this));
+    parent = new Parent($(this));
+
+    // Set reference by string for parent objects
+    id = $(this).attr('file_id');
+    uploaded_data_files.push(id);
+    parent_objects[$(this).attr('file_id')] = { 'data_file' : parent };
   });
+
 
 
