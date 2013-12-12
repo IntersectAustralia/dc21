@@ -66,18 +66,18 @@
                 = select_minute @end_time, {:field_name => "files[#{file.id}][end_min]"}, {:id => "file_#{file.id}_end_min"}
                 = select_second @end_time, {:field_name => "files[#{file.id}][end_sec]"}, {:id => "file_#{file.id}_end_sec"}
 
-          %h2 New File Relationships
-          .control-group
-            = label_tag "experiment_id_#{file.id}", "Filter Files", class: "control-label"
-            .controls
-              - dfs = file.experiment.data_files.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
-              = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), data: {df: dfs}, file_id: file.id
-              %br/
-              Filter data files by #{@config.level2.downcase}
-          .control-group
-            = label_tag "parent_ids_#{file.id}", "Parents", class: "control-label"
-            .controls
-              = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields}, name: "files[#{file.id}][parent_ids]"
+        %h2 New File Relationships
+        .control-group
+          = label_tag "experiment_id_#{file.id}", "Filter Files", class: "control-label"
+          .controls
+            - dfs = file.experiment.data_files.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
+            = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), data: {df: dfs}, file_id: file.id
+            %br/
+            Filter data files by #{@config.level2.downcase}
+        .control-group
+          = label_tag "parent_ids_#{file.id}", "Parents", class: "control-label"
+          .controls
+            = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields}, name: "files[#{file.id}][parent_ids]"
     .form-actions
       .actions
         = submit_tag "Update"
