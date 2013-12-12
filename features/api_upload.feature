@@ -216,12 +216,12 @@ Feature: Upload files via the API
       | experiment        | Flux Experiment 1                                             |
       | parent_filenames  | weather_station_15_min.dat,sample1.txt                        |
     Then I should get a 200 response code
-    And file "weather_station_05_min.dat" should have 2 parent files
-    And file "weather_station_05_min.dat" should have parent files "weather_station_15_min.dat,sample1.txt"
+    And file "weather_station_05_min.dat" should have 2 parents
+    And file "weather_station_05_min.dat" should have parents "weather_station_15_min.dat,sample1.txt"
     And file "sample1.txt" should have 1 children files
-    And file "sample1.txt" should have children files "weather_station_05_min.dat"
-    And file "weather_station_15_min.dat" should have 1 children files
-    And file "weather_station_15_min.dat" should have children files "weather_station_05_min.dat"
+    And file "sample1.txt" should have children "weather_station_05_min.dat"
+    And file "weather_station_15_min.dat" should have 1 children
+    And file "weather_station_15_min.dat" should have children "weather_station_05_min.dat"
 
   #EYETRACKER-172
   Scenario: Assign parent relationships on non-existing files on API file upload
@@ -231,5 +231,5 @@ Feature: Upload files via the API
       | experiment        | Flux Experiment 1                                             |
       | parent_filenames  | weather_station_15_min.dat,sample1.txt                        |
     Then I should get a 200 response code
-    And file "weather_station_05_min.dat" should have 0 parent files
-    And file "weather_station_05_min.dat" should have parent files ""
+    And file "weather_station_05_min.dat" should have 0 parents
+    And file "weather_station_05_min.dat" should have parents ""

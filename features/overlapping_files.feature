@@ -175,6 +175,6 @@ Feature: Overlapping Files
     And I upload "samples/toa5.dat" with type "RAW" and description "old TOA5" and experiment "My Experiment" and parents "weather_station_15_min.dat"
     When I upload "samples/toa5.dat" with type "RAW" and description "new TOA5" and experiment "My Experiment"
     Then I should see "The file replaced one or more other files with similar data. Replaced files: toa5.dat"
-    And file "toa5.dat" should have parents "weather_station_15_min.dat, WTC01_Table1.dat, sample3.txt"
-    And file "toa5.dat" should have children "package1.zip, Test_OCR.jpg"
+    And file "toa5.dat" should have parents "weather_station_15_min.dat,WTC01_Table1.dat,sample3.txt"
+    And file "toa5.dat" should have children "package1.zip,Test_OCR.jpg"
     And there should be files named "toa5.dat, weather_station_15_min.dat, sample3.txt, WTC01_Table1.dat, package1.zip, Test_OCR.jpg" in the system

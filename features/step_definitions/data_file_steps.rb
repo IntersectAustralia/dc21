@@ -404,19 +404,23 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
 end
 
 Then /^file "([^"]*)" should have parents "([^"]*)"$/ do |filename, parent_filenames|
-  parents = []
-  parent_filenames.split(", ").each do |file|
-    parents << DataFile.find_by_filename(file)
-  end
-  DataFile.find_by_filename!(filename).parents.should eq(parents)
+  file = DataFile.find_by_filename!(filename)
+  file.parents.collect(&:filename).sort.should eq(parent_filenames.split(",").sort)
 end
 
 Then /^file "([^"]*)" should have children "([^"]*)"$/ do |filename, children_filenames|
-  children = []
-  children_filenames.split(", ").each do |file|
-    children << DataFile.find_by_filename(file)
-  end
-  DataFile.find_by_filename!(filename).children.should eq(children)
+  file = DataFile.find_by_filename!(filename)
+  file.children.collect(&:filename).sort.should eq(children_filenames.split(",").sort)
+end
+
+Then /^file "([^"]*)" should have (\d+) parents/ do |file, count|
+  file = DataFile.find_by_filename!(file)
+  file.parents.count.should eq(count.to_i)
+end
+
+Then /^file "([^"]*)" should have (\d+) children/ do |file, count|
+  file = DataFile.find_by_filename!(file)
+  file.children.count.should eq(count.to_i)
 end
 
 Then /^file "([^"]*)" should have a UUID created$/ do |filename|

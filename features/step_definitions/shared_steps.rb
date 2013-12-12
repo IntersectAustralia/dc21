@@ -256,22 +256,3 @@ Given /^I have labels (.+)$/ do |label_names|
   end
 end
 
-Then /^file "([^"]*)" should have parent files "([^"]*)"$/ do |file, parents|
-  file = DataFile.find_by_filename!(file)
-  file.parents.collect(&:filename).sort.should eq(parents.split(",").sort)
-end
-
-Then /^file "([^"]*)" should have (\d+) parent files/ do |file, count|
-  file = DataFile.find_by_filename!(file)
-  file.parents.count.should eq(count.to_i)
-end
-
-Then /^file "([^"]*)" should have children files "([^"]*)"$/ do |file, children|
-  file = DataFile.find_by_filename!(file)
-  file.children.collect(&:filename).sort.should eq(children.split(",").sort)
-end
-
-Then /^file "([^"]*)" should have (\d+) children files/ do |file, count|
-  file = DataFile.find_by_filename!(file)
-  file.children.count.should eq(count.to_i)
-end
