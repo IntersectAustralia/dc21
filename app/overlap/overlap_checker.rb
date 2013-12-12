@@ -43,8 +43,12 @@ class OverlapChecker
     unless safe.empty?
       replaced_descriptions = safe.collect(&:file_processing_description)
       replaced_filenames = safe.collect(&:filename)
+      replaced_parents = safe.collect(&:parent_ids).flatten
+      replaced_children = safe.collect(&:child_ids).flatten
       info_message = "The file replaced one or more other files with similar data. Replaced files: #{replaced_filenames.join(", ")}"
       @data_file.file_processing_description = replaced_descriptions.join(', ') if @data_file.file_processing_description.blank?
+      @data_file.parent_ids += replaced_parents
+      @data_file.child_ids += replaced_children
       @data_file.save!
 
       users_with_replaced_files_in_cart = []

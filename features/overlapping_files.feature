@@ -163,3 +163,18 @@ Feature: Overlapping Files
     And file "8_9_10_11_oct.dat" should have type "RAW"
     And there should be files named "8_9_10_11_oct.dat, 12_oct.dat" in the system
     And there should be files named "8_9_10_oct.dat" that were deleted
+
+  #EYETRACKER-181
+  Scenario: Overlap TOA5 file should maintain parent/child relationships of replaced files
+    Given I have uploaded "full_files/weather_station/weather_station_15_min.dat" with type "RAW"
+    And I have uploaded "WTC01_Table1.dat" with type "RAW"
+    And I have uploaded "sample3.txt" with type "RAW"
+    And I have uploaded "package1.zip" with type "RAW"
+    And I have uploaded "Test_OCR.jpg" with type "RAW"
+    And I have uploaded "toa5.dat" with parents "WTC01_Table1.dat, sample3.txt" and children "package1.zip, Test_OCR.jpg"
+    And I upload "samples/toa5.dat" with type "RAW" and description "old TOA5" and experiment "My Experiment" and parents "weather_station_15_min.dat"
+    When I upload "samples/toa5.dat" with type "RAW" and description "new TOA5" and experiment "My Experiment"
+    Then I should see "The file replaced one or more other files with similar data. Replaced files: toa5.dat"
+    And file "toa5.dat" should have parents "weather_station_15_min.dat, WTC01_Table1.dat, sample3.txt"
+    And file "toa5.dat" should have children "package1.zip, Test_OCR.jpg"
+    And there should be files named "toa5.dat, weather_station_15_min.dat, sample3.txt, WTC01_Table1.dat, package1.zip, Test_OCR.jpg" in the system

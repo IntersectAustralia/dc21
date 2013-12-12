@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.string   "data_type"
     t.integer  "position"
     t.integer  "data_file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "column_details", ["data_file_id"], :name => "index_column_details_on_data_file_id"
@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
   create_table "column_mappings", :force => true do |t|
     t.string   "code"
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "data_file_labels", :id => false, :force => true do |t|
@@ -40,16 +40,16 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
   create_table "data_file_relationships", :force => true do |t|
     t.integer  "parent_id"
     t.integer  "child_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "data_files", :force => true do |t|
     t.string   "filename",                    :default => ""
     t.string   "format"
     t.text     "path"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.integer  "created_by_id"
     t.datetime "start_time"
     t.datetime "end_time"
@@ -83,8 +83,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.integer  "experiment_id"
     t.string   "url"
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "experiment_for_codes", ["experiment_id"], :name => "index_experiment_for_codes_on_experiment_id"
@@ -96,8 +96,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.integer  "parameter_modification_id"
     t.decimal  "amount"
     t.string   "comments"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.integer  "parameter_unit_id"
   end
 
@@ -112,8 +112,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.date     "end_date"
     t.string   "subject"
     t.string   "access_rights"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.integer  "facility_id"
     t.integer  "parent_experiment_id"
   end
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
   create_table "facilities", :force => true do |t|
     t.string   "name"
     t.string   "code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.text     "description"
     t.float    "a_lat"
     t.float    "a_long"
@@ -134,8 +134,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.integer  "facility_id"
     t.integer  "user_id"
     t.boolean  "primary",     :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "labels", :force => true do |t|
@@ -146,50 +146,50 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.string   "key"
     t.string   "value"
     t.integer  "data_file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "metadata_items", ["data_file_id"], :name => "index_metadata_items_on_data_file_id"
 
   create_table "parameter_categories", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "parameter_modifications", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "parameter_sub_categories", :force => true do |t|
     t.string   "name"
     t.integer  "parameter_category_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
   end
 
   add_index "parameter_sub_categories", ["parameter_category_id"], :name => "index_parameter_sub_categories_on_parameter_category_id"
 
   create_table "parameter_units", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "roles", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
@@ -197,8 +197,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
 
   create_table "system_configurations", :force => true do |t|
     t.string   "name",                               :default => "HIEv"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                                                 :null => false
+    t.datetime "updated_at",                                                                                 :null => false
     t.string   "level1",                             :default => "Facility"
     t.string   "level1_plural",                      :default => "Facilities"
     t.string   "level2",                             :default => "Experiment"
@@ -229,8 +229,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
 
   create_table "tags", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -250,8 +250,8 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.string   "last_name"
     t.string   "status"
     t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.string   "authentication_token"
   end
 

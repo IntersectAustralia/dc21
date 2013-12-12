@@ -134,6 +134,14 @@ Given /^I have uploaded "([^"]*)" with type "([^"]*)"$/ do |filename, type|
   create_data_file(filename, User.first, type)
 end
 
+Given /^I have uploaded "([^"]*)" with parents "([^"]*)"$/ do |filename, parents|
+  create_data_file(filename, User.first, "RAW", "desc", nil, parents)
+end
+
+Given /^I have uploaded "([^"]*)" with parents "([^"]*)" and children "([^"]*)"$/ do |filename, parents, children|
+  create_data_file(filename, User.first, "RAW", "desc", nil, parents, children)
+end
+
 When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)"$/ do |filename, user_email, type|
   user = User.find_by_email user_email
   create_data_file filename, user, type
@@ -395,9 +403,20 @@ Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experimen
   DataFile.find_by_filename!(filename).experiment_name.should eq(experiment)
 end
 
-Then /^file "([^"]*)" should have parent "([^"]*)"$/ do |filename, parent_file|
-  parent = DataFile.find_all_by_filename(parent_file)
-  DataFile.find_by_filename!(filename).parents.should eq(parent)
+Then /^file "([^"]*)" should have parents "([^"]*)"$/ do |filename, parent_filenames|
+  parents = []
+  parent_filenames.split(", ").each do |file|
+    parents << DataFile.find_by_filename(file)
+  end
+  DataFile.find_by_filename!(filename).parents.should eq(parents)
+end
+
+Then /^file "([^"]*)" should have children "([^"]*)"$/ do |filename, children_filenames|
+  children = []
+  children_filenames.split(", ").each do |file|
+    children << DataFile.find_by_filename(file)
+  end
+  DataFile.find_by_filename!(filename).children.should eq(children)
 end
 
 Then /^file "([^"]*)" should have a UUID created$/ do |filename|
@@ -409,11 +428,15 @@ Then /^file "([^"]*)" should not have a UUID created$/ do |filename|
 end
 
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |file, type, description, experiment|
-  upload(file.strip, type, description, experiment, "")
+  upload(file.strip, type, description, experiment, "", "")
 end
 
 Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and tags "([^"]*)"$/ do |file, type, description, experiment, tags|
-  upload(file, type, description, experiment, tags)
+  upload(file, type, description, experiment, tags, "")
+end
+
+Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and parents "([^"]*)"$/ do | file, type, description, experiment, parents|
+  upload(file, type, description, experiment, "", parents)
 end
 
 Then /^I should see tag checkboxes$/ do |table|
@@ -446,13 +469,15 @@ end
 
 private
 
-def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="desc", experiment=nil)
+def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="desc", experiment=nil, parents=[], children=[])
   attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
 
   path = Rails.root.join('samples', filename).to_s
   file = Rack::Test::UploadedFile.new(path, "application/octet-stream")
   experiment = (Experiment.first || Factory(:experiment)) unless experiment
-  attachment_builder.build(file, experiment.id, type, "desc")
+  parent_ids = DataFile.where(:filename => parents.split(", ")).pluck(:id)
+  child_ids = DataFile.where(:filename => children.split(", ")).pluck(:id)
+  attachment_builder.build(file, experiment.id, type, "desc", [], [], parent_ids, child_ids)
 end
 
 
@@ -474,7 +499,7 @@ Then /^I should not see "([^"]*)" for file "([^"]*)"$/ do |field, file|
 
 end
 
-def upload(file, type, description, experiment, tags)
+def upload(file, type, description, experiment, tags, parents)
   visit(path_to("the upload page"))
   select type, :from => "File type"
   select experiment, :from => "Experiment"
@@ -482,6 +507,11 @@ def upload(file, type, description, experiment, tags)
   attach_file("Select file(s)", File.expand_path(file))
   tags.split(",").each do |tag|
     check(tag) unless tag.blank?
+  end
+  parents.split(",").each do |parent|
+    hidden_field = find :xpath, "//input[@id='data_file_parent_ids']"
+    hidden_field.set DataFile.find_by_filename(parent).id
+    #fill_in "Parents", :with => DataFile.find_by_filename(parent).id
   end
   click_button "Upload"
   page.should have_content("Your files have been uploaded.")
