@@ -57,6 +57,7 @@ cd $HOME/code_base
 git clone git://github.com/IntersectAustralia/dc21.git -b $DC21_TAG
 cd $HOME/code_base/dc21
 
+source $HOME/.bash_profile
 rvm use 1.9.2-p290@dc21app --create
 gem install bundler -v 1.0.20
 bundle install
