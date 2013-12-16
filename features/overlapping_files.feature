@@ -178,3 +178,14 @@ Feature: Overlapping Files
     And file "toa5.dat" should have parents "weather_station_15_min.dat,WTC01_Table1.dat,sample3.txt"
     And file "toa5.dat" should have children "package1.zip,Test_OCR.jpg"
     And there should be files named "toa5.dat, weather_station_15_min.dat, sample3.txt, WTC01_Table1.dat, package1.zip, Test_OCR.jpg" in the system
+
+  #EYETRACKER-181
+  Scenario: Overlap TOA5 file should not produce relationships where a file is both parent and child
+    Given I have uploaded "1.dat" with type "RAW"
+    And I have uploaded "sample1.txt" with parents "1.dat"
+    And I have uploaded "2.dat" with parents "sample1.txt"
+    When I upload "samples/3.dat" with type "RAW" and description "Problem 2" and experiment "My Experiment"
+    Then I should see "The file replaced one or more other files with similar data. Replaced files: 1.dat, 2.dat"
+    And file "3.dat" should have children "sample1.txt"
+    And file "3.dat" should have parents ""
+    And there should be files named "sample1.txt, 3.dat" in the system
