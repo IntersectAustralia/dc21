@@ -202,7 +202,8 @@ Feature: Edit data files metadata
     Then I should see the choice "label_1" in the select2 menu
     And I choose "label_1" in the select2 menu
     And I fill in "Labels" with "th"
-    Then I should see the choice "that2" in the select2 menu
+    Then I should see "Please enter 1 more character"
+    And I fill in "Labels" with "thi"
     And I should see the choice "this3" in the select2 menu
     When I choose "this3" in the select2 menu
     And I fill in "Labels" with "label_2"
@@ -214,15 +215,17 @@ Feature: Edit data files metadata
     When I am on the list data files page
     And I edit data file "file.txt"
     And I fill in "Labels" with "l"
-    Then I should see the choice "l" in the select2 menu
+    Then I should see "Please enter 2 more characters"
+    And I fill in "Labels" with "lab"
+    Then I should see the choice "lab" in the select2 menu
     And I should see the choice "label_1" in the select2 menu
     And I should see the choice "label_2" in the select2 menu
     And I should not see the choice "label_3" in the select2 menu
     And I should not see the choice "label_4" in the select2 menu
     And I should not see the choice "label_5" in the select2 menu
-    When I fill in "Labels" with "t"
-    Then I should see the choice "t" in the select2 menu
+    When I fill in "Labels" with "test"
+    Then I should see the choice "test" in the select2 menu
     And I should see the choice "test1" in the select2 menu
-    And I should see the choice "that2" in the select2 menu
-    And I should see the choice "this3" in the select2 menu
+    And I should not see the choice "that2" in the select2 menu
+    And I should not see the choice "this3" in the select2 menu
     And I should not see the choice "terrier" in the select2 menu

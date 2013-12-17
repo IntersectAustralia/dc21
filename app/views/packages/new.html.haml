@@ -96,4 +96,9 @@
           = f.submit "Create Package"
 
 :javascript
-    $('#package_label_list').select2({tags: $('#package_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'})
+  $('#package_label_list').select2({
+    minimumInputLength: 3,
+    tags: $('#package_label_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });

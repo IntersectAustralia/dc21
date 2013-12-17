@@ -83,7 +83,12 @@
         = submit_tag "Update"
 
 :javascript
-  $('.select2_labels').select2({tags: $('.select2_labels').data('labels'), tokenSeparators: ['|'], separator: '|'});
+  $('.select2_labels').select2({
+    minimumInputLength: 3,
+    tags: $('.select2_labels').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
 
   ////////// PARENT 'CLASS' //////////
   function Parent($id) {
@@ -98,11 +103,15 @@
     var parents = $parent_selector.data('values');
 
     $parent_selector.select2({
+      minimumInputLength: 3,
       multiple: true,
       query: function (query){
           var data = {results: []};
 
           $.each(DC21.preload_data, function(){
+            if (data.results.length >= 100) {
+              return false;
+            }
             if (validDataFile(this.id) && this.exp_id.toString() == $id.val()){
               if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0){
                   data.results.push({id: this.id, text: this.text });

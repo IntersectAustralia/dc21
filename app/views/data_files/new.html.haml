@@ -57,7 +57,12 @@
         = f.submit "Upload", :class => 'btn'
 
 :javascript
-  $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'});
+  $('#data_file_label_list').select2({
+    minimumInputLength: 3,
+    tags: $('#data_file_label_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
 
   var parents = $('#data_file_parent_ids').data('values');
   var interim_data = _.indexBy(_.union(parents, $('#experiment_id').data('df')), 'id')
@@ -74,18 +79,23 @@
   });
 
   $('.file_relation_select').select2({
+    minimumInputLength: 3,
     multiple: true,
     query: function (query){
-        var data = {results: []};
-        $.each(DC21.preload_data, function(){
-          if (this.exp_id.toString() == $('#experiment_id').val()){
-            if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
-                data.results.push({id: this.id, text: this.text });
-            }
-          }
-        });
+      var data = {results: []};
+      $.each(DC21.preload_data, function(){
 
-        query.callback(data);
+        if (data.results.length >= 100) {
+          return false;
+        }
+        if (this.exp_id.toString() == $('#experiment_id').val()){
+          if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
+              data.results.push({id: this.id, text: this.text });
+          }
+        }
+      });
+
+      query.callback(data);
     }
   });
 

@@ -140,7 +140,12 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
-  $('#data_file_label_list').select2({tags: $('#data_file_label_list').data('labels'), tokenSeparators: ['|'], separator: '|'});
+  $('#data_file_label_list').select2({
+    minimumInputLength: 3,
+    tags: $('#data_file_label_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
 
   var invalid = ["#{@data_file.id}"];
   var parents = $('#data_file_parent_ids').data('values');
@@ -160,11 +165,15 @@
   });
 
   $('.file_relation_select').select2({
+    minimumInputLength: 3,
     multiple: true,
     query: function (query){
         var data = {results: []};
 
         $.each(DC21.preload_data, function(){
+          if (data.results.length >= 100) {
+            return false;
+          }
           if (validDataFile(this.id) && this.exp_id.toString() == $('#experiment_id').val()){
             if(query.term.length == 0 || this.text.toUpperCase().indexOf(query.term.toUpperCase()) >= 0  ){
                 data.results.push({id: this.id, text: this.text });
