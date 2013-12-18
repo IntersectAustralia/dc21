@@ -70,8 +70,7 @@
         .control-group
           = label_tag "experiment_id_#{file.id}", "Filter Files", class: "control-label"
           .controls
-            - dfs = file.experiment.data_files.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
-            = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), data: {df: dfs}, file_id: file.id
+            = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), file_id: file.id
             %br/
             Filter data files by #{@config.level2.downcase}
         .control-group
@@ -90,10 +89,13 @@
     separator: '|'
   });
 
+  ////////// Parents are initially the same //////////
+
+  var DC21 = {preload_data: []};
+
   ////////// PARENT 'CLASS' //////////
   function Parent($id) {
     var file_id = $id.attr('file_id');
-    var data = $id.data('df');
 
     ////////// TRACK INVALID DATA FILES //////////
     var invalid_dfs = [];
@@ -127,14 +129,14 @@
       // only when it is part of the set of uploaded data files
       // console.log("Focused object : " + invalid_dfs);
       var id = event.val;
-      if ($.inArray(id, uploaded_data_files)) {
+      if ($.inArray(id, uploaded_data_files) && parent_objects[id] != null) {
         parent_objects[id].data_file.set_invalid(file_id);
       }
     });
 
     $parent_selector.on('select2-removed', function(event){
       var id = event.val;
-      if ($.inArray(id, uploaded_data_files)) {
+      if ($.inArray(id, uploaded_data_files) && parent_objects[id] != null) {
         parent_objects[id].data_file.remove_invalid(file_id);
       }
     });
@@ -166,20 +168,25 @@
     }
 
     ////////// ON CHANGE EXPERIMENT //////////
-    var interim_data =  _.indexBy(_.union(parents, data), 'id')
-    var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
-
     $id.change(function() {
-      $.post("/data_files/api_search.json", { experiments: [$id.val()] }, function(data) {
-        var new_data = _.map(data, function(df){
-          return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
-        });
+      var exp_id = $id.val();
+      if ($.inArray(exp_id.toString(), _.keys(_.indexBy(DC21.preload_data,'exp_id'))) == -1) {
+        $id.attr('disabled', true);
+        $parent_selector.select2('enable', false);
+        $.post("/data_files/api_search.json", { experiments: [exp_id] }, function(data) {
+          var new_data = _.map(data, function(df){
+            return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
+          });
 
-        interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
-        DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
-      },
-      "json");
+          interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
+          DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
+          $id.removeAttr('disabled');
+          $parent_selector.select2('enable', true);
+        },
+        "json");
+      }
     });
+    $id.change();
   }
 
   ////////// INIT //////////
@@ -189,9 +196,9 @@
     parent = new Parent($(this));
 
     // Set reference by string for parent objects
-    id = $(this).attr('file_id');
-    uploaded_data_files.push(id);
-    parent_objects[$(this).attr('file_id')] = { 'data_file' : parent };
+    file_id = $(this).attr('file_id');
+    uploaded_data_files.push(file_id);
+    parent_objects[file_id] = { 'data_file' : parent };
   });
 
 

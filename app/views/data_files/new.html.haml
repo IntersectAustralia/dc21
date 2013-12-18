@@ -43,8 +43,7 @@
     .control-group
       = label_tag "experiment_id", "Filter Files", class: "control-label"
       .controls
-        - dfs = DataFile.order(:filename).collect {|a| {id: a.id, text: a.filename, exp_id: a.experiment_id}}
-        = select_tag 'experiment_id', option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, nil), data: {df: dfs}
+        = select_tag 'experiment_id', option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, nil)
         %br/
         Filter data files by #{@config.level2.downcase}
     .control-group
@@ -65,18 +64,27 @@
   });
 
   var parents = $('#data_file_parent_ids').data('values');
-  var interim_data = _.indexBy(_.union(parents, $('#experiment_id').data('df')), 'id')
-  var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
+  var interim_data = _.indexBy(_.union(parents), 'id')
 
+  var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
   $('#experiment_id').change(function() {
-    $.post( "/data_files/api_search.json", { experiments: [$('#experiment_id').val()] }, function( data ) {
-      var new_data = _.map(data, function(df){
-                       return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
-                     });
-      interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
-      DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
-    }, "json");
+    var exp_id = $('#experiment_id').val();
+    if ($.inArray(exp_id.toString(), _.keys(_.indexBy(DC21.preload_data,'exp_id'))) == -1) {
+      $('#experiment_id').attr('disabled', true);
+      $('.file_relation_select').select2("enable", false);
+      $.post( "/data_files/api_search.json", { experiments: [exp_id] }, function( data ) {
+        var new_data = _.map(data, function(df){
+                         return {id: df.file_id, exp_id: df.experiment_id, text: df.filename};
+                       });
+        interim_data = _.indexBy(_.union(DC21.preload_data, new_data), 'id')
+        DC21.preload_data = _.sortBy(_.values(interim_data), 'text');
+        $('.file_relation_select').select2("enable", true);
+        $('#experiment_id').removeAttr('disabled');
+      }, "json");
+    }
   });
+
+  $('#experiment_id').change()
 
   $('.file_relation_select').select2({
     minimumInputLength: 3,
