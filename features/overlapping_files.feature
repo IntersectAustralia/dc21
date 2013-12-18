@@ -180,7 +180,8 @@ Feature: Overlapping Files
     And there should be files named "toa5.dat, weather_station_15_min.dat, sample3.txt, WTC01_Table1.dat, package1.zip, Test_OCR.jpg" in the system
 
   #EYETRACKER-181
-  Scenario: Overlap TOA5 file should not produce relationships where a file is both parent and child
+  @javascript
+  Scenario: Overlap TOA5 file should not produce parent relationships where a file is both parent and child, should not be able to add child as parent during mass update
     Given I have uploaded "1.dat" with type "RAW"
     And I have uploaded "sample1.txt" with parents "1.dat"
     And I have uploaded "2.dat" with parents "sample1.txt"
@@ -188,4 +189,7 @@ Feature: Overlapping Files
     Then I should see "The file replaced one or more other files with similar data. Replaced files: 1.dat, 2.dat"
     And file "3.dat" should have children "sample1.txt"
     And file "3.dat" should have parents ""
+    And I fill in "Parents" with "sample1.txt" within the file area for '3.dat'
+    Then I should see "No matches found"
     And there should be files named "sample1.txt, 3.dat" in the system
+

@@ -76,7 +76,7 @@
         .control-group
           = label_tag "parent_ids_#{file.id}", "Parents", class: "control-label"
           .controls
-            = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields}, name: "files[#{file.id}][parent_ids]"
+            = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields, children: file.child_ids}, name: "files[#{file.id}][parent_ids]"
     .form-actions
       .actions
         = submit_tag "Update"
@@ -97,12 +97,14 @@
   function Parent($id) {
     var file_id = $id.attr('file_id');
 
-    ////////// TRACK INVALID DATA FILES //////////
-    var invalid_dfs = [];
-
     ////////// START PARENTS //////////
     var $parent_selector = $('#parent_ids_' + file_id);
     var parents = $parent_selector.data('values');
+
+    ////////// TRACK INVALID DATA FILES //////////
+    var invalid_dfs = _.map($parent_selector.data('children'), function(id){
+                return id.toString();
+              });
 
     $parent_selector.select2({
       minimumInputLength: 3,
