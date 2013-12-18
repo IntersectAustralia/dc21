@@ -150,8 +150,9 @@
   var parents = $('#data_file_parent_ids').data('values');
   var children = $('#data_file_child_ids').data('values');
 
-  var interim_data = _.indexBy(_.union(parents, children), 'id')
-  var DC21 = {preload_data: _.sortBy(_.values(interim_data), 'text')};
+
+  var interim_data = {};
+  var DC21 = {preload_data: []};
 
   $('#experiment_id').change(function() {
     var exp_id = $('#experiment_id').val();
