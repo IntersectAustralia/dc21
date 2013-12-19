@@ -184,7 +184,7 @@ Feature: Edit system configuration
     And I have facility "Facility0" with code "f0"
     And I have experiment "Experiment 1" which belongs to facility "f0"
     And I am on the system config page
-    Then I should see "L2 Parameters:Enabled"
+    Then I should see field "L2 Parameters" with value "Enabled"
     When I am on the edit system config page
     Then the "L2 Parameters" checkbox should be checked
     When I am on the facilities page

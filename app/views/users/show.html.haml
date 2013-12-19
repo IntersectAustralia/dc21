@@ -6,17 +6,17 @@
   = render 'actions'
 
   %h2 User details for #{@user.email}
-  = render_field "Email", @user.email
-  = render_field "First name", breaking_word_wrap(@user.first_name, 60)
-  = render_field "Last name", breaking_word_wrap(@user.last_name, 60)
+  - render_field "Email", @user.email
+  - render_field "First name", breaking_word_wrap(@user.first_name, 60)
+  - render_field "Last name", breaking_word_wrap(@user.last_name, 60)
 
   - if !@user.pending_approval?
-    = render_field_with_block "Last Logged In" do
+    - render_field_with_block "Last Logged In" do
       - if @user.last_sign_in_at.nil?
         Never logged in
       - else
         = @user.last_sign_in_at.localtime.strftime("%d/%m/%Y %I:%M%p")
-  = render_field "Role", (@user.role ? @user.role.name : "")
-  = render_field "Status", @user.status_description
+  - render_field "Role", (@user.role ? @user.role.name : "")
+  - render_field "Status", @user.status_description
 
   = render 'actions'

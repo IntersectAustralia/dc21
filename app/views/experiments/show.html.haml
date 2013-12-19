@@ -4,15 +4,15 @@
 .container
   = render 'actions'
   %h2{:title => @experiment.name} Details for the #{@experiment.name} experiment
-  = render_field "ID", @experiment.id
-  = render_field "Parent", @experiment.parent_name
-  = render_field "Name", @experiment.name
-  = render_description "Description", @experiment.description
-  = render_field "Start date", @experiment.start_date.to_s(:date_only) if @experiment.start_date
-  = render_field "End date", @experiment.end_date.to_s(:date_only) if @experiment.end_date
-  = render_field "Subject", @experiment.subject
-  = render_field "Access rights", @experiment.access_rights_description
-  = render_field_with_block "FOR codes" do
+  - render_field "ID", @experiment.id
+  - render_field "Parent", @experiment.parent_name
+  - render_field "Name", @experiment.name
+  - render_description "Description", @experiment.description
+  - render_field "Start date", @experiment.start_date.to_s(:date_only) if @experiment.start_date
+  - render_field "End date", @experiment.end_date.to_s(:date_only) if @experiment.end_date
+  - render_field "Subject", @experiment.subject
+  - render_field "Access rights", @experiment.access_rights_description
+  - render_field_with_block "FOR codes" do
     %ul#for_codes_list
       - @experiment.experiment_for_codes.each do |code|
         %li{:title => code.name}= code.name

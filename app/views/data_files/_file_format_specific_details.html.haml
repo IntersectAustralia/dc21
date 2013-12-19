@@ -1,5 +1,5 @@
 - @data_file.metadata_items.each do |item|
-  = render_field item.key.humanize, item.value
+  - render_field item.key.humanize, item.value
 
 %hr/
 %h3 Columns

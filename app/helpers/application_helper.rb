@@ -39,18 +39,16 @@ module ApplicationHelper
   private
   def render_field_content(label, content)
     div_id = label.tr(" ,", "_").downcase
-    html = "<div class='control-group'>"
-    html << "<div class='control-label' title='#{h label}'>"
-    html << (h label)
-    html << ":"
-    html << '</div>'
-    html << "<div class='controls'>"
-    html << "<div class='record' id='#{div_id + '_display'}' title='#{string_escape  content}'>"
-    html << content
-    html << '</div>'
-    html << '</div>'
-    html << '</div>'
-    html.html_safe
+    haml_tag :div, class: 'control-group' do
+      haml_tag :div, class: 'control-label', title: label do
+        haml_concat label + ":"
+      end
+      haml_tag :div, class: 'controls' do
+        haml_tag :div, class: 'record', id: "#{div_id + '_display'}", title: content do
+          haml_concat content
+        end
+      end
+    end
   end
 
   private
@@ -58,39 +56,34 @@ module ApplicationHelper
     div_id = label.tr(" ,", "_").downcase
     #value = content.gsub("\n", "<br />").html_safe
     values = content.split("\n")
-    html = "<div class='control-group'>"
-    html << "<div class='control-label' title='#{h label}'>"
-    html << (h label)
-    html << ":"
-    html << '</div>'
-    html << "<div class='controls'>"
-    html << "<div class='description' id='#{div_id + '_display'}' title='#{string_escape content}'>"
-    values.each do |value|
-      html << value
-      html << '<br>'
+    haml_tag :div, class: 'control-group' do
+      haml_tag :div, class: 'control-label', title: label do
+        haml_concat label + ":"
+      end
+      haml_tag :div, class: 'controls' do
+        haml_tag :div, class: 'description', id: "#{div_id + '_display'}", title: content do
+          values.each do |value|
+            haml_concat value + '<br>'
+          end
+        end
+      end
     end
-    html << '</div>'
-    html << '</div>'
-    html << '</div>'
-    html.html_safe
   end
 
   private
   def render_field_list(label, content)
     #lists for FOR codes, Tags in files and API token
     div_id = label.tr(" ,", "_").downcase
-    html = "<div class='control-group'>"
-    html << "<div class='control-label' title='#{h label}'>"
-    html << (h label)
-    html << ":"
-    html << '</div>'
-    html << "<div class='controls'>"
-    html << "<div class='record' id='#{div_id + '_display'}'>"
-    html << content
-    html << '</div>'
-    html << '</div>'
-    html << '</div>'
-    html.html_safe
+    haml_tag :div, class: 'control-group' do
+      haml_tag :div, class: 'control-label', title: label do
+        haml_concat label + ":"
+      end
+      haml_tag :div, class: 'controls' do
+        haml_tag :div, class: 'record', id: "#{div_id + '_display'}" do
+          haml_concat content
+        end
+      end
+    end
   end
 
   private

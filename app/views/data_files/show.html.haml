@@ -28,49 +28,49 @@
 #file_details
   .container
     %h2 Basic Information
-    = render_field "Name", @data_file.filename
-    = render_field "Type", @data_file.file_processing_status
-    = render_field "File format", @data_file.format
+    - render_field "Name", @data_file.filename
+    - render_field "Type", @data_file.file_processing_status
+    - render_field "File format", @data_file.format
     .description
-      = render_description "Description", @data_file.file_processing_description
+      - render_description "Description", @data_file.file_processing_description
 
-    = render_field_with_block "Tags" do
+    - render_field_with_block "Tags" do
       - @data_file.tags.each do |tag|
         %span{:title => tag.name}= tag.name
         %br/
-    = render_field "Labels", @data_file.label_list_display
-    = render_field "#{@config.level2}", @data_file.experiment_name
-    = render_field "#{@config.level1}", @data_file.facility_name
-    = render_field "Date added", @data_file.created_at.to_s(:with_time)
+    - render_field "Labels", @data_file.label_list_display
+    - render_field "#{@config.level2}", @data_file.experiment_name
+    - render_field "#{@config.level1}", @data_file.facility_name
+    - render_field "Date added", @data_file.created_at.to_s(:with_time)
     - if @data_file.processed_by_resque?
-      = render_field "Creation status", @data_file.transfer_status
+      - render_field "Creation status", @data_file.transfer_status
     - if !@data_file.modifiable? and @data_file.is_package?
-      = render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"
+      - render_field "Packaging progress", "#{number_to_human_size(@data_file.zip_progress)} processed"
 
-    = render_field "Size", number_to_human_size(@data_file.file_size)
-    = render_field "File ID", @data_file.id
-    = render_field "ID", @data_file.external_id
-    = render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
+    - render_field "Size", number_to_human_size(@data_file.file_size)
+    - render_field "File ID", @data_file.id
+    - render_field "ID", @data_file.external_id
+    - render_field "Added by", (@data_file.created_by ? @data_file.created_by.email : "")
     -if @data_file.is_package?
-      = render_field "Title", @data_file.title
-      = render_field "Published", @data_file.published ? "Yes" : "No"
+      - render_field "Title", @data_file.title
+      - render_field "Published", @data_file.published ? "Yes" : "No"
       - if @data_file.published and !@data_file.published_date.nil?
-        = render_field "Published by", @data_file.published_by.full_name
-        = render_field "Published date", @data_file.published_date.to_s(:with_time)
+        - render_field "Published by", @data_file.published_by.full_name
+        - render_field "Published date", @data_file.published_date.to_s(:with_time)
 
     - unless @data_file.is_toa5?
       .container
         - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
         - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
-        = render_field "Start time", start_date
-        = render_field "End time", end_date
+        - render_field "Start time", start_date
+        - render_field "End time", end_date
 
   .container
     %h2
       File Relationships
       = link_to 'Add All Related Files to Cart', add_all_cart_items_path(:related => @data_file.id), :class => "btn"
     - @cart_item_ids = cart_items.collect(&:id)
-    = render_field_with_block "Parents" do
+    - render_field_with_block "Parents" do
       - if @data_file.parents.present?
         - @data_file.parents.order(:filename).each do |data_file|
           %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
@@ -78,7 +78,7 @@
       - else
         No parent files defined.
 
-    = render_field_with_block "Children" do
+    - render_field_with_block "Children" do
       - if @data_file.children.present?
         - @data_file.children.order(:filename).each do |data_file|
           %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
@@ -89,9 +89,9 @@
     - if @data_file.is_toa5?
       .container
         %h2 Information From The File
-        = render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
-        = render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
-        = render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
+        - render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
+        - render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
+        - render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
         = render "file_format_specific_details"
 
 

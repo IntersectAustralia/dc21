@@ -8,38 +8,38 @@
 
 .container
   %h2 System Configuration
-  = render_field "Local System Name", @config.name
-  = render_field "Research Centre Name", @config.research_centre_name
-  = render_field "Overarching Entity", @config.entity
-  = render_field "Address", @config.address1 + ', ' + @config.address2 + ', ' + @config.address3
-  = render_field "Telephone Numbers", @config.telephone_number
-  = render_field "Email", @config.email
-  = render_field "Description", @config.description
-  = render_field "URLs", @config.urls
-  = render_field "Org. L1 Singular", @config.level1
-  = render_field "Org. L1 Plural", @config.level1_plural
-  = render_field "Org. L2 Singular", @config.level2
-  = render_field "Org. L2 Plural", @config.level2_plural
-  = render_field "L2 Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
+  - render_field "Local System Name", @config.name
+  - render_field "Research Centre Name", @config.research_centre_name
+  - render_field "Overarching Entity", @config.entity
+  - render_field "Address", @config.address1 + ', ' + @config.address2 + ', ' + @config.address3
+  - render_field "Telephone Numbers", @config.telephone_number
+  - render_field "Email", @config.email
+  - render_field "Description", @config.description
+  - render_field "URLs", @config.urls
+  - render_field "Org. L1 Singular", @config.level1
+  - render_field "Org. L1 Plural", @config.level1_plural
+  - render_field "Org. L2 Singular", @config.level2
+  - render_field "Org. L2 Plural", @config.level2_plural
+  - render_field "L2 Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
 
   %h2 OCR Processing
-  = render_field "Auto OCR on Upload", @config.auto_ocr_on_upload ? 'Enabled':'Disabled'
-  = render_field "Auto OCR Regular Expression", @config.auto_ocr_regex
-  = render_field "OCR Supported MIME Types", @config.ocr_types
+  - render_field "Auto OCR on Upload", @config.auto_ocr_on_upload ? 'Enabled':'Disabled'
+  - render_field "Auto OCR Regular Expression", @config.auto_ocr_regex
+  - render_field "OCR Supported MIME Types", @config.ocr_types
   .control-group
     .controls
       %i Note: Tesseract will be used if the ABBYY details are not provided.
-  = render_field "ABBYY Host", @config.ocr_cloud_host
-  = render_field "ABBYY App Name", @config.ocr_cloud_id
-  = render_field "ABBYY Password", '*****'
+  - render_field "ABBYY Host", @config.ocr_cloud_host
+  - render_field "ABBYY App Name", @config.ocr_cloud_id
+  - render_field "ABBYY Password", '*****'
 
   %h2 Speech Recognition Processing
-  = render_field "Auto SR on Upload", @config.auto_sr_on_upload ? 'Enabled':'Disabled'
-  = render_field "Auto SR Regular Expression", @config.auto_sr_regex
-  = render_field "SR Supported MIME Types", @config.sr_types
-  = render_field "Koemei Host", @config.sr_cloud_host
-  = render_field "Koemei Login", @config.sr_cloud_id
-  = render_field "Koemei Password", '*****'
+  - render_field "Auto SR on Upload", @config.auto_sr_on_upload ? 'Enabled':'Disabled'
+  - render_field "Auto SR Regular Expression", @config.auto_sr_regex
+  - render_field "SR Supported MIME Types", @config.sr_types
+  - render_field "Koemei Host", @config.sr_cloud_host
+  - render_field "Koemei Login", @config.sr_cloud_id
+  - render_field "Koemei Password", '*****'
 
 .form-actions
   .actions-pre

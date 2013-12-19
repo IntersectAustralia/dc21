@@ -4,10 +4,10 @@
 = render 'user_registers/contentnavigation'
 .container
   %h2 User Details
-  = render_field "User Name", breaking_word_wrap(current_user.email, 60)
-  = render_field "First Name", breaking_word_wrap(current_user.first_name, 60)
-  = render_field "Last Name", breaking_word_wrap(current_user.last_name, 60)
-  = render_field_with_block "API Token" do
+  - render_field "User Name", breaking_word_wrap(current_user.email, 60)
+  - render_field "First Name", breaking_word_wrap(current_user.first_name, 60)
+  - render_field "Last Name", breaking_word_wrap(current_user.last_name, 60)
+  - render_field_with_block "API Token" do
     - if current_user.authentication_token.blank?
       No token generated - click generate to get a token
       %br/

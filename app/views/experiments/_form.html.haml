@@ -7,7 +7,7 @@
   = render "shared/error_messages", :target => @experiment
 
   .control-group
-    = render_field "ID", @experiment.id
+    - render_field "ID", @experiment.id
 
   .control-group
     = f.label :parent_experiment_id, "Parent", class: "control-label"
