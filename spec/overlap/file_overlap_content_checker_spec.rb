@@ -69,14 +69,14 @@ end
 
 def create_from_sample(sample_name, name_as=nil)
   path = Rails.root.join('samples/overlap_tests', sample_name).to_s
-  data_file = DataFile.new(:path => path,
+  data_file = DataFile.new(
                            :filename => name_as ? name_as : sample_name,
-                           :created_by => Factory(:user),
                            :file_processing_status => DataFile::STATUS_RAW,
                            :experiment_id => Factory(:experiment).id,
                            :file_processing_description => 'description',
                            :file_size => 0)
-
+  data_file.path = path
+  data_file.created_by = Factory(:user)
   format = FileTypeDeterminer.new.identify_file(data_file)
   data_file.format = format
 

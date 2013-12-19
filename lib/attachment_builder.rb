@@ -35,14 +35,16 @@ class AttachmentBuilder
 
     path, new_filename = store_file("#{parent.filename}#{ext}", tmp)
 
-    DataFile.create(:path => path,
+    data_file = DataFile.create(
                     :filename => new_filename,
-                    :created_by => parent.created_by,
                     :format => File.mime_type?(path),
                     :file_size => tmp.size,
-                    :transfer_status => DataFile::RESQUE_QUEUED,
                     :file_processing_status => "PROCESSED",
                     :experiment_id => parent.experiment_id)
+    data_file.created_by = parent.created_by
+    data_file.path = path
+    data_file.transfer_status = DataFile::RESQUE_QUEUED
+    data_file
   end
 
   private
@@ -50,15 +52,16 @@ class AttachmentBuilder
   def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time, parent_file_ids, child_file_ids)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
-    data_file = DataFile.new(:path => path,
+    data_file = DataFile.new(
                              :filename => filename,
-                             :created_by => @current_user,
                              :file_processing_status => type,
                              :experiment_id => experiment_id,
                              :file_processing_description => description,
                              :file_size => size,
                              :start_time => start_time,
                              :end_time => end_time)
+    data_file.created_by = @current_user
+    data_file.path = path
     data_file.tag_ids = tags
     data_file.label_ids = labels
     data_file.parent_ids = parent_file_ids
