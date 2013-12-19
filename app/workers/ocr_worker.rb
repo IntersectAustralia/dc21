@@ -89,9 +89,9 @@ class OCRWorker
         File.open(output_file.path, "w:UTF-8") {|f| f.write(recognized_text.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => ""})) }
         ocr_type = "ABBYY - #{@config.ocr_cloud_host}"
       else
-        if `which tesseract`[/tesseract/]
+        if tesseract_installed?
           tmp = Tempfile.new('dc21_ocr')
-          if system *%W(tesseract #{parent.path} #{tmp.path})
+          if run_tesseract(parent,tmp)
             system *%W(mv #{tmp.path}.txt #{output_file.path})
             ocr_type = %x(tesseract -v 2>&1).split("\n")[0].camelize
           else
@@ -123,6 +123,13 @@ class OCRWorker
     end
   end
 
+  def run_tesseract(parent, tmp)
+    system *%W(tesseract #{parent.path} #{tmp.path})
+  end
+
+  def tesseract_installed?
+    `which tesseract`[/tesseract/].eql?("tesseract")
+  end
 
 end
 
