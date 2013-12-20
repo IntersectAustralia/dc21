@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :data_file do
     sequence(:filename) { |n| "file-#{n}" }
-    path "a-path"
+    path "/tmp/a-path"
     association :created_by, :factory => :user
     association :published_by, :factory => :user
     association :experiment
@@ -13,7 +13,7 @@ FactoryGirl.define do
 
   factory :package do
     sequence(:filename) { |n| "file-#{n}" }
-    path "a-path"
+    path "/tmp/a-path"
     association :created_by, :factory => :user
     association :published_by, :factory => :user
     association :experiment
