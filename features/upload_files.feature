@@ -24,14 +24,21 @@ Feature: Upload files
       | Video      |
       | Gap-Filled |
 
-  @wip @javascript
+  @javascript
   Scenario: Additional file select box appears after previous one is used
     Given I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
-    And I select "samples/sample1.txt" to upload with "files_field"
-    Then I should see "files_field_2"
+    And I select "samples/sample1.txt" to upload with "files_field_0"
+    And I select "samples/sample2.txt" to upload with "files_field_1"
+    And I press "Upload"
+    And the uploaded files display should include "sample1.txt" with file type "RAW"
+    And the uploaded files display should include "sample1.txt" with messages "success"
+    And the uploaded files display should include "sample1.txt" with experiment "My Experiment"
+    And the uploaded files display should include "sample2.txt" with file type "RAW"
+    And the uploaded files display should include "sample2.txt" with messages "success"
+    And the uploaded files display should include "sample2.txt" with experiment "My Experiment"
 
   Scenario: Try to upload without selecting any files
     Given I am on the upload page
@@ -305,7 +312,7 @@ Feature: Upload files
     Then I should see details displayed
       | Start time | Unknown |
 
-  @javascript @wip
+  @javascript
 
   Scenario: When entering a dates for non-toa5, i should also have the option of entering times
     Given I am on the upload page
@@ -320,9 +327,11 @@ Feature: Upload files
     And I should see "end_time" for file "sample1.txt"
     And I should not see "start_hr" for file "sample1.txt"
     And I should not see "end_hr" for file "sample1.txt"
-
     And I fill in "2010-06-03" for "Start Time"
     And I fill in "2010-06-10" for "End Time"
+    And I click on "Start Time"
+    And I click on "End Time"
+    And I wait for 2 seconds
     Then I should see "start_hr" for file "sample1.txt"
     And I should see "start_min" for file "sample1.txt"
     And I should see "start_sec" for file "sample1.txt"
@@ -330,7 +339,7 @@ Feature: Upload files
     And I should see "end_min" for file "sample1.txt"
     And I should see "end_sec" for file "sample1.txt"
 
-  @javascript @wip
+  @javascript
 
   Scenario: When clearing a date for non-toa5, times should also be removed
     Given I am on the upload page
@@ -342,11 +351,16 @@ Feature: Upload files
     And I press "Upload"
     And I fill in "2010-06-03" for "Start Time"
     And I fill in "2010-06-10" for "End Time"
+    And I click on "Start Time"
+    And I click on "End Time"
+    And I wait for 2 seconds
     And I should see "start_hr" for file "sample1.txt"
     And I should see "end_hr" for file "sample1.txt"
     And I fill in "" for "Start Time"
     And I fill in "" for "End Time"
-
+    And I click on "Start Time"
+    And I click on "End Time"
+    And I wait for 2 seconds
     Then I should not see "start_hr" for file "sample1.txt"
     And I should not see "start_min" for file "sample1.txt"
     And I should not see "start_sec" for file "sample1.txt"
@@ -365,13 +379,18 @@ Feature: Upload files
     And I check "Photo"
     And I press "Upload"
     And I fill in "2010-06-03" for "Start Time"
+    And I click on "Start Time"
+
     And I select "05" from "Start Hour"
     And I select "30" from "Start Min"
     And I select "45" from "Start Second"
     And I fill in "2010-06-10" for "End Time"
+    And I click on "End Time"
+
     And I select "06" from "End Hour"
     And I select "31" from "End Min"
     And I select "44" from "End Second"
+    And I press "Upload"
 
   Scenario: The date format is on the date files page after uploading a file
     Given I am on the upload page
@@ -531,12 +550,12 @@ Feature: Upload files
     And the uploaded files display should include "Test_SR.wav" with experiment "My Experiment"
     And file "Test_SR.wav" should have type "RAW"
     And file "Test_SR.wav" should have experiment "My Experiment"
-   And I am on the data file details page for Test_SR.wav
-   And I should see details displayed
-     | Parents  | No parent files defined. |
-     | Children | Test_SR.wav.txt          |
-   And I should not see "Creation status"
-   And file "Test_SR.wav.txt" should have a UUID created
+    And I am on the data file details page for Test_SR.wav
+    And I should see details displayed
+      | Parents  | No parent files defined. |
+      | Children | Test_SR.wav.txt          |
+    And I should not see "Creation status"
+    And file "Test_SR.wav.txt" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
       | Filename        | Added by               | Type      |
@@ -553,13 +572,13 @@ Feature: Upload files
     And the uploaded files display should include "Test_SR.mp3" with experiment "My Experiment"
     And file "Test_SR.mp3" should have type "RAW"
     And file "Test_SR.mp3" should have experiment "My Experiment"
-  And I am on the data file details page for Test_SR.mp3
-  And I should see details displayed
-    | Parents  | No parent files defined. |
-    | Children | Test_SR.mp3.txt          |
-  And I should not see "Creation status"
-  And file "Test_SR.mp3.txt" should have a UUID created
- When I am on the list data files page
+    And I am on the data file details page for Test_SR.mp3
+    And I should see details displayed
+      | Parents  | No parent files defined. |
+      | Children | Test_SR.mp3.txt          |
+    And I should not see "Creation status"
+    And file "Test_SR.mp3.txt" should have a UUID created
+    When I am on the list data files page
     Then I should see "exploredata" table with
       | Filename        | Added by               | Type      |
       | Test_SR.mp3.txt | admin@intersect.org.au | PROCESSED |
@@ -605,9 +624,9 @@ Feature: Upload files
     And file "Test_OCR.jpg.txt" should have a UUID created
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename     | Added by               | Type |
-      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED  |
-      | Test_OCR.jpg | admin@intersect.org.au | RAW  |
+      | Filename         | Added by               | Type      |
+      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED |
+      | Test_OCR.jpg     | admin@intersect.org.au | RAW       |
 
   #EYETRACKER-138
   Scenario: Check UUID is blank for uploaded image file not conforming to auto OCR processing config

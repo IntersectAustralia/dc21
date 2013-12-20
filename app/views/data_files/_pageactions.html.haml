@@ -10,7 +10,7 @@
 - delete_warning_tail = "? \nThis action cannot be undone."
 - delete_warning = delete_warning_beginning << delete_warning_contents << delete_warning_station << delete_warning_time << delete_relationships << delete_warning_tail
 
-- if !@data_file.is_complete? and current_user.is_admin? and @data_file.is_package?
+- if !@data_file.modifiable? and current_user.is_admin?
   - delete_warning_incomplete = "\n\nBefore deleting this package, you should ensure the background job is terminated using the job admin screen."
   - delete_warning << delete_warning_incomplete
 

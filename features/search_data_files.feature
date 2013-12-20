@@ -18,15 +18,15 @@ Feature: Search data files by date range
       | Video |
       | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | label_list | experiment    | external_id | id | transfer_status | format |
-      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | A, B   | My Experiment | test ID     |    | QUEUED              | TOA5   |
-      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | B, C   | My Experiment |             | 1  | WORKING             | BAGIT  |
-      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | A      | My Experiment |             |    | FAILED              | Unknown |
-      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | C      | My Experiment |             |    | COMPLETE            | image/jpeg |
-      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | D      | Other         |             |    | COMPLETE            | image/png  |
-      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |        | Experiment 2  |             |    | FAILED              | video/mpeg |
-      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |        | My Experiment |             |    | WORKING             | audio/mpeg |
-      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              |        | Experiment 2  |             |    | QUEUED              | audio/x-wav |
+      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | label_list | experiment    | facility            | external_id | id | transfer_status | format      |
+      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | A, B       | My Experiment | HFE Weather Station | test ID     |    | QUEUED          | TOA5        |
+      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | B, C       | My Experiment | HFE Weather Station |             | 1  | WORKING         | BAGIT       |
+      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | A          | My Experiment | HFE Weather Station |             |    | FAILED          | Unknown     |
+      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | C          | My Experiment | HFE Weather Station |             |    | COMPLETE        | image/jpeg  |
+      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | D          | Other         | ROS_WS              |             |    | COMPLETE        | image/png   |
+      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |            | Experiment 2  | Tree Chambers       |             |    | FAILED          | video/mpeg  |
+      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |            | My Experiment | HFE Weather Station |             |    | WORKING         | audio/mpeg  |
+      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              |            | Experiment 2  | Tree Chambers       |             |    | QUEUED          | audio/x-wav |
     And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
     And file "mydata7.dat" has metadata item "station_name" with value "TC"
     And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
@@ -39,10 +39,6 @@ Feature: Search data files by date range
     And file "datafile4.dat" has column info "Humi", "Percent", "Avg"
     And file "datafile1.dat" has column info "temp3", "DegC", "Avg"
     And file "datafile1.dat" has column info "humidity", "DegC", "Avg"
-    And I have facilities
-      | name                | code   |
-      | HFE Weather Station | HFE_WS |
-      | Tree Chambers       | TC     |
     And I have column mappings
       | code  | name        |
       | Rnfll | Rainfall    |
@@ -121,7 +117,6 @@ Feature: Search data files by date range
     And the "upload_from_date" field should contain "2011-01-01"
     And the "upload_to_date" field should contain "2011-11-30"
 
-  @wip
   Scenario: Search for files from specific facilities
     When I am on the list data files page
     Then I should see facility checkboxes
@@ -135,13 +130,15 @@ Feature: Search data files by date range
     Then I should see "exploredata" table with
       | Filename      |
       | mydata6.dat   |
+      | datafile5.dat |
+      | mydata7.dat   |
+      | datafile2.dat |
       | mydata8.dat   |
       | datafile4.dat |
     And the "ROS_WS" checkbox should be checked
     And the "HFE Weather Station" checkbox should be checked
     And the "Tree Chambers" checkbox should not be checked
 
-  @wip
   Scenario: Search for files from specific facilities and by date range
     When I am on the list data files page
     And I check "HFE Weather Station"
@@ -153,6 +150,8 @@ Feature: Search data files by date range
     Then I should see "exploredata" table with
       | Filename      |
       | mydata6.dat   |
+      | datafile5.dat |
+      | mydata7.dat   |
       | datafile4.dat |
 
   Scenario: Search by Uploader
@@ -434,18 +433,20 @@ Feature: Search data files by date range
     When I check "Rnfl"
     Then the "Rainfall" checkbox should be checked
 
-  @javascript @wip
-
+  @javascript
   Scenario: Expanding a parent column name should show the children
     Given I am on the list data files page
     And I follow Showing
     And I click on "Columns:"
+    And I wait for 2 seconds
     Then I should not see "Rnfl"
     Then I should not see "Rnfll"
     When I expand "Rainfall"
+    And I wait for 2 seconds
     Then I should see "Rnfl"
     Then I should see "Rnfll"
     When I collapse "Rainfall"
+    And I wait for 2 seconds
     Then I should not see "Rnfl"
     Then I should not see "Rnfll"
 

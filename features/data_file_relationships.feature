@@ -12,7 +12,7 @@ Feature: Edit data file relationships
       | sample.txt           | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other                |                                   | UNKNOWN                | TOA5   |                   |                 |       |
       | file.txt             | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment     | desc.                             | UNKNOWN                |        |                   |                 |       |
       | error.txt            | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1                | desc.                             | ERROR                  |        |                   |                 |       |
-      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 | FAILED          | 12345 |
+      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 | WORKING         | 12345 |
 
   @javascript
   Scenario: Edit and view relationships
@@ -55,7 +55,7 @@ Feature: Edit data file relationships
 
 
   @javascript
-  Scenario: Add related files excludes error/incomplete files
+  Scenario: Add related files excludes incomplete files
     Given I am logged in as "admin@intersect.org.au"
     And I should see "0 Files in Cart"
     And I have data files

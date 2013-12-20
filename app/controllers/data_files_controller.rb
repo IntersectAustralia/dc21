@@ -55,14 +55,19 @@ class DataFilesController < ApplicationController
   end
 
   def edit
-    data_file = DataFile.find(params[:id])
-    if !data_file.modifiable? and data_file.processed_by_resque? and !current_user.is_admin?
-      redirect_to data_file_path, alert: "Cannot edit - Creation status is not COMPLETE."
+    if !@data_file.modifiable? and !current_user.is_admin?
+      redirect_to data_file_path(@data_file), alert: "Cannot edit - Creation status is not COMPLETE."
+      return
     end
     set_tab :explore, :contentnavigation
   end
 
   def update
+    if !@data_file.modifiable? and !current_user.is_admin?
+      redirect_to data_file_path(@data_file), alert: "Cannot edit - Creation status is not COMPLETE."
+      return
+    end
+
     @data_file.tag_ids = params[:tags]
 
 
@@ -84,7 +89,7 @@ class DataFilesController < ApplicationController
     old_filename = @data_file.filename
     if @data_file.update_attributes(params[:data_file])
       @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root']) unless @data_file.is_package?
-      redirect_to data_file_path, notice: SAVE_MESSAGE
+      redirect_to data_file_path(@data_file), notice: SAVE_MESSAGE
     else
       render action: "edit"
     end
@@ -125,10 +130,8 @@ class DataFilesController < ApplicationController
   end
 
   def process_metadata_extraction
-    file = DataFile.find(params[:id])
-    format = file.format
-    MetadataExtractor.new.extract_metadata(file, format, true)
-    redirect_to data_file_path(file), :notice => "Data file has been queued for processing."
+    MetadataExtractor.new.extract_metadata(@data_file, @data_file.format, true)
+    redirect_to data_file_path(@data_file), :notice => "Data file has been queued for processing."
   end
 
   def bulk_update
@@ -203,38 +206,36 @@ class DataFilesController < ApplicationController
   end
 
   def destroy
-    file = DataFile.find(params[:id])
-    if !file.modifiable? and file.processed_by_resque?
-      unless current_user.is_admin?
-        redirect_to data_file_path, alert: "Cannot delete - Creation status is not COMPLETE."
-        return
-      end
+
+    if !@data_file.modifiable? and !current_user.is_admin?
+      redirect_to data_file_path(@data_file), alert: "Cannot delete - Creation status is not COMPLETE."
+      return
     end
 
-    if file.is_package?
-      if file.destroy
+    if @data_file.is_package?
+      if @data_file.destroy
         begin
-          if archive_files(file)
-            redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully archived.")
+          if archive_files(@data_file)
+            redirect_to(data_files_path, :notice => "The file '#{@data_file.filename}' was successfully archived.")
           end
         rescue Errno::ENOENT => e
           Rails.logger.error e
-          redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed but the files itself could not be archived. \nPlease copy this entire error for your system administrator.")
+          redirect_to(data_files_path, :alert => "The file '#{@data_file.filename}' was successfully removed but the files itself could not be archived. \nPlease copy this entire error for your system administrator.")
         end
       else
-        redirect_to(data_file_path(file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
+        redirect_to(data_file_path(@data_file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
     else
-      if file.destroy
+      if @data_file.destroy
         begin
           File.delete @data_file.path
-          redirect_to(data_files_path, :notice => "The file '#{file.filename}' was successfully removed.")
+          redirect_to(data_files_path, :notice => "The file '#{@data_file.filename}' was successfully removed.")
         rescue Errno::ENOENT => e
           Rails.logger.error e
-          redirect_to(data_files_path, :alert => "The file '#{file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
+          redirect_to(data_files_path, :alert => "The file '#{@data_file.filename}' was successfully removed from the system, however the file itself could not be deleted. \nPlease copy this entire error for your system administrator.")
         end
       else
-        redirect_to(data_file_path(file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
+        redirect_to(data_file_path(@data_file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
     end
   end

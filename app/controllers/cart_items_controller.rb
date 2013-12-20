@@ -22,7 +22,7 @@ class CartItemsController < ApplicationController
     current_cart_items = cart_items.collect(&:id)
 
     respond_to do |format|
-      if data_file.is_complete? or !data_file.is_package?
+      if data_file.modifiable?
         if !current_cart_items.include? data_file.id
           current_user.cart_items << data_file
           format.html {
@@ -45,10 +45,10 @@ class CartItemsController < ApplicationController
         end
       else
         format.html {
-          redirect_to session[:return_to]||data_files_path, notice: 'File could not be added: The package is not complete.'
+          redirect_to session[:return_to]||data_files_path, notice: 'File could not be added: The processing is not complete.'
         }
         format.js {
-          partial = render_to_string :partial => "layouts/notice", :locals => {:msg => 'File could not be added: The package is not complete.'}
+          partial = render_to_string :partial => "layouts/notice", :locals => {:msg => 'File could not be added: The processing is not complete.'}
           data = {:notice => partial, :status => 422}
           render :json => data.to_json
         }

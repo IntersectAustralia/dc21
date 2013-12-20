@@ -211,7 +211,7 @@ Given /^file "(.*)" has the following metadata$/ do |filename, table|
 end
 
 Then /^I should see facility checkboxes$/ do |table|
-  labels = find(".facility").all("label").map { |label| label.text.strip }
+  labels = all(".facility > .facility_group > label").map { |label| label.text.strip }
   expected_labels = table.raw.collect { |row| row[0] }
   labels.should eq(expected_labels)
 end
@@ -269,7 +269,7 @@ end
 
 When /^I visit the delete url for "([^"]*)"$/ do |filename|
   file = DataFile.find_by_filename filename
-  visit_path data_file_path(file), :delete
+  page.driver.submit :delete, data_file_path(file), {}
 end
 
 Then /^I should see postprocess error "(.*)" for "(.*)"$/ do |error_message, filename|
@@ -318,8 +318,10 @@ end
 
 When /^(?:|I )select "([^"]*)" to upload with "([^"]*)"$/ do |path, locator|
   files = path.split(",").collect { |filename| File.expand_path(filename.strip) }.join(",")
+  msg = "cannot attach file, no file field with id, name, or label '#{locator}' found"
+  find(:xpath, XPath::HTML.file_field(locator), :message => msg).set(files)
 
-  page.attach_file(locator, files.first)
+  #page.attach_file(locator, files.first)
 end
 
 Then /^the uploaded files display should include "([^"]*)" with file type "([^"]*)"$/ do |filename, type|
@@ -492,14 +494,14 @@ end
 Then /^I should see "([^"]*)" for file "([^"]*)"$/ do |field, file|
   file_obj = DataFile.find_by_filename(file)
   field_id = "file_#{file_obj.id}_#{field.downcase.gsub(/\s/, '_')}"
-  step "I should see element with id \"#{field_id}\""
+  expect{find_field(field_id)}.not_to raise_error
 
 end
 
 Then /^I should not see "([^"]*)" for file "([^"]*)"$/ do |field, file|
   file_obj = DataFile.find_by_filename(file)
   field_id = "file_#{file_obj.id}_#{field.downcase.gsub(/\s/, '_')}"
-  step "I should not see element with id \"#{field_id}\""
+  expect{find_field(field_id)}.to raise_error
 
 end
 
@@ -570,8 +572,7 @@ end
 When /^I add ([^"]*) to the cart$/ do |name|
   data_file = DataFile.find_by_filename(name)
   link_id = "add_cart_item_#{data_file.id}"
-  link = find_link(link_id)
-  link.click
+  click_link(link_id)
   wait_until do
     page.evaluate_script('$.active') == 0
   end

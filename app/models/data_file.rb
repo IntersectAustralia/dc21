@@ -85,8 +85,8 @@ class DataFile < ActiveRecord::Base
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
 
-  scope :completed_items, where("transfer_status = ? OR uuid IS NULL", RESQUE_COMPLETE)
-  scope :count_unadded_items, where("transfer_status != ?", RESQUE_COMPLETE)
+  scope :completed_items, where("transfer_status in (?, ?) OR transfer_status IS NULL OR uuid IS NULL", RESQUE_COMPLETE, RESQUE_FAILED)
+  scope :count_unadded_items, where("transfer_status not in (?, ?)", RESQUE_COMPLETE, RESQUE_FAILED)
   scope :most_recent_first, order("created_at DESC")
   scope :most_recent_first_and_completed_items, order("created_at DESC").where("transfer_status = ? OR uuid IS NULL", RESQUE_COMPLETE)
   scope :earliest_start_time, order("start_time ASC").where("start_time IS NOT NULL")
@@ -117,10 +117,6 @@ class DataFile < ActiveRecord::Base
     published | false
   end
 
-  def is_complete?
-    transfer_status.eql? RESQUE_COMPLETE
-  end
-
   def label_list
     self.labels.pluck(:name).join("|")
   end
@@ -135,7 +131,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def modifiable?
-    transfer_status.eql? RESQUE_COMPLETE or transfer_status.eql? RESQUE_FAILED or transfer_status.blank?
+    self.processed_by_resque? ? (transfer_status.eql? RESQUE_COMPLETE or transfer_status.eql? RESQUE_FAILED) : true
   end
 
   def mark_as_queued
