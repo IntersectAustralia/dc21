@@ -62,6 +62,7 @@ Spork.prefork do
     config.before(:each) {
       Rails.env = "test"
       ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;"
+      ActionMailer::Base.deliveries.clear
     }
   end
   class Warden::SessionSerializer

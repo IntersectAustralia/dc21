@@ -44,7 +44,7 @@ class SRUploadWorker
           "Koemei Media ID: #{media_id}\n"
           output_file.save
 
-          Resque.enqueue_in(15.minutes, SRPollWorker, {output_id: output_file.id, parent_id: parent.id, media_id: media_id})
+          Resque.enqueue_in(15.minutes, SRPollWorker, {'output_id' => output_file.id, 'parent_id' => parent.id, 'media_id' => media_id})
 
         rescue RestClient::ExceptionWithResponse => e
           output_response_error(e)
