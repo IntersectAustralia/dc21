@@ -35,7 +35,7 @@ class AttachmentBuilder
 
     path, new_filename = store_file("#{parent.filename}#{ext}", tmp)
 
-    data_file = DataFile.create(
+    data_file = DataFile.new(
                     :filename => new_filename,
                     :format => File.mime_type?(path),
                     :file_size => tmp.size,
@@ -44,6 +44,7 @@ class AttachmentBuilder
     data_file.created_by = parent.created_by
     data_file.path = path
     data_file.transfer_status = DataFile::RESQUE_QUEUED
+    data_file.save
     data_file
   end
 
