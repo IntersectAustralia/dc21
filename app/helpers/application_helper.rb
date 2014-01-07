@@ -1,8 +1,4 @@
 module ApplicationHelper
-  def title(page_title)
-    content_for(:title) { page_title }
-  end
-
   #shorthand for the required asterisk
   def required
     "<span class='asterisk' title='Required'>*</span>".html_safe

@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1 "#{@config.level1_plural}" / "#{@config.level2_plural}" / Parameters / New
+  #{@config.level1_plural} / #{@config.level2_plural} / Parameters / New
 
 .container
   = render 'form'

@@ -1,4 +1,9 @@
-%title= @config.name
+%title
+  - if content_for?(:breadcrumb)
+    = @config.name + ' - ' + yield(:breadcrumb)
+  - else
+    = @config.name
+
 = stylesheet_link_tag "application"
 = javascript_include_tag "application"
 = csrf_meta_tag

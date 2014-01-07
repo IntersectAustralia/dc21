@@ -15,7 +15,7 @@
     = render 'layouts/banner'
     #content
       - if content_for?(:breadcrumb)
-        = yield :breadcrumb
+        %h1{title: yield(:breadcrumb)}= yield :breadcrumb
       #content_container
         = yield
   = render 'layouts/footer'

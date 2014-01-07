@@ -2,9 +2,8 @@
   .mapping.new.btn
     = link_to "Add Mapping", new_column_mapping_path
 
-
 - content_for :breadcrumb do
-  %h1 Admin / Column Mappings
+  Admin / Column Mappings
 
 - if @column_mappings.empty?
   %h3 No column mappings to display.

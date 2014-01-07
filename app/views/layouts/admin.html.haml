@@ -15,15 +15,15 @@
     = render 'layouts/banner'
     #content
       - if content_for?(:breadcrumb)
-        = yield :breadcrumb
+        %h1{title: yield(:breadcrumb)}= yield :breadcrumb
       #content_container
         .contentnavigation
           = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-            = tab.users 'Users', users_path, :id => "users"
-            = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests"
-            = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings"
-            = tab.resque 'Resque', landing_resque_index_path, :id => "resque"
-            = tab.systemconfig 'System Configuration', admin_config_path, :id => "config"
+            = tab.users 'Users', users_path, :id => "users_tab"
+            = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests_tab"
+            = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings_tab"
+            = tab.resque 'Resque', landing_resque_index_path, :id => "resque_tab"
+            = tab.systemconfig 'System Configuration', admin_config_path, :id => "config_tab"
             = yield :actions
         = yield
   = render 'layouts/footer'

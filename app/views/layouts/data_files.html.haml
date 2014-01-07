@@ -20,7 +20,7 @@
     #content
       #menu
       - if content_for? :pageactions
-        =yield :pageactions
+        = yield :pageactions
       - else
         .pageactions
           = link_to "Upload", new_data_file_path, :id => "newdataentry", :class => "btn btn-primary" unless current_page?(:controller => 'data_files', :action => 'new')
@@ -44,15 +44,14 @@
             =link_to "Edit cart",  cart_items_path, :id => "cart_edit"
 
       - if content_for?(:breadcrumb)
-        = yield :breadcrumb
-
+        %h1{title: yield(:breadcrumb)}= yield :breadcrumb
 
       #content_container
         .contentnavigation
           = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
-            = tab.dashboard 'Dashboard', home_pages_path, :id => "dashboard"
-            = tab.explore 'Explore Data', data_files_path, :id => "data"
-            = tab.facilities "#{@config.level1_plural}", facilities_path, :id => "facilities"
+            = tab.dashboard 'Dashboard', home_pages_path, :id => "dashboard_tab"
+            = tab.explore 'Explore Data', data_files_path, :id => "data_tab"
+            = tab.facilities "#{@config.level1_plural}", facilities_path, :id => "facilities_tab"
             = yield :actions
 
 

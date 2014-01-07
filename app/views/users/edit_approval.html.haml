@@ -1,5 +1,5 @@
 - content_for :breadcrumb do
-  %h1 Admin / Access Requests / #{@user.email}
+  Admin / Access Requests / #{@user.email}
 
 .container
   = form_for(@user, :url => approve_user_path(@user)) do |f|

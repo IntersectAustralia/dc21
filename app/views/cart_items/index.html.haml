@@ -1,7 +1,6 @@
 - remove_all_warning = "Do you really want to remove #{@cart_items.size} files from your cart?"
-
 - content_for :breadcrumb  do
-  %h1 Cart / Edit Cart
+  Cart / Edit Cart
 
 - if @cart_items.empty?
   %h3 Your cart is empty.
@@ -18,9 +17,9 @@
       = link_to "Package",  new_package_path, :class => "btn btn-primary"
 
   %h2.results
-    Your cart 
+    Your cart
     = @cart_items.size == 1 ? "Showing 1 file" : "contains #{@cart_items.size} files"
-    for a 
+    for a
     total of #{number_to_human_size(current_user.cart_size)}
 
   %table#exploredata.cart

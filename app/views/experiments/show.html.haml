@@ -1,5 +1,5 @@
 - content_for :breadcrumb  do
-  %h1{:title => @experiment.name} #{@config.level1_plural} / #{@config.level2_plural} / #{@experiment.name}
+  #{@config.level1_plural} / #{@config.level2_plural} / #{@experiment.name}
 
 .container
   = render 'actions'

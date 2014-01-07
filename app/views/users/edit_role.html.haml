@@ -1,5 +1,5 @@
 - content_for :breadcrumb do
-  %h1 Admin / Users / #{@user.email}
+  Admin / Users / #{@user.email}
 
 .container
   = form_for(@user, :url => update_role_user_path(@user)) do |f|
