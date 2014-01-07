@@ -73,7 +73,7 @@ class OCRWorker
           task_status = xml_data.elements["response/task"].attributes["status"]
 
           # Check if there were errors ..
-          raise "The task hasn't been processed because an error occurred" if task_status == "ProcessingFailed"
+          raise "The task hasn't been processed because an error occurred on ABBYY" if task_status == "ProcessingFailed"
 
           # .. or you don't have enough credits (see http://ocrsdk.com/documentation/specifications/task-statuses for other statuses)
           raise "You don't have enough money on your account to process the task" if task_status == "NotEnoughCredits"
