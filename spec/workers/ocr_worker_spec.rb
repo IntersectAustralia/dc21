@@ -86,7 +86,6 @@ describe OCRWorker do
       resque_job = Resque::Plugins::Status::Hash.new()
       resque_job.status = "WORKING"
       Resque::Plugins::Status::Hash.stub(:get).and_return(resque_job)
-      worker.stub(:tesseract_installed?).and_return(true)
       expect { worker.perform }.to raise_error
 
       output.file_processing_description.should eq("OCR ERROR: Tesseract does not support #{parent.path} (#{parent.format})")
@@ -266,7 +265,6 @@ describe OCRWorker do
       resque_job = Resque::Plugins::Status::Hash.new()
       resque_job.status = "WORKING"
       Resque::Plugins::Status::Hash.stub(:get).and_return(resque_job)
-      worker.stub(:tesseract_installed?).and_return(true)
       expect { worker.perform }.not_to raise_error
 
       tesseract_version = %x(tesseract -v 2>&1).split("\n")[0].camelize

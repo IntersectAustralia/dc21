@@ -124,6 +124,7 @@ class OCRWorker
   end
 
   def run_tesseract(parent, tmp)
+    Rails.logger.info "Saving #{parent.path} to #{tmp.path} temporarily"
     system *%W(tesseract #{parent.path} #{tmp.path})
   end
 
