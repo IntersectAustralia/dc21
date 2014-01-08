@@ -8,7 +8,7 @@ set already_confirmed_password 0
 spawn bash vm_setup.sh
 
 expect {
-    "password for devel:" { send "$PASSWORD\r" ; exp_continue}
+    "password for $USER:" { send "$PASSWORD\r" ; exp_continue}
 
     "Password: <hidden>" {send ""; exp_continue}
 
