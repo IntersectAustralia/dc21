@@ -1,3 +1,4 @@
+source setup_config
 status=0
 if [ -z "$DC21_TAG" ]; then
   echo "Please define DC21_TAG"
