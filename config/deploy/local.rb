@@ -1,9 +1,9 @@
-set :user, 'dc21'
+set :user, ENV['USER']
 set :deploy_base, "/home/#{user}"
 set :use_sudo, true
 set :copy_dir, "/home/#{user}/tmp"
 set :remote_copy_dir, "/tmp"
-set :rails_env, "production"
+set :rails_env, ENV['DC21_STAGE'] || "production"
 set :stage, ENV['DC21_STAGE'] || "production"
 set :branch, ENV['DC21_TAG'] unless ENV['DC21_TAG'].to_s.eql?("")
 
