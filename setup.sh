@@ -1,4 +1,5 @@
 source setup_config
+sudo yum install -y expect
 wget https://raw.github.com/IntersectAustralia/dc21/$DC21_TAG/vm_setup.sh
 /usr/bin/expect -<<EOD
 set timeout -1
