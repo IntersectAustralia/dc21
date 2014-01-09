@@ -67,14 +67,29 @@ if [ $? -ne 0 ]; then
     source $HOME/.rvm/scripts/rvm
     echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> $HOME/.bashrc
   else
-    echo "$(tput setaf 1)ERROR $status: RVM install failed. Manually install RVM/Ruby 1.9.3-p448 and rerun the vm_setup script.$(tput sgr0)"
+    echo "$(tput setaf 1)ERROR $status: RVM install failed. Manually install RVM and rerun the vm_setup script.$(tput sgr0)"
     exit $status;
   fi
 fi
 
-
 source $HOME/.bash_profile
 source $HOME/.bashrc
+
+# Update RVM and Ruby to 1.9.3 if needed
+rvm list | grep ruby-1.9.3-p448 > /dev/null
+if [ $? -ne 0 ]; then
+  echo "Installing ruby-1.9.3-p448 as it was not detected"
+  rvm get head
+  rvm install 1.9.3-p448
+  status=$?
+  if [ $status -eq 0 ]; then
+    echo "$(tput setaf 2)RVM updated and Ruby 1.9.3-p448 installed.$(tput sgr0)"
+  else
+    echo "$(tput setaf 1)ERROR $status: Ruby 1.9.3-p448 install failed. Manually install Ruby 1.9.3-p448 and rerun the vm_setup script.$(tput sgr0)"
+    exit $status;
+  fi
+fi
+
 cd $HOME/code_base/dc21
 rvm use 1.9.3-p448@dc21app --create
 
