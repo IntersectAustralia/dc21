@@ -1,22 +1,25 @@
-DC21_HOST=www.example.com # Host name of this server excluding http://
-DC21_DB_PWD=dc21_test # Database password for the application
+export DC21_HOST=www.example.com # Host name of this server excluding http://
+export DC21_DB_PWD=dc21_test # Database password for the application
 # Uncomment the line below if you are setting up using the test AAF
-# DC21_AAF_TEST=true
-DC21_TAG=tag # The git tag you wish to deploy. This has been tested with 2.0.01 and above.
-DC21_STAGE=production # The type of server you are deploying. qa/staging/production
-PASSWORD=password # The password of this server
-JOAI=joaipass # jOAI password (at least six alphanumeric characters)
-FIRST_NAME=John # The first name of the initial user on the application
-LAST_NAME=Smith # The last name of the initial user on the application
-EMAIL=user@example.com # The email of the initial user on the application
-USER_PASS=userpass # The password of the initial user on the application
+# export DC21_AAF_TEST=true
+export DC21_TAG=tag # The git tag you wish to deploy. This has been tested with 2.0.01 and above.
+export DC21_STAGE=production # The type of server you are deploying. qa/staging/production
+export PASSWORD=password # The password of this server
+export JOAI=joaipass # jOAI password (at least six alphanumeric characters)
+
+# The following is for setting up the initial user
+
+export FIRST_NAME=John # The first name of the initial user on the application
+export LAST_NAME=Smith # The last name of the initial user on the application
+export EMAIL=user@example.com # The email of the initial user on the application
+export USER_PASS=userpass # The password of the initial user on the application
 
 # The following is for setting up SSL using OpenSSL automatically.
 # You can always update the SSL certificates manually at /etc/httpd/ssl/server.key and /etc/httpd/ssl/server.crt
 
-SSL_COUNTRY_CODE=AU # Country Name (2 letter code)
-SSL_STATE_CODE=NSW # State or Province Name (full name)
-SSL_CITY=Sydney # Locality Name (eg, city)
-SSL_ORGANIZATION_NAME=Intersect # Organization Name (eg, company)
-SSL_ORGANIZATION_UNIT_NAME=Intersect # Organizational Unit Name (eg, section)
-SSL_EMAIL=admin@example.com # The server administrator's email
+export SSL_COUNTRY_CODE=AU # Country Name (2 letter code)
+export SSL_STATE_CODE=NSW # State or Province Name (full name)
+export SSL_CITY=Sydney # Locality Name (eg, city)
+export SSL_ORGANIZATION_NAME=Intersect # Organization Name (eg, company)
+export SSL_ORGANIZATION_UNIT_NAME=Intersect # Organizational Unit Name (eg, section)
+export SSL_EMAIL=admin@example.com # The server administrator's email

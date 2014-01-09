@@ -1,4 +1,4 @@
-source setup_config
+source $HOME/setup_config
 status=0
 if [ -z "$DC21_TAG" ]; then
   echo "Please define DC21_TAG"
@@ -82,6 +82,7 @@ gem install bundler -v 1.0.20
 bundle install
 status=$?
 
+source $HOME/setup_config
 if [ $status -eq 0 ]; then
   cap local server_setup:deploy_config
 else
