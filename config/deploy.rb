@@ -28,12 +28,15 @@ set :copy_exclude, ["features/*", "spec/*", "performance/*"]
 
 set :branch do
   default_tag = 'HEAD'
-
-  puts "    Availible tags:".yellow
-  puts `git tag`
-  tag = Capistrano::CLI.ui.ask "Tag to deploy (make sure to push the branch/tag first) or HEAD?: [#{default_tag}] ".yellow
-  tag = default_tag if tag.empty?
+  tag = ENV['DC21_TAG'] || ""
+  if tag.empty?
+    puts "    Availible tags:".yellow
+    puts `git tag`
+    tag = Capistrano::CLI.ui.ask "Tag to deploy (make sure to push the branch/tag first) or HEAD?: [#{default_tag}] ".yellow
+    tag = default_tag if tag.empty?
+  end
   tag
+
 end
 
 set(:group) { "#{defined?(group) ? group : user}" }
