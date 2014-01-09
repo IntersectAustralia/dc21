@@ -11,6 +11,12 @@ Feature: Edit system configuration
     And I have the usual roles
     And "georgina@intersect.org.au" has role "Administrator"
     And "cindy@intersect.org.au" has role "Researcher"
+    And I have facilities
+      | name                |
+      | ROS Weather Station |
+    And I have experiments
+      | name             | description    | start_date | end_date   | subject | facility            | parent          | access_rights                                       |
+      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
 
 # EYETRACKER-1 EYETRACKER-95
 
@@ -141,6 +147,58 @@ Feature: Edit system configuration
       And the system configuration should have
       | ocr_cloud_token | Test ABBYY Password  |
       | sr_cloud_token  | Test Koemei Password |
+
+  Scenario: Update organisation level 1 and level 2 names
+    Given I am logged in as "georgina@intersect.org.au"
+    And I am on the system config page
+    Then I should see details displayed
+      | Org. L1 Singular | Facility     |
+      | Org. L1 Plural   | Facilities   |
+      | Org. L2 Singular | Experiment   |
+      | Org. L2 Plural   | Experiments  |
+    When I am on the view facility page for 'ROS Weather Station'
+    Then I should see "Facilities / ROS Weather Station"
+    And I should see "Facility"
+    And I should see "Edit Facility"
+    And I should see "New Experiment"
+    And I should see "Experiments"
+    When I click on "Edit Facility"
+    Then I should see "Facilities / ROS Weather Station / Edit"
+    And I should see "Edit Facility"
+    When I am on the view experiment page for 'Weather Station'
+    Then I should see "Details for the Weather Station Experiment"
+    And I should see "Edit Experiment"
+    When I am on the edit experiment page for 'Weather Station'
+    Then I should see "Facilities / Experiments / Weather Station / Edit"
+    And I should see "Edit Experiment"
+    When I am on the edit system config page
+    And I fill in the following:
+      | Org. L1 Singular | L1 sing     |
+      | Org. L1 Plural   | L1 plu      |
+      | Org. L2 Singular | L2 sing     |
+      | Org. L2 Plural   | L2 plu      |
+    And I press "Update"
+    And I am on the system config page
+    Then I should see details displayed
+      | Org. L1 Singular | L1 sing |
+      | Org. L1 Plural   | L1 plu  |
+      | Org. L2 Singular | L2 sing |
+      | Org. L2 Plural   | L2 plu  |
+    When I am on the view facility page for 'ROS Weather Station'
+    Then I should see "L1 plu / ROS Weather Station"
+    And I should see "L1 sing"
+    And I should see "Edit L1 sing"
+    And I should see "New L2 sing"
+    And I should see "L2 plu"
+    When I click on "Edit L1 sing"
+    Then I should see "L1 plu / ROS Weather Station / Edit"
+    And I should see "Edit L1 sing"
+    When I am on the view experiment page for 'Weather Station'
+    Then I should see "Details for the Weather Station L2 sing"
+    And I should see "Edit L2 sing"
+    When I am on the edit experiment page for 'Weather Station'
+    Then I should see "L1 plu / L2 plu / Weather Station / Edit"
+    And I should see "Edit L2 sing"
 
 # EYETRACKER-95
 

@@ -3,7 +3,7 @@
 
 .container
   = render 'actions'
-  %h2{:title => @experiment.name} Details for the #{@experiment.name} experiment
+  %h2{:title => @experiment.name} Details for the #{@experiment.name} #{@config.level2}
   - render_field "ID", @experiment.id
   - render_field "Parent", @experiment.parent_name
   - render_field "Name", @experiment.name
