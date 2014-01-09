@@ -1,5 +1,10 @@
 source setup_config
-sudo yum install -y expect
+
+type -P expect > /dev/null
+if [ $? -ne 0 ]; then
+  sudo yum install -y expect
+fi
+
 wget https://raw.github.com/IntersectAustralia/dc21/$DC21_TAG/vm_setup.sh
 /usr/bin/expect -<<EOD
 set timeout -1

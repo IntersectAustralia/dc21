@@ -3,6 +3,7 @@ DC21_DB_PWD=dc21_test # Database password for the application
 # Uncomment the line below if you are setting up using the test AAF
 # DC21_AAF_TEST=true
 DC21_TAG=tag # The git tag you wish to deploy. This has been tested with 2.0.01 and above.
+DC21_STAGE=production # The type of server you are deploying. qa/staging/production
 PASSWORD=password # The password of this server
 JOAI=joaipass # jOAI password (at least six alphanumeric characters)
 FIRST_NAME=John # The first name of the initial user on the application
@@ -12,7 +13,6 @@ USER_PASS=userpass # The password of the initial user on the application
 
 # The following is for setting up SSL using OpenSSL automatically.
 # You can always update the SSL certificates manually at /etc/httpd/ssl/server.key and /etc/httpd/ssl/server.crt
-# For more info
 
 SSL_COUNTRY_CODE=AU # Country Name (2 letter code)
 SSL_STATE_CODE=NSW # State or Province Name (full name)

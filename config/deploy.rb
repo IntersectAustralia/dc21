@@ -36,7 +36,6 @@ set :branch do
   tag
 end
 
-set(:user) { "#{defined?(user) ? user : 'devel'}" }
 set(:group) { "#{defined?(group) ? group : user}" }
 set(:user_home) { "/home/#{user}" }
 set(:deploy_to) { "#{user_home}/#{application}" }

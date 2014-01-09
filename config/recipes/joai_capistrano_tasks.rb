@@ -5,7 +5,6 @@ namespace :joai do
   set :webapp_dir, "#{catalina_home}/webapps"
   set :tomcat_conf, "#{catalina_home}/conf"
 
-  set :remote_directory, "/home/#{user}/joai"
   set :tomcat_bundle, "tomcat-joai.tar.gz"
   set :tomcat_package, 'apache-tomcat-6.0.35'
 
@@ -16,6 +15,7 @@ namespace :joai do
 
   desc 'Copy joai bundle to remote server'
   task :copy do
+    remote_directory = "/home/#{user}/joai"
     run "mkdir -p #{remote_directory}"
     upload("joai/#{tomcat_bundle}", "#{remote_directory}", :via => :scp)
     upload("joai/#{tomcat_service}", "#{remote_directory}", :via => :scp)
@@ -25,6 +25,7 @@ namespace :joai do
   desc "Unpack tomcat and install in usr directory"
   task :tomcat_install do
     sudo "yum -y install java-1.6.0-openjdk java-1.6.0-openjdk-devel"
+    remote_directory = "/home/#{user}/joai"
     run "cd #{remote_directory} && tar xvfz #{tomcat_bundle}"
     run "#{try_sudo} mv #{remote_directory}/#{tomcat_package} #{catalina_home}"
     run "#{try_sudo} mv #{remote_directory}/#{tomcat_service} /etc/init.d"

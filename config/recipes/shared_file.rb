@@ -52,7 +52,6 @@ namespace :shared_file do
 end
 
 after 'multistage:ensure' do
-  set(:rails_env) { "#{defined?(rails_env) ? rails_env : stage.to_s}" }
   set :shared_files, %W(
     config/environments/#{stage}.rb
     config/deploy/#{stage}.rb
