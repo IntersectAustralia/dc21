@@ -38,6 +38,8 @@ expect {
         }
     }
 
+    "Tag to deploy (make sure to push the branch/tag first) or HEAD?: [HEAD]" { send "$DC21_TAG\r" ; exp_continue}
+
     "Is this okay?" {send "yes\r" ; exp_continue}
 
     "Country Name (2 letter code)" {send "$SSL_COUNTRY_CODE\r" ; exp_continue}
