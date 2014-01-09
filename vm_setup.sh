@@ -98,6 +98,10 @@ else
   exit $status;
 fi
 
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
+sudo service httpd restart
+cap local deploy:restart
+
 status=$?
 if [ $status -eq 0 ]; then
   echo "$(tput setaf 3)Please copy the following certificate to register for AAF$(tput sgr0)"
@@ -106,7 +110,3 @@ else
   echo "$(tput setaf 1)ERROR $status: The local deploy process failed. Please investigate and try again.$(tput sgr0)"
   exit $status;
 fi
-
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
-sudo service httpd restart
-
