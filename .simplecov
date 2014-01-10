@@ -5,4 +5,5 @@ class SimpleCov::Formatter::MergedFormatter
   end
 end
 SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
+SimpleCov.merge_timeout(7200)
 SimpleCov.start 'rails'
