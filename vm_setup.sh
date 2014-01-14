@@ -50,6 +50,11 @@ if [ $? -ne 0 ]; then
 
   cd $HOME/code_base/tesseract-ocr/ && ./autogen.sh && ./configure && make && sudo make install && sudo mv $HOME/code_base/tesseract-ocr/tessdata/eng.* /usr/local/share/tessdata/
   sudo ldconfig
+
+  cd $HOME/code_base/
+  # Clean up downloaded files
+  rm -rf $HOME/code_base/tesseract-ocr* $HOME/code_base/leptonica-1.69*
+  echo "$(tput setaf 2)Tesseract installed.$(tput sgr0)"
 else
   echo "$(tput setaf 2)Tesseract detected, nothing to do.$(tput sgr0)"
 fi
@@ -107,7 +112,13 @@ fi
 
 status=$?
 if [ $status -eq 0 ]; then
-  cap local deploy:first_time
+  if [ "$DC21_UPGRADE" = "true" ]; then
+    sudo /etc/init.d/redis_6379 stop
+    sudo rm /etc/init.d/redis_6379
+    cap local server_setup:aaf_install server_setup:gem_install server_setup:passenger resque:setup shared_file:setup server_setup:config:apache deploy:safe
+  else
+    cap local deploy:first_time
+  fi
 else
   echo "$(tput setaf 1)ERROR $status: deploy config set up failed.$(tput sgr0)"
   exit $status;

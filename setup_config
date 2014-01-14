@@ -1,7 +1,6 @@
 export DC21_HOST=www.example.com # Host name of this server excluding http://
-export DC21_DB_PWD=dc21_test # Database password for the application
-# Uncomment the line below if you are setting up using the test AAF
-# export DC21_AAF_TEST=true
+export DC21_DB_PWD=dc21 # Database password for the application
+
 export DC21_TAG=tag # The git tag you wish to deploy. This has been tested with 2.0.01 and above.
 export DC21_STAGE=production # The type of server you are deploying. qa/staging/production
 export PASSWORD=password # The password of this server
@@ -23,3 +22,9 @@ export SSL_CITY=Sydney # Locality Name (eg, city)
 export SSL_ORGANIZATION_NAME=Intersect # Organization Name (eg, company)
 export SSL_ORGANIZATION_UNIT_NAME=Intersect # Organizational Unit Name (eg, section)
 export SSL_EMAIL=admin@example.com # The server administrator's email
+
+# Uncomment the line below if you are setting up using the test AAF
+# export DC21_AAF_TEST=true
+
+# Uncomment the line below if you are upgrading from 1.9.04 to 2.0.01
+# export DC21_UPGRADE=true
