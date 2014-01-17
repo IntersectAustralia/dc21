@@ -46,27 +46,27 @@
         = f.text_field :urls
 
     .control-group
-      = f.label :level1 , "Org. L1 Singular", class: "control-label"
+      = f.label :level1 , "Type of Org Unit (Singular)", class: "control-label"
       .controls
         = required
         = f.text_field :level1
     .control-group
-      = f.label :level1_plural , "Org. L1 Plural", class: "control-label"
+      = f.label :level1_plural , "Type of Org Unit (Plural)", class: "control-label"
       .controls
         = required
         = f.text_field :level1_plural
     .control-group
-      = f.label :level2 , "Org. L2 Singular", class: "control-label"
+      = f.label :level2 , "Type of Project (Singular)", class: "control-label"
       .controls
         = required
         = f.text_field :level2
     .control-group
-      = f.label :level2_plural , "Org. L2 Plural", class: "control-label"
+      = f.label :level2_plural , "Type of Project (Plural)", class: "control-label"
       .controls
         = required
         = f.text_field :level2_plural
     .control-group
-      = f.label :level2_parameters, "L2 Parameters", class: "control-label"
+      = f.label :level2_parameters, "Project Parameters", class: "control-label"
       .controls
         = f.check_box :level2_parameters, {}, 'true', 'false'
 

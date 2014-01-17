@@ -15,8 +15,8 @@ Feature: Edit system configuration
       | name                |
       | ROS Weather Station |
     And I have experiments
-      | name             | description    | start_date | end_date   | subject | facility            | parent          | access_rights                                       |
-      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
+      | name            | description    | start_date | end_date | subject | facility            | parent | access_rights                                    |
+      | Weather Station | Blah Blah Blah | 2011-10-30 |          | Rain    | ROS Weather Station |        | http://creativecommons.org/licenses/by-sa/3.0/au |
 
 # EYETRACKER-1 EYETRACKER-95
 
@@ -67,20 +67,20 @@ Feature: Edit system configuration
     When I fill in "Name" with ""
     And I fill in "Research Centre Name" with ""
     And I fill in "Entity" with ""
-    And I fill in "Org. L1 Singular" with ""
-    And I fill in "Org. L1 Plural" with ""
-    And I fill in "Org. L2 Singular" with ""
-    And I fill in "Org. L2 Plural" with ""
+    And I fill in "Type of Org Unit (Singular)" with ""
+    And I fill in "Type of Org Unit (Plural)" with ""
+    And I fill in "Type of Project (Singular)" with ""
+    And I fill in "Type of Project (Plural)" with ""
     And I press "Update"
     Then I should not see "System configuration updated successfully."
     And I should see "Please correct the following before continuing:"
     And I should see "Name can't be blank"
     And I should see "Research centre name can't be blank"
     And I should see "Entity can't be blank"
-    And I should see "Level1 can't be blank"
-    And I should see "Level1 plural can't be blank"
-    And I should see "Level2 can't be blank"
-    And I should see "Level2 plural can't be blank"
+    And I should see "Type of Org Unit (Singular) can't be blank"
+    And I should see "Type of Org Unit (Plural) can't be blank"
+    And I should see "Type of Project (Singular) can't be blank"
+    And I should see "Type of Project (Plural) can't be blank"
 
   # EYETRACKER-151 EYETRACKER-152 EYETRACKER-185
   Scenario: Check edited changes are kept after update
@@ -152,10 +152,10 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the system config page
     Then I should see details displayed
-      | Org. L1 Singular | Facility     |
-      | Org. L1 Plural   | Facilities   |
-      | Org. L2 Singular | Experiment   |
-      | Org. L2 Plural   | Experiments  |
+      | Type of Org Unit (Singular) | Facility    |
+      | Type of Org Unit (Plural)   | Facilities  |
+      | Type of Project (Singular)  | Experiment  |
+      | Type of Project (Plural)    | Experiments |
     When I am on the view facility page for 'ROS Weather Station'
     Then I should see "Facilities / ROS Weather Station"
     And I should see "Facility"
@@ -173,17 +173,17 @@ Feature: Edit system configuration
     And I should see "Edit Experiment"
     When I am on the edit system config page
     And I fill in the following:
-      | Org. L1 Singular | L1 sing     |
-      | Org. L1 Plural   | L1 plu      |
-      | Org. L2 Singular | L2 sing     |
-      | Org. L2 Plural   | L2 plu      |
+      | Type of Org Unit (Singular) | L1 sing |
+      | Type of Org Unit (Plural)   | L1 plu  |
+      | Type of Project (Singular)  | L2 sing |
+      | Type of Project (Plural)    | L2 plu  |
     And I press "Update"
     And I am on the system config page
     Then I should see details displayed
-      | Org. L1 Singular | L1 sing |
-      | Org. L1 Plural   | L1 plu  |
-      | Org. L2 Singular | L2 sing |
-      | Org. L2 Plural   | L2 plu  |
+      | Type of Org Unit (Singular) | L1 sing |
+      | Type of Org Unit (Plural)   | L1 plu  |
+      | Type of Project (Singular)  | L2 sing |
+      | Type of Project (Plural)    | L2 plu  |
     When I am on the view facility page for 'ROS Weather Station'
     Then I should see "L1 plu / ROS Weather Station"
     And I should see "L1 sing"
@@ -229,7 +229,7 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I have facility "Facility0" with code "f0"
     And I am on the edit system config page
-    When I fill in "Org. L2 Singular" with "long_name_of_20_char"
+    When I fill in "Type of Project (Singular)" with "long_name_of_20_char"
     And I press "Update"
     And I am on the facilities page
     And I follow the view link for facility "Facility0"
@@ -242,9 +242,9 @@ Feature: Edit system configuration
     And I have facility "Facility0" with code "f0"
     And I have experiment "Experiment 1" which belongs to facility "f0"
     And I am on the system config page
-    Then I should see field "L2 Parameters" with value "Enabled"
+    Then I should see field "Project Parameters" with value "Enabled"
     When I am on the edit system config page
-    Then the "L2 Parameters" checkbox should be checked
+    Then the "Project Parameters" checkbox should be checked
     When I am on the facilities page
     And I follow the view link for facility "Facility0"
     And I follow the view link for experiment "Experiment 1"
@@ -258,13 +258,13 @@ Feature: Edit system configuration
     And I have facility "Facility0" with code "f0"
     And I have experiment "Experiment 1" which belongs to facility "f0"
     When I am on the edit system config page
-    And I uncheck "L2 Parameters"
+    And I uncheck "Project Parameters"
     And I press "Update"
     When I should be on the system config page
     When I am on the edit system config page
-    Then the "L2 Parameters" checkbox should not be checked
+    Then the "Project Parameters" checkbox should not be checked
     When I am on the system config page
-    Then I should see field "L2 Parameters" with value "Disabled"
+    Then I should see field "Project Parameters" with value "Disabled"
     When I am on the facilities page
     And I follow the view link for facility "Facility0"
     And I follow the view link for experiment "Experiment 1"

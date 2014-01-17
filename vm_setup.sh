@@ -60,7 +60,7 @@ else
 fi
 
 cd $HOME/code_base
-git clone git://github.com/IntersectAustralia/dc21.git -b $DC21_TAG
+git clone git://github.com/IntersectAustralia/dc21.git $DC21_TAG
 cd $HOME/code_base/dc21
 
 # Set up RVM

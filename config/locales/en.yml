@@ -16,6 +16,10 @@ en:
       system_configuration:
         auto_ocr_regex: 'Auto OCR Regular Expression:'
         auto_sr_regex: 'Auto SR Regular Expression:'
+        level1: 'Type of Org Unit (Singular)'
+        level1_plural: 'Type of Org Unit (Plural)'
+        level2: 'Type of Project (Singular)'
+        level2_plural: 'Type of Project (Plural)'
     errors:
       models:
         facility:

@@ -16,11 +16,11 @@
   - render_field "Email", @config.email
   - render_field "Description", @config.description
   - render_field "URLs", @config.urls
-  - render_field "Org. L1 Singular", @config.level1
-  - render_field "Org. L1 Plural", @config.level1_plural
-  - render_field "Org. L2 Singular", @config.level2
-  - render_field "Org. L2 Plural", @config.level2_plural
-  - render_field "L2 Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
+  - render_field "Type of Org Unit (Singular)", @config.level1
+  - render_field "Type of Org Unit (Plural)", @config.level1_plural
+  - render_field "Type of Project (Singular)", @config.level2
+  - render_field "Type of Project (Plural)", @config.level2_plural
+  - render_field "Project Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
 
   %h2 OCR Processing
   - render_field "Auto OCR on Upload", @config.auto_ocr_on_upload ? 'Enabled':'Disabled'

@@ -33,14 +33,14 @@ class SystemConfiguration < ActiveRecord::Base
 
   def level2_cannot_equal_level1_fields
     if self.level1.eql? self.level2
-      errors.add(:level1, "singular cannot be the same as Level 2 singular")
+      errors.add(:level1, "cannot be the same as Type of Project (Singular)")
     elsif self.level1.eql? self.level2_plural
-      errors.add(:level1, "singular cannot be the same as Level 2 plural")
+      errors.add(:level1, "cannot be the same as Type of Project (Plural)")
     end
     if self.level1_plural.eql? self.level2
-      errors.add(:level1_plural, "cannot be the same as Level 2 singular")
+      errors.add(:level1_plural, "cannot be the same as Type of Project (Singular)")
     elsif self.level1_plural.eql? self.level2_plural
-      errors.add(:level1_plural, "cannot be the same as Level 2 plural")
+      errors.add(:level1_plural, "cannot be the same as Type of Project (Plural)")
     end
   end
 
