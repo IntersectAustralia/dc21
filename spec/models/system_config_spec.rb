@@ -87,11 +87,11 @@ describe SystemConfiguration do
       config = SystemConfiguration.instance
       result = config.update_attributes({:level1 => 'same name', :level2 => 'same name'})
       result.should be_false
-      config.errors[:level1].should eq ["singular cannot be the same as Level 2 singular"]
+      config.errors[:level1].should eq ["cannot be the same as Type of Project (Singular)"]
 
       result = config.update_attributes({:level1_plural => 'same name'})
       result.should be_false
-      config.errors[:level1_plural].should eq ["cannot be the same as Level 2 singular"]
+      config.errors[:level1_plural].should eq ["cannot be the same as Type of Project (Singular)"]
     end
 
     it "should fail if a line in the address field is longer than 80 characters" do
