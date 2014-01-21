@@ -41,7 +41,7 @@ class AttachmentBuilder
                     :file_size => tmp.size,
                     :file_processing_status => "PROCESSED",
                     :experiment_id => parent.experiment_id)
-    data_file.created_by = parent.created_by
+    data_file.created_by = @current_user
     data_file.path = path
     data_file.transfer_status = DataFile::RESQUE_QUEUED
     data_file.save

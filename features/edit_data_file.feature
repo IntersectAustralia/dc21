@@ -163,9 +163,9 @@ Feature: Edit data files metadata
   Scenario: Remove unused labels from users view
     Given I have labels "label_1, label_2, label_3, label_4, label_5, terrier"
     And I have data files
-      | filename      | created_at       | uploaded_by                  | file_processing_status | experiment    | label_list |
-      | datafile1.dat | 04/12/2013 11:53 | researcher@intersect.org.au  | RAW                    | My Experiment | label_1    |
-      | sample2.txt   | 01/12/2011 13:45 | researcher@intersect.org.au  | CLEANSED               | Experiment 2  | label_5    |
+      | filename      | created_at       | uploaded_by                 | file_processing_status | experiment    | label_list |
+      | datafile1.dat | 04/12/2013 11:53 | researcher@intersect.org.au | RAW                    | My Experiment | label_1    |
+      | sample2.txt   | 01/12/2011 13:45 | researcher@intersect.org.au | CLEANSED               | Experiment 2  | label_5    |
     And I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "sample2.txt"

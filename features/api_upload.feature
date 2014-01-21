@@ -211,10 +211,10 @@ Feature: Upload files via the API
     Given I have uploaded "full_files/weather_station/weather_station_15_min.dat" with type "RAW"
     And I have uploaded "sample1.txt" with type "PROCESSED"
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
-      | file              | samples/full_files/weather_station/weather_station_05_min.dat |
-      | type              | RAW                                                           |
-      | experiment        | Flux Experiment 1                                             |
-      | parent_filenames  | weather_station_15_min.dat,sample1.txt                        |
+      | file             | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type             | RAW                                                           |
+      | experiment       | Flux Experiment 1                                             |
+      | parent_filenames | weather_station_15_min.dat,sample1.txt                        |
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 2 parents
     And file "weather_station_05_min.dat" should have parents "weather_station_15_min.dat,sample1.txt"
@@ -226,10 +226,10 @@ Feature: Upload files via the API
   #EYETRACKER-172
   Scenario: Assign parent relationships on non-existing files on API file upload
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
-      | file              | samples/full_files/weather_station/weather_station_05_min.dat |
-      | type              | RAW                                                           |
-      | experiment        | Flux Experiment 1                                             |
-      | parent_filenames  | weather_station_15_min.dat,sample1.txt                        |
+      | file             | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type             | RAW                                                           |
+      | experiment       | Flux Experiment 1                                             |
+      | parent_filenames | weather_station_15_min.dat,sample1.txt                        |
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 0 parents
     And file "weather_station_05_min.dat" should have parents ""

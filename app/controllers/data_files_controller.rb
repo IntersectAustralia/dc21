@@ -130,7 +130,7 @@ class DataFilesController < ApplicationController
   end
 
   def process_metadata_extraction
-    MetadataExtractor.new.extract_metadata(@data_file, @data_file.format, true)
+    MetadataExtractor.new.extract_metadata(@data_file, @data_file.format, current_user, true)
     redirect_to data_file_path(@data_file), :notice => "Data file has been queued for processing."
   end
 

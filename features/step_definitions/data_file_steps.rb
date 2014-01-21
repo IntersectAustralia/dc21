@@ -96,7 +96,7 @@ Given /^I have data files$/ do |table|
 
     unless label_csv.blank?
       labels = label_csv.split(",").collect { |label| label.strip }
-      labels.map { |label| df.labels << Label.find_or_create_by_name(label)}
+      labels.map { |label| df.labels << Label.find_or_create_by_name(label) }
     end
 
     if df.is_package?
@@ -397,6 +397,11 @@ Then /^file "([^"]*)" should have type "([^"]*)"$/ do |filename, type|
   DataFile.find_by_filename!(base_filename).file_processing_status.should eq(type)
 end
 
+Then /^file "([^"]*)" should be created by "([^"]*)"$/ do |filename, email|
+  base_filename = filename.split("/").last
+  DataFile.find_by_filename!(base_filename).created_by.email.should eq(email)
+end
+
 Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
   DataFile.find_by_filename!(filename).file_processing_description.should eq(desc)
 end
@@ -409,6 +414,7 @@ Then /^file "([^"]*)" should have parents "([^"]*)"$/ do |filename, parent_filen
   file = DataFile.find_by_filename!(filename)
   file.parents.collect(&:filename).sort.should eq(parent_filenames.split(",").sort)
 end
+
 
 Then /^file "([^"]*)" should have children "([^"]*)"$/ do |filename, children_filenames|
   file = DataFile.find_by_filename!(filename)
@@ -441,7 +447,7 @@ Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and exp
   upload(file, type, description, experiment, tags, "")
 end
 
-Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and parents "([^"]*)"$/ do | file, type, description, experiment, parents|
+Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and parents "([^"]*)"$/ do |file, type, description, experiment, parents|
   upload(file, type, description, experiment, "", parents)
 end
 
@@ -494,14 +500,14 @@ end
 Then /^I should see "([^"]*)" for file "([^"]*)"$/ do |field, file|
   file_obj = DataFile.find_by_filename(file)
   field_id = "file_#{file_obj.id}_#{field.downcase.gsub(/\s/, '_')}"
-  expect{find_field(field_id)}.not_to raise_error
+  expect { find_field(field_id) }.not_to raise_error
 
 end
 
 Then /^I should not see "([^"]*)" for file "([^"]*)"$/ do |field, file|
   file_obj = DataFile.find_by_filename(file)
   field_id = "file_#{file_obj.id}_#{field.downcase.gsub(/\s/, '_')}"
-  expect{find_field(field_id)}.to raise_error
+  expect { find_field(field_id) }.to raise_error
 
 end
 

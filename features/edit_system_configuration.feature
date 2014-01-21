@@ -142,9 +142,9 @@ Feature: Edit system configuration
     When I fill in the following:
       | ABBYY Password  |  |
       | Koemei Password |  |
-      And I press "Update"
-      And I should be on the system config page
-      And the system configuration should have
+    And I press "Update"
+    And I should be on the system config page
+    And the system configuration should have
       | ocr_cloud_token | Test ABBYY Password  |
       | sr_cloud_token  | Test Koemei Password |
 

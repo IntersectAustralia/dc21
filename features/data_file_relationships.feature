@@ -124,8 +124,8 @@ Feature: Edit data file relationships
     And I follow the view link for data file "sample1.txt"
     And I wait for 1 seconds
     Then I should see details displayed
-      | Parents     | datafile.dat                |
-      | Children    | No children files defined.  |
+      | Parents  | datafile.dat               |
+      | Children | No children files defined. |
 
 #EYETRACKER-170
   @javascript
@@ -158,8 +158,8 @@ Feature: Edit data file relationships
     And I follow the view link for data file "sample1.txt"
     And I wait for 1 seconds
     Then I should see details displayed
-      | Parents     | No parent files defined.    |
-      | Children    | No children files defined.  |
+      | Parents  | No parent files defined.   |
+      | Children | No children files defined. |
 
 #EYETRACKER-170
   Scenario: Multiple mass upload parent relationship

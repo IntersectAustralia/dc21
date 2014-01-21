@@ -43,11 +43,12 @@ describe SRPollWorker do
   let(:transcript){
     'This is a test script.'
   }
+  let(:user) { Factory(:user) }
 
   before(:each) {
     @parent = Factory(:data_file, filename: "abc.mp3", format: "audio/mpeg", path: File.join(Rails.root, "samples/Test_SR.mp3"))
     SRPollWorker.stub(:create).and_return("UUID-1")
-    MetadataExtractor.new.extract_metadata(@parent, @parent.format, true)
+    MetadataExtractor.new.extract_metadata(@parent, @parent.format, user, true)
     @output = @parent.children.first
 
     #This assumes successful upload
@@ -183,7 +184,7 @@ describe SRPollWorker do
         ActionMailer::Base.deliveries.empty?.should eq(false)
         email = ActionMailer::Base.deliveries.last
         email.subject.should eq("HIEv - Processing completed")
-        email.to.should eq([@parent.created_by.email])
+        email.to.should eq([user.email])
         email.body.should eq(<<-eos
 <p>Hello Fred Bloggs,</p>
 <p>The processing of file abc.mp3.txt is now complete.</p>

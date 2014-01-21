@@ -474,119 +474,6 @@ Feature: Upload files
     And I am on the data file details page for sample1.txt
     Then I should see field "Labels" with value "Abba, bebba"
 
-#EYETRACKER-7 EYETRACKER-140 EYETRACKER-169
-
-  Scenario: Check UUID is created for an uploaded jpeg or png image file
-    Given I logout
-    And I am logged in as "admin@intersect.org.au"
-    When I am on the edit system config page
-    And I check "Auto OCR on Upload"
-    And I press "Update"
-    When I am on the upload page
-    And I select "RAW" from "File type"
-    And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_OCR.jpg" to upload
-    And I press "Upload"
-    Then the most recent file should have name "Test_OCR.jpg.txt"
-    And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
-    And the uploaded files display should include "Test_OCR.jpg" with messages "success"
-    And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
-    And file "Test_OCR.jpg" should have type "RAW"
-    And file "Test_OCR.jpg" should have experiment "My Experiment"
-    And I am on the data file details page for Test_OCR.jpg
-    And I should see details displayed
-      | Parents  | No parent files defined. |
-      | Children | Test_OCR.jpg.txt         |
-    And I should not see "Creation status"
-    And file "Test_OCR.jpg.txt" should have a UUID created
-    When I am on the list data files page
-    Then I should see "exploredata" table with
-      | Filename         | Added by               | Type      |
-      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED |
-      | Test_OCR.jpg     | admin@intersect.org.au | RAW       |
-    Given I am on the upload page
-    When I select "RAW" from "File type"
-    And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_OCR.png" to upload
-    And I press "Upload"
-    Then the most recent file should have name "Test_OCR.png.txt"
-    And the uploaded files display should include "Test_OCR.png" with file type "RAW"
-    And the uploaded files display should include "Test_OCR.png" with messages "success"
-    And the uploaded files display should include "Test_OCR.png" with experiment "My Experiment"
-    And file "Test_OCR.png" should have type "RAW"
-    And file "Test_OCR.png" should have experiment "My Experiment"
-    And I am on the data file details page for Test_OCR.png
-    And I should see details displayed
-      | Parents  | No parent files defined. |
-      | Children | Test_OCR.png.txt         |
-    And I should not see "Creation status"
-    And file "Test_OCR.png.txt" should have a UUID created
-    When I am on the list data files page
-    Then I should see "exploredata" table with
-      | Filename         | Added by               | Type      |
-      | Test_OCR.png.txt | admin@intersect.org.au | PROCESSED |
-      | Test_OCR.png     | admin@intersect.org.au | RAW       |
-      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED |
-      | Test_OCR.jpg     | admin@intersect.org.au | RAW       |
-
-#EYETRACKER-8 EYETRACKER-140 EYETRACKER-169
-
-  Scenario: Check UUID is created for an uploaded mp3 or wav file
-    Given I logout
-    And I am logged in as "admin@intersect.org.au"
-    When I am on the edit system config page
-    And I check "Auto SR on Upload"
-    And I select "audio/mpeg" from "system_configuration_supported_sr_types"
-    And I select "audio/x-wav" from "system_configuration_supported_sr_types"
-    And I press "Update"
-    When I am on the upload page
-    And I select "RAW" from "File type"
-    And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_SR.wav" to upload
-    And I press "Upload"
-    Then the most recent file should have name "Test_SR.wav.txt"
-    And the uploaded files display should include "Test_SR.wav" with file type "RAW"
-    And the uploaded files display should include "Test_SR.wav" with messages "success"
-    And the uploaded files display should include "Test_SR.wav" with experiment "My Experiment"
-    And file "Test_SR.wav" should have type "RAW"
-    And file "Test_SR.wav" should have experiment "My Experiment"
-    And I am on the data file details page for Test_SR.wav
-    And I should see details displayed
-      | Parents  | No parent files defined. |
-      | Children | Test_SR.wav.txt          |
-    And I should not see "Creation status"
-    And file "Test_SR.wav.txt" should have a UUID created
-    When I am on the list data files page
-    Then I should see "exploredata" table with
-      | Filename        | Added by               | Type      |
-      | Test_SR.wav.txt | admin@intersect.org.au | PROCESSED |
-      | Test_SR.wav     | admin@intersect.org.au | RAW       |
-    Given I am on the upload page
-    When I select "RAW" from "File type"
-    And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_SR.mp3" to upload
-    And I press "Upload"
-    Then the most recent file should have name "Test_SR.mp3.txt"
-    And the uploaded files display should include "Test_SR.mp3" with file type "RAW"
-    And the uploaded files display should include "Test_SR.mp3" with messages "success"
-    And the uploaded files display should include "Test_SR.mp3" with experiment "My Experiment"
-    And file "Test_SR.mp3" should have type "RAW"
-    And file "Test_SR.mp3" should have experiment "My Experiment"
-    And I am on the data file details page for Test_SR.mp3
-    And I should see details displayed
-      | Parents  | No parent files defined. |
-      | Children | Test_SR.mp3.txt          |
-    And I should not see "Creation status"
-    And file "Test_SR.mp3.txt" should have a UUID created
-    When I am on the list data files page
-    Then I should see "exploredata" table with
-      | Filename        | Added by               | Type      |
-      | Test_SR.mp3.txt | admin@intersect.org.au | PROCESSED |
-      | Test_SR.mp3     | admin@intersect.org.au | RAW       |
-      | Test_SR.wav.txt | admin@intersect.org.au | PROCESSED |
-      | Test_SR.wav     | admin@intersect.org.au | RAW       |
-
-
 #EYETRACKER-7
 
   Scenario: Check UUID is blank for uploaded none image files
@@ -603,30 +490,47 @@ Feature: Upload files
     And file "sample1.txt" should have experiment "My Experiment"
     And file "sample1.txt" should not have a UUID created
 
-  #EYETRACKER-138  EYETRACKER-169
-  Scenario: Check UUID created for uploaded image file conforming to auto OCR processing config
+  #EYETRACKER-7 EYETRACKER-8 EYETRACKER-138 EYETRACKER-140 EYETRACKER-169
+  Scenario Outline: Check UUID created for uploaded image file conforming to autoprocessing config
     Given I logout
-    And I am logged in as "admin@intersect.org.au"
-    When I am on the edit system config page
-    And I check "Auto OCR on Upload"
-    And I press "Update"
+    And I have the following system configuration
+      | auto_<type>_on_upload |
+      | true                  |
+    And I am logged in as "<email>"
     When I am on the upload page
     When I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_OCR.jpg" to upload
+    And I select "samples/<file>" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_OCR.jpg.txt"
-    And the uploaded files display should include "Test_OCR.jpg" with file type "RAW"
-    And the uploaded files display should include "Test_OCR.jpg" with messages "success"
-    And the uploaded files display should include "Test_OCR.jpg" with experiment "My Experiment"
-    And file "Test_OCR.jpg" should have type "RAW"
-    And file "Test_OCR.jpg" should have experiment "My Experiment"
-    And file "Test_OCR.jpg.txt" should have a UUID created
+    Then the most recent file should have name "<file>.txt"
+    And the uploaded files display should include "<file>" with file type "RAW"
+    And the uploaded files display should include "<file>" with messages "success"
+    And the uploaded files display should include "<file>" with experiment "My Experiment"
+    And file "<file>" should have type "RAW"
+    And file "<file>" should have experiment "My Experiment"
+    And file "<file>.txt" should be created by "<email>"
+    And file "<file>.txt" should have a UUID created
+    And I am on the data file details page for <file>
+    And I should not see "Creation status"
+    And I should see details displayed
+      | Parents  | No parent files defined. |
+      | Children | <file>.txt               |
     When I am on the list data files page
     Then I should see "exploredata" table with
-      | Filename         | Added by               | Type      |
-      | Test_OCR.jpg.txt | admin@intersect.org.au | PROCESSED |
-      | Test_OCR.jpg     | admin@intersect.org.au | RAW       |
+      | Filename   | Added by | Type      |
+      | <file>.txt | <email>  | PROCESSED |
+      | <file>     | <email>  | RAW       |
+
+  Examples:
+    | file         | email                       | type |
+    | Test_OCR.jpg | admin@intersect.org.au      | ocr  |
+    | Test_OCR.jpg | researcher@intersect.org.au | ocr  |
+    | Test_OCR.png | admin@intersect.org.au      | ocr  |
+    | Test_OCR.png | researcher@intersect.org.au | ocr  |
+    | Test_SR.wav  | admin@intersect.org.au      | sr   |
+    | Test_SR.wav  | researcher@intersect.org.au | sr   |
+    | Test_SR.mp3  | admin@intersect.org.au      | sr   |
+    | Test_SR.mp3  | researcher@intersect.org.au | sr   |
 
   #EYETRACKER-138
   Scenario: Check UUID is blank for uploaded image file not conforming to auto OCR processing config
@@ -718,33 +622,23 @@ Feature: Upload files
     And file "Test_SR_2.mp3" should not have a UUID created
 
   #EYETRACKER-186
-  Scenario: OCR regular expression matching should be case insensitive
+  Scenario Outline: Regular expression matching should be case insensitive
     Given I logout
-    And I am logged in as "admin@intersect.org.au"
-    And I am on the edit system config page
-    And I check "Auto OCR on Upload"
-    And I fill in "Auto OCR Regular Expression" with "tEST"
-    And I press "Update"
+    And I have the following system configuration
+      | auto_<type>_on_upload | auto_<type>_regex |
+      | true                  | tEST              |
+    And I am logged in as "<email>"
     When I am on the upload page
     And I select "RAW" from "File type"
     And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_OCR.jpg" to upload
+    And I select "samples/<file>" to upload
     And I press "Upload"
-    Then the most recent file should have name "Test_OCR.jpg.txt"
-    And file "Test_OCR.jpg.txt" should have a UUID created
-
-#EYETRACKER-186
-  Scenario: SR regular expression matching should be case insensitive
-    Given I logout
-    And I am logged in as "admin@intersect.org.au"
-    And I am on the edit system config page
-    And I check "Auto SR on Upload"
-    And I fill in "Auto SR Regular Expression" with "sr"
-    And I press "Update"
-    When I am on the upload page
-    And I select "RAW" from "File type"
-    And I select "My Experiment" from "Experiment"
-    And I select "samples/Test_SR.wav" to upload
-    And I press "Upload"
-    Then the most recent file should have name "Test_SR.wav.txt"
-    And file "Test_SR.wav.txt" should have a UUID created
+    Then the most recent file should have name "<file>.txt"
+    And file "<file>.txt" should be created by "<email>"
+    And file "<file>.txt" should have a UUID created
+  Examples:
+    | file         | email                       | type |
+    | Test_OCR.jpg | admin@intersect.org.au      | ocr  |
+    | Test_OCR.jpg | researcher@intersect.org.au | ocr  |
+    | Test_SR.wav  | admin@intersect.org.au      | sr   |
+    | Test_SR.wav  | researcher@intersect.org.au | sr   |

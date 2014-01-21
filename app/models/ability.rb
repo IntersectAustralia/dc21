@@ -38,7 +38,8 @@ class Ability
          :download_selected,
          :bulk_update,
          :api_create,
-         :api_search], DataFile
+         :api_search,
+         :process_metadata_extraction], DataFile
     can :destroy, DataFile, :created_by_id => user.id, :published => false
     can :update, DataFile, :created_by_id => user.id, :published => false
     cannot :update, DataFile do |datafile|

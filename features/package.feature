@@ -80,8 +80,8 @@ Feature: Create a package
     And I should be on the data file details page for my_package1.zip
     And I should see "dc21_0"
     And I should see details displayed
-      | Parents  | sample1.txt\nsample2.txt    |
-      | Children | No children files defined.  |
+      | Parents  | sample1.txt\nsample2.txt   |
+      | Children | No children files defined. |
     When I am on the create package page
     Then I should see "Filename"
     And I should see "Experiment"
@@ -96,8 +96,8 @@ Feature: Create a package
     And I should be on the data file details page for my_package2.zip
     And I should see "dc21_1"
     And I should see details displayed
-      | Parents  | sample1.txt\nsample2.txt    |
-      | Children | No children files defined.  |
+      | Parents  | sample1.txt\nsample2.txt   |
+      | Children | No children files defined. |
 
   Scenario: External ID is not reused
     Given I am on the list data files page

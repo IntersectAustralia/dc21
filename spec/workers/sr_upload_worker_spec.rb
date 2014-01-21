@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe SRUploadWorker do
+  let(:user) { Factory(:user) }
 
   describe "Error messages" do
     it "should raise error if Koemei details are not supplied" do
@@ -9,7 +10,7 @@ describe SRUploadWorker do
       SRUploadWorker.stub(:create).and_return("UUID-1")
 
       # forces metadata extraction
-      MetadataExtractor.new.extract_metadata(parent, parent.format, true)
+      MetadataExtractor.new.extract_metadata(parent, parent.format, user, true)
 
       output = parent.children.first
       output.should_not be_nil
@@ -49,7 +50,7 @@ describe SRUploadWorker do
       SRUploadWorker.stub(:create).and_return("UUID-1")
 
       # forces metadata extraction
-      MetadataExtractor.new.extract_metadata(parent, parent.format, true)
+      MetadataExtractor.new.extract_metadata(parent, parent.format, user, true)
 
       output = parent.children.first
       output.should_not be_nil
@@ -90,7 +91,7 @@ describe SRUploadWorker do
       SRUploadWorker.stub(:create).and_return("UUID-1")
 
       # forces metadata extraction
-      MetadataExtractor.new.extract_metadata(parent, parent.format, true)
+      MetadataExtractor.new.extract_metadata(parent, parent.format, user, true)
 
       output = parent.children.first
       output.should_not be_nil
@@ -131,7 +132,7 @@ describe SRUploadWorker do
       SRUploadWorker.stub(:create).and_return("UUID-1")
 
       # forces metadata extraction
-      MetadataExtractor.new.extract_metadata(parent, parent.format, true)
+      MetadataExtractor.new.extract_metadata(parent, parent.format, user, true)
 
       output = parent.children.first
       output.should_not be_nil
@@ -180,7 +181,7 @@ describe SRUploadWorker do
       SRUploadWorker.should_receive(:create)
 
       # forces metadata extraction, this should create a child
-      MetadataExtractor.new.extract_metadata(parent, parent.format, true)
+      MetadataExtractor.new.extract_metadata(parent, parent.format, user, true)
 
       output = parent.children.first
       output.should_not be_nil
