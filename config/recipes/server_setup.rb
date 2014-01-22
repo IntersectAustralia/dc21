@@ -37,7 +37,7 @@ namespace :server_setup do
     hostname = ENV['DC21_HOST'] || web_server
 
     run "cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
-    run "#{try_sudo} chmod 0644 /etc/shibboleth/sp-cert.*"
+    run "#{try_sudo} chmod 0644 /etc/shibboleth/sp-*"
 
     # Update AAF
     if ENV['DC21_AAF_TEST'].eql?("true")
