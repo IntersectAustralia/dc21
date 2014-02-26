@@ -6,6 +6,7 @@
 - else
   - content_for :breadcrumb  do
     Home / Dashboard
+  - content_for :subtitle, SystemConfiguration.instance.dashboard_contents.try(:html_safe)
   .recentactivity
     %h2 Recent Activity
     %table#exploredata

@@ -104,6 +104,9 @@ module NavigationHelpers
       when /the system config page/
         admin_config_path
 
+      when /the admin dashboard page/
+        edit_admin_dashboard_path
+
       else
         begin
           page_name =~ /^the (.*) page$/

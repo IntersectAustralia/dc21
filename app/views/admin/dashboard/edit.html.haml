@@ -1,0 +1,11 @@
+- content_for :breadcrumb do
+  Admin / Dashboard
+
+.container
+  = form_for [:admin, @config], :url => {action: "update"} do |f|
+    = f.bootsy_area :dashboard_contents, id: "bootsy_text_area", editor_options: {link: false, image: false}
+    .form-actions
+      .actions-pre
+        = cancel_button 'Cancel', root_path
+      .actions
+        = f.submit "Update"

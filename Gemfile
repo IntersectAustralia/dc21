@@ -43,6 +43,7 @@ gem 'rake', '~> 0.9.2.2'
 gem 'validates_timeliness', '~> 3.0'
 gem 'rabl'
 gem 'elif'
+gem 'bootsy'
 
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"
@@ -59,6 +60,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem "mailcatcher"
 
+
   # cucumber gems
   gem "email_spec"
   gem "cucumber"
@@ -73,6 +75,8 @@ end
 
 group :development do
   gem "rails3-generators"
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do

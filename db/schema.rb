@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131203002118) do
+ActiveRecord::Schema.define(:version => 20140224035906) do
+
+  create_table "bootsy_image_galleries", :force => true do |t|
+    t.integer  "bootsy_resource_id"
+    t.string   "bootsy_resource_type"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  create_table "bootsy_images", :force => true do |t|
+    t.string   "image_file"
+    t.integer  "image_gallery_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "column_details", :force => true do |t|
     t.string   "name"
@@ -225,6 +239,7 @@ ActiveRecord::Schema.define(:version => 20131203002118) do
     t.string   "sr_cloud_host"
     t.string   "sr_cloud_id"
     t.string   "sr_cloud_token"
+    t.text     "dashboard_contents"
   end
 
   create_table "tags", :force => true do |t|
