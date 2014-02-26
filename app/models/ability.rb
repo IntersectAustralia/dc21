@@ -61,7 +61,7 @@ class Ability
       end
 
       can :manage, SystemConfiguration
-
+      can :manage, AccessGroup
     end
 
   end

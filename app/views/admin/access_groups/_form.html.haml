@@ -1,0 +1,65 @@
+= form_for [:admin, @access_group] do |f|
+  - if @access_group.new_record?
+    %h2 New Access Control Group
+  - else
+    %h2 Edit Access Control Group
+
+  = render "shared/error_messages", :target => @access_group
+
+  .control-group
+    = f.label :name, "Name", class: "control-label"
+    .controls
+      = required
+      = f.text_field :name, :maxlength => 255, :size => 50
+
+  .control-group
+    = f.label :status, "Status", class: "control-label"
+    .controls
+      = f.check_box :status, {}, 'true', 'false'
+
+
+  .control-group
+    = f.label :description, "Description", class: "control-label"
+    .controls
+      = f.text_area :description
+
+  .control-group
+    - if !@access_group.created_at.nil?
+      - render_field "Date Created", @access_group.created_at.localtime.strftime("%d/%m/%Y %I:%M%p")
+
+  .control-group
+    = f.label :primary_user, "Primary User", class: "control-label"
+    .controls
+      = required
+      %span.input
+      - if @access_group.primary_user.nil?
+        = select_tag :primary_user_select, options_from_collection_for_select(User.approved, :id, :email)
+      - else
+        = select_tag :primary_user_select, options_from_collection_for_select(User.approved, :id, :email, @access_group.primary_user.id)
+
+  .control-group
+    = label_tag :other_users_select, 'Other Users', class: 'control-label'
+    .controls
+      %span.input
+      = select_tag :other_users_select, options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
+      = link_to 'Add', '#', :class => "btn btn-primary", :id => 'access_group_add_user'
+
+      %ul#users_list
+        - if @access_group.users.present?
+          - @access_group.users.each do |user|
+            %li{:id => "user_#{user.id}"}
+              = hidden_field_tag "user_ids[]", user.id
+              %span= user.email
+              = link_to "Delete", "#", :class => 'delete_user delete_link'
+
+  .form-actions
+    - if @access_group.new_record?
+      .action-pre
+        = cancel_button 'Cancel', admin_access_groups_path, :class => "btn"
+      .actions
+        = f.submit "Save Access Group", :class => ""
+    - else
+      .actions-pre
+        = cancel_button 'Cancel', admin_access_groups_path("#{@access_group.id}")
+      .actions
+        = f.submit "Update", :class => ""

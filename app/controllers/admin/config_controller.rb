@@ -1,6 +1,6 @@
 class Admin::ConfigController < ApplicationController
 
-  # load_and_authorize_resource :system_configuration
+  #load_and_authorize_resource :system_configuration
   before_filter :authenticate_user!
   before_filter :authorize_admin
   layout 'admin'

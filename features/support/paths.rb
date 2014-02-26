@@ -104,6 +104,9 @@ module NavigationHelpers
       when /the system config page/
         admin_config_path
 
+      when /the access groups page/
+        admin_access_groups_path
+
       else
         begin
           page_name =~ /^the (.*) page$/

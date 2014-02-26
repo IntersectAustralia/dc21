@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 
   belongs_to :role
   has_and_belongs_to_many :cart_items, :uniq => true, :class_name => "DataFile"
+  has_many :access_group_users, :uniq => true
+  has_many :access_groups, :through => :access_group_users, :uniq => true
 
   # Setup accessible attributes (status/approved flags should NEVER be accessible by mass assignment)
   attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :data_files, :data_file_ids

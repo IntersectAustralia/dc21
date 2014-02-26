@@ -57,6 +57,13 @@ Dc21app::Application.routes.draw do
 
   namespace :admin do
     resource :config, :controller => "config"
+    resources :access_groups, :controller => "access_groups" do
+      member do
+        put :activate
+        put :deactivate
+        put :remove_user_from_group
+      end
+    end
   end
 
   resource :pages do

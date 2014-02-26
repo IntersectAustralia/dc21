@@ -21,6 +21,7 @@
           = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|
             = tab.users 'Users', users_path, :id => "users_tab"
             = tab.accessrequests 'Access Requests', access_requests_users_path, :id => "requests_tab"
+            = tab.accessgroups 'Access Groups', admin_access_groups_path, :id => "access_groups_tab"
             = tab.columnmappings 'Column Mappings', column_mappings_path, :id => "mappings_tab"
             = tab.resque 'Resque', landing_resque_index_path, :id => "resque_tab"
             = tab.systemconfig 'System Configuration', admin_config_path, :id => "config_tab"
