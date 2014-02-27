@@ -24,7 +24,9 @@
 .container.access_groups
   .form-actions
     .actions-pre
-      = link_to 'New Access Group', new_admin_access_group_path, :class => 'btn btn-primary'
+      = select_tag :access_groups_select, options_from_collection_for_select(AccessGroup.all, :id, :name), :include_blank => true
+    .actions
+      = link_to 'Add Access Group', '#', :class => "btn btn-primary", :id => 'user_add_access_group'
 
   - if @user.access_groups.empty?
     There are no access groups to display.

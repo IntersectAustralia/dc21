@@ -8,7 +8,7 @@ Feature: Create and manage file access control groups
       | email                       | first_name | last_name |
       | admin@intersect.org.au      | Admin      | Guy       |
       | cindy@intersect.org.au      | Cindy      | Wang      |
-      | researcher@intersect.org.au | Researcher | Person    |
+      | researcher@intersect.org.au | Researcher | Man       |
     And I have the usual roles
     And "admin@intersect.org.au" has role "Administrator"
     And "cindy@intersect.org.au" has role "Researcher"
@@ -46,11 +46,46 @@ Feature: Create and manage file access control groups
     When I am on the access groups page
     Then I should see "access_groups" table with
       | Name   | Status   | Creation Date      | Primary User      | Description | Edit Status |
-      | Apple  | Inactive | 26/02/2014 02:33PM | Researcher Person | 1st         | Activate    |
+      | Apple  | Inactive | 26/02/2014 02:33PM | Researcher Man    | 1st         | Activate    |
       | Banana | Active   | 26/02/2014 02:33PM | Cindy Wang        | 2nd         | Deactivate  |
       | Citrus | Active   | 26/02/2014 02:33PM | Admin Guy         | 3rd         | Deactivate  |
       | Durian | Inactive | 26/02/2014 02:33PM | Cindy Wang        | 4th         | Activate    |
 
+  @javascript
   Scenario: Create new access control group
     Given I have access groups
-      | primary_user | created_at | description |
+      | primary_user            | created_at        | description |
+      | admin@intersect.org.au  | 26/02/2014 14:53  | existing    |
+    And I am logged in as "admin@intersect.org.au"
+    When I am on the access groups page
+    And I click on "New Access Group"
+    Then I should be on the new access groups page
+    When I fill in the following:
+      | Name        | test1                                       |
+      | Description | Testing create default access control group |
+    And I press "Save Access Group"
+    Then I should see "Access group successfully added."
+    And I should see details displayed
+      | Name          | test1                                       |
+      | Status        | Active                                      |
+      | Description   | Testing create default access control group |
+      | Primary User  | Admin Guy (admin@intersect.org.au)          |
+    When I am on the new access groups page
+    When I fill in the following:
+      | Name        | test2                                         |
+      | Description | Testing create different access control group |
+    And I uncheck "Active"
+    And I select "cindy@intersect.org.au" from the primary user select box
+    And I select and add "admin@intersect.org.au" from the other users select box
+    And I select and add "researcher@intersect.org.au" from the other users select box
+    And I press "Save Access Group"
+    Then I should see "Access group successfully added."
+    And I should see details displayed
+      | Name          | test2                                         |
+      | Status        | Inactive                                      |
+      | Description   | Testing create different access control group |
+      | Primary User  | Cindy Wang (cindy@intersect.org.au)           |
+      | Other User 1  | Admin Guy (admin@intersect.org.au)            |
+      | Other User 2  | Researcher Man (researcher@intersect.org.au)  |
+
+

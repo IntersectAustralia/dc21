@@ -54,7 +54,7 @@
 
   .form-actions
     - if @access_group.new_record?
-      .action-pre
+      .actions-pre
         = cancel_button 'Cancel', admin_access_groups_path, :class => "btn"
       .actions
         = f.submit "Save Access Group", :class => ""

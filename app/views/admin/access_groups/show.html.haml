@@ -13,6 +13,6 @@
   - render_field "Primary User", "#{@access_group.primary_user.full_name} (#{@access_group.primary_user.email})"
   - if @access_group.users.present?
     - @access_group.users.each_with_index do |u, i|
-      - render_field "Other User #{i+1}", "#{u.full_name} (#{u.email})}"
+      - render_field "Other User #{i+1}", "#{u.full_name} (#{u.email})"
 
   = render 'actions'
