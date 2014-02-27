@@ -8,6 +8,9 @@
     Home / Dashboard
   - content_for :subtitle, SystemConfiguration.instance.dashboard_contents.try(:html_safe)
   .recentactivity
+    - if content_for?(:subtitle)
+      %br
+      .dashboardcontent= yield(:subtitle)
     %h2 Recent Activity
     %table#exploredata
       %tr
