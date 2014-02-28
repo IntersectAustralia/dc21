@@ -47,4 +47,4 @@
           %td.primary_user= access_group.primary_user.full_name
           %td.description= access_group.description
           %td.remove
-            = link_to '', remove_user_from_group_admin_access_group_path(@user, access_group), :method => :put, :confirm => "Are you sure you want to remove #{@user.full_name} from access group #{access_group.name}?", :id => "delete_#{access_group.id}", :class => "delete", :title => "Delete"
+            = link_to '', remove_access_group_from_user_path(@user, access_group, :group_id => access_group.id), :method => :put, :confirm => "Are you sure you want to remove #{@user.full_name} from access group #{access_group.name}?", :id => "delete_#{access_group.id}", :class => "delete", :title => "Delete"

@@ -53,6 +53,7 @@ Dc21app::Application.routes.draw do
       get :edit_approval
       put :approve
       put :add_access_group_to
+      put :remove_access_group_from
     end
   end
 
@@ -62,7 +63,6 @@ Dc21app::Application.routes.draw do
       member do
         put :activate
         put :deactivate
-        put :remove_user_from_group
       end
     end
   end

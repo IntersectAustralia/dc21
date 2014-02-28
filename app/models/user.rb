@@ -174,6 +174,11 @@ class User < ActiveRecord::Base
     ac_user.save!
   end
 
+  def remove_from_access_group(gid)
+    self.access_groups = self.access_groups - [AccessGroup.find(gid)]
+    save!(:validate => false)
+  end
+
     private
   def initialize_status
     self.status = "U" unless self.status

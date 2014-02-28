@@ -55,6 +55,7 @@ class Ability
       can :reject, User
       can :approve, User
       can :add_access_group_to, User
+      can :remove_access_group_from, User
 
       can :manage, DataFile
       cannot :update, DataFile do |datafile|
