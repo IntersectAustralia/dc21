@@ -1,0 +1,5 @@
+.form-actions
+  .actions-pre
+    = cancel_button 'Back', admin_access_groups_path
+  .actions
+    = link_to "Edit Access Control Group", edit_admin_access_group_path(@access_group), :class => "btn btn-primary"

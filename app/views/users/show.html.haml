@@ -20,3 +20,33 @@
   - render_field "Status", @user.status_description
 
   = render 'actions'
+
+.container.access_groups
+  .form-actions
+    .actions-pre
+      = select_tag :access_groups_select, options_from_collection_for_select(AccessGroup.all, :id, :name), :include_blank => true
+    .actions
+      = link_to 'Add Access Group', '#', :class => "btn btn-primary", :id => 'user_add_access_group'
+
+  - if @user.access_groups.empty?
+    There are no access groups to display.
+  - else
+    %table#access_groups
+      %tr
+        %th.name Name
+        %th.status Status
+        %th.creation_date Creation Date
+        %th.primary_user Primary User
+        %th.description Description
+        %th.remove Remove
+        -#%th.edit_status Edit Status
+
+      - @user.access_groups.each do |access_group|
+        %tr
+          %td.name{:title => access_group.name}= link_to access_group.name, admin_access_group_path(access_group), :id => "view_access_group_#{access_group.id}"
+          %td.status= access_group.status ? 'Active':'Inactive'
+          %td.creation_date= access_group.created_at.localtime.strftime("%d/%m/%Y %I:%M%p")
+          %td.primary_user= access_group.primary_user.full_name
+          %td.description= access_group.description
+          %td.remove
+            = link_to '', remove_user_from_group_admin_access_group_path(@user, access_group), :method => :put, :confirm => "Are you sure you want to remove #{@user.full_name} from access group #{access_group.name}?", :id => "delete_#{access_group.id}", :class => "delete", :title => "Delete"

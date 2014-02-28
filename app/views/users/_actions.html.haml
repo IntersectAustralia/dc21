@@ -6,10 +6,10 @@
       = cancel_button 'Back', users_path
   .actions
     - if @user.pending_approval?
-      - if can?(:reject, @user) then
+      - if can?(:reject, @user)
         = link_to "Spam", reject_as_spam_user_path(@user), :method => :put, :class => "btn"
         = link_to "Reject", reject_user_path(@user), :method => :put, :class => "btn btn-danger"
-      - if can?(:approve, @user) then
+      - if can?(:approve, @user)
         = link_to "Approve", edit_approval_user_path(@user), :method => :get, :class => "btn btn-primary"
 
     - if @user.approved?

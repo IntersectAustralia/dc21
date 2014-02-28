@@ -1,0 +1,18 @@
+- content_for :breadcrumb do
+  Admin / Access Groups / #{@access_group.name}
+
+.container
+
+  = render 'actions'
+
+  %h2 Access group details for #{@access_group.name}
+  - render_field "Name", @access_group.name
+  - render_field "Status", @access_group.status ? "Active":"Inactive"
+  - render_field "Description", @access_group.description
+  - render_field "Date Created", @access_group.created_at.localtime.strftime("%d/%m/%Y %I:%M%p")
+  - render_field "Primary User", "#{@access_group.primary_user.full_name} (#{@access_group.primary_user.email})"
+  - if @access_group.users.present?
+    - @access_group.users.each_with_index do |u, i|
+      - render_field "Other User #{i+1}", "#{u.full_name} (#{u.email})"
+
+  = render 'actions'
