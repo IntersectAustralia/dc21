@@ -52,6 +52,7 @@ Dc21app::Application.routes.draw do
       put :update_role
       get :edit_approval
       put :approve
+      put :add_access_group_to
     end
   end
 

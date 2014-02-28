@@ -22,11 +22,9 @@
   = render 'actions'
 
 .container.access_groups
-  .form-actions
-    .actions-pre
-      = select_tag :access_groups_select, options_from_collection_for_select(AccessGroup.all, :id, :name), :include_blank => true
-    .actions
-      = link_to 'Add Access Group', '#', :class => "btn btn-primary", :id => 'user_add_access_group'
+  = form_for(@user, :url => add_access_group_to_user_path(@user)) do |f|
+    = f.collection_select(:access_groups, AccessGroup.all - @user.access_groups, :id, :name, {:include_blank => ""})
+    = f.submit "Add Access Group"
 
   - if @user.access_groups.empty?
     There are no access groups to display.
