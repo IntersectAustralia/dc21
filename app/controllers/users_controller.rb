@@ -35,6 +35,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def remove_access_group_from
+    group_id = params[:group_id]
+    @user.remove_from_access_group(group_id)
+    if @user.save
+      redirect_to(@user)
+    end
+  end
+
   def deactivate
     if !@user.check_number_of_superusers(params[:id], current_user.id) 
       redirect_to(@user, :alert => "You cannot deactivate this account as it is the only account with Administrator privileges.")

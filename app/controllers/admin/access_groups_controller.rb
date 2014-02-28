@@ -52,10 +52,6 @@ class Admin::AccessGroupsController < ApplicationController
     end
   end
 
-  def remove_user_from_group
-
-  end
-
   def authorize_admin
     authorize! :manage, AccessGroup
   end
