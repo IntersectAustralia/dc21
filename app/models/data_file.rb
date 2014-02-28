@@ -41,6 +41,8 @@ class DataFile < ActiveRecord::Base
            :source => :child,
            :conditions => proc  { "child_id <> parent_id" }
 
+  has_many :access_groups, :through => :'datafile_access.rb', :uniq => true
+
   belongs_to :created_by, :class_name => "User"
   belongs_to :published_by, :class_name => "User"
   belongs_to :experiment
