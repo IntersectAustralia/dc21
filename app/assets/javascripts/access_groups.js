@@ -13,6 +13,11 @@ $(document).ready(function(){
        return event.preventDefault();
     });
 
+    $("#user_add_access_group").on('click', function(event) {
+        var group_id;
+        group_id = $("#access_group_select option:selected").val();
+
+    });
     $("#primary_user_select").on('change', removePrimaryInList);
 
     $(".delete_user").live('click', function(){

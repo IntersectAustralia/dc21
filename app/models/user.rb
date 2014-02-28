@@ -167,6 +167,13 @@ class User < ActiveRecord::Base
     cart_items.sum(:file_size)
   end
 
+  def addToAccessGroup(gid)
+    ac_user = AccessGroupUser.create
+    ac_user.user_id = self.id
+    ac_user.access_group_id = gid
+    ac_user.save!
+  end
+
     private
   def initialize_status
     self.status = "U" unless self.status
