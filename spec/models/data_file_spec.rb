@@ -55,6 +55,7 @@ describe DataFile do
     it { should have_many(:metadata_items) }
     it { should have_and_belong_to_many(:users) }
     it { should have_and_belong_to_many(:tags) }
+    it { should have_many(:access_groups)}
   end
 
   describe "Get experiment name" do

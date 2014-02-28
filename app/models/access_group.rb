@@ -20,6 +20,9 @@ class AccessGroup < ActiveRecord::Base
            :source => :user,
            :order => 'users.last_name, users.first_name'
 
+  has_many :datafiles,
+           :through => :datafile_accesses
+
   accepts_nested_attributes_for :primary_user
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :aggregated_users

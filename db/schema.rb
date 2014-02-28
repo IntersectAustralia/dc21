@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140227220954) do
+ActiveRecord::Schema.define(:version => 20140228055003) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -27,20 +27,6 @@ ActiveRecord::Schema.define(:version => 20140227220954) do
     t.text     "description"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
-  end
-
-  create_table "bootsy_image_galleries", :force => true do |t|
-    t.integer  "bootsy_resource_id"
-    t.string   "bootsy_resource_type"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
-  end
-
-  create_table "bootsy_images", :force => true do |t|
-    t.string   "image_file"
-    t.integer  "image_gallery_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
   end
 
   create_table "column_details", :force => true do |t|
@@ -110,8 +96,8 @@ ActiveRecord::Schema.define(:version => 20140227220954) do
 
   add_index "data_files_users", ["data_file_id", "user_id"], :name => "index_data_files_users_on_data_file_id_and_user_id"
 
-  create_table "datafile_access", :force => true do |t|
-    t.integer  "datafile_id"
+  create_table "datafile_accesses", :force => true do |t|
+    t.integer  "data_file_id"
     t.integer  "access_group_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
@@ -263,7 +249,6 @@ ActiveRecord::Schema.define(:version => 20140227220954) do
     t.string   "sr_cloud_host"
     t.string   "sr_cloud_id"
     t.string   "sr_cloud_token"
-    t.text     "dashboard_contents"
   end
 
   create_table "tags", :force => true do |t|
