@@ -66,6 +66,18 @@ Feature: Create and manage file access control groups
     Then I should see "access_groups" table with
       | Name    | Status   | Creation Date      | Primary User      | Description | Edit Status |
       | name-1  | Active   | 03/03/2014 06:10PM | Cindy Wang        |             | Deactivate  |
+    When I click on "name-1"
+    Then I should see link "Deactivate"
+    When I click on "Deactivate"
+    Then I should see "access_groups" table with
+      | Name    | Status   | Creation Date      | Primary User      | Description | Edit Status |
+      | name-1  | Inactive | 03/03/2014 06:10PM | Cindy Wang        |             | Activate    |
+    When I click on "name-1"
+    Then I should see link "Activate"
+    When I click on "Activate"
+    Then I should see "access_groups" table with
+      | Name    | Status   | Creation Date      | Primary User      | Description | Edit Status |
+      | name-1  | Active   | 03/03/2014 06:10PM | Cindy Wang        |             | Deactivate  |
 
   Scenario: List access control groups sorted in alphabetical order on name
     Given I have access groups
@@ -215,4 +227,9 @@ Feature: Create and manage file access control groups
       | three | Active | 04/03/2014 09:20AM  | Cindy Wang     |             |        |
       | two   | Active | 04/03/2014 12:16PM  | Admin Guy      |             |        |
     And I follow "delete" for access group "three"
-    And show me the page
+    Then I should be on the user details page for dev@intersect.org.au
+    And I should see "access_groups" table with
+      | Name  | Status | Creation Date       | Primary User   | Description | Remove |
+      | four  | Active | 01/01/2014 12:00AM  | Admin Guy      |             |        |
+      | one   | Active | 04/03/2014 03:43PM  | Researcher Man |             |        |
+      | two   | Active | 04/03/2014 12:16PM  | Admin Guy      |             |        |
