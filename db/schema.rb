@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140227220954) do
+ActiveRecord::Schema.define(:version => 20140228055003) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -96,8 +96,8 @@ ActiveRecord::Schema.define(:version => 20140227220954) do
 
   add_index "data_files_users", ["data_file_id", "user_id"], :name => "index_data_files_users_on_data_file_id_and_user_id"
 
-  create_table "datafile_access", :force => true do |t|
-    t.integer  "datafile_id"
+  create_table "datafile_accesses", :force => true do |t|
+    t.integer  "data_file_id"
     t.integer  "access_group_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
