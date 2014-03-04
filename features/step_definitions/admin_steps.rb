@@ -9,15 +9,3 @@ Then /^the system configuration should have$/ do |table|
     SystemConfiguration.instance.send(row[0]).eql?(row[1]).should be_true
   end
 end
-
-Given /^I have access groups$/ do |table|
-  table.hashes.each do |attributes|
-    if attributes.include? ("primary_user")
-      primary_user_email = attributes.delete("primary_user")
-      primary_user = User.find_by_email(primary_user_email)
-      Factory(:access_group, attributes.merge(:primary_user => primary_user))
-    else
-      Factory(:access_group, attributes)
-    end
-  end
-end

@@ -144,6 +144,10 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}".strip
   end
 
+  def display_name
+    "#{full_name} (#{email})"
+  end
+
   def aaf_logged_in?(aaf_email)
     aaf_email.present? && self.email.eql?(aaf_email)
   end

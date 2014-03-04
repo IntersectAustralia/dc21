@@ -12,6 +12,7 @@ class Admin::AccessGroupsController < ApplicationController
 
   def show
     set_tab :accessgroups, :contentnavigation
+    @access_group = AccessGroup.find(params[:id])
   end
 
   def new
@@ -41,11 +42,12 @@ class Admin::AccessGroupsController < ApplicationController
 
   def update
     set_tab :accessgroups, :contentnavigation
+    @access_group = AccessGroup.find(params[:id])
     primary_user = params[:primary_user_select]
     params[:access_group][:primary_user] = User.find(primary_user)
     params[:access_group][:user_ids] = params[:user_ids]
 
-    if @access_group.update_attributes(params[:access_group])
+    if @access_group.update_attributes(params[:access_group]) #:status => params[:status]) #
       redirect_to admin_access_group_path(@access_group), :notice => "Access group successfully updated."
     else
       render 'edit'

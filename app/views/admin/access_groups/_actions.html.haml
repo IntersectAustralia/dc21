@@ -3,3 +3,7 @@
     = cancel_button 'Back', admin_access_groups_path
   .actions
     = link_to "Edit Access Control Group", edit_admin_access_group_path(@access_group), :class => "btn btn-primary"
+    -#- if @access_group.status
+    -#  = link_to "Deactivate", admin_access_group_path(@access_group, :status => false), :method => :put, :class => "btn btn-danger"
+    -#- else
+    -#  = link_to "Activate", admin_access_group_path(@access_group, :status => true), :method => :put, :class => "btn btn-primary"

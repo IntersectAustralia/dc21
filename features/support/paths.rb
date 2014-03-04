@@ -105,14 +105,18 @@ module NavigationHelpers
         admin_config_path
 
       #  Access Control Groups paths
-      when /the access groups page/
+      when /the list access groups page/
         admin_access_groups_path
 
       when /the new access groups page/
         new_admin_access_group_path
 
-      when /the view access group page for '(.*)'/
-        admin_access_group_path(AccessGroup.find_by_name($1))
+      when /the view access group page for '(.*)'$/
+        admin_access_group_path(AccessGroup.find_by_id($1))
+
+      when /^the edit access group page for '(.*)'$/
+        group = AccessGroup.find_by_name!($1)
+        edit_admin_access_group_path(group.id)
 
       else
         begin

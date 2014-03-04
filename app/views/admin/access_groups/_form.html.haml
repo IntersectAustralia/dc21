@@ -33,23 +33,23 @@
       = required
       %span.input
       - if @access_group.primary_user.nil?
-        = select_tag :primary_user_select, options_from_collection_for_select(User.approved, :id, :email)
+        = select_tag :primary_user_select, options_from_collection_for_select(User.approved, :id, :display_name)
       - else
-        = select_tag :primary_user_select, options_from_collection_for_select(User.approved, :id, :email, @access_group.primary_user.id)
+        = select_tag :primary_user_select, options_from_collection_for_select(User.approved, :id, :display_name, @access_group.primary_user.id)
 
   .control-group
     = label_tag :other_users_select, 'Other Users', class: 'control-label'
     .controls
       %span.input
-      = select_tag :other_users_select, options_from_collection_for_select(User.approved, :id, :email), :include_blank => true
+      = select_tag :other_users_select, options_from_collection_for_select(User.approved, :id, :display_name), :include_blank => true
       = link_to 'Add', '#', :class => "btn btn-primary", :id => 'access_group_add_user'
 
       %ul#users_list
         - if @access_group.users.present?
-          - @access_group.users.each do |user|
+          - @access_group.users.sort.each do |user|
             %li{:id => "user_#{user.id}"}
               = hidden_field_tag "user_ids[]", user.id
-              %span= user.email
+              %span= user.display_name
               = link_to "Delete", "#", :class => 'delete_user delete_link'
 
   .form-actions
@@ -60,6 +60,6 @@
         = f.submit "Save Access Group", :class => ""
     - else
       .actions-pre
-        = cancel_button 'Cancel', admin_access_groups_path("#{@access_group.id}")
+        = cancel_button 'Cancel', admin_access_group_path("#{@access_group.id}")
       .actions
         = f.submit "Update", :class => ""
