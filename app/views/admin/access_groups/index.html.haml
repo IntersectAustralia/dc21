@@ -1,0 +1,30 @@
+.datacontroll
+  = link_to 'New Access Group', new_admin_access_group_path, :class => 'btn btn-primary'
+
+- content_for :breadcrumb do
+  Admin / Access Groups
+
+- if @access_groups.empty?
+  There are no access groups to display.
+- else
+  %table#access_groups
+    %tr
+      %th.name Name
+      %th.status Status
+      %th.creation_date Creation Date
+      %th.primary_user Primary User
+      %th.description Description
+      %th.edit_status Edit Status
+
+    - @access_groups.each do |access_group|
+      %tr
+        %td.name{:title => access_group.name}= link_to access_group.name, admin_access_group_path(access_group), :id => "view_access_group_#{access_group.id}"
+        %td.status= access_group.status ? 'Active':'Inactive'
+        %td.creation_date= access_group.created_at.localtime.strftime("%d/%m/%Y %I:%M%p")
+        %td.primary_user= access_group.primary_user.full_name
+        %td.description= access_group.description
+        %td.edit_status
+          - if access_group.status
+            = link_to "Deactivate", deactivate_admin_access_group_path(access_group), :method => :put, :class => "btn btn-danger active_deactive"
+          - else
+            = link_to "Activate", activate_admin_access_group_path(access_group), :method => :put, :class => "btn btn-primary active_deactive"

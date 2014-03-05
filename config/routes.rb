@@ -54,11 +54,21 @@ not Dc21app::Application.routes.draw do
       put :update_role
       get :edit_approval
       put :approve
+      put :add_access_group_to
+      put :remove_access_group_from
     end
   end
 
   namespace :admin do
     resource :config, :controller => "config"
+
+    resources :access_groups, :controller => "access_groups" do
+      member do
+        put :activate
+        put :deactivate
+      end
+    end
+
     resource :dashboard, :controller => "dashboard"
   end
 

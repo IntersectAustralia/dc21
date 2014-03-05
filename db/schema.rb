@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140224035906) do
+ActiveRecord::Schema.define(:version => 20140228055003) do
+
+  create_table "access_group_users", :force => true do |t|
+    t.integer  "access_group_id"
+    t.integer  "user_id"
+    t.boolean  "primary",         :default => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
+  create_table "access_groups", :force => true do |t|
+    t.string   "name"
+    t.boolean  "status",      :default => true
+    t.text     "description"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "bootsy_image_galleries", :force => true do |t|
     t.integer  "bootsy_resource_id"
@@ -79,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20140224035906) do
     t.text     "title",                       :default => ""
     t.string   "transfer_status"
     t.string   "uuid"
+    t.boolean  "restricted_access"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|
@@ -92,6 +109,13 @@ ActiveRecord::Schema.define(:version => 20140224035906) do
   end
 
   add_index "data_files_users", ["data_file_id", "user_id"], :name => "index_data_files_users_on_data_file_id_and_user_id"
+
+  create_table "datafile_accesses", :force => true do |t|
+    t.integer  "data_file_id"
+    t.integer  "access_group_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "experiment_for_codes", :force => true do |t|
     t.integer  "experiment_id"

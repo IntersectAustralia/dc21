@@ -23,6 +23,26 @@ class UsersController < ApplicationController
     set_tab :accessrequests, :contentnavigation
   end
 
+  def add_access_group_to
+    group_id = params[:user][:access_groups]
+    if group_id.blank?
+      redirect_to(user_path(@user), :alert => "Please select an access group to add.")
+    else
+      @user.addToAccessGroup(group_id)
+      if @user.save
+        redirect_to(@user, :notice => "The user is added to the access group #{AccessGroup.find_by_id(group_id).name} successfully")
+      end
+    end
+  end
+
+  def remove_access_group_from
+    group_id = params[:group_id]
+    @user.remove_from_access_group(group_id)
+    if @user.save
+      redirect_to(@user)
+    end
+  end
+
   def deactivate
     if !@user.check_number_of_superusers(params[:id], current_user.id) 
       redirect_to(@user, :alert => "You cannot deactivate this account as it is the only account with Administrator privileges.")

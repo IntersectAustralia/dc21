@@ -20,3 +20,31 @@
   - render_field "Status", @user.status_description
 
   = render 'actions'
+
+.container.access_groups
+  = form_for(@user, :url => add_access_group_to_user_path(@user)) do |f|
+    = f.collection_select(:access_groups, AccessGroup.all - @user.access_groups, :id, :name, {:include_blank => ""})
+    = f.submit "Add Access Group"
+
+  - if @user.access_groups.empty?
+    There are no access groups to display.
+  - else
+    %table#access_groups
+      %tr
+        %th.name Name
+        %th.status Status
+        %th.creation_date Creation Date
+        %th.primary_user Primary User
+        %th.description Description
+        %th.remove Remove
+        -#%th.edit_status Edit Status
+
+      - @user.access_groups.sort_by {|group| group.name}.each do |access_group|
+        %tr
+          %td.name{:title => access_group.name}= link_to access_group.name, admin_access_group_path(access_group), :id => "view_access_group_#{access_group.id}"
+          %td.status= access_group.status ? 'Active':'Inactive'
+          %td.creation_date= access_group.created_at.localtime.strftime("%d/%m/%Y %I:%M%p")
+          %td.primary_user= access_group.primary_user.full_name
+          %td.description= access_group.description
+          %td.remove
+            = link_to '', remove_access_group_from_user_path(@user, access_group, :group_id => access_group.id), :method => :put, :id => "delete_#{access_group.id}", :class => "delete", :title => "Delete"

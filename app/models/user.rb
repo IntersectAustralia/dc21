@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 
   belongs_to :role
   has_and_belongs_to_many :cart_items, :uniq => true, :class_name => "DataFile"
+  has_many :access_group_users, :uniq => true
+  has_many :access_groups, :through => :access_group_users, :uniq => true
 
   # Setup accessible attributes (status/approved flags should NEVER be accessible by mass assignment)
   attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :data_files, :data_file_ids
@@ -142,6 +144,10 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}".strip
   end
 
+  def display_name
+    "#{full_name} (#{email})"
+  end
+
   def aaf_logged_in?(aaf_email)
     aaf_email.present? && self.email.eql?(aaf_email)
   end
@@ -163,6 +169,18 @@ class User < ActiveRecord::Base
 
   def cart_size
     cart_items.sum(:file_size)
+  end
+
+  def addToAccessGroup(gid)
+    ac_user = AccessGroupUser.create
+    ac_user.user_id = self.id
+    ac_user.access_group_id = gid
+    ac_user.save!
+  end
+
+  def remove_from_access_group(gid)
+    self.access_groups = self.access_groups - [AccessGroup.find(gid)]
+    save!(:validate => false)
   end
 
     private
