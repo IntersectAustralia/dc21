@@ -4,6 +4,7 @@ describe User do
   describe "Associations" do
     it { should belong_to(:role) }
     it { should have_and_belong_to_many(:cart_items) }
+    it { should have_many(:access_groups) }
   end
 
   describe "Named Scopes" do
