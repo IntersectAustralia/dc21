@@ -37,9 +37,14 @@ class UsersController < ApplicationController
 
   def remove_access_group_from
     group_id = params[:group_id]
-    @user.remove_from_access_group(group_id)
-    if @user.save
-      redirect_to(@user)
+    group = AccessGroup.find_by_id(group_id)
+    if group.primary_user == @user
+      redirect_to(@user, :alert => "#{@user.full_name} is the primary user for group #{group.name}, please nominate an alternative primary user before attempting to remove them.")
+    else
+      @user.remove_from_access_group(group_id)
+      if @user.save
+        redirect_to(@user)
+      end
     end
   end
 
