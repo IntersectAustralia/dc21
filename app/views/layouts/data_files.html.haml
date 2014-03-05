@@ -45,7 +45,6 @@
 
       - if content_for?(:breadcrumb)
         %h1{title: yield(:breadcrumb)}= yield :breadcrumb
-
       #content_container
         .contentnavigation
           = tabs_tag(:builder => MenuTabBuilder, :namespace => :contentnavigation) do |tab|

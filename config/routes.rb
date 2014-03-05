@@ -1,4 +1,6 @@
-Dc21app::Application.routes.draw do
+not Dc21app::Application.routes.draw do
+
+  mount Bootsy::Engine => '/bootsy', as: 'bootsy'
 
   resources :packages do
     member do
@@ -59,12 +61,15 @@ Dc21app::Application.routes.draw do
 
   namespace :admin do
     resource :config, :controller => "config"
+
     resources :access_groups, :controller => "access_groups" do
       member do
         put :activate
         put :deactivate
       end
     end
+
+    resource :dashboard, :controller => "dashboard"
   end
 
   resource :pages do
