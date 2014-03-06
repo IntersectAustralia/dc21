@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140228055003) do
+ActiveRecord::Schema.define(:version => 20140306004249) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(:version => 20140228055003) do
     t.text     "title",                       :default => ""
     t.string   "transfer_status"
     t.string   "uuid"
-    t.boolean  "restricted_access"
+    t.boolean  "restricted_access",           :default => false
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|
