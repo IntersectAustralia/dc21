@@ -46,7 +46,7 @@
         .controls
           = f.text_area :file_processing_description
       .control-group
-        .control-label Restrict Access
+        = f.label :restricted_access, "Restrict Access", class: "control-label"
         .controls
           = f.check_box :restricted_access, {}, 'true', 'false'
       .control-group#tags

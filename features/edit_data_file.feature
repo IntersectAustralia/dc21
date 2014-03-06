@@ -200,3 +200,19 @@ Feature: Edit data files metadata
     And I should not see the choice "that2" in the select2 menu
     And I should not see the choice "this3" in the select2 menu
     And I should not see the choice "terrier" in the select2 menu
+
+  Scenario: Editing restricted access flag in data file as researcher
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I check "Restrict Access"
+    And I press "Update"
+    Then I should be on the data file details page for file.txt
+    And I should see "The data file was saved successfully"
+    And I should see field "Restricted Access" with value "true"
+    Then I follow "Edit Metadata"
+    And I uncheck "Restrict Access"
+    And I press "Update"
+    Then I should be on the data file details page for file.txt
+    And I should see "The data file was saved successfully"
+    And I should see field "Restricted Access" with value "false"
