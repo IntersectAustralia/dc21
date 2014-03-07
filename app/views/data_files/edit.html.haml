@@ -46,9 +46,21 @@
         .controls
           = f.text_area :file_processing_description
       .control-group
-        = f.label :restricted_access, "Restrict Access", class: "control-label"
+        = f.label :access, "Public", class: "control-label"
         .controls
-          = f.check_box :restricted_access, {}, 'true', 'false'
+          = f.radio_button :access, "Public"
+      .control-group
+        = f.label :access, "Private", class: "control-label"
+        .controls
+          = f.radio_button :access, "Private"
+        .controls
+          .record.checkbox
+            = f.check_box :access_to_all_institutional_users, {}, "true", "false"
+            = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
+          .record.checkbox
+            = f.check_box :access_to_user_groups, {}, "true", "false"
+            = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
+
       .control-group#tags
         .control-label Tags
         .controls

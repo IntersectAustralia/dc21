@@ -31,6 +31,20 @@ describe DataFile do
       file.should_not be_valid
     end
 
+    it 'ensures access to all institutional users option is not set if access is public' do
+      file = Factory(:data_file)
+      file.access = DataFile::ACCESS_PUBLIC
+      file.access_to_all_institutional_users = true
+      file.should_not be_valid
+    end
+
+    it 'ensures access to group users options is not set if access is public' do
+      file = Factory(:data_file)
+      file.access = DataFile::ACCESS_PUBLIC
+      file.access_to_user_groups = true
+      file.should_not be_valid
+    end
+
   end
 
   describe "File processing description length" do

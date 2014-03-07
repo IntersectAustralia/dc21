@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140306004249) do
+ActiveRecord::Schema.define(:version => 20140307003636) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -75,27 +75,29 @@ ActiveRecord::Schema.define(:version => 20140306004249) do
   end
 
   create_table "data_files", :force => true do |t|
-    t.string   "filename",                    :default => ""
+    t.string   "filename",                          :default => ""
     t.string   "format"
     t.text     "path"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
     t.integer  "created_by_id"
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "interval"
     t.string   "file_processing_status"
-    t.text     "file_processing_description", :default => ""
+    t.text     "file_processing_description",       :default => ""
     t.integer  "experiment_id"
     t.float    "file_size"
-    t.boolean  "published",                   :default => false
+    t.boolean  "published",                         :default => false
     t.datetime "published_date"
     t.integer  "published_by_id"
-    t.text     "external_id",                 :default => ""
-    t.text     "title",                       :default => ""
+    t.text     "external_id",                       :default => ""
+    t.text     "title",                             :default => ""
     t.string   "transfer_status"
     t.string   "uuid"
-    t.boolean  "restricted_access",           :default => false
+    t.text     "access",                            :default => "Public"
+    t.boolean  "access_to_all_institutional_users"
+    t.boolean  "access_to_user_groups"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

@@ -22,6 +22,9 @@ class DataFile < ActiveRecord::Base
   # for searching auto processing jobs
   AUTOMATION_STATI = [RESQUE_COMPLETE, RESQUE_FAILED, RESQUE_WORKING, RESQUE_QUEUED]
 
+  ACCESS_PUBLIC = 'Public'
+  ACCESS_PRIVATE = 'Private'
+
 
   has_many :parent_child_relationships,
            :class_name => "DataFileRelationship",
@@ -55,7 +58,7 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
-  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :restricted_access
+  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -72,6 +75,9 @@ class DataFile < ActiveRecord::Base
   validates_length_of :external_id, :maximum => 1000
 
   validates_presence_of :path
+
+  validate :private_access_check
+
   validates_length_of :path, :maximum => 260
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
@@ -106,6 +112,15 @@ class DataFile < ActiveRecord::Base
   scope :relationship_fields, select([:id, 'filename as text', 'experiment_id as exp_id'])
 
   attr_accessor :messages, :url
+
+
+  def private_access_check
+    if self.access == ACCESS_PUBLIC
+      if access_to_all_institutional_users? or access_to_user_groups?
+        errors.add(:access, "Private Access Options cannot be set when Access is Public")
+      end
+    end
+  end
 
   def uploader_email
     created_by.present? ? created_by.email : ""
