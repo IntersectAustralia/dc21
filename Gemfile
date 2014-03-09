@@ -44,6 +44,7 @@ gem 'validates_timeliness', '~> 3.0'
 gem 'rabl'
 gem 'elif'
 gem 'bootsy'
+gem 'exifr'
 
 gem 'resque', :require => "resque/server"
 gem 'resque-status', :require => "resque/status_server"

@@ -3,6 +3,7 @@ class FileTypeDeterminer
   TOA5 = "TOA5"
   BAGIT = "BAGIT"
   UNKNOWN = "Unknown"
+  ExifImage = "Image"
   # for searching file formats
   ALL_FORMATS = [TOA5, BAGIT, UNKNOWN] + EXTENSIONS.values.uniq
 
@@ -10,6 +11,7 @@ class FileTypeDeterminer
     return TOA5 if is_toa5?(data_file)
     return BAGIT if is_bagit?(data_file)
     mime = File.mime_type?(File.new(data_file.path))
+    return ExifImage if mime.starts_with?('image/jpeg', 'image/pjpeg', 'image/tiff', 'image/x-tiff')
     unless mime[/unknown/]
       return mime[/^\w+\/[^;]+/]
     end

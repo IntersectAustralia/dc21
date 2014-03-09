@@ -287,6 +287,10 @@ class DataFile < ActiveRecord::Base
     self.format.eql?(FileTypeDeterminer::TOA5)
   end
 
+  def is_exif_image?
+    self.format.eql?(FileTypeDeterminer::ExifImage)
+  end
+
   def is_error_file?
     self.file_processing_status.eql? STATUS_ERROR
   end
