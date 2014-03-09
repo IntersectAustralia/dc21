@@ -89,7 +89,7 @@ describe FileTypeDeterminer do
 
     it "should NOT identify files with DAT extension but no TOA5 header - binary format" do
       format = file_type_determiner.identify_file(jpg)
-      format.should eq('image/jpeg')
+      format.should eq(FileTypeDeterminer::ExifImage)
     end
 
   end
