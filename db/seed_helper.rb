@@ -2,8 +2,9 @@ def create_roles
   Role.delete_all
 
   Role.create!(:name => "Administrator")
-  Role.create!(:name => "Researcher")
+  Role.create!(:name => "Institutional User")
   Role.create!(:name => "API Uploader")
+  Role.create!(:name => "Non-Institutional User")
 end
 
 def create_tags
