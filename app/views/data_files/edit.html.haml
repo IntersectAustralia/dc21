@@ -60,6 +60,10 @@
           .record.checkbox
             = f.check_box :access_to_user_groups, {}, "true", "false"
             = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
+        .controls
+          = f.label :groups, "Groups"
+          = f.text_field :access_group_list, data: {values: access_groups}
+
 
       .control-group#tags
         .control-label Tags
@@ -155,6 +159,14 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
+  var access_groups = $('#data_file_access_group_list').data('values');
+  $('#data_file_access_group_list').select2('data', access_groups);
+  //$('#data_file_access_group_list').select2({
+  //  //tags: $('#data_file_access_group_list').data('access_groups'),
+  //  tokenSeparators: ['|'],
+  //  separator: '|'
+  //});
+
   $('#data_file_label_list').select2({
     minimumInputLength: 3,
     tags: $('#data_file_label_list').data('labels'),

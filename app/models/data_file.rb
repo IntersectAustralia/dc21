@@ -44,6 +44,7 @@ class DataFile < ActiveRecord::Base
            :source => :child,
            :conditions => proc  { "child_id <> parent_id" }
 
+  has_many :datafile_accesses, :uniq => true
   has_many :access_groups, :through => :datafile_accesses, :uniq => true
 
   belongs_to :created_by, :class_name => "User"
@@ -58,7 +59,7 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
-  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups
+  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_group_list
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -134,6 +135,14 @@ class DataFile < ActiveRecord::Base
     published | false
   end
 
+  def access_group_list
+    self.access_groups.pluck(:name).join("|")
+  end
+
+  def access_group_list=(new_value)
+    access_group_names = new_value.split(/\|\s*/)
+    self.access_groups = access_group_names.map { |name| AccessGroup.find_by_name(name)}
+  end
   def label_list
     self.labels.pluck(:name).join("|")
   end

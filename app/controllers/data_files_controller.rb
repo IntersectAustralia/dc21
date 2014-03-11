@@ -19,6 +19,7 @@ class DataFilesController < ApplicationController
 
   expose(:tags) { Tag.order(:name) }
   expose(:labels) { Label.joins(:data_file_labels).pluck(:name).uniq }
+  expose(:access_groups) { AccessGroup.pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 
@@ -107,13 +108,15 @@ class DataFilesController < ApplicationController
       tags = params[:tags]
       l = params[:data_file].delete(:label_list)
       labels = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
+      ag = params[:data_file].delete(:access_group_list)
+      access_groups = ag.split(',').map{|name| AccessGroup.find_by_name(name).id}
 
       parents = []
       if params[:data_file][:parent_ids]
         parents = params[:data_file][:parent_ids].split(",")
       end
 
-      unless validate_inputs(files, experiment_id, type, description, tags, labels)
+      unless validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
         render :new
         return
       end
@@ -344,7 +347,7 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def validate_inputs(files, experiment_id, type, description, tags, labels)
+  def validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -361,6 +364,7 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     @data_file.label_ids = labels
+    @data_file.access_group_ids = access_groups
     !@data_file.errors.any?
   end
 
