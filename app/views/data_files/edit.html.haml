@@ -45,24 +45,6 @@
         %label.control-label{:for => :data_file_file_processing_description} Description
         .controls
           = f.text_area :file_processing_description
-      .control-group
-        = f.label :access, "Public", class: "control-label"
-        .controls
-          = f.radio_button :access, "Public"
-      .control-group
-        = f.label :access, "Private", class: "control-label"
-        .controls
-          = f.radio_button :access, "Private"
-        .controls
-          .record.checkbox
-            = f.check_box :access_to_all_institutional_users, {}, "true", "false"
-            = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
-          .record.checkbox
-            = f.check_box :access_to_user_groups, {}, "true", "false"
-            = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
-        .controls
-          = f.label :groups, "Groups"
-          = f.text_field :access_group_list, data: {values: access_groups}
 
       .control-group#tags
         .control-label Tags
@@ -152,9 +134,10 @@
           .record.checkbox
             = f.check_box :access_to_user_groups, {id: "users_in_groups"}, "true", "false"
             = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
-            .control-group
+            .control-group#user_groups_list
               .controls
-                =label_tag "groups list goes here", "groups list goes here", id: "user_groups_list"
+                = f.label :groups, "Groups"
+                = f.select :access_group_list, data: {values: access_groups}, id: "user_groups_list_blah", multiple: "multiple"
 
       %h2{:title => @data_file.filename} Editing File Relationships of #{@data_file.filename}
       .control-group
