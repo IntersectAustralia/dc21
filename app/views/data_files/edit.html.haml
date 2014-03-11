@@ -45,21 +45,6 @@
         %label.control-label{:for => :data_file_file_processing_description} Description
         .controls
           = f.text_area :file_processing_description
-      .control-group
-        = f.label :access, "Public", class: "control-label"
-        .controls
-          = f.radio_button :access, "Public"
-      .control-group
-        = f.label :access, "Private", class: "control-label"
-        .controls
-          = f.radio_button :access, "Private"
-        .controls
-          .record.checkbox
-            = f.check_box :access_to_all_institutional_users, {}, "true", "false"
-            = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
-          .record.checkbox
-            = f.check_box :access_to_user_groups, {}, "true", "false"
-            = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
 
       .control-group#tags
         .control-label Tags
@@ -132,6 +117,27 @@
                 = select_hour @data_file.end_time, {:field_name => "end_hr"}
                 = select_minute @data_file.end_time, {:field_name => "end_min"}
                 = select_second @data_file.end_time, {:field_name => "end_sec"}
+
+      %h2{:title => @data_file.filename} Access Control for #{@data_file.filename}
+      .control-group
+        = f.label :access, "Public", class: "control-label"
+        .controls
+          = f.radio_button :access, "Public", id: "public_access_radio_button"
+      .control-group
+        = f.label :access, "Private", class: "control-label"
+        .controls
+          = f.radio_button :access, "Private", id: "private_access_radio_button"
+        .controls#private_access_options
+          .record.checkbox
+            = f.check_box :access_to_all_institutional_users, {}, "true", "false"
+            = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
+          .record.checkbox
+            = f.check_box :access_to_user_groups, {id: "users_in_groups"}, "true", "false"
+            = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
+            .control-group
+              .controls
+                =label_tag "groups list goes here", "groups list goes here", id: "user_groups_list"
+
       %h2{:title => @data_file.filename} Editing File Relationships of #{@data_file.filename}
       .control-group
         = label_tag "experiment_id", "Filter Files", class: "control-label"
@@ -155,6 +161,11 @@
           = f.submit "Update", :confirm => @data_file.published? ? "These changes will not affect the underlying RIF-CS. To modify the metadata in the RIF-CS, you will need to create a new package." : nil
 
 :javascript
+  $(document).ready(function(){
+    var privateAccessIsChecked = $('#private_access_radio_button').is(":checked");
+    showPrivateAccessOptions(privateAccessIsChecked);
+  });
+
   $('#data_file_label_list').select2({
     minimumInputLength: 3,
     tags: $('#data_file_label_list').data('labels'),
@@ -214,10 +225,48 @@
   $('#data_file_parent_ids').select2('data', parents);
   $('#data_file_child_ids').select2('data', children);
 
+  $('#public_access_radio_button').click(function(){
+    if($(this).is(":checked"))
+    {
+      showPrivateAccessOptions(false);
+    }
+  });
+
+  $('#private_access_radio_button').click(function(){
+    if($(this).is(":checked"))
+    {
+      showPrivateAccessOptions(true);
+    }
+  });
+
+  $('#users_in_groups').click(function(){
+    showUserGroupsList();
+  });
+
   function validDataFile(id) {
     invalid = ["#{@data_file.id}"];
     $.merge(invalid, $('#data_file_child_ids').val().split(",") || []);
     $.merge(invalid, $('#data_file_parent_ids').val().split(",") || []);
     $.unique(invalid);
     return $.inArray(id.toString(), invalid) == -1;
+  }
+
+  function showPrivateAccessOptions(showOptions)
+  {
+    if(showOptions)
+    {   //show checkboxes
+      $('#private_access_options').show();
+    }
+    else if(!showOptions)
+    {   //hide and uncheck checkboxes
+      $('#private_access_options').find('input[type=checkbox]:checked').removeAttr('checked');
+      $('#private_access_options').hide();
+    }
+    showUserGroupsList();
+  }
+
+  function showUserGroupsList()
+  {
+    $('#users_in_groups').is(':checked') ? $('#user_groups_list').show() : $('#user_groups_list').hide();
+    //MAY ALSO NEED TO CLEAR THE SELECTED VALUES IF IT IS NOT CHECKED
   }
