@@ -135,14 +135,10 @@ class DataFile < ActiveRecord::Base
     published | false
   end
 
-  def access_group_list
-    self.access_groups.pluck(:name).join("|")
+  def access_group_list_display
+    self.access_groups.pluck(:name).join(", ")
   end
 
-  def access_group_list=(new_value)
-    access_group_names = new_value.split(/\|\s*/)
-    self.access_groups = access_group_names.map { |name| AccessGroup.find_by_name(name)}
-  end
   def label_list
     self.labels.pluck(:name).join("|")
   end

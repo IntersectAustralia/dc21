@@ -137,7 +137,7 @@
         .control-group#user_groups_list
           = f.label :groups, "Groups"
           .controls
-            = f.collection_select :access_groups, AccessGroup.all, :id, :name, {}, {:multiple => true}
+            = f.collection_select(:access_groups, AccessGroup.all, :id, :name, {:selected => @data_file.access_groups.collect {|ag| ag.id}}, {:multiple => true})
 
 
       %h2{:title => @data_file.filename} Editing File Relationships of #{@data_file.filename}
