@@ -120,22 +120,22 @@
 
       %h2{:title => @data_file.filename} Access Control for #{@data_file.filename}
       .control-group
-        = f.label :access, "Public", class: "control-label"
+        = f.label :access, "Public", class: "control-label", :for => "public_access_radio_button"
         .controls
           = f.radio_button :access, "Public", id: "public_access_radio_button"
       .control-group
-        = f.label :access, "Private", class: "control-label"
+        = f.label :access, "Private", class: "control-label", :for => "private_access_radio_button"
         .controls
           = f.radio_button :access, "Private", id: "private_access_radio_button"
         .controls#private_access_options
           .record.checkbox
-            = f.check_box :access_to_all_institutional_users, {}, "true", "false"
-            = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
+            = f.check_box :access_to_all_institutional_users, {id: "all_institutional_users"}, "true", "false"
+            = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users", :for => "all_institutional_users"
           .record.checkbox
             = f.check_box :access_to_user_groups, {id: "users_in_groups"}, "true", "false"
-            = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
+            = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups", :for => "users_in_groups"
         .control-group#user_groups_list
-          = f.label :groups, "Groups"
+          = f.label :groups, "Groups", :for => "s2id_autogen1"
           .controls
             = f.collection_select(:access_groups, AccessGroup.find_all_by_status(true), :id, :name, {:selected => @data_file.access_groups.find_all_by_status(true).collect {|ag| ag.id}}, {:multiple => true})
 
