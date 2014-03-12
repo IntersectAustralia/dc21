@@ -136,7 +136,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def access_group_list_display
-    self.access_groups.pluck(:name).join(", ")
+    self.access_groups.find_all_by_status(true).collect {|ag| ag.name}.join(", ")
   end
 
   def label_list
