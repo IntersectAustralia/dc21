@@ -134,10 +134,11 @@
           .record.checkbox
             = f.check_box :access_to_user_groups, {id: "users_in_groups"}, "true", "false"
             = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
-            .control-group#user_groups_list
-              .controls
-                = f.label :groups, "Groups"
-                = f.select :access_group_list, data: {values: access_groups}, id: "user_groups_list_blah", multiple: "multiple"
+        .control-group#user_groups_list
+          = f.label :groups, "Groups"
+          .controls
+            = f.collection_select :access_groups, AccessGroup.all, :id, :name, {}, {:multiple => true}
+
 
       %h2{:title => @data_file.filename} Editing File Relationships of #{@data_file.filename}
       .control-group
@@ -167,13 +168,7 @@
       showPrivateAccessOptions(privateAccessIsChecked);
     });
 
-  var access_groups = $('#data_file_access_group_list').data('values');
-  $('#data_file_access_group_list').select2('data', access_groups);
-  //$('#data_file_access_group_list').select2({
-  //  //tags: $('#data_file_access_group_list').data('access_groups'),
-  //  tokenSeparators: ['|'],
-  //  separator: '|'
-  //});
+  $('#data_file_access_groups').select2();
   
   $('#data_file_label_list').select2({
     minimumInputLength: 3,

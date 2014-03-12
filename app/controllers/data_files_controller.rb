@@ -87,6 +87,10 @@ class DataFilesController < ApplicationController
       params[:data_file][:child_ids] = params[:data_file][:child_ids].split(",")
     end
 
+    if params[:data_file][:access_groups]
+      params[:data_file][:access_groups] = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
+    end
+
     old_filename = @data_file.filename
     if @data_file.update_attributes(params[:data_file])
       @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root']) unless @data_file.is_package?
