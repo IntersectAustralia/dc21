@@ -300,6 +300,22 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.eql? STATUS_ERROR
   end
 
+  def is_authorised_for_access_by?(current_user)
+    if current_user.role.name == "Administrator" || self.created_by == current_user || self.access == DataFile::ACCESS_PUBLIC
+      return true
+    end
+
+    if self.access == DataFile::ACCESS_PRIVATE
+      if self.access_to_all_institutional_users && current_user.role.name == "Institutional User"
+        return true
+      elsif self.access_to_user_groups && !(current_user.access_groups.find_all_by_status(true) & self.access_groups.find_all_by_status(true)).empty?
+        return true
+      end
+    end
+
+    return false
+  end
+
   def has_data_in_range?(from, to)
     return false if self.start_time.nil?
 

@@ -39,7 +39,9 @@ class Ability
          :bulk_update,
          :api_create,
          :api_search,
-         :process_metadata_extraction], DataFile
+         :process_metadata_extraction], DataFile do |datafile|
+      datafile.is_authorised_for_access_by?(user)
+    end
     can :destroy, DataFile, :created_by_id => user.id, :published => false
     can :update, DataFile, :created_by_id => user.id, :published => false
     cannot :update, DataFile do |datafile|
