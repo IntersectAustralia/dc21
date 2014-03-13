@@ -12,6 +12,27 @@
           - if file.messages.is_a? Array
             - file.messages.each do |message_attrs|
               %li.alert{:class => message_attrs[:type]}= message_attrs[:message]
+        %h2{:title => file.filename} Access Control for #{file.filename}
+        .control-group
+          = label_tag :access, "Public", class: "control-label"
+          .controls
+            = radio_button_tag :access, "Public", true, {id: "public_access_radio_button"}
+        .control-group
+          = label_tag :access, "Private", class: "control-label"
+          .controls
+            = radio_button_tag :access, "Private", false, {id: "private_access_radio_button"}
+          .controls#private_access_options
+            .record.checkbox
+              = check_box_tag :access_to_all_institutional_users, "true"
+              = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
+            .record.checkbox
+              = check_box_tag :access_to_user_groups, true, {id: "users_in_groups"}
+              = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
+          .control-group#user_groups_list
+            = label_tag :groups, "Groups"
+            .controls
+              = collection_select(:access_groups, :access_groups, AccessGroup.find_all_by_status(true), :id, :name, :multiple => true)
+
         .control-group
           %label.control-label Type:
           .controls
@@ -82,6 +103,13 @@
         = submit_tag "Update"
 
 :javascript
+  $(document).ready(function(){
+          var privateAccessIsChecked = $('#private_access_radio_button').is(":checked");
+          showPrivateAccessOptions(privateAccessIsChecked);
+        });
+
+  $('#data_file_access_groups').select2();
+
   $('.select2_labels').select2({
     minimumInputLength: 3,
     tags: $('.select2_labels').data('labels'),
@@ -202,3 +230,41 @@
     uploaded_data_files.push(file_id);
     parent_objects[file_id] = { 'data_file' : parent };
   });
+
+  $('#public_access_radio_button').click(function(){
+    if($(this).is(":checked"))
+    {
+      showPrivateAccessOptions(false);
+    }
+  });
+
+  $('#private_access_radio_button').click(function(){
+    if($(this).is(":checked"))
+    {
+      showPrivateAccessOptions(true);
+    }
+  });
+
+  $('#users_in_groups').click(function(){
+    showUserGroupsList();
+  });
+
+  function showPrivateAccessOptions(showOptions)
+  {
+    if(showOptions)
+    {   //show checkboxes
+      $('#private_access_options').show();
+    }
+    else if(!showOptions)
+    {   //hide and uncheck checkboxes
+      $('#private_access_options').find('input[type=checkbox]:checked').removeAttr('checked');
+      $('#private_access_options').hide();
+    }
+    showUserGroupsList();
+  }
+
+  function showUserGroupsList()
+  {
+    $('#users_in_groups').is(':checked') ? $('#user_groups_list').show() : $('#user_groups_list').hide();
+    //MAY ALSO NEED TO CLEAR THE SELECTED VALUES IF IT IS NOT CHECKED
+  }

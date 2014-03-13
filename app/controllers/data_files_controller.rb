@@ -112,12 +112,15 @@ class DataFilesController < ApplicationController
       tags = params[:tags]
       l = params[:data_file].delete(:label_list)
       labels = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
-      ag = params[:data_file].delete(:access_group_list)
-      access_groups = ag.split(',').map{|name| AccessGroup.find_by_name(name).id}
 
       parents = []
       if params[:data_file][:parent_ids]
         parents = params[:data_file][:parent_ids].split(",")
+      end
+
+      access_groups = []
+      if params[:data_file][:access_groups]
+        access_groups = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
       end
 
       unless validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
