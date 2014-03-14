@@ -46,7 +46,7 @@ describe DataFile do
       file.should_not be_valid
     end
 
-    describe "abilities" do
+    describe "Abilities" do
       before(:each) do
         @super_role = Factory(:role, :name => "Administrator")
         @inst_role = Factory(:role, :name => "Institutional User")
@@ -67,7 +67,8 @@ describe DataFile do
         end
 
         it "can access public data files" do
-          @ability.should be_able_to(:read, @public_file)
+          @ability.should be_able_to(:index, @public_file)
+          @ability.should be_able_to(:show, @public_file)
           @ability.should be_able_to(:create, @public_file)
           @ability.should be_able_to(:download, @public_file)
           @ability.should be_able_to(:download_selected, @public_file)
@@ -78,7 +79,8 @@ describe DataFile do
         end
 
         it "can access private data files open to all institutional users" do
-          @ability.should be_able_to(:read, @private_file_all_inst)
+          @ability.should be_able_to(:index, @private_file_all_inst)
+          @ability.should be_able_to(:show, @private_file_all_inst)
           @ability.should be_able_to(:create, @private_file_all_inst)
           @ability.should be_able_to(:download, @private_file_all_inst)
           @ability.should be_able_to(:download_selected, @private_file_all_inst)
@@ -95,7 +97,8 @@ describe DataFile do
         it "cannot access private data files of restricted access that they do not belong to the access groups" do
           @restricted_file_no_groups = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
 
-          @ability.should_not be_able_to(:read, @restricted_file_no_groups)
+          @ability.should be_able_to(:index, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:show, @restricted_file_no_groups)
           @ability.should_not be_able_to(:create, @restricted_file_no_groups)
           @ability.should_not be_able_to(:download, @restricted_file_no_groups)
           @ability.should_not be_able_to(:download_selected, @restricted_file_no_groups)
@@ -107,7 +110,8 @@ describe DataFile do
 
         it "can access private restricted data files that they uploaded themselves" do
           restricted_file_uploaded_by_user = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @inst_user, :access_to_user_groups => true)
-          @ability.should be_able_to(:read, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:index, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:show, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:create, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:download, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:download_selected, restricted_file_uploaded_by_user)
@@ -124,7 +128,8 @@ describe DataFile do
         end
 
         it "can access public data files" do
-          @ability.should be_able_to(:read, @public_file)
+          @ability.should be_able_to(:index, @public_file)
+          @ability.should be_able_to(:show, @public_file)
           @ability.should be_able_to(:create, @public_file)
           @ability.should be_able_to(:download, @public_file)
           @ability.should be_able_to(:download_selected, @public_file)
@@ -135,7 +140,8 @@ describe DataFile do
         end
 
         it "cannot access private data files open to all institutional users" do
-          @ability.should_not be_able_to(:read, @private_file_all_inst)
+          @ability.should be_able_to(:index, @private_file_all_inst)
+          @ability.should_not be_able_to(:show, @private_file_all_inst)
           @ability.should_not be_able_to(:create, @private_file_all_inst)
           @ability.should_not be_able_to(:download, @private_file_all_inst)
           @ability.should_not be_able_to(:download_selected, @private_file_all_inst)
@@ -152,7 +158,8 @@ describe DataFile do
         it "cannot access private data files of restricted access that they do not belong to the access groups" do
           restricted_file = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @inst_user, :access_to_user_groups => true)
 
-          @ability.should_not be_able_to(:read, restricted_file)
+          @ability.should be_able_to(:index, restricted_file)
+          @ability.should_not be_able_to(:show, restricted_file)
           @ability.should_not be_able_to(:create, restricted_file)
           @ability.should_not be_able_to(:download, restricted_file)
           @ability.should_not be_able_to(:download_selected, restricted_file)
@@ -164,7 +171,8 @@ describe DataFile do
 
         it "can access private restricted data files that they uploaded themselves" do
           restricted_file_uploaded_by_user = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
-          @ability.should be_able_to(:read, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:index, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:show, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:create, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:download, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:download_selected, restricted_file_uploaded_by_user)

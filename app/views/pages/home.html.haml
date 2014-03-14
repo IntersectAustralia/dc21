@@ -25,12 +25,15 @@
 
       - @data_files.each do |data_file|
         %tr{:class => cycle('field_bg', 'field_nobg')}
-          %td.filename{:title => data_file.filename}= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}"
+          -if data_file.is_authorised_for_access_by?(current_user)
+            %td.filename{:title => data_file.filename}= link_to data_file.filename  , data_file, :id => "view_#{data_file.id}"
+          -else
+            %td.filename{:title => data_file.filename}= data_file.filename
           %td.date{:title => data_file.created_at.to_s(:with_time)}= data_file.created_at.to_s(:with_time)
           %td.size{:title => number_to_human_size(data_file.file_size)}= number_to_human_size(data_file.file_size)
           %td.email{:title => data_file.uploader_email}= data_file.uploader_email
           %td.add_cart
-            - if @cart_item_ids.include?(data_file.id)
+            - if @cart_item_ids.include?(data_file.id) or !data_file.is_authorised_for_access_by?(current_user)
               %a.btn.disabled{:href => "#", :data_file => data_file.id, :file_size => data_file.file_size} Add to Cart
             - else
               %a.btn{:href => "#", :id => "add_cart_item_#{data_file.id}", :data_file => data_file.id, :file_size => data_file.file_size} Add to Cart
