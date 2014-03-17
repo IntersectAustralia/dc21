@@ -86,7 +86,10 @@
     - render_field_with_block "Parents" do
       - if @data_file.parents.present?
         - @data_file.parents.order(:filename).each do |data_file|
-          %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -if data_file.is_authorised_for_access_by?(current_user)
+            %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -else
+            %span{:title => data_file.filename}= data_file.filename
           %br/
       - else
         No parent files defined.
@@ -94,7 +97,10 @@
     - render_field_with_block "Children" do
       - if @data_file.children.present?
         - @data_file.children.order(:filename).each do |data_file|
-          %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -if data_file.is_authorised_for_access_by?(current_user)
+            %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -else
+            %span{:title => data_file.filename}= data_file.filename
           %br/
       - else
         No children files defined.

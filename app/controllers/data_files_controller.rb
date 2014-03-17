@@ -180,6 +180,8 @@ class DataFilesController < ApplicationController
   end
 
   def download_selected
+    cart_items.delete_if{|file| !file.is_authorised_for_access_by?(current_user)} if !cart_items.empty?
+
     if cart_items.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
@@ -195,23 +197,27 @@ class DataFilesController < ApplicationController
   end
 
   def download
-    unless @data_file.published? and @data_file.is_package?
-      authenticate_user!
-      authorize! :download, @data_file
-    end
+    if @data_file.is_authorised_for_access_by?(current_user)
+      unless @data_file.published? and @data_file.is_package?
+        authenticate_user!
+        authorize! :download, @data_file
+      end
 
-    if current_user.present?
-      return send_data_file(@data_file)
-    else
-      unless APP_CONFIG['ip_addresses'].nil?
-        if APP_CONFIG['ip_addresses'].include? request.ip
-          return send_data_file(@data_file)
+      if current_user.present?
+        return send_data_file(@data_file)
+      else
+        unless APP_CONFIG['ip_addresses'].nil?
+          if APP_CONFIG['ip_addresses'].include? request.ip
+            return send_data_file(@data_file)
+          else
+            raise ActionController::RoutingError.new('Not Found')
+          end
         else
           raise ActionController::RoutingError.new('Not Found')
         end
-      else
-        raise ActionController::RoutingError.new('Not Found')
       end
+    else
+      redirect_to data_files_path, alert: "You do not have access to download this file."
     end
   end
 
