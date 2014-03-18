@@ -180,7 +180,11 @@ class DataFilesController < ApplicationController
   end
 
   def download_selected
+    size_before_authorised_check = cart_items.size
     cart_items.delete_if{|file| !file.is_authorised_for_access_by?(current_user)} if !cart_items.empty?
+    if cart_items.size != size_before_authorised_check
+      flash[:alert] = "#{size_before_authorised_check - cart_items.size} restricted access files were not downloaded because you do not have access."
+    end
 
     if cart_items.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
