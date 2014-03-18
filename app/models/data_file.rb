@@ -268,7 +268,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def time_parsable?
-    self.is_package? || self.is_toa5?
+    self.is_package? || self.is_toa5? || self.is_exif_image?
   end
 
   def is_raw_file?
@@ -288,7 +288,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_exif_image?
-    self.format.eql?(FileTypeDeterminer::ExifImage)
+    ['image/jpeg', 'image/pjpeg', 'image/tiff', 'image/x-tiff'].include? self.format
   end
 
   def is_error_file?
