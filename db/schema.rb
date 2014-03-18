@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140307003636) do
+ActiveRecord::Schema.define(:version => 20140317042546) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(:version => 20140307003636) do
     t.string   "filename",                          :default => ""
     t.string   "format"
     t.text     "path"
-    t.datetime "created_at",                                              :null => false
-    t.datetime "updated_at",                                              :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.integer  "created_by_id"
     t.datetime "start_time"
     t.datetime "end_time"
@@ -95,8 +95,8 @@ ActiveRecord::Schema.define(:version => 20140307003636) do
     t.text     "title",                             :default => ""
     t.string   "transfer_status"
     t.string   "uuid"
-    t.text     "access",                            :default => "Public"
-    t.boolean  "access_to_all_institutional_users"
+    t.text     "access",                            :default => "Private"
+    t.boolean  "access_to_all_institutional_users", :default => true
     t.boolean  "access_to_user_groups"
   end
 

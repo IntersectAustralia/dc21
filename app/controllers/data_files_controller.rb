@@ -123,7 +123,7 @@ class DataFilesController < ApplicationController
         access_groups = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
       end
 
-      unless validate_inputs(files, experiment_id, type, description, tags, labels)
+      unless validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
         render :new
         return
       end
@@ -364,7 +364,7 @@ class DataFilesController < ApplicationController
     end
   end
 
-  def validate_inputs(files, experiment_id, type, description, tags, labels)
+  def validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -381,6 +381,7 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     @data_file.label_ids = labels
+    @data_file.access_group_ids = access_groups
     !@data_file.errors.any?
   end
 

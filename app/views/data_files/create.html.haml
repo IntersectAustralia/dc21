@@ -14,21 +14,21 @@
               %li.alert{:class => message_attrs[:type]}= message_attrs[:message]
         %h2{:title => file.filename} Access Control for #{file.filename}
         .control-group
-          = label_tag :access, "Public", class: "control-label"
+          = label_tag "file_#{file.id}_access", "Public", class: "control-label"
           .controls
-            = radio_button_tag :access, "Public", true, {id: "public_access_radio_button"}
+            = radio_button_tag "file_#{file.id}_access", "Public", {id: "public_access_radio_button_#{file.id}"}
         .control-group
-          = label_tag :access, "Private", class: "control-label"
+          = label_tag "file_#{file.id}_access", "Private", class: "control-label"
           .controls
-            = radio_button_tag :access, "Private", false, {id: "private_access_radio_button"}
-          .controls#private_access_options
+            = radio_button_tag "file_#{file.id}_access", "Private", {id: "private_access_radio_button_#{file.id}"}
+          .controls{:id => "private_access_options_#{file.id}"}
             .record.checkbox
-              = check_box_tag :access_to_all_institutional_users, "true"
+              = check_box_tag "file_#{file.id}_access_to_all_institutional_users", file.access_to_all_institutional_users, file.access_to_all_institutional_users
               = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
             .record.checkbox
-              = check_box_tag :access_to_user_groups, true, {id: "users_in_groups"}
+              = check_box_tag "file_#{file.id}_access_to_user_groups", file.access_to_user_groups, file.access_to_user_groups
               = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
-          .control-group#user_groups_list
+          .control-group{:id => "user_groups_list_#{file.id}"}
             = label_tag :groups, "Groups"
             .controls
               = collection_select(:access_groups, :access_groups, AccessGroup.find_all_by_status(true), :id, :name, :multiple => true)
@@ -104,11 +104,15 @@
 
 :javascript
   $(document).ready(function(){
-          var privateAccessIsChecked = $('#private_access_radio_button').is(":checked");
-          showPrivateAccessOptions(privateAccessIsChecked);
+          $('[id$="_access_Private"]').each(function(){
+            showPrivateAccessOptions(splitStringToGainFileID($(this).attr("id")), $(this).is(":checked"));
+          })
+
         });
 
-  $('#data_file_access_groups').select2();
+  $('[id^="user_groups_list_"]').each(function(){
+    $(this).find('select').select2();
+  });
 
   $('.select2_labels').select2({
     minimumInputLength: 3,
@@ -231,40 +235,45 @@
     parent_objects[file_id] = { 'data_file' : parent };
   });
 
-  $('#public_access_radio_button').click(function(){
+  $('[id$="_access_Public"]').click(function(){
     if($(this).is(":checked"))
     {
-      showPrivateAccessOptions(false);
+      showPrivateAccessOptions(splitStringToGainFileID($(this).attr("id")), false);
     }
   });
 
-  $('#private_access_radio_button').click(function(){
+  $('[id$="_access_Private"]').click(function(){
     if($(this).is(":checked"))
     {
-      showPrivateAccessOptions(true);
+      showPrivateAccessOptions(splitStringToGainFileID($(this).attr("id")), true);
     }
   });
 
-  $('#users_in_groups').click(function(){
-    showUserGroupsList();
+  $('[id$="_access_to_user_groups"]').click(function(){
+    showUserGroupsList(splitStringToGainFileID($(this).attr("id")));
   });
 
-  function showPrivateAccessOptions(showOptions)
+  function showPrivateAccessOptions(file_id, showOptions)
   {
     if(showOptions)
     {   //show checkboxes
-      $('#private_access_options').show();
+      $("#private_access_options_" + file_id).show();
     }
     else if(!showOptions)
     {   //hide and uncheck checkboxes
-      $('#private_access_options').find('input[type=checkbox]:checked').removeAttr('checked');
-      $('#private_access_options').hide();
+      $("#private_access_options_" + file_id).find('input[type=checkbox]:checked').removeAttr('checked');
+      $("#private_access_options_" + file_id).hide();
     }
-    showUserGroupsList();
+    showUserGroupsList(file_id);
   }
 
-  function showUserGroupsList()
+  function showUserGroupsList(file_id)
   {
-    $('#users_in_groups').is(':checked') ? $('#user_groups_list').show() : $('#user_groups_list').hide();
+    $("#file_" + file_id + "_access_to_user_groups").is(':checked') ? $("#user_groups_list_" + file_id).show() : $("#user_groups_list_" + file_id).hide();
     //MAY ALSO NEED TO CLEAR THE SELECTED VALUES IF IT IS NOT CHECKED
+  }
+
+  function splitStringToGainFileID(stringToSplit)
+  {
+    return stringToSplit.split("_")[1];
   }
