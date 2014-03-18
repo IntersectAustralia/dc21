@@ -7,14 +7,14 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [], children=[])
-    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, parents, children, nil, nil)
+  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [], children=[], access, access_to_all_institutional_users, access_to_user_groups, access_groups)
+    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, parents, children, access, access_to_all_institutional_users, access_to_user_groups, access_groups, nil, nil)
   end
 
 
-  def build_named_file(original_filename, file, experiment_id, type, description, tags = [], labels = [], parent_files = [], child_files = [], start_time, end_time)
+  def build_named_file(original_filename, file, experiment_id, type, description, tags = [], labels = [], parent_files = [], child_files = [], access, access_to_all_institutional_users, access_to_user_groups, access_groups, start_time, end_time)
     path, new_filename = store_file(original_filename, file)
-    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, labels, original_filename, file.size, start_time, end_time, parent_files, child_files)
+    data_file = create_data_file(path, new_filename, experiment_id, type, description, tags, labels, original_filename, file.size, start_time, end_time, parent_files, child_files, access, access_to_all_institutional_users, access_to_user_groups, access_groups)
     if data_file.messages.blank?
       data_file.add_message(:success, "File uploaded successfully.")
     end
@@ -50,7 +50,7 @@ class AttachmentBuilder
 
   private
 
-  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time, parent_file_ids, child_file_ids)
+  def create_data_file(path, filename, experiment_id, type, description, tags, labels, original_filename, size, start_time, end_time, parent_file_ids, child_file_ids, access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
     Rails.logger.info("Processing: #{path} - #{filename}")
 
     data_file = DataFile.new(
@@ -67,6 +67,10 @@ class AttachmentBuilder
     data_file.label_ids = labels
     data_file.parent_ids = parent_file_ids
     data_file.child_ids = child_file_ids
+    data_file.access = access
+    data_file.access_to_all_institutional_users = access_to_all_institutional_users
+    data_file.access_to_user_groups = access_to_user_groups
+    data_file.access_group_ids = access_group_ids
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format

@@ -664,3 +664,32 @@ When /^there should be files named "([^"]*)" that were deleted$/ do |csv_files|
   end
 end
 
+Then /^file "([^"]*)" should have access level "([^"]*)"$/ do |file, access|
+  file = DataFile.find_by_filename!(file)
+  file.access.should eq(access)
+end
+
+Then /^file "([^"]*)" is private access to all institutional users$/ do |file|
+  file = DataFile.find_by_filename!(file)
+  file.access_to_all_institutional_users.should be_true
+end
+
+Then /^file "([^"]*)" is not set as private access to all institutional users$/ do |file|
+  file = DataFile.find_by_filename!(file)
+  file.access_to_all_institutional_users.should be_false
+end
+
+Then /^file "([^"]*)" is private access to user groups$/ do |file|
+  file = DataFile.find_by_filename!(file)
+  file.access_to_user_groups.should be_true
+end
+
+Then /^file "([^"]*)" is not set as private access to user groups$/ do |file|
+  file = DataFile.find_by_filename!(file)
+  file.access_to_user_groups.should be_false
+end
+
+Then /^file "([^"]*)" should have access groups "([^"]*)"$/ do |file, groups|
+  file = DataFile.find_by_filename!(file)
+  file.access_groups.pluck(:name).sort.should eq(groups.split(",").sort)
+end

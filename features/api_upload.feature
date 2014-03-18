@@ -4,7 +4,7 @@ Feature: Upload files via the API
   I want to be able to have my PC automatically send files to DC21
 
   Background:
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And user "researcher@intersect.org.au" has an API token
     And I have facility "Flux Tower" with code "FLUX"
     Given I have experiments
@@ -233,3 +233,59 @@ Feature: Upload files via the API
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 0 parents
     And file "weather_station_05_min.dat" should have parents ""
+
+
+  Scenario: Default access control settings to files uploaded through the API, when no access setting is specified
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" is private access to all institutional users
+    And file "weather_station_05_min.dat" is not set as private access to user groups
+
+  Scenario: Specify access control to files uploaded through the API
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | access     | Public                                                        |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Public"
+    And file "weather_station_05_min.dat" is not set as private access to all institutional users
+    And file "weather_station_05_min.dat" is not set as private access to user groups
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                              | RAW                                                           |
+      | experiment                        | Flux Experiment 1                                             |
+      | access                            | Private                                                       |
+      | access_to_all_institutional_users | false                                                         |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" is not set as private access to all institutional users
+    And file "weather_station_05_min.dat" is not set as private access to user groups
+    And file "weather_station_05_min.dat" should have access groups ""
+    Given I have access groups
+      | name    |
+      | group-A |
+      | group-B |
+      | group-C |
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                  | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                  | RAW                                                           |
+      | experiment            | Flux Experiment 1                                             |
+      | access                | Private                                                       |
+      | access_to_user_groups | true                                                          |
+      | access_groups         | group-C,group-A                                               |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" is not set as private access to all institutional users
+    And file "weather_station_05_min.dat" is private access to user groups
+    And file "weather_station_05_min.dat" should have access groups "group-C,group-A"
+
+  Scenario: Giving bad access control parameters in the API upload should result in error
+
+  Scenario: Specifying one or more non-existing access groups should upload with warning
+
+  Scenario: Specifying access groups with public or access to all inst users should upload with warnings

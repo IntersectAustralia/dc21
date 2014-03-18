@@ -274,11 +274,18 @@ class DataFilesController < ApplicationController
       tag_names = params[:tag_names]
       label_names = params[:label_names]
       parent_file_ids = DataFile.where(:filename => params[:parent_filenames]).pluck(:id)
-      errors, tag_ids, label_ids = validate_api_inputs(file, type, experiment_id, tag_names, label_names)
+      access = params[:access] #unless params[:access].nil?
+      access_to_all_institutional_users = params[:access_to_all_institutional_users] #(params[:access_to_all_institutional_users].nil? and params[:access].nil?) ? true : params[:access_to_all_institutional_users]
+      access_to_user_groups = params[:access_to_user_groups]
+      access_group_ids = AccessGroup.where(:name => params[:access_groups]).pluck(:id)
+      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups)
 
       if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids)
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
         messages = uploaded_file.messages.collect { |m| m[:message] }
+        if !params[:access_groups].nil? and params[:access_groups].size != access_group_ids.size
+          messages << "#{params[:access_groups].size - access_group_ids.size} access groups do not exist"
+        end
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
       else
         render :json => {:messages => errors}, :status => :bad_request
@@ -385,7 +392,7 @@ class DataFilesController < ApplicationController
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, tag_names, label_names)
+  def validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups)
     errors = []
     errors << 'Experiment id is required' if experiment_id.blank?
     errors << 'File is required' if file.blank?
@@ -393,10 +400,35 @@ class DataFilesController < ApplicationController
     errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
     errors << 'Supplied org level 2 id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
     errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
+    errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PUBLIC}" unless access.blank? || access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE
+    errors << 'Supplied access_to_all_institutional_users was not valid: has to be either true or false' unless access_to_all_institutional_users.blank? || access_to_all_institutional_users =~ (/(true|t|yes|y|1)$/i) || access_to_all_institutional_users =~ (/(false|f|no|n|0)$/i)
+    errors << 'Supplied access_to_user_groups was not valid: has to be either true or false' unless access_to_user_groups.blank? || access_to_user_groups =~ (/(true|t|yes|y|1)$/i) || access_to_user_groups =~ (/(false|f|no|n|0)$/i)
 
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
-    [errors, tag_ids, label_ids]
+    access_to_all_institutional_users_flag = ''
+    access_to_user_groups_flag = ''
+    if access_to_all_institutional_users.blank?
+      if access.blank?
+        access_to_all_institutional_users_flag = true
+      end
+    else
+      if access_to_all_institutional_users =~ (/(true|t|yes|y|1)$/i)
+        access_to_all_institutional_users_flag = true
+      elsif access_to_all_institutional_users =~ (/(false|f|no|n|0)$/i)
+        access_to_all_institutional_users_flag = false
+      end
+    end
+    unless access_to_user_groups.blank?
+      if access_to_user_groups =~ (/(true|t|yes|y|1)$/i)
+        access_to_user_groups_flag = true
+      elsif access_to_user_groups =~ (/(false|f|no|n|0)$/i)
+        access_to_user_groups_flag = false
+      end
+    end
+    access = access.blank? ? DataFile::ACCESS_PRIVATE : access
+
+    [errors, tag_ids, label_ids, access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
   end
 
   def parse_tags(tag_names, errors)
