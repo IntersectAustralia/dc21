@@ -7,7 +7,7 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [], children=[], access, access_to_all_institutional_users, access_to_user_groups, access_groups)
+  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [], children=[], access = DataFile::ACCESS_PRIVATE, access_to_all_institutional_users = true, access_to_user_groups = false, access_groups = [])
     build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, parents, children, access, access_to_all_institutional_users, access_to_user_groups, access_groups, nil, nil)
   end
 

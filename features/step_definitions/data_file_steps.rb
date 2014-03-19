@@ -669,22 +669,22 @@ Then /^file "([^"]*)" should have access level "([^"]*)"$/ do |file, access|
   file.access.should eq(access)
 end
 
-Then /^file "([^"]*)" is private access to all institutional users$/ do |file|
+Then /^file "([^"]*)" should be set as private access to all institutional users$/ do |file|
   file = DataFile.find_by_filename!(file)
   file.access_to_all_institutional_users.should be_true
 end
 
-Then /^file "([^"]*)" is not set as private access to all institutional users$/ do |file|
+Then /^file "([^"]*)" should not be set as private access to all institutional users$/ do |file|
   file = DataFile.find_by_filename!(file)
   file.access_to_all_institutional_users.should be_false
 end
 
-Then /^file "([^"]*)" is private access to user groups$/ do |file|
+Then /^file "([^"]*)" should be set as private access to user groups$/ do |file|
   file = DataFile.find_by_filename!(file)
   file.access_to_user_groups.should be_true
 end
 
-Then /^file "([^"]*)" is not set as private access to user groups$/ do |file|
+Then /^file "([^"]*)" should not be set as private access to user groups$/ do |file|
   file = DataFile.find_by_filename!(file)
   file.access_to_user_groups.should be_false
 end
@@ -692,4 +692,20 @@ end
 Then /^file "([^"]*)" should have access groups "([^"]*)"$/ do |file, groups|
   file = DataFile.find_by_filename!(file)
   file.access_groups.pluck(:name).sort.should eq(groups.split(",").sort)
+end
+
+Then /^file "([^"]*)" should have the private access options: "([^"]*)" to all institutional users, "([^"]*)" to user groups$/ do |file, inst, groups|
+  file = DataFile.find_by_filename!(file)
+  if inst == "true"
+    inst_flag = true
+  elsif inst == "false"
+    inst_flag = false
+  end
+  if groups == "true"
+    groups_flag = true
+  elsif groups == "false"
+    groups_flag = false
+  end
+  file.access_to_all_institutional_users.should eq inst_flag
+  file.access_to_user_groups.should eq groups_flag
 end
