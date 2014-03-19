@@ -1,5 +1,15 @@
 Given /^I have access groups$/ do |table|
   table.hashes.each do |attributes|
+    user_list = attributes.delete("users")
+    unless user_list.blank?
+      attributes["user_ids"] = User.where(email: user_list.split(", ")).collect(&:id)
+    end
+    #users = []
+    #user_list.each do |user|
+    #  users << User.find_by_email(user)
+    #end
+    #attributes.merge(:users => users)
+
     if attributes.include? ("primary_user")
       primary_user_email = attributes.delete("primary_user")
       primary_user = User.find_by_email(primary_user_email)

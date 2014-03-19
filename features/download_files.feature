@@ -4,7 +4,8 @@ Feature: Download multiple files
   I want to download multiple files from the explore data page
 
   Background:
-    Given I am logged in as "admin@intersect.org.au"
+    Given I have a user "admin@intersect.org.au" with role "Administrator"
+    And I am logged in as "admin@intersect.org.au"
     And I have data files
       | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                | id |
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au  | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  |

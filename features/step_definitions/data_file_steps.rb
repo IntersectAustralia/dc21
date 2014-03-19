@@ -151,6 +151,11 @@ Given /^I have uploaded "([^"]*)" with type "([^"]*)" and description "([^"]*)" 
   create_data_file filename, User.first, type, desc, Experiment.find_by_name!(exp)
 end
 
+When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)" and experiment "([^"]*)" and access "([^"]*)" with options institutional "([^"]*)" and user groups "([^"]*)" and access groups "([^"]*)"$/ do |filename, user_email, type, exp, access, inst_users_flag, user_groups_flag, groups|
+  user = User.find_by_email user_email
+  create_data_file filename, user, type, "desc", Experiment.find_by_name!(exp), [], [], access, inst_users_flag, user_groups_flag, groups
+end
+
 When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |file_name|
   post_path = data_files_path
   file_path = "#{Rails.root}/samples/#{file_name}"
@@ -451,6 +456,10 @@ Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and exp
   upload(file, type, description, experiment, "", parents)
 end
 
+Given /^I upload "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)" and access group "([^"]*)"$/ do |file, type, description, experiment|
+  upload(file.strip, type, description, experiment, "", "")
+end
+
 Then /^I should see tag checkboxes$/ do |table|
   expected = table.raw.collect { |row| row[0] }
   actual = find("#tags").all("input")
@@ -481,7 +490,7 @@ end
 
 private
 
-def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="desc", experiment=nil, parents=[], children=[])
+def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="desc", experiment=nil, parents=[], children=[], access = DataFile::ACCESS_PRIVATE, access_to_all_institutional_users = true, access_to_user_groups = false, access_groups = [])
   attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
 
   path = Rails.root.join('samples', filename).to_s
@@ -489,7 +498,8 @@ def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="des
   experiment = (Experiment.first || Factory(:experiment)) unless experiment
   parent_ids = DataFile.where(:filename => parents.split(", ")).pluck(:id)
   child_ids = DataFile.where(:filename => children.split(", ")).pluck(:id)
-  attachment_builder.build(file, experiment.id, type, "desc", [], [], parent_ids, child_ids)
+  group_ids = AccessGroup.where(:name => access_groups.split(", ")).pluck(:id)
+  attachment_builder.build(file, experiment.id, type, "desc", [], [], parent_ids, child_ids, access, access_to_all_institutional_users, access_to_user_groups, group_ids)
 end
 
 

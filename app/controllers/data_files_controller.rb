@@ -371,14 +371,17 @@ class DataFilesController < ApplicationController
   end
 
   def do_api_search(search_params)
-    authorize! :read, DataFile
+    #authorize! :read, DataFile
     @search = DataFileSearch.new(search_params)
     # prevents CanCan loading the id search param
     @data_files = DataFile.scoped
-    @data_files = @search.do_search(@data_files)
+    @data_files = @search.do_search(@data_files).select{ |df| df.is_authorised_for_access_by?(current_user) }
     @data_files.each do |data_file|
-      data_file.url = download_data_file_url(data_file.id, :format => :json)
+      if data_file.is_authorised_for_access_by?(current_user)
+        data_file.url = download_data_file_url(data_file.id, :format => :json)
+      end
     end
+
   end
 
   def validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)

@@ -3,7 +3,7 @@ Feature: Perform searching via API
   I want to perform a search via API so I can run this search from scripts to analyse data.
 
   Background:
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And user "researcher@intersect.org.au" has an API token
     And I have tags
       | name  |
@@ -148,3 +148,20 @@ Feature: Perform searching via API
       | sample2.txt |
       | sample4.txt |
     And I should have file download link for each entry
+
+    
+  Scenario: Search via API with some restricted data files that the user does not have access to
+    Given I have a user "external@intersect.org.au" with role "Non-Institutional User"
+    And user "external@intersect.org.au" has an API token
+    And I have access groups
+      | name    | users                     |
+      | group-1 | external@intersect.org.au |
+      | group-2 |                           |
+    And I have uploaded "1.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment1" and access "Private" with options institutional "true" and user groups "true" and access groups "group-1"
+    And I have uploaded "2.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment1" and access "Private" with options institutional "true" and user groups "true" and access groups "group-2"
+    When I perform an API search with the following parameters as user "external@intersect.org.au"
+      | stati | My type |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | 1.dat       |
