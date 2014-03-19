@@ -24,8 +24,9 @@
     - else
       = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "btn", :method => "post"
 
-
 #file_details
+  -if @path
+    = image_tag @path, :size => "200x200", :class => "float_right"
   .container
     %h2 Basic Information
     - render_field "Name", @data_file.filename

@@ -5,8 +5,6 @@ class MetadataExtractor
     config = SystemConfiguration.instance
     if type == FileTypeDeterminer::TOA5
       Toa5Parser.extract_metadata(data_file)
-    elsif type == FileTypeDeterminer::ExifImage
-      ExifParser.extract_metadata(data_file)
     elsif config.auto_ocr?(data_file, force)
       builder = AttachmentBuilder.new(APP_CONFIG['files_root'], user, FileTypeDeterminer.new, MetadataExtractor.new)
       output_file = builder.build_output_data_file(data_file, '.txt')
@@ -19,6 +17,10 @@ class MetadataExtractor
       output_file.uuid = SRUploadWorker.create({'output_id' => output_file.id, 'parent_id' => data_file.id})
       output_file.parents << data_file
       output_file.save
+    end
+
+    if ['image/jpeg', 'image/pjpeg', 'image/tiff', 'image/x-tiff'].include? type
+      ExifParser.extract_metadata(data_file)
     end
   end
 end

@@ -9,7 +9,7 @@ class DataFilesController < ApplicationController
   before_filter :sort_params, :only => [:index, :search]
   before_filter :search_params, :only => [:index, :search]
   before_filter :page_params, :only => [:index]
-
+  before_filter :clean_up_temp_image_files
 
   load_and_authorize_resource :except => [:download, :api_search]
   load_resource :only => [:download]
@@ -48,6 +48,11 @@ class DataFilesController < ApplicationController
   def show
     set_tab :explore, :contentnavigation
     @back_request = request.referer
+    @data_file = DataFile.find_by_id(params[:id])
+    if ['image/jpeg','image/bmp','image/x-windows-bmp','image/gif','image/png','image/x-ms-bmp'].include? @data_file.format
+      FileUtils.cp_r @data_file.path, Rails.root.join('public/images/temp/')
+      @path = '/images/temp/' + @data_file.filename
+    end
   end
 
   def new
@@ -559,4 +564,7 @@ class DataFilesController < ApplicationController
     true
   end
 
+  def clean_up_temp_image_files
+    FileUtils.rm_rf Dir.glob(Rails.root.join('public/images/temp/*'))
+  end
 end
