@@ -222,7 +222,7 @@ class DataFilesController < ApplicationController
   def download
     unless @data_file.published? and @data_file.is_package?
       authenticate_user!
-      #authorize! :download, @data_file
+      authorize! :download, @data_file
     end
 
     if current_user.present?
@@ -389,11 +389,9 @@ class DataFilesController < ApplicationController
     @search = DataFileSearch.new(search_params)
     # prevents CanCan loading the id search param
     @data_files = DataFile.scoped
-    @data_files = @search.do_search(@data_files).select{ |df| df.is_authorised_for_access_by?(current_user) }
+    @data_files = @search.do_search(@data_files)
     @data_files.each do |data_file|
-      if data_file.is_authorised_for_access_by?(current_user)
         data_file.url = download_data_file_url(data_file.id, :format => :json)
-      end
     end
 
   end

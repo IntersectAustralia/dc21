@@ -22,12 +22,11 @@ Feature: Download multiple files
     When I make a request for the data download page for "sample1.txt" with an invalid API token
     Then I should get a 401 response code
 
-  @wip
   Scenario: Download a single file via API
     And user "admin@intersect.org.au" has an API token
     When I make a request for the data download page for "sample1.txt" as "admin@intersect.org.au" with a valid API token
     Then I should get a 200 response code
-    And I should get a file with name "sample1.txt" and content type "text/html; charset=utf-8"
+    And I should get a file with name "sample1.txt" and content type "text/plain"
     And the file should contain "Plain text file sample1.txt"
 
   Scenario: Download a selection of files from the cart

@@ -167,5 +167,7 @@ Feature: Perform searching via API
     And I should get a JSON response with
       | filename    |
       | 1.dat       |
+      | 2.dat       |
       | 3.dat       |
       | toa5.dat    |
+    # modify step above to read in empty value as nil
