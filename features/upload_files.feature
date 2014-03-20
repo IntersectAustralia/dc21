@@ -4,7 +4,7 @@ Feature: Upload files
   I want to upload a file
 
   Background:
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And I have a user "admin@intersect.org.au" with role "Administrator"
     And I am logged in as "researcher@intersect.org.au"
     And I have facility "ROS Weather Station" with code "ROS_WS"
