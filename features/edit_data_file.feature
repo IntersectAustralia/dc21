@@ -5,7 +5,7 @@ Feature: Edit data files metadata
 
   Background:
     Given I have a user "admin@intersect.org.au" with role "Administrator"
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And I have data files
       | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        |
       | datafile.dat         | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment   | Description of my file            | RAW                    |        |                   |
@@ -146,6 +146,9 @@ Feature: Edit data files metadata
     Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
+    Then I should see element with id "private_access_options"
+    And I should not see element with id "user_groups_list"
+    When I choose "Public"
     Then I should not see element with id "private_access_options"
     And I should not see element with id "user_groups_list"
     When I choose "Private"
