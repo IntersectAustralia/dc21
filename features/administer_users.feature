@@ -21,14 +21,14 @@ Feature: Administer users
       | raul@intersect.org.au  | Raul       | Carrizo   |               | Deactivated |
 
   Scenario: View user details
-    Given "raul@intersect.org.au" has role "Researcher"
+    Given "raul@intersect.org.au" has role "Institutional User"
     And I am on the list users page
     When I follow "View Details" for "raul@intersect.org.au"
     Then I should see details displayed
       | Email      | raul@intersect.org.au |
       | First name | Raul                  |
       | Last name  | Carrizo               |
-      | Role       | Researcher            |
+      | Role       | Institutional User    |
       | Status     | Active                |
 
   Scenario: Go back from user details
@@ -59,14 +59,14 @@ Feature: Administer users
     And I should see field "Role" with value "Administrator"
 
   Scenario: Cancel out of editing roles
-    Given "raul@intersect.org.au" has role "Researcher"
+    Given "raul@intersect.org.au" has role "Institutional User"
     And I am on the list users page
     When I follow "View Details" for "raul@intersect.org.au"
     And I follow "Edit role"
     And I select "Administrator" from "Role"
     And I follow "Back"
     Then I should be on the user details page for raul@intersect.org.au
-    And I should see field "Role" with value "Researcher"
+    And I should see field "Role" with value "Institutional User"
 
   Scenario: Role should be mandatory when editing Role
     And I am on the list users page

@@ -5,7 +5,7 @@ Feature: Edit data files metadata
 
   Background:
     Given I have a user "admin@intersect.org.au" with role "Administrator"
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And I have data files
       | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        |
       | datafile.dat         | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment   | Description of my file            | RAW                    |        |                   |
@@ -13,6 +13,11 @@ Feature: Edit data files metadata
       | file.txt             | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment     | desc.                             | UNKNOWN                |        |                   |
       | error.txt            | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1                | desc.                             | ERROR                  |        |                   |
       | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 |
+    And I have access groups
+      | id | name    | primary_user                |  created_at       | status |
+      | 1  | group-1 | admin@intersect.org.au      | 26/02/2014 14:18  | true   |
+      | 2  | group-2 | researcher@intersect.org.au | 03/03/2014 16:32  | false  |
+      | 3  | group-3 | admin@intersect.org.au      | 02/01/2014 00:00  | true   |
 
 
   Scenario: ID should be unique
@@ -136,6 +141,32 @@ Feature: Edit data files metadata
     And I press "Update"
     Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cu,ba"
 
+  @javascript
+  Scenario: Make a data file private with access groups
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    Then I should see element with id "private_access_options"
+    And I should not see element with id "user_groups_list"
+    When I choose "Public"
+    Then I should not see element with id "private_access_options"
+    And I should not see element with id "user_groups_list"
+    When I choose "Private"
+    And I check "Users in Groups"
+    Then I should see select2 field "data_file_access_groups" is empty
+    When I click on "Groups"
+    Then I should see the choice "group-1" in the select2 menu
+    And I should see the choice "group-3" in the select2 menu
+    And I should not see the choice "group-2" in the select2 menu
+    When I choose "group-3" in the select2 menu
+    Then I should see select2 field "data_file_access_groups" with array values "3"
+    When I click on "Groups"
+    Then I should see the choice "group-1" in the select2 menu
+    And I should not see the choice "group-3" in the select2 menu
+    When I choose "group-1" in the select2 menu
+    Then I should see select2 field "data_file_access_groups" with array values "1, 3"
+    When I fill in "Groups" with "gibberish"
+    Then I should see no matches found in the select2 field
 
 #EYETRACKER-88
 

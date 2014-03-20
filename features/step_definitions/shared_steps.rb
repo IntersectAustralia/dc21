@@ -231,6 +231,16 @@ Then /^I should see select2 field "([^"]*)" with value "([^"]*)"$/ do |name, val
   field.value.should eq value
 end
 
+Then /^I should see select2 field "([^"]*)" with array values "([^"]*)"$/ do |name, value|
+  field = page.find("##{name}")
+  field.value.join(", ").should eq value
+end
+
+Then /^I should see select2 field "([^"]*)" is empty$/ do |name|
+  field = page.find("##{name}")
+  field.value.should be_empty
+end
+
 Then /^I should see the choice "([^"]*)" in the select2 menu$/ do |value|
   field = page.find(".select2-result-label", text: value)
   field.should_not be_nil
@@ -238,6 +248,11 @@ end
 
 Then /^I should not see the choice "([^"]*)" in the select2 menu$/ do |value|
   page.should have_no_xpath("//*[@class='select2-result-label' and text()='#{value}']")
+end
+
+Then /^I should see no matches found in the select2 field$/ do
+  field = page.find("#select2-drop")
+  field.text.strip.should eq "No matches found"
 end
 
 Then /^file "([^"]*)" should have labels "([^"]*)"$/ do |file, labels|

@@ -1,5 +1,15 @@
 Given /^I have access groups$/ do |table|
   table.hashes.each do |attributes|
+    user_list = attributes.delete("users")
+    unless user_list.blank?
+      attributes["user_ids"] = User.where(email: user_list.split(", ")).collect(&:id)
+    end
+    #users = []
+    #user_list.each do |user|
+    #  users << User.find_by_email(user)
+    #end
+    #attributes.merge(:users => users)
+
     if attributes.include? ("primary_user")
       primary_user_email = attributes.delete("primary_user")
       primary_user = User.find_by_email(primary_user_email)
@@ -7,25 +17,6 @@ Given /^I have access groups$/ do |table|
     else
       Factory(:access_group, attributes)
     end
-
-    #users_csv = attributes.delete('users')
-    #unless users_csv.blank?
-    #  users = users_csv.split(", ").collect { |user| user.strip }
-    #  users.map { |user| df.labels << Label.find_or_create_by_name(label) }
-    #end
-    #unless users.blank?
-    #  attributes["user_ids"] = User.where(email: users.split(", ")).collect(&:id)
-    #end
-    #if attributes.include? ("users")
-    #  users_emails = attributes.delete("users").split(',')
-    #  users = []
-    #  users_emails.each do |email|
-    #    users.append(User.find_by_email(email))
-    #  end
-    #  Factory(:access_group, attributes.merge(:users => users))
-    #else
-    #  Factory(:access_group, attributes)
-    #end
   end
 end
 

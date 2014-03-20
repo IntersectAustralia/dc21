@@ -12,7 +12,7 @@ end
 
 Given /^I have the usual roles$/ do
   Role.create!(:name => "Administrator")
-  Role.create!(:name => "Researcher")
+  Role.create!(:name => "Institutional User")
 end
 
 

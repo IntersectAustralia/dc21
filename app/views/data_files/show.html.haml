@@ -24,8 +24,9 @@
     - else
       = link_to 'Add to Cart', cart_items_path(:data_file_ids => @data_file.id),  :class => "btn", :method => "post"
 
-
 #file_details
+  -if @path
+    = image_tag @path, :size => "200x200", :class => "float_right"
   .container
     %h2 Basic Information
     - render_field "Name", @data_file.filename
@@ -34,7 +35,6 @@
     .description
       - render_description "Description", @data_file.file_processing_description
 
-    - render_field "Access", @data_file.access
     - render_field_with_block "Tags" do
       - @data_file.tags.each do |tag|
         %span{:title => tag.name}= tag.name
@@ -67,6 +67,19 @@
         - render_field "End time", end_date
 
   .container
+    %h2 Access Control
+    - render_field "Access", @data_file.access
+    - if @data_file.access == "Private"
+      - render_field_with_block "Options" do
+        - if @data_file.access_to_all_institutional_users?
+          %span= "Access to all institutional users"
+          %br/
+        - if @data_file.access_to_user_groups?
+          %span= "Access to user groups"
+          %br/
+          - render_field "Groups", @data_file.access_group_list_display
+
+  .container
     %h2
       File Relationships
       = link_to 'Add All Related Files to Cart', add_all_cart_items_path(:related => @data_file.id), :class => "btn"
@@ -74,7 +87,10 @@
     - render_field_with_block "Parents" do
       - if @data_file.parents.present?
         - @data_file.parents.order(:filename).each do |data_file|
-          %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -if data_file.is_authorised_for_access_by?(current_user)
+            %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -else
+            %span{:title => data_file.filename}= data_file.filename
           %br/
       - else
         No parent files defined.
@@ -82,7 +98,10 @@
     - render_field_with_block "Children" do
       - if @data_file.children.present?
         - @data_file.children.order(:filename).each do |data_file|
-          %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -if data_file.is_authorised_for_access_by?(current_user)
+            %span{:title => data_file.filename}= link_to data_file.filename, data_file_path(data_file)
+          -else
+            %span{:title => data_file.filename}= data_file.filename
           %br/
       - else
         No children files defined.

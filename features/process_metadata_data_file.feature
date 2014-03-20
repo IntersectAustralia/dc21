@@ -4,9 +4,9 @@ Feature: Process Data files
   I want to manually invoke processing of data files
 
   Background:
-    Given I have a user "api@intersect.org.au" with role "API Uploader"
+    Given I have a user "api@intersect.org.au" with role "Non-Institutional User"
     Given I have a user "admin@intersect.org.au" with role "Administrator"
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And I have the following system configuration
       | ocr_types  | sr_types    |
       | image/jpeg | audio/x-wav |

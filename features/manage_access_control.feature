@@ -12,8 +12,8 @@ Feature: Create and manage file access control groups
       | dev@intersect.org.au          | Dev        | Dude      |
     And I have the usual roles
     And "admin@intersect.org.au" has role "Administrator"
-    And "cindy@intersect.org.au" has role "Researcher"
-    And "researcher@intersect.org.au" has role "Researcher"
+    And "cindy@intersect.org.au" has role "Institutional User"
+    And "researcher@intersect.org.au" has role "Institutional User"
     And "dev@intersect.org.au" has role "Administrator"
 
   Scenario: View access control groups as non-admin
@@ -132,9 +132,9 @@ Feature: Create and manage file access control groups
       | Primary User  | Cindy Wang (cindy@intersect.org.au)           |
       | Other Users   |                                               |
     And I should see "access_group_users" table with
-      | First Name | Last Name | Email                        | Role          | Status |
-      | Admin      | Guy       | admin@intersect.org.au       | Administrator | Active |
-      | Researcher | Man       | researcher@intersect.org.au  | Researcher    | Active |
+      | First Name | Last Name | Email                        | Role               | Status |
+      | Admin      | Guy       | admin@intersect.org.au       | Administrator      | Active |
+      | Researcher | Man       | researcher@intersect.org.au  | Institutional User | Active |
 
   @javascript
   Scenario: Drill down on access group name from the list of access groups
@@ -180,9 +180,9 @@ Feature: Create and manage file access control groups
       | Primary User | Admin Guy (admin@intersect.org.au) |
       | Other Users  |                                    |
     And I should see "access_group_users" table with
-      | First Name | Last Name | Email                        | Role          | Status |
-      | Cindy      | Wang      | cindy@intersect.org.au       | Researcher    | Active |
-      | Researcher | Man       | researcher@intersect.org.au  | Researcher    | Active |
+      | First Name | Last Name | Email                        | Role               | Status |
+      | Cindy      | Wang      | cindy@intersect.org.au       | Institutional User | Active |
+      | Researcher | Man       | researcher@intersect.org.au  | Institutional User | Active |
 
   @javascript
   Scenario: Display and edit access groups a user belongs to on the user's details page

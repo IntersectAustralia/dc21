@@ -44,6 +44,7 @@ class DataFile < ActiveRecord::Base
            :source => :child,
            :conditions => proc  { "child_id <> parent_id" }
 
+  has_many :datafile_accesses, :uniq => true
   has_many :access_groups, :through => :datafile_accesses, :uniq => true
 
   belongs_to :created_by, :class_name => "User"
@@ -58,7 +59,7 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
-  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups
+  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -108,7 +109,7 @@ class DataFile < ActiveRecord::Base
   scope :with_transfer_status_in, lambda { |automation_stati| where { transfer_status.in automation_stati } }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
   scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id) }
-  scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email')
+  scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email, data_files.access, data_files.access_to_all_institutional_users, data_files.access_to_user_groups, data_files.created_by_id')
   scope :relationship_fields, select([:id, 'filename as text', 'experiment_id as exp_id'])
 
   attr_accessor :messages, :url
@@ -132,6 +133,10 @@ class DataFile < ActiveRecord::Base
 
   def is_published?
     published | false
+  end
+
+  def access_group_list_display
+    self.access_groups.find_all_by_status(true).collect {|ag| ag.name}.join(", ")
   end
 
   def label_list
@@ -268,7 +273,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def time_parsable?
-    self.is_package? || self.is_toa5?
+    self.is_package? || self.is_toa5? || self.is_exif_image?
   end
 
   def is_raw_file?
@@ -288,11 +293,27 @@ class DataFile < ActiveRecord::Base
   end
 
   def is_exif_image?
-    self.format.eql?(FileTypeDeterminer::ExifImage)
+    ['image/jpeg', 'image/pjpeg', 'image/tiff', 'image/x-tiff'].include? self.format
   end
 
   def is_error_file?
     self.file_processing_status.eql? STATUS_ERROR
+  end
+
+  def is_authorised_for_access_by?(current_user)
+    if current_user.role.name == "Administrator" || self.created_by == current_user || self.access == DataFile::ACCESS_PUBLIC
+      return true
+    end
+
+    if self.access == DataFile::ACCESS_PRIVATE
+      if self.access_to_all_institutional_users && current_user.role.name == "Institutional User"
+        return true
+      elsif self.access_to_user_groups && !(current_user.access_groups.find_all_by_status(true) & self.access_groups.find_all_by_status(true)).empty?
+        return true
+      end
+    end
+
+    return false
   end
 
   def has_data_in_range?(from, to)

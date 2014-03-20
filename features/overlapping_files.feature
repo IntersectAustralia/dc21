@@ -5,8 +5,8 @@ Feature: Overlapping Files
   And I don't want to overlap mismatching files
 
   Background:
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
-    Given I have a user "other@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
+    Given I have a user "other@intersect.org.au" with role "Institutional User"
     And I am logged in as "researcher@intersect.org.au"
     And I have experiment "My Experiment"
 

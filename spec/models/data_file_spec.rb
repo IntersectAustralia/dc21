@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cancan/matchers'
 
 describe DataFile do
   describe "Validations" do
@@ -45,6 +46,176 @@ describe DataFile do
       file.should_not be_valid
     end
 
+    describe "Abilities" do
+      before(:each) do
+        @super_role = Factory(:role, :name => "Administrator")
+        @inst_role = Factory(:role, :name => "Institutional User")
+        @non_inst_role = Factory(:role, :name => "Non-Institutional User")
+
+        @admin_user = Factory(:user, :role => @super_role, :status => "A")
+        @inst_user = Factory(:user, :role => @inst_role, :status => "A")
+        @non_inst_user = Factory(:user, :role => @non_inst_role, :status => "A")
+
+        @public_file = Factory(:data_file, :access => DataFile::ACCESS_PUBLIC, :created_by => @admin_user)
+        @private_file_all_inst = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => true, :created_by => @inst_user)
+        @restricted_file_no_groups = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
+      end
+
+      describe "as Institutional User" do
+        before(:each) do
+          @ability = Ability.new(@inst_user)
+        end
+
+        it "can access public data files" do
+          @ability.should be_able_to(:index, @public_file)
+          @ability.should be_able_to(:show, @public_file)
+          @ability.should be_able_to(:create, @public_file)
+          @ability.should be_able_to(:download, @public_file)
+          @ability.should be_able_to(:download_selected, @public_file)
+          @ability.should be_able_to(:bulk_update, @public_file)
+          @ability.should be_able_to(:api_create, @public_file)
+          @ability.should be_able_to(:api_search, @public_file)
+          @ability.should be_able_to(:process_metadata_extraction, @public_file)
+        end
+
+        it "can access private data files open to all institutional users" do
+          @ability.should be_able_to(:index, @private_file_all_inst)
+          @ability.should be_able_to(:show, @private_file_all_inst)
+          @ability.should be_able_to(:create, @private_file_all_inst)
+          @ability.should be_able_to(:download, @private_file_all_inst)
+          @ability.should be_able_to(:download_selected, @private_file_all_inst)
+          @ability.should be_able_to(:bulk_update, @private_file_all_inst)
+          @ability.should be_able_to(:api_create, @private_file_all_inst)
+          @ability.should be_able_to(:api_search, @private_file_all_inst)
+          @ability.should be_able_to(:process_metadata_extraction, @private_file_all_inst)
+        end
+
+        it "can access private data files associated with an access group that they belong to" do
+
+        end
+
+        it "cannot access private data files of restricted access that they do not belong to the access groups" do
+          @restricted_file_no_groups = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
+
+          @ability.should be_able_to(:index, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:show, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:create, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:download, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:download_selected, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:bulk_update, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:api_create, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:api_search, @restricted_file_no_groups)
+          @ability.should_not be_able_to(:process_metadata_extraction, @restricted_file_no_groups)
+        end
+
+        it "can access private restricted data files that they uploaded themselves" do
+          restricted_file_uploaded_by_user = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @inst_user, :access_to_user_groups => true)
+          @ability.should be_able_to(:index, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:show, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:create, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:download, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:download_selected, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:bulk_update, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:api_create, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:api_search, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:process_metadata_extraction, restricted_file_uploaded_by_user)
+        end
+      end
+
+      describe "as a Non-Institutional User" do
+        before(:each) do
+          @ability = Ability.new(@non_inst_user)
+        end
+
+        it "can access public data files" do
+          @ability.should be_able_to(:index, @public_file)
+          @ability.should be_able_to(:show, @public_file)
+          @ability.should be_able_to(:create, @public_file)
+          @ability.should be_able_to(:download, @public_file)
+          @ability.should be_able_to(:download_selected, @public_file)
+          @ability.should be_able_to(:bulk_update, @public_file)
+          @ability.should be_able_to(:api_create, @public_file)
+          @ability.should be_able_to(:api_search, @public_file)
+          @ability.should be_able_to(:process_metadata_extraction, @public_file)
+        end
+
+        it "cannot access private data files open to all institutional users" do
+          @ability.should be_able_to(:index, @private_file_all_inst)
+          @ability.should_not be_able_to(:show, @private_file_all_inst)
+          @ability.should_not be_able_to(:create, @private_file_all_inst)
+          @ability.should_not be_able_to(:download, @private_file_all_inst)
+          @ability.should_not be_able_to(:download_selected, @private_file_all_inst)
+          @ability.should_not be_able_to(:bulk_update, @private_file_all_inst)
+          @ability.should_not be_able_to(:api_create, @private_file_all_inst)
+          @ability.should_not be_able_to(:api_search, @private_file_all_inst)
+          @ability.should_not be_able_to(:process_metadata_extraction, @private_file_all_inst)
+        end
+
+        it "can access private data files associated with an access group that they belong to" do
+
+        end
+
+        it "cannot access private data files of restricted access that they do not belong to the access groups" do
+          restricted_file = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @inst_user, :access_to_user_groups => true)
+
+          @ability.should be_able_to(:index, restricted_file)
+          @ability.should_not be_able_to(:show, restricted_file)
+          @ability.should_not be_able_to(:create, restricted_file)
+          @ability.should_not be_able_to(:download, restricted_file)
+          @ability.should_not be_able_to(:download_selected, restricted_file)
+          @ability.should_not be_able_to(:bulk_update, restricted_file)
+          @ability.should_not be_able_to(:api_create, restricted_file)
+          @ability.should_not be_able_to(:api_search, restricted_file)
+          @ability.should_not be_able_to(:process_metadata_extraction, restricted_file)
+        end
+
+        it "can access private restricted data files that they uploaded themselves" do
+          restricted_file_uploaded_by_user = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
+          @ability.should be_able_to(:index, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:show, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:create, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:download, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:download_selected, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:bulk_update, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:api_create, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:api_search, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:process_metadata_extraction, restricted_file_uploaded_by_user)
+        end
+      end
+
+
+      describe "as admin" do
+        it "can access all data files" do
+          ability = Ability.new(@admin_user)
+          ability.should be_able_to(:read, @public_file)
+          ability.should be_able_to(:create, @public_file)
+          ability.should be_able_to(:download, @public_file)
+          ability.should be_able_to(:download_selected, @public_file)
+          ability.should be_able_to(:bulk_update, @public_file)
+          ability.should be_able_to(:api_create, @public_file)
+          ability.should be_able_to(:api_search, @public_file)
+          ability.should be_able_to(:process_metadata_extraction, @public_file)
+
+          ability.should be_able_to(:read, @private_file_all_inst)
+          ability.should be_able_to(:create, @private_file_all_inst)
+          ability.should be_able_to(:download, @private_file_all_inst)
+          ability.should be_able_to(:download_selected, @private_file_all_inst)
+          ability.should be_able_to(:bulk_update, @private_file_all_inst)
+          ability.should be_able_to(:api_create, @private_file_all_inst)
+          ability.should be_able_to(:api_search, @private_file_all_inst)
+          ability.should be_able_to(:process_metadata_extraction, @private_file_all_inst)
+
+          ability.should be_able_to(:read, @restricted_file_no_groups)
+          ability.should be_able_to(:create, @restricted_file_no_groups)
+          ability.should be_able_to(:download, @restricted_file_no_groups)
+          ability.should be_able_to(:download_selected, @restricted_file_no_groups)
+          ability.should be_able_to(:bulk_update, @restricted_file_no_groups)
+          ability.should be_able_to(:api_create, @restricted_file_no_groups)
+          ability.should be_able_to(:api_search, @restricted_file_no_groups)
+          ability.should be_able_to(:process_metadata_extraction, @restricted_file_no_groups)
+        end
+      end
+    end
   end
 
   describe "File processing description length" do

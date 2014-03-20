@@ -32,14 +32,17 @@ class Ability
 
     # all users can read and add data files, and can delete their own. This *could* be expressed more simply,
     #   but shouldn't until we actually have explicitly defined permissions and roles
-    can [:read, #index, show
+    can :index, DataFile
+    can [:show,
          :create, #new, create
          :download,
          :download_selected,
          :bulk_update,
          :api_create,
          :api_search,
-         :process_metadata_extraction], DataFile
+         :process_metadata_extraction], DataFile do |datafile|
+      datafile.is_authorised_for_access_by?(user)
+    end
     can :destroy, DataFile, :created_by_id => user.id, :published => false
     can :update, DataFile, :created_by_id => user.id, :published => false
     cannot :update, DataFile do |datafile|

@@ -50,6 +50,11 @@ When /^I submit an API upload request with the following parameters as user "([^
 
   post_params[:parent_filenames] = params['parent_filenames'].split(",") unless params['parent_filenames'].blank?
 
+  post_params[:access] = params['access'] unless params['access'].blank?
+  post_params[:access_to_all_institutional_users] = params['access_to_all_institutional_users'] unless params['access_to_all_institutional_users'].blank?
+  post_params[:access_to_user_groups] = params['access_to_user_groups'] unless params['access_to_user_groups'].blank?
+  post_params[:access_groups] = params['access_groups'].split(",") unless params['access_groups'].blank?
+
   user = User.find_by_email!(email)
   post api_create_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end

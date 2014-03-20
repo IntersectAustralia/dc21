@@ -4,7 +4,7 @@ Feature: Upload files via the API
   I want to be able to have my PC automatically send files to DC21
 
   Background:
-    Given I have a user "researcher@intersect.org.au" with role "Researcher"
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And user "researcher@intersect.org.au" has an API token
     And I have facility "Flux Tower" with code "FLUX"
     Given I have experiments
@@ -16,6 +16,12 @@ Feature: Upload files via the API
       | Photo      |
       | Video      |
       | Gap Filled |
+    And I have access groups
+      | name    |
+      | group-A |
+      | group-B |
+      | group-C |
+      | group-D |
 
   Scenario: Try to upload without an API token
     When I submit an API upload request without an API token
@@ -35,6 +41,9 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have experiment "Flux Experiment 1"
     And file "weather_station_05_min.dat" should have type "RAW"
     And file "weather_station_05_min.dat" should have automatically extracted metadata
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" should be set as private access to all institutional users
+    And file "weather_station_05_min.dat" should not be set as private access to user groups
 
   # EYETRACKER-106
   Scenario: Successful upload TOA5 file with minimum required metadata with Org Level 2 identifier
@@ -233,3 +242,109 @@ Feature: Upload files via the API
     Then I should get a 200 response code
     And file "weather_station_05_min.dat" should have 0 parents
     And file "weather_station_05_min.dat" should have parents ""
+
+  Scenario: Specify access control to files uploaded through the API
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type       | RAW                                                           |
+      | experiment | Flux Experiment 1                                             |
+      | access     | Public                                                        |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Public"
+    And file "weather_station_05_min.dat" should not be set as private access to all institutional users
+    And file "weather_station_05_min.dat" should not be set as private access to user groups
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                              | RAW                                                           |
+      | experiment                        | Flux Experiment 1                                             |
+      | access                            | Private                                                       |
+      | access_to_all_institutional_users | false                                                         |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" should not be set as private access to all institutional users
+    And file "weather_station_05_min.dat" should not be set as private access to user groups
+    And file "weather_station_05_min.dat" should have access groups ""
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                  | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                  | RAW                                                           |
+      | experiment            | Flux Experiment 1                                             |
+      | access                | Private                                                       |
+      | access_to_user_groups | true                                                          |
+      | access_groups         | group-C,group-A,group-B                                       |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" should not be set as private access to all institutional users
+    And file "weather_station_05_min.dat" should be set as private access to user groups
+    And file "weather_station_05_min.dat" should have access groups "group-C,group-A,group-B"
+
+  Scenario Outline: Supplying multiple access control keywords in API upload should upload file and set it to the most restricted access setting (from what's specified)
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                              | PROCESSED                                                     |
+      | experiment                        | Flux Experiment 1                                             |
+      | access                            | <access>                                                      |
+      | access_to_all_institutional_users | <all_inst_users>                                    |
+      | access_to_user_groups             | <user_groups>                                       |
+      | access_groups                     | <group_names>                                                 |
+    Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should have access level "<resulting_access>"
+    And file "weather_station_05_min.dat" should have the private access options: "<resulting_inst>" to all institutional users, "<resulting_groups>" to user groups
+    And file "weather_station_05_min.dat" should have access groups "<resulting_group_names>"
+  Examples:
+      | access  | all_inst_users | user_groups | group_names     | resulting_access | resulting_inst | resulting_groups | resulting_group_names |
+      | Public  | true           |             |                 | Private          | true           |                  |                       |
+      | Public  |                | true        |                 | Private          |                | true             |                       |
+      | Public  |                |             | group-A,group-B | Private          |                | true             | group-A,group-B       |
+      | Public  | true           | true        |                 | Private          | true           | true             |                       |
+      | Public  |                |             | made,up,groups  | Private          |                | true             |                       |
+      | Public  | true           |             | group-C,other   | Private          | true           | true             | group-C               |
+      |         | true           |             |                 | Private          | true           |                  |                       |
+      |         |                | true        |                 | Private          |                | true             |                       |
+      |         |                |             | group-A,group-B | Private          |                | true             | group-A,group-B       |
+      |         | true           | true        |                 | Private          | true           | true             |                       |
+      |         |                |             | made,up,groups  | Private          |                | true             |                       |
+      |         | true           |             | group-C,other   | Private          | true           | true             | group-C               |
+
+  Scenario Outline: Invalid access control parameters in the API upload should result in error
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                              | RAW                                                           |
+      | experiment                        | Flux Experiment 1                                             |
+      | access                            | <access>                    |
+      | access_to_all_institutional_users | <access_to_all_inst_users>  |
+      | access_to_user_groups             | <access_to_user_groups>     |
+    Then I should get a 400 response code
+    And I should get a JSON response with errors "<errors>"
+  Examples:
+    | access  | access_to_all_inst_users | access_to_user_groups | errors |
+    | bad     |                          |                       | Supplied access was not valid: has to be either Public or Public  |
+    | Public  | blah                     |                       | Supplied access_to_all_institutional_users was not valid: has to be either true or false |
+    | Private |                          | meh                   | Supplied access_to_user_groups was not valid: has to be either true or false             |
+    | some    | random                   | stuff                 | Supplied access was not valid: has to be either Public or Public, Supplied access_to_all_institutional_users was not valid: has to be either true or false, Supplied access_to_user_groups was not valid: has to be either true or false |
+    | other   | thing                    |                       | Supplied access was not valid: has to be either Public or Public, Supplied access_to_all_institutional_users was not valid: has to be either true or false |
+    | made    |                          | up                    | Supplied access was not valid: has to be either Public or Public, Supplied access_to_user_groups was not valid: has to be either true or false |
+    |         | random                   | stuff                 | Supplied access_to_all_institutional_users was not valid: has to be either true or false, Supplied access_to_user_groups was not valid: has to be either true or false |
+
+  Scenario Outline: Specifying one or more non-existing access groups in API upload parameters should upload file with warning
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file                              | samples/full_files/weather_station/weather_station_05_min.dat |
+      | type                              | RAW                                                           |
+      | experiment                        | Flux Experiment 1                                             |
+      | access                            | Private                                                       |
+      | access_to_all_institutional_users | false                                                         |
+      | access_to_user_groups             | true                                                          |
+      | access_groups                     | <group_names>                                                 |
+    Then I should get a 200 response code
+    And I should get a JSON response with filename "weather_station_05_min.dat" and type "RAW" with messages "<messages>"
+    And file "weather_station_05_min.dat" should have access level "Private"
+    And file "weather_station_05_min.dat" should be set as private access to user groups
+    And file "weather_station_05_min.dat" should have access groups "<resulting_groups>"
+    And file "weather_station_05_min.dat" should not be set as private access to all institutional users
+    Examples:
+      | group_names                   | messages                                                                 | resulting_groups |
+      | other                         | File uploaded successfully., 1 access group does not exist in the system |                  |
+      | group-A,avengers              | File uploaded successfully., 1 access group does not exist in the system | group-A          |
+      | group-C,citrus,cake           | File uploaded successfully., 2 access groups do not exist in the system  | group-C          |
+      | group-B,banana,group-C        | File uploaded successfully., 1 access group does not exist in the system | group-B,group-C  |
+      | a,bunch,of,made,up,groups     | File uploaded successfully., 6 access groups do not exist in the system  |                  |
+      | some,imaginary,groups,group-A | File uploaded successfully., 3 access groups do not exist in the system  | group-A          |

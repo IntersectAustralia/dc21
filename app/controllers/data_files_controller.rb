@@ -9,7 +9,7 @@ class DataFilesController < ApplicationController
   before_filter :sort_params, :only => [:index, :search]
   before_filter :search_params, :only => [:index, :search]
   before_filter :page_params, :only => [:index]
-
+  before_filter :clean_up_temp_image_files
 
   load_and_authorize_resource :except => [:download, :api_search]
   load_resource :only => [:download]
@@ -19,6 +19,7 @@ class DataFilesController < ApplicationController
 
   expose(:tags) { Tag.order(:name) }
   expose(:labels) { Label.joins(:data_file_labels).pluck(:name).uniq }
+  expose(:access_groups) { AccessGroup.pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
 
@@ -47,6 +48,11 @@ class DataFilesController < ApplicationController
   def show
     set_tab :explore, :contentnavigation
     @back_request = request.referer
+    @data_file = DataFile.find_by_id(params[:id])
+    if ['image/jpeg','image/bmp','image/x-windows-bmp','image/gif','image/png','image/x-ms-bmp'].include? @data_file.format
+      FileUtils.cp_r @data_file.path, Rails.root.join('public/images/temp/')
+      @path = '/images/temp/' + @data_file.filename
+    end
   end
 
   def new
@@ -86,6 +92,10 @@ class DataFilesController < ApplicationController
       params[:data_file][:child_ids] = params[:data_file][:child_ids].split(",")
     end
 
+    if params[:data_file][:access_groups]
+      params[:data_file][:access_groups] = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
+    end
+
     old_filename = @data_file.filename
     if @data_file.update_attributes(params[:data_file])
       @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root']) unless @data_file.is_package?
@@ -113,7 +123,12 @@ class DataFilesController < ApplicationController
         parents = params[:data_file][:parent_ids].split(",")
       end
 
-      unless validate_inputs(files, experiment_id, type, description, tags, labels)
+      access_groups = []
+      if params[:data_file][:access_groups]
+        access_groups = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
+      end
+
+      unless validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
         render :new
         return
       end
@@ -150,6 +165,20 @@ class DataFilesController < ApplicationController
         attrs[:parent_ids] = attrs[:parent_ids].split(",")
       end
 
+      if attrs[:access_groups]
+        array_of_access_groups = attrs[:access_groups][:access_groups].map {|id| AccessGroup.find_by_id(id)}
+        attrs[:access_groups] = array_of_access_groups
+      end
+
+      unless attrs[:access_to_user_groups]
+        attrs[:access_to_user_groups] = false
+      end
+
+      unless attrs[:access_to_all_institutional_users]
+        attrs[:access_to_all_institutional_users] = false
+      end
+
+
       file = DataFile.find(id)
 
       successful_update = file.update_attributes(attrs)
@@ -170,6 +199,12 @@ class DataFilesController < ApplicationController
   end
 
   def download_selected
+    size_before_authorised_check = cart_items.size
+    cart_items.delete_if{|file| !file.is_authorised_for_access_by?(current_user)} if !cart_items.empty?
+    if cart_items.size != size_before_authorised_check
+      flash[:alert] = "#{size_before_authorised_check - cart_items.size} restricted access files were not downloaded because you do not have access."
+    end
+
     if cart_items.empty?
       redirect_to(data_files_path, :notice => "Your cart is empty.")
     else
@@ -187,20 +222,24 @@ class DataFilesController < ApplicationController
   def download
     unless @data_file.published? and @data_file.is_package?
       authenticate_user!
-      authorize! :download, @data_file
+      #authorize! :download, @data_file
     end
 
     if current_user.present?
-      return send_data_file(@data_file)
+      if @data_file.is_authorised_for_access_by?(current_user)
+        return send_data_file(@data_file)
+      else
+        redirect_to data_files_path, alert: "You do not have access to download this file."
+      end
     else
       unless APP_CONFIG['ip_addresses'].nil?
-        if APP_CONFIG['ip_addresses'].include? request.ip
-          return send_data_file(@data_file)
-        else
-          raise ActionController::RoutingError.new('Not Found')
-        end
+      if APP_CONFIG['ip_addresses'].include? request.ip
+        return send_data_file(@data_file)
       else
         raise ActionController::RoutingError.new('Not Found')
+      end
+      else
+      raise ActionController::RoutingError.new('Not Found')
       end
     end
   end
@@ -254,11 +293,23 @@ class DataFilesController < ApplicationController
       tag_names = params[:tag_names]
       label_names = params[:label_names]
       parent_file_ids = DataFile.where(:filename => params[:parent_filenames]).pluck(:id)
-      errors, tag_ids, label_ids = validate_api_inputs(file, type, experiment_id, tag_names, label_names)
+      access = params[:access] #unless params[:access].nil?
+      access_to_all_institutional_users = params[:access_to_all_institutional_users] #(params[:access_to_all_institutional_users].nil? and params[:access].nil?) ? true : params[:access_to_all_institutional_users]
+      access_to_user_groups = params[:access_to_user_groups]
+      access_group_ids = AccessGroup.where(:name => params[:access_groups]).pluck(:id)
+      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, params[:access_groups])
 
       if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids)
+        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
         messages = uploaded_file.messages.collect { |m| m[:message] }
+        if !params[:access_groups].nil? and params[:access_groups].size != access_group_ids.size
+          n = params[:access_groups].size - access_group_ids.size
+          if n == 1
+            messages << "#{n} access group does not exist in the system"
+          else
+            messages << "#{n} access groups do not exist in the system"
+          end
+        end
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
       else
         render :json => {:messages => errors}, :status => :bad_request
@@ -334,17 +385,20 @@ class DataFilesController < ApplicationController
   end
 
   def do_api_search(search_params)
-    authorize! :read, DataFile
+    #authorize! :read, DataFile
     @search = DataFileSearch.new(search_params)
     # prevents CanCan loading the id search param
     @data_files = DataFile.scoped
-    @data_files = @search.do_search(@data_files)
+    @data_files = @search.do_search(@data_files).select{ |df| df.is_authorised_for_access_by?(current_user) }
     @data_files.each do |data_file|
-      data_file.url = download_data_file_url(data_file.id, :format => :json)
+      if data_file.is_authorised_for_access_by?(current_user)
+        data_file.url = download_data_file_url(data_file.id, :format => :json)
+      end
     end
+
   end
 
-  def validate_inputs(files, experiment_id, type, description, tags, labels)
+  def validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -361,10 +415,11 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     @data_file.label_ids = labels
+    @data_file.access_group_ids = access_groups
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, tag_names, label_names)
+  def validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups)
     errors = []
     errors << 'Experiment id is required' if experiment_id.blank?
     errors << 'File is required' if file.blank?
@@ -372,10 +427,38 @@ class DataFilesController < ApplicationController
     errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
     errors << 'Supplied org level 2 id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
     errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
+    errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PUBLIC}" unless access.blank? || access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE
+    errors << 'Supplied access_to_all_institutional_users was not valid: has to be either true or false' unless access_to_all_institutional_users.blank? || access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i) || access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i)
+    errors << 'Supplied access_to_user_groups was not valid: has to be either true or false' unless access_to_user_groups.blank? || access_to_user_groups =~ (/^(true|t|yes|y|1)$/i) || access_to_user_groups =~ (/^(false|f|no|n|0)$/i)
 
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
-    [errors, tag_ids, label_ids]
+    access_to_all_institutional_users_flag = ''
+    access_to_user_groups_flag = ''
+    unless access_to_all_institutional_users.blank?
+      if access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i)
+        access = DataFile::ACCESS_PRIVATE
+        access_to_all_institutional_users_flag = true
+      elsif access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i)
+        access_to_all_institutional_users_flag = false
+      end
+    end
+    unless access_to_user_groups.blank?
+      if access_to_user_groups =~ (/^(true|t|yes|y|1)$/i)
+        access = DataFile::ACCESS_PRIVATE
+        access_to_user_groups_flag = true
+      elsif access_to_user_groups =~ (/^(false|f|no|n|0)$/i)
+        access_to_user_groups_flag = false
+      end
+    end
+    unless access_groups.nil?
+      access = DataFile::ACCESS_PRIVATE
+      access_to_user_groups_flag = true
+    end
+    access_to_all_institutional_users_flag = true if access.blank? and access_to_user_groups.blank? and access_groups.nil?
+    access = access.blank? ? DataFile::ACCESS_PRIVATE : access
+
+    [errors, tag_ids, label_ids, access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
   end
 
   def parse_tags(tag_names, errors)
@@ -498,4 +581,7 @@ class DataFilesController < ApplicationController
     true
   end
 
+  def clean_up_temp_image_files
+    FileUtils.rm_rf Dir.glob(Rails.root.join('public/images/temp/*'))
+  end
 end

@@ -4,7 +4,9 @@ Feature: Download multiple files
   I want to download multiple files from the explore data page
 
   Background:
-    Given I am logged in as "admin@intersect.org.au"
+    Given I have the usual roles
+    And I have a user "admin@intersect.org.au" with role "Administrator"
+    And I am logged in as "admin@intersect.org.au"
     And I have data files
       | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                | id |
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au  | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  |
@@ -19,6 +21,14 @@ Feature: Download multiple files
   Scenario: Try to download with an invalid API token
     When I make a request for the data download page for "sample1.txt" with an invalid API token
     Then I should get a 401 response code
+
+  @wip
+  Scenario: Download a single file via API
+    And user "admin@intersect.org.au" has an API token
+    When I make a request for the data download page for "sample1.txt" as "admin@intersect.org.au" with a valid API token
+    Then I should get a 200 response code
+    And I should get a file with name "sample1.txt" and content type "text/html; charset=utf-8"
+    And the file should contain "Plain text file sample1.txt"
 
   Scenario: Download a selection of files from the cart
     When I add "sample1.txt" to the cart
