@@ -16,22 +16,22 @@
         .control-group
           = label_tag "file_#{file.id}_access", "Public", class: "control-label"
           .controls
-            = radio_button_tag "file_#{file.id}_access", "Public", {id: "public_access_radio_button_#{file.id}"}
+            = radio_button_tag "files[#{file.id}][access]", "Public", {id: "public_access_radio_button_#{file.id}"}
         .control-group
           = label_tag "file_#{file.id}_access", "Private", class: "control-label"
           .controls
-            = radio_button_tag "file_#{file.id}_access", "Private", {id: "private_access_radio_button_#{file.id}"}
+            = radio_button_tag "files[#{file.id}][access]", "Private", {id: "private_access_radio_button_#{file.id}"}
           .controls{:id => "private_access_options_#{file.id}"}
             .record.checkbox
-              = check_box_tag "file_#{file.id}_access_to_all_institutional_users", file.access_to_all_institutional_users, file.access_to_all_institutional_users
+              = check_box_tag "files[#{file.id}][access_to_all_institutional_users]", true, file.access_to_all_institutional_users
               = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
             .record.checkbox
-              = check_box_tag "file_#{file.id}_access_to_user_groups", file.access_to_user_groups, file.access_to_user_groups
+              = check_box_tag "files[#{file.id}][access_to_user_groups]", true, file.access_to_user_groups
               = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
           .control-group{:id => "user_groups_list_#{file.id}"}
             = label_tag :groups, "Groups"
             .controls
-              = collection_select(:access_groups, :access_groups, AccessGroup.find_all_by_status(true), :id, :name, :multiple => true)
+              = collection_select("files[#{file.id}][access_groups]", :access_groups, AccessGroup.find_all_by_status(true), :id, :name, {:name => "files[#{file.id}][access_groups]"}, {:multiple => true})
 
         .control-group
           %label.control-label Type:
@@ -269,7 +269,7 @@
 
   function showUserGroupsList(file_id)
   {
-    $("#file_" + file_id + "_access_to_user_groups").is(':checked') ? $("#user_groups_list_" + file_id).show() : $("#user_groups_list_" + file_id).hide();
+    $("#files_" + file_id + "_access_to_user_groups").is(':checked') ? $("#user_groups_list_" + file_id).show() : $("#user_groups_list_" + file_id).hide();
     //MAY ALSO NEED TO CLEAR THE SELECTED VALUES IF IT IS NOT CHECKED
   }
 

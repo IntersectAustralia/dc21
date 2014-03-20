@@ -165,6 +165,20 @@ class DataFilesController < ApplicationController
         attrs[:parent_ids] = attrs[:parent_ids].split(",")
       end
 
+      if attrs[:access_groups]
+        array_of_access_groups = attrs[:access_groups][:access_groups].map {|id| AccessGroup.find_by_id(id)}
+        attrs[:access_groups] = array_of_access_groups
+      end
+
+      unless attrs[:access_to_user_groups]
+        attrs[:access_to_user_groups] = false
+      end
+
+      unless attrs[:access_to_all_institutional_users]
+        attrs[:access_to_all_institutional_users] = false
+      end
+
+
       file = DataFile.find(id)
 
       successful_update = file.update_attributes(attrs)
