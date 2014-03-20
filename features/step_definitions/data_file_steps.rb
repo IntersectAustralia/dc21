@@ -167,13 +167,23 @@ When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |file_n
 end
 
 Then /^I should get a file with name "([^"]*)" and content type "([^"]*)"$/ do |name, type|
-  page.response_headers['Content-Type'].should == type
-  page.response_headers['Content-Disposition'].should include("filename=\"#{name}\"")
-  page.response_headers['Content-Disposition'].should include("attachment")
+  if page.response_headers['Content-Disposition']
+    page.response_headers['Content-Type'].should == type
+    page.response_headers['Content-Disposition'].should include("filename=\"#{name}\"")
+    page.response_headers['Content-Disposition'].should include("attachment")
+  else
+    last_response.headers['Content-Type'].should == type
+    last_response.headers['Content-Disposition'].should include("filename=\"#{name}\"")
+    last_response.headers['Content-Disposition'].should include("attachment")
+  end
 end
 
 Then /^the file should contain "([^"]*)"$/ do |expected|
-  actual = page.source.strip
+  if page.response_headers['Content-Disposition']
+    actual = page.source.strip
+  else
+    actual = last_response.body.strip
+  end
   expected.strip.should eq(actual)
 end
 

@@ -122,6 +122,11 @@ When /^I make a request for the data download page for "([^"]*)" with an invalid
   get download_data_file_path(:id => DataFile.find_by_filename(data).id, :auth_token => 'blah', :format => :json)
 end
 
+When /^I make a request for the data download page for "([^"]*)" as "([^"]*)" with a valid API token$/ do |data, email|
+  user = User.find_by_email!(email)
+  get download_data_file_path(:id => DataFile.find_by_filename(data).id, :auth_token => user.authentication_token, :format => :json)
+end
+
 When /^I make a request for the data download page for "([^"]*)" without an API token$/ do |data|
   get download_data_file_path(:id => DataFile.find_by_filename(data).id, :format => :json)
 end
