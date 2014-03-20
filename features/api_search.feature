@@ -159,9 +159,13 @@ Feature: Perform searching via API
       | group-2 |                           |
     And I have uploaded "1.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment1" and access "Private" with options institutional "true" and user groups "true" and access groups "group-1"
     And I have uploaded "2.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment1" and access "Private" with options institutional "true" and user groups "true" and access groups "group-2"
+    And I have uploaded "3.dat" as "external@intersect.org.au" with type "My type" and experiment "Experiment2" and access "Private" with options institutional "false" and user groups "true" and access groups ""
+    And I have uploaded "toa5.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment4" and access "Public" with options institutional "false" and user groups "false" and access groups ""
     When I perform an API search with the following parameters as user "external@intersect.org.au"
       | stati | My type |
     Then I should get a 200 response code
     And I should get a JSON response with
       | filename    |
       | 1.dat       |
+      | 3.dat       |
+      | toa5.dat    |
