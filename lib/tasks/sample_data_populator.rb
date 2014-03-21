@@ -7,6 +7,7 @@ def populate_data
   create_facilities_and_experiments
   create_test_files
   create_column_mappings
+  create_groups
 end
 
 def create_test_files
@@ -37,6 +38,10 @@ def create_test_users
   create_user(:email => "researcher1@intersect.org.au", :first_name => "Researcher", :last_name => "One")
   r2 = create_user(:email => "researcher2@intersect.org.au", :first_name => "Researcher", :last_name => "Two")
   r2.deactivate
+  create_user(:email => "apgr@intersect.org.au", :first_name => "API", :last_name => "Group")
+  create_user(:email => "adgr@intersect.org.au", :first_name => "Admin", :last_name => "Group")
+  create_user(:email => "ingr@intersect.org.au", :first_name => "Institution", :last_name => "Group")
+  create_user(:email => "noningr@intersect.org.au", :first_name => "Non-Institution", :last_name => "Group")
   create_rejected_user(:email => "rejected@intersect.org.au", :first_name => "Rejected", :last_name => "One")
   create_unapproved_user(:email => "unapproved1@intersect.org.au", :first_name => "Unapproved", :last_name => "One")
   create_unapproved_user(:email => "unapproved2@intersect.org.au", :first_name => "Unapproved", :last_name => "Two")
@@ -46,8 +51,12 @@ def create_test_users
   set_role("shuqian@intersect.org.au", "Administrator")
   set_role("marc@intersect.org.au", "Non-Institutional User")
   set_role("cindy@intersect.org.au", "Administrator")
-
+  set_role("apgr@intersect.org.au", "API Uploader")
+  set_role("adgr@intersect.org.au", "Administrator")
+  set_role("ingr@intersect.org.au", "Institutional User")
+  set_role("noningr@intersect.org.au", "Non-Institutional User")
 end
+
 
 def create_data_file(filename, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
@@ -188,4 +197,28 @@ def create_mapping(attrs)
   mapping = ColumnMapping.new(attrs)
   mapping.save!
   mapping
+end
+
+def create_groups
+	AccessGroup.delete_all
+
+  create_group(:name => "Kali's Group",
+  :primary_user => "adgr@intersect.org.au",
+  :users => ["apgr@intersect.org.au", "ingr@intersect.org.au", "noningr@intersect.org.au"])
+
+  create_group(:name => "Another Group",
+   :primary_user => "ingr@intersect.org.au",
+   :users => ["apgr@intersect.org.au", "adgr@intersect.org.au", "noningr@intersect.org.au"])
+  create_group(:name => "A Third Group",
+   :primary_user => "apgr@intersect.org.au",
+   :users => ["adgr@intersect.org.au", "ingr@intersect.org.au", "noningr@intersect.org.au"])
+end
+
+def create_group(attrs)
+  attrs[:primary_user] = User.find_by_email attrs[:primary_user]
+  user_ids = attrs[:users].map{|email| User.find_by_email email}
+  attrs[:users] = user_ids
+  group = AccessGroup.new attrs
+  group.save!
+  group
 end
