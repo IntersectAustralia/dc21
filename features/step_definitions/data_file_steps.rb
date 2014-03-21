@@ -106,8 +106,6 @@ Given /^I have data files$/ do |table|
       output_location = File.join(dir, "rif-cs-#{df.id}.xml")
       `touch #{output_location}`
     end
-
-
   end
 end
 
@@ -149,11 +147,6 @@ end
 
 Given /^I have uploaded "([^"]*)" with type "([^"]*)" and description "([^"]*)" and experiment "([^"]*)"$/ do |filename, type, desc, exp|
   create_data_file filename, User.first, type, desc, Experiment.find_by_name!(exp)
-end
-
-When /^I have uploaded "([^"]*)" as "([^"]*)" with type "([^"]*)" and experiment "([^"]*)" and access "([^"]*)" with options institutional "([^"]*)" and user groups "([^"]*)" and access groups "([^"]*)"$/ do |filename, user_email, type, exp, access, inst_users_flag, user_groups_flag, groups|
-  user = User.find_by_email user_email
-  create_data_file filename, user, type, "desc", Experiment.find_by_name!(exp), [], [], access, inst_users_flag, user_groups_flag, groups
 end
 
 When /^I attempt to upload "([^"]*)" directly I should get an error$/ do |file_name|

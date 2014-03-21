@@ -173,7 +173,7 @@ When /^I should get a JSON response with$/ do |table|
   count = 0
   table.hashes.each do |attributes|
     attributes.each do |key, value|
-      actual[count][key].should eq(value)
+      actual[count][key].to_s.should eq(value)
     end
     count += 1
   end

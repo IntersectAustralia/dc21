@@ -154,20 +154,21 @@ Feature: Perform searching via API
     Given I have a user "external@intersect.org.au" with role "Non-Institutional User"
     And user "external@intersect.org.au" has an API token
     And I have access groups
-      | name    | users                     |
-      | group-1 | external@intersect.org.au |
-      | group-2 |                           |
-    And I have uploaded "1.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment1" and access "Private" with options institutional "true" and user groups "true" and access groups "group-1"
-    And I have uploaded "2.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment1" and access "Private" with options institutional "true" and user groups "true" and access groups "group-2"
-    And I have uploaded "3.dat" as "external@intersect.org.au" with type "My type" and experiment "Experiment2" and access "Private" with options institutional "false" and user groups "true" and access groups ""
-    And I have uploaded "toa5.dat" as "researcher@intersect.org.au" with type "My type" and experiment "Experiment4" and access "Public" with options institutional "false" and user groups "false" and access groups ""
+      | name    | users                     | id |
+      | group-1 | external@intersect.org.au | 1  |
+      | group-2 |                           | 2  |
+    And I have data files
+      | filename    | uploaded_by                 | file_processing_status | experiment  | access  | access_to_all_institutional_users | access_to_user_groups | access_group_ids | format | created_at | file_size | file_processing_description |
+      | 1.dat       | researcher@intersect.org.au | My type                | Experiment1 | Private | true                              | true                  | 1                | text     | 21/03/2014 14:46 | 100  | description 1      |
+      | 2.dat       | researcher@intersect.org.au | My type                | Experiment1 | Private | true                              | true                  | 2                | text     | 21/03/2014 14:46 | 200 | description 2      |
+      | 3.dat       | external@intersect.org.au   | My type                | Experiment2 | Private | false                             | true                  |                  | text     | 21/03/2014 14:46 | 300 | description 3      |
+      | toa5.dat    | researcher@intersect.org.au | My type                | Experiment4 | Public  |                                   |                       |                  | TOA5     | 21/03/2014 14:46 | 400 | description 4      |
     When I perform an API search with the following parameters as user "external@intersect.org.au"
       | stati | My type |
     Then I should get a 200 response code
     And I should get a JSON response with
-      | filename    |
-      | 1.dat       |
-      | 2.dat       |
-      | 3.dat       |
-      | toa5.dat    |
-    # modify step above to read in empty value as nil
+      | filename    | format | published | file_processing_description | created_at                | file_size | file_processing_status |
+      | 1.dat       | text   | false     | description 1               | 2014-03-21T14:46:00+11:00 | 100.0     | My type                |
+      | 2.dat       |        |           |                             | 2014-03-21T14:46:00+11:00 | 200.0     | My type                |
+      | 3.dat       | text   | false     | description 3               | 2014-03-21T14:46:00+11:00 | 300.0     | My type                |
+      | toa5.dat    | TOA5   | false     | description 4               | 2014-03-21T14:46:00+11:00 | 400.0     | My type                |
