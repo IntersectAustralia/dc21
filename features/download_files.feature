@@ -6,12 +6,18 @@ Feature: Download multiple files
   Background:
     Given I have the usual roles
     And I have a user "admin@intersect.org.au" with role "Administrator"
+    And I have a user "researcher@intersect.org.au" with role "Institutional User"
+    And I have a user "external@intersect.org.au" with role "Non-Institutional User"
     And I am logged in as "admin@intersect.org.au"
+    And I have access groups
+      | name    | users                     | id |
+      | group-1 | external@intersect.org.au | 1  |
+      | group-2 |                           | 2  |
     And I have data files
-      | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                | id |
-      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au  | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  |
-      | sample2.txt | 30/11/2011 10:15 | admin@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt | 2  |
-      | sample3.txt | 30/12/2011 12:34 | admin@intersect.org.au |                  |                     | samples/sample3.txt | 3  |
+      | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                | id | access  | access_to_all_institutional_users | access_to_user_groups | access_group_ids |
+      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au  | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  | Private | true                              | true                  | 1                |
+      | sample2.txt | 30/11/2011 10:15 | admin@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt | 2  | Private | true                              | true                  | 2                |
+      | sample3.txt | 30/12/2011 12:34 | admin@intersect.org.au |                  |                     | samples/sample3.txt | 3  |         |                                   |                       |                  |
     And I am on the list data files page
 
   Scenario: Try to download without an API token
@@ -40,12 +46,23 @@ Feature: Download multiple files
     Then I should get a 403 response code
 
   Scenario: Download a file of (default) Private Institutional access as an Institutional User via API
-    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
-    And user "researcher@intersect.org.au" has an API token
+    Given user "researcher@intersect.org.au" has an API token
     When I make a request for the data download page for "sample1.txt" as "researcher@intersect.org.au" with a valid API token
     Then I should get a 200 response code
     And I should get a file with name "sample1.txt" and content type "text/plain"
     And the file should contain "Plain text file sample1.txt"
+
+  Scenario: Download an access restricted file via API
+    Given user "external@intersect.org.au" has an API token
+    And user "researcher@intersect.org.au" has an API token
+    When I make a request for the data download page for "sample1.txt" as "external@intersect.org.au" with a valid API token
+    Then I should get a 200 response code
+    And I should get a file with name "sample1.txt" and content type "text/plain"
+    And the file should contain "Plain text file sample1.txt"
+    When I make a request for the data download page for "sample2.txt" as "external@intersect.org.au" with a valid API token
+    Then I should get a 403 response code
+    When I make a request for the data download page for "sample3.txt" as "external@intersect.org.au" with a valid API token
+    Then I should get a 403 response code
 
   Scenario: Download a selection of files from the cart
     When I add "sample1.txt" to the cart
