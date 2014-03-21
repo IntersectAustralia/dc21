@@ -23,8 +23,26 @@ Feature: Download multiple files
     Then I should get a 401 response code
 
   Scenario: Download a single file via API
-    And user "admin@intersect.org.au" has an API token
+    Given user "admin@intersect.org.au" has an API token
     When I make a request for the data download page for "sample1.txt" as "admin@intersect.org.au" with a valid API token
+    Then I should get a 200 response code
+    And I should get a file with name "sample1.txt" and content type "text/plain"
+    And the file should contain "Plain text file sample1.txt"
+
+  Scenario: Download a file as unauthorised access user via API
+    Given I have a user "non-inst-user@intersect.org.au" with role "Non-Institutional User"
+    And user "non-inst-user@intersect.org.au" has an API token
+    When I make a request for the data download page for "sample1.txt" as "non-inst-user@intersect.org.au" with a valid API token
+    Then I should get a 403 response code
+    When I make a request for the data download page for "sample2.txt" as "non-inst-user@intersect.org.au" with a valid API token
+    Then I should get a 403 response code
+    When I make a request for the data download page for "sample3.txt" as "non-inst-user@intersect.org.au" with a valid API token
+    Then I should get a 403 response code
+
+  Scenario: Download a file of (default) Private Institutional access as an Institutional User via API
+    Given I have a user "researcher@intersect.org.au" with role "Institutional User"
+    And user "researcher@intersect.org.au" has an API token
+    When I make a request for the data download page for "sample1.txt" as "researcher@intersect.org.au" with a valid API token
     Then I should get a 200 response code
     And I should get a file with name "sample1.txt" and content type "text/plain"
     And the file should contain "Plain text file sample1.txt"

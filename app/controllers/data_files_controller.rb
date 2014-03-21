@@ -222,14 +222,14 @@ class DataFilesController < ApplicationController
   def download
     unless @data_file.published? and @data_file.is_package?
       authenticate_user!
-      authorize! :download, @data_file
+      #authorize! :download, @data_file
     end
 
     if current_user.present?
       if @data_file.is_authorised_for_access_by?(current_user)
         return send_data_file(@data_file)
       else
-        redirect_to data_files_path, alert: "You do not have access to download this file."
+        redirect_to data_files_path, alert: "You do not have access to download this file.", :status => 403
       end
     else
       unless APP_CONFIG['ip_addresses'].nil?
