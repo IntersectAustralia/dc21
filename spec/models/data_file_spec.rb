@@ -56,7 +56,7 @@ describe DataFile do
         @inst_user = Factory(:user, :role => @inst_role, :status => "A")
         @non_inst_user = Factory(:user, :role => @non_inst_role, :status => "A")
 
-        @public_file = Factory(:data_file, :access => DataFile::ACCESS_PUBLIC, :created_by => @admin_user)
+        @public_file = Factory(:data_file, :access => DataFile::ACCESS_PUBLIC, :access_to_all_institutional_users => false, :access_to_user_groups => false, :created_by => @admin_user)
         @private_file_all_inst = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => true, :created_by => @inst_user)
         @restricted_file_no_groups = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
       end
@@ -98,12 +98,13 @@ describe DataFile do
           @restricted_file_no_groups = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
 
           @ability.should be_able_to(:index, @restricted_file_no_groups)
+          @ability.should be_able_to(:create, @restricted_file_no_groups)
+          @ability.should be_able_to(:api_create, @restricted_file_no_groups)
+
           @ability.should_not be_able_to(:show, @restricted_file_no_groups)
-          @ability.should_not be_able_to(:create, @restricted_file_no_groups)
           @ability.should_not be_able_to(:download, @restricted_file_no_groups)
           @ability.should_not be_able_to(:download_selected, @restricted_file_no_groups)
           @ability.should_not be_able_to(:bulk_update, @restricted_file_no_groups)
-          @ability.should_not be_able_to(:api_create, @restricted_file_no_groups)
           @ability.should_not be_able_to(:api_search, @restricted_file_no_groups)
           @ability.should_not be_able_to(:process_metadata_extraction, @restricted_file_no_groups)
         end
@@ -141,12 +142,13 @@ describe DataFile do
 
         it "cannot access private data files open to all institutional users" do
           @ability.should be_able_to(:index, @private_file_all_inst)
+          @ability.should be_able_to(:create, @private_file_all_inst)
+          @ability.should be_able_to(:api_create, @private_file_all_inst)
+
           @ability.should_not be_able_to(:show, @private_file_all_inst)
-          @ability.should_not be_able_to(:create, @private_file_all_inst)
           @ability.should_not be_able_to(:download, @private_file_all_inst)
           @ability.should_not be_able_to(:download_selected, @private_file_all_inst)
           @ability.should_not be_able_to(:bulk_update, @private_file_all_inst)
-          @ability.should_not be_able_to(:api_create, @private_file_all_inst)
           @ability.should_not be_able_to(:api_search, @private_file_all_inst)
           @ability.should_not be_able_to(:process_metadata_extraction, @private_file_all_inst)
         end
@@ -159,12 +161,13 @@ describe DataFile do
           restricted_file = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @inst_user, :access_to_user_groups => true)
 
           @ability.should be_able_to(:index, restricted_file)
+          @ability.should be_able_to(:create, restricted_file)
+          @ability.should be_able_to(:api_create, restricted_file)
+
           @ability.should_not be_able_to(:show, restricted_file)
-          @ability.should_not be_able_to(:create, restricted_file)
           @ability.should_not be_able_to(:download, restricted_file)
           @ability.should_not be_able_to(:download_selected, restricted_file)
           @ability.should_not be_able_to(:bulk_update, restricted_file)
-          @ability.should_not be_able_to(:api_create, restricted_file)
           @ability.should_not be_able_to(:api_search, restricted_file)
           @ability.should_not be_able_to(:process_metadata_extraction, restricted_file)
         end
