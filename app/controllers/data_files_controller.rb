@@ -293,8 +293,8 @@ class DataFilesController < ApplicationController
       tag_names = params[:tag_names]
       label_names = params[:label_names]
       parent_file_ids = DataFile.where(:filename => params[:parent_filenames]).pluck(:id)
-      access = params[:access] #unless params[:access].nil?
-      access_to_all_institutional_users = params[:access_to_all_institutional_users] #(params[:access_to_all_institutional_users].nil? and params[:access].nil?) ? true : params[:access_to_all_institutional_users]
+      access = params[:access]
+      access_to_all_institutional_users = params[:access_to_all_institutional_users]
       access_to_user_groups = params[:access_to_user_groups]
       access_group_ids = AccessGroup.where(:name => params[:access_groups]).pluck(:id)
       errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, params[:access_groups])
@@ -433,21 +433,17 @@ class DataFilesController < ApplicationController
     label_ids = parse_labels(label_names, errors)
     access_to_all_institutional_users_flag = ''
     access_to_user_groups_flag = ''
-    unless access_to_all_institutional_users.blank?
-      if access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i)
-        access = DataFile::ACCESS_PRIVATE
-        access_to_all_institutional_users_flag = true
-      elsif access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i)
-        access_to_all_institutional_users_flag = false
-      end
+    if access_to_all_institutional_users and access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i)
+      access = DataFile::ACCESS_PRIVATE
+      access_to_all_institutional_users_flag = true
+    else
+      access_to_all_institutional_users_flag = false
     end
-    unless access_to_user_groups.blank?
-      if access_to_user_groups =~ (/^(true|t|yes|y|1)$/i)
-        access = DataFile::ACCESS_PRIVATE
-        access_to_user_groups_flag = true
-      elsif access_to_user_groups =~ (/^(false|f|no|n|0)$/i)
-        access_to_user_groups_flag = false
-      end
+    if access_to_user_groups and access_to_user_groups =~ (/^(true|t|yes|y|1)$/i)
+      access = DataFile::ACCESS_PRIVATE
+      access_to_user_groups_flag = true
+    else
+      access_to_user_groups_flag = false
     end
     unless access_groups.nil?
       access = DataFile::ACCESS_PRIVATE

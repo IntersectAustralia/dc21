@@ -292,17 +292,17 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have access groups "<resulting_group_names>"
   Examples:
       | access  | all_inst_users | user_groups | group_names     | resulting_access | resulting_inst | resulting_groups | resulting_group_names |
-      | Public  | true           |             |                 | Private          | true           |                  |                       |
-      | Public  |                | true        |                 | Private          |                | true             |                       |
-      | Public  |                |             | group-A,group-B | Private          |                | true             | group-A,group-B       |
+      | Public  | true           |             |                 | Private          | true           | false            |                       |
+      | Public  |                | true        |                 | Private          | false          | true             |                       |
+      | Public  |                |             | group-A,group-B | Private          | false          | true             | group-A,group-B       |
       | Public  | true           | true        |                 | Private          | true           | true             |                       |
-      | Public  |                |             | made,up,groups  | Private          |                | true             |                       |
+      | Public  |                |             | made,up,groups  | Private          | false          | true             |                       |
       | Public  | true           |             | group-C,other   | Private          | true           | true             | group-C               |
-      |         | true           |             |                 | Private          | true           |                  |                       |
-      |         |                | true        |                 | Private          |                | true             |                       |
-      |         |                |             | group-A,group-B | Private          |                | true             | group-A,group-B       |
+      |         | true           |             |                 | Private          | true           | false            |                       |
+      |         |                | true        |                 | Private          | false          | true             |                       |
+      |         |                |             | group-A,group-B | Private          | false          | true             | group-A,group-B       |
       |         | true           | true        |                 | Private          | true           | true             |                       |
-      |         |                |             | made,up,groups  | Private          |                | true             |                       |
+      |         |                |             | made,up,groups  | Private          | false          | true             |                       |
       |         | true           |             | group-C,other   | Private          | true           | true             | group-C               |
 
   Scenario Outline: Invalid access control parameters in the API upload should result in error
