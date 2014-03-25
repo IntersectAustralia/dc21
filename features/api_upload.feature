@@ -317,12 +317,12 @@ Feature: Upload files via the API
     And I should get a JSON response with errors "<errors>"
   Examples:
     | access  | access_to_all_inst_users | access_to_user_groups | errors |
-    | bad     |                          |                       | Supplied access was not valid: has to be either Public or Public  |
+    | bad     |                          |                       | Supplied access was not valid: has to be either Public or Private  |
     | Public  | blah                     |                       | Supplied access_to_all_institutional_users was not valid: has to be either true or false |
     | Private |                          | meh                   | Supplied access_to_user_groups was not valid: has to be either true or false             |
-    | some    | random                   | stuff                 | Supplied access was not valid: has to be either Public or Public, Supplied access_to_all_institutional_users was not valid: has to be either true or false, Supplied access_to_user_groups was not valid: has to be either true or false |
-    | other   | thing                    |                       | Supplied access was not valid: has to be either Public or Public, Supplied access_to_all_institutional_users was not valid: has to be either true or false |
-    | made    |                          | up                    | Supplied access was not valid: has to be either Public or Public, Supplied access_to_user_groups was not valid: has to be either true or false |
+    | some    | random                   | stuff                 | Supplied access was not valid: has to be either Public or Private, Supplied access_to_all_institutional_users was not valid: has to be either true or false, Supplied access_to_user_groups was not valid: has to be either true or false |
+    | other   | thing                    |                       | Supplied access was not valid: has to be either Public or Private, Supplied access_to_all_institutional_users was not valid: has to be either true or false |
+    | made    |                          | up                    | Supplied access was not valid: has to be either Public or Private, Supplied access_to_user_groups was not valid: has to be either true or false |
     |         | random                   | stuff                 | Supplied access_to_all_institutional_users was not valid: has to be either true or false, Supplied access_to_user_groups was not valid: has to be either true or false |
 
   Scenario Outline: Specifying one or more non-existing access groups in API upload parameters should upload file with warning

@@ -292,18 +292,18 @@ class DataFilesController < ApplicationController
       experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
       label_names = params[:label_names]
-      parent_file_ids = DataFile.where(:filename => params[:parent_filenames]).pluck(:id)
-      access = params[:access]
-      access_to_all_institutional_users = params[:access_to_all_institutional_users]
-      access_to_user_groups = params[:access_to_user_groups]
-      access_group_ids = AccessGroup.where(:name => params[:access_groups]).pluck(:id)
-      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, params[:access_groups])
+      parent_files = clean_params_list_string(params[:parent_filenames])
+      parent_file_ids = DataFile.where(:filename => parent_files).pluck(:id)
+      access_groups = clean_params_list_string(params[:access_groups])
+      access_group_ids = AccessGroup.where(:name => access_groups).pluck(:id)
+
+      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups])
 
       if errors.empty?
         uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
         messages = uploaded_file.messages.collect { |m| m[:message] }
-        if !params[:access_groups].nil? and params[:access_groups].size != access_group_ids.size
-          n = params[:access_groups].size - access_group_ids.size
+        if !access_groups.nil? and access_groups.size != access_group_ids.size
+          n = access_groups.size - access_group_ids.size
           if n == 1
             messages << "#{n} access group does not exist in the system"
           else
@@ -320,6 +320,15 @@ class DataFilesController < ApplicationController
   end
 
   private
+
+  def clean_params_list_string(params_str)
+    list_str = params_str
+    unless list_str.nil? or list_str.kind_of?(Array)
+      list_str = list_str.gsub('[','').gsub(']','').split(',')
+      list_str = list_str.map{|name| name.tr('"','').strip }
+    end
+    list_str
+  end
 
   def send_data_file(data_file)
     extname = File.extname(data_file.filename)[1..-1]
@@ -425,7 +434,7 @@ class DataFilesController < ApplicationController
     errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
     errors << 'Supplied org level 2 id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
     errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
-    errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PUBLIC}" unless access.blank? || access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE
+    errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PRIVATE}" unless access.blank? || access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE
     errors << 'Supplied access_to_all_institutional_users was not valid: has to be either true or false' unless access_to_all_institutional_users.blank? || access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i) || access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i)
     errors << 'Supplied access_to_user_groups was not valid: has to be either true or false' unless access_to_user_groups.blank? || access_to_user_groups =~ (/^(true|t|yes|y|1)$/i) || access_to_user_groups =~ (/^(false|f|no|n|0)$/i)
 
