@@ -35,6 +35,7 @@ class Ability
     can :index, DataFile
     can :create, DataFile
     can :api_create, DataFile
+    can :search, DataFile
     can [:show,
          :download,
          :download_selected,
