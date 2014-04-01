@@ -59,6 +59,11 @@ describe DataFile do
         @public_file = Factory(:data_file, :access => DataFile::ACCESS_PUBLIC, :access_to_all_institutional_users => false, :access_to_user_groups => false, :created_by => @admin_user)
         @private_file_all_inst = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => true, :created_by => @inst_user)
         @restricted_file_no_groups = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :created_by => @non_inst_user, :access_to_user_groups => true)
+
+        @group_a = Factory(:access_group, :primary_user => @admin_user, :users => [@inst_user])
+        @restricted_file_group_a = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :access_to_user_groups => true, :access_groups => [@group_a])
+        @group_b = Factory(:access_group, :primary_user => @admin_user, :users => [@non_inst_user])
+        @restricted_file_group_b = Factory(:data_file, :access => DataFile::ACCESS_PRIVATE, :access_to_all_institutional_users => false, :access_to_user_groups => true, :access_groups => [@group_b])
       end
 
       describe "as Institutional User" do
@@ -76,6 +81,7 @@ describe DataFile do
           @ability.should be_able_to(:api_create, @public_file)
           @ability.should be_able_to(:api_search, @public_file)
           @ability.should be_able_to(:process_metadata_extraction, @public_file)
+          @ability.should be_able_to(:search, @public_file)
         end
 
         it "can access private data files open to all institutional users" do
@@ -88,10 +94,20 @@ describe DataFile do
           @ability.should be_able_to(:api_create, @private_file_all_inst)
           @ability.should be_able_to(:api_search, @private_file_all_inst)
           @ability.should be_able_to(:process_metadata_extraction, @private_file_all_inst)
+          @ability.should be_able_to(:search, @private_file_all_inst)
         end
 
         it "can access private data files associated with an access group that they belong to" do
-
+          @ability.should be_able_to(:index, @restricted_file_group_a)
+          @ability.should be_able_to(:show, @restricted_file_group_a)
+          @ability.should be_able_to(:create, @restricted_file_group_a)
+          @ability.should be_able_to(:download, @restricted_file_group_a)
+          @ability.should be_able_to(:download_selected, @restricted_file_group_a)
+          @ability.should be_able_to(:bulk_update, @restricted_file_group_a)
+          @ability.should be_able_to(:api_create, @restricted_file_group_a)
+          @ability.should be_able_to(:api_search, @restricted_file_group_a)
+          @ability.should be_able_to(:process_metadata_extraction, @restricted_file_group_a)
+          @ability.should be_able_to(:search, @restricted_file_group_a)
         end
 
         it "cannot access private data files of restricted access that they do not belong to the access groups" do
@@ -100,6 +116,7 @@ describe DataFile do
           @ability.should be_able_to(:index, @restricted_file_no_groups)
           @ability.should be_able_to(:create, @restricted_file_no_groups)
           @ability.should be_able_to(:api_create, @restricted_file_no_groups)
+          @ability.should be_able_to(:search, @restricted_file_no_groups)
 
           @ability.should_not be_able_to(:show, @restricted_file_no_groups)
           @ability.should_not be_able_to(:download, @restricted_file_no_groups)
@@ -120,6 +137,7 @@ describe DataFile do
           @ability.should be_able_to(:api_create, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:api_search, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:process_metadata_extraction, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:search, restricted_file_uploaded_by_user)
         end
       end
 
@@ -138,12 +156,14 @@ describe DataFile do
           @ability.should be_able_to(:api_create, @public_file)
           @ability.should be_able_to(:api_search, @public_file)
           @ability.should be_able_to(:process_metadata_extraction, @public_file)
+          @ability.should be_able_to(:search, @public_file)
         end
 
         it "cannot access private data files open to all institutional users" do
           @ability.should be_able_to(:index, @private_file_all_inst)
           @ability.should be_able_to(:create, @private_file_all_inst)
           @ability.should be_able_to(:api_create, @private_file_all_inst)
+          @ability.should be_able_to(:search, @private_file_all_inst)
 
           @ability.should_not be_able_to(:show, @private_file_all_inst)
           @ability.should_not be_able_to(:download, @private_file_all_inst)
@@ -154,7 +174,16 @@ describe DataFile do
         end
 
         it "can access private data files associated with an access group that they belong to" do
-
+          @ability.should be_able_to(:index, @restricted_file_group_b)
+          @ability.should be_able_to(:show, @restricted_file_group_b)
+          @ability.should be_able_to(:create, @restricted_file_group_b)
+          @ability.should be_able_to(:download, @restricted_file_group_b)
+          @ability.should be_able_to(:download_selected, @restricted_file_group_b)
+          @ability.should be_able_to(:bulk_update, @restricted_file_group_b)
+          @ability.should be_able_to(:api_create, @restricted_file_group_b)
+          @ability.should be_able_to(:api_search, @restricted_file_group_b)
+          @ability.should be_able_to(:process_metadata_extraction, @restricted_file_group_b)
+          @ability.should be_able_to(:search, @restricted_file_group_b)
         end
 
         it "cannot access private data files of restricted access that they do not belong to the access groups" do
@@ -163,6 +192,7 @@ describe DataFile do
           @ability.should be_able_to(:index, restricted_file)
           @ability.should be_able_to(:create, restricted_file)
           @ability.should be_able_to(:api_create, restricted_file)
+          @ability.should be_able_to(:search, restricted_file)
 
           @ability.should_not be_able_to(:show, restricted_file)
           @ability.should_not be_able_to(:download, restricted_file)
@@ -183,6 +213,7 @@ describe DataFile do
           @ability.should be_able_to(:api_create, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:api_search, restricted_file_uploaded_by_user)
           @ability.should be_able_to(:process_metadata_extraction, restricted_file_uploaded_by_user)
+          @ability.should be_able_to(:search, restricted_file_uploaded_by_user)
         end
       end
 
@@ -198,6 +229,7 @@ describe DataFile do
           ability.should be_able_to(:api_create, @public_file)
           ability.should be_able_to(:api_search, @public_file)
           ability.should be_able_to(:process_metadata_extraction, @public_file)
+          ability.should be_able_to(:search, @public_file)
 
           ability.should be_able_to(:read, @private_file_all_inst)
           ability.should be_able_to(:create, @private_file_all_inst)
@@ -207,6 +239,7 @@ describe DataFile do
           ability.should be_able_to(:api_create, @private_file_all_inst)
           ability.should be_able_to(:api_search, @private_file_all_inst)
           ability.should be_able_to(:process_metadata_extraction, @private_file_all_inst)
+          ability.should be_able_to(:search, @private_file_all_inst)
 
           ability.should be_able_to(:read, @restricted_file_no_groups)
           ability.should be_able_to(:create, @restricted_file_no_groups)
@@ -216,6 +249,27 @@ describe DataFile do
           ability.should be_able_to(:api_create, @restricted_file_no_groups)
           ability.should be_able_to(:api_search, @restricted_file_no_groups)
           ability.should be_able_to(:process_metadata_extraction, @restricted_file_no_groups)
+          ability.should be_able_to(:search, @restricted_file_no_groups)
+
+          ability.should be_able_to(:read, @restricted_file_group_a)
+          ability.should be_able_to(:create, @restricted_file_group_a)
+          ability.should be_able_to(:download, @restricted_file_group_a)
+          ability.should be_able_to(:download_selected, @restricted_file_group_a)
+          ability.should be_able_to(:bulk_update, @restricted_file_group_a)
+          ability.should be_able_to(:api_create, @restricted_file_group_a)
+          ability.should be_able_to(:api_search, @restricted_file_group_a)
+          ability.should be_able_to(:process_metadata_extraction, @restricted_file_group_a)
+          ability.should be_able_to(:search, @restricted_file_group_a)
+
+          ability.should be_able_to(:read, @restricted_file_group_b)
+          ability.should be_able_to(:create, @restricted_file_group_b)
+          ability.should be_able_to(:download, @restricted_file_group_b)
+          ability.should be_able_to(:download_selected, @restricted_file_group_b)
+          ability.should be_able_to(:bulk_update, @restricted_file_group_b)
+          ability.should be_able_to(:api_create, @restricted_file_group_b)
+          ability.should be_able_to(:api_search, @restricted_file_group_b)
+          ability.should be_able_to(:process_metadata_extraction, @restricted_file_group_b)
+          ability.should be_able_to(:search, @restricted_file_group_b)
         end
       end
     end
