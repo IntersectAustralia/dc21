@@ -1,9 +1,7 @@
 class RenameResearcherRoleToInstUser < ActiveRecord::Migration
   def change
     if Role.exists?(:name => "Researcher")
-      r = Role.where(:name => "Researcher").first
-      r.name = "Institutional User"
-      r.save
+      Role.find_by_name("Researcher").update_attribute(:name, "Institutional User")
     end
     unless Role.exists?(:name => "Non-Institutional User")
       Role.create!(:name => "Non-Institutional User")
