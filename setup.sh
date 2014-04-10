@@ -58,7 +58,6 @@ expect {
 
     "There are pending migrations. Are you sure you want to continue?" {send "yes\r" ; exp_continue}
 
-    "login:" {send "dc21\r" ; exp_continue}
 }
 
 EOD
