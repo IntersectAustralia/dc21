@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140326070039) do
+ActiveRecord::Schema.define(:version => 20140414001925) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -236,22 +236,22 @@ ActiveRecord::Schema.define(:version => 20140326070039) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "system_configurations", :force => true do |t|
-    t.string   "name",                               :default => "HIEv"
-    t.datetime "created_at",                                                                                 :null => false
-    t.datetime "updated_at",                                                                                 :null => false
+    t.string   "name",                               :default => "DIVER"
+    t.datetime "created_at",                                                                             :null => false
+    t.datetime "updated_at",                                                                             :null => false
     t.string   "level1",                             :default => "Facility"
     t.string   "level1_plural",                      :default => "Facilities"
     t.string   "level2",                             :default => "Experiment"
     t.string   "level2_plural",                      :default => "Experiments"
-    t.string   "research_centre_name", :limit => 80, :default => "Hawkesbury Institute for the Environment", :null => false
-    t.string   "entity",               :limit => 80, :default => "University of Western Sydney",             :null => false
-    t.string   "address1",             :limit => 80, :default => "Locked Bag 1797"
-    t.string   "address2",             :limit => 80, :default => "Penrith NSW, 2751"
-    t.string   "address3",             :limit => 80, :default => "Australia"
-    t.string   "telephone_number",     :limit => 80, :default => "+61 2 4570 1125"
-    t.string   "email",                :limit => 80, :default => "hieinfo@lists.uws.edu.au"
-    t.string   "description",          :limit => 80
-    t.string   "urls",                 :limit => 80, :default => "http://www.uws.edu.au/hie"
+    t.string   "research_centre_name", :limit => 80, :default => "Enter your research centre name here", :null => false
+    t.string   "entity",               :limit => 80, :default => "Enter your institution name here",     :null => false
+    t.string   "address1",             :limit => 80, :default => "Enter your address"
+    t.string   "address2",             :limit => 80, :default => ""
+    t.string   "address3",             :limit => 80, :default => ""
+    t.string   "telephone_number",     :limit => 80, :default => ""
+    t.string   "email",                :limit => 80, :default => ""
+    t.string   "description",          :limit => 80, :default => ""
+    t.string   "urls",                 :limit => 80, :default => ""
     t.boolean  "level2_parameters",                  :default => true
     t.boolean  "auto_ocr_on_upload",                 :default => false
     t.text     "auto_ocr_regex"
