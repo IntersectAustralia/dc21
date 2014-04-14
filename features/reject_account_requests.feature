@@ -20,9 +20,9 @@ Feature: Reject access requests
     And I should see "access_requests" table with
       | First name | Last name | Email                 |
       | Ryan       | Braganza  | ryan@intersect.org.au |
-    And "diego@intersect.org.au" should receive an email with subject "HIEv - Your access request has been rejected"
+    And "diego@intersect.org.au" should receive an email with subject "DIVER - Your access request has been rejected"
     When I open the email
-    Then I should see "You made a request for access to HIEv. Your request has been rejected. Please contact the HIEv team for further information." in the email body
+    Then I should see "You made a request for access to DIVER. Your request has been rejected. Please contact the DIVER team for further information." in the email body
     And I should see "Hello Diego Alonso de Marcos," in the email body
 
   Scenario: Reject an access request as spam from the list page
@@ -32,9 +32,9 @@ Feature: Reject access requests
     And I should see "access_requests" table with
       | First name | Last name | Email                 |
       | Ryan       | Braganza  | ryan@intersect.org.au |
-    And "diego@intersect.org.au" should receive an email with subject "HIEv - Your access request has been rejected"
+    And "diego@intersect.org.au" should receive an email with subject "DIVER - Your access request has been rejected"
     When they open the email
-    Then they should see "You made a request for access to HIEv. Your request has been rejected. Please contact the HIEv team for further information." in the email body
+    Then they should see "You made a request for access to DIVER. Your request has been rejected. Please contact the DIVER team for further information." in the email body
     And they should see "Hello Diego Alonso de Marcos," in the email body
 
   Scenario: Reject an access request from the view details page

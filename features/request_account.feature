@@ -30,7 +30,7 @@ Feature: Request an account
       | First Name       | Fred                   |
       | Last Name        | Bloggs                 |
     And I press "Submit Request"
-    Then "diego.alonso@intersect.org.au" should receive an email with subject "HIEv - There has been a new access request"
+    Then "diego.alonso@intersect.org.au" should receive an email with subject "DIVER - There has been a new access request"
     When they open the email
     Then they should see "An access request has been made with the following details:" in the email body
     And they should see "Email: admin@intersect.org.au" in the email body
@@ -97,5 +97,5 @@ Feature: Request an account
       | First Name       | Fred                   |
       | Last Name        | Bloggs                 |
     And I press "Submit Request"
-    Then "diego.alonso@intersect.org.au" should receive an email with subject "HIEv - There has been a new access request"
+    Then "diego.alonso@intersect.org.au" should receive an email with subject "DIVER - There has been a new access request"
     Then "fred@intersect.org.au" should receive no emails

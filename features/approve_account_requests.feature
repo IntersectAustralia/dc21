@@ -28,9 +28,9 @@ Feature: Approve access requests
     And I should see "access_requests" table with
       | First name | Last name | Email                 |
       | Ryan       | Braganza  | ryan@intersect.org.au |
-    And "diego@intersect.org.au" should receive an email with subject "HIEv - Your access request has been approved"
+    And "diego@intersect.org.au" should receive an email with subject "DIVER - Your access request has been approved"
     When they open the email
-    Then they should see "You made a request for access to HIEv. Your request has been approved. Please visit" in the email body
+    Then they should see "You made a request for access to DIVER. Your request has been approved. Please visit" in the email body
     And they should see "Hello Diego Alonso de Marcos," in the email body
     When they click the first link in the email
     Then I should be on the home page

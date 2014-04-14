@@ -33,14 +33,14 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the system config page
     Then I should see details displayed
-      | Local System Name           | HIEv                                          |
-      | Research Centre Name        | Hawkesbury Institute for the Environment      |
-      | Overarching Entity          | University of Western Sydney                  |
-      | Address                     | Locked Bag 1797, Penrith NSW, 2751, Australia |
-      | Telephone Numbers           | +61 2 4570 1125                               |
-      | Email                       | hieinfo@lists.uws.edu.au                      |
+      | Local System Name           | DIVER                                         |
+      | Research Centre Name        | Enter your research centre name here          |
+      | Overarching Entity          | Enter your institution name here              |
+      | Address                     | Enter your address                            |
+      | Telephone Numbers           |                                               |
+      | Email                       |                                               |
       | Description                 |                                               |
-      | URLs                        | http://www.uws.edu.au/hie                     |
+      | URLs                        |                                               |
       | Auto OCR on Upload          | Disabled                                      |
       | Auto OCR Regular Expression |                                               |
       | OCR Supported MIME Types    | image/jpeg, image/png                         |
@@ -53,6 +53,11 @@ Feature: Edit system configuration
       | Koemei Host                 |                                               |
       | Koemei Login                |                                               |
       | Koemei Password             | *****                                         |
+      | Project Parameters          | Enabled                                       |
+      | Type of Org Unit (Singular) | Facility                                      |
+      | Type of Org Unit (Plural)   | Facilities                                    |
+      | Type of Project (Singular)  | Experiment                                    |
+      | Type of Project (Plural)    | Experiments                                   |
 
   Scenario: Access system config edit page as non-admin
     Given I am logged in as "cindy@intersect.org.au"
@@ -118,7 +123,7 @@ Feature: Edit system configuration
       | Local System Name           | Hello                                |
       | Research Centre Name        | World                                |
       | Overarching Entity          | !                                    |
-      | Address                     | Test 1, Penrith NSW, 2751, Australia |
+      | Address                     | Test 1                               |
       | Telephone Numbers           | +61 2 23456789                       |
       | Email                       | test@test.org.au                     |
       | Description                 |                                      |

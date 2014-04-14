@@ -28,7 +28,7 @@ Feature: EYETRACKER-2: Logging In
     And I should be on the home page
     And I should see "inactive@intersect.org.au (via AAF)"
     And I should see "Note: You are logged in via AAF as inactive@intersect.org.au"
-    And I should see "but your HIEv account request is pending approval."
+    And I should see "but your DIVER account request is pending approval."
     And I should see "Your account is not active."
     And I should see link "Sign out"
 
@@ -45,7 +45,7 @@ Feature: EYETRACKER-2: Logging In
     And I should be on the login page
     And I should see "unregistered@intersect.org.au (via AAF)"
     And I should see "Note: You are logged in via AAF as unregistered@intersect.org.au"
-    And I should see "but you have not registered an account with HIEv."
+    And I should see "but you have not registered an account with DIVER."
     And I should see "You must be an approved user to access this site."
     And I should see link "Sign out"
 
@@ -56,7 +56,7 @@ Feature: EYETRACKER-2: Logging In
     And I should be on the home page
     And I should see "inactive@intersect.org.au (via AAF)"
     And I should see "Note: You are logged in via AAF as inactive@intersect.org.au"
-    And I should see "but your HIEv account request is pending approval."
+    And I should see "but your DIVER account request is pending approval."
     And I should see "Your account is not active."
     And I should see link "Sign out"
     When I fill in "Email" with "admin@intersect.org.au"

@@ -11,7 +11,7 @@
   - render_field "Local System Name", @config.name
   - render_field "Research Centre Name", @config.research_centre_name
   - render_field "Overarching Entity", @config.entity
-  - render_field "Address", @config.address1 + ', ' + @config.address2 + ', ' + @config.address3
+  - render_field "Address", [@config.address1, @config.address2, @config.address3].reject{|s| s.empty?}.join(', ')
   - render_field "Telephone Numbers", @config.telephone_number
   - render_field "Email", @config.email
   - render_field "Description", @config.description
