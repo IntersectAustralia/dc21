@@ -274,7 +274,7 @@ describe OCRWorker do
       # check that the email has been queued for sending
       ActionMailer::Base.deliveries.empty?.should eq(false)
       email = ActionMailer::Base.deliveries.last
-      email.subject.should eq("HIEv - Processing completed")
+      email.subject.should eq("DIVER - Processing completed")
       email.to.should eq([user.email])
       email.body.should eq(<<-eos
 <p>Hello Fred Bloggs,</p>
@@ -335,7 +335,7 @@ Source file id: #{parent.id}
       # check that the email has been queued for sending
       ActionMailer::Base.deliveries.empty?.should eq(false)
       email = ActionMailer::Base.deliveries.last
-      email.subject.should eq("HIEv - Processing completed")
+      email.subject.should eq("DIVER - Processing completed")
       email.to.should eq([user.email])
       email.body.should eq(<<-eos
 <p>Hello Fred Bloggs,</p>

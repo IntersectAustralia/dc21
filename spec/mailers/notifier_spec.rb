@@ -11,7 +11,7 @@ describe Notifier do
       # check that the email has been queued for sending
       ActionMailer::Base.deliveries.empty?.should eq(false) 
       email.to.should eq([address])
-      email.subject.should eq("HIEv - Your access request has been approved")
+      email.subject.should eq("DIVER - Your access request has been approved")
     end
 
     it "should send mail to user if access request denied" do
@@ -22,7 +22,7 @@ describe Notifier do
       # check that the email has been queued for sending
       ActionMailer::Base.deliveries.empty?.should eq(false) 
       email.to.should eq([address])
-      email.subject.should eq("HIEv - Your access request has been rejected")
+      email.subject.should eq("DIVER - Your access request has been rejected")
     end
   end
 
@@ -35,7 +35,7 @@ describe Notifier do
 
     # check that the email has been queued for sending
     ActionMailer::Base.deliveries.empty?.should eq(false)
-    email.subject.should eq("HIEv - There has been a new access request")
+    email.subject.should eq("DIVER - There has been a new access request")
     email.to.should eq(["super1@intersect.org.au", "super2@intersect.org.au"])
   end
  
