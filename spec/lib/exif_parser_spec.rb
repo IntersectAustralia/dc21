@@ -89,7 +89,7 @@ describe ExifParser do
       metadata = Hash[*data_file.metadata_items.collect{|mi| [mi.key, mi.value]}.flatten]
       metadata.size.should eq(41)
 
-      metadata.should_not have_key("copyright")
+      metadata.should_not have_value("")
     end
   end
 
