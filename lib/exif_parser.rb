@@ -24,7 +24,7 @@ class ExifParser
         data_file.update_attributes! data_file_attrs
         
         exif_info.to_hash.each do |k, v|
-          if v and k.to_s != "user_comment" and k.to_s != "gps_time_stamp"
+          if v and v != "" and k.to_s != "user_comment" and k.to_s != "gps_time_stamp"
             if k.to_s == "gps_longitude"
               longitude_as_a_decimal_value = convert_sexagesimal_to_decimal(v)
               longitude_as_a_decimal_value = longitude_as_a_decimal_value * -1 if exif_info.gps_longitude_ref == "W"   # (W is -, E is +)
