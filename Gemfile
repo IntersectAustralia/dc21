@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.16'
+gem 'rails', '~> 3.2.16'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -32,12 +32,14 @@ gem "capistrano"
 gem "capistrano_colors"
 gem "colorize"
 gem "squeel"
-gem "httparty"
+gem "httparty", ">= 0.10.0"
 gem "decent_exposure"
 gem "rvm-capistrano"
 gem "google-analytics-rails"
+gem 'nokogiri', '>= 1.6.1'
+gem 'multi_xml', '>= 0.5.2'
+gem 'will_paginate', '>= 3.0.5'
 gem 'highline' # This has (up until now) been implicitly included by capistrano
-gem 'will_paginate'
 gem 'bootstrap-sass'
 gem 'bootstrap-will_paginate'
 gem 'rake', '~> 0.9.2.2'

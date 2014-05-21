@@ -47,7 +47,8 @@ PassengerTempDir #{current_path}/tmp/pids
          downgrade-1.0 force-response-1.0
 
     SSLProtocol all -SSLv2
-    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+    SSLHonorCipherOrder On
+    SSLCipherSuite ALL:!aNull:!ADH:!eNULL:!LOW:!SSLv2:!EXPORT:!EXP:RC4+RSA:+HIGH:+MEDIUM
     SSLCertificateFile /etc/httpd/ssl/server.crt
     SSLCertificateKeyFile /etc/httpd/ssl/server.key
 
