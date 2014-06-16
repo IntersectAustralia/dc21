@@ -11,6 +11,7 @@ Feature: Search data files by date range
       | three@intersect.org.au | Third      | Three     |
       | four@intersect.org.au  | Fourth     | Four      |
       | five@intersect.org.au  | Fifth      | Five      |
+    And I have the usual roles
     And I am logged in as "admin@intersect.org.au"
     And I have tags
       | name  |
@@ -364,6 +365,15 @@ Feature: Search data files by date range
       | mydata7.dat   |
 
   Scenario: Go back to showing all after searching
+    When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
+    Then the "exploredata" table should have 4 rows
+    When I follow "Clear Search"
+    Then the "exploredata" table should have 8 rows
+
+  Scenario: Go back to showing all after searching as non admin user
+    When I follow "Sign out"
+    And "one@intersect.org.au" has role "Institutional User"
+    And I am logged in as "one@intersect.org.au"
     When I do a date search for data files with dates "2010-06-03" and "2010-06-10"
     Then the "exploredata" table should have 4 rows
     When I follow "Clear Search"
