@@ -17,12 +17,6 @@ class Ability
     # alias reject_as_spam to reject so they are considered the same
     alias_action :reject_as_spam, :to => :reject
 
-    # alias search to read
-    alias_action :search, :to => :read
-
-    # alias clear to read
-    alias_action :clear, :to => :read
-
     return unless user && user.role
 
     can :manage, Facility
@@ -32,6 +26,7 @@ class Ability
 
     # all users can read and add data files, and can delete their own. This *could* be expressed more simply,
     #   but shouldn't until we actually have explicitly defined permissions and roles
+    can :clear, DataFile
     can :index, DataFile
     can :create, DataFile
     can :api_create, DataFile
