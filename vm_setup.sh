@@ -66,7 +66,7 @@ cd $HOME/code_base/dc21
 # Set up RVM
 type -P $HOME/.rvm/scripts/rvm > /dev/null
 if [ $? -ne 0 ]; then
-  curl -L http://get.rvm.io | bash -s stable --ruby=1.9.3-p448
+  curl -L http://get.rvm.io | bash -s stable --ruby=2.0.0-p481
   status=$?
   if [ $status -eq 0 ]; then
     source $HOME/.rvm/scripts/rvm
@@ -81,22 +81,22 @@ source $HOME/.bash_profile
 source $HOME/.bashrc
 
 # Update RVM and Ruby to 1.9.3 if needed
-rvm list | grep ruby-1.9.3-p448 > /dev/null
+rvm list | grep ruby-2.0.0-p481 > /dev/null
 if [ $? -ne 0 ]; then
-  echo "Installing ruby-1.9.3-p448 as it was not detected"
+  echo "Installing ruby-2.0.0-p481 as it was not detected"
   rvm get head
-  rvm install 1.9.3-p448
+  rvm install 2.0.0-p481
   status=$?
   if [ $status -eq 0 ]; then
-    echo "$(tput setaf 2)RVM updated and Ruby 1.9.3-p448 installed.$(tput sgr0)"
+    echo "$(tput setaf 2)RVM updated and Ruby 2.0.0-p481 installed.$(tput sgr0)"
   else
-    echo "$(tput setaf 1)ERROR $status: Ruby 1.9.3-p448 install failed. Manually install Ruby 1.9.3-p448 and rerun the vm_setup script.$(tput sgr0)"
+    echo "$(tput setaf 1)ERROR $status: Ruby 2.0.0-p481 install failed. Manually install Ruby 2.0.0-p481 and rerun the vm_setup script.$(tput sgr0)"
     exit $status;
   fi
 fi
 
 cd $HOME/code_base/dc21
-rvm use 1.9.3-p448@dc21app --create
+rvm use 2.0.0-p481@dc21app --create
 
 gem install bundler -v 1.0.20
 bundle install
