@@ -8,7 +8,7 @@ test:
 
 qa:
   user-mapping:  {first_name: "givenName", last_name: "surname", email: "email"}
-  shibb_login_url: "https://knt1-dc21-qa.intersect.org.au/Shibboleth.sso/Login"
+  shibb_login_url: "https://ic2-diver-qa-vm.intersect.org.au/Shibboleth.sso/Login"
 
 staging:
   user-mapping:  {first_name: "givenName", last_name: "surname", email: "email"}
