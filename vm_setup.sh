@@ -80,7 +80,7 @@ fi
 source $HOME/.bash_profile
 source $HOME/.bashrc
 
-# Update RVM and Ruby to 1.9.3 if needed
+# Update RVM and Ruby to 2.0.0 if needed
 rvm list | grep ruby-2.0.0-p481 > /dev/null
 if [ $? -ne 0 ]; then
   echo "Installing ruby-2.0.0-p481 as it was not detected"

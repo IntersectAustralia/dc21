@@ -10,10 +10,11 @@ version = "3.0.21"
 wrapper_path = rvm_home + "/wrappers/" + gem_set
 
 apache_string = <<EOF
-LoadModule passenger_module #{gem_home}/gems/passenger-#{version}/ext/apache2/mod_passenger.so
-PassengerRoot #{gem_home}/gems/passenger-#{version}
-PassengerRuby #{wrapper_path}/ruby
-PassengerTempDir #{current_path}/tmp/pids
+LoadModule passenger_module #{gem_home}/gems/passenger-#{version}/buildout/apache2/mod_passenger.so
+   <IfModule mod_passenger.c>
+     PassengerRoot #{gem_home}/gems/passenger-#{version}
+     PassengerDefaultRuby #{wrapper_path}/ruby
+   </IfModule>
 
 <VirtualHost *:80>
     ServerName #{hostname}

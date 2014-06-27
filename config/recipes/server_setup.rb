@@ -95,7 +95,7 @@ namespace :server_setup do
   end
 
   task :passenger, :roles => :app do
-    run "gem install passenger -v 3.0.21"
+    run "gem install passenger -v 4.0.45"
     run "passenger-install-apache2-module -a"
   end
 
