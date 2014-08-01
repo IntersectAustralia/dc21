@@ -25,7 +25,7 @@ gem 'jquery-rails'
 gem "haml", "~> 3.1.8"
 gem "haml-rails"
 gem "tabs_on_rails"
-gem "devise", "~> 1.5.4"
+gem "devise", "~> 2.2.4"
 gem "cancan"
 gem "capistrano-ext"
 gem "capistrano"
@@ -71,7 +71,6 @@ group :development, :test do
   gem "cucumber-rails", :require => false
   gem "capybara", '~> 1.1.4'
   gem "database_cleaner"
-  gem 'spork', '~> 0.9.0.rc'
   gem "launchy"    # So you can do Then show me the page
   gem "zeus"
 end
