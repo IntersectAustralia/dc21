@@ -54,7 +54,7 @@ gem 'resque-status', :require => "resque/status_server"
 gem 'resque-scheduler', :require => 'resque_scheduler'
 gem 'daemons-rails'
 
-gem "devise_shibboleth_authenticatable", github: 'IntersectAustralia/devise_shibboleth_authenticatable', :branch => 'master'
+gem 'devise_aaf_rc_authenticatable'
 gem "select2-rails"
 
 group :development, :test do
@@ -63,7 +63,6 @@ group :development, :test do
   gem "shoulda-matchers"
   gem 'selenium-webdriver'
   gem "mailcatcher"
-
 
   # cucumber gems
   gem "email_spec"

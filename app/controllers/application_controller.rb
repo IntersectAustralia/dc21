@@ -1,19 +1,15 @@
 class ApplicationController < ActionController::Base
-  rescue_from DeviseShibbolethAuthenticatable::ShibbolethException do |exception|
+  rescue_from DeviseAafRcAuthenticatable::AafRcException do |exception|
     render :text => exception, :status => 500
   end
-  prepend_before_filter :retrieve_aaf_credentials
 
   before_filter :shib_sign_up_redirect, :except => :root
   before_filter :shib_flash
-
-  def retrieve_aaf_credentials
-    @aaf_credentials = {email: request.headers['email'], first_name: request.headers['givenName'], last_name: request.headers['surname'], exists: User.find_by_email(request.headers['email']).present?}
-  end
+  prepend_before_filter :retrieve_aaf_credentials
 
   def shib_flash
-    if !user_signed_in? && @aaf_credentials[:email].present?
-      if User.find_by_email(@aaf_credentials[:email]).blank?
+    if !user_signed_in? && @aaf_credentials[:mail].present?
+      if User.find_by_email(@aaf_credentials[:mail]).blank?
         flash.now[:alert] = t "devise.failure.invalid_aaf"
       else
         flash.now[:alert] = t "devise.failure.inactive"
@@ -22,9 +18,13 @@ class ApplicationController < ActionController::Base
   end
 
   def shib_sign_up_redirect
-    if !user_signed_in? && @aaf_credentials[:email].present? && User.find_by_email(@aaf_credentials[:email]).blank?
+    if !user_signed_in? && @aaf_credentials[:mail].present? && User.find_by_email(@aaf_credentials[:mail]).blank?
       redirect_to new_user_registration_path
     end
+  end
+
+  def retrieve_aaf_credentials
+    @aaf_credentials = session['attributes'] || {}
   end
 
   protect_from_forgery

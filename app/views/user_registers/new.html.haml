@@ -1,13 +1,13 @@
 -# - content_for :breadcrumb  do
 -#   %h1 Sign Up
 
-- if @aaf_credentials[:email].present?
+- if @aaf_credentials[:mail].present?
   .container
     .control-group
       .controls
         %small
           You are logged in via AAF as
-          %strong #{@aaf_credentials[:email]}
+          %strong #{@aaf_credentials[:mail]}
           \.
           %br
           %br

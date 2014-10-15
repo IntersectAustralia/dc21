@@ -15,7 +15,7 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: 'a41367bf9f69f21a26f04ec5787e3ef9c3527e7c'
+  license_key: '441c8b58a40dab9bbe04ceabcfabd9da0242d2c5'
 
   # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
@@ -42,7 +42,7 @@ common: &default_settings
   #       - Ajax Service
   #       - All Services
   #
-  app_name: DC21
+  app_name: DIVER
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
@@ -188,7 +188,7 @@ common: &default_settings
 
 development:
   <<: *default_settings
-  app_name: DC21 (Dev)
+  app_name: DIVER (Dev)
   # Turn off communication to New Relic service in development mode (also
   # 'enabled').
   # NOTE: for initial evaluation purposes, you may want to temporarily
@@ -225,10 +225,10 @@ production:
 staging:
   <<: *default_settings
   monitor_mode: true
-  app_name: DC21 (Staging)
+  app_name: DIVER (Staging)
 
 # QA Server
 qa:
   <<: *default_settings
   monitor_mode: true
-  app_name: DC21 (QA)
+  app_name: DIVER (QA)

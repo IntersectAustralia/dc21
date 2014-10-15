@@ -56,7 +56,6 @@ default_run_options[:pty] = true
 
 # Capistrano hooks
 before 'deploy:setup' do
-  server_setup.aaf_install
   server_setup.gem_install
   server_setup.passenger
   postgresql.setup

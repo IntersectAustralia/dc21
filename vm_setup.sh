@@ -115,7 +115,7 @@ if [ $status -eq 0 ]; then
   if [ "$DC21_UPGRADE" = "true" ]; then
     sudo /etc/init.d/redis_6379 stop
     sudo rm /etc/init.d/redis_6379
-    cap local server_setup:aaf_install server_setup:gem_install server_setup:passenger resque:setup shared_file:setup server_setup:config:apache deploy:safe
+    cap local server_setup:gem_install server_setup:passenger resque:setup shared_file:setup server_setup:config:apache deploy:safe
   else
     cap local deploy:first_time
   fi
@@ -129,9 +129,9 @@ sudo service httpd restart
 cap local deploy:restart
 
 status=$?
+
 if [ $status -eq 0 ]; then
-  echo "$(tput setaf 3)Please copy the following certificate to register for AAF$(tput sgr0)"
-  sudo cat /etc/shibboleth/sp-cert.pem
+  echo "$(tput setaf 2)DIVER instance installed$(tput sgr0)"
 else
   echo "$(tput setaf 1)ERROR $status: The local deploy process failed. Please investigate and try again.$(tput sgr0)"
   exit $status;
