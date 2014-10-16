@@ -11,7 +11,7 @@
           \.
           %br
           %br
-        = link_to "← Sign out", aaf_destroy_user_session_path, :class => "btn aaf"
+        = link_to "← Sign out", destroy_user_session_path, :class => "btn aaf"
 .container
   %h2 User Sign Up
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|

@@ -40,7 +40,6 @@ not Dc21app::Application.routes.draw do
     collection do
       get :access_requests
       get :index
-      #get :admin
     end
 
     member do
