@@ -183,6 +183,10 @@ class User < ActiveRecord::Base
     save!(:validate => false)
   end
 
+  def after_aaf_rc_authentication
+    raise Exception.new('Unauthorized') unless approved?
+  end
+
     private
   def initialize_status
     self.status = "U" unless self.status

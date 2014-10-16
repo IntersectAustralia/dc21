@@ -16,11 +16,11 @@
           You may log in with a different account below or sign out of AAF.
           %br
           %br
-        = link_to "← Sign out", users_aaf_sign_out_path, :class => "btn aaf"
+        = link_to "← Sign out", aaf_destroy_user_session_path, :class => "btn aaf"
   - else
     .control-group
       .controls
-        = link_to "Log in via AAF →", users_aaf_sign_in_path, :class => "btn aaf"
+        = link_to "Log in via AAF →", aaf_new_user_session_path, :class => "btn aaf"
 
     .control-group
       .controls

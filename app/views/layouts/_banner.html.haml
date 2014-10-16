@@ -13,7 +13,7 @@
               = tab.aaf_login "#{@aaf_credentials[:mail]} (via AAF)", root_url, id: "aaf_small"
             - else
               = tab.login 'Log in', new_user_session_path
-              = tab.aaf_login 'Log in via AAF', users_aaf_sign_in_url, id: "aaf_small"
+              = tab.aaf_login 'Log in via AAF', aaf_new_user_session_path, id: "aaf_small"
             = tab.signup "Sign Up", new_user_registration_path, id: "signup"
           - else
             = tab.home '', root_url, :id => "home_tab"
@@ -24,5 +24,5 @@
             #accountmenu_container
               %ul
                 %li.settings= link_to "Settings", users_profile_path
-                %li.signout= link_to "← Sign out", current_user.aaf_logged_in?(@aaf_credentials[:mail]) ? users_aaf_sign_out_path : destroy_user_session_path
+                %li.signout= link_to "← Sign out", current_user.aaf_logged_in?(@aaf_credentials[:mail]) ? aaf_destroy_user_session_path : destroy_user_session_path
 
