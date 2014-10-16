@@ -205,6 +205,8 @@ GEM
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.4)
+    quiet_assets (1.0.3)
+      railties (>= 3.1, < 5.0)
     rabl (0.8.0)
       activesupport (>= 2.3.14)
     rack (1.4.5)
@@ -392,6 +394,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri (>= 1.6.1)
   pg
+  quiet_assets
   rabl
   rails (~> 3.2.16)
   rails3-generators

@@ -63,6 +63,7 @@ group :development, :test do
   gem "shoulda-matchers"
   gem 'selenium-webdriver'
   gem "mailcatcher"
+  gem "quiet_assets"
 
   # cucumber gems
   gem "email_spec"
