@@ -7,6 +7,11 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'unknown.dat')
   end
 
+  let(:unknown_nc) do
+    path = Rails.root.join('spec/samples', 'unknown.nc')
+    Factory(:data_file, :path => path, :filename => 'unknown.nc')
+  end
+
   let(:empty_dat) do
     path = Rails.root.join('spec/samples', 'empty.dat')
     Factory(:data_file, :path => path, :filename => 'empty.dat')
@@ -30,6 +35,16 @@ describe FileTypeDeterminer do
   let(:toa5_csv) do
     path = Rails.root.join('spec/samples', 'toa5.csv')
     Factory(:data_file, :path => path, :filename => 'toa5.csv')
+  end
+
+  let(:netcdf_nc) do
+    path = Rails.root.join('spec/samples', 'netcdf.nc')
+    Factory(:data_file, :path => path, :filename => 'netcdf.nc')
+  end
+
+  let(:netcdf_other) do
+    path = Rails.root.join('spec/samples', 'netcdf.other')
+    Factory(:data_file, :path => path, :filename => 'netcdf.other')
   end
 
   let(:jpg) do
@@ -68,6 +83,16 @@ describe FileTypeDeterminer do
       format.should eq(FileTypeDeterminer::TOA5)
     end
 
+    it "should identify NETCDF files with nc extension and correct format" do
+      format = file_type_determiner.identify_file(netcdf_nc)
+      format.should eq(FileTypeDeterminer::NETCDF)
+    end
+
+    it "should identify NETCDF files without nc extension and correct format" do
+      format = file_type_determiner.identify_file(netcdf_other)
+      format.should eq(FileTypeDeterminer::NETCDF)
+    end
+
     it "should identify WAV file" do
       format = file_type_determiner.identify_file(wav)
       format.should eq('audio/x-wav')
@@ -90,6 +115,11 @@ describe FileTypeDeterminer do
     it "should NOT identify files with DAT extension but no TOA5 header - binary format" do
       format = file_type_determiner.identify_file(jpg)
       format.should eq('image/jpeg')
+    end
+
+    it "should NOT identify files with NC extension but not in valid nc format" do
+      format = file_type_determiner.identify_file(unknown_nc)
+      format.should eq("text/plain")
     end
 
   end
