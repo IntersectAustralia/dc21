@@ -13,7 +13,8 @@ class NetcdfParser
 
   def self.read_metadata(data_file)
     # Get header data
-    output = %x(ncdump -x -h #{data_file.path})
+    datafile_path = Shellwords.shellescape(data_file.path)
+    output = %x(ncdump -x -h #{datafile_path})
     doc = Nokogiri::XML.parse(output)
     doc.remove_namespaces!
     results = doc.xpath('//variable')

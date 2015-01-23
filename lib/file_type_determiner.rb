@@ -37,8 +37,8 @@ class FileTypeDeterminer
 
   def is_netcdf?(data_file)
     return false unless File.exists?(data_file.path)
-    #system *%W(ncdump -h #{data_file.path})
-    %x(ncdump -h #{data_file.path} &>/dev/null)
+    datafile_path = Shellwords.shellescape data_file.path
+    %x(ncdump -h #{datafile_path} &>/dev/null)
     return $?.success?
   end
 end
