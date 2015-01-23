@@ -288,6 +288,10 @@ class DataFile < ActiveRecord::Base
     self.uuid.present?
   end
 
+  def is_netcdf?
+    self.format.eql?(FileTypeDeterminer::NETCDF)
+  end
+
   def is_toa5?
     self.format.eql?(FileTypeDeterminer::TOA5)
   end

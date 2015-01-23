@@ -83,6 +83,13 @@ describe FileTypeDeterminer do
       format.should eq(FileTypeDeterminer::TOA5)
     end
 
+    it "should identify WAV file" do
+      format = file_type_determiner.identify_file(wav)
+      format.should eq('audio/x-wav')
+    end
+  end
+
+  describe "Should identify valid NETCDF files" do
     it "should identify NETCDF files with nc extension and correct format" do
       format = file_type_determiner.identify_file(netcdf_nc)
       format.should eq(FileTypeDeterminer::NETCDF)
@@ -91,11 +98,6 @@ describe FileTypeDeterminer do
     it "should identify NETCDF files without nc extension and correct format" do
       format = file_type_determiner.identify_file(netcdf_other)
       format.should eq(FileTypeDeterminer::NETCDF)
-    end
-
-    it "should identify WAV file" do
-      format = file_type_determiner.identify_file(wav)
-      format.should eq('audio/x-wav')
     end
   end
 
