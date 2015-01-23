@@ -42,6 +42,11 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'netcdf.nc')
   end
 
+  let(:netcdf_2_nc) do
+    path = Rails.root.join('spec/samples', 'netcdf 2 (1).nc')
+    Factory(:data_file, :path => path, :filename => 'netcdf two (1).nc')
+  end
+
   let(:netcdf_other) do
     path = Rails.root.join('spec/samples', 'netcdf.other')
     Factory(:data_file, :path => path, :filename => 'netcdf.other')
@@ -97,6 +102,11 @@ describe FileTypeDeterminer do
 
     it "should identify NETCDF files without nc extension and correct format" do
       format = file_type_determiner.identify_file(netcdf_other)
+      format.should eq(FileTypeDeterminer::NETCDF)
+    end
+
+    it "should identify NETCDF files with space in the name" do
+      format = file_type_determiner.identify_file(netcdf_2_nc)
       format.should eq(FileTypeDeterminer::NETCDF)
     end
   end
