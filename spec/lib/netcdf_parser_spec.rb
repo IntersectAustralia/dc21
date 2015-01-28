@@ -27,6 +27,30 @@ describe NetcdfParser do
       elem.unit.should eq("seconds since 1970-01-01 00:00:00")
       elem.data_type.should be_nil
       elem.position.should eq(0)
+
+      elem = headers[1]
+      elem.name.should eq("latitude")
+      elem.unit.should eq("degrees_north")
+      elem.data_type.should be_nil
+      elem.position.should eq(1)
+
+      elem = headers[2]
+      elem.name.should eq("longitude")
+      elem.unit.should eq("degrees_east")
+      elem.data_type.should be_nil
+      elem.position.should eq(2)
+
+      elem = headers[3]
+      elem.name.should eq("convective_precipitation_flux")
+      elem.unit.should eq("mm")
+      elem.data_type.should eq("day")
+      elem.position.should eq(3)
+
+      elem = headers[4]
+      elem.name.should eq("crs")
+      elem.unit.should be_nil
+      elem.data_type.should be_nil
+      elem.position.should eq(4)
     end
 
     it "should extract the column header from file with spaces" do
@@ -42,6 +66,30 @@ describe NetcdfParser do
       elem.unit.should eq("seconds since 1970-01-01 00:00:00")
       elem.data_type.should be_nil
       elem.position.should eq(0)
+
+      elem = headers[1]
+      elem.name.should eq("latitude")
+      elem.unit.should eq("degrees_north")
+      elem.data_type.should be_nil
+      elem.position.should eq(1)
+
+      elem = headers[2]
+      elem.name.should eq("longitude")
+      elem.unit.should eq("degrees_east")
+      elem.data_type.should be_nil
+      elem.position.should eq(2)
+
+      elem = headers[3]
+      elem.name.should eq("convective_precipitation_flux")
+      elem.unit.should eq("mm")
+      elem.data_type.should eq("day")
+      elem.position.should eq(3)
+
+      elem = headers[4]
+      elem.name.should eq("crs")
+      elem.unit.should be_nil
+      elem.data_type.should be_nil
+      elem.position.should eq(4)
     end
 
   end
