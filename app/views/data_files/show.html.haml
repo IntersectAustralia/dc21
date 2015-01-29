@@ -106,7 +106,7 @@
       - else
         No children files defined.
 
-    - if @data_file.is_toa5? or @data_file.is_exif_image?
+    - if @data_file.is_toa5? or @data_file.is_exif_image? or @data_file.is_netcdf?
       .container
         %h2 Information From The File
         - render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
