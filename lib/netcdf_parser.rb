@@ -8,7 +8,7 @@ class NetcdfParser
     begin
       data_file.update_attributes! data_file_attrs
     rescue
-      # do nothing, FIXME
+      # do nothing, FIXME DIVERBEVAN-52
     end
 
     column_details_attrs.each do |attrs|
@@ -54,12 +54,13 @@ class NetcdfParser
     data_file_attrs[:external_id] = id.xpath('./@value').text
     time_len = ncksdoc.xpath('//dimension/@length').text.to_i
     if time_len == 1
-      value = ncksdoc.xpath('//variable/values').text[0..-2]
+      value = ncksdoc.xpath('//variable/values').text
+      value = value[0..-2] unless !value.ends_with? '.'
       time = Time.at(value.to_i)
       data_file_attrs[:start_time] = time
       data_file_attrs[:end_time] = time
     else
-      # TODO
+      # TODO DIVERBEVAN-53
 
     end
     data_file_attrs

@@ -114,9 +114,6 @@
         - if @data_file.is_toa5?
           - render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
         = render "file_format_specific_details"
-    - if @data_file.is_netcdf?
-      .container
-        = render "file_format_specific_details"
 
 
 
