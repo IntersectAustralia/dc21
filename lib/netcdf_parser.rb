@@ -5,11 +5,7 @@ class NetcdfParser
   def self.extract_metadata(data_file)
     data_file_attrs, column_details_attrs, metadata_items_as_hash = read_metadata(data_file)
 
-    begin
-      data_file.update_attributes! data_file_attrs
-    rescue
-      # do nothing, FIXME DIVERBEVAN-52
-    end
+    data_file.update_attributes! data_file_attrs
 
     column_details_attrs.each do |attrs|
       data_file.column_details.create!(attrs)
@@ -38,7 +34,7 @@ class NetcdfParser
     timevar_output = %x(ncks --xml -v time #{datafile_path})
     ncksdoc = Nokogiri::XML.parse(timevar_output)
     ncksdoc.remove_namespaces!
-    data_file_attrs = get_data_file_attributes(doc, ncksdoc)
+    data_file_attrs = get_data_file_attributes(data_file, doc, ncksdoc)
 
     # Retrieve column info
     col_info = get_data_file_column_details(doc)
@@ -48,10 +44,15 @@ class NetcdfParser
 
   private
 
-  def self.get_data_file_attributes(doc, ncksdoc)
+  def self.get_data_file_attributes(data_file, doc, ncksdoc)
     id = doc.xpath('/netcdf/attribute[@name="id"]')
     data_file_attrs = {}
-    data_file_attrs[:external_id] = id.xpath('./@value').text
+    external_id_val = id.xpath('./@value').text
+    if no_existing_id?(external_id_val)
+      data_file_attrs[:external_id] = external_id_val
+    else
+      data_file.add_message(:info, "A file with the same ID already exists. File is uploaded but ID is not set.")
+    end
     time_len = ncksdoc.xpath('//dimension/@length').text.to_i
     if time_len == 1
       value = ncksdoc.xpath('//variable/values').text
@@ -64,6 +65,10 @@ class NetcdfParser
 
     end
     data_file_attrs
+    end
+
+  def self.no_existing_id?(id)
+    return DataFile.find_by_external_id(id) ? false : true
   end
 
   def self.get_data_file_column_details(doc)
