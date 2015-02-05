@@ -255,6 +255,10 @@ class DataFile < ActiveRecord::Base
     (mapped_names + existing_values).uniq.sort
   end
 
+  def self.id_already_exist?(id)
+    return DataFile.find_by_external_id(id) ? true : false
+  end
+
   def extension
     ext = File.extname(filename)[1..-1]
     ext ? ext.downcase : nil
