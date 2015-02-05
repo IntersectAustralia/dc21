@@ -21,64 +21,41 @@ class NetcdfParser
   def self.read_metadata(data_file)
     # Retrieve column information
     datafile_path = Shellwords.shellescape(data_file.path)
+    util = NetcdfUtilities.new(datafile_path)
 
-    output = %x(ncdump -x -h #{datafile_path})
-    doc = Nokogiri::XML.parse(output)
-    doc.remove_namespaces!
+    # Retrieve file metadata
+    metadata_items = get_data_file_metadata(util)
 
-    # Retrieve file information
-    metadata_items = get_data_file_metadata(doc)
-
-    # Retrieve ID
-
-    timevar_output = %x(ncks --xml -v time #{datafile_path})
-    ncksdoc = Nokogiri::XML.parse(timevar_output)
-    ncksdoc.remove_namespaces!
-    data_file_attrs = get_data_file_attributes(data_file, doc, ncksdoc)
+    # Retrieve DataFile attributes
+    data_file_attrs = get_data_file_attributes(util)
 
     # Retrieve column info
-    col_info = get_data_file_column_details(doc)
+    col_info = get_data_file_column_details(util)
 
     return data_file_attrs, col_info, metadata_items
   end
 
   private
 
-  def self.get_data_file_attributes(data_file, doc, ncksdoc)
-    id = doc.xpath('/netcdf/attribute[@name="id"]')
+  def self.get_data_file_attributes(util)
     data_file_attrs = {}
-    external_id_val = id.xpath('./@value').text
-    if no_existing_id?(external_id_val)
-      data_file_attrs[:external_id] = external_id_val
-    else
-      data_file.add_message(:info, "A file with the same ID already exists. File is uploaded but ID is not set.")
-    end
-    time_len = ncksdoc.xpath('//dimension/@length').text.to_i
-    if time_len == 1
-      value = ncksdoc.xpath('//variable/values').text
-      value = value[0..-2] unless !value.ends_with? '.'
-      time = Time.at(value.to_i)
-      data_file_attrs[:start_time] = time
-      data_file_attrs[:end_time] = time
-    else
-      # TODO DIVERBEVAN-53
+    id = util.extract_external_id
+    start_time, end_time = util.extract_start_end_time
+    data_file_attrs[:external_id] = util.formatted_id(id, start_time, end_time)
+    data_file_attrs[:start_time] = start_time
+    data_file_attrs[:end_time] = end_time
 
-    end
     data_file_attrs
-    end
-
-  def self.no_existing_id?(id)
-    return DataFile.find_by_external_id(id) ? false : true
   end
 
-  def self.get_data_file_column_details(doc)
-    variables = doc.xpath('//variable')
+  def self.get_data_file_column_details(util)
+    variables = util.extract_all_variables
     col_info = []
-    variables.each_with_index do |variable, index|
-      name = variable.xpath('./@name').text
-      unit = variable.xpath('./attribute[@name="units"]/@value').text
-      data_type = variable.xpath('./attribute[@name="cell_methods"]/@value').text
-      fill_value = variable.xpath('./attribute[@name="_FillValue"]/@value').text
+    variables.each_with_index do |var, index|
+      name = util.extract_attribute_from_element(var, 'name')
+      unit = util.extract_attribute_from_variable(var, 'units')
+      data_type = util.extract_attribute_from_variable(var, 'cell_methods')
+      fill_value = util.extract_attribute_from_variable(var, '_FillValue')
       col_info << {:name => name.blank? ? nil : name,
                    :unit => unit.blank? ? nil : unit,
                    :data_type => data_type.blank? ? nil : data_type,
@@ -88,20 +65,21 @@ class NetcdfParser
     col_info
   end
 
-  def self.get_data_file_metadata(doc)
+  def self.get_data_file_metadata(util)
 
     metadata_items = {}
-    dimensions = doc.xpath('//dimension')
-    dimensions.each do |attr|
-      name = attr.xpath('./@name').text
-      value = attr.xpath('./@length').text
+    dimensions = util.extract_all_dimensions
+    dimensions.each do |dim|
+      name = util.extract_attribute_from_element(dim, 'name')
+      value = util.extract_attribute_from_element(dim, 'length')
       metadata_items[name] = value
     end
 
-    top_lvl_attrs = doc.xpath('/netcdf/attribute')
+    top_lvl_attrs = util.extract_all_top_lvl_attributes
     top_lvl_attrs.each do |attr|
-      value = attr.xpath('./@value').text
-      metadata_items[attr.xpath('./@name').text] = value
+      name = util.extract_attribute_from_element(attr, 'name')
+      value = util.extract_attribute_from_element(attr, 'value')
+      metadata_items[name] = value
     end
 
     metadata_items

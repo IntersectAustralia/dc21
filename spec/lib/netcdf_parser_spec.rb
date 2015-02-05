@@ -39,20 +39,11 @@ describe NetcdfParser do
       check_metadata(metadata_items)
     end
 
-    it "should not have external id saved if another file has the same id" do
+    it "should have an id with start and end time appended to it" do
       data_file = netcdf_nc
       NetcdfParser.extract_metadata(data_file)
-      data_file.save!
-      data_file.external_id.should eq('eMAST_eWATCH_day_prec_v1m0_1979_2012')
-      (NetcdfParser.no_existing_id? 'eMAST_eWATCH_day_prec_v1m0_1979_2012').should eq(false)
-
-      data_file2 = netcdf_2_nc
-      # extract a file with same id
-      NetcdfParser.extract_metadata(data_file2)
-      data_file2.reload
-      data_file2.external_id.should eq("")
-      data_file2.messages.length.should eq(1)
-      data_file2.messages[0][:message].should eq("A file with the same ID already exists. File is uploaded but ID is not set.")
+      data_file.reload
+      data_file.external_id.should eq("eMAST_eWATCH_day_prec_v1m0_1979_2012__1990-08-01 10:00_1990-08-01 10:00")
     end
   end
 
