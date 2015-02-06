@@ -12,6 +12,11 @@ describe NetcdfParser do
     Factory(:data_file, :path => path, :filename => 'netcdf 2 (1).nc')
   end
 
+  let(:netcdf_timeseries_nc) do
+    path = Rails.root.join('spec/samples', 'netcdf_double_series.nc')
+    Factory(:data_file, :path => path, :filename => 'netcdf_double_series.nc')
+  end
+
   describe "valid file" do
 
     it "should extract the column header from the file" do
@@ -22,7 +27,7 @@ describe NetcdfParser do
 
       headers = data_file.column_details
       metadata_items = data_file.metadata_items
-      check_df_attrs(data_file)
+      check_df_attrs(data_file, '1990-08-01 00:00', '1990-08-01 00:00')
       check_headers(headers)
       check_metadata(metadata_items)
     end
@@ -43,15 +48,23 @@ describe NetcdfParser do
       data_file = netcdf_nc
       NetcdfParser.extract_metadata(data_file)
       data_file.reload
-      data_file.external_id.should eq("eMAST_eWATCH_day_prec_v1m0_1979_2012__1990-08-01 10:00_1990-08-01 10:00")
+      data_file.external_id.should eq("eMAST_eWATCH_day_prec_v1m0_1979_2012__1990-08-01 00:00_1990-08-01 00:00")
     end
+
+    it "should have start and end time properly extracted if it's a time series datafile" do
+      data_file = netcdf_timeseries_nc
+      NetcdfParser.extract_metadata(data_file)
+      data_file.reload
+      check_df_attrs(data_file, '1950-01-01 12:00', '2009-01-01 12:00')
+    end
+
   end
 
   private
 
-  def check_df_attrs(data_file)
-    data_file.start_time.strftime('%Y-%m-%d %H:%M').should eq('1990-08-01 10:00')
-    data_file.end_time.strftime('%Y-%m-%d %H:%M').should eq('1990-08-01 10:00')
+  def check_df_attrs(data_file, start_time, end_time)
+    data_file.start_time.strftime('%Y-%m-%d %H:%M').should eq(start_time)
+    data_file.end_time.strftime('%Y-%m-%d %H:%M').should eq(end_time)
   end
 
   def check_headers(headers)
