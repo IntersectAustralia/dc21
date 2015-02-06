@@ -30,13 +30,36 @@ class NetcdfUtilities
     start_time = nil
     end_time = nil
     time_len = @var_info.xpath('//dimension/@length').text.to_i
-    if time_len == 1
-      value = @var_info.xpath('//variable/values').text
-      value = value[0..-2] unless !value.ends_with? '.'
-      start_time = Time.at(value.to_i)
-      end_time = start_time
-    else
+    var = @var_info.xpath('//variable')
+    value = var.xpath('//values').text
+    if time_len >= 1
+      type = extract_attribute_from_element(var, 'type')
+      unit = extract_attribute_from_variable(var, 'units')
+      start_time, end_time = determine_start_end_time(type, unit, value)
+    end
+    return start_time, end_time
+  end
 
+  def determine_start_end_time(type,unit,values)
+    time_series = []
+    start_time = nil
+    end_time = nil
+    time_series = values.split
+
+    start_val = time_series[0].to_f
+    end_val = time_series[-1].to_f
+    if unit.include? 'since'
+      split_str = unit.split(' since ')
+      time_unit = split_str[0]
+      time_method = time_unit.singularize
+      time_since = Time.parse(split_str[-1])
+      begin
+        start_time = time_since + start_val.send(time_method)
+        end_time = time_since + end_val.send(time_method)
+      rescue
+        start_time = time_since + start_val.to_i.send(time_method)
+        end_time = time_since + end_val.to_i.send(time_method)
+      end
     end
     return start_time, end_time
   end

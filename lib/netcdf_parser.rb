@@ -3,6 +3,7 @@ require 'nokogiri'
 class NetcdfParser
 
   def self.extract_metadata(data_file)
+    @filename = data_file.filename
     data_file_attrs, column_details_attrs, metadata_items_as_hash = read_metadata(data_file)
 
     data_file.update_attributes! data_file_attrs
@@ -40,6 +41,9 @@ class NetcdfParser
   def self.get_data_file_attributes(util)
     data_file_attrs = {}
     id = util.extract_external_id
+    if id.blank?
+      id = @filename
+    end
     start_time, end_time = util.extract_start_end_time
     data_file_attrs[:external_id] = util.formatted_id(id, start_time, end_time)
     data_file_attrs[:start_time] = start_time
