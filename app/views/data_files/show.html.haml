@@ -62,8 +62,8 @@
     - unless @data_file.is_toa5?
       .container
         - if @data_file.is_netcdf?
-          - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s : "Unknown"
-          - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s : "Unknown"
+          - start_date = @data_file.start_time.present? ? @data_file.start_time : "Unknown"
+          - end_date = @data_file.end_time.present? ? @data_file.end_time : "Unknown"
         - else
           - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
           - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
@@ -115,8 +115,8 @@
       .container
         %h2 Information From The File
         - if @data_file.is_netcdf?
-          - render_field "Start time", @data_file.start_time.utc.to_s if @data_file.start_time
-          - render_field "End time", @data_file.end_time.utc.to_s if @data_file.end_time
+          - render_field "Start time", @data_file.start_time if @data_file.start_time
+          - render_field "End time", @data_file.end_time if @data_file.end_time
         - else
           - render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
           - render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
