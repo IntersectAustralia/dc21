@@ -30,8 +30,8 @@ class NetcdfUtilities
     start_time = nil
     end_time = nil
     time_len = @var_info.xpath('//dimension/@length').text.to_i
-    var = @var_info.xpath('//variable')
-    value = var.xpath('//values').text
+    var = @var_info.xpath('.//variable[@name="time"]')
+    value = var.xpath('.//values').text
     if time_len >= 1
       type = extract_attribute_from_element(var, 'type')
       unit = extract_attribute_from_variable(var, 'units')

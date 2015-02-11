@@ -17,6 +17,11 @@ describe NetcdfParser do
     Factory(:data_file, :path => path, :filename => 'netcdf_double_series.nc')
   end
 
+  let(:netcdf_2times) do
+    path = Rails.root.join('spec/samples', 'netcdf_2times.nc')
+    Factory(:data_file, :path => path, :filename => 'netcdf_2times.nc')
+  end
+
   describe "valid file" do
 
     it "should extract the column header from the file" do
@@ -57,6 +62,14 @@ describe NetcdfParser do
       data_file.reload
       check_df_attrs(data_file, '1950-01-01 12:00', '2009-01-01 12:00')
     end
+
+    it "should have start and end time properly extracted if it's a time series datafile" do
+      data_file = netcdf_2times
+      NetcdfParser.extract_metadata(data_file)
+      data_file.reload
+      check_df_attrs(data_file, '1996-01-01 00:00', '1996-01-01 00:00')
+    end
+
 
   end
 
