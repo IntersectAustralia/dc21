@@ -135,8 +135,16 @@ class DataFilesController < ApplicationController
 
       @uploaded_files = []
       attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+      @error_messages = []
       files.each do |file|
-        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, parents)
+        begin
+          @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, parents)
+        rescue Exception => e
+          @error_messages << e.message
+        end
+      end
+      if (not @error_messages.empty?) and (files.length == 1)
+        redirect_to :back, :flash => { :error => @error_messages }
       end
     ensure
       clean_up_temp_files(files)
