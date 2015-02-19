@@ -11,7 +11,7 @@ class DataFilesController < ApplicationController
   before_filter :page_params, :only => [:index]
   before_filter :clean_up_temp_image_files
 
-  load_and_authorize_resource :except => [:download, :api_search]
+  load_and_authorize_resource :except => [:download, :api_search, :variable_list]
   load_resource :only => [:download]
   set_tab :home
   helper_method :sort_column, :sort_direction
@@ -285,6 +285,11 @@ class DataFilesController < ApplicationController
         redirect_to(data_file_path(@data_file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
     end
+  end
+
+  def variable_list
+    var_list = ColumnDetail.all
+    render :json => var_list.to_json
   end
 
   def api_search

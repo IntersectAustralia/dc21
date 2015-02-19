@@ -36,6 +36,7 @@ class Ability
          :download_selected,
          :bulk_update,
          :api_search,
+         :variable_list,
          :process_metadata_extraction], DataFile do |datafile|
       datafile.is_authorised_for_access_by?(user)
     end
