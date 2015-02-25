@@ -101,11 +101,6 @@ ActiveRecord::Schema.define(:version => 20150129005031) do
     t.boolean  "access_to_user_groups"
   end
 
-  create_table "data_files_labels", :id => false, :force => true do |t|
-    t.integer "data_file_id"
-    t.integer "label_id"
-  end
-
   create_table "data_files_tags", :id => false, :force => true do |t|
     t.integer "data_file_id"
     t.integer "tag_id"

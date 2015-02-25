@@ -167,6 +167,19 @@ When /^I perform an API search with an invalid API token$/ do |table|
   post api_search_data_files_path(:format => :json, :auth_token => 'blah'), post_params
 end
 
+When /^I get the variable list as user "([^"]*)"$/ do |email|
+  user = User.find_by_email!(email)
+  post variable_list_data_files_path(:format => :json, :auth_token => user.authentication_token)
+end
+
+When /^I get the variable list without an API token$/ do
+  post variable_list_data_files_path(:format => :json)
+end
+
+When /^I get the variable list with an invalid API token$/ do
+  post variable_list_data_files_path(:format => :json, :auth_token => 'blah')
+end
+
 When /^I should get a JSON response with$/ do |table|
   actual = JSON.parse(last_response.body)
   actual.size.should eq(table.hashes.size)

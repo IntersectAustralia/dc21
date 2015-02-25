@@ -289,6 +289,10 @@ class DataFilesController < ApplicationController
 
   def variable_list
     var_list = ColumnDetail.all
+    var_list.each do |column_detail|
+       mapping = ColumnMapping.find_by_code(column_detail.name)
+       column_detail["mapping"] = mapping.name if not mapping.blank?
+    end
     render :json => var_list.to_json
   end
 
