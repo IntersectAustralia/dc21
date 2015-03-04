@@ -34,7 +34,7 @@ gem "colorize"
 gem "squeel"
 gem "httparty", ">= 0.10.0"
 gem "decent_exposure"
-gem "rvm-capistrano"
+gem "rvm-capistrano", require: false
 gem "google-analytics-rails"
 gem 'nokogiri', '>= 1.6.1'
 gem 'multi_xml', '>= 0.5.2'
