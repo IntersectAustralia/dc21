@@ -1,4 +1,5 @@
-class NetcdfParser
+class NcmlParser
+
 
   def self.extract_metadata(data_file)
     @filename = data_file.filename
@@ -20,7 +21,7 @@ class NetcdfParser
   def self.read_metadata(data_file)
     # Retrieve column information
     datafile_path = Shellwords.shellescape(data_file.path)
-    util = NetcdfUtilities.new(datafile_path)
+    util = NcmlUtilities.new(datafile_path)
 
     # Retrieve file metadata
     metadata_items = get_data_file_metadata(util)
@@ -40,11 +41,7 @@ class NetcdfParser
     if id.blank?
       id = @filename
     end
-    start_time, end_time = util.extract_start_end_time
-    data_file_attrs[:external_id] = util.formatted_id(id, start_time, end_time)
-    data_file_attrs[:start_time] = start_time
-    data_file_attrs[:end_time] = end_time
-
+    data_file_attrs[:external_id] = id
     data_file_attrs
   end
 
@@ -66,7 +63,6 @@ class NetcdfParser
   end
 
   def self.get_data_file_metadata(util)
-
     metadata_items = {}
     dimensions = util.extract_all_dimensions
     dimensions.each do |dim|
@@ -81,8 +77,8 @@ class NetcdfParser
       value = util.extract_attribute_from_element(attr, 'value')
       metadata_items[name] = value
     end
-
+    # Add location to metadata items
+    metadata_items['location'] = util.extract_location()
     metadata_items
   end
-
 end
