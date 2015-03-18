@@ -300,12 +300,24 @@ class DataFile < ActiveRecord::Base
     self.format.eql?(FileTypeDeterminer::TOA5)
   end
 
+  def is_ncml?
+    self.format.eql?(FileTypeDeterminer::NCML)
+  end
+
   def is_exif_image?
     ['image/jpeg', 'image/pjpeg', 'image/tiff', 'image/x-tiff'].include? self.format
   end
 
   def is_error_file?
     self.file_processing_status.eql? STATUS_ERROR
+  end
+
+  def show_columns?
+    return (is_toa5? or is_netcdf? or is_ncml?)
+  end
+
+  def show_information_from_file?
+    return (is_toa5? or is_exif_image? or is_netcdf? or is_ncml?)
   end
 
   def is_authorised_for_access_by?(current_user)
@@ -395,6 +407,12 @@ class DataFile < ActiveRecord::Base
     self.published_date = DateTime.now
     self.published_by_id = current_user.id
     save!
+  end
+
+
+  def location_link
+    return nil if not is_ncml? or metadata_items.empty?
+    return metadata_items.find_by_key("location").value
   end
 
   def categorise_overlap(new_file)

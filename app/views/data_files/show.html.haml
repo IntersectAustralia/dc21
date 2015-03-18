@@ -32,6 +32,10 @@
     - render_field "Name", @data_file.filename
     - render_field "Type", @data_file.file_processing_status
     - render_field "File format", @data_file.format
+    - if @data_file.is_ncml?
+      //- render_field "Location", @data_file.location_link
+      - render_field_with_block "Location" do
+        %a{href: @data_file.location_link} #{@data_file.location_link}
     .description
       - render_description "Description", @data_file.file_processing_description
 
@@ -67,9 +71,9 @@
         - else
           - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
           - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
-
-        - render_field "Start time", start_date
-        - render_field "End time", end_date
+        - unless @data_file.is_ncml? # Can't calculate start and end time for ncml files
+          - render_field "Start time", start_date
+          - render_field "End time", end_date
 
   .container
     %h2 Access Control
@@ -111,7 +115,7 @@
       - else
         No children files defined.
 
-    - if @data_file.is_toa5? or @data_file.is_exif_image? or @data_file.is_netcdf?
+    - if @data_file.show_information_from_file?
       .container
         %h2 Information From The File
         - if @data_file.is_netcdf?
