@@ -312,6 +312,14 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.eql? STATUS_ERROR
   end
 
+  def show_columns?
+    return (is_toa5? or is_netcdf? or is_ncml?)
+  end
+
+  def show_information_from_file?
+    return (is_toa5? or is_exif_image? or is_netcdf? or is_ncml?)
+  end
+
   def is_authorised_for_access_by?(current_user)
     if current_user.role.name == "Administrator" || self.created_by == current_user || self.access == DataFile::ACCESS_PUBLIC
       return true

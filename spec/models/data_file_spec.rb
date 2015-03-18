@@ -3,10 +3,11 @@ require 'cancan/matchers'
 
 describe DataFile do
 
+  let(:file) do
+    Factory(:data_file, :path => 'some_path', :filename => 'agg.ncml', :format => FileTypeDeterminer::NCML)
+  end
+
   describe "#is_ncml?" do
-    let(:file) do
-      Factory(:data_file, :path => 'some_path', :filename => 'agg.ncml', :format => FileTypeDeterminer::NCML)
-    end
 
     context "when file is ncml format" do
       it { file.is_ncml?.should be_true }
@@ -18,6 +19,73 @@ describe DataFile do
       end
       it { file.is_ncml?.should be_false }
       it { file.is_netcdf?.should be_true }
+    end
+  end
+
+  describe "#show_columns" do
+    context "when file is toa5" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.dat', :format => FileTypeDeterminer::TOA5)
+      end
+      it { file.show_columns?.should be_true}
+    end
+
+    context "when file is netcdf" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.nc', :format => FileTypeDeterminer::NETCDF)
+      end
+      it { file.show_columns?.should be_true}
+    end
+
+    context "when file is ncml" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.ncml', :format => FileTypeDeterminer::NCML)
+      end
+      it { file.show_columns?.should be_true}
+    end
+
+    context "when file is text" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.txt', :format => "text/plain")
+      end
+      it { file.show_columns?.should be_false}
+    end
+  end
+
+  describe "#show_information_from_file" do
+    context "when file is toa5" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.dat', :format => FileTypeDeterminer::TOA5)
+      end
+      it { file.show_information_from_file?.should be_true}
+    end
+
+    context "when file is netcdf" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.nc', :format => FileTypeDeterminer::NETCDF)
+      end
+      it { file.show_information_from_file?.should be_true}
+    end
+
+    context "when file is ncml" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.ncml', :format => FileTypeDeterminer::NCML)
+      end
+      it { file.show_information_from_file?.should be_true}
+    end
+
+    context "when file is exif image" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.xtiff', :format => "image/x-tiff")
+      end
+      it { file.show_information_from_file?.should be_true}
+    end
+
+    context "when file is text" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'file.txt', :format => "text/plain")
+      end
+      it { file.show_information_from_file?.should be_false}
     end
   end
 
