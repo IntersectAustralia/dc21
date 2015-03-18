@@ -80,6 +80,8 @@ group :development do
   gem "rails3-generators"
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'guard'
+  gem 'guard-rspec', require: false
 end
 
 group :test do

@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 class NetcdfParser
 
   def self.extract_metadata(data_file)
@@ -35,8 +33,6 @@ class NetcdfParser
 
     return data_file_attrs, col_info, metadata_items
   end
-
-  private
 
   def self.get_data_file_attributes(util)
     data_file_attrs = {}

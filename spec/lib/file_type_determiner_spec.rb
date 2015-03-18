@@ -62,9 +62,34 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'Test_SR.wav')
   end
 
-  let(:file_type_determiner) {
+  let(:netcdf_ncml) do
+    path = Rails.root.join('spec/samples', 'netcdf.ncml')
+    Factory(:data_file, :path => path, :filename => 'netcdf.ncml')
+  end
+
+  let(:netcdf_xml) do
+    path = Rails.root.join('spec/samples', 'netcdf.xml')
+    Factory(:data_file, :path => path, :filename => 'netcdf.xml')
+  end
+
+  let(:file_type_determiner) do
     FileTypeDeterminer.new
-  }
+  end
+
+  describe "#identify_file" do
+    let(:file_type) { file_type_determiner.identify_file(netcdf_ncml) }
+
+    context "when file is NCML" do
+      it {file_type.should eq(FileTypeDeterminer::NCML) }
+    end
+
+    context "when file is missing a location for netcdf root element" do
+      let(:file_type) { file_type_determiner.identify_file(netcdf_xml) }
+      it {file_type.should_not eq(FileTypeDeterminer::NCML) }
+      it {file_type.should eq('application/xml')}
+    end
+  end
+
 
   describe "Should identify valid TOA5 files regardless of file extension" do
 

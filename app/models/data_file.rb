@@ -300,6 +300,10 @@ class DataFile < ActiveRecord::Base
     self.format.eql?(FileTypeDeterminer::TOA5)
   end
 
+  def is_ncml?
+    self.format.eql?(FileTypeDeterminer::NCML)
+  end
+
   def is_exif_image?
     ['image/jpeg', 'image/pjpeg', 'image/tiff', 'image/x-tiff'].include? self.format
   end
@@ -395,6 +399,12 @@ class DataFile < ActiveRecord::Base
     self.published_date = DateTime.now
     self.published_by_id = current_user.id
     save!
+  end
+
+
+  def location_link()
+    return nil if not is_ncml? or metadata_items.empty?
+    return metadata_items[0].value
   end
 
   def categorise_overlap(new_file)

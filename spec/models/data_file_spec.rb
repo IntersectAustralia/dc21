@@ -2,6 +2,25 @@ require 'spec_helper'
 require 'cancan/matchers'
 
 describe DataFile do
+
+  describe "#is_ncml?" do
+    let(:file) do
+      Factory(:data_file, :path => 'some_path', :filename => 'agg.ncml', :format => FileTypeDeterminer::NCML)
+    end
+
+    context "when file is ncml format" do
+      it { file.is_ncml?.should be_true }
+    end
+
+    context "when file is not ncml format" do
+      let(:file) do
+        Factory(:data_file, :path => 'some_path', :filename => 'agg.xml', :format => FileTypeDeterminer::NETCDF)
+      end
+      it { file.is_ncml?.should be_false }
+      it { file.is_netcdf?.should be_true }
+    end
+  end
+
   describe "Validations" do
     it { should validate_presence_of(:filename) }
     it { should validate_presence_of(:path) }
