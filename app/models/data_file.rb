@@ -410,7 +410,7 @@ class DataFile < ActiveRecord::Base
   end
 
 
-  def location_link()
+  def location_link
     return nil if not is_ncml? or metadata_items.empty?
     return metadata_items.find_by_key("location").value
   end

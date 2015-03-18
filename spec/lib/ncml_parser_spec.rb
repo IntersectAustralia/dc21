@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NetcdfParser do
+describe NcmlParser do
 
   let(:netcdf_ncml) do
     path = Rails.root.join('spec/samples', 'netcdf.ncml')
