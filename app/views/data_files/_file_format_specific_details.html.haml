@@ -11,7 +11,7 @@
       %th Column Mapping
       %th Unit
       %th Measurement Type
-      - if @data_file.is_netcdf?
+      - if @data_file.is_netcdf? or @data_file.is_ncml?
         %th Fill Value
     - @data_file.column_details.order(:position).each do |column_details|
       %tr
@@ -19,5 +19,5 @@
         %td{:title => column_details.get_mapped_name}= column_details.get_mapped_name
         %td{:title => column_details.unit}= column_details.unit
         %td{:title => column_details.data_type}= column_details.data_type
-        - if @data_file.is_netcdf?
+        - if @data_file.is_netcdf? or @data_file.is_ncml?
           %td{:title => column_details.fill_value}= column_details.fill_value
