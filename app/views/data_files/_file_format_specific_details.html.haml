@@ -1,6 +1,6 @@
 - @data_file.metadata_items.each do |item|
   - render_field item.key.humanize, item.value
-- if @data_file.is_toa5?
+- if @data_file.show_columns?
   %hr/
   %h3 Columns
   - if @data_file.cols_unmapped?
@@ -11,9 +11,13 @@
       %th Column Mapping
       %th Unit
       %th Measurement Type
+      - if @data_file.is_netcdf?
+        %th Fill Value
     - @data_file.column_details.order(:position).each do |column_details|
       %tr
         %td{:title => column_details.name}= column_details.name
         %td{:title => column_details.get_mapped_name}= column_details.get_mapped_name
         %td{:title => column_details.unit}= column_details.unit
         %td{:title => column_details.data_type}= column_details.data_type
+        - if @data_file.is_netcdf?
+          %td{:title => column_details.fill_value}= column_details.fill_value

@@ -11,7 +11,7 @@ class DataFilesController < ApplicationController
   before_filter :page_params, :only => [:index]
   before_filter :clean_up_temp_image_files
 
-  load_and_authorize_resource :except => [:download, :api_search]
+  load_and_authorize_resource :except => [:download, :api_search, :variable_list]
   load_resource :only => [:download]
   set_tab :home
   helper_method :sort_column, :sort_direction
@@ -135,8 +135,16 @@ class DataFilesController < ApplicationController
 
       @uploaded_files = []
       attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+      @error_messages = []
       files.each do |file|
-        @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, parents)
+        begin
+          @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, parents)
+        rescue Exception => e
+          @error_messages << e.message
+        end
+      end
+      if (not @error_messages.empty?) and (files.length == 1)
+        redirect_to :back, :flash => { :error => @error_messages }
       end
     ensure
       clean_up_temp_files(files)
@@ -277,6 +285,15 @@ class DataFilesController < ApplicationController
         redirect_to(data_file_path(@data_file), :alert => "Could not delete this file. It may have an ID assigned, or you may not have permission to delete it.")
       end
     end
+  end
+
+  def variable_list
+    var_list = ColumnDetail.all
+    var_list.each do |column_detail|
+       mapping = ColumnMapping.find_by_code(column_detail.name)
+       column_detail["mapping"] = mapping.name if not mapping.blank?
+    end
+    render :json => var_list.to_json
   end
 
   def api_search

@@ -255,6 +255,10 @@ class DataFile < ActiveRecord::Base
     (mapped_names + existing_values).uniq.sort
   end
 
+  def self.id_already_exist?(id)
+    return DataFile.find_by_external_id(id) ? true : false
+  end
+
   def extension
     ext = File.extname(filename)[1..-1]
     ext ? ext.downcase : nil
@@ -288,8 +292,16 @@ class DataFile < ActiveRecord::Base
     self.uuid.present?
   end
 
+  def is_netcdf?
+    self.format.eql?(FileTypeDeterminer::NETCDF)
+  end
+
   def is_toa5?
     self.format.eql?(FileTypeDeterminer::TOA5)
+  end
+
+  def is_ncml?
+    self.format.eql?(FileTypeDeterminer::NCML)
   end
 
   def is_exif_image?
@@ -298,6 +310,14 @@ class DataFile < ActiveRecord::Base
 
   def is_error_file?
     self.file_processing_status.eql? STATUS_ERROR
+  end
+
+  def show_columns?
+    return (is_toa5? or is_netcdf? or is_ncml?)
+  end
+
+  def show_information_from_file?
+    return (is_toa5? or is_exif_image? or is_netcdf? or is_ncml?)
   end
 
   def is_authorised_for_access_by?(current_user)
@@ -387,6 +407,12 @@ class DataFile < ActiveRecord::Base
     self.published_date = DateTime.now
     self.published_by_id = current_user.id
     save!
+  end
+
+
+  def location_link()
+    return nil if not is_ncml? or metadata_items.empty?
+    return metadata_items.find_by_key("location").value
   end
 
   def categorise_overlap(new_file)

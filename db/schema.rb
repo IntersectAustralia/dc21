@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140414001925) do
+ActiveRecord::Schema.define(:version => 20150129005031) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20140414001925) do
     t.integer  "data_file_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.string   "fill_value"
   end
 
   add_index "column_details", ["data_file_id"], :name => "index_column_details_on_data_file_id"
@@ -184,7 +185,7 @@ ActiveRecord::Schema.define(:version => 20140414001925) do
 
   create_table "metadata_items", :force => true do |t|
     t.string   "key"
-    t.string   "value"
+    t.text     "value"
     t.integer  "data_file_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false

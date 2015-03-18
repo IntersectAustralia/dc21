@@ -32,6 +32,10 @@
     - render_field "Name", @data_file.filename
     - render_field "Type", @data_file.file_processing_status
     - render_field "File format", @data_file.format
+    - if @data_file.is_ncml?
+      //- render_field "Location", @data_file.location_link
+      - render_field_with_block "Location" do
+        %a{href: @data_file.location_link} #{@data_file.location_link}
     .description
       - render_description "Description", @data_file.file_processing_description
 
@@ -61,10 +65,15 @@
 
     - unless @data_file.is_toa5?
       .container
-        - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
-        - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
-        - render_field "Start time", start_date
-        - render_field "End time", end_date
+        - if @data_file.is_netcdf?
+          - start_date = @data_file.start_time.present? ? @data_file.start_time : "Unknown"
+          - end_date = @data_file.end_time.present? ? @data_file.end_time : "Unknown"
+        - else
+          - start_date = @data_file.start_time.present? ? @data_file.start_time.utc.to_s(:with_seconds) : "Unknown"
+          - end_date = @data_file.end_time.present? ? @data_file.end_time.utc.to_s(:with_seconds) : "Unknown"
+        - unless @data_file.is_ncml? # Can't calculate start and end time for ncml files
+          - render_field "Start time", start_date
+          - render_field "End time", end_date
 
   .container
     %h2 Access Control
@@ -106,11 +115,15 @@
       - else
         No children files defined.
 
-    - if @data_file.is_toa5? or @data_file.is_exif_image?
+    - if @data_file.show_information_from_file?
       .container
         %h2 Information From The File
-        - render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
-        - render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
+        - if @data_file.is_netcdf?
+          - render_field "Start time", @data_file.start_time if @data_file.start_time
+          - render_field "End time", @data_file.end_time if @data_file.end_time
+        - else
+          - render_field "Start time", @data_file.start_time.utc.to_s(:with_seconds) if @data_file.start_time
+          - render_field "End time", @data_file.end_time.utc.to_s(:with_seconds) if @data_file.end_time
         - if @data_file.is_toa5?
           - render_field "Sample interval", distance_of_time_in_words(@data_file.interval) if @data_file.interval
         = render "file_format_specific_details"
