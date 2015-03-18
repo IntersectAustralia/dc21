@@ -1,6 +1,6 @@
 - @data_file.metadata_items.each do |item|
   - render_field item.key.humanize, item.value
-- if @data_file.is_toa5? or @data_file.is_netcdf?
+- if @data_file.is_toa5? or @data_file.is_netcdf? or @data_file.is_ncml?
   %hr/
   %h3 Columns
   - if @data_file.cols_unmapped?

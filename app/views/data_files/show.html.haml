@@ -115,7 +115,7 @@
       - else
         No children files defined.
 
-    - if @data_file.is_toa5? or @data_file.is_exif_image? or @data_file.is_netcdf?
+    - if @data_file.is_toa5? or @data_file.is_exif_image? or @data_file.is_netcdf? or @data_file.is_ncml?
       .container
         %h2 Information From The File
         - if @data_file.is_netcdf?

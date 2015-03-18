@@ -404,7 +404,7 @@ class DataFile < ActiveRecord::Base
 
   def location_link()
     return nil if not is_ncml? or metadata_items.empty?
-    return metadata_items[0].value
+    return metadata_items.find_by_key("location").value
   end
 
   def categorise_overlap(new_file)
