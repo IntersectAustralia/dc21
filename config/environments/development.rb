@@ -1,5 +1,7 @@
 Dc21app::Application.configure do
 
+  config.default_url_options = {:host => 'http://localhost:3000'}
+
   # TODO: set your own correct URL for action mailer
   config.action_mailer.default_url_options = {:host => 'localhost:3000'}
 

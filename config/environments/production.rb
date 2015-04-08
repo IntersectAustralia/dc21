@@ -1,5 +1,7 @@
 Dc21app::Application.configure do
 
+  config.default_url_options = {:host => 'https://%s' % Socket.gethostname}
+  
   GA.tracker = "UA-16667092-16"
 
   config.action_mailer.default_url_options = {:host => Socket.gethostname}

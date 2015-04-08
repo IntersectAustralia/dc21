@@ -16,13 +16,31 @@ describe PackageRifCsWrapper do
     it "Should return the root url as provided to the wrapper" do
       PackageRifCsWrapper.new(nil, [], {:root_url => 'http://example.com'}).originating_source.should eq('http://example.com')
     end
+
+    it "Should return the root url outside of Rails application context" do
+      PackageRifCsWrapper.new(nil, [], {:root_url => Rails.application.config.default_url_options[:host]}).originating_source.should eq('http://localhost:3000')
+    end
+
   end
 
   describe "Electronic location" do
+
+    let (:package) { Factory(:package) }
+
     it "Should return the collection zip url as provided to the wrapper" do
       PackageRifCsWrapper.new(nil, [], {:zip_url => 'http://example.com/1.zip'}).electronic_location.should eq('http://example.com/1.zip')
     end
+
+    it "Should return the collection zip url outside of Rails application context" do
+
+      root_url = Rails.application.config.default_url_options[:host]
+      zip_url = Rails.application.routes.url_helpers.download_data_file_path(package)
+      zip_full_url = File.join(root_url, zip_url)
+
+      PackageRifCsWrapper.new(nil, [], {:zip_url => zip_full_url}).electronic_location.should eq('http://localhost:3000/data_files/%s/download' % package.id)
+    end
   end
+
 
   it "Key should be external_id field" do
     user = Factory(:user, :first_name => "postman", :last_name => "pac", :email => "postmanpac@intersect.org.au")

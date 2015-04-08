@@ -50,9 +50,11 @@ class PackageWorker
 
     file = File.new(output_location, 'w')
 
-    options = {:root_url => Rails.application.routes.url_helpers.root_path,
+    root_url = Rails.application.config.default_url_options[:host]
+    zip_url = File.join(root_url, Rails.application.routes.url_helpers.download_data_file_path(package))
+    options = {:root_url => root_url,
                :collection_url => Rails.application.routes.url_helpers.data_file_path(package),
-               :zip_url => Rails.application.routes.url_helpers.download_data_file_path(package),
+               :zip_url => zip_url,
                :submitter => user}
     RifCsGenerator.new(PackageRifCsWrapper.new(package, files, options), file).build_rif_cs
     file.close
