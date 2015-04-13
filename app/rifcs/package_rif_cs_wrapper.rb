@@ -43,8 +43,16 @@ class PackageRifCsWrapper < RifCsWrapper
     subjects.select { |s| !s.blank? }
   end
 
-  def access_rights
+  def rights_uris
     experiments.collect(&:access_rights).uniq.sort
+  end
+
+  def license_type
+    AccessRightsLookup::RIGHTS[rights_uris.first].partition(':').first
+  end
+
+  def access_rights
+    'Data is freely available for reuse in accordance with license conditions'
   end
 
   # returns an array of strings, each item being an FOR code in its PURL format

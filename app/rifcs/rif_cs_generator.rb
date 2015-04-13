@@ -47,8 +47,15 @@ class RifCsGenerator
             xml.description wrapper_object.file_processing_description, type: 'brief'
           end
 
-          wrapper_object.access_rights.each do |right|
-            xml.description right, type: 'rights'
+          xml.rights do
+            if wrapper_object.rights_uris.first == 'N/A'
+              xml.licence type: 'All Rights Reserved.'
+            else
+              wrapper_object.rights_uris.each do |uri|
+                xml.licence '', type: wrapper_object.license_type, rightsUri: uri
+                xml.accessRights wrapper_object.access_rights, type: 'open'
+              end
+            end
           end
 
           if wrapper_object.start_time || wrapper_object.end_time
