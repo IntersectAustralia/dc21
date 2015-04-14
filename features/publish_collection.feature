@@ -13,7 +13,7 @@ Feature: Publish a PACKAGE
     And I have facilities
       | name                | code   | primary_contact             |
       | ROS Weather Station | ROS_WS | researcher@intersect.org.au |
-      | Flux Tower          | FLUX   |                             |
+      | Flux Tower          | FLUX   | researcher@intersect.org.au |
     And I have data files
       | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      | published_by               | transfer_status |
       | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |                            | COMPLETE        |
