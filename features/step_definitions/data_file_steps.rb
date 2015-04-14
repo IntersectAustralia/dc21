@@ -182,6 +182,7 @@ end
 
 When /^I do a date search for data files with dates "([^"]*)" and "([^"]*)"$/ do |from, to|
   visit path_to("the list data files page")
+  find("#drop4").click
   find("#date").click
   fill_in "From Date:", :with => from
   fill_in "To Date:", :with => to

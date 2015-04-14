@@ -121,18 +121,20 @@ describe PackageRifCsWrapper do
 
   describe "Rights" do
 
-    it "should return the right from the experiment associated with the package and not the files" do
-      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au") #CC BY: Attribution")
-      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au") #CC BY-NC-SA: Attribution-Noncommercial-Share Alike")
-      exp3 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nd/3.0/au") #CC BY-ND: Attribution-No Derivative Works")
+    it "should return the rights from the experiment associated with the package and not the files" do
+      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au")
+      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au")
+      exp3 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nd/3.0/au")
+      exp_reserved = Factory(:experiment, :access_rights => "N/A")
 
       df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => exp2.id)
       df3 = Factory(:data_file, :experiment_id => exp1.id)
       df4 = Factory(:data_file, :experiment_id => exp2.id)
+      df_reserved = Factory(:data_file, :experiment_id => exp_reserved.id)
 
       package = Factory(:package, :experiment_id => exp3.id, :filename => 'open package')
-      CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id], package) do |zip_file|
+      CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id, df_reserved.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
         wrapper = PackageRifCsWrapper.new(package, files, {})
@@ -143,9 +145,9 @@ describe PackageRifCsWrapper do
     end
 
     it "should not return the open access rights label for non-open packages" do
-      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au") #CC BY: Attribution")
-      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au") #CC BY-NC-SA: Attribution-Noncommercial-Share Alike")
-      exp_reserved = Factory(:experiment, :access_rights => "N/A") #All rights reserved")
+      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au")
+      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au")
+      exp_reserved = Factory(:experiment, :access_rights => "N/A")
 
       df1 = Factory(:data_file, :experiment_id => exp1.id)
       df2 = Factory(:data_file, :experiment_id => exp2.id)
