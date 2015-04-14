@@ -144,6 +144,7 @@ class DataFilesController < ApplicationController
         end
       end
       if (not @error_messages.empty?) and (files.length == 1)
+        files = []
         redirect_to :back, :flash => { :error => @error_messages }
       end
     ensure
@@ -317,8 +318,14 @@ class DataFilesController < ApplicationController
       errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups])
 
       if errors.empty?
-        uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
-        messages = uploaded_file.messages.collect { |m| m[:message] }
+        begin
+          uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
+          messages = uploaded_file.messages.collect { |m| m[:message] }
+        rescue Exception => e
+          # Exit if attachment builder fails to build the uploaded file
+          render :json => {:messages => e.message}, :status => :bad_request
+          return
+        end
         if !access_groups.nil? and access_groups.size != access_group_ids.size
           n = access_groups.size - access_group_ids.size
           if n == 1
