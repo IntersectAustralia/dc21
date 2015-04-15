@@ -18,7 +18,7 @@ class RifCsGenerator
     xml.instruct!
     xml.registryObjects(:xmlns => 'http://ands.org.au/standards/rif-cs/registryObjects',
                         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                        'xsi:schemaLocation' => 'http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd') do
+                        'xsi:schemaLocation' => 'http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.6/schema/registryObjects.xsd') do
       xml.registryObject group: wrapper_object.group do
         xml.key wrapper_object.key
         xml.originatingSource wrapper_object.originating_source
