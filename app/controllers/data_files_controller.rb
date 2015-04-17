@@ -11,7 +11,7 @@ class DataFilesController < ApplicationController
   before_filter :page_params, :only => [:index]
   before_filter :clean_up_temp_image_files
 
-  load_and_authorize_resource :except => [:download, :api_search, :variable_list]
+  load_and_authorize_resource :except => [:download, :api_search, :variable_list, :facility_and_experiment_list]
   load_resource :only => [:download]
   set_tab :home
   helper_method :sort_column, :sort_direction
@@ -297,6 +297,14 @@ class DataFilesController < ApplicationController
     render :json => var_list.to_json
   end
 
+  def facility_and_experiment_list
+    result = []
+    Facility.all.each do |facility|
+      result << {:facility_id => facility.id, :facility_name => facility.name, :experiments => facility.experiments.map{|exp| { id: exp.id, name: exp.name }}}
+    end
+    render :json => result.to_json
+  end
+  
   def api_search
     do_api_search(params)
   end

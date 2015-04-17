@@ -172,12 +172,25 @@ When /^I get the variable list as user "([^"]*)"$/ do |email|
   post variable_list_data_files_path(:format => :json, :auth_token => user.authentication_token)
 end
 
+When /^I get the facility and experiment list as user "([^"]*)"$/ do |email|
+  user = User.find_by_email!(email)
+  get facility_and_experiment_list_data_files_path(:format => :json, :auth_token => user.authentication_token)
+end
+
 When /^I get the variable list without an API token$/ do
   post variable_list_data_files_path(:format => :json)
 end
 
+When /^I get the facility and experiment list without an API token$/ do
+  get facility_and_experiment_list_data_files_path(:format => :json)
+end
+
 When /^I get the variable list with an invalid API token$/ do
   post variable_list_data_files_path(:format => :json, :auth_token => 'blah')
+end
+
+When /^I get the facility and experiment list with an invalid API token$/ do
+  get facility_and_experiment_list_data_files_path(:format => :json, :auth_token => 'blah')
 end
 
 When /^I should get a JSON response with$/ do |table|
@@ -190,6 +203,12 @@ When /^I should get a JSON response with$/ do |table|
     end
     count += 1
   end
+end
+
+Then /^the JSON response should equal:$/ do |json|
+  actual = JSON.parse(last_response.body)
+  expected = JSON.parse(json)
+  actual.should eq(expected)
 end
 
 When /^I should have file download link for each entry$/ do
