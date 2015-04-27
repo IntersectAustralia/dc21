@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.16'
+gem 'rails', '~> 3.2.21'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -79,11 +79,13 @@ group :development do
   gem "rails3-generators"
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'bundler-audit'
 end
 
 group :test do
   gem "simplecov", :require => false
   gem "simplecov-rcov", :require => false
+  gem "jwt"
 end
 
 gem 'mimetype-fu', :require => 'mimetype_fu'

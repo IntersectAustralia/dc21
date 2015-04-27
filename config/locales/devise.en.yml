@@ -10,7 +10,6 @@ en:
       not_saved:
         one: "1 error prohibited this %{resource} from being saved:"
         other: "%{count} errors prohibited this %{resource} from being saved:"
-
   devise:
     failure:
       already_authenticated: 'You are already logged in.'
@@ -60,5 +59,6 @@ en:
         inactive_signed_up: 'Thanks for requesting an account. You will receive an email when your request has been approved.'
     user_passwords:
       user:
+        no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
         updated: 'Your password was changed successfully. You are now signed in.'
         send_paranoid_instructions: 'If the email address you entered was valid, you will receive an email with instructions about how to reset your password in a few minutes.'

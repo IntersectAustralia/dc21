@@ -2,9 +2,9 @@
   = f.label :first_name , "First Name", class: "control-label"
   .controls
     = required
-    - if @aaf_credentials[:first_name].present?
-      = f.text_field :first_name, value: @aaf_credentials[:first_name], disabled:true
-      = f.hidden_field :first_name, value: @aaf_credentials[:first_name]
+    - if @aaf_credentials[:displayname].present?
+      = f.text_field :first_name, value: @aaf_credentials[:displayname], disabled:true
+      = f.hidden_field :first_name, value: @aaf_credentials[:displayname]
     - else
       = f.text_field :first_name
 
@@ -12,8 +12,8 @@
   = f.label :last_name, "Last Name", class: "control-label"
   .controls
     = required
-    - if @aaf_credentials[:last_name].present?
-      = f.text_field :last_name, value: @aaf_credentials[:last_name], disabled:true
-      = f.hidden_field :last_name, value: @aaf_credentials[:last_name]
+    - if @aaf_credentials[:surname].present?
+      = f.text_field :last_name, value: @aaf_credentials[:surname], disabled:true
+      = f.hidden_field :last_name, value: @aaf_credentials[:surname]
     - else
       = f.text_field :last_name

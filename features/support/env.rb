@@ -30,10 +30,9 @@ Capybara.default_selector = :css
 Capybara.ignore_hidden_elements = true
 Capybara.server_boot_timeout = 50
 
-Capybara.register_driver :selenium do |app|
-  Capybara::Selenium::Driver.new(app, :browser => :chrome)
-end
-
+# Capybara.register_driver :selenium do |app|
+#   Capybara::Selenium::Driver.new(app, :browser => :chrome)
+# end
 
 `echo '' > #{Rails.root}/log/test.log`
 clear_data_files
@@ -46,7 +45,6 @@ end
 Before do
   ActiveRecord::Base.connection.execute "ALTER SEQUENCE package_id_seq RESTART WITH 1;"
 end
-
 
 ActionController::Base.allow_rescue = false
 

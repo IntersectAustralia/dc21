@@ -32,8 +32,8 @@ staging:
 
 test:
   <<: *common
-  hostname:
-  secret_token:
+  hostname: http://example.com/
+  secret_token: Test
   aaf_rc_login_url: https://rapid.test.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME
 
 production:

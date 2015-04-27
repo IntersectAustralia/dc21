@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   def shib_flash
     if !user_signed_in? && @aaf_credentials[:mail].present?
-      if User.find_by_email(@aaf_credentials[:mail]).blank?
+      if User.find_for_authentication(email: @aaf_credentials[:mail]).blank?
         flash.now[:alert] = t "devise.failure.invalid_aaf"
       else
         flash.now[:alert] = t "devise.failure.inactive"
@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def shib_sign_up_redirect
-    if !user_signed_in? && @aaf_credentials[:mail].present? && User.find_by_email(@aaf_credentials[:mail]).blank?
+    if !user_signed_in? && @aaf_credentials[:mail].present? && User.find_for_authentication(email: @aaf_credentials[:mail]).blank?
       redirect_to new_user_registration_path
     end
   end

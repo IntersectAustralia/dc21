@@ -1,13 +1,29 @@
 Given /^I log in via AAF as "([^"]*)"$/ do |email|
-  Capybara.current_session.driver.header 'email', email
-  Capybara.current_session.driver.header 'givenName', "Test"
-  Capybara.current_session.driver.header 'surname', "AAF"
-end
 
-Given /^the Shibboleth headers are empty$/ do
-  Capybara.current_session.driver.header 'email', ""
-  Capybara.current_session.driver.header 'givenName', ""
-  Capybara.current_session.driver.header 'surname', ""
+  require 'jwt'
+
+  iat = Time.now
+
+  # See config/aaf_rc.yml for secret token and aud attribute
+  aaf_rc_params = {"iat" => iat.to_i,
+                   "nbf" => (iat - 1.minute).to_i,
+                   "exp" => (iat + 3.minutes).to_i,
+                   "typ" => "authnresponse",
+                   "https://aaf.edu.au/attributes" =>
+                       {
+                           "cn" => 'Test AAF',
+                           "displayname" => 'Test AAF',
+                           "surname" => 'AAF',
+                           "givenname" => 'Test',
+                           "mail" => email,
+                           "edupersonprincipalname" => email
+                       },
+                   "iss" => "https://rapid.test.aaf.edu.au",
+                   "aud" => "http://example.com/"
+  }
+  jwt_token = JWT.encode(aaf_rc_params, 'Test')
+
+  page.driver.post('/users/aaf_sign_in', {assertion: jwt_token})
 end
 
 Given /^I have a user "([^"]*)"$/ do |email|
@@ -50,7 +66,7 @@ Given /^I have a user "([^"]*)" with role "([^"]*)"$/ do |email, role|
 end
 
 Given /^I am logged in as "([^"]*)"$/ do |email|
-  unless User.find_by_email(email)
+  unless User.find_for_authentication(email: email)
     user = Factory(:user, :email => email, :password => "Pas$w0rd", :status => 'A')
     set_user_role(user, "Administrator")
   end

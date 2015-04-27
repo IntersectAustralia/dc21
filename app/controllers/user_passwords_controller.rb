@@ -7,7 +7,7 @@ class UserPasswordsController < Devise::PasswordsController
 
     # the only error we show is the empty email one
     if params[resource_name][:email].empty?
-      respond_with_navigational(resource){ render_with_scope :new }
+      respond_with_navigational(resource){ render :new }
     else
       set_flash_message(:notice, :send_paranoid_instructions) if is_navigational_format?
       redirect_to(new_user_session_path)

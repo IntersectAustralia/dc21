@@ -6,7 +6,9 @@ Feature: EYETRACKER-2: Logging In
   Background:
     Given I have the usual roles
     And I have a user "admin@intersect.org.au"
+    And I have a user "Case.Insensitive@Intersect.Org.Au"
     And "admin@intersect.org.au" has role "Administrator"
+    And "Case.Insensitive@Intersect.Org.Au" has role "Administrator"
 
   Scenario: Display AAF notes
     Given I am on the login page
@@ -19,6 +21,23 @@ Feature: EYETRACKER-2: Logging In
     And I should be on the home page
     Then I should see "Home / Dashboard"
     And I should see "admin@intersect.org.au"
+    And I should see "Admin"
+
+  Scenario: Successful login via AAF case insensitive
+    Given I log in via AAF as "Case.Insensitive@Intersect.Org.Au"
+    And I am on the home page
+    And I should be on the home page
+    Then I should see "Home / Dashboard"
+    And I should not see "Your account is not active"
+    And I should see "case.insensitive@intersect.org.au"
+    And I should see "Admin"
+    And I logout
+    Given I log in via AAF as "case.insensitive@intersect.org.au"
+    And I am on the home page
+    And I should be on the home page
+    Then I should see "Home / Dashboard"
+    And I should not see "You must be an approved user to access this site"
+    And I should see "case.insensitive@intersect.org.au"
     And I should see "Admin"
 
   Scenario: Login via AAF with inactive account
@@ -82,7 +101,7 @@ Feature: EYETRACKER-2: Logging In
     And I should be on the home page
 
   Scenario: Sign up should still work if request headers are empty strings
-    Given the Shibboleth headers are empty
+    Given I log in via AAF as ""
     And I am on the request account page
     And I should be on the request account page
     When I fill in the following:

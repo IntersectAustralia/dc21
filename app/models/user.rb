@@ -187,7 +187,7 @@ class User < ActiveRecord::Base
     raise Exception.new('Unauthorized') unless approved?
   end
 
-    private
+  private
   def initialize_status
     self.status = "U" unless self.status
   end

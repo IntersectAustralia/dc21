@@ -159,7 +159,7 @@ end
 def create_data_file_performance(filename, type, uploader)
   # we use the attachment builder to create the sample files so we know they've been processed the same way as if uploaded
   file = Rack::Test::UploadedFile.new("#{APP_CONFIG['data_root']}/perf_samples/#{filename}", "application/octet-stream")
-  builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_by_email(uploader), FileTypeDeterminer.new, MetadataExtractor.new)
+  builder = AttachmentBuilder.new(APP_CONFIG['files_root'], User.find_for_authentication(email: uploader), FileTypeDeterminer.new, MetadataExtractor.new)
   experiment_id = Experiment.first.id
 
   builder.build(file, experiment_id, type, "")
