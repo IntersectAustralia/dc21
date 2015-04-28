@@ -57,7 +57,7 @@ after 'multistage:ensure' do
     config/deploy/#{stage}.rb
     config/database.yml
     config/dc21app_config.yml
-    config/shibboleth.yml
+    config/aaf_rc.yml
     public/favicon.ico
     public/icon_app.png
     public/icon_app_small.png

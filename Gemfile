@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.16'
+gem 'rails', '~> 3.2.21'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -25,7 +25,7 @@ gem 'jquery-rails'
 gem "haml", "~> 3.1.8"
 gem "haml-rails"
 gem "tabs_on_rails"
-gem "devise", "~> 1.5.4"
+gem "devise", "~> 2.2.4"
 gem "cancan"
 gem "capistrano-ext"
 gem "capistrano"
@@ -54,7 +54,7 @@ gem 'resque-status', :require => "resque/status_server"
 gem 'resque-scheduler', :require => 'resque_scheduler'
 gem 'daemons-rails'
 
-gem "devise_shibboleth_authenticatable", github: 'IntersectAustralia/devise_shibboleth_authenticatable', :branch => 'master'
+gem 'devise_aaf_rc_authenticatable'
 gem "select2-rails"
 
 group :development, :test do
@@ -63,7 +63,7 @@ group :development, :test do
   gem "shoulda-matchers"
   gem 'selenium-webdriver'
   gem "mailcatcher"
-
+  gem "quiet_assets"
 
   # cucumber gems
   gem "email_spec"
@@ -71,7 +71,6 @@ group :development, :test do
   gem "cucumber-rails", :require => false
   gem "capybara", '~> 1.1.4'
   gem "database_cleaner"
-  gem 'spork', '~> 0.9.0.rc'
   gem "launchy"    # So you can do Then show me the page
   gem "zeus"
 end
@@ -80,11 +79,13 @@ group :development do
   gem "rails3-generators"
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'bundler-audit'
 end
 
 group :test do
   gem "simplecov", :require => false
   gem "simplecov-rcov", :require => false
+  gem "jwt"
 end
 
 gem 'mimetype-fu', :require => 'mimetype_fu'

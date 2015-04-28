@@ -7,7 +7,7 @@ Given /^I have access groups$/ do |table|
 
     if attributes.include? ("primary_user")
       primary_user_email = attributes.delete("primary_user")
-      primary_user = User.find_by_email(primary_user_email)
+      primary_user = User.find_for_authentication(email: primary_user_email)
       Factory(:access_group, attributes.merge(:primary_user => primary_user))
     else
       Factory(:access_group, attributes)

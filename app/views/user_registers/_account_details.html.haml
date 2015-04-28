@@ -2,9 +2,9 @@
   = f.label :email, "Email Address", class: "control-label"
   .controls
     = required
-    - if @aaf_credentials[:email].present?
-      = f.text_field :email, value: @aaf_credentials[:email], disabled:true
-      = f.hidden_field :email, value: @aaf_credentials[:email]
+    - if @aaf_mail.present?
+      = f.text_field :email, value: @aaf_mail, disabled:true
+      = f.hidden_field :email, value: @aaf_mail
     - else
       = f.text_field :email
 

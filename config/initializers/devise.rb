@@ -1,10 +1,10 @@
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
 Devise.setup do |config|
-  # ==> Shibboleth Configuration
-  config.shibboleth_logger = true
-  config.shibboleth_create_user = false
-  config.shibboleth_config = "#{Rails.root}/config/shibboleth.yml"
+  # ==> AAF Rapid Connect Configuration
+  config.aaf_rc_logger = true
+  config.aaf_rc_create_user = false
+  config.aaf_rc_config = "#{Rails.root}/config/aaf_rc.yml"
 
   # http://stackoverflow.com/questions/580314/overriding-a-module-method-from-a-gem-in-rails/1852448#1852448
   # verifies password before checking if account is active
@@ -79,7 +79,7 @@ Devise.setup do |config|
   # It will change confirmation, password recovery and other workflows
   # to behave the same regardless if the e-mail provided was right or wrong.
   # Does not affect registerable.
-  config.paranoid = true
+  config.paranoid = false
 
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If
@@ -113,10 +113,6 @@ Devise.setup do |config|
 
   # If true, extends the user's remember period when remembered via cookie.
   # config.extend_remember_period = false
-
-  # If true, uses the password salt as remember token. This should be turned
-  # to false if you are not using database authenticatable.
-  config.use_salt_as_remember_token = true
 
   # Options to be passed to the created cookie. For instance, you can set
   # :secure => true in order to force SSL only cookies.
@@ -190,7 +186,7 @@ Devise.setup do |config|
   config.token_authentication_key = :auth_token
   # If true, authentication through token does not store user in session and needs
   # to be supplied on each request. Useful if you are using the token as API token.
-  config.stateless_token = true
+  config.skip_session_storage << :token_auth
 
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for

@@ -1,0 +1,43 @@
+common: &common
+  # this is to map attributes as described in http://aaf.edu.au/technical/aaf-core-attributes/
+  # to their respective field in the database
+  # uncomment them if need be
+  user-mapping:
+    cn: ""
+    displayname: ""
+    edupersontargetedid: ""
+    edupersonscopedaffiliation: ""
+    edupersonprincipalname: ""
+    mail: email
+    givenname: first_name
+    surname: last_name
+
+development:
+  <<: *common
+  hostname: https://local.intersect.org.au/
+  secret_token:
+  aaf_rc_login_url: https://rapid.test.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME
+
+qa:
+  <<: *common
+  hostname:
+  secret_token:
+  aaf_rc_login_url: https://rapid.test.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME
+
+staging:
+  <<: *common
+  hostname:
+  secret_token:
+  aaf_rc_login_url: https://rapid.test.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME
+
+test:
+  <<: *common
+  hostname: http://example.com/
+  secret_token: Test
+  aaf_rc_login_url: https://rapid.test.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME
+
+production:
+  <<: *common
+  hostname: https://HOSTNAME
+  secret_token: SECRET_TOKEN
+  aaf_rc_login_url: https://rapid.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME

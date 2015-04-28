@@ -4,49 +4,13 @@ namespace :server_setup do
     code_base = "/home/#{user}/code_base/dc21"
     if File.directory?(code_base)
       # Update hostnames
-      system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml #{code_base}/config/deploy/local.rb #{code_base}/config/shibboleth.yml")
+      system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy/local.rb #{code_base}/config/aaf_rc.yml")
       # Update DB password
       system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{code_base}/config/database.yml")
       # Update AAF
-      if ENV['DC21_AAF_TEST'].eql?("true")
-        system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.test.aaf.edu.au')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml")
-      else
-        system ("ruby -pi.bak -e \"gsub(/AAF_HOST/, 'ds.aaf.edu.au')\" #{code_base}/config/deploy_files/shibboleth/shibboleth2.xml")
-      end
     else
       raise "Your system is not set up for local deployment.".red
     end
-
-  end
-
-  task :aaf_install do
-
-    status = capture "#{try_sudo} service shibd status; echo;"
-    if status[/unrecognized/]
-      run "#{try_sudo} wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo -P /etc/yum.repos.d"
-      run "#{try_sudo} yum install -y shibboleth"
-    else
-      puts "    Shibboleth installed already.".green
-    end
-    #upload configs
-    upload "config/deploy_files/shibboleth", "/tmp/", :via => :scp, :recursive => true
-    run "#{try_sudo} mv /tmp/shibboleth/* /etc/shibboleth/"
-
-    #set up certificate
-
-    hostname = ENV['DC21_HOST'] || web_server
-
-    run "cd /etc/shibboleth && #{try_sudo} ./keygen.sh -f -h #{hostname} -e https://#{hostname}/shibboleth"
-    run "#{try_sudo} chmod 0644 /etc/shibboleth/sp-*"
-
-    # Update AAF
-    if ENV['DC21_AAF_TEST'].eql?("true")
-      run "#{try_sudo} wget https://ds.test.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
-    else
-      run "#{try_sudo} wget https://ds.aaf.edu.au/distribution/metadata/aaf-metadata-cert.pem -O /etc/shibboleth/aaf-metadata-cert.pem"
-    end
-
-    sudo "service shibd start"
 
   end
 

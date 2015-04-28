@@ -5,7 +5,7 @@ class UserRegistersController < Devise::RegistrationsController
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy, :edit_password, :update_password, :profile]
   layout 'application'
 
-  skip_before_filter :shib_sign_up_redirect, :only => [:new, :create]
+  skip_before_filter :aaf_sign_up_redirect, :only => [:new, :create]
   def profile
     set_tab :account
     set_tab :overview, :contentnavigation
@@ -35,7 +35,7 @@ class UserRegistersController < Devise::RegistrationsController
       end
     else
       clean_up_passwords(resource)
-      respond_with_navigational(resource) { render_with_scope :new }
+      respond_with_navigational(resource) { render :new }
     end
   end
 
@@ -48,14 +48,14 @@ class UserRegistersController < Devise::RegistrationsController
       respond_with resource, :location => after_update_path_for(resource)
     else
       clean_up_passwords(resource)
-      respond_with_navigational(resource){ render_with_scope :edit }
+      respond_with_navigational(resource){ render :edit }
     end
   end
 
   def edit_password
     set_tab :account
     set_tab :changepassword, :contentnavigation
-    render_with_scope :edit_password
+    render :edit_password
   end
 
   # Mostly the same as the devise 'update' method, just call a different method on the model
@@ -68,7 +68,7 @@ class UserRegistersController < Devise::RegistrationsController
       respond_with resource, :location => after_update_path_for(resource)
     else
       clean_up_passwords(resource)
-      respond_with_navigational(resource){ render_with_scope :edit_password }
+      respond_with_navigational(resource){ render :edit_password }
     end
   end
 

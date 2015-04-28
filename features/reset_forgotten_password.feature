@@ -114,7 +114,4 @@ Feature: Reset forgotten password
   Scenario: Can't go to get new password page without the token in the email
     Given I have a user "admin@intersect.org.au"
     When I go to the reset password page
-    When I fill in "Password" with "Pass.456"
-    And I fill in "Password confirmation" with "Pass.456"
-    And I press "Change Your Password"
-    Then I should see "Reset password token can't be blank"
+    And I should see "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."

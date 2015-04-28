@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   # Include devise modules
-  devise :shibboleth_authenticatable, :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
+  devise :aaf_rc_authenticatable, :database_authenticatable, :registerable, :lockable, :recoverable, :trackable, :validatable, :timeoutable, :token_authenticatable
 
   belongs_to :role
   has_and_belongs_to_many :cart_items, :uniq => true, :class_name => "DataFile"
@@ -183,7 +183,11 @@ class User < ActiveRecord::Base
     save!(:validate => false)
   end
 
-    private
+  def after_aaf_rc_authentication
+    raise StandardError.new('Unauthorized') unless approved?
+  end
+
+  private
   def initialize_status
     self.status = "U" unless self.status
   end

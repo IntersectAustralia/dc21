@@ -38,7 +38,7 @@ def create_permission(entity, action, roles)
 end
 
 Given /^"([^"]*)" has role "([^"]*)"$/ do |email, role|
-  user = User.where(:email => email).first
+  user = User.find_for_authentication(:email => email)
   role = Role.where(:name => role).first
   user.role = role
   user.save!(:validate => false)
