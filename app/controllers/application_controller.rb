@@ -3,11 +3,11 @@ class ApplicationController < ActionController::Base
     render :text => exception, :status => 500
   end
 
-  before_filter :shib_sign_up_redirect, :except => :root
-  before_filter :shib_flash
+  before_filter :aaf_sign_up_redirect, :except => :root
+  before_filter :aaf_flash
   prepend_before_filter :retrieve_aaf_credentials
 
-  def shib_flash
+  def aaf_flash
     if !user_signed_in? && @aaf_credentials[:mail].present?
       if User.find_for_authentication(email: @aaf_credentials[:mail]).blank?
         flash.now[:alert] = t "devise.failure.invalid_aaf"
@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def shib_sign_up_redirect
+  def aaf_sign_up_redirect
     if !user_signed_in? && @aaf_credentials[:mail].present? && User.find_for_authentication(email: @aaf_credentials[:mail]).blank?
       redirect_to new_user_registration_path
     end

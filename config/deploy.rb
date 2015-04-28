@@ -218,7 +218,6 @@ namespace :deploy do
     sudo "service tomcat restart"
     sudo "service redis restart"
     sudo "service postgresql restart"
-    sudo "service shibd restart"
     sudo "service httpd restart"
   end
 
@@ -227,10 +226,8 @@ namespace :deploy do
     sudo "service tomcat status | cat"
     sudo "service redis status | cat"
     sudo "service postgresql status | cat"
-    sudo "service shibd status | cat"
     sudo "service httpd status | cat"
   end
-
 
   desc "Runs all the first time setup tasks"
   task :first_time, :except => {:no_release => true} do
