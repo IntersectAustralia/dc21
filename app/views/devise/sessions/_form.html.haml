@@ -1,13 +1,13 @@
 .container
   %h2 AAF Login
-  - if @aaf_credentials[:mail].present?
+  - if @aaf_mail.present?
     .control-group
       .controls
         %small
           Note: You are logged in via AAF as
-          %strong #{@aaf_credentials[:mail]}
+          %strong #{@aaf_mail}
           ,
-          - if User.find_for_authentication(email: @aaf_credentials[:mail])
+          - if User.find_for_authentication(email: @aaf_mail)
             but your #{@config.name} account request is pending approval.
           - else
             but you have not registered an account with #{@config.name}.

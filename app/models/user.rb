@@ -184,7 +184,7 @@ class User < ActiveRecord::Base
   end
 
   def after_aaf_rc_authentication
-    raise Exception.new('Unauthorized') unless approved?
+    raise StandardError.new('Unauthorized') unless approved?
   end
 
   private

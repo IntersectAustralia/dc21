@@ -8,23 +8,26 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :retrieve_aaf_credentials
 
   def aaf_flash
-    if !user_signed_in? && @aaf_credentials[:mail].present?
-      if User.find_for_authentication(email: @aaf_credentials[:mail]).blank?
-        flash.now[:alert] = t "devise.failure.invalid_aaf"
+    if !user_signed_in? && @aaf_mail.present?
+      if User.find_for_authentication(email: @aaf_mail).blank?
+        flash.now[:alert] = t 'devise.failure.invalid_aaf'
       else
-        flash.now[:alert] = t "devise.failure.inactive"
+        flash.now[:alert] = t 'devise.failure.inactive'
       end
     end
   end
 
   def aaf_sign_up_redirect
-    if !user_signed_in? && @aaf_credentials[:mail].present? && User.find_for_authentication(email: @aaf_credentials[:mail]).blank?
+    if !user_signed_in? && @aaf_mail.present? && User.find_for_authentication(email: @aaf_mail).blank?
       redirect_to new_user_registration_path
     end
   end
 
   def retrieve_aaf_credentials
     @aaf_credentials = session['attributes'] || {}
+    @aaf_mail = @aaf_credentials[:mail]
+    @aaf_first_name = @aaf_credentials[:givenname]
+    @aaf_last_name = @aaf_credentials[:surname]
   end
 
   protect_from_forgery
