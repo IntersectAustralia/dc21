@@ -15,10 +15,6 @@ if [ -z "$DC21_HOST" ]; then
   status=1
 fi
 
-if [ -z "$DC21_AAF_TEST" ]; then
-  echo "DC21_AAF_TEST is not defined. Using PRODUCTION AAF Registry."
-fi
-
 if [ "$status" -ne 0 ]; then
   exit $status
 fi
@@ -118,13 +114,13 @@ if [ $status -eq 0 ]; then
     cap local server_setup:gem_install server_setup:passenger resque:setup shared_file:setup server_setup:config:apache deploy:safe
   else
     cap local deploy:first_time
+    sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
   fi
 else
   echo "$(tput setaf 1)ERROR $status: deploy config set up failed.$(tput sgr0)"
   exit $status;
 fi
 
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
 sudo service httpd restart
 cap local deploy:restart
 
