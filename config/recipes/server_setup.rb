@@ -59,7 +59,7 @@ namespace :server_setup do
   end
 
   task :gem_install, :roles => :app do
-    run "gem install bundler -v 1.0.20"
+    run "gem install bundler -v 1.9.4"
   end
 
   task :passenger, :roles => :app do

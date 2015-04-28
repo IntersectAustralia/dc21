@@ -94,7 +94,8 @@ fi
 cd $HOME/code_base/dc21
 rvm use 2.0.0-p481@dc21app --create
 
-gem install bundler -v 1.0.20
+gem install bundler -v 1.9.4
+rvm rubygems 1.8.25
 bundle install
 status=$?
 
