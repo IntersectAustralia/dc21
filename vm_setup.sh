@@ -62,6 +62,7 @@ cd $HOME/code_base/dc21
 # Set up RVM
 type -P $HOME/.rvm/scripts/rvm > /dev/null
 if [ $? -ne 0 ]; then
+  curl -sSL https://rvm.io/mpapis.asc | gpg --import -
   curl -L http://get.rvm.io | bash -s stable --ruby=2.0.0-p481
   status=$?
   if [ $status -eq 0 ]; then
