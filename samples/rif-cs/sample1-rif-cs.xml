@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd">
+                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.6/schema/registryObjects.xsd">
   <registryObject group="University of Western Sydney">
-    <key>$$COLLECTION_URL$$</key>
+    <key>$$KEY$$</key>
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart>No Dates</namePart>
+        <namePart>No Dates.zip</namePart>
       </name>
 
       <location>
@@ -19,21 +19,19 @@
       </location>
 
       <subject type="local" xml:lang="en">Rainfall</subject>
-      <subject type="anzsrc-for">0202</subject>
-      <subject type="anzsrc-for">030304</subject>
-
-      <description type="rights">http://creativecommons.org/licenses/by-nc-nd/3.0/au</description>
-
-      <coverage>
-        <spatial type="gmlKmlPolyCoords">150.9934,45.3434</spatial>
-        <spatial type="gmlKmlPolyCoords">155.5552,46.33333</spatial>
-      </coverage>
+      <rights>
+        <licence type="CC BY-NC-ND" rightsUri="http://creativecommons.org/licenses/by-nc-nd/3.0/au"></licence>
+        <accessRights type="open">Data is freely available for reuse in accordance with license conditions</accessRights>
+      </rights>
 
       <relatedInfo>
-        <notes>Published by Fred Bloggs (georgina@intersect.org.au)</notes>
+        <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Primary contact for Facility1 is Fred Bloggs (primary_contact@intersect.org.au)</notes>
+        <notes>Unique ID: $$KEY$$</notes>
+      </relatedInfo>
+      <relatedInfo>
+      <notes>Primary contact for ROS Weather Station is Fred Bloggs ($$PRIMARY_CONTACT$$@intersect.org.au)</notes>
       </relatedInfo>
     </collection>
   </registryObject>

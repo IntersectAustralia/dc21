@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   host: localhost
-  database: dc21-dev
+  database: dc21
   username: dc21
   password: dc21
   pool: 5

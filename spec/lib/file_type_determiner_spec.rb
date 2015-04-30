@@ -7,6 +7,11 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'unknown.dat')
   end
 
+  let(:unknown_nc) do
+    path = Rails.root.join('spec/samples', 'unknown.nc')
+    Factory(:data_file, :path => path, :filename => 'unknown.nc')
+  end
+
   let(:empty_dat) do
     path = Rails.root.join('spec/samples', 'empty.dat')
     Factory(:data_file, :path => path, :filename => 'empty.dat')
@@ -32,6 +37,21 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'toa5.csv')
   end
 
+  let(:netcdf_nc) do
+    path = Rails.root.join('spec/samples', 'netcdf.nc')
+    Factory(:data_file, :path => path, :filename => 'netcdf.nc')
+  end
+
+  let(:netcdf_2_nc) do
+    path = Rails.root.join('spec/samples', 'netcdf 2 (1).nc')
+    Factory(:data_file, :path => path, :filename => 'netcdf two (1).nc')
+  end
+
+  let(:netcdf_other) do
+    path = Rails.root.join('spec/samples', 'netcdf.other')
+    Factory(:data_file, :path => path, :filename => 'netcdf.other')
+  end
+
   let(:jpg) do
     path = Rails.root.join('spec/samples', 'really-a-jpg.dat')
     Factory(:data_file, :path => path, :filename => 'really-a-jpg.dat')
@@ -42,9 +62,34 @@ describe FileTypeDeterminer do
     Factory(:data_file, :path => path, :filename => 'Test_SR.wav')
   end
 
-  let(:file_type_determiner) {
+  let(:netcdf_ncml) do
+    path = Rails.root.join('spec/samples', 'netcdf.ncml')
+    Factory(:data_file, :path => path, :filename => 'netcdf.ncml')
+  end
+
+  let(:netcdf_xml) do
+    path = Rails.root.join('spec/samples', 'netcdf.xml')
+    Factory(:data_file, :path => path, :filename => 'netcdf.xml')
+  end
+
+  let(:file_type_determiner) do
     FileTypeDeterminer.new
-  }
+  end
+
+  describe "#identify_file" do
+    let(:file_type) { file_type_determiner.identify_file(netcdf_ncml) }
+
+    context "when file is NCML" do
+      it {file_type.should eq(FileTypeDeterminer::NCML) }
+    end
+
+    context "when file is missing a location for netcdf root element" do
+      let(:file_type) { file_type_determiner.identify_file(netcdf_xml) }
+      it {file_type.should_not eq(FileTypeDeterminer::NCML) }
+      it {file_type.should eq('application/xml')}
+    end
+  end
+
 
   describe "Should identify valid TOA5 files regardless of file extension" do
 
@@ -74,6 +119,23 @@ describe FileTypeDeterminer do
     end
   end
 
+  describe "Should identify valid NETCDF files" do
+    it "should identify NETCDF files with nc extension and correct format" do
+      format = file_type_determiner.identify_file(netcdf_nc)
+      format.should eq(FileTypeDeterminer::NETCDF)
+    end
+
+    it "should identify NETCDF files without nc extension and correct format" do
+      format = file_type_determiner.identify_file(netcdf_other)
+      format.should eq(FileTypeDeterminer::NETCDF)
+    end
+
+    it "should identify NETCDF files with space in the name" do
+      format = file_type_determiner.identify_file(netcdf_2_nc)
+      format.should eq(FileTypeDeterminer::NETCDF)
+    end
+  end
+
   describe "Unidentifiable files" do
 
     it "should NOT identify files with DAT extension but no TOA5 header" do
@@ -90,6 +152,11 @@ describe FileTypeDeterminer do
     it "should NOT identify files with DAT extension but no TOA5 header - binary format" do
       format = file_type_determiner.identify_file(jpg)
       format.should eq('image/jpeg')
+    end
+
+    it "should NOT identify files with NC extension but not in valid nc format" do
+      format = file_type_determiner.identify_file(unknown_nc)
+      format.should eq("text/plain")
     end
 
   end

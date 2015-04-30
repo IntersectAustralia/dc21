@@ -8,30 +8,22 @@ Then /^there should be no published collections$/ do
 end
 
 Then /^the RIF\-CS file for the latest published collection should match "([^"]*)"$/ do |file|
-  pc = PublishedCollection.last
+  pc = Package.last
   expected_contents = File.open(File.join(Rails.root, file)).read
   # do substitution on collection url and root url
-  expected_contents.gsub!("$$COLLECTION_URL$$", published_collection_url(pc))
+  expected_contents.gsub!("$$COLLECTION_URL$$", Rails.application.routes.url_helpers.data_file_path(pc))
+  expected_contents.gsub!("$$KEY$$", pc.external_id)
+  root_url = "http://#{Capybara.current_session.driver.rack_server.host}:#{Capybara.current_session.driver.rack_server.port}/"
+  zip_url = File.join(root_url, Rails.application.routes.url_helpers.download_data_file_path(pc))
   expected_contents.gsub!("$$ROOT_URL$$", root_url)
+  expected_contents.gsub!("$$ZIP_URL$$", zip_url)
+  expected_contents.gsub!("$$PRIMARY_CONTACT$$", 'researcher')
 
-  actual_contents = File.open(pc.rif_cs_file_path).read
+  actual_contents = File.open("/tmp/dc21-data/published_rif_cs/rif-cs-#{pc.id}.xml").read
 
   # convert XML to hashes so we don't have to do dumb string comparison
   actual_hash = Hash.from_xml(actual_contents)
   expected_hash = Hash.from_xml(expected_contents)
-
-  # remove key, originating source, electronic location and check them separately, since we don't know the URLs ahead of time
-  actual_originating_source = actual_hash['registryObjects']['registryObject'].delete('originatingSource')
-  actual_key = actual_hash['registryObjects']['registryObject'].delete('key')
-  actual_location = actual_hash['registryObjects']['registryObject']['collection']['location']['address']['electronic'].delete('value')
-
-  actual_key.should =~ /^http:\/\/([^\/]*)\/published_collections\/#{pc.id}$/
-  actual_originating_source.should =~ /^http:\/\/([^\/]*)\/$/
-  actual_location.should =~ /^http:\/\/([^\/]*)\/published_collections\/#{pc.id}.zip$/
-
-  expected_hash['registryObjects']['registryObject'].delete('originatingSource')
-  expected_hash['registryObjects']['registryObject'].delete('key')
-  expected_hash['registryObjects']['registryObject']['collection']['location']['address']['electronic'].delete('value')
 
   diff = expected_hash.diff(actual_hash)
   unless diff == {}
@@ -51,9 +43,9 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
 end
 
 When /^I perform a GET for the zip file for the latest published collection I should get a zip matching "([^"]*)"$/ do |directory_to_match|
-  pc = PublishedCollection.last
+  pc = Package.last
 
-  url = published_collection_path(pc, format: :zip)
+  url = File.join(root_url, Rails.application.routes.url_helpers.download_data_file_path(pc))
   response = get url
 
   compare_zip_to_expected_files(response.body, directory_to_match)

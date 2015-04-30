@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<netcdf xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2" location="http://dapds00.nci.org.au/thredds/dodsC/eMAST_TERN/Climate/eMAST/ANUClimate/0_01deg/v1m0_aus/day/land/prec/e_01/1970_2012/eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg.ncml">
+  <attribute name="DOI" value="To be added" />
+  <attribute name="Metadata_Conventions" value="Unidata Dataset Discovery v1.0" />
+  <attribute name="citation" value="Michael Hutchinson, Jennifer Kesteven, Tingbao Xu, 2014. Daily total precipitation: ANUClimate 1.0, 0.01 degree, Australian Coverage, 1970-2012. Australian National University, Canberra, Australia. Obtained from http://dap.nci.org.au, made available by the Ecosystem Modelling and Scaling Infrastructure (eMAST, http://www.emast.org.au) of the Terrestrial Ecosystem Research Network (TERN, http://www.tern.org.au). Accessed [Date accessed]." />
+  <attribute name="licence_data_access" value="These data can be freely downloaded and used subject to the TERN-BY licence. " />
+  <attribute name="references" value="1. Michael Hutchinson, Jennnifer Kesteven, Tingbao Xu, 2014. Daily total precipitation: ANUClimate 1.0, 0.01 degree, Australian Coverage, 1970-2012. Australian National University, Canberra, Australia., 2. Hutchinson, M.F., Mckenney, D.W., Lawrence, K., Pedlar, J., Hopkinson, R., Milewska, E. and Papadopol, P. 2009. Development and testing of Canada-wide interpolated spatial models of daily minimum/maximum temperature and precipitation for 1961-2003. Journal of Applied Meteorology and Climatology 48: 725?741., 3. Hutchinson, M.F. and Xu, T. 2013. ANUSPLIN version 4.4 User Guide. Fenner School of Environment and Society, Australian National University, Canberra." />
+  <attribute name="contributor_role" value="principalInvestigator, author" />
+  <attribute name="keywords" value="EARTH SCIENCE &gt; ATMOSPHERE &gt; PRECIPITATION" />
+  <attribute name="summary" value="Daily total precipitation for Australian continent between 1970-2012. Daily rainfall totals are useful for estimation of soil moisture for plant growth and surface runoff via soil water balance modelling.  Modelled by expressing each daily value, including zero rainfall, as a normalised anomaly with respect to the gridded 1976-2005 mean for each month, as provided by eMAST_ANUClimate_mmn_rain_v1m0_1976_2005. The daily anomalies were interpolated by trivariate thin plate smoothing spline functions of longitude, latitude and vertically exaggerated elevation using ANUSPLIN Version 4.5. Station elevations were 0.05 degree local averages of grid values from the GEODATA 9 second DEM version 3 as provided by eMAST_ANUClimate_fx_el05_v1m0. There was an average of 6438 Bureau of Meteorology data points per day between 1970 and 2012. The mean absolute value of all individual cross validation residuals provided by the spline analysis is 0.96 mm (50% of the overall mean). Extreme studentised residuals clearly identified data errors associated with unrecognised missing values, unrecognised accumulated values, and values recorded on the wrong (usually preceding) day. There were on average around 5 such extreme residuals per day. These data errors will be removed in Version 1.1 of these grids with minor improvement in error statistics. The rainfall occurrence of the individual cross validated days agrees with the rainfall occurrence of 90.5% of all days of record, where daily rainfall occurrence is defined as rainfall exceeding 0.2 mm. A comprehensive assessment of the analysis and the factors contributing to the quality of the final interpolated monthly rainfall grids is in preparation." />
+  <attribute name="publisher_name" value="Ecosystem Modelling and Scaling Infrastructure (eMAST) Facility: Macquarie University" />
+  <attribute name="id" value="eMAST_ANUClimate_day_prec_v1m0_1970_2012" />
+  <attribute name="spatial_coverage" value="Australia" />
+  <attribute name="acknowledgment" value="The creation of this data was funded by the Terrestrial Ecosystem Research Network (TERN) Ecosystem Modelling and Scaling Infrastructure (eMAST) Facility under the National Collaborative Research Infrastructure Strategy (NCRIS) 2013-2014 budget initiative of the Australian Government Department of Industry, the Australian Government Department of Environment in support of the National Carbon Accounting System, and the Australian National University. Any publication of this data or works derived from these data, must include the following citation and prior email notification (eMAST.data@mq.edu.au). Please send reprints/citations of papers or oral presentations to the eMAST office." />
+  <attribute name="title" value="Daily total precipitation: ANUClimate 1.0, 0.01 degree, Australian Coverage" />
+  <attribute name="standard_name_vocabulary" value="Climate and Forecast(CF) convention standard names (http://cf-pcmdi.llnl.gov/documents/cf-standard-names)" />
+  <attribute name="source" value="ANUClimate 1.0" />
+  <attribute name="publisher_url" value="http://www.emast.org.au/" />
+  <attribute name="featureType" value="grid" />
+  <attribute name="publisher_email" value="eMAST.data@mq.edu.au" />
+  <attribute name="keywords_vocabulary" value="Global Change Master Directory (http://gcmd.nasa.gov)" />
+  <attribute name="metadata_link" value="http://datamgt.nci.org.au:8080/geonetwork" />
+  <attribute name="creator_email" value="eMAST.data@mq.edu.au" />
+  <attribute name="institution" value="Australian National University" />
+  <attribute name="contributor_name" value="Michael Hutchinson, Jennnifer Kesteven" />
+  <attribute name="creator_name" value="eMAST data manager" />
+  <attribute name="license" value="Copyright 2014 ANU. Rights owned by The Australian National University (ANU). Rights licensed subject to TERN Attribution Licence (TERN-BY)   http://tern.org.au/datalicence/TERN-BY/1.0/" />
+  <attribute name="Conventions" value="CF-1.6" />
+  <attribute name="cdm_data_type" value="grid" />
+  <attribute name="contact" value="Michael Hutchinson, Professor of spatial and temporal analysis, 3.23A, Fenner School of Environment &amp; Society, College of Medicine, Biology &amp; Environment, Frank Fenner Building 141, Australian National University, Canberra, Australian Capital Territory, 0200.0, Australia, (+61) 2 6125 4783, Michael.Hutchinson@anu.edu.au, http://orcid.org/0000-0001-8205-6689" />
+  <attribute name="creator_url" value="http://www.emast.org.au/" />
+  <attribute name="history" value="Reformatted to NetCDF 2014-09-24.Updated metadata 2014-09-29 ." />
+  <attribute name="geospatial_lat_min" type="double" value="-43.74" />
+  <attribute name="geospatial_lat_max" type="double" value="-9.0" />
+  <attribute name="geospatial_lat_units" value="degrees_north" />
+  <attribute name="geospatial_lat_resolution" type="double" value="-0.01" />
+  <attribute name="geospatial_lon_min" type="double" value="112.9" />
+  <attribute name="geospatial_lon_max" type="double" value="154.0" />
+  <attribute name="geospatial_lon_units" value="degrees_east" />
+  <attribute name="geospatial_lon_resolution" type="double" value="0.01" />
+  <attribute name="_CoordSysBuilder" value="ucar.nc2.dataset.conv.CF1Convention" />
+  <dimension name="latitude" length="3474" />
+  <dimension name="longitude" length="4110" />
+  <dimension name="time" length="15706" />
+  <group name="CFMetadata">
+    <attribute name="geospatial_lon_min" value="112.905" type="float" />
+    <attribute name="geospatial_lat_min" value="-43.735" type="float" />
+    <attribute name="geospatial_lon_max" value="153.995" type="float" />
+    <attribute name="geospatial_lat_max" value="-9.005" type="float" />
+    <attribute name="geospatial_lon_units" value="degrees_east" />
+    <attribute name="geospatial_lat_units" value="degrees_north" />
+    <attribute name="geospatial_lon_resolution" value="0.01" />
+    <attribute name="geospatial_lat_resolution" value="0.009999999999999998" />
+    <attribute name="time_coverage_start" value="1970-01-01T00:00:00Z" />
+    <attribute name="time_coverage_end" value="2012-12-31T00:00:00Z" />
+    <attribute name="time_coverage_units" value="seconds" />
+    <attribute name="time_coverage_resolution" value="86400.0" />
+    <attribute name="time_coverage_duration" value="P0Y0M15705DT0H0M0.000S" />
+  </group>
+  <group name="NCISOMetadata">
+    <attribute name="metadata_creation" value="2015-03-12" />
+    <attribute name="nciso_version" value="2.2.2" />
+  </group>
+  <group name="THREDDSMetadata">
+    <attribute name="id" value="eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg" />
+    <attribute name="full_name" value="eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg" />
+    <group name="documentation">
+      <group name="document">
+        <attribute name="inline" value="Registered research users only" type="rights" />
+      </group>
+    </group>
+    <group name="services">
+      <attribute name="opendap_service" value="http://dapds00.nci.org.au/thredds/dodsC/eMAST_TERN/Climate/eMAST/ANUClimate/0_01deg/v1m0_aus/day/land/prec/e_01/1970_2012/eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg.ncml" />
+      <attribute name="wms_service" value="http://dapds00.nci.org.au/thredds/wms/eMAST_TERN/Climate/eMAST/ANUClimate/0_01deg/v1m0_aus/day/land/prec/e_01/1970_2012/eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg.ncml?service=WMS&amp;version=1.3.0&amp;request=GetCapabilities" />
+      <attribute name="wcs_service" value="http://dapds00.nci.org.au/thredds/wcs/eMAST_TERN/Climate/eMAST/ANUClimate/0_01deg/v1m0_aus/day/land/prec/e_01/1970_2012/eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg.ncml?service=WCS&amp;version=1.0.0&amp;request=GetCapabilities" />
+      <attribute name="nccs_service" value="http://dapds00.nci.org.au/thredds/ncss/grid/eMAST_TERN/Climate/eMAST/ANUClimate/0_01deg/v1m0_aus/day/land/prec/e_01/1970_2012/eMAST_ANUClimate_day_prec_v1m0_1970_2012_agg.ncml/dataset.html" />
+    </group>
+  </group>
+  <variable name="crs" shape="" type="int">
+    <attribute name="datum" value="Geocentric_Datum_of_Australia_1994" />
+    <attribute name="semi_minor_axis" type="double" value="6356752.314140356" />
+    <attribute name="semi_major_axis" type="double" value="6378137.0" />
+    <attribute name="name" value="GDA94" />
+    <attribute name="longitude_of_prime_meridian" type="double" value="0.0" />
+    <attribute name="inverse_flattening" type="double" value="298.257222101" />
+    <attribute name="_CoordinateTransformType" value="Projection" />
+    <attribute name="_CoordinateAxisTypes" value="GeoX GeoY" />
+  </variable>
+  <variable name="lwe_thickness_of_precipitation_amount" shape="time latitude longitude" type="float">
+    <attribute name="coordinates" value="lat lon" />
+    <attribute name="long_name" value="Daily total precipitation: ANUClimate 1.0, 0.01 degree, Australian Coverage" />
+    <attribute name="standard_name" value="lwe_thickness_of_precipitation_amount" />
+    <attribute name="units" value="mm day-1" />
+    <attribute name="grid_mapping" value="crs" />
+    <attribute name="cell_methods" value="day" />
+    <attribute name="_FillValue" type="float" value="-9999.0" />
+  </variable>
+  <variable name="latitude" shape="latitude" type="double">
+    <attribute name="standard_name" value="latitude" />
+    <attribute name="units" value="degrees_north" />
+    <attribute name="axis" value="Y" />
+    <attribute name="long_name" value="latitude" />
+    <attribute name="_CoordinateAxisType" value="Lat" />
+  </variable>
+  <variable name="longitude" shape="longitude" type="double">
+    <attribute name="long_name" value="longitude" />
+    <attribute name="standard_name" value="longitude" />
+    <attribute name="units" value="degrees_east" />
+    <attribute name="axis" value="X" />
+    <attribute name="_CoordinateAxisType" value="Lon" />
+  </variable>
+  <variable name="time" shape="time" type="double">
+    <attribute name="long_name" value="time" />
+    <attribute name="standard_name" value="time" />
+    <attribute name="units" value="seconds since 1970-01-01 00:00:00" />
+    <attribute name="calendar" value="gregorian" />
+    <attribute name="axis" value="T" />
+    <attribute name="_CoordinateAxisType" value="Time" />
+  </variable>
+</netcdf>
+

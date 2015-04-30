@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd">
+                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.6/schema/registryObjects.xsd">
   <registryObject group="University of Western Sydney">
-    <key>$$COLLECTION_URL$$</key>
+    <key>$$KEY$$</key>
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart>My Collection Of Stuff</namePart>
+        <namePart>My Collection Of Stuff.zip</namePart>
       </name>
 
       <location>
@@ -19,40 +19,28 @@
       </location>
 
       <subject type="local" xml:lang="en">Rainfall</subject>
-      <subject type="local" xml:lang="en">Trees</subject>
-      <subject type="anzsrc-for">0202</subject>
-      <subject type="anzsrc-for">030304</subject>
-      <subject type="anzsrc-for">05</subject>
 
       <description type="brief">Describe my collection of stuff</description>
-      <description type="rights">http://creativecommons.org/licenses/by-nc-nd/3.0/au</description>
-      <description type="rights">http://creativecommons.org/licenses/by-nc-sa/3.0/au</description>
+      <rights>
+        <licence type="CC BY-NC-SA" rightsUri="http://creativecommons.org/licenses/by-nc-sa/3.0/au"></licence>
+        <accessRights type="open">Data is freely available for reuse in accordance with license conditions</accessRights>
+      </rights>
 
       <coverage>
         <temporal>
-          <date type="dateFrom" dateFormat="W3CDTF">2011-08-11</date>
-          <date type="dateTo" dateFormat="W3CDTF">2011-11-12</date>
+          <date type="dateFrom" dateFormat="W3CDTF">2010-06-01T06:42:01+10:00</date>
+          <date type="dateTo" dateFormat="W3CDTF">2011-11-30T18:05:23+11:00</date>
         </temporal>
       </coverage>
 
-      <coverage>
-        <spatial type="gmlKmlPolyCoords">150.9934,45.3434</spatial>
-        <spatial type="gmlKmlPolyCoords">155.5552,46.33333</spatial>
-      </coverage>
-
-      <coverage>
-        <spatial type="gmlKmlPolyCoords">-13.4554,-10.003</spatial>
-      </coverage>
-
       <relatedInfo>
-        <notes>Published by Fred Bloggs (georgina@intersect.org.au)</notes>
-      </relatedInfo>
-
-      <relatedInfo>
-        <notes>Primary contact for Facility1 is Fred Bloggs (primary_contact@intersect.org.au)</notes>
+        <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Primary contact for Facility2 is Fred Bloggs (primary_contact@intersect.org.au)</notes>
+        <notes>Unique ID: $$KEY$$</notes>
+      </relatedInfo>
+      <relatedInfo>
+        <notes>Primary contact for ROS Weather Station is Fred Bloggs ($$PRIMARY_CONTACT$$@intersect.org.au)</notes>
       </relatedInfo>
 
     </collection>

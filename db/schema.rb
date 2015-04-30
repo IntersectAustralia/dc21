@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
     t.integer  "data_file_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.string   "fill_value"
   end
 
   add_index "column_details", ["data_file_id"], :name => "index_column_details_on_data_file_id"
@@ -184,7 +185,7 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
 
   create_table "metadata_items", :force => true do |t|
     t.string   "key"
-    t.string   "value"
+    t.text     "value"
     t.integer  "data_file_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
@@ -275,24 +276,24 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                 :default => "", :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
+    t.string   "email",                  :default => "", :null => false
+    t.string   "encrypted_password",     :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.integer  "sign_in_count",          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "failed_attempts",                       :default => 0
+    t.integer  "failed_attempts",        :default => 0
     t.datetime "locked_at"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "status"
     t.integer  "role_id"
-    t.datetime "created_at",                                            :null => false
-    t.datetime "updated_at",                                            :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "authentication_token"
   end
 

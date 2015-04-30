@@ -74,6 +74,9 @@ class AttachmentBuilder
 
     format = @file_type_determiner.identify_file(data_file)
     data_file.format = format
+    if data_file.is_netcdf?
+      check_netcdf_id_unique(data_file)
+    end
 
     data_file.save!
     @metadata_extractor.extract_metadata(data_file, format) if format
@@ -86,6 +89,19 @@ class AttachmentBuilder
     end
 
     data_file
+  end
+
+  def check_netcdf_id_unique(data_file)
+    util = NetcdfUtilities.new(data_file.path)
+    eid = util.extract_external_id
+    if eid.blank?
+      eid = data_file.filename
+    end
+    start_time, end_time = util.extract_start_end_time
+    id = util.formatted_id(eid, start_time, end_time)
+    if not id.blank?
+      raise Exception, "File with id #{id} already exists. Please choose another file." if DataFile.id_already_exist? id
+    end
   end
 
   def store_package(pkg_filename, data_file)

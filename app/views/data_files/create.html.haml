@@ -2,6 +2,9 @@
   Data / Upload
 
 .container
+  - if @error_messages
+    - @error_messages.each do |msg|
+      .alert.alert-error #{msg}
   .alert.alert-success
     Your files have been uploaded. Below you can modify the information about individual files if you wish.
   = form_tag(bulk_update_data_files_path, :method => :put) do

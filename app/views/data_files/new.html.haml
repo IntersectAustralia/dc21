@@ -2,6 +2,9 @@
   Data / Upload
 
 .container
+  - flash.each do |key, msg|
+    .alert.alert-error #{msg[0]}
+
   .alert.alert-info Begin by entering the following information about the files to be uploaded. You can override this for individual files at the next step.
   = form_for(@data_file, :html => {:multipart => true}) do |f|
     %h2 New Data Files
