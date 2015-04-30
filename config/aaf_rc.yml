@@ -38,6 +38,6 @@ test:
 
 production:
   <<: *common
-  hostname: https://HOSTNAME
+  hostname: https://HOSTNAME/
   secret_token: SECRET_TOKEN
-  aaf_rc_login_url: https://rapid.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME
+  aaf_rc_login_url: LOGIN_URL

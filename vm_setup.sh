@@ -15,10 +15,6 @@ if [ -z "$DC21_HOST" ]; then
   status=1
 fi
 
-if [ -z "$DC21_AAF_TEST" ]; then
-  echo "DC21_AAF_TEST is not defined. Using PRODUCTION AAF Registry."
-fi
-
 if [ "$status" -ne 0 ]; then
   exit $status
 fi
@@ -66,6 +62,7 @@ cd $HOME/code_base/dc21
 # Set up RVM
 type -P $HOME/.rvm/scripts/rvm > /dev/null
 if [ $? -ne 0 ]; then
+  curl -sSL https://rvm.io/mpapis.asc | gpg --import -
   curl -L http://get.rvm.io | bash -s stable --ruby=2.0.0-p481
   status=$?
   if [ $status -eq 0 ]; then
@@ -96,9 +93,10 @@ if [ $? -ne 0 ]; then
 fi
 
 cd $HOME/code_base/dc21
+git checkout tags/$DC21_TAG
 rvm use 2.0.0-p481@dc21app --create
 
-gem install bundler -v 1.0.20
+gem install bundler -v 1.9.4
 bundle install
 status=$?
 
@@ -118,13 +116,13 @@ if [ $status -eq 0 ]; then
     cap local server_setup:gem_install server_setup:passenger resque:setup shared_file:setup server_setup:config:apache deploy:safe
   else
     cap local deploy:first_time
+    sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
   fi
 else
   echo "$(tput setaf 1)ERROR $status: deploy config set up failed.$(tput sgr0)"
   exit $status;
 fi
 
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/server.key -out /etc/httpd/ssl/server.crt
 sudo service httpd restart
 cap local deploy:restart
 
