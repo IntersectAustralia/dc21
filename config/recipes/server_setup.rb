@@ -4,10 +4,14 @@ namespace :server_setup do
     code_base = "/home/#{user}/code_base/dc21"
     if File.directory?(code_base)
       # Update hostnames
-      system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, '#{ENV['DC21_HOST'] || web_server}')\" #{code_base}/config/deploy/local.rb #{code_base}/config/aaf_rc.yml")
+      system ("ruby -pi.bak -e \"gsub(/HOSTNAME/, %Q|#{ENV['DC21_HOST'] || web_server}|)\" #{code_base}/config/deploy/local.rb #{code_base}/config/aaf_rc.yml")
+
+      # Update AAF credentials
+      system ("ruby -pi.bak -e \"gsub(/SECRET_TOKEN/, %Q|#{ENV['AAF_SECRET_TOKEN']}|)\" #{code_base}/config/aaf_rc.yml")
+      system ("ruby -pi.bak -e \"gsub(/LOGIN_URL/, %Q|#{ENV['AAF_LOGIN_URL']}|)\" #{code_base}/config/aaf_rc.yml")
+
       # Update DB password
-      system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, '#{ENV['DC21_DB_PWD']}')\" #{code_base}/config/database.yml")
-      # Update AAF
+      system ("ruby -pi.bak -e \"gsub(/DB_PASSWORD/, %Q|#{ENV['DC21_DB_PWD']}|)\" #{code_base}/config/database.yml")
     else
       raise "Your system is not set up for local deployment.".red
     end
@@ -55,7 +59,7 @@ namespace :server_setup do
   end
 
   task :gem_install, :roles => :app do
-    run "gem install bundler -v 1.0.20"
+    run "gem install bundler -v 1.9.4"
   end
 
   task :passenger, :roles => :app do
@@ -81,7 +85,6 @@ namespace :server_setup do
       run "#{try_sudo} mkdir -p /etc/httpd/ssl"
 
       sudo "chkconfig httpd on"
-
     end
 
     task :cron do

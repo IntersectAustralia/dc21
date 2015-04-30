@@ -6,8 +6,16 @@ export DC21_STAGE="production" # The type of server you are deploying. qa/stagin
 export PASSWORD="password" # The password of this server
 export JOAI="joaipass" # jOAI password (at least six alphanumeric characters)
 
-# The following is for setting up the initial user
+# The following is for setting up the AAF Rapid Connect variables
+# These will live in dc21app/shared/files/config/aaf_rc.yml
+# See also, https://rapid.aaf.edu.au/registration
 
+# The token you generated when registering for AAF Rapid Connect. You will need to escape double quotes in the token.
+export AAF_SECRET_TOKEN=""
+# The URL will be emailed to you when your service provider is approved in the Production Federation
+export AAF_LOGIN_URL="https://rapid.aaf.edu.au/jwt/authnrequest/research/REPLACE_ME"
+
+# The following is for setting up the initial user
 export FIRST_NAME="John" # The first name of the initial user on the application
 export LAST_NAME="Smith" # The last name of the initial user on the application
 export EMAIL="user@example.com" # The email of the initial user on the application
@@ -23,8 +31,5 @@ export SSL_ORGANIZATION_NAME=Intersect # Organization Name (eg, company)
 export SSL_ORGANIZATION_UNIT_NAME=Intersect # Organizational Unit Name (eg, section)
 export SSL_EMAIL=admin@example.com # The server administrator's email
 
-# Uncomment the line below if you are setting up using the test AAF
-# export DC21_AAF_TEST=true
-
-# Uncomment the line below if you are upgrading from 1.9.04 to 2.0.01
+# Uncomment the line below if you are upgrading an existing deployment
 # export DC21_UPGRADE=true
