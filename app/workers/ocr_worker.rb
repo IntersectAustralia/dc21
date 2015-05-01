@@ -129,7 +129,7 @@ class OCRWorker
   end
 
   def tesseract_installed?
-    `which tesseract`[/tesseract/].eql?("tesseract")
+    %x(which tesseract)[/tesseract/].eql?("tesseract")
   end
 
 end
