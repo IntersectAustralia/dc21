@@ -73,6 +73,7 @@ group :development, :test do
   gem "database_cleaner"
   gem "launchy"    # So you can do Then show me the page
   gem "zeus"
+  gem 'rspec_junit_formatter'
 end
 
 group :development do
@@ -82,6 +83,9 @@ group :development do
   gem 'bundler-audit'
   gem 'guard'
   gem 'guard-rspec', require: false
+  gem 'pry-rails'
+  gem 'pry-rescue'
+  gem 'table_print'
 end
 
 group :test do
