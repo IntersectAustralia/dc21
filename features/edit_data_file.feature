@@ -136,6 +136,7 @@ Feature: Edit data files metadata
     Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
+    And I wait for 2 seconds
     And I should see select2 field "data_file_label_list" with value ""
     And I fill in "data_file_label_list" with "bebb@|Abba|cu,ba|AA<script></script>"
     And I press "Update"
