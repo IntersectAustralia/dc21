@@ -147,7 +147,7 @@ Feature: Edit data files metadata
     Given I am logged in as "researcher@intersect.org.au"
     When I am on the list data files page
     And I edit data file "file.txt"
-    Then print the page html
+    And I wait for 2 seconds
     Then I should see element with id "private_access_options"
     And I should not see element with id "user_groups_list"
     When I choose "Public"
