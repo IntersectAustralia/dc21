@@ -262,6 +262,10 @@ Then /^show me the page$/ do
   save_and_open_page
 end
 
+Then /^print the page html$/ do
+  print page.html
+end
+
 When /^I confirm the popup$/ do
   page.driver.browser.switch_to.alert.accept
 end
