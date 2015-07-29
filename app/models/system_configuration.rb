@@ -4,8 +4,9 @@ class SystemConfiguration < ActiveRecord::Base
   validates_presence_of :level1, :level1_plural, :level2, :level2_plural
   validates_length_of :level1, :level1_plural, :level2, :level2_plural, :maximum => 20
   validates_length_of :address1, :address2, :address3, :telephone_number, :urls, :maximum => 80
-  validates_length_of :description, :maximum => 10000
+  validates_length_of :description, :maximum => 80
   validates_length_of :auto_ocr_regex, :auto_sr_regex, :maximum => 1000
+  validates_length_of :open_access_rights_uri, :conditional_access_rights_uri, :restricted_access_rights_uri, :rights_statement, maximum: 10000
 
   validates :name, presence: true, length: {maximum: 20}
   validates :research_centre_name, presence: true, length: {maximum: 80}

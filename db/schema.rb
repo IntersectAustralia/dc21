@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150427062716) do
+ActiveRecord::Schema.define(:version => 20150728014827) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -76,29 +76,33 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
   end
 
   create_table "data_files", :force => true do |t|
-    t.string   "filename",                          :default => ""
+    t.string   "filename",                                        :default => ""
     t.string   "format"
     t.text     "path"
-    t.datetime "created_at",                                               :null => false
-    t.datetime "updated_at",                                               :null => false
+    t.datetime "created_at",                                                             :null => false
+    t.datetime "updated_at",                                                             :null => false
     t.integer  "created_by_id"
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "interval"
     t.string   "file_processing_status"
-    t.text     "file_processing_description",       :default => ""
+    t.text     "file_processing_description",                     :default => ""
     t.integer  "experiment_id"
     t.float    "file_size"
-    t.boolean  "published",                         :default => false
+    t.boolean  "published",                                       :default => false
     t.datetime "published_date"
     t.integer  "published_by_id"
-    t.text     "external_id",                       :default => ""
-    t.text     "title",                             :default => ""
+    t.text     "external_id",                                     :default => ""
+    t.text     "title",                                           :default => ""
     t.string   "transfer_status"
     t.string   "uuid"
-    t.text     "access",                            :default => "Private"
-    t.boolean  "access_to_all_institutional_users", :default => true
+    t.text     "access",                                          :default => "Private"
+    t.boolean  "access_to_all_institutional_users",               :default => true
     t.boolean  "access_to_user_groups"
+    t.string   "language"
+    t.text     "rights_statement"
+    t.string   "access_rights_type"
+    t.string   "research_centre_name",              :limit => 80
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|
@@ -179,8 +183,22 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
     t.datetime "updated_at",                     :null => false
   end
 
+  create_table "grant_numbers", :force => true do |t|
+    t.integer  "data_file_id"
+    t.string   "grant_id",     :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "labels", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "languages", :force => true do |t|
+    t.string   "language_name", :null => false
+    t.string   "iso_code"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "metadata_items", :force => true do |t|
@@ -220,6 +238,13 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "related_websites", :force => true do |t|
+    t.integer  "data_file_id"
+    t.string   "url",          :limit => 80, :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
   create_table "roles", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -237,29 +262,29 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "system_configurations", :force => true do |t|
-    t.string   "name",                               :default => "DIVER"
-    t.datetime "created_at",                                                                             :null => false
-    t.datetime "updated_at",                                                                             :null => false
-    t.string   "level1",                             :default => "Facility"
-    t.string   "level1_plural",                      :default => "Facilities"
-    t.string   "level2",                             :default => "Experiment"
-    t.string   "level2_plural",                      :default => "Experiments"
-    t.string   "research_centre_name", :limit => 80, :default => "Enter your research centre name here", :null => false
-    t.string   "entity",               :limit => 80, :default => "Enter your institution name here",     :null => false
-    t.string   "address1",             :limit => 80, :default => "Enter your address"
-    t.string   "address2",             :limit => 80, :default => ""
-    t.string   "address3",             :limit => 80, :default => ""
-    t.string   "telephone_number",     :limit => 80, :default => ""
-    t.string   "email",                :limit => 80, :default => ""
-    t.string   "description",          :limit => 80, :default => ""
-    t.string   "urls",                 :limit => 80, :default => ""
-    t.boolean  "level2_parameters",                  :default => true
-    t.boolean  "auto_ocr_on_upload",                 :default => false
+    t.string   "name",                                        :default => "DIVER"
+    t.datetime "created_at",                                                                                      :null => false
+    t.datetime "updated_at",                                                                                      :null => false
+    t.string   "level1",                                      :default => "Facility"
+    t.string   "level1_plural",                               :default => "Facilities"
+    t.string   "level2",                                      :default => "Experiment"
+    t.string   "level2_plural",                               :default => "Experiments"
+    t.string   "research_centre_name",          :limit => 80, :default => "Enter your research centre name here", :null => false
+    t.string   "entity",                        :limit => 80, :default => "Enter your institution name here",     :null => false
+    t.string   "address1",                      :limit => 80, :default => "Enter your address"
+    t.string   "address2",                      :limit => 80, :default => ""
+    t.string   "address3",                      :limit => 80, :default => ""
+    t.string   "telephone_number",              :limit => 80, :default => ""
+    t.string   "email",                         :limit => 80, :default => ""
+    t.string   "description",                   :limit => 80, :default => ""
+    t.string   "urls",                          :limit => 80, :default => ""
+    t.boolean  "level2_parameters",                           :default => true
+    t.boolean  "auto_ocr_on_upload",                          :default => false
     t.text     "auto_ocr_regex"
-    t.boolean  "auto_sr_on_upload",                  :default => false
+    t.boolean  "auto_sr_on_upload",                           :default => false
     t.text     "auto_sr_regex"
-    t.text     "ocr_types",                          :default => "image/jpeg, image/png"
-    t.text     "sr_types",                           :default => "audio/x-wav, audio/mpeg"
+    t.text     "ocr_types",                                   :default => "image/jpeg, image/png"
+    t.text     "sr_types",                                    :default => "audio/x-wav, audio/mpeg"
     t.string   "ocr_cloud_host"
     t.string   "ocr_cloud_id"
     t.string   "ocr_cloud_token"
@@ -267,6 +292,12 @@ ActiveRecord::Schema.define(:version => 20150427062716) do
     t.string   "sr_cloud_id"
     t.string   "sr_cloud_token"
     t.text     "dashboard_contents"
+    t.string   "language"
+    t.text     "open_access_rights_uri"
+    t.text     "conditional_access_rights_uri"
+    t.text     "restricted_access_rights_uri"
+    t.text     "rights_statement"
+    t.string   "handle_uri_prefix"
   end
 
   create_table "tags", :force => true do |t|

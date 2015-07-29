@@ -9,12 +9,12 @@ Feature: Permissions on Resque processed data files
     Given I have a user "admin@intersect.org.au" with role "Administrator"
     Given I have a user "researcher@intersect.org.au" with role "Researcher"
     Given I have data files
-      | filename        | uploaded_by                 | transfer_status | uuid | file_processing_status | path                |
-      | resque_queued   | researcher@intersect.org.au | QUEUED          | 1    | RAW                    | samples/sample1.txt |
-      | resque_working  | researcher@intersect.org.au | WORKING         | 1    | PACKAGE                | samples/sample1.txt |
-      | resque_failed   | researcher@intersect.org.au | FAILED          | 1    | RAW                    | samples/sample1.txt |
-      | resque_complete | researcher@intersect.org.au | COMPLETE        | 1    | PACKAGE                | samples/sample1.txt |
-      | non_resque      | researcher@intersect.org.au |                 |      | RAW                    | samples/sample1.txt |
+      | filename        | uploaded_by                 | transfer_status | uuid | file_processing_status | path                | access_rights_type |
+      | resque_queued   | researcher@intersect.org.au | QUEUED          | 1    | RAW                    | samples/sample1.txt |                    |
+      | resque_working  | researcher@intersect.org.au | WORKING         | 1    | PACKAGE                | samples/sample1.txt | Open               |
+      | resque_failed   | researcher@intersect.org.au | FAILED          | 1    | RAW                    | samples/sample1.txt |                    |
+      | resque_complete | researcher@intersect.org.au | COMPLETE        | 1    | PACKAGE                | samples/sample1.txt | Restricted         |
+      | non_resque      | researcher@intersect.org.au |                 |      | RAW                    | samples/sample1.txt |                    |
 
   Scenario: Admin users can edit any incomplete file
     And I am logged in as "admin@intersect.org.au"

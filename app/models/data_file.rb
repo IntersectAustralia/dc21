@@ -25,6 +25,7 @@ class DataFile < ActiveRecord::Base
   ACCESS_PUBLIC = 'Public'
   ACCESS_PRIVATE = 'Private'
 
+  ACCESS_RIGHTS_TYPES = ['Open', 'Conditional', 'Restricted']
 
   has_many :parent_child_relationships,
            :class_name => "DataFileRelationship",
@@ -59,6 +60,11 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
+  has_many :grant_numbers
+  accepts_nested_attributes_for :grant_numbers
+  has_many :related_websites
+  accepts_nested_attributes_for :related_websites
+
   attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups
 
   before_validation :strip_whitespaces
@@ -90,6 +96,10 @@ class DataFile < ActiveRecord::Base
   validates_datetime :end_time, :on_or_after => :start_time, :allow_blank => true,
                      :on_or_after_message => "cannot be before start time",
                      :invalid_datetime_message => "must be a valid time"
+
+  validates_presence_of :access_rights_type, if: :is_package?
+  validates_inclusion_of :access_rights_type, in: ACCESS_RIGHTS_TYPES, if: "access_rights_type.present?"
+  validates_length_of :research_centre_name, maximum: 80
 
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil

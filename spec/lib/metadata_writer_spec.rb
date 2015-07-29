@@ -109,7 +109,8 @@ describe MetadataWriter do
                           format: "BAGIT",
                           created_at: "2012-12-27 14:09:24",
                           file_processing_description: "This package contains a lot of cats. Be warned.",
-                          created_by: @pkg_creator)
+                          created_by: @pkg_creator,
+                          access_rights_type: 'Open')
     @package.labels << Label.create!(name: "Package Label 1")
     @package.labels << Label.create!(name: "Package Label 2")
 
