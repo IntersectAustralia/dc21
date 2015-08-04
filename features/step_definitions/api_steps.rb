@@ -48,6 +48,9 @@ When /^I submit an API upload request with the following parameters as user "([^
   post_params[:type] = params['type']
   post_params[:description] = params['description'] if params['description']
 
+  post_params[:start_time] = params['start_time'] if params['start_time']
+  post_params[:end_time] = params['end_time'] if params['end_time']
+
   post_params[:parent_filenames] = params['parent_filenames'].split(",") unless params['parent_filenames'].blank?
 
   post_params[:access] = params['access'] unless params['access'].blank?

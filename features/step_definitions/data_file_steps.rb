@@ -415,6 +415,28 @@ Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
   DataFile.find_by_filename!(filename).file_processing_description.should eq(desc)
 end
 
+Then /^file "([^"]*)" should have start time "([^"]*)"$/ do |filename, start_time|
+  s = DateTime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+  DataFile.find_by_filename!(filename).start_time.should eq(s)
+end
+
+Then /^file "([^"]*)" should have end time "([^"]*)"$/ do |filename, end_time|
+  s = DateTime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+  DataFile.find_by_filename!(filename).end_time.should eq(s)
+end
+
+Then /^file "([^"]*)" should not have start time "([^"]*)"$/ do |filename, start_time|
+  s = DateTime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+  DataFile.find_by_filename!(filename).start_time.should_not eq(nil)
+  DataFile.find_by_filename!(filename).start_time.should_not eq(s)
+end
+
+Then /^file "([^"]*)" should not have end time "([^"]*)"$/ do |filename, end_time|
+  s = DateTime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+  DataFile.find_by_filename!(filename).end_time.should_not eq(nil)
+  DataFile.find_by_filename!(filename).end_time.should_not eq(s)
+end
+
 Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
   DataFile.find_by_filename!(filename).experiment_name.should eq(experiment)
 end
@@ -423,7 +445,6 @@ Then /^file "([^"]*)" should have parents "([^"]*)"$/ do |filename, parent_filen
   file = DataFile.find_by_filename!(filename)
   file.parents.collect(&:filename).sort.should eq(parent_filenames.split(",").sort)
 end
-
 
 Then /^file "([^"]*)" should have children "([^"]*)"$/ do |filename, children_filenames|
   file = DataFile.find_by_filename!(filename)

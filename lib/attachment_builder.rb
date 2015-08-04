@@ -7,8 +7,8 @@ class AttachmentBuilder
     @metadata_extractor = metadata_extractor
   end
 
-  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [], children=[], access = DataFile::ACCESS_PRIVATE, access_to_all_institutional_users = true, access_to_user_groups = false, access_groups = [])
-    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, parents, children, access, access_to_all_institutional_users, access_to_user_groups, access_groups, nil, nil)
+  def build(file, experiment_id, type, description, tags = [], labels = [], parents = [], children=[], access = DataFile::ACCESS_PRIVATE, access_to_all_institutional_users = true, access_to_user_groups = false, access_groups = [], start_time = nil, end_time = nil)
+    build_named_file(file.original_filename, file, experiment_id, type, description, tags, labels, parents, children, access, access_to_all_institutional_users, access_to_user_groups, access_groups, start_time, end_time)
   end
 
 
@@ -58,9 +58,7 @@ class AttachmentBuilder
                              :file_processing_status => type,
                              :experiment_id => experiment_id,
                              :file_processing_description => description,
-                             :file_size => size,
-                             :start_time => start_time,
-                             :end_time => end_time)
+                             :file_size => size)
     data_file.created_by = @current_user
     data_file.path = path
     data_file.tag_ids = tags
@@ -81,6 +79,13 @@ class AttachmentBuilder
     data_file.save!
     @metadata_extractor.extract_metadata(data_file, format) if format
     data_file.reload
+
+    # Use the provided start_time and end_time if they were not parsed from the file's metadata
+    if data_file.start_time.nil? && data_file.end_time.nil?
+      data_file.start_time = start_time
+      data_file.end_time = end_time
+      data_file.save!
+    end
 
     OverlapChecker.new(data_file, original_filename, @files_root).run
 
