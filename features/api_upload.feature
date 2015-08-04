@@ -127,6 +127,7 @@ Feature: Upload files via the API
       | start_time | 2015-08-03 15:30:00                                           |
       | end_time   | 2015-08-04 15:30:00                                           |
     Then I should get a 200 response code
+    And I should get a JSON response with message "Supplied start_time and end_time have been ignored in favor of the uploaded file's metadata"
     And file "weather_station_05_min.dat" should not have start time "2015-08-03 15:30:00"
     And file "weather_station_05_min.dat" should not have end time "2015-08-04 15:30:00"
 
