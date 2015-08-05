@@ -102,7 +102,11 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.string   "language"
     t.text     "rights_statement"
     t.string   "access_rights_type"
+    t.text     "access_rights_uri"
     t.string   "research_centre_name",              :limit => 80
+    t.string   "handle"
+    t.string   "handle_uri"
+    t.string   "physical_location",                 :limit => 80
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|
@@ -297,6 +301,7 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.text     "conditional_access_rights_uri"
     t.text     "restricted_access_rights_uri"
     t.text     "rights_statement"
+    t.integer  "max_package_size"
     t.string   "handle_uri_prefix"
   end
 
