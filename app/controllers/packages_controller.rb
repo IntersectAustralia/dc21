@@ -23,6 +23,17 @@ class PackagesController < DataFilesController
       data_file_ids = current_user.cart_item_ids
       @package.label_list = params[:package][:label_list] if params[:package][:label_list]
       @package.parent_ids = data_file_ids
+      config = SystemConfiguration.instance
+      @package.language = config.language
+      @package.rights_statement = config.rights_statement
+      @package.physical_location = config.entity
+      if @package.access_rights_type == "Open"
+        @package.access_rights_uri = config.open_access_rights_uri
+      elsif @package.access_rights_type == "Conditional"
+        @package.access_rights_uri = config.conditional_access_rights_uri
+      elsif @package.access_rights_type == "Restricted"
+        @package.access_rights_uri = config.restricted_access_rights_uri
+      end
       begin
         if params[:run_in_background]
           # Persist the job id in the db - we need to retrieve it per record basis

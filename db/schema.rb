@@ -104,8 +104,7 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.string   "access_rights_type"
     t.text     "access_rights_uri"
     t.string   "research_centre_name",              :limit => 80
-    t.string   "handle"
-    t.string   "handle_uri"
+    t.string   "hdl_handle"
     t.string   "physical_location",                 :limit => 80
   end
 

@@ -21,6 +21,8 @@ defaults: &defaults
   readme_template_file: ""
 
   handle_prefix: dc21
+  # the hdl handle URL must include: ${sequence_number}
+  hdl_handle_prefix: http://hdl.handle.net/_${sequence_number}
 
   notification_email_sender: noreply@intersect.org.au
   column_mappings:

@@ -13,8 +13,7 @@ class AddExtraRifcsFieldsToSystemAndPackage < ActiveRecord::Migration
     add_column :data_files, :access_rights_type, :string
     add_column :data_files, :access_rights_uri, :text, limit: 10000
     add_column :data_files, :research_centre_name, :string, limit: 80
-    add_column :data_files, :handle, :string
-    add_column :data_files, :handle_uri, :string
+    add_column :data_files, :hdl_handle, :string
     add_column :data_files, :physical_location, :string, :limit => 80
   end
 end

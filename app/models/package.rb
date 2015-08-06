@@ -16,6 +16,10 @@ class Package < DataFile
       prefix = prefix[0..99]
       package_id = self.class.connection.select_value("SELECT nextval('package_id_seq')").to_i - 1
       self.update_attribute(:external_id, "#{prefix}_#{package_id}".strip)
+      unless APP_CONFIG['hdl_handle_prefix'].nil?
+        hdl = APP_CONFIG['hdl_handle_prefix'].gsub('${sequence_number}', package_id.to_s)
+        self.update_attribute(:hdl_handle, hdl)
+      end
     end
   end
 
