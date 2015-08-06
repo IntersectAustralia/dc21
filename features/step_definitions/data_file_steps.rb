@@ -415,6 +415,18 @@ Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
   DataFile.find_by_filename!(filename).file_processing_description.should eq(desc)
 end
 
+Then /^file "([^"]*)" should have label "([^"]*)"$/ do |filename, label|
+  data_file = DataFile.find_by_filename!(filename)
+  label_names = data_file.labels.map { |l| l.name}
+  label_names.should include(label)
+end
+
+Then /^file "([^"]*)" should have tag "([^"]*)"$/ do |filename, tag|
+  data_file = DataFile.find_by_filename!(filename)
+  tag_names = data_file.tags.map { |t| t.name}
+  tag_names.should include(tag)
+end
+
 Then /^file "([^"]*)" should have start time "([^"]*)"$/ do |filename, start_time|
   s = DateTime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
   DataFile.find_by_filename!(filename).start_time.should eq(s)
@@ -439,6 +451,14 @@ end
 
 Then /^file "([^"]*)" should have experiment "([^"]*)"$/ do |filename, experiment|
   DataFile.find_by_filename!(filename).experiment_name.should eq(experiment)
+end
+
+Then /^file "([^"]*)" should have title "([^"]*)"$/ do |filename, title|
+  DataFile.find_by_filename!(filename).title.should eq(title)
+end
+
+Then /^file "([^"]*)" should have transfer status "([^"]*)"$/ do |filename, transfer_status|
+  DataFile.find_by_filename!(filename).transfer_status.should eq(transfer_status)
 end
 
 Then /^file "([^"]*)" should have parents "([^"]*)"$/ do |filename, parent_filenames|

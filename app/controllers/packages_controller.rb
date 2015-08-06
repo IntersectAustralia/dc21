@@ -17,11 +17,12 @@ class PackagesController < DataFilesController
   end
 
   def create
-    @package = Package.create_package(params, current_user)
+    package_params = params[:package]
+    @package = Package.create_package(package_params, params[:date], current_user)
     if @package.save
       save_tags(@package, params[:tags])
       data_file_ids = current_user.cart_item_ids
-      @package.label_list = params[:package][:label_list] if params[:package][:label_list]
+      @package.label_list = package_params[:label_list] if package_params[:label_list]
       @package.parent_ids = data_file_ids
       begin
         if params[:run_in_background]
@@ -34,7 +35,7 @@ class PackagesController < DataFilesController
           CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, @package) do |zip_file|
             attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
             package = attachment_builder.build_package(@package, zip_file)
-            build_rif_cs(package) unless package.nil?
+            build_rif_cs(package, @package) unless package.nil?
           end
           @package.mark_as_complete
           redirect_to data_file_path(@package), notice: 'Package was successfully created.'
@@ -46,8 +47,56 @@ class PackagesController < DataFilesController
       end
 
     else
-      @package.reformat_on_error(params)
+      @package.reformat_on_error(package_params[:filename], params[:tags], params[:label_list])
       render :action => 'new'
+    end
+  end
+
+  def api_create
+    errors = []
+
+    file_ids = params[:file_ids]
+    tag_names = params[:tag_names]
+    label_names = params[:label_names]
+    params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
+    params[:file_processing_description] = params[:description]
+    run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
+
+    data_files = validate_file_ids(file_ids, errors)
+    tag_ids = parse_tags(tag_names, errors)
+    label_ids = parse_labels(label_names, errors)
+
+    package = Package.create_package(params, nil, current_user)
+    if errors.empty? && package.save
+      save_tags(package, tag_ids)
+      save_labels(package, label_ids)
+      data_file_ids = data_files.map { |data_file| data_file.id }
+      package.label_list = params[:label_list] if params[:label_list]
+      package.parent_ids = data_file_ids
+
+      begin
+        if run_in_background
+          package.uuid = PackageWorker.create({:package_id => package.id, :data_file_ids => data_file_ids, :user_id => current_user.id})
+          package.save
+          render :json => {package_id: package.id, :messages => ['Package is now queued for processing in the background.'], :file_name => package.filename, :file_type => package.file_processing_status}
+        else
+          CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, package) do |zip_file|
+            attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
+            new_package = attachment_builder.build_package(package, zip_file)
+            build_rif_cs(new_package, package) unless new_package.nil?
+          end
+          package.mark_as_complete
+          render :json => {package_id: package.id, :messages => ['Package was successfully created.'], :file_name => package.filename, :file_type => package.file_processing_status}
+        end
+      rescue ::TemplateError => e
+        logger.error e.message
+        render :json => {:messages => ['There were errors in the README.html template file']}, :status => :internal_server_error
+      end
+    else
+      package.errors.each{ |attribute,message|
+        errors << "#{attribute} #{message}"
+      }
+      render :json => {:messages => errors}, :status => :bad_request
     end
   end
 
@@ -81,19 +130,25 @@ class PackagesController < DataFilesController
     pkg.save
   end
 
-  def build_rif_cs(files)
+  def save_labels(package, labels)
+    pkg = DataFile.find(package.id)
+    pkg.label_ids = labels
+    pkg.save
+  end
+
+  def build_rif_cs(files, package)
     #build the rif-cs and place in the unpublished_rif_cs folder, where it will stay until published in DC21
     dir = APP_CONFIG['unpublished_rif_cs_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
-    output_location = File.join(dir, "rif-cs-#{@package.id}.xml")
+    output_location = File.join(dir, "rif-cs-#{package.id}.xml")
 
     file = File.new(output_location, 'w')
 
     options = {:root_url => root_url,
-               :collection_url => data_file_path(@package),
-               :zip_url => download_data_file_url(@package),
+               :collection_url => data_file_path(package),
+               :zip_url => download_data_file_url(package),
                :submitter => current_user}
-    RifCsGenerator.new(PackageRifCsWrapper.new(@package, files, options), file).build_rif_cs
+    RifCsGenerator.new(PackageRifCsWrapper.new(package, files, options), file).build_rif_cs
     file.close
   end
 
@@ -106,6 +161,32 @@ class PackagesController < DataFilesController
     unpublished_location = File.join(unpublished_dir, "rif-cs-#{@package.id}.xml")
     FileUtils.mv(unpublished_location, output_location)
     true
+  end
+
+  def validate_file_ids(file_ids, errors)
+    data_files = []
+    if !file_ids.is_a? Array
+      errors << 'file_ids is required and must be an Array'
+      return data_files
+    end
+    if file_ids.empty?
+      errors << 'file_ids can\'t be empty'
+      return data_files
+    end
+
+    file_ids.each do |file_id|
+      begin
+        id_as_int = Integer(file_id)
+        if !DataFile.exists?(id_as_int)
+          errors << "file with id '#{file_id}' could not be found"
+        else
+          data_files << DataFile.find(id_as_int)
+        end
+      rescue ArgumentError
+        errors << "file id '#{file_id}' is not a valid file id"
+      end
+    end
+    return data_files
   end
 
 end

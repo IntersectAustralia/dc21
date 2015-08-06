@@ -6,6 +6,9 @@ not Dc21app::Application.routes.draw do
     member do
       get :publish
     end
+    collection do
+      post :api_create, :defaults => {:format => 'json'}
+    end
   end
 
   resources :cart_items, :only => [:index, :create, :destroy] do
