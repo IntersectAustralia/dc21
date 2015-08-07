@@ -117,6 +117,20 @@ Feature: Upload files via the API
     Then I should get a 200 response code
     And file "sample1.txt" should have start time "2015-08-03 15:30:00"
     And file "sample1.txt" should have end time "2015-08-04 15:30:00"
+    And I should get a JSON response with message "File uploaded successfully."
+
+  Scenario: Optional start and end times are accepted without the need for trailing zeros
+    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+      | file       | samples/zip/sample1.txt          |
+      | type       | RAW                              |
+      | experiment | Flux Experiment 1                |
+      | start_time | 2015-08-03 5:30:00              |
+      | end_time   | 2015-08-04 5:30:00              |
+    Then I should get a 200 response code
+    And file "sample1.txt" should have start time "2015-08-03 5:30:00"
+    And file "sample1.txt" should have end time "2015-08-04 5:30:00"
+    And I should get a JSON response without message "Supplied start_time and end_time have been ignored in favor of the uploaded file's metadata"
+    And I should get a JSON response with message "File uploaded successfully."
 
   Scenario: Optional start and end times are ignored when uploading a TOA5 file
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
@@ -128,6 +142,7 @@ Feature: Upload files via the API
       | end_time   | 2015-08-04 15:30:00                                           |
     Then I should get a 200 response code
     And I should get a JSON response with message "Supplied start_time and end_time have been ignored in favor of the uploaded file's metadata"
+    And I should get a JSON response with message "File uploaded successfully."
     And file "weather_station_05_min.dat" should not have start time "2015-08-03 15:30:00"
     And file "weather_station_05_min.dat" should not have end time "2015-08-04 15:30:00"
 

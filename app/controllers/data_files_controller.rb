@@ -350,10 +350,8 @@ class DataFilesController < ApplicationController
         end
 
         # Determine if the start_time and end_time has been ignored (if provided)
-        if !start_time.nil? and !end_time.nil?
-          if uploaded_file.start_time.utc.to_s != start_time || uploaded_file.end_time.utc.to_s != end_time
-            messages << 'Supplied start_time and end_time have been ignored in favor of the uploaded file\'s metadata'
-          end
+        if !start_time.nil? and !end_time.nil? and (DateTime.parse(start_time) != uploaded_file.start_time || DateTime.parse(end_time) != uploaded_file.end_time)
+          messages << 'Supplied start_time and end_time have been ignored in favor of the uploaded file\'s metadata'
         end
 
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}

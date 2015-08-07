@@ -83,6 +83,12 @@ Then /^I should get a JSON response with message "([^"]*)"$/ do |message|
   actual['messages'].should include(message)
 end
 
+Then /^I should get a JSON response without message "([^"]*)"$/ do |message|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+  actual['messages'].should_not include(message)
+end
+
 Then /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with the success message$/ do |filename, type|
   require 'json'
   actual = JSON.parse(last_response.body)
