@@ -1,6 +1,9 @@
 class SystemConfiguration < ActiveRecord::Base
 
   acts_as_singleton
+
+  STORAGE_UNITS = ["bytes", "kB", "MB", "GB", "TB"]
+
   validates_presence_of :level1, :level1_plural, :level2, :level2_plural
   validates_length_of :level1, :level1_plural, :level2, :level2_plural, :maximum => 20
   validates_length_of :address1, :address2, :address3, :telephone_number, :urls, :maximum => 80
@@ -17,6 +20,7 @@ class SystemConfiguration < ActiveRecord::Base
 
   validate :level2_cannot_equal_level1_fields
   validate :valid_regex
+  validates_inclusion_of :max_package_size_unit, :in => STORAGE_UNITS, :on => :update, if: :max_package_size_set?
 
   def valid_regex
     begin
@@ -109,5 +113,13 @@ class SystemConfiguration < ActiveRecord::Base
 
   def supported_sr_types
     self.sr_types.split(", ").sort
+  end
+
+  def friendly_max_package_size
+    "#{self.max_package_size} #{self.max_package_size_unit}"
+  end
+
+  def max_package_size_set?
+    not self.max_package_size.nil?
   end
 end

@@ -154,6 +154,9 @@ Feature: Create a package
     And I should see "Title can't be blank"
 
   Scenario: New package - rendering correct data_file view screen
+    Given I have the following system configuration
+      | language | rights_statement | entity              | research_centre_name |
+      | English  | blah blah        | Intersect Australia | Intersect Research   |
     Given I am on the list data files page
     And I add sample1.txt to the cart
     And I add sample2.txt to the cart
@@ -169,12 +172,17 @@ Feature: Create a package
     And I press "Create Package"
     When I am on the data file details page for my_other_package.zip
     Then I should see details displayed
-      | Name        | my_other_package.zip |
-      | Type        | PACKAGE              |
-      | File format | BAGIT                |
-      | Description | Here's a description |
-      | Experiment  | My Experiment        |
-      | Title       | Test title           |
+      | Name                 | my_other_package.zip          |
+      | Type                 | PACKAGE                       |
+      | File format          | BAGIT                         |
+      | Description          | Here's a description          |
+      | Experiment           | My Experiment                 |
+      | Title                | Test title                    |
+      | Language             | English                       |
+      | Rights Statement     | blah blah                     |
+      | HDL Handle           | http://hdl.handle.net/diver_0 |
+      | Physical Location    | Intersect Australia           |
+      | Research Centre Name | Intersect Research            |
 
   Scenario: Back button - hardcode url
     When I am on the create package page

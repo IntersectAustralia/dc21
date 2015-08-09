@@ -300,7 +300,8 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.text     "conditional_access_rights_uri"
     t.text     "restricted_access_rights_uri"
     t.text     "rights_statement"
-    t.integer  "max_package_size"
+    t.float    "max_package_size"
+    t.string   "max_package_size_unit"
     t.string   "handle_uri_prefix"
   end
 

@@ -69,6 +69,33 @@
       = f.label :level2_parameters, "Project Parameters", class: "control-label"
       .controls
         = f.check_box :level2_parameters, {}, 'true', 'false'
+    .control-group
+      = f.label :language, class: "control-label"
+      .controls
+        = required
+        = f.select :language, Language.pluck(:language_name)
+    .control-group
+      = f.label :open_access_rights_uri, "Open Access Rights URI", class: "control-label"
+      .controls
+        = f.text_area :open_access_rights_uri
+    .control-group
+      = f.label :conditional_access_rights_uri, "Conditional Access Rights URI", class: "control-label"
+      .controls
+        = f.text_area :conditional_access_rights_uri
+    .control-group
+      = f.label :restricted_access_rights_uri, "Restricted Access Rights URI", class: "control-label"
+      .controls
+        = f.text_area :restricted_access_rights_uri
+    .control-group
+      = f.label :rights_statement, class: "control-label"
+      .controls
+        = f.text_area :rights_statement
+    .control-group
+      = f.label :max_package_size, "Maximum Package Size", class: "control-label"
+      .controls
+        = required
+        = f.text_field :max_package_size, {style: 'width: 50px;'}
+        = f.select :max_package_size_unit, SystemConfiguration::STORAGE_UNITS
 
     %h2 Edit OCR Processing
     .control-group

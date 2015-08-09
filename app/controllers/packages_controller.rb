@@ -27,6 +27,7 @@ class PackagesController < DataFilesController
       @package.language = config.language
       @package.rights_statement = config.rights_statement
       @package.physical_location = config.entity
+      @package.research_centre_name = config.research_centre_name
       if @package.access_rights_type == "Open"
         @package.access_rights_uri = config.open_access_rights_uri
       elsif @package.access_rights_type == "Conditional"

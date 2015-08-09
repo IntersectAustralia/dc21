@@ -5,7 +5,8 @@ class AddExtraRifcsFieldsToSystemAndPackage < ActiveRecord::Migration
     add_column :system_configurations, :conditional_access_rights_uri, :text, limit: 10000
     add_column :system_configurations, :restricted_access_rights_uri, :text, limit: 10000
     add_column :system_configurations, :rights_statement, :text, limit: 10000
-    add_column :system_configurations, :max_package_size, :integer
+    add_column :system_configurations, :max_package_size, :float
+    add_column :system_configurations, :max_package_size_unit, :string
     add_column :system_configurations, :handle_uri_prefix, :string
 
     add_column :data_files, :language, :string

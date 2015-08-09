@@ -21,6 +21,12 @@
   - render_field "Type of Project (Singular)", @config.level2
   - render_field "Type of Project (Plural)", @config.level2_plural
   - render_field "Project Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
+  - render_field "Language", @config.language
+  - render_field "Open Access Rights URI", @config.open_access_rights_uri
+  - render_field "Conditional Access Rights URI", @config.conditional_access_rights_uri
+  - render_field "Restricted Access Rights URI", @config.restricted_access_rights_uri
+  - render_field "Rights Statement", @config.rights_statement
+  - render_field "Maximum Package Size", @config.friendly_max_package_size
 
   %h2 OCR Processing
   - render_field "Auto OCR on Upload", @config.auto_ocr_on_upload ? 'Enabled':'Disabled'
