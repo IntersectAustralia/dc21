@@ -85,7 +85,6 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'pry-rails'
   gem 'pry-rescue'
-  gem 'table_print'
   gem 'xray-rails'
 end
 

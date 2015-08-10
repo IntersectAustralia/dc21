@@ -15,14 +15,14 @@ def create_test_files
   ColumnDetail.delete_all
   MetadataItem.delete_all
   create_data_file("sample1.txt", "researcher1@intersect.org.au")
-  create_data_file("sample2.txt", "shuqian@intersect.org.au")
-  create_data_file("weather_station_15_min.dat", "shuqian@intersect.org.au")
+  create_data_file("sample2.txt", "daniel@intersect.org.au")
+  create_data_file("weather_station_15_min.dat", "daniel@intersect.org.au")
   create_data_file("weather_station_05_min.dat", "researcher1@intersect.org.au")
   create_data_file("weather_station_table_2.dat", "researcher2@intersect.org.au")
   create_data_file("sample3.txt", "researcher1@intersect.org.au")
   create_data_file("WTC01_Table1.dat", "researcher2@intersect.org.au")
-  create_data_file("WTC02_Table1.dat", "shuqian@intersect.org.au")
-  create_data_file("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat", "shuqian@intersect.org.au")
+  create_data_file("WTC02_Table1.dat", "daniel@intersect.org.au")
+  create_data_file("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat", "daniel@intersect.org.au")
 
   test_file = DataFile.find_by_filename("VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat")
   test_file.file_processing_description = "Test ~!@\#$\%^\&*()_\+\`567890-={}[]|:\";'<>?,./ TestTestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test 500 Characters Test"
@@ -32,9 +32,9 @@ end
 def create_test_users
   User.delete_all
   create_user(:email => "kali@intersect.org.au", :first_name => "Admin", :last_name => "User")
-  create_user(:email => "shuqian@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "daniel@intersect.org.au", :first_name => "Admin", :last_name => "User")
   create_user(:email => "cindy@intersect.org.au", :first_name => "Admin", :last_name => "User")
-  create_user(:email => "marc@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "cathy@intersect.org.au", :first_name => "Admin", :last_name => "User")
   create_user(:email => "researcher1@intersect.org.au", :first_name => "Researcher", :last_name => "One")
   r2 = create_user(:email => "researcher2@intersect.org.au", :first_name => "Researcher", :last_name => "Two")
   r2.deactivate
@@ -48,8 +48,8 @@ def create_test_users
   set_role("researcher1@intersect.org.au", "Institutional User")
   set_role("researcher2@intersect.org.au", "Institutional User")
   set_role("kali@intersect.org.au", "Administrator")
-  set_role("shuqian@intersect.org.au", "Administrator")
-  set_role("marc@intersect.org.au", "Non-Institutional User")
+  set_role("daniel@intersect.org.au", "Administrator")
+  set_role("cathy@intersect.org.au", "Non-Institutional User")
   set_role("cindy@intersect.org.au", "Administrator")
   set_role("apgr@intersect.org.au", "API Uploader")
   set_role("adgr@intersect.org.au", "Administrator")

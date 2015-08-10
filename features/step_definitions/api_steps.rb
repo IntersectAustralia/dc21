@@ -48,6 +48,9 @@ When /^I submit an API upload request with the following parameters as user "([^
   post_params[:type] = params['type']
   post_params[:description] = params['description'] if params['description']
 
+  post_params[:start_time] = params['start_time'] if params['start_time']
+  post_params[:end_time] = params['end_time'] if params['end_time']
+
   post_params[:parent_filenames] = params['parent_filenames'].split(",") unless params['parent_filenames'].blank?
 
   post_params[:access] = params['access'] unless params['access'].blank?
@@ -74,6 +77,18 @@ Then /^I should get a JSON response with errors "([^"]*)"$/ do |errors|
   actual['messages'].should eq(expected_errors)
 end
 
+Then /^I should get a JSON response with message "([^"]*)"$/ do |message|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+  actual['messages'].should include(message)
+end
+
+Then /^I should get a JSON response without message "([^"]*)"$/ do |message|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+  actual['messages'].should_not include(message)
+end
+
 Then /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with the success message$/ do |filename, type|
   require 'json'
   actual = JSON.parse(last_response.body)
@@ -84,6 +99,14 @@ Then /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" w
   actual['messages'].should eq(['File uploaded successfully.'])
 end
 
+Then /^I should get a JSON response with package name "([^"]*)"$/ do |filename|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+
+  actual['package_id'].should eq(Package.last.id)
+  actual['file_name'].should eq(filename)
+  actual['file_type'].should eq('PACKAGE')
+end
 
 When /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" with messages "([^"]*)"$/ do |filename, type, message_codes|
   require 'json'
@@ -167,6 +190,11 @@ When /^I perform an API search with an invalid API token$/ do |table|
   post api_search_data_files_path(:format => :json, :auth_token => 'blah'), post_params
 end
 
+When /^I perform an API publish with an invalid API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_publish_packages_path(:format => :json, :auth_token => 'blah'), post_params
+end
+
 When /^I get the variable list as user "([^"]*)"$/ do |email|
   user = User.find_by_email!(email)
   post variable_list_data_files_path(:format => :json, :auth_token => user.authentication_token)
@@ -192,6 +220,39 @@ end
 When /^I get the facility and experiment list with an invalid API token$/ do
   get facility_and_experiment_list_data_files_path(:format => :json, :auth_token => 'blah')
 end
+
+When /^I perform an API package create without an API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_create_packages_path(:format => :json), post_params
+end
+
+When /^I perform an API publish without an API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_publish_packages_path(:format => :json), post_params
+end
+
+When /^I perform an API package create with an invalid API token$/ do |table|
+  post_params = Hash[*table.raw.flatten].merge(:auth_token => 'blah')
+  post api_create_packages_path(:format => :json), post_params
+end
+
+When /^I perform an API package create with the following parameters as user "([^"]*)"$/ do |email,table|
+  params = Hash[*table.raw.flatten]
+
+  if params["file_ids"]
+    params["file_ids"] = params["file_ids"].split(',')
+  end
+
+  user = User.find_by_email!(email)
+  post api_create_packages_path(:format => :json, :auth_token => user.authentication_token), params
+end
+
+When /^I perform an API publish with the following parameters as user "([^"]*)"$/ do |email,table|
+  params = Hash[*table.raw.flatten]
+  user = User.find_by_email!(email)
+  post api_publish_packages_path(:format => :json, :auth_token => user.authentication_token), params
+end
+
 
 When /^I should get a JSON response with$/ do |table|
   actual = JSON.parse(last_response.body)

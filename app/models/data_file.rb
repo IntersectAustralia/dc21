@@ -145,6 +145,14 @@ class DataFile < ActiveRecord::Base
     published | false
   end
 
+  def is_unpublished?
+    !is_published?
+  end
+
+  def is_public?
+    self.access == ACCESS_PUBLIC
+  end
+
   def access_group_list_display
     self.access_groups.find_all_by_status(true).collect {|ag| ag.name}.join(", ")
   end

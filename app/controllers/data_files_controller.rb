@@ -322,12 +322,18 @@ class DataFilesController < ApplicationController
       parent_file_ids = DataFile.where(:filename => parent_files).pluck(:id)
       access_groups = clean_params_list_string(params[:access_groups])
       access_group_ids = AccessGroup.where(:name => access_groups).pluck(:id)
+      start_time = params[:start_time]
+      end_time = params[:end_time]
 
-      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups])
+      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups])
 
       if errors.empty?
         begin
-          uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids)
+          if !start_time.nil? and !end_time.nil?
+            start_time += ' UTC'
+            end_time += ' UTC'
+          end
+          uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids, start_time, end_time)
           messages = uploaded_file.messages.collect { |m| m[:message] }
         rescue Exception => e
           # Exit if attachment builder fails to build the uploaded file
@@ -342,6 +348,12 @@ class DataFilesController < ApplicationController
             messages << "#{n} access groups do not exist in the system"
           end
         end
+
+        # Determine if the start_time and end_time has been ignored (if provided)
+        if !start_time.nil? and !end_time.nil? and (DateTime.parse(start_time) != uploaded_file.start_time || DateTime.parse(end_time) != uploaded_file.end_time)
+          messages << 'Supplied start_time and end_time have been ignored in favor of the uploaded file\'s metadata'
+        end
+
         render :json => {:file_id => uploaded_file.id, :messages => messages, :file_name => uploaded_file.filename, :file_type => uploaded_file.file_processing_status}
       else
         render :json => {:messages => errors}, :status => :bad_request
@@ -458,7 +470,7 @@ class DataFilesController < ApplicationController
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups)
+  def validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups)
     errors = []
     errors << 'Experiment id is required' if experiment_id.blank?
     errors << 'File is required' if file.blank?
@@ -469,6 +481,26 @@ class DataFilesController < ApplicationController
     errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PRIVATE}" unless access.blank? || access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE
     errors << 'Supplied access_to_all_institutional_users was not valid: has to be either true or false' unless access_to_all_institutional_users.blank? || access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i) || access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i)
     errors << 'Supplied access_to_user_groups was not valid: has to be either true or false' unless access_to_user_groups.blank? || access_to_user_groups =~ (/^(true|t|yes|y|1)$/i) || access_to_user_groups =~ (/^(false|f|no|n|0)$/i)
+
+    if start_time.present? || end_time.present?
+      date_time_format = '%Y-%m-%d %H:%M:%S'
+      begin
+        parsed_start_time = DateTime.strptime(start_time, date_time_format) if start_time.present?
+      rescue ArgumentError
+        errors << 'Supplied start_time must be valid: it must be in the format yyyy-mm-dd hh:mm:ss'
+      end
+      begin
+        parsed_end_time = DateTime.strptime(end_time, date_time_format) if end_time.present?
+      rescue ArgumentError
+        errors << 'Supplied end_time must be valid: it must be in the format yyyy-mm-dd hh:mm:ss'
+      end
+
+      if parsed_start_time.nil? || parsed_end_time.nil?
+        errors << 'Both start_time and end_time must be provided as a pair or not at all.'
+      elsif parsed_end_time <= parsed_start_time
+        errors << 'Supplied end_time must be after the supplied start_time'
+      end
+    end
 
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
