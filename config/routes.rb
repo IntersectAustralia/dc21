@@ -8,6 +8,7 @@ not Dc21app::Application.routes.draw do
     end
     collection do
       post :api_create, :defaults => {:format => 'json'}
+      post :api_publish, :defaults => {:format => 'json'}
     end
   end
 

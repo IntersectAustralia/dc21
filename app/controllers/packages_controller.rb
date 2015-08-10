@@ -107,7 +107,7 @@ class PackagesController < DataFilesController
         if @package.published.eql?(true)
           redirect_to data_files_path, :notice => "This package is already submitted for publishing."
         else
-          if @package.save! and publish_rif_cs
+          if @package.save! and publish_rif_cs(@package)
               @package.set_to_published(current_user)
               valid = true
           end
@@ -119,6 +119,32 @@ class PackagesController < DataFilesController
     end
 
     redirect_to data_files_path, :notice => valid ? "Package has been successfully submitted for publishing." : "Unable to publish package."
+  end
+
+  def api_publish
+    package_id = params[:package_id]
+    if package_id.blank?
+      render :json => {:messages => ['package_id is required']}, :status => :bad_request
+      return
+    end
+
+    if !Package.exists?(package_id)
+      render :json => {:messages => ["Package with id #{package_id} could not be found"]}, :status => :bad_request
+      return
+    end
+
+    package = Package.find(package_id)
+    if package.published?
+      render :json => {:messages => ["Package #{package_id} is already submitted for publishing."]}
+      return
+    end
+
+    if package.save! and publish_rif_cs(package)
+      package.set_to_published(current_user)
+      render :json => {:messages => ["Package has been successfully submitted for publishing."]}
+    else
+      render :json => {:messages => ["Unable to publish package."]}
+    end
   end
 
   private
@@ -152,13 +178,13 @@ class PackagesController < DataFilesController
     file.close
   end
 
-  def publish_rif_cs
+  def publish_rif_cs(package)
     #TODO set new 'submitter' value
     dir = APP_CONFIG['published_rif_cs_directory']
     unpublished_dir = APP_CONFIG['unpublished_rif_cs_directory']
     Dir.mkdir(dir) unless Dir.exists?(dir)
-    output_location = File.join(dir, "rif-cs-#{@package.id}.xml")
-    unpublished_location = File.join(unpublished_dir, "rif-cs-#{@package.id}.xml")
+    output_location = File.join(dir, "rif-cs-#{package.id}.xml")
+    unpublished_location = File.join(unpublished_dir, "rif-cs-#{package.id}.xml")
     FileUtils.mv(unpublished_location, output_location)
     true
   end

@@ -41,6 +41,10 @@ class ApplicationController < ActionController::Base
 
   # catch access denied and redirect to the home page
   rescue_from CanCan::AccessDenied do |exception|
+    if exception.action == :api_publish && exception.subject.class == Package.class
+      render :json => {:messages => ["Unauthorized"]}, :status => :unauthorized
+      return
+    end
     flash[:alert] = exception.message
     redirect_to root_url
   end

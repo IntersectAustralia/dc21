@@ -190,6 +190,11 @@ When /^I perform an API search with an invalid API token$/ do |table|
   post api_search_data_files_path(:format => :json, :auth_token => 'blah'), post_params
 end
 
+When /^I perform an API publish with an invalid API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_publish_packages_path(:format => :json, :auth_token => 'blah'), post_params
+end
+
 When /^I get the variable list as user "([^"]*)"$/ do |email|
   user = User.find_by_email!(email)
   post variable_list_data_files_path(:format => :json, :auth_token => user.authentication_token)
@@ -221,6 +226,11 @@ When /^I perform an API package create without an API token$/ do |table|
   post api_create_packages_path(:format => :json), post_params
 end
 
+When /^I perform an API publish without an API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_publish_packages_path(:format => :json), post_params
+end
+
 When /^I perform an API package create with an invalid API token$/ do |table|
   post_params = Hash[*table.raw.flatten].merge(:auth_token => 'blah')
   post api_create_packages_path(:format => :json), post_params
@@ -235,6 +245,12 @@ When /^I perform an API package create with the following parameters as user "([
 
   user = User.find_by_email!(email)
   post api_create_packages_path(:format => :json, :auth_token => user.authentication_token), params
+end
+
+When /^I perform an API publish with the following parameters as user "([^"]*)"$/ do |email,table|
+  params = Hash[*table.raw.flatten]
+  user = User.find_by_email!(email)
+  post api_publish_packages_path(:format => :json, :auth_token => user.authentication_token), params
 end
 
 

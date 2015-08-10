@@ -24,7 +24,7 @@ module Devise
       end
 
       def valid_packages_operation?
-        params[:action] == 'api_create'
+        params[:action] == 'api_create' || params[:action] == 'api_publish'
       end
     end
   end
