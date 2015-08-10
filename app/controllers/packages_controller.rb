@@ -135,13 +135,13 @@ class PackagesController < DataFilesController
 
     package = Package.find(package_id)
     if package.published?
-      render :json => {:messages => ["Package #{package_id} is already submitted for publishing."]}
+      render :json => {:package_id => package.id, :messages => ["Package #{package_id} is already submitted for publishing."]}
       return
     end
 
     if package.save! and publish_rif_cs(package)
       package.set_to_published(current_user)
-      render :json => {:messages => ["Package has been successfully submitted for publishing."]}
+      render :json => {:package_id => package.id, :messages => ["Package has been successfully submitted for publishing."]}
     else
       render :json => {:messages => ["Unable to publish package."]}
     end
