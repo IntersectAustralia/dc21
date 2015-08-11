@@ -5,5 +5,8 @@ class CreateLanguages < ActiveRecord::Migration
       t.string :iso_code
       t.timestamps
     end
+
+    add_column :data_files, :language_id, :integer
+    add_column :system_configurations, :language_id, :integer
   end
 end

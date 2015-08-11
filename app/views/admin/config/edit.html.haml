@@ -73,7 +73,7 @@
       = f.label :language, class: "control-label"
       .controls
         = required
-        = f.select :language, Language.pluck(:language_name)
+        = f.collection_select :language_id, Language.all, :id, :language_name
     .control-group
       = f.label :open_access_rights_uri, "Open Access Rights URI", class: "control-label"
       .controls

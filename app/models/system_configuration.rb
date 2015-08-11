@@ -22,6 +22,10 @@ class SystemConfiguration < ActiveRecord::Base
   validate :valid_regex
   validates_inclusion_of :max_package_size_unit, :in => STORAGE_UNITS, :on => :update, if: :max_package_size_set?
 
+  belongs_to :language
+
+  accepts_nested_attributes_for :language
+
   def valid_regex
     begin
       Regexp.try_convert(/#{self.auto_ocr_regex}/)

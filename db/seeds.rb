@@ -15,3 +15,4 @@ create_sequences
 create_roles
 create_parameter_categories
 create_tags
+seed_languages

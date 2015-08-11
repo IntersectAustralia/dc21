@@ -109,13 +109,13 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.text     "access",                                          :default => "Private"
     t.boolean  "access_to_all_institutional_users",               :default => true
     t.boolean  "access_to_user_groups"
-    t.string   "language"
     t.text     "rights_statement"
     t.string   "access_rights_type"
     t.text     "access_rights_uri"
     t.string   "research_centre_name",              :limit => 80
     t.string   "hdl_handle"
     t.string   "physical_location",                 :limit => 80
+    t.integer  "language_id"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|
@@ -299,7 +299,6 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.string   "sr_cloud_id"
     t.string   "sr_cloud_token"
     t.text     "dashboard_contents"
-    t.string   "language"
     t.text     "open_access_rights_uri"
     t.text     "conditional_access_rights_uri"
     t.text     "restricted_access_rights_uri"
@@ -307,6 +306,7 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.float    "max_package_size"
     t.string   "max_package_size_unit"
     t.string   "handle_uri_prefix"
+    t.integer  "language_id"
   end
 
   create_table "tags", :force => true do |t|

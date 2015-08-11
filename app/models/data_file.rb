@@ -51,6 +51,8 @@ class DataFile < ActiveRecord::Base
   belongs_to :created_by, :class_name => "User"
   belongs_to :published_by, :class_name => "User"
   belongs_to :experiment
+  belongs_to :language
+
   has_many :column_details, :dependent => :destroy
   has_many :metadata_items, :dependent => :destroy
   has_and_belongs_to_many :users
