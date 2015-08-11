@@ -18,6 +18,7 @@ FactoryGirl.define do
     association :published_by, :factory => :user
     association :experiment
     file_processing_status "PACKAGE"
+    access_rights_type Package::ACCESS_RIGHTS_OPEN
     title "title"
     file_size 35642
   end

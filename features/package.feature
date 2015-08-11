@@ -180,7 +180,7 @@ Feature: Create a package
       | Title                | Test title                    |
       | Language             | English                       |
       | Rights Statement     | blah blah                     |
-      | HDL Handle           | http://hdl.handle.net/diver_0 |
+      | HDL Handle           | http://hdl.handle.net/dc21_0 |
       | Physical Location    | Intersect Australia           |
       | Research Centre Name | Intersect Research            |
 
