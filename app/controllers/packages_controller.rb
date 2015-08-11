@@ -65,9 +65,16 @@ class PackagesController < DataFilesController
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
 
-    data_files = validate_file_ids(file_ids, errors)
+    data_files = validate_file_ids(file_ids, current_user, errors)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
+
+    access_rights_type = params[:access_rights_type]
+    if access_rights_type.nil?
+      params[:access_rights_type] = Package::ACCESS_RIGHTS_OPEN
+    elsif ![Package::ACCESS_RIGHTS_OPEN, Package::ACCESS_RIGHTS_CONDITIONAL, Package::ACCESS_RIGHTS_RESTRICTED].include?(access_rights_type)
+      errors << "access_rights_type must be one of: #{Package::ACCESS_RIGHTS_OPEN}, #{Package::ACCESS_RIGHTS_CONDITIONAL}, #{Package::ACCESS_RIGHTS_RESTRICTED}"
+    end
 
     package = Package.create_package(params, nil, current_user)
     if errors.empty? && package.save
@@ -192,7 +199,7 @@ class PackagesController < DataFilesController
     true
   end
 
-  def validate_file_ids(file_ids, errors)
+  def validate_file_ids(file_ids, current_user, errors)
     data_files = []
     if !file_ids.is_a? Array
       errors << 'file_ids is required and must be an Array'
@@ -209,13 +216,18 @@ class PackagesController < DataFilesController
         if !DataFile.exists?(id_as_int)
           errors << "file with id '#{file_id}' could not be found"
         else
-          data_files << DataFile.find(id_as_int)
+          data_file = DataFile.find(id_as_int)
+          if data_file.is_authorised_for_access_by?(current_user)
+            data_files << data_file
+          else
+            errors << "unauthorized to package file '#{file_id}'"
+          end
         end
       rescue ArgumentError
         errors << "file id '#{file_id}' is not a valid file id"
       end
     end
-    return data_files
+    return data_files.uniq
   end
 
 end

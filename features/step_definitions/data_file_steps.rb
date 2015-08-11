@@ -461,6 +461,10 @@ Then /^file "([^"]*)" should have transfer status "([^"]*)"$/ do |filename, tran
   DataFile.find_by_filename!(filename).transfer_status.should eq(transfer_status)
 end
 
+Then /^file "([^"]*)" should have access rights type "([^"]*)"$/ do |filename, access_rights_type|
+  DataFile.find_by_filename!(filename).access_rights_type.should eq(access_rights_type)
+end
+
 Then /^file "([^"]*)" should have parents "([^"]*)"$/ do |filename, parent_filenames|
   file = DataFile.find_by_filename!(filename)
   file.parents.collect(&:filename).sort.should eq(parent_filenames.split(",").sort)

@@ -63,6 +63,13 @@ Feature: Create a package from the API
     And I should get a JSON response with message "experiment_id can't be blank"
     And I should get a JSON response with message "title can't be blank"
 
+  Scenario: Try to package with invalid access rights type
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1                   |
+      | access_rights_type | BadAccessRightsType |
+    Then I should get a 400 response code
+    And I should get a JSON response with message "access_rights_type must be one of: Open, Conditional, Restricted"
+
   Scenario: package is created successfully in the background
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
       | file_ids      | 1,2,3            |
@@ -75,6 +82,7 @@ Feature: Create a package from the API
     And file "my_package.zip" should have experiment "My Experiment"
     And file "my_package.zip" should have title "my magic package"
     And file "my_package.zip" should have transfer status "QUEUED"
+    And file "my_package.zip" should have access rights type "Open"
 
   Scenario: package is created successfully in the foreground
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
@@ -89,20 +97,22 @@ Feature: Create a package from the API
     And file "my_package.zip" should have experiment "My Experiment"
     And file "my_package.zip" should have title "my magic package"
     And file "my_package.zip" should have transfer status "COMPLETE"
+    And file "my_package.zip" should have access rights type "Open"
 
   Scenario: package is created successfully with all the options
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
-      | file_ids          | 1,2,3                     |
-      | filename          | my_package                |
-      | experiment_id     | 1                         |
-      | title             | my magic package          |
-      | run_in_background | false                     |
-      | description       | some friendly description |
-      | tag_names         | "Photo","Video"           |
-      | label_names       | "Label1","Label2"         |
-      | start_time        | 2011-10-10 01:01:01       |
-      | end_time          | 2011-11-11 02:02:02       |
-      | run_in_background | false                     |
+      | file_ids           | 1,2,3                     |
+      | filename           | my_package                |
+      | experiment_id      | 1                         |
+      | title              | my magic package          |
+      | run_in_background  | false                     |
+      | description        | some friendly description |
+      | tag_names          | "Photo","Video"           |
+      | label_names        | "Label1","Label2"         |
+      | start_time         | 2011-10-10 01:01:01       |
+      | end_time           | 2011-11-11 02:02:02       |
+      | run_in_background  | false                     |
+      | access_rights_type | Restricted                |
     Then I should get a 200 response code
     And I should get a JSON response with message "Package was successfully created."
     And I should get a JSON response with package name "my_package.zip"
@@ -116,5 +126,6 @@ Feature: Create a package from the API
     And file "my_package.zip" should have tag "Video"
     And file "my_package.zip" should have start time "2011-10-10 01:01:01"
     And file "my_package.zip" should have end time "2011-11-11 02:02:02"
+    And file "my_package.zip" should have access rights type "Restricted"
 
 

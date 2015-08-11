@@ -6,6 +6,11 @@ class Package < DataFile
   PACKAGE_FORMAT = 'BAGIT'
   FILE_EXTENSION = '.zip'
 
+  ACCESS_RIGHTS_OPEN = 'Open'
+  ACCESS_RIGHTS_CONDITIONAL = 'Conditional'
+  ACCESS_RIGHTS_RESTRICTED = 'Restricted'
+
+
   default_scope where(:format => PACKAGE_FORMAT, :file_processing_status => "PACKAGE")
 
   before_save :set_external_id
@@ -44,11 +49,11 @@ class Package < DataFile
     datafile.physical_location = config.entity
     datafile.research_centre_name = config.research_centre_name
     datafile.access_rights_type = params[:access_rights_type]
-    if datafile.access_rights_type == "Open"
+    if datafile.access_rights_type == ACCESS_RIGHTS_OPEN
       datafile.access_rights_uri = config.open_access_rights_uri
-    elsif datafile.access_rights_type == "Conditional"
+    elsif datafile.access_rights_type == ACCESS_RIGHTS_CONDITIONAL
       datafile.access_rights_uri = config.conditional_access_rights_uri
-    elsif datafile.access_rights_type == "Restricted"
+    elsif datafile.access_rights_type == ACCESS_RIGHTS_RESTRICTED
       datafile.access_rights_uri = config.restricted_access_rights_uri
     end
     datafile
