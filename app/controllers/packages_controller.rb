@@ -8,6 +8,7 @@ class PackagesController < DataFilesController
       @back_request = request.referer
       @package = Package.new
       @package.set_times(current_user)
+      @package.set_metatdata
       set_tab :dashboard, :contentnavigation
     end
   end
@@ -23,19 +24,8 @@ class PackagesController < DataFilesController
       save_tags(@package, params[:tags])
       data_file_ids = current_user.cart_item_ids
       @package.label_list = package_params[:label_list] if package_params[:label_list]
+      @package.grant_number_list = package_params[:grant_number_list] if package_params[:grant_number_list]
       @package.parent_ids = data_file_ids
-      config = SystemConfiguration.instance
-      @package.language = config.language
-      @package.rights_statement = config.rights_statement
-      @package.physical_location = config.entity
-      @package.research_centre_name = config.research_centre_name
-      if @package.access_rights_type == "Open"
-        @package.access_rights_uri = config.open_access_rights_uri
-      elsif @package.access_rights_type == "Conditional"
-        @package.access_rights_uri = config.conditional_access_rights_uri
-      elsif @package.access_rights_type == "Restricted"
-        @package.access_rights_uri = config.restricted_access_rights_uri
-      end
       begin
         if params[:run_in_background]
           # Persist the job id in the db - we need to retrieve it per record basis
@@ -59,7 +49,7 @@ class PackagesController < DataFilesController
       end
 
     else
-      @package.reformat_on_error(package_params[:filename], params[:tags], params[:label_list])
+      @package.reformat_on_error(package_params[:filename], params[:tags], params[:label_list], params[:grant_number_list])
       render :action => 'new'
     end
   end

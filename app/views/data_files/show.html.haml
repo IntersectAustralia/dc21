@@ -62,6 +62,9 @@
       - if @data_file.published and !@data_file.published_date.nil?
         - render_field "Published by", @data_file.published_by.full_name
         - render_field "Published date", @data_file.published_date.to_s(:with_time)
+      - render_field "Access Rights Type", @data_file.access_rights_type
+      - render_field "Grant Numbers", @data_file.grant_number_list_display
+      - render_field "Related Websites", @data_file.related_website_list_display
       - render_field "Language", @data_file.language
       - render_field "Rights Statement", @data_file.rights_statement
       - render_field "HDL Handle", @data_file.hdl_handle

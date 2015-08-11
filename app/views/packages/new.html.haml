@@ -51,6 +51,39 @@
         .controls
           = f.text_field :label_list, data: {labels: labels}
       .control-group
+        .control-label Access Rights Type
+        .controls
+          = required
+          = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
+      .control-group#grant-numbers
+        %label.control-label{:for => :package_grant_number_list} Grant Numbers
+        .controls
+          = f.text_field :grant_number_list, data: {labels: grant_numbers}
+      .control-group#related-websites
+        %label.control-label{:for => :package_related_website_list} Related Websites
+        .controls
+          = f.text_field :related_website_list, data: {labels: related_websites}
+      .control-group
+        .control-label Language
+        .controls
+          .record
+            = @package.language
+      .control-group
+        .control-label Rights Statement
+        .controls
+          .record
+            = @package.rights_statement
+      .control-group
+        .control-label Physical Location
+        .controls
+          .record
+            = @package.physical_location
+      .control-group
+        .control-label Research Centre Name
+        .controls
+          .record
+            = @package.research_centre_name
+      .control-group
         .date-format yyyy-mm-dd
       .control-group
         = label_tag "package_start_time", "Start Time", class: "control-label", :for => "package_start_time"
@@ -101,4 +134,18 @@
     tags: $('#package_label_list').data('labels'),
     tokenSeparators: ['|'],
     separator: '|'
+  });
+
+  $('#package_grant_number_list').select2({
+    minimumInputLength: 3,
+    tags: $('#package_grant_number_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
+
+  $('#package_related_website_list').select2({
+      minimumInputLength: 3,
+      tags: $('#package_related_website_list').data('labels'),
+      tokenSeparators: ['|'],
+      separator: '|'
   });

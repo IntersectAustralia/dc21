@@ -19,6 +19,8 @@ class DataFilesController < ApplicationController
 
   expose(:tags) { Tag.order(:name) }
   expose(:labels) { Label.joins(:data_file_labels).pluck(:name).uniq }
+  expose(:grant_numbers) { GrantNumber.joins(:data_file_grant_numbers).pluck(:name).uniq }
+  expose(:related_websites) { RelatedWebsite.joins(:data_file_related_websites).pluck(:url).uniq}
   expose(:access_groups) { AccessGroup.pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }

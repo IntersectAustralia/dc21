@@ -1,7 +1,13 @@
 class GrantNumber < ActiveRecord::Base
-  belongs_to :data_file
+  validates_presence_of :name
+  validates_uniqueness_of :name, :case_sensitive => false
+  has_many :data_file_grant_numbers
 
-  validates_presence_of :grant_id
+  before_validation :remove_white_spaces
+  default_scope order(:name)
 
-  attr_accessible :grant_id
+  def remove_white_spaces
+    self.name = self.name.to_s.strip
+  end
+
 end

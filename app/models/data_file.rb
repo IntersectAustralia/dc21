@@ -60,12 +60,13 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
-  has_many :grant_numbers
-  accepts_nested_attributes_for :grant_numbers
-  has_many :related_websites
-  accepts_nested_attributes_for :related_websites
+  has_many :data_file_grant_numbers, :uniq => true
+  has_many :grant_numbers, :through => :data_file_grant_numbers, :uniq => true
 
-  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups
+  has_many :data_file_related_websites, :uniq => true
+  has_many :related_websites, :through => :data_file_related_websites, :uniq => true
+
+  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :grant_number_list, :related_website_list
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -161,13 +162,39 @@ class DataFile < ActiveRecord::Base
     self.labels.pluck(:name).join("|")
   end
 
+  def grant_number_list
+    self.grant_numbers.pluck(:name).join("|")
+  end
+
+  def related_website_list
+    self.related_websites.pluck(:url).join("|")
+  end
+
   def label_list_display
     self.labels.pluck(:name).join(", ")
+  end
+
+  def grant_number_list_display
+    self.grant_numbers.pluck(:name).join(", ")
+  end
+
+  def related_website_list_display
+    self.related_websites.pluck(:url).join(", ")
   end
 
   def label_list=(new_value)
     label_names = new_value.split(/\|\s*/)
     self.labels = label_names.map { |name| Label.find_or_create_by_name(name) }
+  end
+
+  def grant_number_list=(new_value)
+    grant_number_names = new_value.split(/\|\s*/)
+    self.grant_numbers = grant_number_names.map { |name| GrantNumber.find_or_create_by_name(name) }
+  end
+
+  def related_website_list=(new_value)
+    related_website_urls = new_value.split(/\|\s*/)
+    self.related_websites = related_website_urls.map { |url| RelatedWebsite.find_or_create_by_url(url) }
   end
 
   def modifiable?

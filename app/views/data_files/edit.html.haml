@@ -64,6 +64,45 @@
         .controls
           = required
           = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
+      - if @data_file.is_package?
+        .control-group
+          .control-label Access Rights Type
+          .controls
+            = required
+            = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
+        .control-group#grant-numbers
+          %label.control-label{:for => :data_file_grant_number_list} Grant Numbers
+          .controls
+            = f.text_field :grant_number_list, data: {labels: grant_numbers}
+        .control-group#related-websites
+          %label.control-label{:for => :data_file_related_website_list} Related Websites
+          .controls
+            = f.text_field :related_website_list, data: {labels: related_websites}
+        .control-group
+          .control-label Language
+          .controls
+            .record
+              = @data_file.language
+        .control-group
+          .control-label Rights Statement
+          .controls
+            .record
+              = @data_file.rights_statement
+        .control-group
+          .control-label HDL Handle
+          .controls
+            .record
+              = @data_file.hdl_handle
+        .control-group
+          .control-label Physical Location
+          .controls
+            .record
+              = @data_file.physical_location
+        .control-group
+          .control-label Research Centre Name
+          .controls
+            .record
+              = @data_file.research_centre_name
       .control-group
         .control-label Date Added
         .controls
@@ -173,6 +212,20 @@
   $('#data_file_label_list').select2({
     minimumInputLength: 3,
     tags: $('#data_file_label_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
+
+  $('#data_file_grant_number_list').select2({
+    minimumInputLength: 3,
+    tags: $('#data_file_grant_number_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
+
+  $('#data_file_related_website_list').select2({
+    minimumInputLength: 3,
+    tags: $('#data_file_related_website_list').data('labels'),
     tokenSeparators: ['|'],
     separator: '|'
   });

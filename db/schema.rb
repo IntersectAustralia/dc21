@@ -63,9 +63,19 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "data_file_grant_numbers", :id => false, :force => true do |t|
+    t.integer "data_file_id"
+    t.integer "grant_number_id"
+  end
+
   create_table "data_file_labels", :id => false, :force => true do |t|
     t.integer "data_file_id"
     t.integer "label_id"
+  end
+
+  create_table "data_file_related_websites", :id => false, :force => true do |t|
+    t.integer "data_file_id"
+    t.integer "related_website_id"
   end
 
   create_table "data_file_relationships", :force => true do |t|
@@ -187,10 +197,7 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
   end
 
   create_table "grant_numbers", :force => true do |t|
-    t.integer  "data_file_id"
-    t.string   "grant_id",     :null => false
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string "name"
   end
 
   create_table "labels", :force => true do |t|
@@ -242,10 +249,7 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
   end
 
   create_table "related_websites", :force => true do |t|
-    t.integer  "data_file_id"
-    t.string   "url",          :limit => 80, :null => false
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.string "url", :limit => 80
   end
 
   create_table "roles", :force => true do |t|

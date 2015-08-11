@@ -38,13 +38,27 @@ class Package < DataFile
     datafile.published = false
     datafile.title = params[:title]
     datafile.transfer_status = RESQUE_QUEUED
+    config = SystemConfiguration.instance
+    datafile.language = config.language
+    datafile.rights_statement = config.rights_statement
+    datafile.physical_location = config.entity
+    datafile.research_centre_name = config.research_centre_name
+    datafile.access_rights_type = params[:access_rights_type]
+    if datafile.access_rights_type == "Open"
+      datafile.access_rights_uri = config.open_access_rights_uri
+    elsif datafile.access_rights_type == "Conditional"
+      datafile.access_rights_uri = config.conditional_access_rights_uri
+    elsif datafile.access_rights_type == "Restricted"
+      datafile.access_rights_uri = config.restricted_access_rights_uri
+    end
     datafile
   end
 
-  def reformat_on_error(filename, tags, label_list)
+  def reformat_on_error(filename, tags, label_list, grant_number_list)
     self.filename = filename
     self.tag_ids = tags
     self.label_ids = label_list
+    self.grant_number_ids = grant_number_list
   end
 
   def set_times(user)
@@ -61,6 +75,14 @@ class Package < DataFile
     else
       self.end_time = end_df.end_time
     end
+  end
+
+  def set_metatdata
+    config = SystemConfiguration.instance
+    self.language = config.language
+    self.rights_statement = config.rights_statement
+    self.physical_location = config.entity
+    self.research_centre_name = config.research_centre_name
   end
 
   private

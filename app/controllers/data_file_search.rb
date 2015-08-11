@@ -12,6 +12,8 @@ class DataFileSearch
   attr_accessor :automation_stati
   attr_accessor :tags
   attr_accessor :labels
+  attr_accessor :grant_numbers
+  attr_accessor :related_websites
   attr_accessor :file_formats
   attr_accessor :uploader_id
   attr_accessor :upload_date_range
@@ -45,6 +47,8 @@ class DataFileSearch
     self.automation_stati = @search_params[:automation_stati] || []
     self.tags = @search_params[:tags]|| []
     self.labels = @search_params[:labels]|| []
+    self.grant_numbers = @search_params[:grant_numbers]|| []
+    self.related_websites = @search_params[:related_websites]|| []
     self.file_formats = @search_params[:file_formats] || []
     self.published = @search_params[:published]|| []
     self.unpublished = @search_params[:unpublished]|| []
