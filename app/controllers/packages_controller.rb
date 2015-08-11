@@ -25,6 +25,7 @@ class PackagesController < DataFilesController
       data_file_ids = current_user.cart_item_ids
       @package.label_list = package_params[:label_list] if package_params[:label_list]
       @package.grant_number_list = package_params[:grant_number_list] if package_params[:grant_number_list]
+      @package.related_website_list = package_params[:related_website_list] if package_params[:related_website_list]
       @package.parent_ids = data_file_ids
       begin
         if params[:run_in_background]

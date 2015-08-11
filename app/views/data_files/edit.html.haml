@@ -70,6 +70,11 @@
           .controls
             = required
             = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
+        .control-group
+          .control-label Access Rights URI
+          .controls
+            .record
+              = @data_file.access_rights_uri
         .control-group#grant-numbers
           %label.control-label{:for => :data_file_grant_number_list} Grant Numbers
           .controls
