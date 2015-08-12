@@ -51,10 +51,13 @@ class Package < DataFile
     datafile.access_rights_type = params[:access_rights_type]
     if datafile.access_rights_type == ACCESS_RIGHTS_OPEN
       datafile.access_rights_uri = config.open_access_rights_uri
+      datafile.access_rights_text = config.open_access_rights_text
     elsif datafile.access_rights_type == ACCESS_RIGHTS_CONDITIONAL
       datafile.access_rights_uri = config.conditional_access_rights_uri
+      datafile.access_rights_text = config.conditional_access_rights_text
     elsif datafile.access_rights_type == ACCESS_RIGHTS_RESTRICTED
       datafile.access_rights_uri = config.restricted_access_rights_uri
+      datafile.access_rights_text = config.restricted_access_rights_text
     end
     datafile
   end

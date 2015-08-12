@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.text     "rights_statement"
     t.string   "access_rights_type"
     t.text     "access_rights_uri"
+    t.text     "access_rights_text"
     t.string   "research_centre_name",              :limit => 80
     t.string   "hdl_handle"
     t.string   "physical_location",                 :limit => 80
@@ -269,29 +270,29 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "system_configurations", :force => true do |t|
-    t.string   "name",                                        :default => "DIVER"
-    t.datetime "created_at",                                                                                      :null => false
-    t.datetime "updated_at",                                                                                      :null => false
-    t.string   "level1",                                      :default => "Facility"
-    t.string   "level1_plural",                               :default => "Facilities"
-    t.string   "level2",                                      :default => "Experiment"
-    t.string   "level2_plural",                               :default => "Experiments"
-    t.string   "research_centre_name",          :limit => 80, :default => "Enter your research centre name here", :null => false
-    t.string   "entity",                        :limit => 80, :default => "Enter your institution name here",     :null => false
-    t.string   "address1",                      :limit => 80, :default => "Enter your address"
-    t.string   "address2",                      :limit => 80, :default => ""
-    t.string   "address3",                      :limit => 80, :default => ""
-    t.string   "telephone_number",              :limit => 80, :default => ""
-    t.string   "email",                         :limit => 80, :default => ""
-    t.string   "description",                   :limit => 80, :default => ""
-    t.string   "urls",                          :limit => 80, :default => ""
-    t.boolean  "level2_parameters",                           :default => true
-    t.boolean  "auto_ocr_on_upload",                          :default => false
+    t.string   "name",                                         :default => "DIVER"
+    t.datetime "created_at",                                                                                       :null => false
+    t.datetime "updated_at",                                                                                       :null => false
+    t.string   "level1",                                       :default => "Facility"
+    t.string   "level1_plural",                                :default => "Facilities"
+    t.string   "level2",                                       :default => "Experiment"
+    t.string   "level2_plural",                                :default => "Experiments"
+    t.string   "research_centre_name",           :limit => 80, :default => "Enter your research centre name here", :null => false
+    t.string   "entity",                         :limit => 80, :default => "Enter your institution name here",     :null => false
+    t.string   "address1",                       :limit => 80, :default => "Enter your address"
+    t.string   "address2",                       :limit => 80, :default => ""
+    t.string   "address3",                       :limit => 80, :default => ""
+    t.string   "telephone_number",               :limit => 80, :default => ""
+    t.string   "email",                          :limit => 80, :default => ""
+    t.string   "description",                    :limit => 80, :default => ""
+    t.string   "urls",                           :limit => 80, :default => ""
+    t.boolean  "level2_parameters",                            :default => true
+    t.boolean  "auto_ocr_on_upload",                           :default => false
     t.text     "auto_ocr_regex"
-    t.boolean  "auto_sr_on_upload",                           :default => false
+    t.boolean  "auto_sr_on_upload",                            :default => false
     t.text     "auto_sr_regex"
-    t.text     "ocr_types",                                   :default => "image/jpeg, image/png"
-    t.text     "sr_types",                                    :default => "audio/x-wav, audio/mpeg"
+    t.text     "ocr_types",                                    :default => "image/jpeg, image/png"
+    t.text     "sr_types",                                     :default => "audio/x-wav, audio/mpeg"
     t.string   "ocr_cloud_host"
     t.string   "ocr_cloud_id"
     t.string   "ocr_cloud_token"
@@ -300,8 +301,11 @@ ActiveRecord::Schema.define(:version => 20150728014827) do
     t.string   "sr_cloud_token"
     t.text     "dashboard_contents"
     t.text     "open_access_rights_uri"
+    t.text     "open_access_rights_text"
     t.text     "conditional_access_rights_uri"
+    t.text     "conditional_access_rights_text"
     t.text     "restricted_access_rights_uri"
+    t.text     "restricted_access_rights_text"
     t.text     "rights_statement"
     t.float    "max_package_size"
     t.string   "max_package_size_unit"
