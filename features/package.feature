@@ -26,6 +26,13 @@ Feature: Create a package
       | Photo      |
       | Video      |
       | Gap-Filled |
+    Given I have languages
+      | language_name | id |
+      | English       | 1  |
+      | Spanish       | 2  |
+    Given I have the following system configuration
+      | language_id | rights_statement | entity              | research_centre_name |
+      | 2           | blah blah        | Intersect Australia | Intersect Research   |
 
   Scenario: Package is now available as a file type to search on
     Given I am on the list data files page
@@ -154,13 +161,6 @@ Feature: Create a package
     And I should see "Title can't be blank"
 
   Scenario: New package - rendering correct data_file view screen
-    Given I have languages
-      | language_name | id |
-      | English       | 1  |
-      | Spanish       | 2  |
-    Given I have the following system configuration
-      | language_id | rights_statement | entity              | research_centre_name |
-      | 2           | blah blah        | Intersect Australia | Intersect Research   |
     Given I am on the list data files page
     And I add sample1.txt to the cart
     And I add sample2.txt to the cart
@@ -249,3 +249,27 @@ Feature: Create a package
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Labels" with value "test1, this3"
+
+  Scenario: Create package specifying access rights type, grant numbers and related websites
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    And I wait for 4 seconds
+    When I am on the create package page
+    And I fill in "package_grant_number_list" with "bebb@|Abba|cuba|AA<script></script>"
+    And I check select2 field "package_grant_number_list" updated value to "Abba,bebb@,cuba,AA<script></script>"
+    And I fill in "package_related_website_list" with "webweb|a_site|siteB|http://example.com"
+    And I check select2 field "package_related_website_list" updated value to "webweb|a_site|siteB|http://example.com"
+    And I select "Conditional" from "package_access_rights_type"
+    And I should see "Spanish"
+    And I should see "blah blah"
+    And I should see "Intersect Australia"
+    And I should see "Intersect Research"
+    And I fill in "Filename" with "my_package1"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Title" with "Package 1"
+    And I uncheck "Run in background?"
+    And I press "Create Package"
+    When I should be on the data file details page for my_package1.zip
+    Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
+    Then I should see field "Related Websites" with value "a_site, http://example.com, siteB, webweb"
+    Then I should see field "Access Rights Type" with value "Conditional"
