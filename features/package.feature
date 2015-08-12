@@ -154,9 +154,13 @@ Feature: Create a package
     And I should see "Title can't be blank"
 
   Scenario: New package - rendering correct data_file view screen
+    Given I have languages
+      | language_name | id |
+      | English       | 1  |
+      | Spanish       | 2  |
     Given I have the following system configuration
-      | language | rights_statement | entity              | research_centre_name |
-      | English  | blah blah        | Intersect Australia | Intersect Research   |
+      | language_id | rights_statement | entity              | research_centre_name |
+      | 2           | blah blah        | Intersect Australia | Intersect Research   |
     Given I am on the list data files page
     And I add sample1.txt to the cart
     And I add sample2.txt to the cart
@@ -178,7 +182,7 @@ Feature: Create a package
       | Description          | Here's a description          |
       | Experiment           | My Experiment                 |
       | Title                | Test title                    |
-      | Language             | English                       |
+      | Language             | Spanish                       |
       | Rights Statement     | blah blah                     |
       | HDL Handle           | http://hdl.handle.net/dc21_0 |
       | Physical Location    | Intersect Australia           |
