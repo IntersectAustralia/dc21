@@ -2,5 +2,6 @@
 
 FactoryGirl.define do
   factory :language do
+    sequence(:language_name) { |n| "Language-#{n}" }
   end
 end

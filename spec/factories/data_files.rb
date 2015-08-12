@@ -17,6 +17,7 @@ FactoryGirl.define do
     association :created_by, :factory => :user
     association :published_by, :factory => :user
     association :experiment
+    association :language, :factory => :language
     file_processing_status "PACKAGE"
     access_rights_type Package::ACCESS_RIGHTS_OPEN
     title "title"

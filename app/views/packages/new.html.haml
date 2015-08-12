@@ -67,7 +67,7 @@
         .control-label Language
         .controls
           .record
-            = @package.language.language_name
+            = @package.language.try(:language_name)
       .control-group
         .control-label Rights Statement
         .controls
