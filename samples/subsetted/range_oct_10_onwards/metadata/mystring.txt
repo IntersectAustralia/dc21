@@ -4,7 +4,7 @@ Description:
 Start date: 2012-02-09
 End date: 
 Subject: MyString
-Access Rights: http://creativecommons.org/licenses/by/3.0/au
+Access Rights: http://creativecommons.org/licenses/by/4.0
 FOR codes: 
 Persistent URL: http://localhost:3000/facilities/2393/experiments/2555
 

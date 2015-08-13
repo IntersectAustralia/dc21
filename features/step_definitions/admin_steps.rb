@@ -1,5 +1,10 @@
 Given /^I have the following system configuration$/ do |table|
-  SystemConfiguration.instance.update_attributes(table.hashes.first)
+  vals = table.hashes.first
+  lang = vals.delete('language')
+  SystemConfiguration.instance.update_attributes(vals)
+  if lang
+    SystemConfiguration.instance.update_attribute(:language, Language.find_by_language_name(lang))
+  end
 end
 
 Given /^I have languages$/ do |table|

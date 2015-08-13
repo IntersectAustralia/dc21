@@ -13,9 +13,9 @@ class MetadataWriter
                              :experiments => experiments,
                              :facilities => facilities,
                              :metadata_helper => MetadataHelper.new(facilities))
-    rescue SyntaxError
+    rescue SyntaxError => e
       raise TemplateError, "syntax error in external template file for HTML"
-    rescue NameError
+    rescue NameError => e
       raise TemplateError, "undefined variable in external template file for HTML"
     end
   end

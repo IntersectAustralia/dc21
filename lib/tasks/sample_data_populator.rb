@@ -142,17 +142,17 @@ def create_facilities_and_experiments
 
   user = User.first
   ws = create_facility(:name => "Rainout Shelter Weather Station", :code => "ROS_WS", :primary_contact => user)
-  ws.experiments.create!(:name => "The Rain Experiment", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Rain")
-  ws.experiments.create!(:name => "The Wind Experiment", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au", :subject => "Wind")
+  ws.experiments.create!(:name => "The Rain Experiment", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/4.0", :subject => "Rain")
+  ws.experiments.create!(:name => "The Wind Experiment", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/4.0", :subject => "Wind")
 
   test = create_facility(:name => "Test Facility", :code => "T1", :primary_contact => user)
-  test.experiments.create(:name => "Test Experiment 1", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Test1")
-  test.experiments.create(:name => "Test Experiment 2", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au", :subject => "Test2")
-  test.experiments.create(:name => "Test Experiment 3", :start_date => "2012-06-01", :access_rights => "http://creativecommons.org/licenses/by-nc-nd/3.0/au", :subject => "Test3")
+  test.experiments.create(:name => "Test Experiment 1", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/4.0", :subject => "Test1")
+  test.experiments.create(:name => "Test Experiment 2", :start_date => "2011-01-20", :access_rights => "http://creativecommons.org/licenses/by-nc-sa/4.0", :subject => "Test2")
+  test.experiments.create(:name => "Test Experiment 3", :start_date => "2012-06-01", :access_rights => "http://creativecommons.org/licenses/by-nc-nd/4.0", :subject => "Test3")
 
   other = create_facility(:name => "Other", :code => "Other Code", :primary_contact => user)
   #other.id = -1
-  other_experiment = other.experiments.create(:name => "Other", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/3.0/au", :subject => "Other subject")
+  other_experiment = other.experiments.create(:name => "Other", :start_date => "2012-01-01", :access_rights => "http://creativecommons.org/licenses/by-sa/4.0", :subject => "Other subject")
   #other_experiment.id = -1
   #other_experiment.save!
   #other.save

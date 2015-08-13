@@ -7,42 +7,54 @@
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart>My Collection Of Stuff.zip</namePart>
+        <namePart xml:lang="$$LANG$$">My Collection Of Stuff.zip</namePart>
       </name>
-
       <location>
         <address>
           <electronic type="url">
             <value>$$ZIP_URL$$</value>
           </electronic>
+          <physical>
+            <addressPart type="text">$$PHYSICAL_ADDRESS$$</addressPart>
+          </physical>
         </address>
       </location>
-
-      <subject type="local" xml:lang="en">Rainfall</subject>
-
-      <description type="brief">Describe my collection of stuff</description>
+      <description type="brief" xml:lang="$$LANG$$">Describe my collection of stuff</description>
       <rights>
-        <licence type="CC BY-NC-SA" rightsUri="http://creativecommons.org/licenses/by-nc-sa/3.0/au"></licence>
-        <accessRights type="open">Data is freely available for reuse in accordance with license conditions</accessRights>
+        <rightsStatement>blah blah</rightsStatement>
+        <accessRights type="open" rightsUri=""/>
+        <license type="CC-BY-NC-SA" rightsUri="http://creativecommons.org/licenses/by-nc-sa/4.0"/>
       </rights>
-
+      <identifier type="uri">dc21_3</identifier>
+      <identifier type="handle">http://hdl.handle.net/dc21_3</identifier>
       <coverage>
         <temporal>
           <date type="dateFrom" dateFormat="W3CDTF">2010-06-01T06:42:01+10:00</date>
           <date type="dateTo" dateFormat="W3CDTF">2011-11-30T18:05:23+11:00</date>
         </temporal>
       </coverage>
-
+      <relatedObject>
+        <key>Fred Bloggs</key>
+        <relation type="hasCollector">
+          <description>Creator</description>
+        </relation>
+      </relatedObject>
+      <relatedObject>
+        <key>Intersect Research</key>
+        <relation type="isManagedBy"/>
+      </relatedObject>
+      <relatedObject>
+        <key>Fred Bloggs (researcher@intersect.org.au)</key>
+        <relation type="hasAssociationWith">
+          <description>Primary Contact</description>
+        </relation>
+      </relatedObject>
       <relatedInfo>
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Unique ID: $$KEY$$</notes>
+        <notes>Unique ID: dc21_3</notes>
       </relatedInfo>
-      <relatedInfo>
-        <notes>Primary contact for ROS Weather Station is Fred Bloggs ($$PRIMARY_CONTACT$$@intersect.org.au)</notes>
-      </relatedInfo>
-
     </collection>
   </registryObject>
 </registryObjects>

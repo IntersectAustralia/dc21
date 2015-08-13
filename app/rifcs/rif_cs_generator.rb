@@ -32,6 +32,9 @@ class RifCsGenerator
               xml.electronic type: 'url' do
                 xml.value wrapper_object.electronic_location
               end
+              xml.physical do
+                xml.addressPart wrapper_object.physical_address, type: 'text'
+              end
             end
           end
 
@@ -53,16 +56,19 @@ class RifCsGenerator
             xml.license type: wrapper_object.license_type, rightsUri: wrapper_object.license_uri
           end
 
+          xml.identifier wrapper_object.identifier_uri, {type: 'uri'}
+          xml.identifier wrapper_object.identifier_handle, {type: 'handle'}
+
           if wrapper_object.start_time || wrapper_object.end_time
             xml.coverage do
               xml.temporal do
                 if wrapper_object.start_time
                   start_datetime = DateTime.parse(wrapper_object.start_time.to_s).strftime("%FT%T%:z")
-                  xml.date start_datetime, type: 'dateFrom', date_format: 'W3CDTF'
+                  xml.date start_datetime, type: 'dateFrom', dateFormat: 'W3CDTF'
                 end
                 if wrapper_object.end_time
                   end_datetime = DateTime.parse(wrapper_object.end_time.to_s).strftime("%FT%T%:z")
-                  xml.date end_datetime, type: 'dateTo', date_format: 'W3CDTF'
+                  xml.date end_datetime, type: 'dateTo', dateFormat: 'W3CDTF'
                 end
               end
             end
@@ -76,11 +82,23 @@ class RifCsGenerator
             end
           end
 
+          wrapper_object.grant_numbers.each do |grant_number|
+            xml.relatedObject do
+              xml.key grant_number
+              xml.relation type: 'isOutputOf'
+            end
+          end
+
           xml.relatedObject do
             xml.key wrapper_object.created_by
             xml.relation type: 'hasCollector' do
               xml.description 'Creator'
             end
+          end
+
+          xml.relatedObject do
+            xml.key wrapper_object.managed_by
+            xml.relation type: 'isManagedBy'
           end
 
           wrapper_object.primary_contacts.each do |contact|

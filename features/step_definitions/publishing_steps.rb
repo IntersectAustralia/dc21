@@ -18,6 +18,8 @@ Then /^the RIF\-CS file for the latest published collection should match "([^"]*
   expected_contents.gsub!("$$ROOT_URL$$", root_url)
   expected_contents.gsub!("$$ZIP_URL$$", zip_url)
   expected_contents.gsub!("$$PRIMARY_CONTACT$$", 'researcher')
+  expected_contents.gsub!("$$LANG$$", pc.language.iso_code)
+  expected_contents.gsub!("$$PHYSICAL_ADDRESS$$", SystemConfiguration.instance.entity)
 
   actual_contents = File.open("/tmp/dc21-data/published_rif_cs/rif-cs-#{pc.id}.xml").read
 

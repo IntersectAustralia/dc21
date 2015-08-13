@@ -81,7 +81,7 @@ describe Experiment do
 
   describe "Get access right name" do
     it "should look it up in the access rights lookup" do
-      Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au").access_rights_description.should eq("CC BY: Attribution")
+      Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/4.0").access_rights_description.should eq("CC BY: Attribution")
     end
 
     it "should return nil if not found" do

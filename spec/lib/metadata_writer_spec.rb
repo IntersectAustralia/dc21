@@ -39,7 +39,7 @@ describe MetadataWriter do
                           end_date: '2012-01-01',
                           subject: 'Drought',
                           description: 'Experiment desc',
-                          access_rights: 'http://creativecommons.org/licenses/by/3.0/au')
+                          access_rights: 'http://creativecommons.org/licenses/by/4.0')
     @experiment.set_for_codes({'1' => {'name' => '0101 - Mathematics', 'url' => 'someurl'}, '2' => {'name' => '0202 - Science', 'url' => 'someotherurl'}})
     @experiment.save!
 

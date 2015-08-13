@@ -39,8 +39,12 @@ class PackageRifCsWrapper < RifCsWrapper
 
   # returns an array of strings, each item being the text for a local subject
   def local_subjects
-    subjects = collection_object.labels.collect(&:name).uniq.sort
-    subjects.select { |s| !s.blank? }
+    if !collection_object.nil?
+      subjects = collection_object.labels.collect(&:name).uniq.sort
+      subjects.select { |s| !s.blank? }
+      return subjects
+    end
+    return []
   end
 
   def rights_statement
@@ -65,6 +69,26 @@ class PackageRifCsWrapper < RifCsWrapper
 
   def license_uri
     collection_object.experiment.access_rights
+  end
+
+  def identifier_uri
+    collection_object.external_id
+  end
+
+  def identifier_handle
+    collection_object.hdl_handle
+  end
+
+  def physical_address
+    SystemConfiguration.instance.entity
+  end
+
+  def managed_by
+    SystemConfiguration.instance.research_centre_name
+  end
+
+  def grant_numbers
+    collection_object.grant_numbers.collect(&:name)
   end
 
   # returns an array of strings, each item being an FOR code in its PURL format

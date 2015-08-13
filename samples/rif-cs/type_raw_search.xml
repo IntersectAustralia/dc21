@@ -7,7 +7,7 @@
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart>Raw Stuff.zip</namePart>
+        <namePart xml:lang="$$LANG$$">Raw Stuff.zip</namePart>
       </name>
 
       <location>
@@ -15,14 +15,20 @@
           <electronic type="url">
             <value>$$ZIP_URL$$</value>
           </electronic>
+          <physical>
+            <addressPart type="text">$$PHYSICAL_ADDRESS$$</addressPart>
+          </physical>
         </address>
       </location>
 
-      <subject type="local" xml:lang="en">Wind</subject>
-
       <rights>
-        <licence type="All Rights Reserved."/>
+        <rightsStatement>blah blah</rightsStatement>
+        <accessRights type="open" rightsUri=""/>
+        <license type="Unknown/Other" rightsUri="N/A"/>
       </rights>
+
+      <identifier type="uri">dc21_3</identifier>
+      <identifier type="handle">http://hdl.handle.net/dc21_3</identifier>
 
       <coverage>
         <temporal>
@@ -31,14 +37,27 @@
         </temporal>
       </coverage>
 
+      <relatedObject>
+        <key>Fred Bloggs</key>
+        <relation type="hasCollector">
+          <description>Creator</description>
+        </relation>
+      </relatedObject>
+      <relatedObject>
+        <key>Intersect Research</key>
+        <relation type="isManagedBy"/>
+      </relatedObject>
+      <relatedObject>
+        <key>Fred Bloggs (researcher@intersect.org.au)</key>
+        <relation type="hasAssociationWith">
+          <description>Primary Contact</description>
+        </relation>
+      </relatedObject>
       <relatedInfo>
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Unique ID: $$KEY$$</notes>
-      </relatedInfo>
-      <relatedInfo>
-        <notes>Primary contact for ROS Weather Station is Fred Bloggs ($$PRIMARY_CONTACT$$@intersect.org.au)</notes>
+        <notes>Unique ID: dc21_3</notes>
       </relatedInfo>
     </collection>
   </registryObject>

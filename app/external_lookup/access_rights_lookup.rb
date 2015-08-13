@@ -15,14 +15,14 @@ class AccessRightsLookup
   
   def get_name(url)
     access_right = RIGHTS.select{ |access_right| access_right[:url] == url }
-    if !access_right.nil?
+    if !access_right.empty?
       return access_right.first[:name]
     end
   end
 
   def get_id(url)
     access_right = RIGHTS.select{ |access_right| access_right[:url] == url }
-    if !access_right.nil?
+    if !access_right.empty?
       return access_right.first[:id]
     end
   end

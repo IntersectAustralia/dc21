@@ -47,7 +47,7 @@ describe PackageRifCsWrapper do
     post_facility = Factory(:facility, :name =>'PFac', :primary_contact => user)
     experiment = Factory(:experiment, :facility => post_facility)
     package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
-                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+                      file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
     PackageRifCsWrapper.new(package, [], {}).key.should eq('dc21_0')
   end
 
@@ -58,7 +58,7 @@ describe PackageRifCsWrapper do
       post_facility = Factory(:facility, :name =>'PFac', :primary_contact => user)
       experiment = Factory(:experiment, :facility => post_facility)
       package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
-                          file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
       wrapper = PackageRifCsWrapper.new(package, [], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes[0].should eq('Published by Georgina Edwards (georgina@intersect.org.au)')
     end
@@ -78,9 +78,9 @@ describe PackageRifCsWrapper do
       df4 = Factory(:data_file, :experiment_id => experiment3.id)
 
       package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment1.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
-                    file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user1, access_rights_type: 'Open')
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user1, access_rights_type: 'Open')
       wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
-      wrapper.notes.size.should eq(4)
+      wrapper.notes.size.should eq(2)
       wrapper.notes.include?('Primary contact for Fac1 is Fred Smith (fred@intersect.org.au')
       wrapper.notes.include?('Primary contact for Fac2 is Bob Jones (bob@intersect.org.au')
     end
@@ -94,7 +94,7 @@ describe PackageRifCsWrapper do
 
       df1 = Factory(:data_file, :experiment_id => experiment.id)
       package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
-                    file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
       wrapper = PackageRifCsWrapper.new(package, [df1], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       # this should never happen, its ok that nothing shows
       wrapper.notes.size.should eq(2)
@@ -102,7 +102,7 @@ describe PackageRifCsWrapper do
   end
 
   describe "Local subjects" do
-    it "should collect all subjects from experiments associated with the files" do
+    it "should not contain file level labels" do
       exp1 = Factory(:experiment, :subject => "Fred")
       exp2 = Factory(:experiment, :subject => "Fred")
       exp3 = Factory(:experiment, :subject => "Bob")
@@ -115,7 +115,31 @@ describe PackageRifCsWrapper do
       df5 = Factory(:data_file, :experiment_id => exp4.id)
 
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
-      wrapper.local_subjects.should eq(["Bob", "Fred"])
+      wrapper.local_subjects.should eq([])
+    end
+
+    it "should contain package level labels" do
+      exp1 = Factory(:experiment, :subject => "Fred")
+      exp2 = Factory(:experiment, :subject => "Fred")
+      exp3 = Factory(:experiment, :subject => "Bob")
+      exp4 = Factory(:experiment, :subject => "Jane")
+
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id)
+
+      user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
+      facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
+      experiment = Factory(:experiment, :facility => facility)
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+      package.labels << Factory(:label, :name => 'Label 1')
+      package.labels << Factory(:label, :name => 'Label 2')
+
+      wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {})
+      wrapper.local_subjects.should eq(['Label 1', 'Label 2'])
     end
   end
 
@@ -124,9 +148,9 @@ describe PackageRifCsWrapper do
     `touch #{data_file_path}`
 
     it "should return the rights from the experiment associated with the package and not the files" do
-      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au")
-      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au")
-      exp3 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nd/3.0/au")
+      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/4.0")
+      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/4.0")
+      exp3 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nd/4.0")
       exp_reserved = Factory(:experiment, :access_rights => "N/A")
 
       df1 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
@@ -135,20 +159,19 @@ describe PackageRifCsWrapper do
       df4 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
       df_reserved = Factory(:data_file, :experiment_id => exp_reserved.id, :path => data_file_path)
 
-      package = Factory(:package, :experiment_id => exp3.id, :filename => 'open package', :path => data_file_path)
+      package = Factory(:package, :experiment_id => exp3.id, :filename => 'open package', :path => data_file_path, :access_rights_uri => "http://creativecommons.org/licenses/by-nd/4.0")
       CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id, df_reserved.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
         wrapper = PackageRifCsWrapper.new(package, files, {})
-        wrapper.access_rights.should eq('Data is freely available for reuse in accordance with license conditions')
-        wrapper.rights_uris.should eq(["http://creativecommons.org/licenses/by-nd/3.0/au"])
-        wrapper.license_type.should eq("CC BY-ND")
+        wrapper.access_rights_uri.should eq("http://creativecommons.org/licenses/by-nd/4.0")
+        wrapper.license_type.should eq("CC-BY-ND")
       end
     end
 
     it "should not return the open access rights label for non-open packages" do
-      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/3.0/au")
-      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/3.0/au")
+      exp1 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by/4.0")
+      exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/4.0")
       exp_reserved = Factory(:experiment, :access_rights => "N/A")
 
       df1 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
@@ -156,13 +179,13 @@ describe PackageRifCsWrapper do
       df3 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
       df4 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
 
-      package = Factory(:package, :experiment_id => exp_reserved.id, :filename => 'non-open package', :path => data_file_path)
+      package = Factory(:package, :experiment_id => exp_reserved.id, :filename => 'non-open package', :path => data_file_path, :access_rights_uri => "N/A")
       CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
         wrapper = PackageRifCsWrapper.new(package, files, {})
-        wrapper.rights_uris.should eq(['N/A'])
-        wrapper.license_type.should eq("All rights reserved")
+        wrapper.access_rights_uri.should eq('N/A')
+        wrapper.license_type.should eq("Unknown/Other")
       end
     end
   end
@@ -231,6 +254,32 @@ describe PackageRifCsWrapper do
       wrapper = PackageRifCsWrapper.new(nil, [df5], {})
       wrapper.start_date.should be_nil
       wrapper.end_date.should be_nil
+    end
+  end
+
+  describe "Grant IDs" do
+    it "should return grant numbers from the package" do
+      exp1 = Factory(:experiment, :subject => "Fred")
+      exp2 = Factory(:experiment, :subject => "Fred")
+      exp3 = Factory(:experiment, :subject => "Bob")
+      exp4 = Factory(:experiment, :subject => "Jane")
+
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id)
+
+      user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
+      facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
+      experiment = Factory(:experiment, :facility => facility)
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+      package.grant_numbers << Factory(:grant_number, :name => 'GN1')
+      package.grant_numbers << Factory(:grant_number, :name => 'GN2')
+
+      wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {})
+      wrapper.grant_numbers.should eq(['GN1', 'GN2'])
     end
   end
 end

@@ -10,11 +10,11 @@ Feature: Manage experiment metadata
       | ROS Weather Station |
       | Tree Chambers       |
     And I have experiments
-      | name             | description    | start_date | end_date   | subject | facility            | parent          | access_rights                                       |
-      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
-      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
-      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                 | http://creativecommons.org/licenses/by-sa/3.0/au    |
-      | Tree Chamber 01A | Another        | 2012-01-15 |            | Trees   | Tree Chambers       | Tree Chamber 01 | http://creativecommons.org/licenses/by-nc-nd/3.0/au |
+      | name             | description    | start_date | end_date   | subject | facility            | parent          | access_rights                                    |
+      | Weather Station  | Blah Blah Blah | 2011-10-30 |            | Rain    | ROS Weather Station |                 | http://creativecommons.org/licenses/by-sa/4.0    |
+      | Tree Chamber 02  | Whatever 2     | 2012-01-01 | 2013-01-31 | Trees   | Tree Chambers       |                 | http://creativecommons.org/licenses/by-sa/4.0    |
+      | Tree Chamber 01  | Whatever       | 2012-01-15 | 2013-01-01 | Trees   | Tree Chambers       |                 | http://creativecommons.org/licenses/by-sa/4.0    |
+      | Tree Chamber 01A | Another        | 2012-01-15 |            | Trees   | Tree Chambers       | Tree Chamber 01 | http://creativecommons.org/licenses/by-nc-nd/4.0 |
 
   Scenario: View the list of experiments under a facility
     When I am on the view facility page for 'Tree Chambers'

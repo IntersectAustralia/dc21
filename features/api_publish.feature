@@ -23,13 +23,13 @@ Feature: Publish a PACKAGE from the API
       | sample1.txt   | PROCESSED              | 01/12/2011 13:45 | researcher@intersect.org.au |                  |                     | samples/sample1.txt   | 4  | false     |                     |                            | COMPLETE        |
       | sample2.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 25/9/2011        | 3/11/2011           | samples/sample2.txt   | 5  | false     |                     |                            | COMPLETE        |
     And I have experiments
-      | name                | facility            | subject  | access_rights                                       |
-      | My Experiment       | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-nd/3.0/au |
-      | Reserved Experiment | ROS Weather Station | Wind     | N/A                                                 |
-      | Rain Experiment     | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-sa/3.0/au |
-      | Flux Experiment 1   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/3.0/au    |
-      | Flux Experiment 2   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/3.0/au    |
-      | Flux Experiment 3   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/3.0/au    |
+      | name                | facility            | subject  | access_rights                                    |
+      | My Experiment       | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-nd/4.0 |
+      | Reserved Experiment | ROS Weather Station | Wind     | N/A                                              |
+      | Rain Experiment     | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-sa/4.0 |
+      | Flux Experiment 1   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/4.0    |
+      | Flux Experiment 2   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/4.0    |
+      | Flux Experiment 3   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/4.0    |
     And I have tags
       | name       |
       | Photo      |

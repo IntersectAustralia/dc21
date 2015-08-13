@@ -6,6 +6,13 @@ Feature: Publish a PACKAGE
 
   Background:
     Given I have the usual roles
+    And I have languages
+      | language_name | iso_code |
+      | English       | en       |
+      | Spanish       | es       |
+    And I have the following system configuration
+      | language    | rights_statement | entity              | research_centre_name |
+      | English     | blah blah        | Intersect Australia | Intersect Research   |
     And I have a user "admin@intersect.org.au" with role "Administrator"
     And I have a user "publisher@intersect.org.au" with role "Administrator"
     And I have a user "researcher@intersect.org.au" with role "Researcher"
@@ -15,20 +22,20 @@ Feature: Publish a PACKAGE
       | ROS Weather Station | ROS_WS | researcher@intersect.org.au |
       | Flux Tower          | FLUX   | researcher@intersect.org.au |
     And I have data files
-      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | id | published | published_date      | published_by               | transfer_status | access_rights_type |
-      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | 1  | false     |                     |                            | COMPLETE        |  Open              |
-      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | admin@intersect.org.au      | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | 2  | false     |                     |                            | COMPLETE        | Restricted         |
-      | published.zip | PACKAGE                | 30/12/2011 12:34 | admin@intersect.org.au      |                  |                     | samples/published.zip | 3  | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au | COMPLETE        | Conditional        |
-      | sample1.txt   | PROCESSED              | 01/12/2011 13:45 | researcher@intersect.org.au |                  |                     | samples/sample1.txt   | 4  | false     |                     |                            | COMPLETE        |                    |
-      | sample2.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 25/9/2011        | 3/11/2011           | samples/sample2.txt   | 5  | false     |                     |                            | COMPLETE        |                    |
+      | filename      | file_processing_status | created_at       | uploaded_by                 | start_time       | end_time            | path                  | published | published_date      | published_by               | transfer_status | access_rights_type |
+      | package1.zip  | PACKAGE                | 01/12/2011 13:45 | researcher@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package1.zip  | false     |                     |                            | COMPLETE        |  Open              |
+      | package2.zip  | PACKAGE                | 30/11/2011 10:15 | admin@intersect.org.au      | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/package2.zip  | false     |                     |                            | COMPLETE        | Restricted         |
+      | published.zip | PACKAGE                | 30/12/2011 12:34 | admin@intersect.org.au      |                  |                     | samples/published.zip | true      | 27/12/2012 13:05:23 | publisher@intersect.org.au | COMPLETE        | Conditional        |
+      | sample1.txt   | PROCESSED              | 01/12/2011 13:45 | researcher@intersect.org.au |                  |                     | samples/sample1.txt   | false     |                     |                            | COMPLETE        |                    |
+      | sample2.txt   | RAW                    | 01/12/2011 13:45 | researcher@intersect.org.au | 25/9/2011        | 3/11/2011           | samples/sample2.txt   | false     |                     |                            | COMPLETE        |                    |
     And I have experiments
-      | name                | facility            | subject  | access_rights                                       |
-      | My Experiment       | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-nd/3.0/au |
-      | Reserved Experiment | ROS Weather Station | Wind     | N/A                                                 |
-      | Rain Experiment     | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-sa/3.0/au |
-      | Flux Experiment 1   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/3.0/au    |
-      | Flux Experiment 2   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/3.0/au    |
-      | Flux Experiment 3   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/3.0/au    |
+      | name                | facility            | subject  | access_rights                                    |
+      | My Experiment       | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-nd/4.0 |
+      | Reserved Experiment | ROS Weather Station | Wind     | N/A                                              |
+      | Rain Experiment     | ROS Weather Station | Rainfall | http://creativecommons.org/licenses/by-nc-sa/4.0 |
+      | Flux Experiment 1   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/4.0    |
+      | Flux Experiment 2   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/4.0    |
+      | Flux Experiment 3   | Flux Tower          | Rainfall | http://creativecommons.org/licenses/by-nc/4.0    |
     And I have tags
       | name       |
       | Photo      |

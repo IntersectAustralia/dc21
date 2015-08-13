@@ -27,12 +27,12 @@ Feature: Create a package
       | Video      |
       | Gap-Filled |
     Given I have languages
-      | language_name | id |
-      | English       | 1  |
-      | Spanish       | 2  |
+      | language_name | iso_code |
+      | English       | en       |
+      | Spanish       | es       |
     Given I have the following system configuration
-      | language_id | rights_statement | entity              | research_centre_name |
-      | 2           | blah blah        | Intersect Australia | Intersect Research   |
+      | language    | rights_statement | entity              | research_centre_name |
+      | Spanish     | blah blah        | Intersect Australia | Intersect Research   |
 
   Scenario: Package is now available as a file type to search on
     Given I am on the list data files page
