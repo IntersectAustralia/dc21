@@ -103,10 +103,13 @@ class DataFilesController < ApplicationController
       config = SystemConfiguration.instance
       if @data_file.access_rights_type == Package::ACCESS_RIGHTS_OPEN
         @data_file.update_attribute(:access_rights_uri, config.open_access_rights_uri)
+        @data_file.update_attribute(:access_rights_text, config.open_access_rights_text)
       elsif @data_file.access_rights_type == Package::ACCESS_RIGHTS_CONDITIONAL
         @data_file.update_attribute(:access_rights_uri, config.conditional_access_rights_uri)
+        @data_file.update_attribute(:access_rights_text, config.conditional_access_rights_text)
       elsif @data_file.access_rights_type == Package::ACCESS_RIGHTS_RESTRICTED
         @data_file.update_attribute(:access_rights_uri, config.restricted_access_rights_uri)
+        @data_file.update_attribute(:access_rights_text, config.restricted_access_rights_text)
       end
       @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root']) unless @data_file.is_package?
       redirect_to data_file_path(@data_file), notice: SAVE_MESSAGE

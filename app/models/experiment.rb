@@ -62,6 +62,10 @@ class Experiment < ActiveRecord::Base
     AccessRightsLookup.new.get_name(self.access_rights)
   end
 
+  def access_rights_id
+    AccessRightsLookup.new.get_id(self.access_rights)
+  end
+
   private
 
   def truncate_description

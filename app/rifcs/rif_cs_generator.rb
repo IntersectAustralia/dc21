@@ -24,7 +24,7 @@ class RifCsGenerator
         xml.originatingSource wrapper_object.originating_source
         xml.collection type: wrapper_object.collection_type do
           xml.name type: 'primary' do
-            xml.namePart wrapper_object.filename
+            xml.namePart wrapper_object.filename, {'xml:lang' => wrapper_object.language}
           end
 
           xml.location do
@@ -36,26 +36,21 @@ class RifCsGenerator
           end
 
           wrapper_object.local_subjects.each do |subject|
-            xml.subject subject, {'type' => 'local', 'xml:lang' => 'en'}
+            xml.subject subject, {'type' => 'local', 'xml:lang' => wrapper_object.language}
           end
 
           wrapper_object.for_codes.each do |for_code|
-            xml.subject for_code, type: 'anzsrc-for'
+            xml.subject for_code, {type: 'anzsrc-for', 'xml:lang' => wrapper_object.language}
           end
 
           unless wrapper_object.file_processing_description.blank?
-            xml.description wrapper_object.file_processing_description, type: 'brief'
+            xml.description wrapper_object.file_processing_description, {type: 'brief', 'xml:lang' => wrapper_object.language}
           end
 
           xml.rights do
-            if wrapper_object.rights_uris.first == 'N/A'
-              xml.licence type: 'All Rights Reserved.'
-            else
-              wrapper_object.rights_uris.each do |uri|
-                xml.licence '', type: wrapper_object.license_type, rightsUri: uri
-                xml.accessRights wrapper_object.access_rights, type: 'open'
-              end
-            end
+            xml.rightsStatement wrapper_object.rights_statement
+            xml.accessRights wrapper_object.access_rights_text, {type: wrapper_object.access_rights_type, rightsUri: wrapper_object.access_rights_uri}
+            xml.license type: wrapper_object.license_type, rightsUri: wrapper_object.license_uri
           end
 
           if wrapper_object.start_time || wrapper_object.end_time
@@ -76,7 +71,23 @@ class RifCsGenerator
           wrapper_object.locations.each do |points|
             xml.coverage do
               points.each do |point|
-                xml.spatial "#{point[:long]},#{point[:lat]}", type: 'gmlKmlPolyCoords'
+                xml.spatial "#{point[:long]},#{point[:lat]}", {type: 'gmlKmlPolyCoords', 'xml:lang' => wrapper_object.language}
+              end
+            end
+          end
+
+          xml.relatedObject do
+            xml.key wrapper_object.created_by
+            xml.relation type: 'hasCollector' do
+              xml.description 'Creator'
+            end
+          end
+
+          wrapper_object.primary_contacts.each do |contact|
+            xml.relatedObject do
+              xml.key contact
+              xml.relation type: 'hasAssociationWith' do
+                xml.description 'Primary Contact'
               end
             end
           end
@@ -86,6 +97,7 @@ class RifCsGenerator
               xml.notes note
             end
           end
+
         end
       end
     end

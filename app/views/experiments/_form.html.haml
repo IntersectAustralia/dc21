@@ -52,7 +52,7 @@
     .controls
       = required
       %span.input
-        = f.select :access_rights, options_for_select(access_rights, @experiment.access_rights), {:include_blank => "Please select"}
+        = f.select :access_rights, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @experiment.access_rights), {:include_blank => "Please select"}
 
   .control-group
     = label_tag :for_code_select_1, "FOR codes", class: "control-label"

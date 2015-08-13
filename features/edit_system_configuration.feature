@@ -16,7 +16,7 @@ Feature: Edit system configuration
       | ROS Weather Station |
     And I have experiments
       | name            | description    | start_date | end_date | subject | facility            | parent | access_rights                                    |
-      | Weather Station | Blah Blah Blah | 2011-10-30 |          | Rain    | ROS Weather Station |        | http://creativecommons.org/licenses/by-sa/3.0/au |
+      | Weather Station | Blah Blah Blah | 2011-10-30 |          | Rain    | ROS Weather Station |        | http://creativecommons.org/licenses/by-sa/4.0    |
     And I have languages
       | language_name         | iso_code |
       | English               | en       |
@@ -38,37 +38,40 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the system config page
     Then I should see details displayed
-      | Local System Name             | DIVER                                |
-      | Research Centre Name          | Enter your research centre name here |
-      | Overarching Entity            | Enter your institution name here     |
-      | Address                       | Enter your address                   |
-      | Telephone Numbers             |                                      |
-      | Email                         |                                      |
-      | Description                   |                                      |
-      | URLs                          |                                      |
-      | Auto OCR on Upload            | Disabled                             |
-      | Auto OCR Regular Expression   |                                      |
-      | OCR Supported MIME Types      | image/jpeg, image/png                |
-      | ABBYY Host                    |                                      |
-      | ABBYY App Name                |                                      |
-      | ABBYY Password                | *****                                |
-      | Auto SR on Upload             | Disabled                             |
-      | Auto SR Regular Expression    |                                      |
-      | SR Supported MIME Types       | audio/x-wav, audio/mpeg              |
-      | Koemei Host                   |                                      |
-      | Koemei Login                  |                                      |
-      | Koemei Password               | *****                                |
-      | Project Parameters            | Enabled                              |
-      | Type of Org Unit (Singular)   | Facility                             |
-      | Type of Org Unit (Plural)     | Facilities                           |
-      | Type of Project (Singular)    | Experiment                           |
-      | Type of Project (Plural)      | Experiments                          |
-      | Language                      |                                      |
-      | Open Access Rights URI        |                                      |
-      | Conditional Access Rights URI |                                      |
-      | Restricted Access Rights URI  |                                      |
-      | Rights Statement              |                                      |
-      | Maximum Package Size          |                                      |
+      | Local System Name              | DIVER                                |
+      | Research Centre Name           | Enter your research centre name here |
+      | Overarching Entity             | Enter your institution name here     |
+      | Address                        | Enter your address                   |
+      | Telephone Numbers              |                                      |
+      | Email                          |                                      |
+      | Description                    |                                      |
+      | URLs                           |                                      |
+      | Auto OCR on Upload             | Disabled                             |
+      | Auto OCR Regular Expression    |                                      |
+      | OCR Supported MIME Types       | image/jpeg, image/png                |
+      | ABBYY Host                     |                                      |
+      | ABBYY App Name                 |                                      |
+      | ABBYY Password                 | *****                                |
+      | Auto SR on Upload              | Disabled                             |
+      | Auto SR Regular Expression     |                                      |
+      | SR Supported MIME Types        | audio/x-wav, audio/mpeg              |
+      | Koemei Host                    |                                      |
+      | Koemei Login                   |                                      |
+      | Koemei Password                | *****                                |
+      | Project Parameters             | Enabled                              |
+      | Type of Org Unit (Singular)    | Facility                             |
+      | Type of Org Unit (Plural)      | Facilities                           |
+      | Type of Project (Singular)     | Experiment                           |
+      | Type of Project (Plural)       | Experiments                          |
+      | Language                       |                                      |
+      | Open Access Rights URI         |                                      |
+      | Open Access Rights Text        |                                      |
+      | Conditional Access Rights URI  |                                      |
+      | Conditional Access Rights Text |                                      |
+      | Restricted Access Rights URI   |                                      |
+      | Restricted Access Rights Text  |                                      |
+      | Rights Statement               |                                      |
+      | Maximum Package Size           |                                      |
 
   Scenario: Access system config edit page as non-admin
     Given I am logged in as "cindy@intersect.org.au"
@@ -103,36 +106,39 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in the following:
-      | Local System Name             | Hello                                                          |
-      | Research Centre Name          | World                                                          |
-      | Entity                        | !                                                              |
-      | Address                       | Test 1                                                         |
-      | Telephone Numbers             | +61 2 23456789                                                 |
-      | Email                         | test@test.org.au                                               |
-      | Description                   |                                                                |
-      | URLs                          | http://www.test.edu.au/hie                                     |
-      | Auto OCR on Upload            | on                                                             |
-      | Auto OCR Regular Expression   | 1234                                                           |
-      | OCR Supported MIME Types      | image/jpeg                                                     |
-      | OCR Supported MIME Types      | image/png                                                      |
-      | OCR Supported MIME Types      | audio/x-wav                                                    |
-      | ABBYY Host                    | Test ABBYY Host                                                |
-      | ABBYY App Name                | Test ABBYY App Name                                            |
-      | ABBYY Password                | Test ABBYY Password                                            |
-      | Auto SR on Upload             | on                                                             |
-      | Auto SR Regular Expression    | 1234                                                           |
-      | SR Supported MIME Types       | audio/x-wav                                                    |
-      | SR Supported MIME Types       | audio/mpeg                                                     |
-      | SR Supported MIME Types       | image/jpeg                                                     |
-      | Koemei Host                   | www.koemei.com                                                 |
-      | Koemei Login                  | test@intersect.org.au                                          |
-      | Koemei Password               | Test Koemei Password                                           |
-      | Language                      | English                                                        |
-      | Open Access Rights URI        | http://open.intersect.org.au                                   |
-      | Conditional Access Rights URI | http://conditional.intersect.org.au                            |
-      | Restricted Access Rights URI  | http://restricted.intersect.org.au                             |
-      | Rights statement              | Organic chia pork belly tilde tattooed blog raw denim leggings |
-      | Maximum Package Size          | 9.9                                                            |
+      | Local System Name                 | Hello                                                          |
+      | Research Centre Name              | World                                                          |
+      | Entity                            | !                                                              |
+      | Address                           | Test 1                                                         |
+      | Telephone Numbers                 | +61 2 23456789                                                 |
+      | Email                             | test@test.org.au                                               |
+      | Description                       |                                                                |
+      | URLs                              | http://www.test.edu.au/hie                                     |
+      | Auto OCR on Upload                | on                                                             |
+      | Auto OCR Regular Expression       | 1234                                                           |
+      | OCR Supported MIME Types          | image/jpeg                                                     |
+      | OCR Supported MIME Types          | image/png                                                      |
+      | OCR Supported MIME Types          | audio/x-wav                                                    |
+      | ABBYY Host                        | Test ABBYY Host                                                |
+      | ABBYY App Name                    | Test ABBYY App Name                                            |
+      | ABBYY Password                    | Test ABBYY Password                                            |
+      | Auto SR on Upload                 | on                                                             |
+      | Auto SR Regular Expression        | 1234                                                           |
+      | SR Supported MIME Types           | audio/x-wav                                                    |
+      | SR Supported MIME Types           | audio/mpeg                                                     |
+      | SR Supported MIME Types           | image/jpeg                                                     |
+      | Koemei Host                       | www.koemei.com                                                 |
+      | Koemei Login                      | test@intersect.org.au                                          |
+      | Koemei Password                   | Test Koemei Password                                           |
+      | system_configuration[language_id] | English                                                        |
+      | Open Access Rights URI            | http://open.intersect.org.au                                   |
+      | Open Access Rights Text           | Open Access Rights Text                                        |
+      | Conditional Access Rights URI     | http://conditional.intersect.org.au                            |
+      | Conditional Access Rights Text    | Conditional Access Rights Text                                 |
+      | Restricted Access Rights URI      | http://restricted.intersect.org.au                             |
+      | Restricted Access Rights Text     | Restricted Access Rights Text                                  |
+      | Rights statement                  | Organic chia pork belly tilde tattooed blog raw denim leggings |
+      | Maximum Package Size              | 9.9                                                            |
     And I press "Update"
     And I should be on the system config page
     Then I should see details displayed
@@ -158,8 +164,11 @@ Feature: Edit system configuration
       | Koemei Password               | *****                                                          |
       | Language                      | English                                                        |
       | Open Access Rights URI        | http://open.intersect.org.au                                   |
+      | Open Access Rights Text       | Open Access Rights Text                                        |
       | Conditional Access Rights URI | http://conditional.intersect.org.au                            |
+      | Conditional Access Rights Text| Conditional Access Rights Text                                 |
       | Restricted Access Rights URI  | http://restricted.intersect.org.au                             |
+      | Restricted Access Rights Text | Restricted Access Rights Text                                  |
       | Rights Statement              | Organic chia pork belly tilde tattooed blog raw denim leggings |
       | Maximum Package Size          | 9.9 bytes                                                      |
     And the system configuration should have

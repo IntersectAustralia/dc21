@@ -39,20 +39,32 @@ class PackageRifCsWrapper < RifCsWrapper
 
   # returns an array of strings, each item being the text for a local subject
   def local_subjects
-    subjects = experiments.collect(&:subject).uniq.sort
+    subjects = collection_object.labels.collect(&:name).uniq.sort
     subjects.select { |s| !s.blank? }
   end
 
-  def rights_uris
-    experiments.collect(&:access_rights).uniq.sort
+  def rights_statement
+    collection_object.rights_statement
+  end
+
+  def access_rights_type
+    collection_object.access_rights_type.downcase
+  end
+
+  def access_rights_uri
+    collection_object.access_rights_uri
+  end
+
+  def access_rights_text
+    collection_object.access_rights_text
   end
 
   def license_type
-    AccessRightsLookup::RIGHTS[rights_uris.first].partition(':').first
+    collection_object.experiment.access_rights_id
   end
 
-  def access_rights
-    'Data is freely available for reuse in accordance with license conditions'
+  def license_uri
+    collection_object.experiment.access_rights
   end
 
   # returns an array of strings, each item being an FOR code in its PURL format
@@ -98,13 +110,24 @@ class PackageRifCsWrapper < RifCsWrapper
     notes = []
     notes << "Published by #{options[:submitter].full_name} (#{options[:submitter].email})"
     notes << "Unique ID: #{collection_object[:external_id]}" unless collection_object[:external_id].blank?
+    notes
+  end
 
+  def language
+    collection_object.language.try(:iso_code) || 'en'
+  end
+
+  def created_by
+    "#{collection_object.created_by.first_name} #{collection_object.created_by.last_name}"
+  end
+
+  def primary_contacts
+    contacts = []
     facilities.each do |facility|
       contact = facility.primary_contact
-      notes << "Primary contact for #{facility.name} is #{contact.full_name} (#{contact.email})" if contact
+      contacts << "#{contact.full_name} (#{contact.email})" if contact
     end
-
-    notes
+    return contacts
   end
 
   private

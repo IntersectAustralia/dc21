@@ -6,7 +6,7 @@ FactoryGirl.define do
     start_date "2012-02-09"
     end_date "2012-02-10"
     subject "MyString"
-    access_rights "http://creativecommons.org/licenses/by/3.0/au"
+    access_rights "http://creativecommons.org/licenses/by/4.0"
     association :facility
   end
 end
