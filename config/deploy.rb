@@ -154,6 +154,12 @@ namespace :deploy do
     run("cd #{current_path} && bundle exec rake db:seed", :env => {'RAILS_ENV' => "#{stage}"})
   end
 
+  # Install languages - will remove all existing languages and set the default language to english.
+  desc "Install all languages"
+  task :seed_languages do
+    run("cd #{current_path} && bundle exec rake seed_languages", :env => {'RAILS_ENV' => "#{stage}"})
+  end
+
   desc "Full redepoyment, it runs deploy:update and deploy:refresh_db"
   task :full_redeploy do
     update
@@ -200,6 +206,7 @@ namespace :deploy do
     backup.db.dump
     backup.db.trim
     migrate
+    deploy.seed_languages
   end
 
   # namespace :assets do
