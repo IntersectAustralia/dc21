@@ -6,10 +6,11 @@ describe MetadataWriter do
   # set up fully populated example entities
   before(:each) do
     @config = SystemConfiguration.instance
-    @config.update_attributes({
+    @config.update_attributes!({
                       name: 'HIEv',
                       research_centre_name: 'Hawkesbury Institute for the Environment',
                       entity: 'University of Western Sydney',
+                      electronic_landing_page_title: 'UWS Reserch Data Repository',
                       address1: 'Locked Bag 1797',
                       address2: 'Penrith NSW, 2751',
                       address3: 'AUSTRALIA',

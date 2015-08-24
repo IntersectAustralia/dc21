@@ -11,8 +11,10 @@
       </name>
       <location>
         <address>
-          <electronic type="url">
+          <electronic type="url" target="landingPage">
             <value>$$ZIP_URL$$</value>
+            <title>Enter the title of your landing page</title>
+            <notes>Attachments section</notes>
           </electronic>
           <physical>
             <addressPart type="text">$$PHYSICAL_ADDRESS$$</addressPart>
@@ -22,11 +24,11 @@
       <description type="brief" xml:lang="$$LANG$$">Describe my collection of stuff</description>
       <rights>
         <rightsStatement>blah blah</rightsStatement>
-        <accessRights type="open" rightsUri=""/>
+        <accessRights type="open" rightsUri="http://handle.uws.edu.au:8081/1959.7/hiev__3"/>
         <license type="CC-BY-NC-SA" rightsUri="http://creativecommons.org/licenses/by-nc-sa/4.0"/>
       </rights>
-      <identifier type="uri">dc21_3</identifier>
-      <identifier type="handle">http://hdl.handle.net/dc21_3</identifier>
+      <identifier type="uri">http://handle.uws.edu.au:8081/1959.7/hiev__3</identifier>
+      <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
       <coverage>
         <temporal>
           <date type="dateFrom" dateFormat="W3CDTF">2010-06-01T06:42:01+10:00</date>
@@ -53,7 +55,7 @@
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Unique ID: dc21_3</notes>
+        <notes>Unique ID: http://handle.uws.edu.au:8081/1959.7/hiev__3</notes>
       </relatedInfo>
     </collection>
   </registryObject>

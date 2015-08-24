@@ -21,6 +21,11 @@
         = required
         = f.text_field :entity
     .control-group
+      = f.label :electronic_landing_page_title, "Electronic Landing Page Title", class: "control-label"
+      .controls
+        = required
+        = f.text_field :electronic_landing_page_title
+    .control-group
       = f.label :address1 , "Address", class: "control-label"
       .controls
         = f.text_field :address1, placeholder: 'line 1'
@@ -76,27 +81,15 @@
         = f.collection_select :language_id, Language.all, :id, :language_name
 
     .control-group
-      = f.label :open_access_rights_uri, "Open Access Rights URI", class: "control-label"
-      .controls
-        = f.text_area :open_access_rights_uri
-    .control-group
       = f.label :open_access_rights_text, "Open Access Rights Text", class: "control-label"
       .controls
         = f.text_area :open_access_rights_text
 
     .control-group
-      = f.label :conditional_access_rights_uri, "Conditional Access Rights URI", class: "control-label"
-      .controls
-        = f.text_area :conditional_access_rights_uri
-    .control-group
       = f.label :conditional_access_rights_text, "Conditional Access Rights Text", class: "control-label"
       .controls
         = f.text_area :conditional_access_rights_text
 
-    .control-group
-      = f.label :restricted_access_rights_uri, "Restricted Access Rights URI", class: "control-label"
-      .controls
-        = f.text_area :restricted_access_rights_uri
     .control-group
       = f.label :restricted_access_rights_text, "Restricted Access Rights Text", class: "control-label"
       .controls

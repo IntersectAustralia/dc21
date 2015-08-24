@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150812075412) do
+ActiveRecord::Schema.define(:version => 20150824011506) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -300,17 +300,15 @@ ActiveRecord::Schema.define(:version => 20150812075412) do
     t.string   "sr_cloud_id"
     t.string   "sr_cloud_token"
     t.text     "dashboard_contents"
-    t.text     "open_access_rights_uri"
     t.text     "open_access_rights_text"
-    t.text     "conditional_access_rights_uri"
     t.text     "conditional_access_rights_text"
-    t.text     "restricted_access_rights_uri"
     t.text     "restricted_access_rights_text"
     t.text     "rights_statement"
     t.float    "max_package_size"
     t.string   "max_package_size_unit"
     t.string   "handle_uri_prefix"
     t.integer  "language_id"
+    t.string   "electronic_landing_page_title",                :default => "Enter the title of your landing page"
   end
 
   create_table "tags", :force => true do |t|

@@ -9,34 +9,31 @@
       <name type="primary">
         <namePart xml:lang="$$LANG$$">Raw Stuff.zip</namePart>
       </name>
-
       <location>
         <address>
-          <electronic type="url">
+          <electronic type="url" target="landingPage">
             <value>$$ZIP_URL$$</value>
+            <title>Enter the title of your landing page</title>
+            <notes>Attachments section</notes>
           </electronic>
           <physical>
             <addressPart type="text">$$PHYSICAL_ADDRESS$$</addressPart>
           </physical>
         </address>
       </location>
-
       <rights>
         <rightsStatement>blah blah</rightsStatement>
-        <accessRights type="open" rightsUri=""/>
-        <license type="Unknown/Other" rightsUri="N/A"/>
+        <accessRights type="open" rightsUri="http://handle.uws.edu.au:8081/1959.7/hiev__3"/>
+        <license type="All rights reserved" rightsUri="N/A"/>
       </rights>
-
-      <identifier type="uri">dc21_3</identifier>
-      <identifier type="handle">http://hdl.handle.net/dc21_3</identifier>
-
+      <identifier type="uri">http://handle.uws.edu.au:8081/1959.7/hiev__3</identifier>
+      <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
       <coverage>
         <temporal>
           <date type="dateFrom" dateFormat="W3CDTF">2011-09-25T00:00:00+10:00</date>
           <date type="dateTo" dateFormat="W3CDTF">2011-11-03T00:00:00+11:00</date>
         </temporal>
       </coverage>
-
       <relatedObject>
         <key>Fred Bloggs</key>
         <relation type="hasCollector">
@@ -57,7 +54,7 @@
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Unique ID: dc21_3</notes>
+        <notes>Unique ID: http://handle.uws.edu.au:8081/1959.7/hiev__3</notes>
       </relatedInfo>
     </collection>
   </registryObject>

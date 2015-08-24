@@ -33,6 +33,10 @@ class PackageRifCsWrapper < RifCsWrapper
     options[:zip_url]
   end
 
+  def electronic_landing_page_title
+    SystemConfiguration.instance.electronic_landing_page_title
+  end
+
   def change_submitter(submitter)
     options[:submitter] = submitter
   end
@@ -56,7 +60,7 @@ class PackageRifCsWrapper < RifCsWrapper
   end
 
   def access_rights_uri
-    collection_object.access_rights_uri
+    return identifier_uri
   end
 
   def access_rights_text

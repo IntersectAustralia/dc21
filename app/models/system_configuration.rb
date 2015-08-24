@@ -9,12 +9,13 @@ class SystemConfiguration < ActiveRecord::Base
   validates_length_of :address1, :address2, :address3, :telephone_number, :urls, :maximum => 80
   validates_length_of :description, :maximum => 80
   validates_length_of :auto_ocr_regex, :auto_sr_regex, :maximum => 1000
-  validates_length_of :open_access_rights_uri, :conditional_access_rights_uri, :restricted_access_rights_uri, :rights_statement, maximum: 10000
+  validates_length_of :rights_statement, maximum: 10000
   validates_length_of :open_access_rights_text, :conditional_access_rights_text, :restricted_access_rights_text, maximum: 10000
 
   validates :name, presence: true, length: {maximum: 20}
   validates :research_centre_name, presence: true, length: {maximum: 80}
   validates :entity, presence: true, length: {maximum: 80}
+  validates :electronic_landing_page_title, presence: true, length: {maximum: 80}
   validates :email, length: {maximum: 80}
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, allow_blank: true
   #validates :telephone_number, format: { with: /\A[+]?[\s\d]+\Z/, message: "is not a valid phone number"}

@@ -64,11 +64,8 @@ Feature: Edit system configuration
       | Type of Project (Singular)     | Experiment                           |
       | Type of Project (Plural)       | Experiments                          |
       | Language                       |                                      |
-      | Open Access Rights URI         |                                      |
       | Open Access Rights Text        |                                      |
-      | Conditional Access Rights URI  |                                      |
       | Conditional Access Rights Text |                                      |
-      | Restricted Access Rights URI   |                                      |
       | Restricted Access Rights Text  |                                      |
       | Rights Statement               |                                      |
       | Maximum Package Size           |                                      |
@@ -131,11 +128,8 @@ Feature: Edit system configuration
       | Koemei Login                      | test@intersect.org.au                                          |
       | Koemei Password                   | Test Koemei Password                                           |
       | system_configuration[language_id] | English                                                        |
-      | Open Access Rights URI            | http://open.intersect.org.au                                   |
       | Open Access Rights Text           | Open Access Rights Text                                        |
-      | Conditional Access Rights URI     | http://conditional.intersect.org.au                            |
       | Conditional Access Rights Text    | Conditional Access Rights Text                                 |
-      | Restricted Access Rights URI      | http://restricted.intersect.org.au                             |
       | Restricted Access Rights Text     | Restricted Access Rights Text                                  |
       | Rights statement                  | Organic chia pork belly tilde tattooed blog raw denim leggings |
       | Maximum Package Size              | 9.9                                                            |
@@ -163,11 +157,8 @@ Feature: Edit system configuration
       | Koemei Login                  | test@intersect.org.au                                          |
       | Koemei Password               | *****                                                          |
       | Language                      | English                                                        |
-      | Open Access Rights URI        | http://open.intersect.org.au                                   |
       | Open Access Rights Text       | Open Access Rights Text                                        |
-      | Conditional Access Rights URI | http://conditional.intersect.org.au                            |
       | Conditional Access Rights Text| Conditional Access Rights Text                                 |
-      | Restricted Access Rights URI  | http://restricted.intersect.org.au                             |
       | Restricted Access Rights Text | Restricted Access Rights Text                                  |
       | Rights Statement              | Organic chia pork belly tilde tattooed blog raw denim leggings |
       | Maximum Package Size          | 9.9 bytes                                                      |

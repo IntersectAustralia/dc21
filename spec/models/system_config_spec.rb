@@ -26,6 +26,13 @@ describe SystemConfiguration do
       config.errors[:entity].should eq ["can't be blank"]
     end
 
+    it "should fail if no electronic landing page title is given" do
+      config = SystemConfiguration.instance
+      result = config.update_attributes({:electronic_landing_page_title => ""})
+      result.should be_false
+      config.errors[:electronic_landing_page_title].should eq ["can't be blank"]
+    end
+
     it "should fail if no organisational level 1 is given" do
       config = SystemConfiguration.instance
       result = config.update_attributes({:level1 => ""})
@@ -182,25 +189,16 @@ describe SystemConfiguration do
       config.auto_sr?(sr_df2).should be_true
     end
 
-    it "should fail if a rights URI or rights statement field is longer than 10K characters" do
+    it "should fail if a rights statement field is longer than 10K characters" do
       long_input = 'a'*10001
       config = SystemConfiguration.instance
-      result = config.update_attributes({:open_access_rights_uri => long_input})
-      result.should be_false
-      config.errors[:open_access_rights_uri].should eq ["is too long (maximum is 10000 characters)"]
-
-      result = config.update_attributes({:conditional_access_rights_uri => long_input})
-      result.should be_false
-      config.errors[:conditional_access_rights_uri].should eq ["is too long (maximum is 10000 characters)"]
-
-      result = config.update_attributes({:restricted_access_rights_uri => long_input})
-      result.should be_false
-      config.errors[:restricted_access_rights_uri].should eq ["is too long (maximum is 10000 characters)"]
 
       result = config.update_attributes({:rights_statement => long_input})
       result.should be_false
       config.errors[:rights_statement].should eq ["is too long (maximum is 10000 characters)"]
     end
+
+
 
     it "should fail if updating max package size unit to anything other than bytes, kB, MB, GB, or TB" do
       config = SystemConfiguration.instance

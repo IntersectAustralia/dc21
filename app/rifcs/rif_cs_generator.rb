@@ -29,8 +29,10 @@ class RifCsGenerator
 
           xml.location do
             xml.address do
-              xml.electronic type: 'url' do
+              xml.electronic type: 'url', target: 'landingPage' do
                 xml.value wrapper_object.electronic_location
+                xml.title wrapper_object.electronic_landing_page_title
+                xml.notes 'Attachments section'
               end
               xml.physical do
                 xml.addressPart wrapper_object.physical_address, type: 'text'

@@ -11,6 +11,7 @@
   - render_field "Local System Name", @config.name
   - render_field "Research Centre Name", @config.research_centre_name
   - render_field "Overarching Entity", @config.entity
+  - render_field "Electronic Landing Page Title", @config.electronic_landing_page_title
   - render_field "Address", [@config.address1, @config.address2, @config.address3].reject{|s| s.empty?}.join(', ')
   - render_field "Telephone Numbers", @config.telephone_number
   - render_field "Email", @config.email
@@ -23,13 +24,10 @@
   - render_field "Project Parameters", @config.level2_parameters ? 'Enabled':'Disabled'
   - render_field "Language", @config.language.try(:language_name)
 
-  - render_field "Open Access Rights URI", @config.open_access_rights_uri
   - render_field "Open Access Rights Text", @config.open_access_rights_text
 
-  - render_field "Conditional Access Rights URI", @config.conditional_access_rights_uri
   - render_field "Conditional Access Rights Text", @config.conditional_access_rights_text
 
-  - render_field "Restricted Access Rights URI", @config.restricted_access_rights_uri
   - render_field "Restricted Access Rights Text", @config.restricted_access_rights_text
 
   - render_field "Rights Statement", @config.rights_statement
