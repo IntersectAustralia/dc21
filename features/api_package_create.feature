@@ -62,20 +62,24 @@ Feature: Create a package from the API
     And I should get a JSON response with message "filename can't be blank"
     And I should get a JSON response with message "experiment_id can't be blank"
     And I should get a JSON response with message "title can't be blank"
+    And I should get a JSON response with message "access_rights_type can't be blank"
+    And I should get a JSON response with message "access_rights_type must be Open, Conditional or Restricted"
 
   Scenario: Try to package with invalid access rights type
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
       | file_ids           | 1                   |
       | access_rights_type | BadAccessRightsType |
     Then I should get a 400 response code
-    And I should get a JSON response with message "access_rights_type must be one of: Open, Conditional, Restricted"
+    And I should get a JSON response with message "access_rights_type is not included in the list"
+    And I should get a JSON response with message "access_rights_type must be Open, Conditional or Restricted"
 
   Scenario: package is created successfully in the background
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
-      | file_ids      | 1,2,3            |
-      | filename      | my_package       |
-      | experiment_id | 1                |
-      | title         | my magic package |
+      | file_ids           | 1,2,3            |
+      | filename           | my_package       |
+      | experiment_id      | 1                |
+      | title              | my magic package |
+      | access_rights_type | Open             |
     Then I should get a 200 response code
     And I should get a JSON response with message "Package is now queued for processing in the background."
     And I should get a JSON response with package name "my_package.zip"
@@ -86,11 +90,12 @@ Feature: Create a package from the API
 
   Scenario: package is created successfully in the foreground
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
-      | file_ids          | 1,2,3            |
-      | filename          | my_package       |
-      | experiment_id     | 1                |
-      | title             | my magic package |
-      | run_in_background | false            |
+      | file_ids           | 1,2,3            |
+      | filename           | my_package       |
+      | experiment_id      | 1                |
+      | title              | my magic package |
+      | run_in_background  | false            |
+      | access_rights_type | Open             |
     Then I should get a 200 response code
     And I should get a JSON response with message "Package was successfully created."
     And I should get a JSON response with package name "my_package.zip"
@@ -128,4 +133,42 @@ Feature: Create a package from the API
     And file "my_package.zip" should have end time "2011-11-11 02:02:02"
     And file "my_package.zip" should have access rights type "Restricted"
 
+  Scenario: Package is created with grant numbers
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1,2,3                     |
+      | filename           | my_package                |
+      | experiment_id      | 1                         |
+      | title              | my magic package          |
+      | description        | some friendly description |
+      | access_rights_type | Restricted                |
+      | run_in_background  | false                     |
+      | grant_numbers      | "GRANT-1","GRANT-2"       |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Package was successfully created."
+    And I should get a JSON response with package name "my_package.zip"
+    And file "my_package.zip" should have experiment "My Experiment"
+    And file "my_package.zip" should have title "my magic package"
+    And file "my_package.zip" should have transfer status "COMPLETE"
+    And file "my_package.zip" should have description "some friendly description"
+    And file "my_package.zip" should have grant number "GRANT-1"
+    And file "my_package.zip" should have grant number "GRANT-2"
 
+  Scenario: Package is created with grant numbers
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1,2,3                         |
+      | filename           | my_package                    |
+      | experiment_id      | 1                             |
+      | title              | my magic package              |
+      | description        | some friendly description     |
+      | access_rights_type | Restricted                    |
+      | run_in_background  | false                         |
+      | related_websites   | "website1.com","website2.com" |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Package was successfully created."
+    And I should get a JSON response with package name "my_package.zip"
+    And file "my_package.zip" should have experiment "My Experiment"
+    And file "my_package.zip" should have title "my magic package"
+    And file "my_package.zip" should have transfer status "COMPLETE"
+    And file "my_package.zip" should have description "some friendly description"
+    And file "my_package.zip" should have related website "website1.com"
+    And file "my_package.zip" should have related website "website2.com"

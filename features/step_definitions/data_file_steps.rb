@@ -421,6 +421,19 @@ Then /^file "([^"]*)" should have label "([^"]*)"$/ do |filename, label|
   label_names.should include(label)
 end
 
+Then /^file "([^"]*)" should have grant number "([^"]*)"$/ do |filename, grant_number|
+  data_file = DataFile.find_by_filename!(filename)
+  grant_number_names = data_file.grant_numbers.map { |gn| gn.name}
+  grant_number_names.should include(grant_number)
+end
+
+Then /^file "([^"]*)" should have related website "([^"]*)"$/ do |filename, related_website|
+  data_file = DataFile.find_by_filename!(filename)
+  related_websites = data_file.related_websites.map { |rw| rw.url}
+  related_websites.should include(related_website)
+end
+
+
 Then /^file "([^"]*)" should have tag "([^"]*)"$/ do |filename, tag|
   data_file = DataFile.find_by_filename!(filename)
   tag_names = data_file.tags.map { |t| t.name}

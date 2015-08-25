@@ -571,6 +571,34 @@ class DataFilesController < ApplicationController
     label_ids
   end
 
+  def parse_grant_numbers(grant_numbers, errors)
+    return [] if grant_numbers.blank?
+    grant_number_ids = []
+    begin
+      grant_numbers_array = CSV.parse_line(grant_numbers)
+      grant_numbers_array.each do |grant_number|
+        grant_number_ids << GrantNumber.find_or_create_by_name(grant_number).id
+      end
+    rescue CSV::MalformedCSVError
+      errors << 'Incorrect format for grant numbers - grant numbers must be double-quoted and comma separated'
+    end
+    grant_number_ids
+  end
+
+  def parse_related_websites(related_websites, errors)
+    return [] if related_websites.blank?
+    related_website_ids = []
+    begin
+      related_websites_array = CSV.parse_line(related_websites)
+      related_websites_array.each do |related_website|
+        related_website_ids << RelatedWebsite.find_or_create_by_url(related_website).id
+      end
+    rescue CSV::MalformedCSVError
+      errors << 'Incorrect format for related websites - related websites must be double-quoted and comma separated'
+    end
+    related_website_ids
+  end
+
   def sort_column
     ALLOWED_SORT_PARAMS.include?(params[:sort]) ? params[:sort] : "data_files.created_at"
   end

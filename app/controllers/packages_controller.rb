@@ -61,6 +61,8 @@ class PackagesController < DataFilesController
     file_ids = params[:file_ids]
     tag_names = params[:tag_names]
     label_names = params[:label_names]
+    grant_numbers = params[:grant_numbers]
+    related_websites = params[:related_websites]
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
@@ -68,18 +70,15 @@ class PackagesController < DataFilesController
     data_files = validate_file_ids(file_ids, current_user, errors)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
-
-    access_rights_type = params[:access_rights_type]
-    if access_rights_type.nil?
-      params[:access_rights_type] = Package::ACCESS_RIGHTS_OPEN
-    elsif ![Package::ACCESS_RIGHTS_OPEN, Package::ACCESS_RIGHTS_CONDITIONAL, Package::ACCESS_RIGHTS_RESTRICTED].include?(access_rights_type)
-      errors << "access_rights_type must be one of: #{Package::ACCESS_RIGHTS_OPEN}, #{Package::ACCESS_RIGHTS_CONDITIONAL}, #{Package::ACCESS_RIGHTS_RESTRICTED}"
-    end
+    grant_number_ids = parse_grant_numbers(grant_numbers, errors)
+    related_website_ids = parse_related_websites(related_websites, errors)
 
     package = Package.create_package(params, nil, current_user)
     if errors.empty? && package.save
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
+      save_grant_numbers(package, grant_number_ids)
+      save_related_websites(package, related_website_ids)
       data_file_ids = data_files.map { |data_file| data_file.id }
       package.label_list = params[:label_list] if params[:label_list]
       package.parent_ids = data_file_ids
@@ -169,6 +168,18 @@ class PackagesController < DataFilesController
   def save_labels(package, labels)
     pkg = DataFile.find(package.id)
     pkg.label_ids = labels
+    pkg.save
+  end
+
+  def save_grant_numbers(package, grant_numbers)
+    pkg = DataFile.find(package.id)
+    pkg.grant_number_ids = grant_numbers
+    pkg.save
+  end
+
+  def save_related_websites(package, related_websites)
+    pkg = DataFile.find(package.id)
+    pkg.related_website_ids = related_websites
     pkg.save
   end
 

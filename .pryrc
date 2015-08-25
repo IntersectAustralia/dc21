@@ -1,0 +1,1 @@
+Pry.config.prompt_name = 'dc21-' + Rails.env

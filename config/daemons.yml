@@ -3,4 +3,5 @@ dir: ../../log
 multiple: false
 backtrace: true
 monitor: false
+# Setting this to true will cause the daemons to not daemonize - which is appropriate for Ansible-based deployments with supervisord
 ontop: false
