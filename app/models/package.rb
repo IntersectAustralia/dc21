@@ -15,6 +15,10 @@ class Package < DataFile
 
   before_save :set_external_id
 
+  def is_incomplete_package?
+      [RESQUE_FAILED, RESQUE_WORKING, RESQUE_QUEUED].include? self.transfer_status
+  end
+
   def set_external_id
     if self.external_id.blank?
       prefix = APP_CONFIG['handle_prefix'] || "hiev"
