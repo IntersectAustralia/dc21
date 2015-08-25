@@ -12,8 +12,16 @@ Feature: Create a package from the API
     And I have data files
       | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                | id |
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au  | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  |
-      | sample2.txt | 30/11/2011 10:15 | admin@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt | 2  |
-      | sample3.txt | 30/12/2011 12:34 | admin@intersect.org.au |                  |                     | samples/sample3.txt | 3  |
+      | sample2.txt | 30/11/2011 10:15 | admin@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |  2 |
+      | sample3.txt | 30/12/2011 12:34 | admin@intersect.org.au |                  |                     | samples/sample3.txt |  3  |
+    And I have data files
+      | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                   | file_processing_status| id |
+      | error_file.txt | 30/12/2011 12:34 | admin@intersect.org.au |               |                     | samples/error_file.txt |               ERROR   | 4  |
+    And I have data files
+      | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                           | file_processing_status| transfer_status| id |
+      | incomplete_package.zip | 30/12/2011 12:34 | admin@intersect.org.au |       |                     | samples/incomplete_package.zip | PACKAGE               | FAILED         | 5  |
+
+
     And I have experiments
       | name              | facility            | id |
       | My Experiment     | ROS Weather Station | 1  |
@@ -51,9 +59,9 @@ Feature: Create a package from the API
 
   Scenario: Try to package with a file id that does not exist
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
-      | file_ids | 1,2,3,4 |
+      | file_ids | 1,2,3,8 |
     Then I should get a 400 response code
-    And I should get a JSON response with message "file with id '4' could not be found"
+    And I should get a JSON response with message "file with id '8' could not be found"
 
   Scenario: Try to package without a filename, experiment or title
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
@@ -64,6 +72,24 @@ Feature: Create a package from the API
     And I should get a JSON response with message "title can't be blank"
     And I should get a JSON response with message "access_rights_type can't be blank"
     And I should get a JSON response with message "access_rights_type must be Open, Conditional or Restricted"
+
+  Scenario: Try to package with error file
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids      | 4    |
+      | filename      | my_package       |
+      | experiment_id | 1                |
+      | title         | my magic package |
+    Then I should get a 400 response code
+    And I should get a JSON response with message "file '4' is not in a state that can be packaged"
+
+  Scenario: Try to package with incomplete package
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids      | 5    |
+      | filename      | my_package       |
+      | experiment_id | 1                |
+      | title         | my magic package |
+    Then I should get a 400 response code
+    And I should get a JSON response with message "file '5' is not in a state that can be packaged"
 
   Scenario: Try to package with invalid access rights type
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
