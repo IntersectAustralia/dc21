@@ -217,7 +217,9 @@ class PackagesController < DataFilesController
           errors << "file with id '#{file_id}' could not be found"
         else
           data_file = DataFile.find(id_as_int)
-          if data_file.is_authorised_for_access_by?(current_user)
+          if data_file.is_incomplete_package? || data_file.is_error_file?
+            errors << "unable to package error file '#{file_id}'"
+          elsif data_file.is_authorised_for_access_by?(current_user)
             data_files << data_file
           else
             errors << "unauthorized to package file '#{file_id}'"

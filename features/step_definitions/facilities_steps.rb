@@ -10,6 +10,17 @@ Given /^I have facilities$/ do |table|
   end
 end
 
+Given /^I set file "([^"]*)" as error file/ do |name|
+  DataFile.find_by_filename(name).update_attribute(:file_processing_status, "ERROR")
+end
+
+Given /^I set package "([^"]*)" as "([^"]*)"$/ do |name,status|
+  package = DataFile.find_by_filename(name)
+  package.update_attribute(:transfer_status, status)
+  package.update_attribute(:format, FileTypeDeterminer::BAGIT)
+  package.update_attribute(:file_processing_status, 'PACKAGE')
+end
+
 Given /^I have facility "([^"]*)" with code "([^"]*)"$/ do |name, code|
   Factory(:facility, :name => name, :code => code)
 end

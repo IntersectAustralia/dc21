@@ -359,6 +359,14 @@ class DataFile < ActiveRecord::Base
     self.file_processing_status.eql? STATUS_ERROR
   end
 
+  def is_incomplete_package?
+    if self.file_processing_status.eql? STATUS_PACKAGE
+      return [RESQUE_FAILED, RESQUE_WORKING, RESQUE_QUEUED].include? self.transfer_status
+    else
+      return nil
+    end
+  end
+
   def show_columns?
     return (is_toa5? or is_netcdf? or is_ncml?)
   end
