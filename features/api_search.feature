@@ -11,12 +11,12 @@ Feature: Perform searching via API
       | Video |
       | Audio |
     And I have data files
-      | filename    | created_at       | uploaded_by               | file_processing_status | file_processing_description | experiment  | id | external_id | tags         | label_list | facility | transfer_status |
-      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | ends with a                 | Experiment4 | 4  | sean        | Photo, Video | sean       | fac10    | COMPLETE        |
-      | sample2.txt | 01/12/2011 12:45 | kali@intersect.org.au     | CLEANSED               | ends with A                 | Experiment2 | 2  | kali        | Photo        | kali       | fac10    | FAILED          |
-      | sample3.txt | 01/12/2011 11:45 | georgina@intersect.org.au | RAW                    | nothing common              | Experiment5 | 5  | georgina    | Video        | georgina   | fac20    | WORKING         |
-      | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     | Audio        | matthew    | fac20    | QUEUED          |
-      | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |              | admin      | fac30    | WORKING         |
+      | filename    | created_at       | uploaded_by               | file_processing_status | file_processing_description | experiment  | id | external_id | tags         | label_list | facility | transfer_status | access_rights_type | grant_numbers | related_websites     |
+      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | ends with a                 | Experiment4 | 4  | sean        | Photo, Video | sean       | fac10    | COMPLETE        | Open               | 1             | www.google.com       |
+      | sample2.txt | 01/12/2011 12:45 | kali@intersect.org.au     | CLEANSED               | ends with A                 | Experiment2 | 2  | kali        | Photo        | kali       | fac10    | FAILED          | Open               | 2             | www.intersect.org.au |
+      | sample3.txt | 01/12/2011 11:45 | georgina@intersect.org.au | RAW                    | nothing common              | Experiment5 | 5  | georgina    | Video        | georgina   | fac20    | WORKING         | Open               | 3             | www.sydney.edu.au    |
+      | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     | Audio        | matthew    | fac20    | QUEUED          | Restricted         | 4             | www.uts.edu.au       |
+      | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |              | admin      | fac30    | WORKING         | Conditional        | 5             | www.unsw.edu.au      |
 
   Scenario: Try to search without an API token
     When I perform an API search without an API token
@@ -149,7 +149,36 @@ Feature: Perform searching via API
       | sample4.txt |
     And I should have file download link for each entry
 
-    
+  Scenario: Search by Access Rights Type via the API
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | access_rights_types | Restricted, Conditional |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample4.txt |
+      | sample5.txt |
+    And I should have file download link for each entry
+
+  Scenario: Search by Grant Numbers via the API
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | grant_numbers | 2, 4 |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample2.txt |
+      | sample4.txt |
+    And I should have file download link for each entry
+
+  Scenario: Search by Related Websites via the API
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | related_websites | www.uts.edu.au, www.sydney.edu.au |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample3.txt |
+      | sample4.txt |
+    And I should have file download link for each entry
+
   Scenario: Search via API with some restricted data files that the user does not have access to
     Given I have a user "external@intersect.org.au" with role "Non-Institutional User"
     And user "external@intersect.org.au" has an API token

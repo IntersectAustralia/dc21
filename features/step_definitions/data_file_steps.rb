@@ -81,6 +81,8 @@ Given /^I have data files$/ do |table|
 
     tag_csv = attributes.delete('tags')
     label_csv = attributes.delete('label_list')
+    grant_numbers_csv = attributes.delete('grant_numbers')
+    related_websites_csv = attributes.delete('related_websites')
 
     if attributes['file_processing_status'] == 'PACKAGE'
       df = Factory(:package, attributes)
@@ -97,6 +99,16 @@ Given /^I have data files$/ do |table|
     unless label_csv.blank?
       labels = label_csv.split(",").collect { |label| label.strip }
       labels.map { |label| df.labels << Label.find_or_create_by_name(label) }
+    end
+
+    unless grant_numbers_csv.blank?
+      grant_numbers = grant_numbers_csv.split(",").collect {|gn| gn.strip}
+      grant_numbers.map { |gn| df.grant_numbers << GrantNumber.find_or_create_by_name(gn) }
+    end
+
+    unless related_websites_csv.blank?
+      related_websites = related_websites_csv.split(",").collect {|rw| rw.strip}
+      related_websites.map { |rw| df.related_websites << RelatedWebsite.find_or_create_by_url(rw)}
     end
 
     if df.is_package?

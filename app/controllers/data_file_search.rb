@@ -10,6 +10,7 @@ class DataFileSearch
   attr_accessor :file_id
   attr_accessor :stati
   attr_accessor :automation_stati
+  attr_accessor :access_rights_types
   attr_accessor :tags
   attr_accessor :labels
   attr_accessor :grant_numbers
@@ -45,6 +46,7 @@ class DataFileSearch
     self.variable_parents = @search_params[:variable_parents]|| []
     self.stati = @search_params[:stati]|| []
     self.automation_stati = @search_params[:automation_stati] || []
+    self.access_rights_types = @search_params[:access_rights_types] || []
     self.tags = @search_params[:tags]|| []
     self.labels = @search_params[:labels]|| []
     self.grant_numbers = @search_params[:grant_numbers]|| []
@@ -79,8 +81,11 @@ class DataFileSearch
         variables.empty? &&
         stati.empty? &&
         automation_stati.empty? &&
+        access_rights_types.empty? &&
         tags.empty? &&
         labels.empty? &&
+        grant_numbers.empty? &&
+        related_websites.empty? &&
         file_formats.empty? &&
         filename.blank? &&
         description.blank? &&
@@ -159,6 +164,10 @@ class DataFileSearch
       search_result = search_result.with_transfer_status_in(automation_stati)
       attrs_array << "Status"
     end
+    unless access_rights_types.nil? || access_rights_types.empty?
+      search_result = search_result.with_access_rights_type_in(access_rights_types)
+      attrs_array << "Access Rights Types"
+    end
     unless tags.nil? || tags.empty?
       search_result = search_result.with_any_of_these_tags(tags.collect { |tag| tag.to_i })
       attrs_array << "Tags"
@@ -166,6 +175,14 @@ class DataFileSearch
     unless labels.nil? || labels.empty?
       search_result = search_result.with_any_of_these_labels(labels)
       attrs_array << "Labels"
+    end
+    unless grant_numbers.nil? || grant_numbers.empty?
+      search_result = search_result.with_any_of_these_grant_numbers(grant_numbers)
+      attrs_array << "Grant Numbers"
+    end
+    unless related_websites.nil? || related_websites.empty?
+      search_result = search_result.with_any_of_these_related_websites(related_websites)
+      attrs_array << "Related Websites"
     end
     unless file_formats.nil? || file_formats.empty?
       search_result = search_result.with_any_of_these_file_formats(file_formats)

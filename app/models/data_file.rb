@@ -120,6 +120,7 @@ class DataFile < ActiveRecord::Base
   scope :with_description_containing, lambda { |desc| where("data_files.file_processing_description ~* ?", desc) }
   scope :with_status_in, lambda { |stati| where { file_processing_status.in stati } }
   scope :with_transfer_status_in, lambda { |automation_stati| where { transfer_status.in automation_stati } }
+  scope :with_access_rights_type_in, lambda { |access_rights_types| where {access_rights_type.in access_rights_types} }
   scope :with_uploader, lambda { |uploader| where("data_files.created_by_id" => uploader) }
   scope :with_external_id, lambda { |ext_id| where("data_files.external_id ~* ?", ext_id) }
   scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email, data_files.access, data_files.access_to_all_institutional_users, data_files.access_to_user_groups, data_files.created_by_id')
@@ -164,12 +165,24 @@ class DataFile < ActiveRecord::Base
     self.labels.pluck(:name).join("|")
   end
 
+  def label_names
+    self.labels.pluck(:name)
+  end
+
   def grant_number_list
     self.grant_numbers.pluck(:name).join("|")
   end
 
+  def grant_number_names
+    self.grant_numbers.pluck(:name)
+  end
+
   def related_website_list
     self.related_websites.collect(&:url).join("|")
+  end
+
+  def related_website_names
+    self.related_websites.pluck(:url)
   end
 
   def label_list_display
@@ -261,6 +274,16 @@ class DataFile < ActiveRecord::Base
 
   def self.with_any_of_these_labels(label_params)
     data_file_ids = DataFile.unscoped.joins(:labels).where { labels.name >> label_params }.pluck(:id).uniq
+    where(:id => data_file_ids)
+  end
+
+  def self.with_any_of_these_grant_numbers(grant_number_params)
+    data_file_ids = DataFile.unscoped.joins(:grant_numbers).where { grant_numbers.name >> grant_number_params }.pluck(:id).uniq
+    where(:id => data_file_ids)
+  end
+
+  def self.with_any_of_these_related_websites(related_website_params)
+    data_file_ids = DataFile.unscoped.joins(:related_websites).where { related_websites.url >> related_website_params }.pluck(:id).uniq
     where(:id => data_file_ids)
   end
 

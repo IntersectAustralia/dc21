@@ -176,6 +176,18 @@ When /^I perform an API search with the following parameters as user "([^"]*)"$/
     automation_stati = post_params.delete('automation_stati')
     post_params['automation_stati'] = automation_stati.split(", ")
   end
+  if post_params['access_rights_types']
+    access_rights_types = post_params.delete('access_rights_types')
+    post_params['access_rights_types'] = access_rights_types.split(", ")
+  end
+  if post_params['grant_numbers']
+    grant_numbers = post_params.delete('grant_numbers')
+    post_params['grant_numbers'] = grant_numbers.split(", ")
+  end
+  if post_params['related_websites']
+    related_websites = post_params.delete('related_websites')
+    post_params['related_websites'] = related_websites.split(", ")
+  end
   user = User.find_by_email!(email)
   post api_search_data_files_path(:format => :json, :auth_token => user.authentication_token), post_params
 end
