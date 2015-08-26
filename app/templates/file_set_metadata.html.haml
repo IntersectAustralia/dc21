@@ -45,6 +45,30 @@
         %h1 End time
         %span{:property => "http://schema.org/endDate", :content => "#{package.end_time.try(:to_s, :w3c)}"}
           = package.end_time.try(:to_s, :long_date)
+        %h1 Access Rights Type
+        %span{:property => "http://schema.org/name"}
+          &= package.access_rights_type
+        %h1 Access Rights URI
+        %span{:property => "http://schema.org/description"}
+          &= package.access_rights_uri
+        %h1 Rights Statement
+        %span{:property => "http://schema.org/description"}
+          &= package.rights_statement
+        %h1 Language
+        %span{:property => "http://schema.org/language"}
+          &= package.language.try(:language_name)
+        %h1 HDL Handle
+        %span{:property => "http://schema.org/name"}
+          &= package.hdl_handle
+        %h1 Physical Location
+        %span{:property => "http://schema.org/name"}
+          &= package.physical_location
+        %h1 Grant Numbers
+        %span{:property => "http://schema.org/name"}
+          &= package.grant_number_list_display
+        %h1 Related Websites
+        %span{:property => "http://schema.org/url"}
+          &= package.related_website_list_display
         %h1 Software Information
         %section{:property => "http://purl.org/dc/terms/creator", :typeof => "http://schema.org/softwareApplication", :resource => "##{config.name}"}
           %table
@@ -64,6 +88,11 @@
                 %td
                   %span{:property => "http://schema.org/url"} https://github.com/IntersectAustralia/dc21
                   %span{:property => "http://schema.org/url"} www.intersect.org.au
+              %tr
+                %td Max Package Size
+                %td
+                  %span{:property => "http://schema.org/name"}
+                    &= config.friendly_max_package_size
         %h1 Organisational Information
         %section{:property => "http://purl.org/dc/terms/references", :typeof => "http://schema.org/Organisation", :resource => "##{config.name}"}
           %table
