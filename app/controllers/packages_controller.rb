@@ -78,7 +78,9 @@ class PackagesController < DataFilesController
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
       save_grant_numbers(package, grant_number_ids)
-      save_related_websites(package, related_website_ids)
+      if !related_website_ids.empty?
+        save_related_websites(package, related_website_ids)
+      end
       data_file_ids = data_files.map { |data_file| data_file.id }
       package.label_list = params[:label_list] if params[:label_list]
       package.parent_ids = data_file_ids

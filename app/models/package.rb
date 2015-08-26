@@ -36,6 +36,7 @@ class Package < DataFile
   def self.create_package(params, date_params, current_user)
     reformat_time(params, date_params)
     datafile = Package.new
+    datafile.set_metatdata
     datafile.filename = "#{params[:filename]}#{FILE_EXTENSION}" unless params[:filename].blank?
     datafile.format = PACKAGE_FORMAT
     datafile.path = create_temp_path(params[:filename])
@@ -49,10 +50,6 @@ class Package < DataFile
     datafile.title = params[:title]
     datafile.transfer_status = RESQUE_QUEUED
     config = SystemConfiguration.instance
-    datafile.language = config.language
-    datafile.rights_statement = config.rights_statement
-    datafile.physical_location = config.entity
-    datafile.research_centre_name = config.research_centre_name
     datafile.access_rights_type = params[:access_rights_type]
     if datafile.access_rights_type == ACCESS_RIGHTS_OPEN
       datafile.access_rights_text = config.open_access_rights_text
@@ -93,6 +90,13 @@ class Package < DataFile
     self.rights_statement = config.rights_statement
     self.physical_location = config.entity
     self.research_centre_name = config.research_centre_name
+    system_urls = config.urls.split(' ')
+    rw_ids = []
+    system_urls.each do |url|
+      rw = RelatedWebsite.find_or_create_by_url(url)
+      rw_ids << rw.id
+    end
+    self.related_website_ids = rw_ids
   end
 
   private

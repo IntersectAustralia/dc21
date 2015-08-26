@@ -134,6 +134,10 @@ class PackageRifCsWrapper < RifCsWrapper
     locations
   end
 
+  def related_websites
+    collection_object.related_websites.collect(&:url)
+  end
+
   def notes
     notes = []
     notes << "Published by #{options[:submitter].full_name} (#{options[:submitter].email})"

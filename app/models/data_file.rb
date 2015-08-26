@@ -169,7 +169,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def related_website_list
-    self.related_websites.pluck(:url).join("|")
+    self.related_websites.collect(&:url).join("|")
   end
 
   def label_list_display

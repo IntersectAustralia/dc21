@@ -112,6 +112,13 @@ class RifCsGenerator
             end
           end
 
+          wrapper_object.related_websites.each do |related_website|
+            xml.relatedInfo type: 'website' do
+              xml.identifier related_website, type: 'uri'
+              xml.title ''
+            end
+          end
+
           wrapper_object.notes.each do |note|
             xml.relatedInfo do
               xml.notes note
