@@ -42,6 +42,12 @@
                 = text_field_tag "search[filename]", @filename, :id => :filename
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
+              %h4#access_rights_types_category.expand Access Rights Type:
+              .access_rights_types
+                = label_tag :access_rights_types, "Access Rights Types:"
+                = text_field_tag "search[access_rights_types]", @access_rights_types, :id => :access_rights_types
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
               %h4#description_category.expand Description:
               .description
                 = label_tag :description, "Description:"

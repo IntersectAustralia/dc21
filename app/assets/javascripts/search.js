@@ -19,6 +19,14 @@ $(function () {
         $('.searchcategory .filename').hide();
     }
 
+    // Access Rights Types
+    if ($.trim($('#access_rights_types').val()).length > 0 ) {
+        $('#access_rights_types_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .access_rights_types').hide();
+    }
+
     // Description
     if ($.trim($('#description').val()).length > 0 ) {
         $('#description_category').toggleClass('current');
@@ -171,6 +179,11 @@ $(function () {
 
     $('#filename_category').click(function (event) {
         $('.searchcategory .filename').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#access_rights_types_category').click(function (event) {
+        $('.searchcategory .access_rights_types').toggle();
         $(this).toggleClass('current');
     });
 

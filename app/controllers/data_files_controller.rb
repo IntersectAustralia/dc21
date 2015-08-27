@@ -415,6 +415,7 @@ class DataFilesController < ApplicationController
     @selected_variables = @search.variables
     @selected_parent_variables = @search.variable_parents
     @filename = @search.filename
+    @access_rights_types = @search.access_rights_types
     @description = @search.description
     @file_id = @search.file_id
     @id = @search.id
