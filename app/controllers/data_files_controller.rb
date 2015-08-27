@@ -424,6 +424,7 @@ class DataFilesController < ApplicationController
     @selected_tags = @search.tags
     @selected_labels = @search.labels
     @selected_grant_numbers = @search.grant_numbers
+    @selected_related_websites = @search.related_websites
     @selected_file_formats = @search.file_formats
     @uploader_id = @search.uploader_id
     @upload_from_date = @search.search_params[:upload_from_date]

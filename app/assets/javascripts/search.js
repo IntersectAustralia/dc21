@@ -102,6 +102,14 @@ $(function () {
         $('.searchcategory .grant_numbers').hide();
     }
 
+    // Related Websites
+    if ( $('.searchcategory .related_websites option[selected]').length > 0 ) {
+        $('#related_websites_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .related_websites').hide();
+    }
+
     // File Format
     if ( $('.searchcategory .file_formats option[selected]').length > 0 ) {
         $('#file_format_category').toggleClass('current');
@@ -235,6 +243,11 @@ $(function () {
 
     $('#grant_numbers_category').click(function (event) {
         $('.searchcategory .grant_numbers').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#related_websites_category').click(function (event) {
+        $('.searchcategory .related_websites').toggle();
         $(this).toggleClass('current');
     });
 
