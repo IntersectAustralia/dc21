@@ -19,15 +19,15 @@ Feature: Search data files by date range
       | Video |
       | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | label_list | experiment    | facility            | external_id | id | transfer_status | format      | access_rights_type |
-      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | A, B       | My Experiment | HFE Weather Station | test ID     |    | QUEUED          | TOA5        |                    |
-      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | B, C       | My Experiment | HFE Weather Station |             | 1  | WORKING         | BAGIT       | Open               |
-      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | A          | My Experiment | HFE Weather Station |             |    | FAILED          | Unknown     |                    |
-      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | C          | My Experiment | HFE Weather Station |             |    | COMPLETE        | image/jpeg  |                    |
-      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | D          | Other         | ROS_WS              |             |    | COMPLETE        | image/png   |                    |
-      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |            | Experiment 2  | Tree Chambers       |             |    | FAILED          | video/mpeg  |                    |
-      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |            | My Experiment | HFE Weather Station |             |    | WORKING         | audio/mpeg  |                    |
-      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              |            | Experiment 2  | Tree Chambers       |             |    | QUEUED          | audio/x-wav |                    |
+      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | label_list | experiment    | facility            | external_id | id | transfer_status | format      | access_rights_type | grant_numbers | related_websites |
+      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | A, B       | My Experiment | HFE Weather Station | test ID     |    | QUEUED          | TOA5        |                    |     1,2       |  test1, test2    |
+      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | B, C       | My Experiment | HFE Weather Station |             | 1  | WORKING         | BAGIT       | Open               |     2,3       |                  |
+      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | A          | My Experiment | HFE Weather Station |             |    | FAILED          | Unknown     |                    |     1         |                  |
+      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | C          | My Experiment | HFE Weather Station |             |    | COMPLETE        | image/jpeg  |                    |      2        |                  |
+      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | D          | Other         | ROS_WS              |             |    | COMPLETE        | image/png   |                    |       4       |         test3    |
+      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |            | Experiment 2  | Tree Chambers       |             |    | FAILED          | video/mpeg  |                    |               |                  |
+      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |            | My Experiment | HFE Weather Station |             |    | WORKING         | audio/mpeg  |                    |               |                  |
+      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              |            | Experiment 2  | Tree Chambers       |             |    | QUEUED          | audio/x-wav |                    |               |                  |
     And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
     And file "mydata7.dat" has metadata item "station_name" with value "TC"
     And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
@@ -298,6 +298,41 @@ Feature: Search data files by date range
       | mydata8.dat   |
       | datafile4.dat |
 
+  Scenario: Search for files by grant numbers
+    Given I am on the list data files page
+    Then the "search_grant_numbers" select should contain
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And nothing should be selected in the "Grant Numbers:" select
+    And I select "1" from "Grant Numbers:"
+    And I select "4" from "Grant Numbers:"
+    And I press "Search"
+    Then "1" should be selected in the "Grant Numbers:" select
+    Then "4" should be selected in the "Grant Numbers:" select
+    And I should see "exploredata" table with
+      | Filename      |
+      | mydata6.dat   |
+      | mydata8.dat   |
+      | datafile4.dat |
+
+  Scenario: Search for files by related websites
+    Given I am on the list data files page
+    Then the "search_related_websites" select should contain
+      | test1 |
+      | test2 |
+       |  test3     |
+    And nothing should be selected in the "Related Websites:" select
+    And I select "test1" from "Related Websites:"
+    And I select "test2" from "Related Websites:"
+    And I press "Search"
+    Then "test1" should be selected in the "Related Websites:" select
+    Then "test2" should be selected in the "Related Websites:" select
+    And I should see "exploredata" table with
+      | Filename      |
+      | mydata8.dat   |
+
     #EYETRACKER-135
   @javascript
   Scenario: Search for files by automation status
@@ -322,6 +357,18 @@ Feature: Search data files by date range
       | mydata7.dat |
       | mydata8.dat |
     And the "Filename" field should contain "my"
+
+  @javascript
+  Scenario: Search for files by access rights type
+    Given I am on the list data files page
+    And I follow Showing
+    When I click on "Access Rights Type:"
+    And I sleep briefly
+    And I check "Open"
+    And I press "Search"
+    Then I should see "exploredata" table with
+      | Filename      |
+      | mydata7.dat   |
 
   @javascript
   Scenario: Search for files by a lot of different things at once
