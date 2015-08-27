@@ -94,6 +94,14 @@ $(function () {
         $('.searchcategory .labels').hide();
     }
 
+    // Grant Numbers
+    if ( $('.searchcategory .grant_numbers option[selected]').length > 0 ) {
+        $('#grant_numbers_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .grant_numbers').hide();
+    }
+
     // File Format
     if ( $('.searchcategory .file_formats option[selected]').length > 0 ) {
         $('#file_format_category').toggleClass('current');
@@ -222,6 +230,11 @@ $(function () {
 
     $('#labels_category').click(function (event) {
         $('.searchcategory .labels').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#grant_numbers_category').click(function (event) {
+        $('.searchcategory .grant_numbers').toggle();
         $(this).toggleClass('current');
     });
 

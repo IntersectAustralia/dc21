@@ -113,6 +113,12 @@
                 = select_tag "search[labels]", options_for_select(labels, @selected_labels), :multiple => true, :id => "search_labels"
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
+              %h4#grant_numbers_category.expand Grant Numbers:
+              .grant_numbers
+                = label_tag "search[grant_numbers]", "Grant Numbers:"
+                = select_tag "search[grant_numbers]", options_for_select(grant_numbers, @selected_grant_numbers), :multiple => true, :id => "search_grant_numbers"
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
               %h4#file_formats_category.expand File Formats:
               .file_formats
                 = label_tag "search[file_formats]", "File Formats:"
@@ -206,4 +212,4 @@
   = will_paginate(@data_files_paginated, :params => params.merge({:search => nil, :sort => nil, :direction => nil}))
 
 :javascript
-  $('#search_labels, #search_file_formats').select2();
+  $('#search_labels, #search_file_formats, #search_grant_numbers').select2();
