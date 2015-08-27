@@ -27,6 +27,7 @@ class DataFilesController < ApplicationController
 
   def index
     set_tab :explore, :contentnavigation
+
     do_search(params[:search])
     @data_files_paginated = @data_files.paginate(page: params[:page]).search_display_fields
   end
@@ -415,11 +416,11 @@ class DataFilesController < ApplicationController
     @selected_variables = @search.variables
     @selected_parent_variables = @search.variable_parents
     @filename = @search.filename
-    @access_rights_types = @search.access_rights_types
     @description = @search.description
     @file_id = @search.file_id
     @id = @search.id
     @selected_stati = @search.stati
+    @selected_access_rights_types = @search.access_rights_types
     @selected_automation_stati = @search.automation_stati
     @selected_tags = @search.tags
     @selected_labels = @search.labels

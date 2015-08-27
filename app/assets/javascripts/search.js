@@ -19,14 +19,6 @@ $(function () {
         $('.searchcategory .filename').hide();
     }
 
-    // Access Rights Types
-    if ($.trim($('#access_rights_types').val()).length > 0 ) {
-        $('#access_rights_types_category').toggleClass('current');
-    }
-    else {
-        $('.searchcategory .access_rights_types').hide();
-    }
-
     // Description
     if ($.trim($('#description').val()).length > 0 ) {
         $('#description_category').toggleClass('current');
@@ -69,6 +61,14 @@ $(function () {
             $('.expand_type', this).text("+");
         }
     });
+
+    // Access Rights Type
+    if ( $('.searchcategory .access_rights_type input[type="checkbox"][checked]').length > 0 ) {
+        $('#access_rights_type_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .access_rights_type').hide();
+    }
 
     // Automation Status
     if ( $('.searchcategory .automation_stati input[type="checkbox"][checked]').length > 0 ) {
@@ -198,11 +198,6 @@ $(function () {
         $(this).toggleClass('current');
     });
 
-    $('#access_rights_types_category').click(function (event) {
-        $('.searchcategory .access_rights_types').toggle();
-        $(this).toggleClass('current');
-    });
-
     $('#description_category').click(function (event) {
         $('.searchcategory .description').toggle();
         $(this).toggleClass('current');
@@ -223,6 +218,11 @@ $(function () {
         $('.searchcategory > .type > .type_group > .type').each(function(index){
             $(this).show();
         });
+        $(this).toggleClass('current');
+    });
+
+    $('#access_rights_type_category').click(function (event) {
+        $('.searchcategory .access_rights_type').toggle();
         $(this).toggleClass('current');
     });
 

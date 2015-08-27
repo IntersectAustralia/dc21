@@ -42,12 +42,6 @@
                 = text_field_tag "search[filename]", @filename, :id => :filename
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
-              %h4#access_rights_types_category.expand Access Rights Type:
-              .access_rights_types
-                = label_tag :access_rights_types, "Access Rights Types:"
-                = text_field_tag "search[access_rights_types]", @access_rights_types, :id => :access_rights_types
-                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
-            .searchcategory
               %h4#description_category.expand Description:
               .description
                 = label_tag :description, "Description:"
@@ -91,6 +85,13 @@
                         = label_tag "publish_date", 'Published Date:', :class => :publish
                         = text_field_tag "search[published_date]", @published_date, :id => :publish_date, :datepicker => true, :size => 10, :maxlength => 10, :class => :publish_date
 
+                .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
+            .searchcategory
+              %h4#access_rights_type_category.expand Access Rights Type:
+              .access_rights_type
+                - DataFile::ACCESS_RIGHTS_TYPES.each_with_index do |status, index|
+                  = label_tag "search_access_rights_type_#{index}", status
+                  = check_box_tag "search[access_rights_types][]", status, @selected_access_rights_types.include?(status), :id => "search_access_rights_type_#{index}"
                 .actions= submit_tag "Update Search Results", :class => "btn btn-primary"
             .searchcategory
               %h4#automation_stati_category.expand Automation Status:
