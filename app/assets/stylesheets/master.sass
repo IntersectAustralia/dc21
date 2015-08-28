@@ -1260,10 +1260,16 @@ table.activity, table.activity tbody
       background: url("../images/icon_home_light.png") center 8px no-repeat
       &:hover
         background: url("../images/icon_home_dark.png") center 8px no-repeat
+      line-height: 0
+      font-size: 0
+      color: transparent
 
   #home_tab.active
     a
       background: url("../images/icon_home_dark.png") center 8px no-repeat
+      line-height: 0
+      font-size: 0
+      color: transparent
 
 // HEADER - MENU - USER
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -1537,7 +1543,10 @@ table.activity, table.activity tbody
     +m-p-w-h-p-t-b-l-r-f(3px 6px 0 0, "", 14px, 14px)
     +inlineblock
     background: url(/images/intersect_logo.png) center
-
+  #intersect_logo
+    line-height: 0
+    font-size: 0
+    color: transparent
   #dev
     cursor: pointer
     +inlineblock
