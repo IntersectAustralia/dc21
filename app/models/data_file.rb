@@ -199,17 +199,26 @@ class DataFile < ActiveRecord::Base
 
   def label_list=(new_value)
     label_names = new_value.split(/\|\s*/)
-    self.labels = label_names.map { |name| Label.find_or_create_by_name(name) }
+    self.labels = label_names.map { |name|
+      existing = Label.where('lower(name) = ?', name.downcase).first
+      existing ||= Label.create(:name => name)
+    }
   end
 
   def grant_number_list=(new_value)
     grant_number_names = new_value.split(/\|\s*/)
-    self.grant_numbers = grant_number_names.map { |name| GrantNumber.find_or_create_by_name(name) }
+    self.grant_numbers = grant_number_names.map { |name|
+      existing = GrantNumber.where('lower(name) = ?', name.downcase).first
+      existing ||= GrantNumber.create(:name => name)
+    }
   end
 
   def related_website_list=(new_value)
     related_website_urls = new_value.split(/\|\s*/)
-    self.related_websites = related_website_urls.map { |url| RelatedWebsite.find_or_create_by_url(url) }
+    self.related_websites = related_website_urls.map { |url|
+      existing = RelatedWebsite.where('lower(url) = ?', url.downcase).first
+      existing ||= RelatedWebsite.create(:url => url)
+    }
   end
 
   def modifiable?

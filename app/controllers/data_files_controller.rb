@@ -567,7 +567,12 @@ class DataFilesController < ApplicationController
     begin
       label_names_array = CSV.parse_line(label_names)
       label_names_array.each do |label_name|
-        label_ids << Label.find_or_create_by_name(label_name).id
+        existing = Label.where('lower(name) = ?', label_name.downcase).first
+        if existing.nil?
+          label_ids << Label.create(:name => label_name).id
+        else
+          label_ids << existing.id
+        end
       end
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for labels - labels must be double-quoted and comma separated'
@@ -581,7 +586,12 @@ class DataFilesController < ApplicationController
     begin
       grant_numbers_array = CSV.parse_line(grant_numbers)
       grant_numbers_array.each do |grant_number|
-        grant_number_ids << GrantNumber.find_or_create_by_name(grant_number).id
+        existing = GrantNumber.where('lower(name) = ?', grant_number.downcase).first
+        if existing.nil?
+          grant_number_ids << GrantNumber.create(:name => grant_number).id
+        else
+          grant_number_ids << existing.id
+        end
       end
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for grant numbers - grant numbers must be double-quoted and comma separated'
@@ -595,7 +605,12 @@ class DataFilesController < ApplicationController
     begin
       related_websites_array = CSV.parse_line(related_websites)
       related_websites_array.each do |related_website|
-        related_website_ids << RelatedWebsite.find_or_create_by_url(related_website).id
+        existing = RelatedWebsite.where('lower(url) = ?', related_website.downcase).first
+        if existing.nil?
+          related_website_ids << RelatedWebsite.create(:url => related_website).id
+        else
+          related_website_ids << existing.id
+        end
       end
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for related websites - related websites must be double-quoted and comma separated'
