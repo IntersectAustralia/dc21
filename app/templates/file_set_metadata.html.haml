@@ -48,9 +48,9 @@
         %h1 Access Rights Type
         %span{:property => "http://schema.org/name"}
           &= package.access_rights_type
-        %h1 Access Rights URI
+        %h1 Access Rights String
         %span{:property => "http://schema.org/description"}
-          &= package.access_rights_uri
+          &= package.access_rights_text
         %h1 Rights Statement
         %span{:property => "http://schema.org/description"}
           &= package.rights_statement
@@ -65,10 +65,10 @@
           &= package.physical_location
         %h1 Grant Numbers
         %span{:property => "http://schema.org/name"}
-          &= package.grant_number_list_display
+          &= package.grant_numbers.pluck(:name).join(", ")
         %h1 Related Websites
         %span{:property => "http://schema.org/url"}
-          &= package.related_website_list_display
+          &= package.related_websites.pluck(:url).join(", ")
         %h1 Software Information
         %section{:property => "http://purl.org/dc/terms/creator", :typeof => "http://schema.org/softwareApplication", :resource => "##{config.name}"}
           %table
