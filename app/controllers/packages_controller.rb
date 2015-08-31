@@ -74,6 +74,7 @@ class PackagesController < DataFilesController
     related_website_ids = parse_related_websites(related_websites, errors)
 
     package = Package.create_package(params, nil, current_user)
+    warning = find_invalid_content_message(errors)
     if errors.empty? && package.save
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
@@ -89,7 +90,9 @@ class PackagesController < DataFilesController
         if run_in_background
           package.uuid = PackageWorker.create({:package_id => package.id, :data_file_ids => data_file_ids, :user_id => current_user.id})
           package.save
-          render :json => {package_id: package.id, :messages => ['Package is now queued for processing in the background.'], :file_name => package.filename, :file_type => package.file_processing_status}
+          messages = ['Package is now queued for processing in the background.']
+          messages += warning unless warning.empty?
+          render :json => {package_id: package.id, :messages => messages, :file_name => package.filename, :file_type => package.file_processing_status}
         else
           CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, package) do |zip_file|
             attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
@@ -97,7 +100,9 @@ class PackagesController < DataFilesController
             build_rif_cs(new_package, package) unless new_package.nil?
           end
           package.mark_as_complete
-          render :json => {package_id: package.id, :messages => ['Package was successfully created.'], :file_name => package.filename, :file_type => package.file_processing_status}
+          messages = ['Package was successfully created.']
+          messages += warning unless warning.empty?
+          render :json => {package_id: package.id, :messages => messages, :file_name => package.filename, :file_type => package.file_processing_status}
         end
       rescue ::TemplateError => e
         logger.error e.message
@@ -230,8 +235,15 @@ class PackagesController < DataFilesController
           errors << "file with id '#{file_id}' could not be found"
         else
           data_file = DataFile.find(id_as_int)
+          include_invalid_content = params[:force].nil? ? false : params[:force].to_bool
           if (data_file.is_package? && Package.find(id_as_int).is_incomplete_package?) || data_file.is_error_file?
-            errors << "file '#{file_id}' is not in a state that can be packaged"
+            if !include_invalid_content
+              errors << "file '#{file_id}' is not in a state that can be packaged"
+            else
+              data_files << data_file
+              status = data_file.is_package? ? data_file.transfer_status : data_file.file_processing_status
+              errors << "Warning: file '#{file_id}' is included in the package but is in '#{status}' state"
+            end
           elsif data_file.is_authorised_for_access_by?(current_user)
             data_files << data_file
           else
@@ -243,6 +255,17 @@ class PackagesController < DataFilesController
       end
     end
     return data_files.uniq
+  end
+
+  def find_invalid_content_message(errors)
+    warning = []
+    errors.each do |e|
+      if !(e =~ /^Warning: file '([^']*)' is included in the package but is in '([^']*)' state$/).nil?
+        warning << e
+        errors.delete(e)
+        return warning
+      end
+    end
   end
 
 end
