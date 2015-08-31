@@ -19,8 +19,8 @@ describe Facility do
   describe "Validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:code) }
-    it { should ensure_length_of(:name).is_at_most 50 }
-    it { should ensure_length_of(:code).is_at_most 50 }
+    it { should validate_length_of(:name).is_at_most 50 }
+    it { should validate_length_of(:code).is_at_most 50 }
 
     it "should validate uniqueness of name" do
       Factory(:facility)
@@ -55,10 +55,10 @@ describe Facility do
     end
 
     it "should validate that latitudes/longitudes are within the allowed ranges" do
-      should ensure_inclusion_of(:a_lat).in_range(-90..90).with_message("must be a number between -90 and 90")
-      should ensure_inclusion_of(:a_long).in_range(-180..180).with_message("must be a number between -180 and 180")
-      should ensure_inclusion_of(:b_lat).in_range(-90..90).with_message("must be a number between -90 and 90")
-      should ensure_inclusion_of(:b_long).in_range(-180..180).with_message("must be a number between -180 and 180")
+      should validate_inclusion_of(:a_lat).in_range(-90..90).with_message("must be a number between -90 and 90")
+      should validate_inclusion_of(:a_long).in_range(-180..180).with_message("must be a number between -180 and 180")
+      should validate_inclusion_of(:b_lat).in_range(-90..90).with_message("must be a number between -90 and 90")
+      should validate_inclusion_of(:b_long).in_range(-180..180).with_message("must be a number between -180 and 180")
     end
 
   end

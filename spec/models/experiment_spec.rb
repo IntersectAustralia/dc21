@@ -14,8 +14,8 @@ describe Experiment do
     it { should validate_presence_of(:subject) }
     it { should validate_presence_of(:facility_id) }
     it { should validate_presence_of(:access_rights) }
-    it { should ensure_length_of(:name).is_at_most 255 }
-    it { should ensure_length_of(:subject).is_at_most 255 }
+    it { should validate_length_of(:name).is_at_most 255 }
+    it { should validate_length_of(:subject).is_at_most 255 }
     it "should validate uniqueness of experiment name" do
       Factory(:experiment)
       should validate_uniqueness_of(:name)
