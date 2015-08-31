@@ -263,9 +263,9 @@ class PackagesController < DataFilesController
       if !(e =~ /^Warning: file '([^']*)' is included in the package but is in '([^']*)' state$/).nil?
         warning << e
         errors.delete(e)
-        return warning
       end
     end
+    return warning
   end
 
 end
