@@ -52,6 +52,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -63,6 +64,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package2"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -81,6 +83,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Open" from "Access Rights Type"
     # running in background
     And I press "Create Package"
     Then I should see "Package is now queued for processing in the background."
@@ -96,6 +99,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package2"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     # running in forergound
     And I press "Create Package"
@@ -117,6 +121,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -131,6 +136,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package2"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -159,6 +165,7 @@ Feature: Create a package
     Then I should see "Filename can't be blank"
     And I should see "Experiment can't be blank"
     And I should see "Title can't be blank"
+    And I should see "Access rights type must be Open, Conditional or Restricted"
 
   Scenario: New package - rendering correct data_file view screen
     Given I am on the list data files page
@@ -172,6 +179,7 @@ Feature: Create a package
     And I fill in "Title" with "Test title"
     And I select "My Experiment" from "Experiment"
     And I check "Video"
+    And I select "Conditional" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I am on the data file details page for my_other_package.zip
@@ -187,6 +195,7 @@ Feature: Create a package
       | HDL Handle           | hdl.handle.net/1959.7/hiev_0 |
       | Physical Location    | Intersect Australia          |
       | Research Centre Name | Intersect Research           |
+      | Access Rights Type   | Conditional                  |
 
   Scenario: Back button - hardcode url
     When I am on the create package page
@@ -228,6 +237,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
@@ -245,6 +255,7 @@ Feature: Create a package
     And I fill in "Filename" with "my_package1"
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
+    And I select "Open" from "Access Rights Type"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip

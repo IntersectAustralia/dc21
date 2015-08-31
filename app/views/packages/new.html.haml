@@ -51,10 +51,10 @@
         .controls
           = f.text_field :label_list, data: {labels: labels}
       .control-group
-        .control-label Access Rights Type
+        = f.label :access_rights_type, "Access Rights Type", class: "control-label"
         .controls
           = required
-          = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
+          = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES, {:include_blank => true}
       .control-group#grant-numbers
         %label.control-label{:for => :package_grant_number_list} Grant Numbers
         .controls

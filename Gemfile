@@ -60,7 +60,7 @@ gem "select2-rails"
 group :development, :test do
   gem "rspec-rails"
   gem "factory_girl_rails", :require => false
-  gem "shoulda-matchers"
+  gem "shoulda-matchers", '>= 2.7.0'
   gem 'selenium-webdriver'
   gem "mailcatcher"
   gem "quiet_assets"

@@ -107,7 +107,7 @@ describe DataFile do
       let(:package) do
         Factory(:data_file, format: FileTypeDeterminer::BAGIT, access_rights_type: 'Open')
       end
-      it { package.should validate_presence_of(:access_rights_type) }
+      it { package.should validate_inclusion_of(:access_rights_type).in_array(DataFile::ACCESS_RIGHTS_TYPES)}
     end
 
     it 'ensures a start time, but only if end_time specified' do

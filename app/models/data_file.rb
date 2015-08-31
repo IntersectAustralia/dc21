@@ -100,7 +100,6 @@ class DataFile < ActiveRecord::Base
                      :on_or_after_message => "cannot be before start time",
                      :invalid_datetime_message => "must be a valid time"
 
-  validates_presence_of :access_rights_type, if: :is_package?
   validates_inclusion_of :access_rights_type, in: ACCESS_RIGHTS_TYPES, if: "access_rights_type.present?"
   validates_length_of :research_centre_name, maximum: 80
 
