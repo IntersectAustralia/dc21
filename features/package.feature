@@ -273,3 +273,13 @@ Feature: Create a package
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
     Then I should see field "Related Websites" with value "a_site, http://example.com, siteB, webweb"
     Then I should see field "Access Rights Type" with value "Conditional"
+
+  Scenario: Cannot create package that exceeds the maximum allowable size
+    When I have the following system configuration
+      | max_package_size | max_package_size_unit |
+      | 1                | bytes                 |
+    And I am on the list data files page
+    And I add sample1.txt to the cart
+    And I add sample2.txt to the cart
+    When I am on the create package page
+    Then I should see "Cannot create package. Total size of files in the cart exceeds the maximum package size."

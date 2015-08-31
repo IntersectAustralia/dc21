@@ -12,16 +12,14 @@ Feature: Create a package from the API
     And I have data files
       | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                | id |
       | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au  | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample1.txt | 1  |
-      | sample2.txt | 30/11/2011 10:15 | admin@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt |  2 |
-      | sample3.txt | 30/12/2011 12:34 | admin@intersect.org.au |                  |                     | samples/sample3.txt |  3  |
+      | sample2.txt | 30/11/2011 10:15 | admin@intersect.org.au | 1/6/2010 6:42:01 | 30/11/2011 18:05:23 | samples/sample2.txt | 2  |
+      | sample3.txt | 30/12/2011 12:34 | admin@intersect.org.au |                  |                     | samples/sample3.txt | 3  |
     And I have data files
       | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                   | file_processing_status| id |
       | error_file.txt | 30/12/2011 12:34 | admin@intersect.org.au |               |                     | samples/error_file.txt |               ERROR   | 4  |
     And I have data files
-      | filename    | created_at       | uploaded_by            | start_time       | end_time            | path                           | file_processing_status| transfer_status| id |
-      | incomplete_package.zip | 30/12/2011 12:34 | admin@intersect.org.au |       |                     | samples/incomplete_package.zip | PACKAGE               | FAILED         | 5  |
-
-
+      | filename               | created_at       | uploaded_by            | start_time  | end_time | path                           | file_processing_status| transfer_status| id |
+      | incomplete_package.zip | 30/12/2011 12:34 | admin@intersect.org.au |             |          | samples/incomplete_package.zip | PACKAGE               | FAILED         | 5  |
     And I have experiments
       | name              | facility            | id |
       | My Experiment     | ROS Weather Station | 1  |
@@ -198,3 +196,16 @@ Feature: Create a package from the API
     And file "my_package.zip" should have description "some friendly description"
     And file "my_package.zip" should have related website "website1.com"
     And file "my_package.zip" should have related website "website2.com"
+
+  Scenario: Package cannot be created if it exceeds the system configured maximum package size
+    When I have the following system configuration
+      | max_package_size | max_package_size_unit |
+      | 1                | bytes                 |
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1,2,3            |
+      | filename           | my_package       |
+      | experiment_id      | 1                |
+      | title              | my magic package |
+      | access_rights_type | Open             |
+    Then I should get a 400 response code
+    And I should get a JSON response with message "total size of files exceeds the maximum package size"

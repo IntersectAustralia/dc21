@@ -2,9 +2,18 @@ require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
 
   def new
-    if current_user.cart_items.empty?
-
-    else
+    if !current_user.cart_items.empty?
+      package_size = current_user.cart_items.sum(:file_size)
+      max_package_size = SystemConfiguration.instance.max_package_size_bytes
+      if max_package_size >= 0 && package_size > max_package_size
+        if request.referer.nil?
+          redirect = root_path
+        else
+          redirect = request.referer
+        end
+        redirect_to redirect, alert: 'Cannot create package. Total size of files in the cart exceeds the maximum package size.'
+        return
+      end
       @back_request = request.referer
       @package = Package.new
       @package.set_times(current_user)
@@ -242,6 +251,13 @@ class PackagesController < DataFilesController
         errors << "file id '#{file_id}' is not a valid file id"
       end
     end
+
+    package_size = data_files.sum(&:file_size)
+    max_package_size = SystemConfiguration.instance.max_package_size_bytes
+    if max_package_size >= 0 && package_size > max_package_size
+      errors << 'total size of files exceeds the maximum package size'
+    end
+
     return data_files.uniq
   end
 

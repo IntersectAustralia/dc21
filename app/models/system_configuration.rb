@@ -127,4 +127,21 @@ class SystemConfiguration < ActiveRecord::Base
   def max_package_size_set?
     not self.max_package_size.nil?
   end
+
+  def max_package_size_bytes
+    case self.max_package_size_unit
+      when "bytes"
+        return self.max_package_size
+      when "kB"
+        return self.max_package_size * 1024
+      when "MB"
+        return self.max_package_size * 1024 * 1024
+      when "GB"
+        return self.max_package_size * 1024 * 1024 * 1024
+      when "TB"
+        return self.max_package_size * 1024 * 1024 * 1024 * 1024
+      else
+        return -1
+    end
+  end
 end
