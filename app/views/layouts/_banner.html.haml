@@ -16,7 +16,7 @@
               = tab.aaf_login 'Log in via AAF', aaf_new_user_session_path, id: "aaf_small"
             = tab.signup "Sign Up", new_user_registration_path, id: "signup"
           - else
-            = tab.home '', root_url, :id => "home_tab"
+            = tab.home 'Home', root_url, :id => "home_tab"
             - if can?(:read, User)
               = tab.admin 'Admin', users_path
             = tabs_tag(:builder => AccountTabBuilder) do |tab|
