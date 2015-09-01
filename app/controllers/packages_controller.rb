@@ -66,6 +66,7 @@ class PackagesController < DataFilesController
 
   def api_create
     errors = []
+    warnings = []
 
     file_ids = params[:file_ids]
     tag_names = params[:tag_names]
@@ -75,8 +76,9 @@ class PackagesController < DataFilesController
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
+    include_invalid_content = params[:force].nil? ? false : params[:force].to_bool
 
-    data_files = validate_file_ids(file_ids, current_user, errors)
+    data_files = validate_file_ids(file_ids, current_user, errors, warnings, include_invalid_content)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
@@ -98,7 +100,9 @@ class PackagesController < DataFilesController
         if run_in_background
           package.uuid = PackageWorker.create({:package_id => package.id, :data_file_ids => data_file_ids, :user_id => current_user.id})
           package.save
-          render :json => {package_id: package.id, :messages => ['Package is now queued for processing in the background.'], :file_name => package.filename, :file_type => package.file_processing_status}
+          messages = ['Package is now queued for processing in the background.']
+          messages += warnings unless warnings.empty?
+          render :json => {package_id: package.id, :messages => messages, :file_name => package.filename, :file_type => package.file_processing_status}
         else
           CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, package) do |zip_file|
             attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], current_user, FileTypeDeterminer.new, MetadataExtractor.new)
@@ -106,7 +110,9 @@ class PackagesController < DataFilesController
             build_rif_cs(new_package, package) unless new_package.nil?
           end
           package.mark_as_complete
-          render :json => {package_id: package.id, :messages => ['Package was successfully created.'], :file_name => package.filename, :file_type => package.file_processing_status}
+          messages = ['Package was successfully created.']
+          messages += warnings unless warnings.empty?
+          render :json => {package_id: package.id, :messages => messages, :file_name => package.filename, :file_type => package.file_processing_status}
         end
       rescue ::TemplateError => e
         logger.error e.message
@@ -221,7 +227,7 @@ class PackagesController < DataFilesController
     true
   end
 
-  def validate_file_ids(file_ids, current_user, errors)
+  def validate_file_ids(file_ids, current_user, errors, warnings, include_invalid_content)
     data_files = []
     if !file_ids.is_a? Array
       errors << 'file_ids is required and must be an Array'
@@ -240,7 +246,13 @@ class PackagesController < DataFilesController
         else
           data_file = DataFile.find(id_as_int)
           if (data_file.is_package? && Package.find(id_as_int).is_incomplete_package?) || data_file.is_error_file?
-            errors << "file '#{file_id}' is not in a state that can be packaged"
+            if !include_invalid_content
+              errors << "file '#{file_id}' is not in a state that can be packaged"
+            else
+              data_files << data_file
+              status = data_file.is_package? ? data_file.transfer_status : data_file.file_processing_status
+              warnings << "Warning: file '#{file_id}' is in state '#{status}'"
+            end
           elsif data_file.is_authorised_for_access_by?(current_user)
             data_files << data_file
           else

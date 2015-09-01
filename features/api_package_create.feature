@@ -77,8 +77,23 @@ Feature: Create a package from the API
       | filename      | my_package       |
       | experiment_id | 1                |
       | title         | my magic package |
+      | access_rights_type | Open             |
     Then I should get a 400 response code
     And I should get a JSON response with message "file '4' is not in a state that can be packaged"
+
+  Scenario: Try to package with error file and optional parameter
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids      | 4    |
+      | filename      | my_package       |
+      | experiment_id | 1                |
+      | title         | my magic package |
+      | force |  true   |
+      | access_rights_type | Open             |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Warning: file '4' is in state 'ERROR'"
+    And I should get a JSON response with package name "my_package.zip"
+    And file "my_package.zip" should have experiment "My Experiment"
+    And file "my_package.zip" should have title "my magic package"
 
   Scenario: Try to package with incomplete package
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
@@ -86,6 +101,32 @@ Feature: Create a package from the API
       | filename      | my_package       |
       | experiment_id | 1                |
       | title         | my magic package |
+      | access_rights_type | Open             |
+    Then I should get a 400 response code
+    And I should get a JSON response with message "file '5' is not in a state that can be packaged"
+
+  Scenario: Try to package with incomplete package and optional parameter set to true
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids      | 5    |
+      | filename      | my_package       |
+      | experiment_id | 1                |
+      | title         | my magic package |
+      | force |  true  |
+      | access_rights_type | Open             |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Warning: file '5' is in state 'FAILED'"
+    And I should get a JSON response with package name "my_package.zip"
+    And file "my_package.zip" should have experiment "My Experiment"
+    And file "my_package.zip" should have title "my magic package"
+
+  Scenario: Try to package with incomplete package and optional parameter set to false
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids      | 5    |
+      | filename      | my_package       |
+      | experiment_id | 1                |
+      | title         | my magic package |
+      | force |  false  |
+      | access_rights_type | Open             |
     Then I should get a 400 response code
     And I should get a JSON response with message "file '5' is not in a state that can be packaged"
 
