@@ -68,7 +68,6 @@ Feature: Create a package from the API
     And I should get a JSON response with message "filename can't be blank"
     And I should get a JSON response with message "experiment_id can't be blank"
     And I should get a JSON response with message "title can't be blank"
-    And I should get a JSON response with message "access_rights_type can't be blank"
     And I should get a JSON response with message "access_rights_type must be Open, Conditional or Restricted"
 
   Scenario: Try to package with error file
