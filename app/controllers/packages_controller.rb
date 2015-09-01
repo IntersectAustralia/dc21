@@ -57,6 +57,7 @@ class PackagesController < DataFilesController
 
   def api_create
     errors = []
+    warnings = []
 
     file_ids = params[:file_ids]
     tag_names = params[:tag_names]
@@ -66,15 +67,15 @@ class PackagesController < DataFilesController
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
+    include_invalid_content = params[:force].nil? ? false : params[:force].to_bool
 
-    data_files = validate_file_ids(file_ids, current_user, errors)
+    data_files = validate_file_ids(file_ids, current_user, errors, warnings, include_invalid_content)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
     related_website_ids = parse_related_websites(related_websites, errors)
 
     package = Package.create_package(params, nil, current_user)
-    warning = find_invalid_content_message(errors)
     if errors.empty? && package.save
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
@@ -91,7 +92,7 @@ class PackagesController < DataFilesController
           package.uuid = PackageWorker.create({:package_id => package.id, :data_file_ids => data_file_ids, :user_id => current_user.id})
           package.save
           messages = ['Package is now queued for processing in the background.']
-          messages += warning unless warning.empty?
+          messages += warnings unless warnings.empty?
           render :json => {package_id: package.id, :messages => messages, :file_name => package.filename, :file_type => package.file_processing_status}
         else
           CustomDownloadBuilder.bagit_for_files_with_ids(data_file_ids, package) do |zip_file|
@@ -101,7 +102,7 @@ class PackagesController < DataFilesController
           end
           package.mark_as_complete
           messages = ['Package was successfully created.']
-          messages += warning unless warning.empty?
+          messages += warnings unless warnings.empty?
           render :json => {package_id: package.id, :messages => messages, :file_name => package.filename, :file_type => package.file_processing_status}
         end
       rescue ::TemplateError => e
@@ -217,7 +218,7 @@ class PackagesController < DataFilesController
     true
   end
 
-  def validate_file_ids(file_ids, current_user, errors)
+  def validate_file_ids(file_ids, current_user, errors, warnings, include_invalid_content)
     data_files = []
     if !file_ids.is_a? Array
       errors << 'file_ids is required and must be an Array'
@@ -235,14 +236,13 @@ class PackagesController < DataFilesController
           errors << "file with id '#{file_id}' could not be found"
         else
           data_file = DataFile.find(id_as_int)
-          include_invalid_content = params[:force].nil? ? false : params[:force].to_bool
           if (data_file.is_package? && Package.find(id_as_int).is_incomplete_package?) || data_file.is_error_file?
             if !include_invalid_content
               errors << "file '#{file_id}' is not in a state that can be packaged"
             else
               data_files << data_file
               status = data_file.is_package? ? data_file.transfer_status : data_file.file_processing_status
-              errors << "Warning: file '#{file_id}' is included in the package but is in '#{status}' state"
+              warnings << "Warning: file '#{file_id}' is in state '#{status}'"
             end
           elsif data_file.is_authorised_for_access_by?(current_user)
             data_files << data_file
@@ -255,17 +255,6 @@ class PackagesController < DataFilesController
       end
     end
     return data_files.uniq
-  end
-
-  def find_invalid_content_message(errors)
-    warning = []
-    errors.each do |e|
-      if !(e =~ /^Warning: file '([^']*)' is included in the package but is in '([^']*)' state$/).nil?
-        warning << e
-        errors.delete(e)
-      end
-    end
-    return warning
   end
 
 end

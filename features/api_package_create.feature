@@ -92,7 +92,7 @@ Feature: Create a package from the API
       | force |  true   |
       | access_rights_type | Open             |
     Then I should get a 200 response code
-    And I should get a JSON response with message "Warning: file '4' is included in the package but is in 'ERROR' state"
+    And I should get a JSON response with message "Warning: file '4' is in state 'ERROR'"
     And I should get a JSON response with package name "my_package.zip"
     And file "my_package.zip" should have experiment "My Experiment"
     And file "my_package.zip" should have title "my magic package"
@@ -116,7 +116,7 @@ Feature: Create a package from the API
       | force |  true  |
       | access_rights_type | Open             |
     Then I should get a 200 response code
-    And I should get a JSON response with message "Warning: file '5' is included in the package but is in 'FAILED' state"
+    And I should get a JSON response with message "Warning: file '5' is in state 'FAILED'"
     And I should get a JSON response with package name "my_package.zip"
     And file "my_package.zip" should have experiment "My Experiment"
     And file "my_package.zip" should have title "my magic package"
