@@ -3,6 +3,7 @@ class SystemConfiguration < ActiveRecord::Base
   acts_as_singleton
 
   STORAGE_UNITS = ["bytes", "kB", "MB", "GB", "TB"]
+  EMAIL_LEVELS = ["Success only", "Failure only", "Always"]
 
   validates_presence_of :level1, :level1_plural, :level2, :level2_plural
   validates_length_of :level1, :level1_plural, :level2, :level2_plural, :maximum => 20
@@ -23,6 +24,7 @@ class SystemConfiguration < ActiveRecord::Base
   validate :level2_cannot_equal_level1_fields
   validate :valid_regex
   validates_inclusion_of :max_package_size_unit, :in => STORAGE_UNITS, :on => :update, if: :max_package_size_set?
+  validates_inclusion_of :email_level, in: EMAIL_LEVELS, on: :update , if: :email_level_set?
 
   belongs_to :language
   accepts_nested_attributes_for :language
@@ -144,4 +146,9 @@ class SystemConfiguration < ActiveRecord::Base
         return -1
     end
   end
+
+  def email_level_set?
+    not self.email_level.nil?
+  end
+
 end

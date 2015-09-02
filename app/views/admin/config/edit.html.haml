@@ -105,6 +105,11 @@
         = required
         = f.text_field :max_package_size, {style: 'width: 50px;'}
         = f.select :max_package_size_unit, SystemConfiguration::STORAGE_UNITS
+    .control-group
+      = f.label :email_level, "Email Level", class: "control-label"
+      .controls
+        = required
+        = f.select :email_level, SystemConfiguration::EMAIL_LEVELS, {:include_blank => true}
 
     %h2 Edit OCR Processing
     .control-group
