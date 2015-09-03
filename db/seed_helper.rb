@@ -50,10 +50,6 @@ end
 def seed_languages
   puts '*** SEEDING THE DATABASE WITH LANGUAGES ***'
 
-  puts 'Removing old languages'
-  Language.delete_all
-
-  puts 'Adding languages'
   languages = [{:language_name => 'Abkhazian',   :iso_code => 'ab'},
                {:language_name => 'Afar',   :iso_code => 'aa'},
                {:language_name => 'Afrikaans',   :iso_code => 'af'},
@@ -219,9 +215,14 @@ def seed_languages
                {:language_name => 'Yoruba',   :iso_code => 'yo'},
                {:language_name => 'Zulu',   :iso_code => 'zu'},]
   languages.each do |language|
-    Language.create(:language_name => language[:language_name], :iso_code => language[:iso_code])
+    existing = Language.find_by_language_name_and_iso_code(language[:language_name], language[:iso_code])
+    if existing.nil?
+      Language.create(:language_name => language[:language_name], :iso_code => language[:iso_code])
+    end
   end
 
   # Set the default language to English
-  SystemConfiguration.instance.update_attribute(:language, Language.find_by_iso_code('en'))
+  if SystemConfiguration.instance.language.nil?
+    SystemConfiguration.instance.update_attribute(:language, Language.find_by_iso_code('en'))
+  end
 end
