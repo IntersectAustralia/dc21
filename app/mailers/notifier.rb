@@ -78,7 +78,7 @@ class Notifier < ActionMailer::Base
     mail(:to =>recipients,
         :from => APP_CONFIG['notification_email_sender'],
         :reply_to => APP_CONFIG['notification_email_sender'],
-        :subject => "#{system_name} - Package publishing is success")
+        :subject => "#{system_name} - Package publishing is successful")
   end
 
   def notify_recipients_of_failed_package_publish(package, recipients)
@@ -87,7 +87,7 @@ class Notifier < ActionMailer::Base
     mail(:to => recipients,
          :from => APP_CONFIG['notification_email_sender'],
          :reply_to => APP_CONFIG['notification_email_sender'],
-         :subject => "#{system_name} - Package publishing is failed")
+         :subject => "#{system_name} - Package publishing has failed")
   end
 
 end
