@@ -32,7 +32,7 @@ describe Notifier do
 
       ActionMailer::Base.deliveries.empty?.should eq(false)
       email.to.should eq(recipients)
-      email.subject.should eq("DIVER - Package publishing is success")
+      email.subject.should eq("DIVER - Package publishing is successful")
     end
 
   end
