@@ -29,6 +29,7 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in "Name" with "Hello world"
+    And I select "Always" from "Email Level"
     And I press "Update"
     Then I should see "System configuration updated successfully."
 
@@ -208,6 +209,7 @@ Feature: Edit system configuration
       | Type of Org Unit (Plural)   | L1 plu  |
       | Type of Project (Singular)  | L2 sing |
       | Type of Project (Plural)    | L2 plu  |
+    And I select "Always" from "Email Level"
     And I press "Update"
     And I am on the system config page
     Then I should see details displayed
@@ -237,6 +239,7 @@ Feature: Edit system configuration
     Given I am logged in as "georgina@intersect.org.au"
     And I am on the edit system config page
     When I fill in "Name" with "Hello world"
+    And I select "Always" from "Email Level"
     And I press "Update"
     And I follow "Sign out"
     Then I should see "Hello world"
@@ -261,6 +264,7 @@ Feature: Edit system configuration
     And I have facility "Facility0" with code "f0"
     And I am on the edit system config page
     When I fill in "Type of Project (Singular)" with "long_name_of_20_char"
+    And I select "Always" from "Email Level"
     And I press "Update"
     And I am on the facilities page
     And I follow the view link for facility "Facility0"
@@ -290,6 +294,7 @@ Feature: Edit system configuration
     And I have experiment "Experiment 1" which belongs to facility "f0"
     When I am on the edit system config page
     And I uncheck "Project Parameters"
+    And I select "Always" from "Email Level"
     And I press "Update"
     When I should be on the system config page
     When I am on the edit system config page
