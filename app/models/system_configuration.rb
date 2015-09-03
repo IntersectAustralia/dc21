@@ -25,6 +25,7 @@ class SystemConfiguration < ActiveRecord::Base
   validate :valid_regex
   validates_inclusion_of :max_package_size_unit, :in => STORAGE_UNITS, :on => :update, if: :max_package_size_set?
   validates_inclusion_of :email_level, in: EMAIL_LEVELS, on: :update , if: :email_level_set?
+  validate :validate_emails #when creating or updating a s_c instance, validate research_librarians emails array
 
   belongs_to :language
   accepts_nested_attributes_for :language
@@ -149,6 +150,21 @@ class SystemConfiguration < ActiveRecord::Base
 
   def email_level_set?
     not self.email_level.nil?
+  end
+
+  def research_librarians_list
+    email_list = self.research_librarians.split(" ")
+    email_list
+  end
+
+  def validate_emails
+    binding.pry
+    email_list = research_librarians_list
+    email_list.each do |email|
+      unless email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+        errors.add(:emails, "#{email} is not a valid email address.")
+      end
+    end
   end
 
 end

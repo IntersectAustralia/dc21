@@ -110,6 +110,10 @@
       .controls
         = required
         = f.select :email_level, SystemConfiguration::EMAIL_LEVELS, {:include_blank => true}
+    .control-group
+      = f.label :research_librarians , "Research Librarian Email list", class: "control-label"
+      .controls
+        = f.text_field :research_librarians
 
     %h2 Edit OCR Processing
     .control-group
