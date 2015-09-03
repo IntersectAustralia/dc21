@@ -160,6 +160,10 @@ class PackagesController < DataFilesController
     end
 
     package = Package.find(package_id)
+
+    config = SystemConfiguration.instance
+    email_level = config.email_level.nil? ? "Always" : config.email_level
+    recipients = config.research_librarians_list << package.created_by.email
     if package.published?
       render :json => {:package_id => package.id, :messages => ["Package #{package_id} is already submitted for publishing."]}
       return
@@ -167,8 +171,10 @@ class PackagesController < DataFilesController
 
     if package.save! and publish_rif_cs(package)
       package.set_to_published(current_user)
+      Notifier.notify_recipients_of_successful_package_publish(package, recipients).deliver unless email_level.eql?("Failure only")
       render :json => {:package_id => package.id, :messages => ["Package has been successfully submitted for publishing."]}
     else
+      Notifier.notify_recipients_of_failed_package_publish(package, recipients).deliver unless email_level.eql?("Success only")
       render :json => {:messages => ["Unable to publish package."]}
     end
   end

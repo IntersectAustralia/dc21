@@ -69,6 +69,8 @@ Feature: Edit system configuration
       | Restricted Access Rights Text  |                                      |
       | Rights Statement               |                                      |
       | Maximum Package Size           |                                      |
+      | Email Level                    |                                      |
+      | Research Librarian Email List  |                                      |
 
   Scenario: Access system config edit page as non-admin
     Given I am logged in as "cindy@intersect.org.au"
@@ -133,6 +135,7 @@ Feature: Edit system configuration
       | Restricted Access Rights Text     | Restricted Access Rights Text                                  |
       | Rights statement                  | Organic chia pork belly tilde tattooed blog raw denim leggings |
       | Maximum Package Size              | 9.9                                                            |
+      | system_configuration[email_level] | Always                                                         |
     And I press "Update"
     And I should be on the system config page
     Then I should see details displayed
@@ -162,6 +165,7 @@ Feature: Edit system configuration
       | Restricted Access Rights Text | Restricted Access Rights Text                                  |
       | Rights Statement              | Organic chia pork belly tilde tattooed blog raw denim leggings |
       | Maximum Package Size          | 9.9 bytes                                                      |
+      | Email Level                   | Always                                                         |
     And the system configuration should have
       | ocr_cloud_token | Test ABBYY Password  |
       | sr_cloud_token  | Test Koemei Password |

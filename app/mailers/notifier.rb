@@ -72,4 +72,22 @@ class Notifier < ActionMailer::Base
           :subject => "#{system_name} - Reset password instructions")
   end
 
+  def notify_recipients_of_successful_package_publish(package, recipients)
+    @system_name = system_name
+    @package = package
+    mail(:to =>recipients,
+        :from => APP_CONFIG['notification_email_sender'],
+        :reply_to => APP_CONFIG['notification_email_sender'],
+        :subject => "#{system_name} - Package publishing is success")
+  end
+
+  def notify_recipients_of_failed_package_publish(package, recipients)
+    @system_name = system_name
+    @package = package
+    mail(:to => recipients,
+         :from => APP_CONFIG['notification_email_sender'],
+         :reply_to => APP_CONFIG['notification_email_sender'],
+         :subject => "#{system_name} - Package publishing is failed")
+  end
+
 end

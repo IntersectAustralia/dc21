@@ -158,7 +158,6 @@ class SystemConfiguration < ActiveRecord::Base
   end
 
   def validate_emails
-    binding.pry
     email_list = research_librarians_list
     email_list.each do |email|
       unless email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
