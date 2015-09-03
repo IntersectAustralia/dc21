@@ -164,7 +164,7 @@ describe PackageRifCsWrapper do
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
         wrapper = PackageRifCsWrapper.new(package, files, {})
-        wrapper.access_rights_uri.should eq("http://handle.uws.edu.au:8081/1959.7/hiev__0")
+        wrapper.access_rights_uri.should eq("http://handle.uws.edu.au:8081/1959.7/hiev_0")
         wrapper.license_type.should eq("CC-BY-ND")
       end
     end
