@@ -121,6 +121,9 @@ class SystemConfiguration < ActiveRecord::Base
   end
 
   def friendly_max_package_size
+    if !max_package_size_set?
+      return "Unlimited"
+    end
     "#{self.max_package_size} #{self.max_package_size_unit}"
   end
 
@@ -129,6 +132,9 @@ class SystemConfiguration < ActiveRecord::Base
   end
 
   def max_package_size_bytes
+    if !max_package_size_set?
+      return -1
+    end
     case self.max_package_size_unit
       when "bytes"
         return self.max_package_size

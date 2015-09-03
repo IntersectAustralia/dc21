@@ -102,7 +102,6 @@
     .control-group
       = f.label :max_package_size, "Maximum Package Size", class: "control-label"
       .controls
-        = required
         = f.text_field :max_package_size, {style: 'width: 50px;'}
         = f.select :max_package_size_unit, SystemConfiguration::STORAGE_UNITS
 
