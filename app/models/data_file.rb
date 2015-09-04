@@ -1,5 +1,6 @@
 require 'tempfile'
 require 'digest/md5'
+require 'uri'
 
 class DataFile < ActiveRecord::Base
   # raw and error are special status values that cannot be modified/removed
@@ -102,6 +103,7 @@ class DataFile < ActiveRecord::Base
 
   validates_inclusion_of :access_rights_type, in: ACCESS_RIGHTS_TYPES, if: "access_rights_type.present?"
   validates_length_of :research_centre_name, maximum: 80
+  validate :validate_related_websites
 
   validates_inclusion_of :license, in: AccessRightsLookup.new.access_rights_values, :if => :is_package?
 
@@ -186,6 +188,8 @@ class DataFile < ActiveRecord::Base
     self.related_websites.collect(&:url).join("|")
   end
 
+
+
   def related_website_names
     self.related_websites.pluck(:url)
   end
@@ -224,6 +228,15 @@ class DataFile < ActiveRecord::Base
       existing = RelatedWebsite.where('lower(url) = ?', url.downcase).first
       existing ||= RelatedWebsite.create(:url => url)
     }
+  end
+
+  def validate_related_websites
+    related_websites = self.related_website_list.split(/\|\s*/)
+    related_websites.each do |url|
+      if url.match(URI.regexp).nil?
+        errors.add(:related_websites, "#{url} is not a valid url.")
+      end
+    end
   end
 
   def modifiable?
