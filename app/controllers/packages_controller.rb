@@ -29,12 +29,12 @@ class PackagesController < DataFilesController
   def create
     package_params = params[:package]
     @package = Package.create_package(package_params, params[:date], current_user)
+    @package.related_website_list = package_params[:related_website_list] if package_params[:related_website_list]
     if @package.save
       save_tags(@package, params[:tags])
       data_file_ids = current_user.cart_item_ids
       @package.label_list = package_params[:label_list] if package_params[:label_list]
       @package.grant_number_list = package_params[:grant_number_list] if package_params[:grant_number_list]
-      @package.related_website_list = package_params[:related_website_list] if package_params[:related_website_list]
       @package.parent_ids = data_file_ids
       begin
         if params[:run_in_background]

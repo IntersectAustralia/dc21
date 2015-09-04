@@ -182,14 +182,7 @@ class DataFile < ActiveRecord::Base
     self.related_websites.collect(&:url).join("|")
   end
 
-  def validate_related_websites
-    related_websites = related_website_list.split("|")
-    related_websites.each do |url|
-      if url.match(URI.regexp).nil?
-        errors.add(:related_websites, "#{url} is not a valid url.")
-      end
-    end
-  end
+
 
   def related_website_names
     self.related_websites.pluck(:url)
@@ -229,6 +222,15 @@ class DataFile < ActiveRecord::Base
       existing = RelatedWebsite.where('lower(url) = ?', url.downcase).first
       existing ||= RelatedWebsite.create(:url => url)
     }
+  end
+
+  def validate_related_websites
+    related_websites = self.related_website_list.split(/\|\s*/)
+    related_websites.each do |url|
+      if url.match(URI.regexp).nil?
+        errors.add(:related_websites, "#{url} is not a valid url.")
+      end
+    end
   end
 
   def modifiable?

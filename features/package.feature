@@ -268,8 +268,8 @@ Feature: Create a package
     When I am on the create package page
     And I fill in "package_grant_number_list" with "bebb@|Abba|cuba|AA<script></script>"
     And I check select2 field "package_grant_number_list" updated value to "Abba,bebb@,cuba,AA<script></script>"
-    And I fill in "package_related_website_list" with "webweb|a_site|siteB|http://example.com"
-    And I check select2 field "package_related_website_list" updated value to "webweb|a_site|siteB|http://example.com"
+    And I fill in "package_related_website_list" with "http://example.com"
+    And I check select2 field "package_related_website_list" updated value to "http://example.com"
     And I select "Conditional" from "package_access_rights_type"
     And I should see "Spanish"
     And I should see "blah blah"
@@ -282,8 +282,27 @@ Feature: Create a package
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
-    Then I should see field "Related Websites" with value "a_site, http://example.com, siteB, webweb"
+    Then I should see field "Related Websites" with value "http://example.com"
     Then I should see field "Access Rights Type" with value "Conditional"
+
+  Scenario: Cannot create package with invalid related websites
+    Given I am on the list data files page
+    And I add sample1.txt to the cart
+    And I wait for 4 seconds
+    When I am on the create package page
+    And I fill in "package_related_website_list" with "webweb|a_site|siteB|http://example.com"
+    And I check select2 field "package_related_website_list" updated value to "webweb|a_site"
+    And I select "Conditional" from "package_access_rights_type"
+    And I should see "Spanish"
+    And I should see "blah blah"
+    And I should see "Intersect Australia"
+    And I should see "Intersect Research"
+    And I fill in "Filename" with "my_package1"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "Title" with "Package 1"
+    And I uncheck "Run in background?"
+    And I press "Create Package"
+    Then I should see "Please correct the following before continuing: Related websites webweb is not a valid url. Related websites a_site is not a valid url."
 
   Scenario: Cannot create package that exceeds the maximum allowable size
     When I have the following system configuration
