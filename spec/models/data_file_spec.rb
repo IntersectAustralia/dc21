@@ -96,6 +96,7 @@ describe DataFile do
     it { should validate_presence_of(:file_processing_status) }
     it { should validate_presence_of(:experiment_id) }
 
+
     it "should validate uniqueness of filename" do
       Factory(:data_file)
       should validate_uniqueness_of(:filename)
@@ -141,6 +142,18 @@ describe DataFile do
       file.access = DataFile::ACCESS_PUBLIC
       file.access_to_user_groups = true
       file.should_not be_valid
+    end
+
+    it 'invalid url should fail validation' do
+      file = Factory(:data_file)
+      file.related_website_list = "www"
+      file.should_not be_valid
+    end
+
+    it 'valid url' do
+      file = Factory(:data_file)
+      file.related_website_list = "http://www.example.com"
+      file.should be_valid
     end
 
     describe "Abilities" do
