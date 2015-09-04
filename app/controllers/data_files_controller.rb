@@ -24,6 +24,7 @@ class DataFilesController < ApplicationController
   expose(:access_groups) { AccessGroup.pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
+  expose(:access_rights) { AccessRightsLookup.new.access_rights }
 
   def index
     set_tab :explore, :contentnavigation

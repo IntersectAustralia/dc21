@@ -68,7 +68,7 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_related_websites, :uniq => true
   has_many :related_websites, :through => :data_file_related_websites, :uniq => true
 
-  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text, :grant_number_list, :related_website_list
+  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text, :grant_number_list, :related_website_list, :license
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -102,6 +102,8 @@ class DataFile < ActiveRecord::Base
 
   validates_inclusion_of :access_rights_type, in: ACCESS_RIGHTS_TYPES, if: "access_rights_type.present?"
   validates_length_of :research_centre_name, maximum: 80
+
+  validates_inclusion_of :license, in: AccessRightsLookup.new.access_rights_values, :if => :is_package?
 
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
@@ -158,6 +160,10 @@ class DataFile < ActiveRecord::Base
 
   def access_group_list_display
     self.access_groups.find_all_by_status(true).collect {|ag| ag.name}.join(", ")
+  end
+
+  def license_description
+    AccessRightsLookup.new.get_name(self.license)
   end
 
   def label_list

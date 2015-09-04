@@ -20,6 +20,7 @@ FactoryGirl.define do
     association :language, :factory => :language
     file_processing_status "PACKAGE"
     access_rights_type Package::ACCESS_RIGHTS_OPEN
+    license 'http://creativecommons.org/licenses/by/4.0'
     title "title"
     file_size 35642
   end

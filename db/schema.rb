@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150902020447) do
+ActiveRecord::Schema.define(:version => 20150903070827) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20150902020447) do
     t.string   "hdl_handle"
     t.string   "physical_location",                 :limit => 80
     t.integer  "language_id"
+    t.string   "license"
   end
 
   create_table "data_files_tags", :id => false, :force => true do |t|

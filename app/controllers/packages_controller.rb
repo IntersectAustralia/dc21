@@ -1,6 +1,8 @@
 require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
 
+  expose(:access_rights) { AccessRightsLookup.new.access_rights }
+
   def new
     if !current_user.cart_items.empty?
       package_size = current_user.cart_items.sum(:file_size)
@@ -18,6 +20,7 @@ class PackagesController < DataFilesController
       @package = Package.new
       @package.set_times(current_user)
       @package.set_metatdata
+      @experiment_access_rights = Experiment.select([:id, :access_rights])
       set_tab :dashboard, :contentnavigation
     end
   end

@@ -71,10 +71,11 @@
             = required
             = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
         .control-group
-          .control-label Access Rights URI
+          .control-label Licence
           .controls
-            .record
-              = @data_file.access_rights_uri
+            = required
+            %span.input
+              = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @data_file.license), {:include_blank => ""}
         .control-group#grant-numbers
           %label.control-label{:for => :data_file_grant_number_list} Grant Numbers
           .controls

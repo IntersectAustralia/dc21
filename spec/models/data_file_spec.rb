@@ -105,9 +105,19 @@ describe DataFile do
       it { should_not validate_presence_of(:access_rights_type) }
 
       let(:package) do
-        Factory(:data_file, format: FileTypeDeterminer::BAGIT, access_rights_type: 'Open')
+        Factory(:data_file, format: FileTypeDeterminer::BAGIT, access_rights_type: 'Open', license: 'http://creativecommons.org/licenses/by/4.0')
       end
       it { package.should validate_inclusion_of(:access_rights_type).in_array(DataFile::ACCESS_RIGHTS_TYPES)}
+    end
+
+
+    context "should validate presence of licence in packages only" do
+      it { should_not validate_presence_of(:access_rights_type) }
+
+      let(:package) do
+        Factory(:data_file, format: FileTypeDeterminer::BAGIT, access_rights_type: 'Open', license: 'http://creativecommons.org/licenses/by/4.0')
+      end
+      it { package.should validate_inclusion_of(:license).in_array(AccessRightsLookup.new.access_rights_values) }
     end
 
     it 'ensures a start time, but only if end_time specified' do
@@ -545,7 +555,7 @@ describe DataFile do
       it "should find matching files" do
         f1 = Factory(:data_file, :format => FileTypeDeterminer::UNKNOWN).id
         f2 = Factory(:data_file, :format => FileTypeDeterminer::TOA5).id
-        f3 = Factory(:data_file, :format => FileTypeDeterminer::BAGIT, access_rights_type: 'Open').id
+        f3 = Factory(:data_file, :format => FileTypeDeterminer::BAGIT, access_rights_type: 'Open', license: 'http://creativecommons.org/licenses/by/4.0').id
         f4 = Factory(:data_file, :format => 'image/png').id
         f5 = Factory(:data_file, :format => 'video/mpeg').id
         f6 = Factory(:data_file, :format => 'audio/mpeg').id
@@ -792,7 +802,7 @@ describe DataFile do
       Factory(:data_file, :format => nil).time_parsable?.should be_false
       Factory(:data_file, :format => 'asdf').time_parsable?.should be_false
       Factory(:data_file, :format => "TOA5").time_parsable?.should be_true
-      Factory(:data_file, :format => "BAGIT", access_rights_type: 'Open').time_parsable?.should be_true
+      Factory(:data_file, :format => "BAGIT", access_rights_type: 'Open', license: 'http://creativecommons.org/licenses/by/4.0').time_parsable?.should be_true
     end
   end
 

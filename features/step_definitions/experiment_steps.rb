@@ -35,6 +35,11 @@ Given /^the experiment "([^"]*)" has parent "([^"]*)"$/ do |experiment_name, par
   experiment.save!
 end
 
+Given /^the experiment "([^"]*)" has access rights "([^"]*)"$/ do |experiment_name, access_rights|
+  experiment = Experiment.find_by_name!(experiment_name)
+  experiment.update_attribute(:access_rights, access_rights)
+end
+
 When /^I add for code "([^"]*)"$/ do |code|
   select code, :from => "FOR codes"
   click_link "Add"

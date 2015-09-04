@@ -27,7 +27,7 @@ describe Notifier do
 
     it "should send mail to recipients if package published" do
       recipients = ["user@email.org","recipient1@email.org","recipient2@email.org"]
-      pkg = Factory(:data_file, format: FileTypeDeterminer::BAGIT, access_rights_type: 'Open')
+      pkg = Factory(:package)
       email = Notifier.notify_recipients_of_successful_package_publish(pkg,recipients).deliver
 
       ActionMailer::Base.deliveries.empty?.should eq(false)

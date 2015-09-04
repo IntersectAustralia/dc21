@@ -69,7 +69,7 @@ Feature: Edit system configuration
       | Conditional Access Rights Text |                                      |
       | Restricted Access Rights Text  |                                      |
       | Rights Statement               |                                      |
-      | Maximum Package Size           |                                      |
+      | Maximum Package Size           | Unlimited                            |
       | Email Level                    |                                      |
       | Research Librarian Email List  |                                      |
 

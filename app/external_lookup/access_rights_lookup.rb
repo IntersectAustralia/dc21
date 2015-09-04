@@ -12,6 +12,10 @@ class AccessRightsLookup
   def access_rights
     RIGHTS.map { |access_right| {:url => access_right[:url], :name => access_right[:name]} }
   end
+
+  def access_rights_values
+    RIGHTS.map {|access_right| access_right[:url]}
+  end
   
   def get_name(url)
     access_right = RIGHTS.select{ |access_right| access_right[:url] == url }
@@ -24,6 +28,13 @@ class AccessRightsLookup
     access_right = RIGHTS.select{ |access_right| access_right[:url] == url }
     if !access_right.empty?
       return access_right.first[:id]
+    end
+  end
+
+  def get_url(id)
+    access_right = RIGHTS.select{ |access_right| access_right[:id] == id }
+    if !access_right.empty?
+      return access_right.first[:url]
     end
   end
 

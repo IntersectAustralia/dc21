@@ -58,6 +58,11 @@ class Package < DataFile
     elsif datafile.access_rights_type == ACCESS_RIGHTS_RESTRICTED
       datafile.access_rights_text = config.restricted_access_rights_text
     end
+    if params[:license]
+      datafile.license = AccessRightsLookup.new.get_url(params[:license])
+    elsif Experiment.exists?(datafile.experiment_id)
+      datafile.license = Experiment.find(datafile.experiment_id).access_rights
+    end
     datafile
   end
 

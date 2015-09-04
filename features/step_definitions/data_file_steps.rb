@@ -427,6 +427,10 @@ Then /^file "([^"]*)" should have description "([^"]*)"$/ do |filename, desc|
   DataFile.find_by_filename!(filename).file_processing_description.should eq(desc)
 end
 
+Then /^file "([^"]*)" should have license "([^"]*)"$/ do |filename, license|
+  DataFile.find_by_filename!(filename).license.should eq(license)
+end
+
 Then /^file "([^"]*)" should have label "([^"]*)"$/ do |filename, label|
   data_file = DataFile.find_by_filename!(filename)
   label_names = data_file.labels.map { |l| l.name}

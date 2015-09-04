@@ -1,5 +1,3 @@
-@javascript
-
 Feature: Create a package
   In order to handle multiple data files which belong to a group
   As a user
@@ -34,12 +32,14 @@ Feature: Create a package
       | language    | rights_statement | entity              | research_centre_name |
       | Spanish     | blah blah        | Intersect Australia | Intersect Research   |
 
+  @javascript
   Scenario: Package is now available as a file type to search on
     Given I am on the list data files page
     And I follow Showing
     And I click on "Type:"
     Then I should see "PACKAGE"
 
+  @javascript
   Scenario: New package auto generates external ID
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -53,6 +53,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -65,12 +66,14 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should see "http://handle.uws.edu.au:8081/1959.7/hiev_1"
 
 #EYETRACKER-140
+  @javascript
   Scenario: New package creates parent relationships
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -84,6 +87,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     # running in background
     And I press "Create Package"
     Then I should see "Package is now queued for processing in the background."
@@ -100,6 +104,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     # running in forergound
     And I press "Create Package"
@@ -110,6 +115,7 @@ Feature: Create a package
       | Parents  | sample1.txt\nsample2.txt   |
       | Children | No children files defined. |
 
+  @javascript
   Scenario: External ID is not reused
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -122,6 +128,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -137,12 +144,14 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
     And I should see "http://handle.uws.edu.au:8081/1959.7/hiev_1"
     And I should not see "http://handle.uws.edu.au:8081/1959.7/hiev_0"
 
+  @javascript
   Scenario: Package filename should not allow illegal characters
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -153,6 +162,7 @@ Feature: Create a package
     And I press "Create Package"
     Then I should see "cannot contain any of the following characters: / \ ? * : | < >"
 
+  @javascript
   Scenario: New package - empty form submission
     Given I am on the list data files page
     And I add sample3.txt to the cart
@@ -167,6 +177,7 @@ Feature: Create a package
     And I should see "Title can't be blank"
     And I should see "Access rights type must be Open, Conditional or Restricted"
 
+  @javascript
   Scenario: New package - rendering correct data_file view screen
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -180,6 +191,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Conditional" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I am on the data file details page for my_other_package.zip
@@ -196,12 +208,15 @@ Feature: Create a package
       | Physical Location    | Intersect Australia          |
       | Research Centre Name | Intersect Research           |
       | Access Rights Type   | Conditional                  |
+      | License              | CC BY: Attribution           |
 
+  @javascript
   Scenario: Back button - hardcode url
     When I am on the create package page
     And I follow "Back"
     Then I should be on the list data files page
 
+  @javascript
   Scenario: Back button goes back in history
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -212,6 +227,7 @@ Feature: Create a package
     And I follow "Package"
     Then I should be on the create package page
 
+  @javascript
   Scenario: Back button resets link after erroneous package save
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -228,6 +244,7 @@ Feature: Create a package
     Then I should be on the list data files page
 
   #EYETRACKER-88
+  @javascript
   Scenario: Add a new label to package
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -238,12 +255,14 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cuba"
 
   #EYETRACKER-88
+  @javascript
   Scenario: Delete an existing label when creating package
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -256,11 +275,13 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
     And I select "Open" from "Access Rights Type"
+    And I select "CC BY: Attribution" from "License"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Labels" with value "test1, this3"
 
+  @javascript
   Scenario: Create package specifying access rights type, grant numbers and related websites
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -271,6 +292,7 @@ Feature: Create a package
     And I fill in "package_related_website_list" with "webweb|a_site|siteB|http://example.com"
     And I check select2 field "package_related_website_list" updated value to "webweb|a_site|siteB|http://example.com"
     And I select "Conditional" from "package_access_rights_type"
+    And I select "CC BY: Attribution" from "License"
     And I should see "Spanish"
     And I should see "blah blah"
     And I should see "Intersect Australia"
@@ -284,7 +306,9 @@ Feature: Create a package
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
     Then I should see field "Related Websites" with value "a_site, http://example.com, siteB, webweb"
     Then I should see field "Access Rights Type" with value "Conditional"
+    Then I should see field "License" with value "CC BY: Attribution"
 
+  @javascript
   Scenario: Cannot create package that exceeds the maximum allowable size
     When I have the following system configuration
       | max_package_size | max_package_size_unit |

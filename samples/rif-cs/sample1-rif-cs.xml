@@ -26,7 +26,7 @@
         <accessRights type="open" rightsUri="http://handle.uws.edu.au:8081/1959.7/hiev_3"/>
         <license type="CC-BY-NC-ND" rightsUri="http://creativecommons.org/licenses/by-nc-nd/4.0"/>
       </rights>
-      <identifier type="uri">http://handle.uws.edu.au:8081/1959.7/hiev__3</identifier>
+      <identifier type="uri">http://handle.uws.edu.au:8081/1959.7/hiev_3</identifier>
       <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
       <relatedObject>
         <key>Fred Bloggs</key>
@@ -48,7 +48,7 @@
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Unique ID: http://handle.uws.edu.au:8081/1959.7/hiev__3</notes>
+        <notes>Unique ID: http://handle.uws.edu.au:8081/1959.7/hiev_3</notes>
       </relatedInfo>
     </collection>
   </registryObject>

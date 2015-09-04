@@ -55,6 +55,12 @@
         .controls
           = required
           = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES, {:include_blank => true}
+      .control-group
+        = f.label :license, "License", class: "control-label"
+        .controls
+          = required
+          %span.input
+            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @package.license), {:include_blank => ""}
       .control-group#grant-numbers
         %label.control-label{:for => :package_grant_number_list} Grant Numbers
         .controls
@@ -148,4 +154,14 @@
       tags: $('#package_related_website_list').data('labels'),
       tokenSeparators: ['|'],
       separator: '|'
+  });
+
+  // Sets the access rights to default from the selected experiment.
+  var experimentAccessRights = #{@experiment_access_rights.to_json};
+  $('#package_experiment_id').on("change", function() {
+    var selectedExperimentId = $('#package_experiment_id').val();
+    var experimentAccessRight = _.find(experimentAccessRights, function(ear) {
+      return ear['id'] == selectedExperimentId;
+    });
+    $('#package_license').val(experimentAccessRight['access_rights']);
   });
