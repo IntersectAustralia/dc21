@@ -157,7 +157,7 @@
   });
 
   // Sets the access rights to default from the selected experiment.
-  var experimentAccessRights = #{@experiment_access_rights.to_json};
+  var experimentAccessRights = #{experiment_access_rights.to_json};
   $('#package_experiment_id').on("change", function() {
     var selectedExperimentId = $('#package_experiment_id').val();
     var experimentAccessRight = _.find(experimentAccessRights, function(ear) {
