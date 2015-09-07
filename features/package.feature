@@ -310,7 +310,6 @@ Feature: Create a package
 
 
   @javascript
-
   Scenario: Cannot create package with invalid related websites
     Given I am on the list data files page
     And I add sample1.txt to the cart
@@ -330,7 +329,7 @@ Feature: Create a package
     And I press "Create Package"
     Then I should see "Please correct the following before continuing: Related websites webweb is not a valid url. Related websites a_site is not a valid url."
 
-
+  @javascript
   Scenario: Cannot create package that exceeds the maximum allowable size
     When I have the following system configuration
       | max_package_size | max_package_size_unit |
