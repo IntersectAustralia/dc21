@@ -42,92 +42,15 @@
           = @data_file.format
 
       .control-group
-        %label.control-label{:for => :data_file_file_processing_description} Description
-        .controls
-          = f.text_area :file_processing_description
-
-      .control-group#tags
-        .control-label Tags
-        .controls
-          - if tags.empty?
-            .record None
-          - tags.each do |tag|
-            .record.checkbox
-              = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
-              = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
-      .control-group#labels
-        %label.control-label{:for => :data_file_label_list} Labels
-        .controls
-          = f.text_field :label_list, data: {labels: labels}
-      .control-group
         %label.control-label{:for => :data_file_experiment_id} #{@config.level2}
         .controls
           = required
           = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @data_file.experiment_id), :include_blank => true
-      - if @data_file.is_package?
-        .control-group
-          .control-label Access Rights Type
-          .controls
-            = required
-            = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
-        .control-group
-          .control-label Licence
-          .controls
-            = required
-            %span.input
-              = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @data_file.license), {:include_blank => ""}
-        .control-group#grant-numbers
-          %label.control-label{:for => :data_file_grant_number_list} Grant Numbers
-          .controls
-            = f.text_field :grant_number_list, data: {labels: grant_numbers}
-        .control-group#related-websites
-          %label.control-label{:for => :data_file_related_website_list} Related Websites
-          .controls
-            = f.text_field :related_website_list, data: {labels: related_websites}
-        .control-group
-          .control-label Language
-          .controls
-            .record
-              = @data_file.language.try(:language_name)
-        .control-group
-          .control-label Rights Statement
-          .controls
-            .record
-              = @data_file.rights_statement
-        .control-group
-          .control-label HDL Handle
-          .controls
-            .record
-              = @data_file.hdl_handle
-        .control-group
-          .control-label Physical Location
-          .controls
-            .record
-              = @data_file.physical_location
-        .control-group
-          .control-label Research Centre Name
-          .controls
-            .record
-              = @data_file.research_centre_name
+
       .control-group
-        .control-label Date Added
+        %label.control-label{:for => :data_file_file_processing_description} Description
         .controls
-          .record
-            = @data_file.created_at.to_s(:with_time)
-      .control-group
-        - if @data_file.is_package?
-          .control-label ID
-          .record.controls
-            = @data_file.external_id
-        - else
-          %label.control-label{ :for => :data_file_external_id} ID
-          .controls
-            = f.text_field :external_id
-      .control-group
-        .control-label Added By
-        .controls
-          .record
-            = (@data_file.created_by ? @data_file.created_by.email : "")
+          = f.text_area :file_processing_description
 
       - unless @data_file.is_toa5?
         .control-group
@@ -162,6 +85,91 @@
                 = select_hour @data_file.end_time, {:field_name => "end_hr"}
                 = select_minute @data_file.end_time, {:field_name => "end_min"}
                 = select_second @data_file.end_time, {:field_name => "end_sec"}
+
+      .control-group
+        - if @data_file.is_package?
+          .control-label ID
+          .record.controls
+            = @data_file.external_id
+        - else
+          %label.control-label{ :for => :data_file_external_id} ID
+          .controls
+            = f.text_field :external_id
+
+      %h2{:title => @data_file.filename}
+      .control-group#tags
+        .control-label Tags
+        .controls
+          - if tags.empty?
+            .record None
+          - tags.each do |tag|
+            .record.checkbox
+              = check_box_tag "tags[]", tag.id, @data_file.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
+              = label_tag "tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
+      .control-group#labels
+        %label.control-label{:for => :data_file_label_list} Labels
+        .controls
+          = f.text_field :label_list, data: {labels: labels}
+
+      - if @data_file.is_package?
+        .control-group#grant-numbers
+          %label.control-label{:for => :data_file_grant_number_list} Grant Numbers
+          .controls
+            = f.text_field :grant_number_list, data: {labels: grant_numbers}
+        .control-group#related-websites
+          %label.control-label{:for => :data_file_related_website_list} Related Websites
+          .controls
+            = f.text_field :related_website_list, data: {labels: related_websites}
+        %h2{:title => @data_file.filename}
+        .control-group
+          .control-label Access Rights Type
+          .controls
+            = required
+            = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES
+        .control-group
+          .control-label Licence
+          .controls
+            = required
+            %span.input
+              = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @data_file.license), {:include_blank => ""}
+        .control-group
+          .control-label Rights Statement
+          .controls
+            .record
+              = @data_file.rights_statement
+        %h2{:title => @data_file.filename}
+        .control-group
+          .control-label Language
+          .controls
+            .record
+              = @data_file.language.try(:language_name)
+        .control-group
+          .control-label Physical Location
+          .controls
+            .record
+              = @data_file.physical_location
+        .control-group
+          .control-label Research Centre Name
+          .controls
+            .record
+              = @data_file.research_centre_name
+        %h2{:title => @data_file.filename}
+        .control-group
+          .control-label HDL Handle
+          .controls
+            .record
+              = @data_file.hdl_handle
+
+      .control-group
+        .control-label Date Added
+        .controls
+          .record
+            = @data_file.created_at.to_s(:with_time)
+      .control-group
+        .control-label Added By
+        .controls
+          .record
+            = (@data_file.created_by ? @data_file.created_by.email : "")
 
       %h2{:title => @data_file.filename} Access Control for #{@data_file.filename}
       .control-group
