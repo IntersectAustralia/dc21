@@ -60,7 +60,7 @@
         .controls
           = required
           %span.input
-            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @package.license), {:include_blank => ""}
+            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:id]]}, @package.license), {:include_blank => ""}
       .control-group#grant-numbers
         %label.control-label{:for => :package_grant_number_list} Grant Numbers
         .controls

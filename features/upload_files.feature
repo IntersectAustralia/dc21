@@ -340,7 +340,6 @@ Feature: Upload files
     And I should see "end_sec" for file "sample1.txt"
 
   @javascript
-
   Scenario: When clearing a date for non-toa5, times should also be removed
     Given I am on the upload page
     When I select "RAW" from "File type"
@@ -369,7 +368,6 @@ Feature: Upload files
     And I should not see "end_sec" for file "sample1.txt"
 
   @javascript @wip
-
   Scenario: Dates and times for non-toa5 files are processed correctly
     Given I am on the upload page
     When I select "RAW" from "File type"

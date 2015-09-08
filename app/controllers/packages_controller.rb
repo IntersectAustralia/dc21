@@ -2,7 +2,9 @@ require File.expand_path('../../../lib/exceptions/template_error.rb', __FILE__)
 class PackagesController < DataFilesController
 
   expose(:access_rights) { AccessRightsLookup.new.access_rights }
-  expose(:experiment_access_rights) {Experiment.select([:id, :access_rights])}
+  expose(:experiment_access_rights) {
+    Experiment.all.map { |experiment| {:id => experiment.id, :access_rights => AccessRightsLookup.new.get_id(experiment.access_rights)  } }
+  }
 
   def new
     if !current_user.cart_items.empty?
@@ -31,7 +33,6 @@ class PackagesController < DataFilesController
 
   def create
     package_params = params[:package]
-    package_params[:license] = AccessRightsLookup.new.get_url(package_params[:license])
     @package = Package.create_package(package_params, params[:date], current_user)
     @package.related_website_list = package_params[:related_website_list] if package_params[:related_website_list]
     if @package.save

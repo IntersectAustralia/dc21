@@ -10,7 +10,7 @@ class AccessRightsLookup
             {:id => 'All rights reserved', :url => "N/A",                                              :name => "All rights reserved"}]
 
   def access_rights
-    RIGHTS.map { |access_right| {:url => access_right[:url], :name => access_right[:name]} }
+    RIGHTS
   end
 
   def access_rights_values
