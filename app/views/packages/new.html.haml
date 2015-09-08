@@ -22,73 +22,19 @@
           = f.text_field :filename
           %span .zip
       .control-group
-        = f.label :experiment_id, "#{@config.level2}", class: "control-label"
-        .controls
-          = required
-          = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @package.experiment_id), :include_blank => true
-      .control-group
         = f.label :title, "Title", class: "control-label"
         .controls
           = required
           = f.text_area :title
       .control-group
-        .control-label ID
+        = f.label :experiment_id, "#{@config.level2}", class: "control-label"
+        .controls
+          = required
+          = f.select :experiment_id, option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, @package.experiment_id), :include_blank => true
       .control-group
         = f.label :file_processing_description, "Description", class: "control-label"
         .controls
           = f.text_area :file_processing_description
-      .control-group#tags
-        .control-label Tags
-        .controls
-          - if tags.empty?
-            .record None
-          - tags.each do |tag|
-            %label.checkbox
-              = check_box_tag "tags[]", tag.id, @package.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
-              = label_tag "tag_#{tag.id}", tag.name
-      .control-group#labels
-        %label.control-label{:for => :package_label_list} Labels
-        .controls
-          = f.text_field :label_list, data: {labels: labels}
-      .control-group
-        = f.label :access_rights_type, "Access Rights Type", class: "control-label"
-        .controls
-          = required
-          = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES, {:include_blank => true}
-      .control-group
-        = f.label :license, "License", class: "control-label"
-        .controls
-          = required
-          %span.input
-            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @package.license), {:include_blank => ""}
-      .control-group#grant-numbers
-        %label.control-label{:for => :package_grant_number_list} Grant Numbers
-        .controls
-          = f.text_field :grant_number_list, data: {labels: grant_numbers}
-      .control-group#related-websites
-        %label.control-label{:for => :package_related_website_list} Related Websites
-        .controls
-          = f.text_field :related_website_list, data: {labels: related_websites}
-      .control-group
-        .control-label Language
-        .controls
-          .record
-            = @package.language.try(:language_name)
-      .control-group
-        .control-label Rights Statement
-        .controls
-          .record
-            = @package.rights_statement
-      .control-group
-        .control-label Physical Location
-        .controls
-          .record
-            = @package.physical_location
-      .control-group
-        .control-label Research Centre Name
-        .controls
-          .record
-            = @package.research_centre_name
       .control-group
         .date-format yyyy-mm-dd
       .control-group
@@ -121,6 +67,64 @@
               = select_hour @package.end_time, {:field_name => "end_hr"}
               = select_minute @package.end_time, {:field_name => "end_min"}
               = select_second @package.end_time, {:field_name => "end_sec"}
+      .control-group
+        .control-label ID
+      %h2{:title => @package.filename}
+      .control-group#tags
+        .control-label Tags
+        .controls
+          - if tags.empty?
+            .record None
+          - tags.each do |tag|
+            %label.checkbox
+              = check_box_tag "tags[]", tag.id, @package.tag_ids.include?(tag.id), :id => "tag_#{tag.id}"
+              = label_tag "tag_#{tag.id}", tag.name
+      .control-group#labels
+        %label.control-label{:for => :package_label_list} Labels
+        .controls
+          = f.text_field :label_list, data: {labels: labels}
+      .control-group#grant-numbers
+        %label.control-label{:for => :package_grant_number_list} Grant Numbers
+        .controls
+          = f.text_field :grant_number_list, data: {labels: grant_numbers}
+      .control-group#related-websites
+        %label.control-label{:for => :package_related_website_list} Related Websites
+        .controls
+          = f.text_field :related_website_list, data: {labels: related_websites}
+      %h2{:title => @package.filename}
+      .control-group
+        = f.label :access_rights_type, "Access Rights Type", class: "control-label"
+        .controls
+          = required
+          = f.select :access_rights_type, Package::ACCESS_RIGHTS_TYPES, {:include_blank => true}
+      .control-group
+        = f.label :license, "License", class: "control-label"
+        .controls
+          = required
+          %span.input
+            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @package.license), {:include_blank => ""}
+      .control-group
+        .control-label Rights Statement
+        .controls
+          .record
+            = @package.rights_statement
+      %h2{:title => @package.filename}
+      .control-group
+        .control-label Language
+        .controls
+          .record
+            = @package.language.try(:language_name)
+      .control-group
+        .control-label Physical Location
+        .controls
+          .record
+            = @package.physical_location
+      .control-group
+        .control-label Research Centre Name
+        .controls
+          .record
+            = @package.research_centre_name
+      %h2{:title => @package.filename}
       .control-group
         .controls
           %label.checkbox
