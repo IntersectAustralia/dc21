@@ -236,6 +236,10 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
   end
 end
 
+Then /^I should see "([^"]*)" selected for "([^"]*)"$/ do |value, select|
+  expect(page).to have_select(select, selected: value)
+end
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should

@@ -236,6 +236,7 @@ Feature: Create a package from the API
     And file "my_package.zip" should have description "some friendly description"
     And file "my_package.zip" should have related website "website1.com"
     And file "my_package.zip" should have related website "website2.com"
+    And file "my_package.zip" should have license "http://creativecommons.org/licenses/by/4.0"
 
   Scenario: Package can be created with a specified license
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"

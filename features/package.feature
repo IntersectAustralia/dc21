@@ -339,3 +339,28 @@ Feature: Create a package
     And I add sample2.txt to the cart
     When I am on the create package page
     Then I should see "Cannot create package. Total size of files in the cart exceeds the maximum package size."
+
+  @javascript
+  Scenario: License changes when the experiment changes
+    Given I have experiments
+      | name   | facility            | access_rights                                    |
+      | Expr 1 | ROS Weather Station | http://creativecommons.org/licenses/by/4.0       |
+      | Expr 2 | ROS Weather Station | http://creativecommons.org/licenses/by-sa/4.0    |
+      | Expr 3 | Flux Tower          | http://creativecommons.org/licenses/by-nd/4.0    |
+      | Expr 4 | Flux Tower          | http://creativecommons.org/licenses/by-nc/4.0    |
+      | Expr 5 | Flux Tower          | http://creativecommons.org/licenses/by-nc-sa/4.0 |
+    And I am on the list data files page
+    And I add sample1.txt to the cart
+    And I wait for 4 seconds
+    When I am on the create package page
+    And I select "Expr 1" from "Experiment"
+    Then I should see "CC BY: Attribution" selected for "License"
+    And I select "Expr 2" from "Experiment"
+    Then I should see "CC BY-SA: Attribution-Share Alike" selected for "License"
+    And I select "Expr 3" from "Experiment"
+    Then I should see "CC BY-ND: Attribution-No Derivative Works" selected for "License"
+    And I select "Expr 4" from "Experiment"
+    Then I should see "CC BY-NC: Attribution-Noncommercial" selected for "License"
+    And I select "Expr 5" from "Experiment"
+    Then I should see "CC BY-NC-SA: Attribution-Noncommercial-Share Alike" selected for "License"
+
