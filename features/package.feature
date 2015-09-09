@@ -315,8 +315,8 @@ Feature: Create a package
     And I add sample1.txt to the cart
     And I wait for 4 seconds
     When I am on the create package page
-    And I fill in "package_related_website_list" with "webweb|a_site|siteB|http://example.com"
-    And I check select2 field "package_related_website_list" updated value to "webweb|a_site"
+    And I fill in "package_related_website_list" with "webweb|test:123|http://sdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksdsdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksd.com"
+    And I check select2 field "package_related_website_list" updated value to "webweb|test:123|http://sdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksdsdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksd.com"
     And I select "Conditional" from "package_access_rights_type"
     And I should see "Spanish"
     And I should see "blah blah"
@@ -327,7 +327,7 @@ Feature: Create a package
     And I fill in "Title" with "Package 1"
     And I uncheck "Run in background?"
     And I press "Create Package"
-    Then I should see "Please correct the following before continuing: Related websites webweb is not a valid url. Related websites a_site is not a valid url."
+    Then I should see "Please correct the following before continuing: Related websites webweb is not a valid url. Related websites test:123 is not a valid url. Related websites http://sdjfklsdjfklsd... is longer than 80 characters"
 
   @javascript
   Scenario: Cannot create package that exceeds the maximum allowable size

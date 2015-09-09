@@ -251,7 +251,9 @@ class DataFile < ActiveRecord::Base
       /x
     related_websites = self.related_website_list.split(/\|\s*/)
     related_websites.each do |url|
-      if url.match(url_regex).nil?
+      if url.length > 80
+        errors.add(:related_websites, "#{url[0..20]+"..."} is longer than 80 characters")
+      elsif url.match(url_regex).nil?
         errors.add(:related_websites, "#{url} is not a valid url.")
       end
     end

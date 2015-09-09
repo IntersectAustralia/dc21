@@ -217,7 +217,7 @@ Feature: Create a package from the API
     And file "my_package.zip" should have grant number "GRANT-1"
     And file "my_package.zip" should have grant number "GRANT-2"
 
-  Scenario: Package is created with grant numbers
+  Scenario: Package is created with related websites
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
       | file_ids           | 1,2,3                         |
       | filename           | my_package                    |
@@ -226,7 +226,7 @@ Feature: Create a package from the API
       | description        | some friendly description     |
       | access_rights_type | Restricted                    |
       | run_in_background  | false                         |
-      | related_websites   | "website1.com","website2.com" |
+      | related_websites   | "http://website1.com","http://website2.com" |
     Then I should get a 200 response code
     And I should get a JSON response with message "Package was successfully created."
     And I should get a JSON response with package name "my_package.zip"
@@ -234,8 +234,8 @@ Feature: Create a package from the API
     And file "my_package.zip" should have title "my magic package"
     And file "my_package.zip" should have transfer status "COMPLETE"
     And file "my_package.zip" should have description "some friendly description"
-    And file "my_package.zip" should have related website "website1.com"
-    And file "my_package.zip" should have related website "website2.com"
+    And file "my_package.zip" should have related website "http://website1.com"
+    And file "my_package.zip" should have related website "http://website2.com"
     And file "my_package.zip" should have license "http://creativecommons.org/licenses/by/4.0"
 
   Scenario: Package can be created with a specified license

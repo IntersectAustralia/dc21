@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150903070827) do
+ActiveRecord::Schema.define(:version => 20150909044908) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -199,11 +199,11 @@ ActiveRecord::Schema.define(:version => 20150903070827) do
   end
 
   create_table "grant_numbers", :force => true do |t|
-    t.string "name"
+    t.text "name"
   end
 
   create_table "labels", :force => true do |t|
-    t.string "name"
+    t.text "name"
   end
 
   create_table "languages", :force => true do |t|
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(:version => 20150903070827) do
   end
 
   create_table "related_websites", :force => true do |t|
-    t.string "url", :limit => 80
+    t.text "url"
   end
 
   create_table "roles", :force => true do |t|
@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(:version => 20150903070827) do
     t.integer  "language_id"
     t.string   "electronic_landing_page_title",                :default => "Enter the title of your landing page"
     t.string   "email_level"
-    t.string   "research_librarians",                          :default => ""
+    t.text     "research_librarians",                          :default => ""
   end
 
   create_table "tags", :force => true do |t|
