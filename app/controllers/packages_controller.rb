@@ -77,7 +77,6 @@ class PackagesController < DataFilesController
     tag_names = params[:tag_names]
     label_names = params[:label_names]
     grant_numbers = params[:grant_numbers]
-    related_websites = params[:related_websites]
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
@@ -87,16 +86,13 @@ class PackagesController < DataFilesController
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
-    related_website_ids = parse_related_websites(related_websites, errors)
 
     package = Package.create_package(params, nil, current_user)
     if errors.empty? && package.save
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
       save_grant_numbers(package, grant_number_ids)
-      if !related_website_ids.empty?
-        save_related_websites(package, related_website_ids)
-      end
+
       data_file_ids = data_files.map { |data_file| data_file.id }
       package.label_list = params[:label_list] if params[:label_list]
       package.parent_ids = data_file_ids
@@ -205,11 +201,6 @@ class PackagesController < DataFilesController
     pkg.save
   end
 
-  def save_related_websites(package, related_websites)
-    pkg = DataFile.find(package.id)
-    pkg.related_website_ids = related_websites
-    pkg.save
-  end
 
   def build_rif_cs(files, package)
     #build the rif-cs and place in the unpublished_rif_cs folder, where it will stay until published in DC21

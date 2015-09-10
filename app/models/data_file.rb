@@ -66,7 +66,7 @@ class DataFile < ActiveRecord::Base
   has_many :grant_numbers, :through => :data_file_grant_numbers, :uniq => true
 
   has_many :data_file_related_websites, :uniq => true
-  has_many :related_websites, :through => :data_file_related_websites, :uniq => true
+  has_many :related_websites, :through => :data_file_related_websites, :uniq => true, autosave: true
 
   attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text, :grant_number_list, :related_website_list, :license
 
@@ -102,7 +102,6 @@ class DataFile < ActiveRecord::Base
 
   validates_inclusion_of :access_rights_type, in: ACCESS_RIGHTS_TYPES, if: "access_rights_type.present?"
   validates_length_of :research_centre_name, maximum: 80
-  validate :validate_related_websites
 
   validates_inclusion_of :license, in: AccessRightsLookup.new.access_rights_values, :if => :is_package?
 
@@ -225,38 +224,8 @@ class DataFile < ActiveRecord::Base
     related_website_urls = new_value.split(/\|\s*/)
     self.related_websites = related_website_urls.map { |url|
       existing = RelatedWebsite.where('lower(url) = ?', url.downcase).first
-      existing ||= RelatedWebsite.create(:url => url)
+      existing ||= self.related_websites.build(:url => url)
     }
-  end
-
-  def validate_related_websites
-    url_regex = /
-        ([a-zA-Z][\-+.a-zA-Z\d]*):\/\/                           (?# 1: scheme)
-        (?:
-           ((?:[\-_.!~*'()a-zA-Z\d;?:@&=+$,]|%[a-fA-F\d]{2})(?:[\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]|%[a-fA-F\d]{2})*)                    (?# 2: opaque)
-        |
-           (?:(?:
-             \/\/(?:
-                 (?:(?:((?:[\-_.!~*'()a-zA-Z\d;:&=+$,]|%[a-fA-F\d]{2})*)@)?        (?# 3: userinfo)
-                   (?:((?:(?:[a-zA-Z0-9\-.]|%\h\h)+|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|\[(?:(?:[a-fA-F\d]{1,4}:)*(?:[a-fA-F\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:(?:[a-fA-F\d]{1,4}:)*[a-fA-F\d]{1,4})?::(?:(?:[a-fA-F\d]{1,4}:)*(?:[a-fA-F\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))?)\]))(?::(\d*))?))? (?# 4: host, 5: port)
-               |
-                 ((?:[\-_.!~*'()a-zA-Z\d$,;:@&=+]|%[a-fA-F\d]{2})+)                 (?# 6: registry)
-               )
-             |
-             (?!\/\/))                           (?# XXX: '\/\/' is the mark for hostport)
-             (\/(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*(?:;(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*)*(?:\/(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*(?:;(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*)*)*)?                    (?# 7: path)
-           )(?:\?((?:[\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]|%[a-fA-F\d]{2})*))?                 (?# 8: query)
-        )
-        (?:\#((?:[\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]|%[a-fA-F\d]{2})*))?                  (?# 9: fragment)
-      /x
-    related_websites = self.related_website_list.split(/\|\s*/)
-    related_websites.each do |url|
-      if url.length > 80
-        errors.add(:related_websites, "#{url[0..20]+"..."} is longer than 80 characters")
-      elsif url.match(url_regex).nil?
-        errors.add(:related_websites, "#{url} is not a valid url.")
-      end
-    end
   end
 
   def modifiable?

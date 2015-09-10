@@ -115,7 +115,6 @@ class DataFilesController < ApplicationController
     else
       render action: "edit"
     end
-
   end
 
   def create
@@ -598,48 +597,6 @@ class DataFilesController < ApplicationController
       errors << 'Incorrect format for grant numbers - grant numbers must be double-quoted and comma separated'
     end
     grant_number_ids
-  end
-
-  def parse_related_websites(related_websites, errors)
-    return [] if related_websites.blank?
-    related_website_ids = []
-    url_regex = /
-        ([a-zA-Z][\-+.a-zA-Z\d]*):\/\/                           (?# 1: scheme)
-        (?:
-           ((?:[\-_.!~*'()a-zA-Z\d;?:@&=+$,]|%[a-fA-F\d]{2})(?:[\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]|%[a-fA-F\d]{2})*)                    (?# 2: opaque)
-        |
-           (?:(?:
-             \/\/(?:
-                 (?:(?:((?:[\-_.!~*'()a-zA-Z\d;:&=+$,]|%[a-fA-F\d]{2})*)@)?        (?# 3: userinfo)
-                   (?:((?:(?:[a-zA-Z0-9\-.]|%\h\h)+|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|\[(?:(?:[a-fA-F\d]{1,4}:)*(?:[a-fA-F\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:(?:[a-fA-F\d]{1,4}:)*[a-fA-F\d]{1,4})?::(?:(?:[a-fA-F\d]{1,4}:)*(?:[a-fA-F\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))?)\]))(?::(\d*))?))? (?# 4: host, 5: port)
-               |
-                 ((?:[\-_.!~*'()a-zA-Z\d$,;:@&=+]|%[a-fA-F\d]{2})+)                 (?# 6: registry)
-               )
-             |
-             (?!\/\/))                           (?# XXX: '\/\/' is the mark for hostport)
-             (\/(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*(?:;(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*)*(?:\/(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*(?:;(?:[\-_.!~*'()a-zA-Z\d:@&=+$,]|%[a-fA-F\d]{2})*)*)*)?                    (?# 7: path)
-           )(?:\?((?:[\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]|%[a-fA-F\d]{2})*))?                 (?# 8: query)
-        )
-        (?:\#((?:[\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]|%[a-fA-F\d]{2})*))?                  (?# 9: fragment)
-      /x
-    begin
-      related_websites_array = CSV.parse_line(related_websites)
-      related_websites_array.each do |related_website|
-        existing = RelatedWebsite.where('lower(url) = ?', related_website.downcase).first
-        if related_website.length > 80
-          errors << "#{related_website} is longer than 80 characters"
-        elsif related_website.match(url_regex).nil?
-          errors << "#{related_website} is not a valid url"
-        elsif existing.nil?
-          related_website_ids << RelatedWebsite.create(:url => related_website).id
-        else
-          related_website_ids << existing.id
-        end
-      end
-    rescue CSV::MalformedCSVError
-      errors << 'Incorrect format for related websites - related websites must be double-quoted and comma separated'
-    end
-    related_website_ids
   end
 
   def sort_column

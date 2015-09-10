@@ -327,7 +327,7 @@ Feature: Create a package
     And I fill in "Title" with "Package 1"
     And I uncheck "Run in background?"
     And I press "Create Package"
-    Then I should see "Please correct the following before continuing: Related websites webweb is not a valid url. Related websites test:123 is not a valid url. Related websites http://sdjfklsdjfklsd... is longer than 80 characters"
+    Then I should see "Please correct the following before continuing: Related websites url webweb is not a valid url Related websites url test:123 is not a valid url Related websites url have url longer than 80 characters"
 
   @javascript
   Scenario: Cannot create package that exceeds the maximum allowable size

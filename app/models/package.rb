@@ -1,3 +1,4 @@
+require 'csv'
 class Package < DataFile
 
   PACKAGE_FORMAT = 'BAGIT'
@@ -49,6 +50,8 @@ class Package < DataFile
     datafile.published = false
     datafile.title = params[:title]
     datafile.transfer_status = RESQUE_QUEUED
+    related_websites_list = params[:related_websites].nil? ? params[:related_website_list] : CSV.parse_line(params[:related_websites]).join("|")
+    datafile.related_website_list = related_websites_list unless related_websites_list.nil?
     config = SystemConfiguration.instance
     datafile.access_rights_type = params[:access_rights_type]
     if datafile.access_rights_type == ACCESS_RIGHTS_OPEN
