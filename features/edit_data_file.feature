@@ -13,6 +13,9 @@ Feature: Edit data files metadata
       | file.txt             | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment     | desc.                             | UNKNOWN                |        |                   |
       | error.txt            | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1                | desc.                             | ERROR                  |        |                   |
       | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 |
+    And I have data files
+      | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        | related_websites |
+      | package1.zip         | 30/12/2011 12:34 | admin@intersect.org.au      | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          |samples/package1.zip  |  a package                        | PACKAGE                |        |                   |                  |
     And I have access groups
       | id | name    | primary_user                |  created_at       | status |
       | 1  | group-1 | admin@intersect.org.au      | 26/02/2014 14:18  | true   |
@@ -250,3 +253,27 @@ Feature: Edit data files metadata
     Then I should be on the data file details page for file.txt
     And I should see "The data file was saved successfully"
     And I should see field "Access" with value "Private"
+
+  @javascript
+  Scenario: Add a new related website to data file
+    Given I am logged in as "admin@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "package1.zip"
+    And I wait for 2 seconds
+    And I should see select2 field "data_file_related_website_list" with value ""
+    And I fill in "data_file_related_website_list" with "http://www.example.com"
+    And I check select2 field "data_file_related_website_list" updated value to "http://www.example.com"
+    And I press "Update"
+    When I should be on the data file details page for package1.zip
+    Then I should see field "Related Websites" with value "http://www.example.com"
+
+  @javascript
+  Scenario: Cannot update a data file with invalid related websites
+    Given I am logged in as "admin@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "package1.zip"
+    And I should see select2 field "data_file_related_website_list" with value ""
+    And I fill in "data_file_related_website_list" with "webweb|test:123|http://sdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksdsdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksd.com"
+    And I check select2 field "data_file_related_website_list" updated value to "webweb|test:123|http://sdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksdsdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksd.com"
+    And I press "Update"
+    Then I should see "Please correct the following before continuing: Related websites url webweb is not a valid url Related websites url test:123 is not a valid url Related websites url have url longer than 80 characters"
