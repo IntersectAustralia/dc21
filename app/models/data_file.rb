@@ -91,7 +91,7 @@ class DataFile < ActiveRecord::Base
   validates_length_of :path, :maximum => 260
   validates_presence_of :created_by_id
   validates_presence_of :file_processing_status
-  validates_presence_of :experiment_id
+  validates :experiment, :presence => true
   validates_length_of :file_processing_description, :maximum => 10.kilobytes
   validates_presence_of :start_time, :if => :end_time?, :message => "is required if End time specified"
   validates_format_of :filename, :with => /^[^\/\\\?\*:|"<>]+$/, :message => %(cannot contain any of the following characters: / \\ ? * : | < > "), :allow_blank => true

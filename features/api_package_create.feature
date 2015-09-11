@@ -66,16 +66,26 @@ Feature: Create a package from the API
       | file_ids | 1,2,3 |
     Then I should get a 400 response code
     And I should get a JSON response with message "filename can't be blank"
-    And I should get a JSON response with message "experiment_id can't be blank"
+    And I should get a JSON response with message "experiment can't be blank"
     And I should get a JSON response with message "title can't be blank"
     And I should get a JSON response with message "access_rights_type must be Open, Conditional or Restricted"
 
+  Scenario: Try to package with an invalid experiment id
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1,2,3       |
+      | filename           | my_pack.zip |
+      | title              | My title    |
+      | access_rights_type | Open        |
+      | experiment_id      | 11          |
+    Then I should get a 400 response code
+    And I should get a JSON response with message "experiment can't be blank"
+
   Scenario: Try to package with error file
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
-      | file_ids      | 4    |
-      | filename      | my_package       |
-      | experiment_id | 1                |
-      | title         | my magic package |
+      | file_ids           | 4                |
+      | filename           | my_package       |
+      | experiment_id      | 1                |
+      | title              | my magic package |
       | access_rights_type | Open             |
     Then I should get a 400 response code
     And I should get a JSON response with message "file '4' is not in a state that can be packaged"
