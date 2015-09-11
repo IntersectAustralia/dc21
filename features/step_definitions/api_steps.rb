@@ -83,6 +83,12 @@ Then /^I should get a JSON response with message "([^"]*)"$/ do |message|
   actual['messages'].should include(message)
 end
 
+Then /^I should get a JSON response with warning "([^"]*)"$/ do |message|
+  require 'json'
+  actual = JSON.parse(last_response.body)
+  actual['warnings'].should include(message)
+end
+
 Then /^I should get a JSON response without message "([^"]*)"$/ do |message|
   require 'json'
   actual = JSON.parse(last_response.body)
@@ -197,10 +203,21 @@ When /^I perform an API search without an API token$/ do |table|
   post api_search_data_files_path(:format => :json), post_params
 end
 
+When /^I perform an API update without an API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_update_data_files_path(:format => :json), post_params
+end
+
 When /^I perform an API search with an invalid API token$/ do |table|
   post_params = Hash[*table.raw.flatten]
   post api_search_data_files_path(:format => :json, :auth_token => 'blah'), post_params
 end
+
+When /^I perform an API update with an invalid API token$/ do |table|
+  post_params = Hash[*table.raw.flatten]
+  post api_update_data_files_path(:format => :json, :auth_token => 'blah'), post_params
+end
+
 
 When /^I perform an API publish with an invalid API token$/ do |table|
   post_params = Hash[*table.raw.flatten]
@@ -264,6 +281,13 @@ When /^I perform an API publish with the following parameters as user "([^"]*)"$
   user = User.find_by_email!(email)
   post api_publish_packages_path(:format => :json, :auth_token => user.authentication_token), params
 end
+
+When /^I perform an API update with the following parameters as user "([^"]*)"$/ do |email,table|
+  params = Hash[*table.raw.flatten]
+  user = User.find_by_email!(email)
+  post api_update_data_files_path(:format => :json, :auth_token => user.authentication_token), params
+end
+
 
 
 When /^I should get a JSON response with$/ do |table|

@@ -3,7 +3,7 @@
     %p= alert
     %span#close_alert ×
 - flash.each do |key, msg|
-  - if not key.to_s[/alert/]
+  - if not key.to_s[/alert|timedout/]
     #notice
       %p= msg
       %span#close_notice ×

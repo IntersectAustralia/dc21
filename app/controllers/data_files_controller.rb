@@ -4,6 +4,7 @@ class DataFilesController < ApplicationController
 
   ALLOWED_SORT_PARAMS = %w(users.email data_files.filename data_files.created_at data_files.file_processing_status data_files.experiment_id data_files.file_size)
   SAVE_MESSAGE = 'The data file was saved successfully.'
+  PACKAGE_SAVE_MESSAGE = 'WARNING: The RIF-CS will not be regenerated.'
 
   before_filter :authenticate_user!, :except => [:download]
   before_filter :sort_params, :only => [:index, :search]
@@ -111,7 +112,11 @@ class DataFilesController < ApplicationController
         @data_file.update_attribute(:access_rights_text, config.restricted_access_rights_text)
       end
       @data_file.rename_file(old_filename, params[:data_file][:filename], APP_CONFIG['files_root']) unless @data_file.is_package?
-      redirect_to data_file_path(@data_file), notice: SAVE_MESSAGE
+      notice = SAVE_MESSAGE
+      if @data_file.is_package?
+        notice += ' ' + PACKAGE_SAVE_MESSAGE
+      end
+      redirect_to data_file_path(@data_file), notice: notice
     else
       render action: "edit"
     end
@@ -336,7 +341,7 @@ class DataFilesController < ApplicationController
       start_time = params[:start_time]
       end_time = params[:end_time]
 
-      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups])
+      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups], false)
 
       if errors.empty?
         begin
@@ -374,7 +379,151 @@ class DataFilesController < ApplicationController
     end
   end
 
+  def api_update
+    errors = []
+    warnings = []
+
+    file_id = params[:file_id]
+    name = params[:name]
+    experiment_id = params[:org_level2_id] || params[:experiment_id]
+    description = params[:description] || params[:file_processing_description]
+
+    access = params[:access]
+    access_to_all_institutional_users = params[:access_to_all_institutional_users]
+    access_to_user_groups = params[:access_to_user_groups]
+
+    tag_names = params[:tag_names]
+    label_names = params[:label_names]
+    grant_numbers = params[:grant_numbers]
+    related_websites = params[:related_websites]
+
+    access_rights_type = params[:access_rights_type]
+    license = params[:license]
+
+    parent_files = clean_params_list_string(params[:parent_filenames])
+    parent_file_ids = DataFile.where(:filename => parent_files).pluck(:id)
+    access_groups = clean_params_list_string(params[:access_groups])
+    access_group_ids = AccessGroup.where(:name => access_groups).pluck(:id)
+    start_time = params[:start_time]
+    end_time = params[:end_time]
+
+    data_file = validate_file_id(file_id, current_user, errors, warnings)
+    validation_errors, tag_ids, label_ids, parsed_access, parsed_access_to_all_institutional_users, parsed_access_to_user_groups = validate_api_inputs(nil, nil, experiment_id, start_time, end_time, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, true)
+    errors.push(*validation_errors)
+
+    if errors.empty?
+
+      if name
+        if data_file.is_package?
+          errors << 'Cannot rename a package'
+        else
+          data_file.rename_file(data_file.filename, name, APP_CONFIG['files_root'])
+        end
+      end
+      if experiment_id
+        data_file.experiment_id = experiment_id
+      end
+      if description
+        data_file.file_processing_description = description
+      end
+      if tag_names
+        data_file.tag_ids = tag_ids
+      end
+      if parent_files
+        data_file.parent_ids = parent_file_ids
+      end
+      if label_names
+        data_file.label_ids = label_ids
+      end
+      if access
+        data_file.access = parsed_access
+      end
+      if access_to_all_institutional_users
+        data_file.access_to_all_institutional_users = parsed_access_to_all_institutional_users
+      end
+      if access_to_user_groups
+        data_file.access_to_user_groups = parsed_access_to_user_groups
+      end
+      if access_groups
+        data_file.access_group_ids = access_group_ids
+      end
+      if start_time
+        data_file.start_time = start_time + ' UTC'
+      end
+      if end_time
+        data_file.end_time = end_time + ' UTC'
+      end
+
+      if data_file.is_package?
+        if access_rights_type
+          config = SystemConfiguration.instance
+          data_file.access_rights_type = access_rights_type
+          if data_file.access_rights_type == Package::ACCESS_RIGHTS_OPEN
+            data_file.access_rights_text = config.open_access_rights_text
+          elsif data_file.access_rights_type == Package::ACCESS_RIGHTS_CONDITIONAL
+            data_file.access_rights_text = config.conditional_access_rights_text
+          elsif data_file.access_rights_type == Package::ACCESS_RIGHTS_RESTRICTED
+            data_file.access_rights_text = config.restricted_access_rights_text
+          end
+        end
+        if license
+          data_file.license = AccessRightsLookup.new.get_url(license)
+        end
+        if related_websites
+          related_websites_list = CSV.parse_line(related_websites).join('|')
+          data_file.related_website_list = related_websites_list
+        end
+        if grant_numbers
+          grant_number_list = CSV.parse_line(grant_numbers).join('|')
+          data_file.grant_number_list = grant_number_list
+        end
+        warnings << 'Updating a package will not cause rif-cs to be regenerated'
+      end
+
+      if errors.empty? && data_file.save
+        render :json => {:file_id => data_file.id, :messages => 'Data file successfully updated', :warnings => warnings}
+      else
+        data_file.errors.each{ |attribute,message|
+          errors << "#{attribute} #{message}"
+        }
+        render :json => {:messages => errors}, :status => :bad_request
+      end
+    else
+      render :json => {:messages => errors}, :status => :bad_request
+    end
+
+  end
+
   private
+
+  def validate_file_id(file_id, current_user, errors, warnings)
+    if file_id.nil?
+      errors << 'file_id is required'
+      return nil
+    end
+    if !DataFile.exists?(file_id)
+      errors << "file with id '#{file_id}' could not be found"
+      return nil
+    end
+
+    data_file = DataFile.find(file_id)
+    if data_file.is_error_file?
+      errors << "file '#{file_id}' has a status of '#{data_file.file_processing_status}' and cannot be updated"
+      return nil
+    end
+
+    if !current_user.is_admin?
+      if data_file.created_by != current_user
+        errors << "unauthorized to update file '#{file_id}'"
+        return nil
+      end
+      if data_file.published?
+        errors << "file '#{file_id}' has a been published and cannot be updated"
+        return nil
+      end
+    end
+    return data_file
+  end
 
   def clean_params_list_string(params_str)
     list_str = params_str
@@ -484,18 +633,80 @@ class DataFilesController < ApplicationController
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups)
+  def validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, is_update)
     errors = []
-    errors << 'Experiment id is required' if experiment_id.blank?
-    errors << 'File is required' if file.blank?
-    errors << 'File type is required' if type.blank?
-    errors << 'File type not recognised' unless type.blank? || DataFile::STATI.include?(type)
-    errors << 'Supplied org level 2 id does not exist' unless experiment_id.blank? || Experiment.exists?(experiment_id)
-    errors << 'Supplied file was not a valid file' unless file.blank? || file.is_a?(ActionDispatch::Http::UploadedFile)
-    errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PRIVATE}" unless access.blank? || access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE
-    errors << 'Supplied access_to_all_institutional_users was not valid: has to be either true or false' unless access_to_all_institutional_users.blank? || access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i) || access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i)
-    errors << 'Supplied access_to_user_groups was not valid: has to be either true or false' unless access_to_user_groups.blank? || access_to_user_groups =~ (/^(true|t|yes|y|1)$/i) || access_to_user_groups =~ (/^(false|f|no|n|0)$/i)
 
+    if experiment_id.blank? && !is_update
+      errors << 'Experiment id is required'
+    end
+    if !experiment_id.blank? && !Experiment.exists?(experiment_id)
+      errors << 'Supplied org level 2 id does not exist'
+    end
+    if file.blank? && !is_update
+      errors << 'File is required'
+    end
+    if !file.blank? && !file.is_a?(ActionDispatch::Http::UploadedFile)
+      errors << 'Supplied file was not a valid file'
+    end
+    if type.blank? && !is_update
+      errors << 'File type is required'
+    end
+    if !type.blank? && !DataFile::STATI.include?(type)
+      errors << 'File type not recognised'
+    end
+    if !access.blank? && !(access == DataFile::ACCESS_PUBLIC || access == DataFile::ACCESS_PRIVATE)
+      errors << "Supplied access was not valid: has to be either #{DataFile::ACCESS_PUBLIC} or #{DataFile::ACCESS_PRIVATE}"
+    end
+    if !access_to_all_institutional_users.blank? && !(access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i) || access_to_all_institutional_users =~ (/^(false|f|no|n|0)$/i))
+      errors << 'Supplied access_to_all_institutional_users was not valid: has to be either true or false'
+    end
+    if !access_to_user_groups.blank? && !(access_to_user_groups =~ (/^(true|t|yes|y|1)$/i) || access_to_user_groups =~ (/^(false|f|no|n|0)$/i))
+      errors << 'Supplied access_to_user_groups was not valid: has to be either true or false'
+    end
+
+    parse_starttime_endtime(start_time, end_time, errors)
+    tag_ids = parse_tags(tag_names, errors)
+    label_ids = parse_labels(label_names, errors)
+
+    access_to_all_institutional_users_flag = ''
+    access_to_user_groups_flag = ''
+
+    if !is_update
+      if access_to_all_institutional_users and access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i)
+        access = DataFile::ACCESS_PRIVATE
+        access_to_all_institutional_users_flag = true
+      else
+        access_to_all_institutional_users_flag = false
+      end
+    elsif access_to_all_institutional_users
+      access_to_all_institutional_users_flag = access_to_all_institutional_users.to_bool
+      access = DataFile::ACCESS_PRIVATE if access_to_all_institutional_users_flag
+    end
+
+    if !is_update
+      if access_to_user_groups and access_to_user_groups =~ (/^(true|t|yes|y|1)$/i)
+        access = DataFile::ACCESS_PRIVATE
+        access_to_user_groups_flag = true
+      else
+        access_to_user_groups_flag = false
+      end
+    elsif access_to_user_groups
+      access_to_user_groups_flag = access_to_user_groups.to_bool
+      access = DataFile::ACCESS_PRIVATE if access_to_user_groups_flag
+    end
+
+    if !access_groups.nil?
+      access = DataFile::ACCESS_PRIVATE
+      access_to_user_groups_flag = true
+    end
+
+    access_to_all_institutional_users_flag = true if access.blank? and access_to_user_groups.blank? and access_groups.nil?
+    access = access.blank? ? DataFile::ACCESS_PRIVATE : access
+
+    [errors, tag_ids, label_ids, access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
+  end
+
+  def parse_starttime_endtime(start_time, end_time, errors)
     if start_time.present? || end_time.present?
       date_time_format = '%Y-%m-%d %H:%M:%S'
       begin
@@ -515,31 +726,6 @@ class DataFilesController < ApplicationController
         errors << 'Supplied end_time must be after the supplied start_time'
       end
     end
-
-    tag_ids = parse_tags(tag_names, errors)
-    label_ids = parse_labels(label_names, errors)
-    access_to_all_institutional_users_flag = ''
-    access_to_user_groups_flag = ''
-    if access_to_all_institutional_users and access_to_all_institutional_users =~ (/^(true|t|yes|y|1)$/i)
-      access = DataFile::ACCESS_PRIVATE
-      access_to_all_institutional_users_flag = true
-    else
-      access_to_all_institutional_users_flag = false
-    end
-    if access_to_user_groups and access_to_user_groups =~ (/^(true|t|yes|y|1)$/i)
-      access = DataFile::ACCESS_PRIVATE
-      access_to_user_groups_flag = true
-    else
-      access_to_user_groups_flag = false
-    end
-    unless access_groups.nil?
-      access = DataFile::ACCESS_PRIVATE
-      access_to_user_groups_flag = true
-    end
-    access_to_all_institutional_users_flag = true if access.blank? and access_to_user_groups.blank? and access_groups.nil?
-    access = access.blank? ? DataFile::ACCESS_PRIVATE : access
-
-    [errors, tag_ids, label_ids, access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
   end
 
   def parse_tags(tag_names, errors)

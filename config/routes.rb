@@ -91,6 +91,7 @@ not Dc21app::Application.routes.draw do
       post :search
       post :api_create
       post :api_search, :defaults => {:format => 'json'}
+      post :api_update
       post :variable_list, :defaults => {:format => 'json'}
       get :facility_and_experiment_list, :defaults => {:format => 'json'}
       get :clear

@@ -20,7 +20,7 @@ module Devise
       end
 
       def valid_data_files_operation?
-        params[:action] == 'download' || params[:action] == 'api_create' || params[:action] == 'api_search' || params[:action] == 'variable_list' || params[:action] == 'facility_and_experiment_list'
+        params[:action] == 'download' || params[:action] == 'api_create' || params[:action] == 'api_search' || params[:action] == 'variable_list' || params[:action] == 'facility_and_experiment_list' || params[:action] == 'api_update'
       end
 
       def valid_packages_operation?
