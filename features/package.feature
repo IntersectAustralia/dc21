@@ -289,8 +289,8 @@ Feature: Create a package
     When I am on the create package page
     And I fill in "package_grant_number_list" with "bebb@|Abba|cuba|AA<script></script>"
     And I check select2 field "package_grant_number_list" updated value to "Abba,bebb@,cuba,AA<script></script>"
-    And I fill in "package_related_website_list" with "http://example.com"
-    And I check select2 field "package_related_website_list" updated value to "http://example.com"
+    And I fill in "package_related_website_list" with "http://example.com | https://test.com| ftp://127.0.0.1/test"
+    And I check select2 field "package_related_website_list" updated value to "ftp://127.0.0.1/test, http://example.com, https://test.com"
     And I select "Conditional" from "package_access_rights_type"
     And I select "CC BY: Attribution" from "License"
     And I should see "Spanish"
@@ -304,7 +304,7 @@ Feature: Create a package
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
-    Then I should see field "Related Websites" with value "http://example.com"
+    Then I should see field "Related Websites" with value "ftp://127.0.0.1/test, http://example.com, https://test.com"
     Then I should see field "Access Rights Type" with value "Conditional"
     Then I should see field "License" with value "CC BY: Attribution"
 
@@ -327,7 +327,7 @@ Feature: Create a package
     And I fill in "Title" with "Package 1"
     And I uncheck "Run in background?"
     And I press "Create Package"
-    Then I should see "Please correct the following before continuing: Related websites url webweb is not a valid url Related websites url test:123 is not a valid url Related websites url have url longer than 80 characters"
+    Then I should see "Please correct the following before continuing: Related websites url webweb is not a valid url Related websites url test:123 is not a valid url Related websites url is too long (maximum is 80 characters)"
 
   @javascript
   Scenario: Cannot create package that exceeds the maximum allowable size

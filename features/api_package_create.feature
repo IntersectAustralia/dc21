@@ -283,5 +283,5 @@ Feature: Create a package from the API
     Then I should get a 400 response code
     And I should get a JSON response with message "related_websites.url test:123 is not a valid url"
     And I should get a JSON response with message "related_websites.url website2.com is not a valid url"
-    And I should get a JSON response with message "related_websites.url have url longer than 80 characters"
+    And I should get a JSON response with message "related_websites.url is too long (maximum is 80 characters)"
 
