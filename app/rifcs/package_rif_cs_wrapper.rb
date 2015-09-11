@@ -68,11 +68,11 @@ class PackageRifCsWrapper < RifCsWrapper
   end
 
   def license_type
-    collection_object.experiment.access_rights_id
+    AccessRightsLookup.new.get_id(collection_object.license)
   end
 
   def license_uri
-    collection_object.experiment.access_rights
+    collection_object.license
   end
 
   def identifier_uri
