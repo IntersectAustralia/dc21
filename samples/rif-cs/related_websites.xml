@@ -52,15 +52,15 @@
       </relatedObject>
       <relatedInfo type="website">
         <identifier type="uri">http://example.com</identifier>
-        <title>This is the title</title>
+        <title>Example</title>
       </relatedInfo>
       <relatedInfo type="website">
         <identifier type="uri">http://www.google.com</identifier>
-        <title>This is the title</title>
+        <title>Google</title>
       </relatedInfo>
       <relatedInfo type="website">
         <identifier type="uri">http://www.facebook.com</identifier>
-        <title>This is the title</title>
+        <title>Facebook</title>
       </relatedInfo>
       <relatedInfo>
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
