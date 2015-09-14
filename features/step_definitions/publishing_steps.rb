@@ -7,6 +7,11 @@ Then /^there should be no published collections$/ do
   PublishedCollection.count.should eq(0)
 end
 
+Then /^(?:|I )expect uri-open of "([^"]*)" to return "([^"]*)"/ do |url, html|
+  #when calling open(url), always return html other than its actual html
+  PackageRifCsWrapper.any_instance.stub(:open).with(url,:allow_redirections => :safe).and_return html
+end
+
 Then /^the RIF\-CS file for the latest published collection should match "([^"]*)"$/ do |file|
   pc = Package.last
   expected_contents = File.open(File.join(Rails.root, file)).read

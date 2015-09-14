@@ -197,6 +197,9 @@ Feature: Publish a PACKAGE
     And I select "CC BY: Attribution" from "License"
     And I fill in "package_related_website_list" with "http://example.com| http://www.google.com | http://www.facebook.com"
     And I check select2 field "package_related_website_list" updated value to "http://example.com, http://www.facebook.com, http://www.google.com "
+    And I expect uri-open of "http://example.com" to return "<html><title>This is the title</title></html>"
+    And I expect uri-open of "http://www.google.com" to return "<html><title>This is the title</title></html>"
+    And I expect uri-open of "http://www.facebook.com" to return "<html><title>This is the title</title></html>"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -204,30 +207,7 @@ Feature: Publish a PACKAGE
     And I confirm the popup
     Then I should see "Package has been successfully submitted for publishing."
     And the RIF-CS file for the latest published collection should match "samples/rif-cs/related_websites.xml"
-
-  Scenario: Unaccessble url should no set title in rif-cs
-    Given I am on the list data files page
-    And I click on "Showing all 5 files"
-    And I click on "Type:"
-    And I check "RAW"
-    And I press "Update Search Results"
-    And I follow "Add All"
-    And I confirm the popup
-    When I am on the create package page
-    And I fill in "Title" with "My Package Title"
-    And I fill in "Filename" with "Raw Stuff"
-    And I select "Reserved Experiment" from "Experiment"
-    And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
-    And I fill in "package_related_website_list" with "http://github.com/wsdfsdf/sdfffffsdfsdf| https://www.google.com"
-    And I check select2 field "package_related_website_list" updated value to "http://github.com/wsdfsdf/sdfffffsdfsdf, https://www.google.com "
-    And I uncheck "Run in background?"
-    And I press "Create Package"
-    Then I should see "Package was successfully created."
-    When I follow "Publish"
-    And I confirm the popup
-    Then I should see "Package has been successfully submitted for publishing."
-    And the RIF-CS file for the latest published collection should match "samples/rif-cs/unaccessible_url.xml"
+  
 #    When I perform a GET for the zip file for the latest published collection I should get a zip matching "samples/published_zips/type_raw"
 
 #

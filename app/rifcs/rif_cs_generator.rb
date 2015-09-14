@@ -117,13 +117,8 @@ class RifCsGenerator
 
           wrapper_object.related_websites.each do |related_website|
             xml.relatedInfo type: 'website' do
-              xml.identifier related_website, type: 'uri'
-              begin
-                xml.title get_title(related_website)
-              rescue StandardError
-                xml.title ''
-                next
-              end
+              xml.identifier related_website[:url], type: 'uri'
+              xml.title related_website[:title]
             end
           end
 
@@ -138,12 +133,6 @@ class RifCsGenerator
     end
   end
 
-  private
 
-  def get_title(url)
-    page = open(url,:allow_redirections => :safe)  #this can raise exception
-    @doc = Nokogiri::HTML(page)
-    return @doc.xpath("//title").text
-  end
 
 end
