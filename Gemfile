@@ -102,3 +102,4 @@ gem 'create_deployment_record', git: 'https://github.com/IntersectAustralia/crea
 gem 'acts_as_singleton'
 
 gem 'rest-client'
+gem 'open_uri_redirections'

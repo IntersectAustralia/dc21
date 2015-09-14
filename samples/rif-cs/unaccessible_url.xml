@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.6/schema/registryObjects.xsd">
+  <registryObject group="University of Western Sydney">
+    <key>$$KEY$$</key>
+    <originatingSource>$$ROOT_URL$$</originatingSource>
+    <collection type="dataset">
+      <name type="primary">
+        <namePart xml:lang="$$LANG$$">Raw Stuff.zip</namePart>
+      </name>
+      <location>
+        <address>
+          <electronic type="url" target="landingPage">
+            <value>$$ZIP_URL$$</value>
+            <title>Enter the title of your landing page</title>
+            <notes>Attachments section</notes>
+          </electronic>
+          <physical>
+            <addressPart type="text">$$PHYSICAL_ADDRESS$$</addressPart>
+          </physical>
+        </address>
+      </location>
+      <rights>
+        <rightsStatement>blah blah</rightsStatement>
+        <accessRights type="open" rightsUri="http://handle.uws.edu.au:8081/1959.7/hiev_3"/>
+        <license type="All rights reserved" rightsUri="N/A"/>
+      </rights>
+      <identifier type="uri">http://handle.uws.edu.au:8081/1959.7/hiev_3</identifier>
+      <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
+      <coverage>
+        <temporal>
+          <date type="dateFrom" dateFormat="W3CDTF">2011-09-25T00:00:00+10:00</date>
+          <date type="dateTo" dateFormat="W3CDTF">2011-11-03T00:00:00+11:00</date>
+        </temporal>
+      </coverage>
+      <relatedObject>
+        <key>Fred Bloggs</key>
+        <relation type="hasCollector">
+          <description>Creator</description>
+        </relation>
+      </relatedObject>
+      <relatedObject>
+        <key>Intersect Research</key>
+        <relation type="isManagedBy"/>
+      </relatedObject>
+      <relatedObject>
+        <key>Fred Bloggs (researcher@intersect.org.au)</key>
+        <relation type="hasAssociationWith">
+          <description>Primary Contact</description>
+        </relation>
+      </relatedObject>
+      <relatedInfo type="website">
+        <identifier type="uri">http://github.com/wsdfsdf/sdfffffsdfsdf</identifier>
+        <title></title>
+      </relatedInfo>
+      <relatedInfo type="website">
+        <identifier type="uri">https://www.google.com</identifier>
+        <title></title>
+      </relatedInfo>
+      <relatedInfo>
+        <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
+      </relatedInfo>
+      <relatedInfo>
+        <notes>Unique ID: http://handle.uws.edu.au:8081/1959.7/hiev_3</notes>
+      </relatedInfo>
+    </collection>
+  </registryObject>
+</registryObjects>

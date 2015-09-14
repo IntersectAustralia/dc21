@@ -1,4 +1,7 @@
 require 'builder'
+require 'open-uri'
+require 'nokogiri'
+require 'open_uri_redirections'
 
 # This class builds the RIF-CS for a collection, delegating to a wrapper object to find the necessary values.
 # The idea is that this can be reused across projects, and that the project-specific details of what goes into
@@ -115,7 +118,12 @@ class RifCsGenerator
           wrapper_object.related_websites.each do |related_website|
             xml.relatedInfo type: 'website' do
               xml.identifier related_website, type: 'uri'
-              xml.title ''
+              begin
+                xml.title get_title(related_website)
+              rescue StandardError
+                xml.title ''
+                next
+              end
             end
           end
 
@@ -128,6 +136,14 @@ class RifCsGenerator
         end
       end
     end
+  end
+
+  private
+
+  def get_title(url)
+    page = open(url,:allow_redirections => :safe)  #this can raise exception
+    @doc = Nokogiri::HTML(page)
+    return @doc.xpath("//title").text
   end
 
 end

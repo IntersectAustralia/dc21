@@ -231,6 +231,7 @@ GEM
     notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     pg (0.17.1)
     polyamorous (0.5.0)
@@ -454,6 +455,7 @@ DEPENDENCIES
   multi_xml (>= 0.5.2)
   newrelic_rpm
   nokogiri (>= 1.6.1)
+  open_uri_redirections
   pg
   pry-rails
   pry-rescue
@@ -487,3 +489,6 @@ DEPENDENCIES
   xray-rails
   zeus
   zip-zip
+
+BUNDLED WITH
+   1.10.6
