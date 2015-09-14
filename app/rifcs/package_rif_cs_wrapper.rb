@@ -135,7 +135,8 @@ class PackageRifCsWrapper < RifCsWrapper
   end
 
   def related_websites
-    collection_object.related_websites.collect(&:url)
+    urls = collection_object.related_websites.collect(&:url)
+    return urls.map { |url|  {url: url, title: get_title(url)} }
   end
 
   def notes
@@ -162,6 +163,7 @@ class PackageRifCsWrapper < RifCsWrapper
     return contacts
   end
 
+
   private
   def experiments
     files.collect(&:experiment).compact.uniq
@@ -169,5 +171,13 @@ class PackageRifCsWrapper < RifCsWrapper
 
   def facilities
     experiments.collect(&:facility).compact.uniq
+  end
+
+  def get_title(url)
+    page = open(url, :allow_redirections => :safe)  #this can raise exception
+    @doc = Nokogiri::HTML(page)
+    return @doc.xpath("//title").text
+  rescue StandardError
+    return ''
   end
 end

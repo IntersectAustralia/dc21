@@ -56,4 +56,4 @@ end
 
 
 require 'factory_girl_rails'
-
+require 'cucumber/rspec/doubles'
