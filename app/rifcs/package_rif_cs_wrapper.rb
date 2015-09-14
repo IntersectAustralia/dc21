@@ -175,8 +175,8 @@ class PackageRifCsWrapper < RifCsWrapper
 
   def get_title(url)
     page = open(url, :allow_redirections => :safe)  #this can raise exception
-    @doc = Nokogiri::HTML(page)
-    return @doc.xpath("//title").text
+    doc = Nokogiri::HTML(page)
+    return doc.xpath("//title").text
   rescue StandardError
     return ''
   end
