@@ -156,6 +156,10 @@ describe MetadataWriter do
         @experiment.end_date = nil
         @experiment.experiment_for_codes.delete_all
         @experiment.save!
+        @experiment.reload
+        @data_file1.reload
+        @data_file2.reload
+        @package.reload
 
         output_html = MetadataWriter.generate_metadata_for([@data_file1, @data_file2], @package)
         diff_html(output_html, 'spec/samples/readme_minimal_experiment.html')

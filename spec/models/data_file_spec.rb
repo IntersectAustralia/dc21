@@ -94,7 +94,7 @@ describe DataFile do
     it { should validate_presence_of(:path) }
     it { should validate_presence_of(:created_by_id) }
     it { should validate_presence_of(:file_processing_status) }
-    it { should validate_presence_of(:experiment_id) }
+    it { should validate_presence_of(:experiment) }
 
 
     it "should validate uniqueness of filename" do

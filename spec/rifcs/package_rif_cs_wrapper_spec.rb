@@ -159,7 +159,7 @@ describe PackageRifCsWrapper do
       df4 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
       df_reserved = Factory(:data_file, :experiment_id => exp_reserved.id, :path => data_file_path)
 
-      package = Factory(:package, :experiment_id => exp3.id, :filename => 'open package', :path => data_file_path, :access_rights_uri => "http://creativecommons.org/licenses/by-nd/4.0")
+      package = Factory(:package, :experiment_id => exp3.id, :filename => 'open package', :path => data_file_path, :license => "http://creativecommons.org/licenses/by-nd/4.0")
       CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id, df_reserved.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
@@ -179,7 +179,7 @@ describe PackageRifCsWrapper do
       df3 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
       df4 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
 
-      package = Factory(:package, :experiment_id => exp_reserved.id, :filename => 'non-open package', :path => data_file_path, :access_rights_uri => "N/A")
+      package = Factory(:package, :experiment_id => exp_reserved.id, :filename => 'non-open package', :path => data_file_path, :license => "N/A")
       CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)

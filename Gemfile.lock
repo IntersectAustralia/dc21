@@ -489,6 +489,3 @@ DEPENDENCIES
   xray-rails
   zeus
   zip-zip
-
-BUNDLED WITH
-   1.10.6
