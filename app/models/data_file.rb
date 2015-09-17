@@ -473,11 +473,13 @@ class DataFile < ActiveRecord::Base
   end
 
   def rename_to(new_path, new_name)
-    require 'fileutils'
-    FileUtils.mv(path, new_path)
+    old_path = self.path
     self.path = new_path
     self.filename = new_name
-    save!
+    if self.save
+      require 'fileutils'
+      FileUtils.mv(old_path, new_path)
+    end
   end
 
   def rename_file(old_filename, new_filename, path_dir)

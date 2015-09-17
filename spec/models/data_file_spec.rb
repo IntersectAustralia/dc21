@@ -847,6 +847,9 @@ describe DataFile do
       data_file = Factory(:data_file, :path => old_path, :filename => "blah.txt")
 
       new_path = Rails.root.join("tmp", "another.txt")
+      FileUtils.rm(new_path, :force => true)
+      new_path.should_not exist
+
       data_file.rename_to(new_path.to_s, "another.txt")
       data_file.reload
       data_file.path.should eq(new_path.to_s)

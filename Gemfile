@@ -86,6 +86,7 @@ group :development do
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'xray-rails'
+  gem 'awesome_print'
 end
 
 group :test do

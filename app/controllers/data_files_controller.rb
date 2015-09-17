@@ -12,7 +12,7 @@ class DataFilesController < ApplicationController
   before_filter :page_params, :only => [:index]
   before_filter :clean_up_temp_image_files
 
-  load_and_authorize_resource :except => [:download, :api_search, :variable_list, :facility_and_experiment_list]
+  load_and_authorize_resource :except => [:download, :api_search, :api_update, :api_create, :variable_list, :facility_and_experiment_list]
   load_resource :only => [:download]
   set_tab :home
   helper_method :sort_column, :sort_direction
@@ -469,12 +469,20 @@ class DataFilesController < ApplicationController
         if license
           data_file.license = AccessRightsLookup.new.get_url(license)
         end
-        if related_websites
-          related_websites_list = CSV.parse_line(related_websites).join('|')
+        if params.has_key?(:related_websites)
+          if related_websites.blank?
+            related_websites_list = ''
+          else
+            related_websites_list = CSV.parse_line(related_websites).join('|')
+          end
           data_file.related_website_list = related_websites_list
         end
-        if grant_numbers
-          grant_number_list = CSV.parse_line(grant_numbers).join('|')
+        if params.has_key?(:grant_numbers)
+          if grant_numbers.blank?
+            grant_number_list = ''
+          else
+            grant_number_list = CSV.parse_line(grant_numbers).join('|')
+          end
           data_file.grant_number_list = grant_number_list
         end
         warnings << 'Updating a package will not cause rif-cs to be regenerated'
