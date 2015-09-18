@@ -7,7 +7,10 @@
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">
       <name type="primary">
-        <namePart xml:lang="$$LANG$$">Raw Stuff.zip</namePart>
+        <namePart xml:lang="$$LANG$$">My Package Title</namePart>
+      </name>
+      <name type="alternative">
+        <namePart>Raw Stuff.zip</namePart>
       </name>
       <location>
         <address>
