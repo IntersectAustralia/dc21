@@ -1,5 +1,5 @@
 require 'csv'
-require 'uri'
+
 class Package < DataFile
 
   PACKAGE_FORMAT = 'BAGIT'
