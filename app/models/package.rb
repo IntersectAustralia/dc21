@@ -1,4 +1,5 @@
 require 'csv'
+require 'uri'
 class Package < DataFile
 
   PACKAGE_FORMAT = 'BAGIT'
@@ -62,7 +63,11 @@ class Package < DataFile
       datafile.access_rights_text = config.restricted_access_rights_text
     end
     if params[:license]
-      datafile.license = AccessRightsLookup.new.get_url(params[:license])
+      if ['All rights reserved',"N/A"].include?(params[:license])
+        datafile.license = params[:license].eql?("N/A") ? params[:license] : AccessRightsLookup.new.get_url(params[:license])
+      else
+        datafile.license = params[:license].match(URI::regexp).nil? ? AccessRightsLookup.new.get_url(params[:license]) : params[:license]
+      end
     elsif Experiment.exists?(datafile.experiment_id)
       datafile.license = Experiment.find(datafile.experiment_id).access_rights
     end
