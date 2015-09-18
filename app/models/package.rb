@@ -9,11 +9,6 @@ class Package < DataFile
   ACCESS_RIGHTS_CONDITIONAL = 'Conditional'
   ACCESS_RIGHTS_RESTRICTED = 'Restricted'
 
-  validates_presence_of :title
-  validates_length_of :title, :maximum => 10000
-  validates :access_rights_type, inclusion: {in: [ACCESS_RIGHTS_OPEN, ACCESS_RIGHTS_CONDITIONAL, ACCESS_RIGHTS_RESTRICTED],
-                                             message: "must be #{ACCESS_RIGHTS_OPEN}, #{ACCESS_RIGHTS_CONDITIONAL} or #{ACCESS_RIGHTS_RESTRICTED}"}
-
   default_scope where(:format => PACKAGE_FORMAT, :file_processing_status => "PACKAGE")
 
   before_save :set_external_id

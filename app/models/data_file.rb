@@ -104,6 +104,10 @@ class DataFile < ActiveRecord::Base
   validates_length_of :research_centre_name, maximum: 80
 
   validates_inclusion_of :license, in: AccessRightsLookup.new.access_rights_values, :if => :is_package?
+  validates_presence_of :title, :if => :is_package?
+  validates_length_of :title, :maximum => 10000, :if => :is_package?
+  validates :access_rights_type, inclusion: {in: [Package::ACCESS_RIGHTS_OPEN, Package::ACCESS_RIGHTS_CONDITIONAL, Package::ACCESS_RIGHTS_RESTRICTED],
+                                             message: "must be #{Package::ACCESS_RIGHTS_OPEN}, #{Package::ACCESS_RIGHTS_CONDITIONAL} or #{Package::ACCESS_RIGHTS_RESTRICTED}"}, :if => :is_package?
 
   before_save :fill_end_time_if_blank
   before_save :set_file_size_if_nil
