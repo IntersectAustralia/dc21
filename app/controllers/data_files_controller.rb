@@ -397,6 +397,7 @@ class DataFilesController < ApplicationController
     grant_numbers = params[:grant_numbers]
     related_websites = params[:related_websites]
 
+    title = params[:title]
     access_rights_type = params[:access_rights_type]
     license = params[:license]
 
@@ -455,6 +456,9 @@ class DataFilesController < ApplicationController
       end
 
       if data_file.is_package?
+        if title
+          data_file.title = title
+        end
         if access_rights_type
           config = SystemConfiguration.instance
           data_file.access_rights_type = access_rights_type
