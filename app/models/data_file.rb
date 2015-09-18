@@ -217,7 +217,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def grant_number_list=(new_value)
-    grant_number_names = new_value.split(/\|\s*/)
+    grant_number_names = new_value.split(/\|\s*/).uniq
     self.grant_numbers = grant_number_names.map { |name|
       existing = GrantNumber.where('lower(name) = ?', name.downcase).first
       existing ||= GrantNumber.create(:name => name)
@@ -225,7 +225,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def related_website_list=(new_value)
-    related_website_urls = new_value.split(/\|\s*/)
+    related_website_urls = new_value.split(/\|\s*/).uniq
     self.related_websites = related_website_urls.map { |url|
       existing = RelatedWebsite.where('lower(url) = ?', url.downcase).first
       existing ||= self.related_websites.build(:url => url)
