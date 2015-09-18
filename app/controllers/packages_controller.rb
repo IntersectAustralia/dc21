@@ -87,6 +87,8 @@ class PackagesController < DataFilesController
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
 
+    params[:license] = AccessRightsLookup.new.get_url(params[:license])
+
     package = Package.create_package(params, nil, current_user)
     if errors.empty? && package.save
       save_tags(package, tag_ids)
