@@ -167,5 +167,5 @@
     var experimentAccessRight = _.find(experimentAccessRights, function(ear) {
       return ear['id'] == selectedExperimentId;
     });
-    $('#package_license').val(experimentAccessRight['access_rights']);
+    $('#package_license').val(experimentAccessRight['access_rights_url']);
   });

@@ -3,7 +3,9 @@ class PackagesController < DataFilesController
 
   expose(:access_rights) { AccessRightsLookup.new.access_rights }
   expose(:experiment_access_rights) {
-    Experiment.all.map { |experiment| {:id => experiment.id, :access_rights => AccessRightsLookup.new.get_id(experiment.access_rights)  } }
+    Experiment.all.map { |experiment|
+      access_rights_id = AccessRightsLookup.new.get_id(experiment.access_rights)
+      {:id => experiment.id, :access_rights_id => access_rights_id, :access_rights_url => AccessRightsLookup.new.get_url(access_rights_id) } }
   }
 
   def new
