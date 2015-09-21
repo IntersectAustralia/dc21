@@ -55,6 +55,7 @@ gem 'resque-scheduler', :require => 'resque_scheduler'
 gem 'daemons-rails'
 
 gem 'devise_aaf_rc_authenticatable'
+gem 'keepass-password-generator'
 gem "select2-rails"
 
 group :development, :test do

@@ -189,6 +189,7 @@ GEM
       securecompare
       url_safe_base64
     jwt (1.4.1)
+    keepass-password-generator (0.1.1)
     launchy (2.4.2)
       addressable (~> 2.3)
     libv8 (3.16.14.3)
@@ -451,6 +452,7 @@ DEPENDENCIES
   httparty (>= 0.10.0)
   jquery-rails
   jwt
+  keepass-password-generator
   launchy
   mailcatcher
   mimetype-fu

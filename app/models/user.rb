@@ -57,6 +57,11 @@ class User < ActiveRecord::Base
   # Devise expects the update user and update password to be the same screen so accepts a blank password as indicating that
   # the user doesn't want to change it
   def update_password(params={})
+    if self.aaf_registered
+      self.errors.add(:current_password, 'Change your password with your institution')
+      return false
+    end
+
     current_password = params.delete(:current_password)
 
     result = if valid_password?(current_password)
@@ -187,9 +192,22 @@ class User < ActiveRecord::Base
     raise StandardError.new('Unauthorized') unless approved?
   end
 
+  def aaf_rc_before_save
+    self.status = "U"
+    generate_temp_password
+    self.aaf_registered = true
+    Notifier.notify_superusers_of_access_request(self).deliver
+  end
+
   private
+
   def initialize_status
     self.status = "U" unless self.status
+  end
+
+  def generate_temp_password
+    password = KeePass::Password.generate('uldsA{5}', :remove_lookalikes => true)
+    self.reset_password!(password, password)
   end
 
 end

@@ -9,6 +9,9 @@
           ,
           - if User.find_for_authentication(email: @aaf_mail)
             but your #{@config.name} account request is pending approval.
+            %br
+            %br
+            You will receive an email once your request for an account with #{@config.name} is approved.
           - else
             but you have not registered an account with #{@config.name}.
           %br
@@ -27,8 +30,6 @@
         %small
           Note: This will take you to the AAF (Australian Access Federation) login page.
           %br
-          %br
-          If you are not yet authorised to use #{@config.name} you will be automatically redirected to the #{@config.name} Registration Page after successfully authenticating with your AAF credentials.
 
 .container
 

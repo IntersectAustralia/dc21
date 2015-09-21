@@ -3,7 +3,7 @@
 Devise.setup do |config|
   # ==> AAF Rapid Connect Configuration
   config.aaf_rc_logger = true
-  config.aaf_rc_create_user = false
+  config.aaf_rc_create_user = true
   config.aaf_rc_config = "#{Rails.root}/config/aaf_rc.yml"
 
   # http://stackoverflow.com/questions/580314/overriding-a-module-method-from-a-gem-in-rails/1852448#1852448
