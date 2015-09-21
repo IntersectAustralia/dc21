@@ -102,7 +102,7 @@
         .controls
           = required
           %span.input
-            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:id]]}, @package.license), {:include_blank => ""}
+            = f.select :license, options_for_select(access_rights.collect{|ar| [ar[:name], ar[:url]]}, @package.license), {:include_blank => ""}
       .control-group
         .control-label Rights Statement
         .controls
@@ -167,5 +167,5 @@
     var experimentAccessRight = _.find(experimentAccessRights, function(ear) {
       return ear['id'] == selectedExperimentId;
     });
-    $('#package_license').val(experimentAccessRight['access_rights']);
+    $('#package_license').val(experimentAccessRight['access_rights_url']);
   });

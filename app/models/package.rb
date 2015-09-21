@@ -1,4 +1,5 @@
 require 'csv'
+
 class Package < DataFile
 
   PACKAGE_FORMAT = 'BAGIT'
@@ -57,7 +58,7 @@ class Package < DataFile
       datafile.access_rights_text = config.restricted_access_rights_text
     end
     if params[:license]
-      datafile.license = AccessRightsLookup.new.get_url(params[:license])
+      datafile.license = params[:license]
     elsif Experiment.exists?(datafile.experiment_id)
       datafile.license = Experiment.find(datafile.experiment_id).access_rights
     end

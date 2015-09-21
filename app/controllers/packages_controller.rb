@@ -3,7 +3,9 @@ class PackagesController < DataFilesController
 
   expose(:access_rights) { AccessRightsLookup.new.access_rights }
   expose(:experiment_access_rights) {
-    Experiment.all.map { |experiment| {:id => experiment.id, :access_rights => AccessRightsLookup.new.get_id(experiment.access_rights)  } }
+    Experiment.all.map { |experiment|
+      access_rights_id = AccessRightsLookup.new.get_id(experiment.access_rights)
+      {:id => experiment.id, :access_rights_id => access_rights_id, :access_rights_url => AccessRightsLookup.new.get_url(access_rights_id) } }
   }
 
   def new
@@ -86,6 +88,8 @@ class PackagesController < DataFilesController
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
+
+    params[:license] = AccessRightsLookup.new.get_url(params[:license])
 
     package = Package.create_package(params, nil, current_user)
     if errors.empty? && package.save
