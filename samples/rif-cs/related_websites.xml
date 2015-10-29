@@ -26,10 +26,10 @@
       </location>
       <rights>
         <rightsStatement>blah blah</rightsStatement>
-        <accessRights type="open" rightsUri="http://handle.uws.edu.au:8081/1959.7/hiev_3"/>
+        <accessRights type="open" rightsUri="http://handle.westernsydney.edu.au:8081/1959.7/hiev_3"/>
         <license type="CC-BY" rightsUri="http://creativecommons.org/licenses/by/4.0"/>
       </rights>
-      <identifier type="uri">http://handle.uws.edu.au:8081/1959.7/hiev_3</identifier>
+      <identifier type="uri">http://handle.westernsydney.edu.au:8081/1959.7/hiev_3</identifier>
       <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
       <coverage>
         <temporal>
@@ -69,7 +69,7 @@
         <notes>Published by Fred Bloggs (admin@intersect.org.au)</notes>
       </relatedInfo>
       <relatedInfo>
-        <notes>Unique ID: http://handle.uws.edu.au:8081/1959.7/hiev_3</notes>
+        <notes>Unique ID: http://handle.westernsydney.edu.au:8081/1959.7/hiev_3</notes>
       </relatedInfo>
     </collection>
   </registryObject>

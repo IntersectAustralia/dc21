@@ -48,7 +48,7 @@ describe PackageRifCsWrapper do
     experiment = Factory(:experiment, :facility => post_facility)
     package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
                       file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
-    PackageRifCsWrapper.new(package, [], {}).key.should eq('http://handle.uws.edu.au:8081/1959.7/hiev_0')
+    PackageRifCsWrapper.new(package, [], {}).key.should eq('http://handle.westernsydney.edu.au:8081/1959.7/hiev_0')
   end
 
   describe "Notes" do
@@ -164,7 +164,7 @@ describe PackageRifCsWrapper do
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
         wrapper = PackageRifCsWrapper.new(package, files, {})
-        wrapper.access_rights_uri.should eq("http://handle.uws.edu.au:8081/1959.7/hiev_0")
+        wrapper.access_rights_uri.should eq("http://handle.westernsydney.edu.au:8081/1959.7/hiev_0")
         wrapper.license_type.should eq("CC-BY-ND")
       end
     end
@@ -184,7 +184,7 @@ describe PackageRifCsWrapper do
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
         wrapper = PackageRifCsWrapper.new(package, files, {})
-        wrapper.access_rights_uri.should eq('http://handle.uws.edu.au:8081/1959.7/hiev_0')
+        wrapper.access_rights_uri.should eq('http://handle.westernsydney.edu.au:8081/1959.7/hiev_0')
         wrapper.license_type.should eq("All rights reserved")
       end
     end

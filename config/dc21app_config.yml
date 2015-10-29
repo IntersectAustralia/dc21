@@ -20,7 +20,7 @@ defaults: &defaults
   readme_template_directory: ""
   readme_template_file: ""
 
-  handle_prefix: http://handle.uws.edu.au:8081/1959.7/hiev
+  handle_prefix: http://handle.westernsydney.edu.au:8081/1959.7/hiev
 
   # the hdl handle URL must include: ${sequence_number}
   hdl_handle_prefix: hdl.handle.net/1959.7/hiev_${sequence_number}
