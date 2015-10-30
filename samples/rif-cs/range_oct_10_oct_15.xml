@@ -17,6 +17,7 @@
           <electronic type="url" target="landingPage">
             <value>$$ZIP_URL$$</value>
             <title>Enter the title of your landing page</title>
+            <byteSize>$$BYTE_SIZE$$</byteSize>
             <notes>Attachments section</notes>
           </electronic>
           <physical>
