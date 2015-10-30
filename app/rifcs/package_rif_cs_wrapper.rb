@@ -1,3 +1,5 @@
+include ActionView::Helpers::NumberHelper
+
 # Wrapper class for Package objects so we can generate RIF-CS from them.
 # This defines the mapping from DC21 domain concepts to fields in the RIF-CS xml.
 # This is used by the RIF-CS generator to actually output RIF-CS.
@@ -163,6 +165,9 @@ class PackageRifCsWrapper < RifCsWrapper
     return contacts
   end
 
+  def byte_size
+    number_to_human_size(collection_object.file_size)
+  end
 
   private
   def experiments

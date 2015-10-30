@@ -38,6 +38,7 @@ class RifCsGenerator
               xml.electronic type: 'url', target: 'landingPage' do
                 xml.value wrapper_object.electronic_location
                 xml.title wrapper_object.electronic_landing_page_title
+                xml.byteSize wrapper_object.byte_size
                 xml.notes 'Attachments section'
               end
               xml.physical do
