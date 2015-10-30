@@ -14,11 +14,11 @@
       </name>
       <location>
         <address>
-          <electronic type="url" target="landingPage">
+          <electronic type="url" target="directDownload">
             <value>$$ZIP_URL$$</value>
             <title>Enter the title of your landing page</title>
             <byteSize>$$BYTE_SIZE$$</byteSize>
-            <notes>Attachments section</notes>
+            <notes>Authorised users only</notes>
           </electronic>
           <physical>
             <addressPart type="text">$$PHYSICAL_ADDRESS$$</addressPart>

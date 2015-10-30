@@ -35,11 +35,11 @@ class RifCsGenerator
 
           xml.location do
             xml.address do
-              xml.electronic type: 'url', target: 'landingPage' do
+              xml.electronic type: 'url', target: 'directDownload' do
                 xml.value wrapper_object.electronic_location
                 xml.title wrapper_object.electronic_landing_page_title
                 xml.byteSize wrapper_object.byte_size
-                xml.notes 'Attachments section'
+                xml.notes 'Authorised users only'
               end
               xml.physical do
                 xml.addressPart wrapper_object.physical_address, type: 'text'
