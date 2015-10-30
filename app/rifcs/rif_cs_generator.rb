@@ -35,7 +35,7 @@ class RifCsGenerator
 
           xml.location do
             xml.address do
-              xml.electronic type: 'url', target: 'landingPage' do
+              xml.electronic type: 'url', target: 'DirectDownload' do
                 xml.value wrapper_object.electronic_location
                 xml.title wrapper_object.electronic_landing_page_title
                 xml.byteSize wrapper_object.byte_size

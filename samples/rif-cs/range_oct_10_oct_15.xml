@@ -14,7 +14,7 @@
       </name>
       <location>
         <address>
-          <electronic type="url" target="landingPage">
+          <electronic type="url" target="DirectDownload">
             <value>$$ZIP_URL$$</value>
             <title>Enter the title of your landing page</title>
             <byteSize>$$BYTE_SIZE$$</byteSize>
