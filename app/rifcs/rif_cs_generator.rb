@@ -61,7 +61,7 @@ class RifCsGenerator
           xml.rights do
             xml.rightsStatement wrapper_object.rights_statement
             xml.accessRights wrapper_object.access_rights_text, {type: wrapper_object.access_rights_type, rightsUri: wrapper_object.access_rights_uri}
-            xml.license type: wrapper_object.license_type, rightsUri: wrapper_object.license_uri
+            xml.licence type: wrapper_object.license_type, rightsUri: wrapper_object.license_uri
           end
 
           xml.identifier wrapper_object.identifier_uri, {type: 'uri'}

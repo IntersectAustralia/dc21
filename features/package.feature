@@ -53,7 +53,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -66,7 +66,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -87,7 +87,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     # running in background
     And I press "Create Package"
     Then I should see "Package is now queued for processing in the background."
@@ -104,7 +104,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     # running in forergound
     And I press "Create Package"
@@ -128,7 +128,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -144,7 +144,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     Then I should see "Package was successfully created."
@@ -191,7 +191,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I check "Video"
     And I select "Conditional" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I am on the data file details page for my_other_package.zip
@@ -208,7 +208,7 @@ Feature: Create a package
       | Physical Location    | Intersect Australia          |
       | Research Centre Name | Intersect Research           |
       | Access Rights Type   | Conditional                  |
-      | License              | CC BY: Attribution           |
+      | Licence              | CC BY: Attribution           |
 
   @javascript
   Scenario: Back button - hardcode url
@@ -255,7 +255,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
@@ -275,7 +275,7 @@ Feature: Create a package
     And I select "My Experiment" from "Experiment"
     And I fill in "Title" with "Package 1"
     And I select "Open" from "Access Rights Type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I uncheck "Run in background?"
     And I press "Create Package"
     When I should be on the data file details page for my_package1.zip
@@ -292,7 +292,7 @@ Feature: Create a package
     And I fill in "package_related_website_list" with "http://example.com | https://test.com| ftp://127.0.0.1/test"
     And I check select2 field "package_related_website_list" updated value to "ftp://127.0.0.1/test, http://example.com, https://test.com"
     And I select "Conditional" from "package_access_rights_type"
-    And I select "CC BY: Attribution" from "License"
+    And I select "CC BY: Attribution" from "Licence"
     And I should see "Spanish"
     And I should see "blah blah"
     And I should see "Intersect Australia"
@@ -306,7 +306,7 @@ Feature: Create a package
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
     Then I should see field "Related Websites" with value "ftp://127.0.0.1/test, http://example.com, https://test.com"
     Then I should see field "Access Rights Type" with value "Conditional"
-    Then I should see field "License" with value "CC BY: Attribution"
+    Then I should see field "Licence" with value "CC BY: Attribution"
 
 
   @javascript
@@ -354,13 +354,13 @@ Feature: Create a package
     And I wait for 4 seconds
     When I am on the create package page
     And I select "Expr 1" from "Experiment"
-    Then I should see "CC BY: Attribution" selected for "License"
+    Then I should see "CC BY: Attribution" selected for "Licence"
     And I select "Expr 2" from "Experiment"
-    Then I should see "CC BY-SA: Attribution-Share Alike" selected for "License"
+    Then I should see "CC BY-SA: Attribution-Share Alike" selected for "Licence"
     And I select "Expr 3" from "Experiment"
-    Then I should see "CC BY-ND: Attribution-No Derivative Works" selected for "License"
+    Then I should see "CC BY-ND: Attribution-No Derivative Works" selected for "Licence"
     And I select "Expr 4" from "Experiment"
-    Then I should see "CC BY-NC: Attribution-Noncommercial" selected for "License"
+    Then I should see "CC BY-NC: Attribution-Noncommercial" selected for "Licence"
     And I select "Expr 5" from "Experiment"
-    Then I should see "CC BY-NC-SA: Attribution-Noncommercial-Share Alike" selected for "License"
+    Then I should see "CC BY-NC-SA: Attribution-Noncommercial-Share Alike" selected for "Licence"
 

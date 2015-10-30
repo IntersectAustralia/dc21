@@ -28,7 +28,7 @@
       <rights>
         <rightsStatement>blah blah</rightsStatement>
         <accessRights type="open" rightsUri="http://handle.westernsydney.edu.au:8081/1959.7/hiev_3"/>
-        <license type="CC-BY" rightsUri="http://creativecommons.org/licenses/by/4.0"/>
+        <licence type="CC-BY" rightsUri="http://creativecommons.org/licenses/by/4.0"/>
       </rights>
       <identifier type="uri">http://handle.westernsydney.edu.au:8081/1959.7/hiev_3</identifier>
       <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
