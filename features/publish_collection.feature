@@ -11,8 +11,8 @@ Feature: Publish a PACKAGE
       | English       | en       |
       | Spanish       | es       |
     And I have the following system configuration
-      | language    | rights_statement | entity              | research_centre_name |
-      | English     | blah blah        | Intersect Australia | Intersect Research   |
+      | language    | rights_statement | entity              | research_centre_name | registry_object_group           |
+      | English     | blah blah        | Intersect Australia | Intersect Research   | Intersect Registry Object Group |
     And I have a user "admin@intersect.org.au" with role "Administrator"
     And I have a user "publisher@intersect.org.au" with role "Administrator"
     And I have a user "researcher@intersect.org.au" with role "Researcher"

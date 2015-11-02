@@ -3,8 +3,10 @@ require 'spec_helper'
 describe PackageRifCsWrapper do
 
   describe "Static values" do
-    it "should always return uws as the group" do
-      PackageRifCsWrapper.new(nil, [], {}).group.should eq("University of Western Sydney")
+    it "should use system configuration to determine the group" do
+      config = SystemConfiguration.instance
+      config.update_attribute(:registry_object_group, 'A Nice Registry Object Group')
+      PackageRifCsWrapper.new(nil, [], {}).group.should eq('A Nice Registry Object Group')
     end
 
     it "should always return dataset as the collection type" do

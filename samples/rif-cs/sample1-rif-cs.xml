@@ -2,7 +2,7 @@
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/1.6/schema/registryObjects.xsd">
-  <registryObject group="University of Western Sydney">
+  <registryObject group="Intersect Registry Object Group">
     <key>$$KEY$$</key>
     <originatingSource>$$ROOT_URL$$</originatingSource>
     <collection type="dataset">

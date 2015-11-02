@@ -20,7 +20,7 @@ class PackageRifCsWrapper < RifCsWrapper
   end
 
   def group
-    'University of Western Sydney'
+    SystemConfiguration.instance.registry_object_group
   end
 
   def originating_source

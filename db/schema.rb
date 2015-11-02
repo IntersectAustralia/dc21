@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150921051205) do
+ActiveRecord::Schema.define(:version => 20151101235159) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(:version => 20150921051205) do
     t.string   "electronic_landing_page_title",                :default => "Enter the title of your landing page"
     t.string   "email_level"
     t.text     "research_librarians",                          :default => ""
+    t.string   "registry_object_group",                        :default => ""
   end
 
   create_table "tags", :force => true do |t|
