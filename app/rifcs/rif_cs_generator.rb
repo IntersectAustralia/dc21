@@ -56,7 +56,7 @@ class RifCsGenerator
           end
 
           unless wrapper_object.file_processing_description.blank?
-            xml.description wrapper_object.file_processing_description, {type: 'brief', 'xml:lang' => wrapper_object.language}
+            xml.description wrapper_object.file_processing_description, {type: 'full', 'xml:lang' => wrapper_object.language}
           end
 
           xml.rights do
