@@ -25,7 +25,7 @@
           </physical>
         </address>
       </location>
-      <description type="brief" xml:lang="$$LANG$$">Describe my collection of stuff</description>
+      <description type="full" xml:lang="$$LANG$$">Describe my collection of stuff</description>
       <rights>
         <rightsStatement>blah blah</rightsStatement>
         <accessRights type="open" rightsUri="http://handle.westernsydney.edu.au:8081/1959.7/hiev_3"/>
