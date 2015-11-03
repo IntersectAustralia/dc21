@@ -36,8 +36,8 @@ Feature: Overlapping Files
       | Description | orig desc |
 
   Scenario: Safe overlap removes replaced files from carts and adds new one to carts
-    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" with type "RAW"
-    And I have uploaded "subsetted/range_oct_13_oct_15/weather_station_05_min_13_to_15.dat" with type "RAW"
+    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" as "other@intersect.org.au" with type "RAW"
+    And I have uploaded "subsetted/range_oct_13_oct_15/weather_station_05_min_13_to_15.dat" as "other@intersect.org.au" with type "RAW"
     And the cart for "researcher@intersect.org.au" contains "weather_station_05_min_10_to_12.dat"
     And the cart for "researcher@intersect.org.au" contains "weather_station_05_min_13_to_15.dat"
     And the cart for "other@intersect.org.au" contains "weather_station_05_min_10_to_12.dat"
@@ -48,19 +48,19 @@ Feature: Overlapping Files
     And I am on the list data files page
     Then I should see only these rows in "exploredata" table
       | Filename                   | Added by                    | Type |
-      | weather_station_05_min.dat | researcher@intersect.org.au | RAW  |
+      | weather_station_05_min.dat | other@intersect.org.au | RAW  |
     And the cart for "other@intersect.org.au" should contain only file "weather_station_05_min.dat"
     And the cart for "researcher@intersect.org.au" should contain only file "weather_station_05_min.dat"
 
   Scenario: Safe overlap doesn't show carts message if no files in carts
-    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" with type "RAW"
-    And I have uploaded "subsetted/range_oct_13_oct_15/weather_station_05_min_13_to_15.dat" with type "RAW"
+    Given I have uploaded "subsetted/range_oct_10_oct_12/weather_station_05_min_10_to_12.dat" as "other@intersect.org.au" with type "RAW"
+    And I have uploaded "subsetted/range_oct_13_oct_15/weather_station_05_min_13_to_15.dat" as "other@intersect.org.au" with type "RAW"
     When I upload "samples/weather_station_05_min.dat" with type "RAW" and description "new description" and experiment "My Experiment"
     Then I should not see "Carts have been updated."
     And I am on the list data files page
     Then I should see only these rows in "exploredata" table
       | Filename                   | Added by                    | Type |
-      | weather_station_05_min.dat | researcher@intersect.org.au | RAW  |
+      | weather_station_05_min.dat | other@intersect.org.au | RAW  |
     And the cart for "other@intersect.org.au" should be empty
     And the cart for "researcher@intersect.org.au" should be empty
 
@@ -182,9 +182,9 @@ Feature: Overlapping Files
   #EYETRACKER-181
   @javascript
   Scenario: Overlap TOA5 file should not produce parent relationships where a file is both parent and child, should not be able to add child as parent during mass update
-    Given I have uploaded "1.dat" with type "RAW"
-    And I have uploaded "sample1.txt" with parents "1.dat"
-    And I have uploaded "2.dat" with parents "sample1.txt"
+    Given I have uploaded "1.dat" as "researcher@intersect.org.au" with type "RAW"
+    And I have uploaded "sample1.txt" as "researcher@intersect.org.au" with parents "1.dat"
+    And I have uploaded "2.dat" as "researcher@intersect.org.au" with parents "sample1.txt"
     When I upload "samples/3.dat" with type "RAW" and description "Problem 2" and experiment "My Experiment"
     Then I should see "The file replaced one or more other files with similar data. Replaced files: 1.dat, 2.dat"
     And file "3.dat" should have children "sample1.txt"

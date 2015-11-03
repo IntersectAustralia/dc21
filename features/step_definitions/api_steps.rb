@@ -139,6 +139,9 @@ When /^I should get a JSON response with filename "([^"]*)" and type "([^"]*)" w
   if expected_messages.include?("goodoverlap")
     messages.join(" ").include?("The file replaced one or more other files with similar data. Replaced files: ").should be_true, "Expected good overlap message to be present, found #{messages}."
   end
+  if expected_messages.include?("ownership_inherited")
+    messages.join(" ").include?("The file has inherited ownership and access control metadata from ").should be_true, "Expected ownerhsip inherited message to be present, found #{messages}."
+  end
 
 end
 

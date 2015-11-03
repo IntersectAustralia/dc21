@@ -148,6 +148,11 @@ Given /^I have uploaded "([^"]*)" with parents "([^"]*)"$/ do |filename, parents
   create_data_file(filename, User.first, "RAW", "desc", nil, parents)
 end
 
+Given /^I have uploaded "([^"]*)" as "([^"]*)" with parents "([^"]*)"$/ do |filename, user_email, parents|
+  user = User.find_by_email user_email
+  create_data_file(filename, user, "RAW", "desc", nil, parents)
+end
+
 Given /^I have uploaded "([^"]*)" with parents "([^"]*)" and children "([^"]*)"$/ do |filename, parents, children|
   create_data_file(filename, User.first, "RAW", "desc", nil, parents, children)
 end
@@ -405,6 +410,10 @@ Then /^the uploaded files display should include "([^"]*)" with messages "([^"]*
     if expected_messages.include?("goodoverlap")
       page.should have_content("The file replaced one or more other files with similar data. Replaced files: ")
     end
+    if expected_messages.include?("ownership_inherited")
+      page.should have_content("The file has inherited ownership and access control metadata from ")
+    end
+
   end
 end
 

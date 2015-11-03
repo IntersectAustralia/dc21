@@ -5,7 +5,9 @@ Feature: Upload files via the API
 
   Background:
     Given I have a user "researcher@intersect.org.au" with role "Institutional User"
+    And I have a user "researcher2@intersect.org.au" with role "Institutional User"
     And user "researcher@intersect.org.au" has an API token
+    And user "researcher2@intersect.org.au" has an API token
     And I have facility "Flux Tower" with code "FLUX"
     Given I have experiments
       | name              | facility   |
@@ -219,18 +221,18 @@ Feature: Upload files via the API
     And there should be <resulting file count> files in the system
 
   Examples:
-    | type      | messages             | resulting name                            | resulting type | resulting file count | description                                         | file path                                                                                |
-    | RAW       | success              | weather_station_15_min_oct_13_15.dat      | RAW            | 3                    | no overlap, different file name                     | samples/subsetted/range_oct_13_oct_15_renamed/weather_station_15_min_oct_13_15.dat       |
-    | RAW       | renamed              | weather_station_15_min_1.dat              | RAW            | 3                    | no overlap, clashing file name                      | samples/subsetted/range_oct_13_oct_15/weather_station_15_min.dat                         |
-    | RAW       | goodoverlap          | weather_station_15_min_oct_10_onwards.dat | RAW            | 2                    | safe overlap, different file name                   | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
-    | RAW       | goodoverlap          | weather_station_15_min.dat                | RAW            | 2                    | safe overlap, replacing file of same name           | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
-    | RAW       | goodoverlap, renamed | sample1_1.txt                             | RAW            | 2                    | safe overlap, clashing file name                    | samples/subsetted/range_oct_10_onwards_renamed/sample1.txt                               |
-    | RAW       | badoverlap           | weather_station_15_min_oct_11_13.dat      | ERROR          | 3                    | bad overlap, different file name                    | samples/subsetted/range_oct_11_oct_13/weather_station_15_min_oct_11_13.dat               |
-    | RAW       | renamed, badoverlap  | weather_station_15_min_1.dat              | ERROR          | 3                    | bad overlap, clashing file name                     | samples/subsetted/range_oct_11_oct_13/weather_station_15_min.dat                         |
-    | RAW       | success              | sample2.txt                               | RAW            | 3                    | non-TOA5, different file name                       | samples/sample2.txt                                                                      |
-    | RAW       | renamed              | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
-    | PROCESSED | success              | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
-    | PROCESSED | renamed              | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+    | type      | messages                                    | resulting name                            | resulting type | resulting file count | description                                         | file path                                                                                |
+    | RAW       | success                                     | weather_station_15_min_oct_13_15.dat      | RAW            | 3                    | no overlap, different file name                     | samples/subsetted/range_oct_13_oct_15_renamed/weather_station_15_min_oct_13_15.dat       |
+    | RAW       | renamed                                     | weather_station_15_min_1.dat              | RAW            | 3                    | no overlap, clashing file name                      | samples/subsetted/range_oct_13_oct_15/weather_station_15_min.dat                         |
+    | RAW       | goodoverlap, ownership_inherited            | weather_station_15_min_oct_10_onwards.dat | RAW            | 2                    | safe overlap, different file name                   | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
+    | RAW       | goodoverlap, ownership_inherited            | weather_station_15_min.dat                | RAW            | 2                    | safe overlap, replacing file of same name           | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
+    | RAW       | goodoverlap, renamed, ownership_inherited   | sample1_1.txt                             | RAW            | 2                    | safe overlap, clashing file name                    | samples/subsetted/range_oct_10_onwards_renamed/sample1.txt                               |
+    | RAW       | badoverlap                                  | weather_station_15_min_oct_11_13.dat      | ERROR          | 3                    | bad overlap, different file name                    | samples/subsetted/range_oct_11_oct_13/weather_station_15_min_oct_11_13.dat               |
+    | RAW       | renamed, badoverlap                         | weather_station_15_min_1.dat              | ERROR          | 3                    | bad overlap, clashing file name                     | samples/subsetted/range_oct_11_oct_13/weather_station_15_min.dat                         |
+    | RAW       | success                                     | sample2.txt                               | RAW            | 3                    | non-TOA5, different file name                       | samples/sample2.txt                                                                      |
+    | RAW       | renamed                                     | sample1_1.txt                             | RAW            | 3                    | non-TOA5, clashing file name                        | samples/sample1.txt                                                                      |
+    | PROCESSED | success                                     | weather_station_15_min_oct_10_onwards.dat | PROCESSED      | 3                    | safe overlap, but not marked raw                    | samples/subsetted/range_oct_10_onwards_renamed/weather_station_15_min_oct_10_onwards.dat |
+    | PROCESSED | renamed                                     | weather_station_15_min_1.dat              | PROCESSED      | 3                    | safe overlap, but not marked raw, clashing filename | samples/subsetted/range_oct_10_onwards/weather_station_15_min.dat                        |
 
   #EYETRACKER-88
   Scenario: Add a list of labels to files uploaded through the API
@@ -282,28 +284,31 @@ Feature: Upload files via the API
     And file "weather_station_05_min.dat" should have 0 parents
     And file "weather_station_05_min.dat" should have parents ""
 
-  Scenario: Specify access control to files uploaded through the API
+  Scenario: Ownership and Access Controls are inherited when uploading subsets of existing data
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
       | file       | samples/full_files/weather_station/weather_station_05_min.dat |
       | type       | RAW                                                           |
       | experiment | Flux Experiment 1                                             |
       | access     | Public                                                        |
     Then I should get a 200 response code
+    And file "weather_station_05_min.dat" should be created by "researcher@intersect.org.au"
     And file "weather_station_05_min.dat" should have access level "Public"
     And file "weather_station_05_min.dat" should not be set as private access to all institutional users
     And file "weather_station_05_min.dat" should not be set as private access to user groups
-    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+    When I submit an API upload request with the following parameters as user "researcher2@intersect.org.au"
       | file                              | samples/full_files/weather_station/weather_station_05_min.dat |
       | type                              | RAW                                                           |
       | experiment                        | Flux Experiment 1                                             |
       | access                            | Private                                                       |
       | access_to_all_institutional_users | false                                                         |
     Then I should get a 200 response code
-    And file "weather_station_05_min.dat" should have access level "Private"
+    And I should get a JSON response with message "The file has inherited ownership and access control metadata from weather_station_05_min.dat"
+    And file "weather_station_05_min.dat" should be created by "researcher@intersect.org.au"
+    And file "weather_station_05_min.dat" should have access level "Public"
     And file "weather_station_05_min.dat" should not be set as private access to all institutional users
     And file "weather_station_05_min.dat" should not be set as private access to user groups
     And file "weather_station_05_min.dat" should have access groups ""
-    When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"
+    When I submit an API upload request with the following parameters as user "researcher2@intersect.org.au"
       | file                  | samples/full_files/weather_station/weather_station_05_min.dat |
       | type                  | RAW                                                           |
       | experiment            | Flux Experiment 1                                             |
@@ -311,10 +316,12 @@ Feature: Upload files via the API
       | access_to_user_groups | true                                                          |
       | access_groups         | group-C,group-A,group-B                                       |
     Then I should get a 200 response code
-    And file "weather_station_05_min.dat" should have access level "Private"
+    And I should get a JSON response with message "The file has inherited ownership and access control metadata from weather_station_05_min.dat"
+    And file "weather_station_05_min.dat" should be created by "researcher@intersect.org.au"
+    And file "weather_station_05_min.dat" should have access level "Public"
     And file "weather_station_05_min.dat" should not be set as private access to all institutional users
-    And file "weather_station_05_min.dat" should be set as private access to user groups
-    And file "weather_station_05_min.dat" should have access groups "group-C,group-A,group-B"
+    And file "weather_station_05_min.dat" should not be set as private access to user groups
+    And file "weather_station_05_min.dat" should have access groups ""
 
   Scenario Outline: Supplying multiple access control keywords in API upload should upload file and set it to the most restricted access setting (from what's specified)
     When I submit an API upload request with the following parameters as user "researcher@intersect.org.au"

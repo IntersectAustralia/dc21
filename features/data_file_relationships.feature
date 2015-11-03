@@ -103,25 +103,25 @@ Feature: Edit data file relationships
     When I select "RAW" from "File type"
     And I select "Other" from "Experiment"
     And I fill in "Description" with "My descriptive description"
-    And I select "samples/sample1.txt" to upload
+    And I select "samples/sample2.txt" to upload
     And I select "My Nice Experiment" from "Filter Files"
     And I should not see "Children"
     When I fill in "Parents" with "datafile.dat"
     And I wait for 2 seconds
     And I choose "datafile.dat" in the select2 menu
     And I press "Upload"
-    Then the most recent file should have name "sample1.txt"
-    And the uploaded files display should include "sample1.txt" with file type "RAW"
-    And the uploaded files display should include "sample1.txt" with messages "success"
-    And the uploaded files display should include "sample1.txt" with experiment "Other"
-    And the uploaded files display should include "sample1.txt" with description "My descriptive description"
-    And file "sample1.txt" should have type "RAW"
-    And file "sample1.txt" should have experiment "Other"
-    And file "sample1.txt" should have description "My descriptive description"
-    And file "sample1.txt" should have parents "datafile.dat"
+    Then the most recent file should have name "sample2.txt"
+    And the uploaded files display should include "sample2.txt" with file type "RAW"
+    And the uploaded files display should include "sample2.txt" with messages "success"
+    And the uploaded files display should include "sample2.txt" with experiment "Other"
+    And the uploaded files display should include "sample2.txt" with description "My descriptive description"
+    And file "sample2.txt" should have type "RAW"
+    And file "sample2.txt" should have experiment "Other"
+    And file "sample2.txt" should have description "My descriptive description"
+    And file "sample2.txt" should have parents "datafile.dat"
     Then I press "Update"
     When I am on the list data files page
-    And I follow the view link for data file "sample1.txt"
+    And I follow the view link for data file "sample2.txt"
     And I wait for 1 seconds
     Then I should see details displayed
       | Parents  | datafile.dat               |

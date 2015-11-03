@@ -7,6 +7,7 @@
       .alert.alert-error #{msg}
   .alert.alert-success
     Your files have been uploaded. Below you can modify the information about individual files if you wish.
+  - editable_files = false
   = form_tag(bulk_update_data_files_path, :method => :put) do
     - @uploaded_files.each do |file|
       .file-panel{:id => "file_panel_#{file.id}"}
@@ -15,95 +16,104 @@
           - if file.messages.is_a? Array
             - file.messages.each do |message_attrs|
               %li.alert{:class => message_attrs[:type]}= message_attrs[:message]
-        %h2{:title => file.filename} Access Control for #{file.filename}
-        .control-group
-          = label_tag "file_#{file.id}_access", "Public", class: "control-label"
-          .controls
-            = radio_button_tag "files[#{file.id}][access]", "Public", {id: "public_access_radio_button_#{file.id}"}
-        .control-group
-          = label_tag "file_#{file.id}_access", "Private", class: "control-label"
-          .controls
-            = radio_button_tag "files[#{file.id}][access]", "Private", {id: "private_access_radio_button_#{file.id}"}
-          .controls{:id => "private_access_options_#{file.id}"}
-            .record.checkbox
-              = check_box_tag "files[#{file.id}][access_to_all_institutional_users]", true, file.access_to_all_institutional_users
-              = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
-            .record.checkbox
-              = check_box_tag "files[#{file.id}][access_to_user_groups]", true, file.access_to_user_groups
-              = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
-          .control-group{:id => "user_groups_list_#{file.id}"}
-            = label_tag :groups, "Groups"
+        - if file.created_by == current_user
+          - editable_files = true
+          %h2{:title => file.filename} Access Control for #{file.filename}
+          .control-group
+            = label_tag "file_#{file.id}_access", "Public", class: "control-label"
             .controls
-              = collection_select("files[#{file.id}][access_groups]", :access_groups, AccessGroup.find_all_by_status(true), :id, :name, {:name => "files[#{file.id}][access_groups]"}, {:multiple => true})
-
-        .control-group
-          %label.control-label Type:
-          .controls
-            .record= "#{file.file_processing_status}"
-
-        .control-group
-          = label_tag "file_#{file.id}_experiment", "#{@config.level2}", class: "control-label"
-          .controls
-            = select_tag "files[#{file.id}][experiment_id]", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), :id => "file_#{file.id}_experiment"
-
-        .control-group
-          = label_tag "file_#{file.id}_description", "Description", class: "control-label"
-          .controls
-            = text_area_tag "files[#{file.id}][file_processing_description]", file.file_processing_description, :id => "file_#{file.id}_description"
-
-        .control-group
-          = label_tag "file_#{file.id}_external_id", "ID", class: "control-label"
-          .controls
-            = text_field_tag "files[#{file.id}][external_id]", file.external_id, :id => "file_#{file.id}_external_id"
-
-        .control-group#tags
-          = label_tag :tags, "Tags", class: "control-label"
-          .controls
-            - if tags.empty?
-              .record None
-            - tags.each do |tag|
+              = radio_button_tag "files[#{file.id}][access]", "Public", {id: "public_access_radio_button_#{file.id}"}
+          .control-group
+            = label_tag "file_#{file.id}_access", "Private", class: "control-label"
+            .controls
+              = radio_button_tag "files[#{file.id}][access]", "Private", {id: "private_access_radio_button_#{file.id}"}
+            .controls{:id => "private_access_options_#{file.id}"}
               .record.checkbox
-                = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
-                = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
-        .control-group#labels
-          = label_tag "files[#{file.id}][label_list]", "Labels:", class: "control-label"
-          .controls
-            = text_field_tag "files[#{file.id}][label_list]", file.labels.pluck(:name).join(','), :class => 'select2_labels', data: {labels: labels}
+                = check_box_tag "files[#{file.id}][access_to_all_institutional_users]", true, file.access_to_all_institutional_users
+                = label_tag "inst_users", "All Institutional Users", :class => 'tag', :title => "All Institutional Users"
+              .record.checkbox
+                = check_box_tag "files[#{file.id}][access_to_user_groups]", true, file.access_to_user_groups
+                = label_tag "non_inst_users", "Users in Groups", :class => 'tag', :title => "Users in Groups"
+            .control-group{:id => "user_groups_list_#{file.id}"}
+              = label_tag :groups, "Groups"
+              .controls
+                = collection_select("files[#{file.id}][access_groups]", :access_groups, AccessGroup.find_all_by_status(true), :id, :name, {:name => "files[#{file.id}][access_groups]"}, {:multiple => true})
 
-        - unless file.time_parsable?
           .control-group
-            .date-format yyyy-mm-dd
-          .control-group
-            = label_tag "file_#{file.id}_start_time", "Start Time", class: "control-label"
+            %label.control-label Type:
             .controls
-              = text_field_tag "files[#{file.id}][start_time]", file.start_time, :id => "file_#{file.id}_start_time", :datepicker => true
-              .hidden{:id => "file_#{file.id}_start_container"}
-                = select_hour @start_time, {:field_name => "files[#{file.id}][start_hr]"}, {:id => "file_#{file.id}_start_hr"}
-                = select_minute @start_time, {:field_name => "files[#{file.id}][start_min]"}, {:id => "file_#{file.id}_start_min"}
-                = select_second @start_time, {:field_name => "files[#{file.id}][start_sec]"}, {:id => "file_#{file.id}_start_sec"}
-          .control-group
-            = label_tag "file_#{file.id}_end_time", "End Time", class: "control-label"
-            .controls
-              = text_field_tag "files[#{file.id}][end_time]", file.end_time, :id => "file_#{file.id}_end_time", :datepicker => true
-              .hidden{:id => "file_#{file.id}_end_container"}
-                = select_hour @end_time, {:field_name => "files[#{file.id}][end_hr]"}, {:id => "file_#{file.id}_end_hr"}
-                = select_minute @end_time, {:field_name => "files[#{file.id}][end_min]"}, {:id => "file_#{file.id}_end_min"}
-                = select_second @end_time, {:field_name => "files[#{file.id}][end_sec]"}, {:id => "file_#{file.id}_end_sec"}
+              .record= "#{file.file_processing_status}"
 
-        %h2 New File Relationships
-        .control-group
-          = label_tag "experiment_id_#{file.id}", "Filter Files", class: "control-label"
-          .controls
-            = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), file_id: file.id
-            %br/
-            Filter data files by #{@config.level2.downcase}
-        .control-group
-          = label_tag "parent_ids_#{file.id}", "Parents", class: "control-label"
-          .controls
-            = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields, children: file.child_ids}, name: "files[#{file.id}][parent_ids]"
-    .form-actions
-      .actions
-        = submit_tag "Update"
+          .control-group
+            = label_tag "file_#{file.id}_experiment", "#{@config.level2}", class: "control-label"
+            .controls
+              = select_tag "files[#{file.id}][experiment_id]", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), :id => "file_#{file.id}_experiment"
+
+          .control-group
+            = label_tag "file_#{file.id}_description", "Description", class: "control-label"
+            .controls
+              = text_area_tag "files[#{file.id}][file_processing_description]", file.file_processing_description, :id => "file_#{file.id}_description"
+
+          .control-group
+            = label_tag "file_#{file.id}_external_id", "ID", class: "control-label"
+            .controls
+              = text_field_tag "files[#{file.id}][external_id]", file.external_id, :id => "file_#{file.id}_external_id"
+
+          .control-group#tags
+            = label_tag :tags, "Tags", class: "control-label"
+            .controls
+              - if tags.empty?
+                .record None
+              - tags.each do |tag|
+                .record.checkbox
+                  = check_box_tag "files[#{file.id}][tag_ids][]", tag.id, file.tag_ids.include?(tag.id), :id => "file_#{file.id}_tag_#{tag.id}"
+                  = label_tag "file_#{file.id}_tag_#{tag.id}", tag.name, :class => 'tag', :title => tag.name
+          .control-group#labels
+            = label_tag "files[#{file.id}][label_list]", "Labels:", class: "control-label"
+            .controls
+              = text_field_tag "files[#{file.id}][label_list]", file.labels.pluck(:name).join(','), :class => 'select2_labels', data: {labels: labels}
+
+          - unless file.time_parsable?
+            .control-group
+              .date-format yyyy-mm-dd
+            .control-group
+              = label_tag "file_#{file.id}_start_time", "Start Time", class: "control-label"
+              .controls
+                = text_field_tag "files[#{file.id}][start_time]", file.start_time, :id => "file_#{file.id}_start_time", :datepicker => true
+                .hidden{:id => "file_#{file.id}_start_container"}
+                  = select_hour @start_time, {:field_name => "files[#{file.id}][start_hr]"}, {:id => "file_#{file.id}_start_hr"}
+                  = select_minute @start_time, {:field_name => "files[#{file.id}][start_min]"}, {:id => "file_#{file.id}_start_min"}
+                  = select_second @start_time, {:field_name => "files[#{file.id}][start_sec]"}, {:id => "file_#{file.id}_start_sec"}
+            .control-group
+              = label_tag "file_#{file.id}_end_time", "End Time", class: "control-label"
+              .controls
+                = text_field_tag "files[#{file.id}][end_time]", file.end_time, :id => "file_#{file.id}_end_time", :datepicker => true
+                .hidden{:id => "file_#{file.id}_end_container"}
+                  = select_hour @end_time, {:field_name => "files[#{file.id}][end_hr]"}, {:id => "file_#{file.id}_end_hr"}
+                  = select_minute @end_time, {:field_name => "files[#{file.id}][end_min]"}, {:id => "file_#{file.id}_end_min"}
+                  = select_second @end_time, {:field_name => "files[#{file.id}][end_sec]"}, {:id => "file_#{file.id}_end_sec"}
+
+          %h2 New File Relationships
+          .control-group
+            = label_tag "experiment_id_#{file.id}", "Filter Files", class: "control-label"
+            .controls
+              = select_tag "experiment_id_#{file.id}", option_groups_from_collection_for_select(grouped_experiments_for_select, :experiments, :name, :id, :name, file.experiment_id), file_id: file.id
+              %br/
+              Filter data files by #{@config.level2.downcase}
+          .control-group
+            = label_tag "parent_ids_#{file.id}", "Parents", class: "control-label"
+            .controls
+              = hidden_field_tag "parent_ids_#{file.id}", nil, data: {placeholder: 'Select parent data files...', values: file.parents.relationship_fields, children: file.child_ids}, name: "files[#{file.id}][parent_ids]"
+    - if editable_files
+      .form-actions
+        .actions
+          = submit_tag "Update"
+    - else
+      .form-actions
+        .actions
+          = link_to "Home", root_path, :class => "btn btn-primary"
+
+
 
 :javascript
   $(document).ready(function(){

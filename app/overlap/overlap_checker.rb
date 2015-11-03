@@ -45,9 +45,19 @@ class OverlapChecker
       replaced_filenames = safe.collect(&:filename)
       replaced_parents = safe.collect(&:parent_ids).flatten
       replaced_children = safe.collect(&:child_ids).flatten
-      info_message = "The file replaced one or more other files with similar data. Replaced files: #{replaced_filenames.join(", ")}"
-      @data_file.file_processing_description = replaced_descriptions.join(', ') if @data_file.file_processing_description.blank?
+      @data_file.add_message(:info, "The file replaced one or more other files with similar data. Replaced files: #{replaced_filenames.join(", ")} ")
 
+      # Determine the oldest file being replaced.
+      # Use the same uploader and access control parameters as the oldest file being replaced.
+      oldest = safe.sort_by{|f| f.id}.first
+      @data_file.created_by = oldest.created_by
+      @data_file.access = oldest.access
+      @data_file.access_to_all_institutional_users = oldest.access_to_all_institutional_users
+      @data_file.access_to_user_groups = oldest.access_to_user_groups
+      @data_file.access_groups = oldest.access_groups
+      @data_file.add_message(:info, "The file has inherited ownership and access control metadata from #{oldest.filename}")
+
+      @data_file.file_processing_description = replaced_descriptions.join(', ') if @data_file.file_processing_description.blank?
       @data_file.parent_ids = @data_file.parent_ids + replaced_parents - replaced_children
       @data_file.child_ids = @data_file.child_ids + replaced_children
       @data_file.save!
@@ -69,8 +79,7 @@ class OverlapChecker
       users_with_replaced_files_in_cart.each do |user|
         user.cart_items << @data_file
       end
-      info_message << " Carts have been updated." unless users_with_replaced_files_in_cart.empty?
-      @data_file.add_message(:info, info_message)
+      @data_file.add_message(:info, "Carts have been updated.") unless users_with_replaced_files_in_cart.empty?
     end
   end
 end
