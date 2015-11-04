@@ -43,6 +43,10 @@ class PackageRifCsWrapper < RifCsWrapper
     options[:submitter] = submitter
   end
 
+  def electronic_address_notes
+    SystemConfiguration.instance.electronic_address_notes
+  end
+
   # returns an array of strings, each item being the text for a local subject
   def local_subjects
     if !collection_object.nil?

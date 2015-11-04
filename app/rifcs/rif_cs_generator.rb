@@ -39,7 +39,7 @@ class RifCsGenerator
                 xml.value wrapper_object.electronic_location
                 xml.title wrapper_object.electronic_landing_page_title
                 xml.byteSize wrapper_object.byte_size
-                xml.notes 'Authorised users only'
+                xml.notes wrapper_object.electronic_address_notes
               end
               xml.physical do
                 xml.addressPart wrapper_object.physical_address, type: 'text'

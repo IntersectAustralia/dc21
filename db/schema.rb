@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151101235159) do
+ActiveRecord::Schema.define(:version => 20151104004016) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -313,6 +313,7 @@ ActiveRecord::Schema.define(:version => 20151101235159) do
     t.string   "email_level"
     t.text     "research_librarians",                          :default => ""
     t.string   "registry_object_group",                        :default => ""
+    t.string   "electronic_address_notes",                     :default => "Authorised users only"
   end
 
   create_table "tags", :force => true do |t|
