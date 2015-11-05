@@ -51,6 +51,12 @@
         %h1 Access Rights String
         %span{:property => "http://schema.org/description"}
           &= package.access_rights_text
+        %h1 Licence
+        %span{:property => 'http://schema.org/description'}
+          &= metadata_helper.licence_name(package.license)
+        %h1 Licence URI
+        %span{:property => 'http://schema.org/description'}
+          &= package.license
         %h1 Rights Statement
         %span{:property => "http://schema.org/description"}
           &= package.rights_statement

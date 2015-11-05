@@ -92,6 +92,10 @@ class MetadataHelper
     number_to_human_size(number, :precision => 2).gsub(" ", "")
   end
 
+  def licence_name(licence_uri)
+    AccessRightsLookup.new.get_name(licence_uri)
+  end
+
   private
 
   def aggregate_facility_users(facilities)
