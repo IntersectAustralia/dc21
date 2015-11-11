@@ -37,7 +37,7 @@
             .control-group{:id => "user_groups_list_#{file.id}"}
               = label_tag :groups, "Groups"
               .controls
-                = collection_select("files[#{file.id}][access_groups]", :access_groups, AccessGroup.find_all_by_status(true), :id, :name, {:name => "files[#{file.id}][access_groups]"}, {:multiple => true})
+                = collection_select("files[#{file.id}][access_groups]", :access_groups, AccessGroup.find_all_by_status(true), :id, :name, {:name => "files[#{file.id}][access_groups]", :selected => file.access_groups.map(&:id)}, {:multiple => true})
 
           .control-group
             %label.control-label Type:
