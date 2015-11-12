@@ -36,6 +36,15 @@
         %h1 Description
         %span{:property => "http://schema.org/description"}
           &= package.file_processing_description
+        %h1 Experiment
+        %span{:property => "http://schema.org/name"}
+          &= package.experiment.name
+        %h1 Facility
+        %span{:property => "http://schema.org/name"}
+          &= package.facility.name
+        %h1 Added By
+        %span{:property => "http://schema.org/name"}
+          &= package.created_by.full_name
         %h1 Labels
         %span
           &= package.labels.pluck(:name).join(", ")
