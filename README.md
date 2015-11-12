@@ -1,4 +1,4 @@
-DIVER (Data Is Vital for Empirical Research) is a general purpose, user-friendly research data capture and sharing application. It was originally developed by [Intersect Australia](http://www.intersect.org.au/) for the Hawkesbury Institute for the Environment Western Sydney Uinversity  as part of an ANDS-Funded Data Capture Project [DC21] (https://projects.ands.org.au/id/DC21)
+DIVER (Data Is Vital for Empirical Research) is a general purpose, user-friendly research data capture and sharing application. It was originally developed by [Intersect Australia](http://www.intersect.org.au/) for the Hawkesbury Institute for the Environment at the Western Sydney Unversity as part of an ANDS-Funded Data Capture Project [DC21] (https://projects.ands.org.au/id/DC21). [ANDS](http://www.ands.org.au/) (Australian National Data Service) is an Australian Government research infrastructure project.
 
 DC21 is a Ruby on Rails (3.2) application for the management of environmental data (predominantly time-series from Campbell Scientific Loggers).
 
