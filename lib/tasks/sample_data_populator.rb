@@ -33,8 +33,8 @@ def create_test_users
   User.delete_all
   create_user(:email => "kali@intersect.org.au", :first_name => "Admin", :last_name => "User")
   create_user(:email => "daniel@intersect.org.au", :first_name => "Admin", :last_name => "User")
-  create_user(:email => "cindy@intersect.org.au", :first_name => "Admin", :last_name => "User")
-  create_user(:email => "cathy@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "tao@intersect.org.au", :first_name => "Admin", :last_name => "User")
+  create_user(:email => "jake@intersect.org.au", :first_name => "Admin", :last_name => "User")
   create_user(:email => "researcher1@intersect.org.au", :first_name => "Researcher", :last_name => "One")
   r2 = create_user(:email => "researcher2@intersect.org.au", :first_name => "Researcher", :last_name => "Two")
   r2.deactivate
@@ -49,8 +49,8 @@ def create_test_users
   set_role("researcher2@intersect.org.au", "Institutional User")
   set_role("kali@intersect.org.au", "Administrator")
   set_role("daniel@intersect.org.au", "Administrator")
-  set_role("cathy@intersect.org.au", "Non-Institutional User")
-  set_role("cindy@intersect.org.au", "Administrator")
+  set_role("jake@intersect.org.au", "Non-Institutional User")
+  set_role("tao@intersect.org.au", "Administrator")
   set_role("apgr@intersect.org.au", "API Uploader")
   set_role("adgr@intersect.org.au", "Administrator")
   set_role("ingr@intersect.org.au", "Institutional User")
