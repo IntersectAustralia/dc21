@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151104004016) do
+ActiveRecord::Schema.define(:version => 20160418013641) do
 
   create_table "access_group_users", :force => true do |t|
     t.integer  "access_group_id"
@@ -61,6 +61,15 @@ ActiveRecord::Schema.define(:version => 20151104004016) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "contributors", :force => true do |t|
+    t.string "name"
+  end
+
+  create_table "data_file_contributors", :id => false, :force => true do |t|
+    t.integer "data_file_id"
+    t.integer "contributor_id"
   end
 
   create_table "data_file_grant_numbers", :id => false, :force => true do |t|

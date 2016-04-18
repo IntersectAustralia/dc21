@@ -42,6 +42,7 @@ class PackagesController < DataFilesController
       data_file_ids = current_user.cart_item_ids
       @package.label_list = package_params[:label_list] if package_params[:label_list]
       @package.grant_number_list = package_params[:grant_number_list] if package_params[:grant_number_list]
+      @package.contributor_list = package_params[:contributor_list] if package_params[:contributor_list]
       @package.parent_ids = data_file_ids
       begin
         if params[:run_in_background]
@@ -66,7 +67,7 @@ class PackagesController < DataFilesController
       end
 
     else
-      @package.reformat_on_error(package_params[:filename], params[:tags], params[:label_list], params[:grant_number_list])
+      @package.reformat_on_error(package_params[:filename], params[:tags], params[:label_list], params[:grant_number_list], params[:contributor_list])
       render :action => 'new'
     end
   end
@@ -79,6 +80,7 @@ class PackagesController < DataFilesController
     tag_names = params[:tag_names]
     label_names = params[:label_names]
     grant_numbers = params[:grant_numbers]
+    contributors = params[:contributors]
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
@@ -88,6 +90,7 @@ class PackagesController < DataFilesController
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
+    contributor_ids = parse_contributors(contributors, errors)
 
     params[:license] = AccessRightsLookup.new.get_url(params[:license])
 
@@ -96,6 +99,7 @@ class PackagesController < DataFilesController
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
       save_grant_numbers(package, grant_number_ids)
+      save_contributors(package, contributor_ids)
 
       data_file_ids = data_files.map { |data_file| data_file.id }
       package.label_list = params[:label_list] if params[:label_list]
@@ -205,6 +209,11 @@ class PackagesController < DataFilesController
     pkg.save
   end
 
+  def save_contributors(package, contributors)
+    pkg = DataFile.find(package.id)
+    pkg.contributor_ids = contributors
+    pkg.save
+  end
 
   def build_rif_cs(files, package)
     #build the rif-cs and place in the unpublished_rif_cs folder, where it will stay until published in DC21

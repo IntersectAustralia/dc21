@@ -22,6 +22,7 @@ class DataFilesController < ApplicationController
   expose(:labels) { Label.joins(:data_file_labels).pluck(:name).uniq }
   expose(:grant_numbers) { GrantNumber.joins(:data_file_grant_numbers).pluck(:name).uniq }
   expose(:related_websites) { RelatedWebsite.joins(:data_file_related_websites).pluck(:url).uniq}
+  expose(:contributors) { Contributor.joins(:data_file_contributors).pluck(:name).uniq }
   expose(:access_groups) { AccessGroup.pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
@@ -396,6 +397,7 @@ class DataFilesController < ApplicationController
     label_names = params[:label_names]
     grant_numbers = params[:grant_numbers]
     related_websites = params[:related_websites]
+    contributors = params[:contributors]
 
     title = params[:title]
     access_rights_type = params[:access_rights_type]
@@ -488,6 +490,14 @@ class DataFilesController < ApplicationController
             grant_number_list = CSV.parse_line(grant_numbers).join('|')
           end
           data_file.grant_number_list = grant_number_list
+        end
+        if params.has_key?(:contributors)
+          if contributors.blank?
+            contributor_list = ''
+          else
+            contributor_list = CSV.parse_line(contributors).join('|')
+          end
+          data_file.contributor_list = contributor_list
         end
         warnings << 'Updating a package will not cause rif-cs to be regenerated'
       end
@@ -587,6 +597,7 @@ class DataFilesController < ApplicationController
     @selected_labels = @search.labels
     @selected_grant_numbers = @search.grant_numbers
     @selected_related_websites = @search.related_websites
+    @selected_contributors = @search.contributors
     @selected_file_formats = @search.file_formats
     @uploader_id = @search.uploader_id
     @upload_from_date = @search.search_params[:upload_from_date]
@@ -795,6 +806,25 @@ class DataFilesController < ApplicationController
       errors << 'Incorrect format for grant numbers - grant numbers must be double-quoted and comma separated'
     end
     grant_number_ids
+  end
+
+  def parse_contributors(contributors, errors)
+    return [] if contributors.blank?
+    contributor_ids = []
+    begin
+      contributors_array = CSV.parse_line(contributors)
+      contributors_array.each do |contributor|
+        existing = Contributor.where('lower(name) = ?', contributor.downcase).first
+        if existing.nil?
+          contributor_ids << Contributor.create(:name => contributor).id
+        else
+          contributor_ids << existing.id
+        end
+      end
+    rescue CSV::MalformedCSVError
+      errors << 'Incorrect format for contributors - contributors must be double-quoted and comma separated'
+    end
+    contributor_ids
   end
 
   def sort_column

@@ -110,6 +110,14 @@ $(function () {
         $('.searchcategory .related_websites').hide();
     }
 
+    // Contributors
+    if ( $('.searchcategory .contributors option[selected]').length > 0 ) {
+        $('#contributors_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .contributors').hide();
+    }
+
     // File Format
     if ( $('.searchcategory .file_formats option[selected]').length > 0 ) {
         $('#file_format_category').toggleClass('current');
@@ -248,6 +256,11 @@ $(function () {
 
     $('#related_websites_category').click(function (event) {
         $('.searchcategory .related_websites').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#contributors_category').click(function (event) {
+        $('.searchcategory .contributors').toggle();
         $(this).toggleClass('current');
     });
 

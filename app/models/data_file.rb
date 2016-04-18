@@ -68,7 +68,11 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_related_websites, :uniq => true
   has_many :related_websites, :through => :data_file_related_websites, :uniq => true, autosave: true
 
-  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text, :grant_number_list, :related_website_list, :license
+  has_many :data_file_contributors, :uniq => true
+  has_many :contributors, :through => :data_file_contributors, :uniq => true
+
+  attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text,
+                  :grant_number_list, :related_website_list, :license, :contributor_list
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -190,10 +194,16 @@ class DataFile < ActiveRecord::Base
     self.related_websites.collect(&:url).join("|")
   end
 
-
-
   def related_website_names
     self.related_websites.pluck(:url)
+  end
+
+  def contributor_list
+    self.contributors.pluck(:name).join("|")
+  end
+
+  def contributor_names
+    self.contributors.pluck(:name)
   end
 
   def label_list_display
@@ -206,6 +216,10 @@ class DataFile < ActiveRecord::Base
 
   def related_website_list_display
     self.related_websites.pluck(:url).join(", ")
+  end
+
+  def contributor_list_display
+    self.contributors.pluck(:name).join(", ")
   end
 
   def label_list=(new_value)
@@ -229,6 +243,14 @@ class DataFile < ActiveRecord::Base
     self.related_websites = related_website_urls.map { |url|
       existing = RelatedWebsite.where('lower(url) = ?', url.downcase).first
       existing ||= self.related_websites.build(:url => url)
+    }
+  end
+
+  def contributor_list=(new_value)
+    contributor_names = new_value.split(/\|\s*/).uniq
+    self.contributors = contributor_names.map { |name|
+      existing = Contributor.where('lower(name) = ?', name.downcase).first
+      existing ||= Contributor.create(:name => name)
     }
   end
 
@@ -304,6 +326,11 @@ class DataFile < ActiveRecord::Base
 
   def self.with_any_of_these_related_websites(related_website_params)
     data_file_ids = DataFile.unscoped.joins(:related_websites).where { related_websites.url >> related_website_params }.pluck(:id).uniq
+    where(:id => data_file_ids)
+  end
+
+  def self.with_any_of_these_contributors(contributor_params)
+    data_file_ids = DataFile.unscoped.joins(:contributors).where { contributors.name >> contributor_params }.pluck(:id).uniq
     where(:id => data_file_ids)
   end
 

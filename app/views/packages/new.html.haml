@@ -91,6 +91,10 @@
         %label.control-label{:for => :package_related_website_list} Related Websites
         .controls
           = f.text_field :related_website_list, data: {labels: related_websites}
+      .control-group#contributors
+        %label.control-label{:for => :package_contributor_list} Contributors
+        .controls
+          = f.text_field :contributor_list, data: {labels: contributors}
       %h2{:title => @package.filename}
       .control-group
         = f.label :access_rights_type, "Access Rights Type", class: "control-label"
@@ -156,6 +160,13 @@
   $('#package_related_website_list').select2({
       minimumInputLength: 3,
       tags: $('#package_related_website_list').data('labels'),
+      tokenSeparators: ['|'],
+      separator: '|'
+  });
+
+  $('#package_contributor_list').select2({
+      minimumInputLength: 3,
+      tags: $('#package_contributor_list').data('labels'),
       tokenSeparators: ['|'],
       separator: '|'
   });

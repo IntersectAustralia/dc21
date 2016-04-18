@@ -101,6 +101,10 @@ class PackageRifCsWrapper < RifCsWrapper
     collection_object.grant_numbers.collect(&:name)
   end
 
+  def contributors
+    collection_object.contributors.collect(&:name)
+  end
+
   # returns an array of strings, each item being an FOR code in its PURL format
   def for_codes
     codes = experiments.collect(&:experiment_for_codes).flatten

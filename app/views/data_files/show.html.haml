@@ -46,6 +46,7 @@
         %span{:title => tag.name}= tag.name
         %br/
     - render_field "Labels", @data_file.label_list_display
+    - render_field "Contributors", @data_file.contributor_list_display
     - render_field "#{@config.level2}", @data_file.experiment_name
     - render_field "#{@config.level1}", @data_file.facility_name
     - render_field "Date added", @data_file.created_at.to_s(:with_time)

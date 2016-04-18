@@ -98,6 +98,13 @@ class RifCsGenerator
             end
           end
 
+          wrapper_object.contributors.each do |contributor|
+            xml.relatedObject do
+              xml.key contributor
+              xml.relation type: 'isOutputOf'
+            end
+          end
+
           xml.relatedObject do
             xml.key wrapper_object.created_by
             xml.relation type: 'hasCollector' do

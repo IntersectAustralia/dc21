@@ -15,6 +15,7 @@ class DataFileSearch
   attr_accessor :labels
   attr_accessor :grant_numbers
   attr_accessor :related_websites
+  attr_accessor :contributors
   attr_accessor :file_formats
   attr_accessor :uploader_id
   attr_accessor :upload_date_range
@@ -51,6 +52,7 @@ class DataFileSearch
     self.labels = @search_params[:labels]|| []
     self.grant_numbers = @search_params[:grant_numbers]|| []
     self.related_websites = @search_params[:related_websites]|| []
+    self.contributors = @search_params[:contributors]|| []
     self.file_formats = @search_params[:file_formats] || []
     self.published = @search_params[:published]|| []
     self.unpublished = @search_params[:unpublished]|| []
@@ -86,6 +88,7 @@ class DataFileSearch
         labels.empty? &&
         grant_numbers.empty? &&
         related_websites.empty? &&
+        contributors.empty? &&
         file_formats.empty? &&
         filename.blank? &&
         description.blank? &&
@@ -183,6 +186,10 @@ class DataFileSearch
     unless related_websites.nil? || related_websites.empty?
       search_result = search_result.with_any_of_these_related_websites(related_websites)
       attrs_array << "Related Websites"
+    end
+    unless contributors.nil? || contributors.empty?
+      search_result = search_result.with_any_of_these_contributors(contributors)
+      attrs_array << "Contributors"
     end
     unless file_formats.nil? || file_formats.empty?
       search_result = search_result.with_any_of_these_file_formats(file_formats)

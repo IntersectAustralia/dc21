@@ -65,11 +65,12 @@ class Package < DataFile
     datafile
   end
 
-  def reformat_on_error(filename, tags, label_list, grant_number_list)
+  def reformat_on_error(filename, tags, label_list, grant_number_list, contributor_list)
     self.filename = filename
     self.tag_ids = tags
     self.label_ids = label_list
     self.grant_number_ids = grant_number_list
+    self.contributor_ids = contributor_list
   end
 
   def set_times(user)

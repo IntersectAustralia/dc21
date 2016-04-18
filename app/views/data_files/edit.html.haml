@@ -117,7 +117,10 @@
         %label.control-label{:for => :data_file_label_list} Labels
         .controls
           = f.text_field :label_list, data: {labels: labels}
-
+      .control-group#contributors
+        %label.control-label{:for => :data_file_contributor_list} Contributors
+        .controls
+          = f.text_field :contributor_list, data: {labels: contributors}
       - if @data_file.is_package?
         .control-group#grant-numbers
           %label.control-label{:for => :data_file_grant_number_list} Grant Numbers
@@ -249,6 +252,13 @@
     tags: $('#data_file_related_website_list').data('labels'),
     tokenSeparators: ['|'],
     separator: '|'
+  });
+
+  $('#data_file_contributor_list').select2({
+  minimumInputLength: 3,
+  tags: $('#data_file_contributor_list').data('labels'),
+  tokenSeparators: ['|'],
+  separator: '|'
   });
 
   var invalid = ["#{@data_file.id}"];
