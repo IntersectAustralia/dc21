@@ -420,6 +420,7 @@ describe DataFile do
     it { should have_many(:access_groups)}
     it { should have_many(:grant_numbers) }
     it { should have_many(:related_websites) }
+    it {should have_many(:contributors)}
   end
 
   describe "Get experiment name" do

@@ -193,6 +193,10 @@ When /^I perform an API search with the following parameters as user "([^"]*)"$/
     grant_numbers = post_params.delete('grant_numbers')
     post_params['grant_numbers'] = grant_numbers.split(", ")
   end
+  if post_params['contributors']
+    contributors = post_params.delete('contributors')
+    post_params['contributors'] = contributors.split(", ")
+  end
   if post_params['related_websites']
     related_websites = post_params.delete('related_websites')
     post_params['related_websites'] = related_websites.split(", ")

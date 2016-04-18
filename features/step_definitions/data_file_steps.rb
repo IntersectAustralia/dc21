@@ -83,6 +83,7 @@ Given /^I have data files$/ do |table|
     label_csv = attributes.delete('label_list')
     grant_numbers_csv = attributes.delete('grant_numbers')
     related_websites_csv = attributes.delete('related_websites')
+    contributors_csv = attributes.delete('contributors')
 
     if attributes['file_processing_status'] == 'PACKAGE'
       df = Factory(:package, attributes)
@@ -99,6 +100,11 @@ Given /^I have data files$/ do |table|
     unless label_csv.blank?
       labels = label_csv.split(",").collect { |label| label.strip }
       labels.map { |label| df.labels << Label.find_or_create_by_name(label) }
+    end
+
+    unless contributors_csv.blank?
+      contributors = contributors_csv.split(",").collect {|cont| cont.strip}
+      contributors.map { |cont| df.contributors << Contributor.find_or_create_by_name(cont) }
     end
 
     unless grant_numbers_csv.blank?
@@ -458,6 +464,11 @@ Then /^file "([^"]*)" should have related website "([^"]*)"$/ do |filename, rela
   related_websites.should include(related_website)
 end
 
+Then /^file "([^"]*)" should have contributor "([^"]*)"$/ do |filename, contributor|
+  data_file = DataFile.find_by_filename!(filename)
+  contributors = data_file.contributors.map { |cont| cont.name}
+  contributors.should include(contributor)
+end
 
 Then /^file "([^"]*)" should have tag "([^"]*)"$/ do |filename, tag|
   data_file = DataFile.find_by_filename!(filename)

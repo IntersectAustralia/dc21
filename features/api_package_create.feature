@@ -248,6 +248,26 @@ Feature: Create a package from the API
     And file "my_package.zip" should have related website "http://website2.com"
     And file "my_package.zip" should have license "http://creativecommons.org/licenses/by/4.0"
 
+  Scenario: Package is created with contributors
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1,2,3                     |
+      | filename           | my_package                |
+      | experiment_id      | 1                         |
+      | title              | my magic package          |
+      | description        | some friendly description |
+      | access_rights_type | Restricted                |
+      | run_in_background  | false                     |
+      | contributors      | "CONT-1","CONT-2"       |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Package was successfully created."
+    And I should get a JSON response with package name "my_package.zip"
+    And file "my_package.zip" should have experiment "My Experiment"
+    And file "my_package.zip" should have title "my magic package"
+    And file "my_package.zip" should have transfer status "COMPLETE"
+    And file "my_package.zip" should have description "some friendly description"
+    And file "my_package.zip" should have contributor "CONT-1"
+    And file "my_package.zip" should have contributor "CONT-2"
+
   Scenario: Package can be created with a specified license
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
       | file_ids           | 1,2,3                         |

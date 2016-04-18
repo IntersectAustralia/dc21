@@ -282,7 +282,7 @@ Feature: Create a package
     Then I should see field "Labels" with value "test1, this3"
 
   @javascript
-  Scenario: Create package specifying access rights type, grant numbers and related websites
+  Scenario: Create package specifying access rights type, grant numbers, related websites and contributors
     Given I am on the list data files page
     And I add sample1.txt to the cart
     And I wait for 4 seconds
@@ -291,6 +291,8 @@ Feature: Create a package
     And I check select2 field "package_grant_number_list" updated value to "Abba,bebb@,cuba,AA<script></script>"
     And I fill in "package_related_website_list" with "http://example.com | https://test.com| ftp://127.0.0.1/test"
     And I check select2 field "package_related_website_list" updated value to "ftp://127.0.0.1/test, http://example.com, https://test.com"
+    And I fill in "package_contributor_list" with "cont3 | CONT@| AAdd<>"
+    And I check select2 field "package_contributor_list" updated value to "AAdd<>, CONT@, cont3"
     And I select "Conditional" from "package_access_rights_type"
     And I select "CC BY: Attribution" from "Licence"
     And I should see "Spanish"
@@ -305,6 +307,7 @@ Feature: Create a package
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
     Then I should see field "Related Websites" with value "ftp://127.0.0.1/test, http://example.com, https://test.com"
+    Then I should see field "Contributors" with value "AAdd<>, CONT@, cont3"
     Then I should see field "Access Rights Type" with value "Conditional"
     Then I should see field "Licence" with value "CC BY: Attribution"
 
