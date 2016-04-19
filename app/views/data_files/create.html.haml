@@ -72,7 +72,10 @@
             = label_tag "files[#{file.id}][label_list]", "Labels:", class: "control-label"
             .controls
               = text_field_tag "files[#{file.id}][label_list]", file.labels.pluck(:name).join(','), :class => 'select2_labels', data: {labels: labels}
-
+          .control-group#contributors
+            = label_tag "files[#{file.id}][contributor_list]", "Contributors:", class: "control-label"
+            .controls
+              = text_field_tag "files[#{file.id}][contributor_list]", file.contributors.pluck(:name).join(','), :class => 'select2_contributors', data: {labels: contributors}
           - unless file.time_parsable?
             .control-group
               .date-format yyyy-mm-dd
@@ -130,6 +133,13 @@
   $('.select2_labels').select2({
     minimumInputLength: 3,
     tags: $('.select2_labels').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
+
+  $('.select2_contributors').select2({
+    minimumInputLength: 3,
+    tags: $('.select2_contributors').data('labels'),
     tokenSeparators: ['|'],
     separator: '|'
   });

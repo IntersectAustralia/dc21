@@ -36,6 +36,10 @@
       %label.control-label{:for => :data_file_label_list} Labels
       .controls
         = f.text_field :label_list, data: {labels: labels}
+    .control-group#contributors
+      %label.control-label{:for => :data_file_contributor_list} Contributors
+      .controls
+        = f.text_field :contributor_list, data: {labels: contributors}
     .control-group#files_input
       = label_tag "files_field_0", "Select file(s)", class: "control-label"
       .controls
@@ -62,6 +66,13 @@
   $('#data_file_label_list').select2({
     minimumInputLength: 3,
     tags: $('#data_file_label_list').data('labels'),
+    tokenSeparators: ['|'],
+    separator: '|'
+  });
+
+   $('#data_file_contributor_list').select2({
+    minimumInputLength: 3,
+    tags: $('#data_file_contributor_list').data('labels'),
     tokenSeparators: ['|'],
     separator: '|'
   });
