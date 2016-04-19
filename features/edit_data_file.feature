@@ -7,12 +7,13 @@ Feature: Edit data files metadata
     Given I have a user "admin@intersect.org.au" with role "Administrator"
     Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And I have data files
-      | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        |
-      | datafile.dat         | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment   | Description of my file            | RAW                    |        |                   |
-      | sample.txt           | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other                |                                   | UNKNOWN                | TOA5   |                   |
-      | file.txt             | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment     | desc.                             | UNKNOWN                |        |                   |
-      | error.txt            | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1                | desc.                             | ERROR                  |        |                   |
-      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 |
+      | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        | contributors     |
+      | datafile.dat         | 30/11/2011 10:15 | admin@intersect.org.au      |                   |                     |          | My Nice Experiment   | Description of my file            | RAW                    |        |                   |                  |
+      | sample.txt           | 01/12/2011 13:45 | sean@intersect.org.au       | 1/6/2010 15:23:00 | 30/11/2011 12:00:00 | 300      | Other                |                                   | UNKNOWN                | TOA5   |                   |                  |
+      | file.txt             | 02/11/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Silly Experiment     | desc.                             | UNKNOWN                |        |                   |                  |
+      | error.txt            | 03/13/2011 14:00 | researcher@intersect.org.au | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          | Expt1                | desc.                             | ERROR                  |        |                   |                  |
+      | file_with_labels.txt | 04/11/2013 15:45 | cindy@intersect.org.au      |                   |                     |          | Delete Label Example | Test deleting a label from a file | UNKNOWN                |        | this3,that2,test1 |                  |
+      | file_with_contributors.txt | 04/11/2013 15:45 | tao@intersect.org.au  |                   |                     |          | Delete Contributor Example | Test deleting a contributor from a file | UNKNOWN    |        |                   | this3,that2,test1 |
     And I have data files
       | filename             | created_at       | uploaded_by                 | start_time        | end_time            | interval | experiment           | file_processing_description       | file_processing_status | format | label_list        | related_websites |
       | package1.zip         | 30/12/2011 12:34 | admin@intersect.org.au      | 1/5/2010 14:00:00 | 2/6/2011 13:00:00   |          |samples/package1.zip  |  a package                        | PACKAGE                |        |                   |                  |
@@ -115,6 +116,7 @@ Feature: Edit data files metadata
 
   Scenario: Editing data file that isn't mine
     Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
     When I follow the view link for data file "datafile.dat"
     Then I should not see "Edit Metadata"
 
@@ -144,6 +146,17 @@ Feature: Edit data files metadata
     And I fill in "data_file_label_list" with "bebb@|Abba|cu,ba|AA<script></script>"
     And I press "Update"
     Then I should see field "Labels" with value "AA<script></script>, Abba, bebb@, cu,ba"
+
+  @javascript
+  Scenario: Add a new contributor to data file
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I wait for 2 seconds
+    And I should see select2 field "data_file_contributor_list" with value ""
+    And I fill in "data_file_contributor_list" with "bebb@|Abba|cu,ba|AA<script></script>"
+    And I press "Update"
+    Then I should see field "Contributors" with value "AA<script></script>, Abba, bebb@, cu,ba"
 
   @javascript
   Scenario: Make a data file private with access groups
@@ -185,6 +198,17 @@ Feature: Edit data files metadata
     And I check select2 field "data_file_label_list" updated value to "test1,this3"
     And I press "Update"
     Then I should see field "Labels" with value "test1, this3"
+
+  @javascript
+  Scenario: Delete an existing contributor from data file 
+    Given I am logged in as "admin@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file_with_contributors.txt"
+    And I should see select2 field "data_file_contributor_list" with value "test1|that2|this3"
+    And I remove "that2" from the select2 field
+    And I check select2 field "data_file_contributor_list" updated value to "test1,this3"
+    And I press "Update"
+    Then I should see field "Contributors" with value "test1, this3"
 
 #EYETRACKER-155
   Scenario: Package filename should not allow illegal characters
@@ -231,6 +255,48 @@ Feature: Edit data files metadata
     And I should not see the choice "label_4" in the select2 menu
     And I should not see the choice "label_5" in the select2 menu
     When I fill in "Labels" with "test"
+    Then I should see the choice "test" in the select2 menu
+    And I should see the choice "test1" in the select2 menu
+    And I should not see the choice "that2" in the select2 menu
+    And I should not see the choice "this3" in the select2 menu
+    And I should not see the choice "terrier" in the select2 menu
+
+  @javascript
+  Scenario: Remove unused contributors from users view
+    Given I have labels "label_1, label_2, label_3, label_4, label_5, terrier"
+    And I have data files
+      | filename      | created_at       | uploaded_by                 | file_processing_status | experiment    | contributor_list |
+      | datafile1.dat | 04/12/2013 11:53 | researcher@intersect.org.au | RAW                    | My Experiment | cont_1    |
+      | sample2.txt   | 01/12/2011 13:45 | researcher@intersect.org.au | CLEANSED               | Experiment 2  | cont_5    |
+    And I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "sample2.txt"
+    And I fill in "Contributors" with "cont"
+    Then I should see the choice "cont_1" in the select2 menu
+    And I choose "cont_1" in the select2 menu
+    And I fill in "Contributors" with "th"
+    Then I should see "Please enter 1 more character"
+    And I fill in "Contributors" with "thi"
+    And I should see the choice "this3" in the select2 menu
+    When I choose "this3" in the select2 menu
+    And I fill in "Contributors" with "cont_2"
+    And I choose "cont_2" in the select2 menu
+    And I remove "cont_5" from the select2 field
+    And I wait for 1 seconds
+    And I press "Update"
+    Then I should see field "Contributors" with value "cont_1, cont_2, this3"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I fill in "Contributors" with "c"
+    Then I should see "Please enter 2 more characters"
+    And I fill in "Contributors" with "con"
+    Then I should see the choice "con" in the select2 menu
+    And I should see the choice "cont_1" in the select2 menu
+    And I should see the choice "cont_2" in the select2 menu
+    And I should not see the choice "cont_3" in the select2 menu
+    And I should not see the choice "cont_4" in the select2 menu
+    And I should not see the choice "cont_5" in the select2 menu
+    When I fill in "Contributors" with "test"
     Then I should see the choice "test" in the select2 menu
     And I should see the choice "test1" in the select2 menu
     And I should not see the choice "that2" in the select2 menu

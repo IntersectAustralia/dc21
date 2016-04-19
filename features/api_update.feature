@@ -211,7 +211,7 @@ Feature: Perform updates to data files and packages via API
   Scenario: Try to update the contributors of a package
     When I perform an API update with the following parameters as user "admin@intersect.org.au"
       | file_id               | 2                                                    |
-      | contributors         | contributor_1,contributor_2                        |
+      | contributor_names         | contributor_1,contributor_2                        |
     Then I should get a 200 response code
     And I should get a JSON response with message "Data file successfully updated"
     And I should get a JSON response with warning "Updating a package will not cause rif-cs to be regenerated"

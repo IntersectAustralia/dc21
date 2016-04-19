@@ -491,6 +491,19 @@ Feature: Upload files
     And I am on the data file details page for sample1.txt
     Then I should see field "Labels" with value "Abba, bebba"
 
+  Scenario: Add new contributors to file upload
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And I fill in "data_file_contributor_list" with "bebba,Abba,cuba,AA<script></script>"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    And the uploaded files display should include "sample1.txt" with contributors "AA<script></script>,Abba,bebba,cuba"
+    And I fill in "Contributors" with "bebba|Abba"
+    And I press "Update"
+    And I am on the data file details page for sample1.txt
+    Then I should see field "Contributors" with value "Abba, bebba"
+
 #EYETRACKER-7
 
   Scenario: Check UUID is blank for uploaded none image files

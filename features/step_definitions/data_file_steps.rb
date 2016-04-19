@@ -378,6 +378,14 @@ Then /^the uploaded files display should include "([^"]*)" with labels "([^"]*)"
   end
 end
 
+Then /^the uploaded files display should include "([^"]*)" with contributors "([^"]*)"$/ do |filename, contributors|
+  with_scope("the file area for '#{filename}'") do
+    page.should have_content(filename)
+    field = find_field("Contributors")
+    field.value.should eq(contributors)
+  end
+end
+
 
 Then /^the uploaded files display should include "([^"]*)" with tags "([^"]*)"$/ do |filename, tags|
   with_scope("the file area for '#{filename}'") do
@@ -597,7 +605,7 @@ def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="des
   parent_ids = DataFile.where(:filename => parents.split(", ")).pluck(:id)
   child_ids = DataFile.where(:filename => children.split(", ")).pluck(:id)
   group_ids = AccessGroup.where(:name => access_groups.split(", ")).pluck(:id)
-  attachment_builder.build(file, experiment.id, type, "desc", [], [], parent_ids, child_ids, access, access_to_all_institutional_users, access_to_user_groups, group_ids)
+  attachment_builder.build(file, experiment.id, type, "desc", [], [], [], parent_ids, child_ids, access, access_to_all_institutional_users, access_to_user_groups, group_ids)
 end
 
 

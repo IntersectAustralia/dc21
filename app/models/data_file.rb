@@ -62,14 +62,14 @@ class DataFile < ActiveRecord::Base
   has_many :data_file_labels, :uniq => true
   has_many :labels, :through => :data_file_labels, :uniq => true
 
+  has_many :data_file_contributors, :uniq => true
+  has_many :contributors, :through => :data_file_contributors, :uniq => true
+
   has_many :data_file_grant_numbers, :uniq => true
   has_many :grant_numbers, :through => :data_file_grant_numbers, :uniq => true
 
   has_many :data_file_related_websites, :uniq => true
   has_many :related_websites, :through => :data_file_related_websites, :uniq => true, autosave: true
-
-  has_many :data_file_contributors, :uniq => true
-  has_many :contributors, :through => :data_file_contributors, :uniq => true
 
   attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text,
                   :grant_number_list, :related_website_list, :license, :contributor_list
@@ -182,6 +182,14 @@ class DataFile < ActiveRecord::Base
     self.labels.pluck(:name)
   end
 
+  def contributor_list
+    self.contributors.pluck(:name).join("|")
+  end
+
+  def contributor_names
+    self.contributors.pluck(:name)
+  end
+
   def grant_number_list
     self.grant_numbers.pluck(:name).join("|")
   end
@@ -198,16 +206,12 @@ class DataFile < ActiveRecord::Base
     self.related_websites.pluck(:url)
   end
 
-  def contributor_list
-    self.contributors.pluck(:name).join("|")
-  end
-
-  def contributor_names
-    self.contributors.pluck(:name)
-  end
-
   def label_list_display
     self.labels.pluck(:name).join(", ")
+  end
+
+  def contributor_list_display
+    self.contributors.pluck(:name).join(", ")
   end
 
   def grant_number_list_display
@@ -218,15 +222,20 @@ class DataFile < ActiveRecord::Base
     self.related_websites.pluck(:url).join(", ")
   end
 
-  def contributor_list_display
-    self.contributors.pluck(:name).join(", ")
-  end
 
   def label_list=(new_value)
     label_names = new_value.split(/\|\s*/)
     self.labels = label_names.map { |name|
       existing = Label.where('lower(name) = ?', name.downcase).first
       existing ||= Label.create(:name => name)
+    }
+  end
+
+  def contributor_list=(new_value)
+    contributor_names = new_value.split(/\|\s*/).uniq
+    self.contributors = contributor_names.map { |name|
+      existing = Contributor.where('lower(name) = ?', name.downcase).first
+      existing ||= Contributor.create(:name => name)
     }
   end
 
@@ -246,13 +255,6 @@ class DataFile < ActiveRecord::Base
     }
   end
 
-  def contributor_list=(new_value)
-    contributor_names = new_value.split(/\|\s*/).uniq
-    self.contributors = contributor_names.map { |name|
-      existing = Contributor.where('lower(name) = ?', name.downcase).first
-      existing ||= Contributor.create(:name => name)
-    }
-  end
 
   def modifiable?
     self.processed_by_resque? ? (transfer_status.eql? RESQUE_COMPLETE or transfer_status.eql? RESQUE_FAILED) : true
@@ -319,6 +321,11 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
+  def self.with_any_of_these_contributors(contributor_params)
+    data_file_ids = DataFile.unscoped.joins(:contributors).where { contributors.name >> contributor_params }.pluck(:id).uniq
+    where(:id => data_file_ids)
+  end
+
   def self.with_any_of_these_grant_numbers(grant_number_params)
     data_file_ids = DataFile.unscoped.joins(:grant_numbers).where { grant_numbers.name >> grant_number_params }.pluck(:id).uniq
     where(:id => data_file_ids)
@@ -329,10 +336,6 @@ class DataFile < ActiveRecord::Base
     where(:id => data_file_ids)
   end
 
-  def self.with_any_of_these_contributors(contributor_params)
-    data_file_ids = DataFile.unscoped.joins(:contributors).where { contributors.name >> contributor_params }.pluck(:id).uniq
-    where(:id => data_file_ids)
-  end
 
   def self.with_any_of_these_file_formats(file_formats)
     data_file_ids = DataFile.unscoped.where(:format => file_formats).pluck(:id)

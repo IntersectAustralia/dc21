@@ -20,9 +20,9 @@ class DataFilesController < ApplicationController
 
   expose(:tags) { Tag.order(:name) }
   expose(:labels) { Label.joins(:data_file_labels).pluck(:name).uniq }
+  expose(:contributors) { Contributor.joins(:data_file_contributors).pluck(:name).uniq }
   expose(:grant_numbers) { GrantNumber.joins(:data_file_grant_numbers).pluck(:name).uniq }
   expose(:related_websites) { RelatedWebsite.joins(:data_file_related_websites).pluck(:url).uniq}
-  expose(:contributors) { Contributor.joins(:data_file_contributors).pluck(:name).uniq }
   expose(:access_groups) { AccessGroup.pluck(:name).uniq }
   expose(:facilities) { Facility.order(:name).select([:id, :name]).includes(:experiments) }
   expose(:variables) { ColumnMapping.mapped_column_names_for_search }
@@ -134,6 +134,8 @@ class DataFilesController < ApplicationController
       tags = params[:tags]
       l = params[:data_file].delete(:label_list)
       labels = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
+      c = params[:data_file].delete(:contributor_list)
+      contributors = c.split(',').map{|name| Contributor.find_or_create_by_name(name).id}
 
       parents = []
       if params[:data_file][:parent_ids]
@@ -145,7 +147,7 @@ class DataFilesController < ApplicationController
         access_groups = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
       end
 
-      unless validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
+      unless validate_inputs(files, experiment_id, type, description, tags, labels, contributors, access_groups)
         render :new
         return
       end
@@ -155,7 +157,7 @@ class DataFilesController < ApplicationController
       @error_messages = []
       files.each do |file|
         begin
-          @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, parents)
+          @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, contributors, parents )
         rescue Exception => e
           @error_messages << e.message
         end
@@ -335,6 +337,7 @@ class DataFilesController < ApplicationController
       experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
       label_names = params[:label_names]
+      contributor_names = params[:contributor_names]
       parent_files = clean_params_list_string(params[:parent_filenames])
       parent_file_ids = DataFile.where(:filename => parent_files).pluck(:id)
       access_groups = clean_params_list_string(params[:access_groups])
@@ -342,7 +345,7 @@ class DataFilesController < ApplicationController
       start_time = params[:start_time]
       end_time = params[:end_time]
 
-      errors, tag_ids, label_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups], false)
+      errors, tag_ids, label_ids, contributor_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, contributor_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups],  false)
 
       if errors.empty?
         begin
@@ -350,7 +353,7 @@ class DataFilesController < ApplicationController
             start_time += ' UTC'
             end_time += ' UTC'
           end
-          uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids, start_time, end_time)
+          uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids,contributor_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids, start_time, end_time)
           messages = uploaded_file.messages.collect { |m| m[:message] }
         rescue Exception => e
           # Exit if attachment builder fails to build the uploaded file
@@ -395,9 +398,9 @@ class DataFilesController < ApplicationController
 
     tag_names = params[:tag_names]
     label_names = params[:label_names]
+    contributor_names = params[:contributor_names]
     grant_numbers = params[:grant_numbers]
     related_websites = params[:related_websites]
-    contributors = params[:contributors]
 
     title = params[:title]
     access_rights_type = params[:access_rights_type]
@@ -411,7 +414,7 @@ class DataFilesController < ApplicationController
     end_time = params[:end_time]
 
     data_file = validate_file_id(file_id, current_user, errors, warnings)
-    validation_errors, tag_ids, label_ids, parsed_access, parsed_access_to_all_institutional_users, parsed_access_to_user_groups = validate_api_inputs(nil, nil, experiment_id, start_time, end_time, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, true)
+    validation_errors, tag_ids, label_ids,contributor_ids, parsed_access, parsed_access_to_all_institutional_users, parsed_access_to_user_groups  = validate_api_inputs(nil, nil, experiment_id, start_time, end_time, tag_names, label_names,contributor_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, true)
     errors.push(*validation_errors)
 
     if errors.empty?
@@ -437,6 +440,9 @@ class DataFilesController < ApplicationController
       end
       if label_names
         data_file.label_ids = label_ids
+      end
+      if contributor_names
+        data_file.contributor_ids = contributor_ids
       end
       if access
         data_file.access = parsed_access
@@ -635,7 +641,7 @@ class DataFilesController < ApplicationController
 
   end
 
-  def validate_inputs(files, experiment_id, type, description, tags, labels, access_groups)
+  def validate_inputs(files, experiment_id, type, description, tags, labels, contributors,  access_groups )
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -652,11 +658,12 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     @data_file.label_ids = labels
+    @data_file.contributor_ids = contributors
     @data_file.access_group_ids = access_groups
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, is_update)
+  def validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, contributor_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups,  is_update)
     errors = []
 
     if experiment_id.blank? && !is_update
@@ -690,6 +697,7 @@ class DataFilesController < ApplicationController
     parse_starttime_endtime(start_time, end_time, errors)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
+    contributor_ids = parse_contributors(contributor_names, errors)
 
     access_to_all_institutional_users_flag = ''
     access_to_user_groups_flag = ''
@@ -726,7 +734,7 @@ class DataFilesController < ApplicationController
     access_to_all_institutional_users_flag = true if access.blank? and access_to_user_groups.blank? and access_groups.nil?
     access = access.blank? ? DataFile::ACCESS_PRIVATE : access
 
-    [errors, tag_ids, label_ids, access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
+    [errors, tag_ids, label_ids, contributor_ids,  access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
   end
 
   def parse_starttime_endtime(start_time, end_time, errors)
@@ -789,6 +797,25 @@ class DataFilesController < ApplicationController
     label_ids
   end
 
+  def parse_contributors(contributor_names, errors)
+    return [] if contributor_names.blank?
+    contributor_ids = []
+    begin
+      contributors_array = CSV.parse_line(contributor_names)
+      contributors_array.each do |contributor|
+        existing = Contributor.where('lower(name) = ?', contributor.downcase).first
+        if existing.nil?
+          contributor_ids << Contributor.create(:name => contributor).id
+        else
+          contributor_ids << existing.id
+        end
+      end
+    rescue CSV::MalformedCSVError
+      errors << 'Incorrect format for contributors - contributors must be double-quoted and comma separated'
+    end
+    contributor_ids
+  end
+
   def parse_grant_numbers(grant_numbers, errors)
     return [] if grant_numbers.blank?
     grant_number_ids = []
@@ -806,25 +833,6 @@ class DataFilesController < ApplicationController
       errors << 'Incorrect format for grant numbers - grant numbers must be double-quoted and comma separated'
     end
     grant_number_ids
-  end
-
-  def parse_contributors(contributors, errors)
-    return [] if contributors.blank?
-    contributor_ids = []
-    begin
-      contributors_array = CSV.parse_line(contributors)
-      contributors_array.each do |contributor|
-        existing = Contributor.where('lower(name) = ?', contributor.downcase).first
-        if existing.nil?
-          contributor_ids << Contributor.create(:name => contributor).id
-        else
-          contributor_ids << existing.id
-        end
-      end
-    rescue CSV::MalformedCSVError
-      errors << 'Incorrect format for contributors - contributors must be double-quoted and comma separated'
-    end
-    contributor_ids
   end
 
   def sort_column

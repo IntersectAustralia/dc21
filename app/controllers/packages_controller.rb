@@ -80,7 +80,7 @@ class PackagesController < DataFilesController
     tag_names = params[:tag_names]
     label_names = params[:label_names]
     grant_numbers = params[:grant_numbers]
-    contributors = params[:contributors]
+    contributor_names = params[:contributor_names]
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
     params[:file_processing_description] = params[:description]
     run_in_background = params[:run_in_background].nil? ? true : params[:run_in_background].to_bool
@@ -90,7 +90,7 @@ class PackagesController < DataFilesController
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
-    contributor_ids = parse_contributors(contributors, errors)
+    contributor_ids = parse_contributors(contributor_names, errors)
 
     params[:license] = AccessRightsLookup.new.get_url(params[:license])
 
