@@ -101,7 +101,9 @@ class RifCsGenerator
           wrapper_object.contributors.each do |contributor|
             xml.relatedObject do
               xml.key contributor
-              xml.relation type: 'isOutputOf'
+              xml.relation type: 'isEnrichedBy' do
+                xml.description 'Contributor'
+              end
             end
           end
 
