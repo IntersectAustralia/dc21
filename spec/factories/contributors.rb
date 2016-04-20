@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :contributor do
-      name "MyString"
+      sequence(:name) { |n| "CONT-#{n}" }
     end
 end

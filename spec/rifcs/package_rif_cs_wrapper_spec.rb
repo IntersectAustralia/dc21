@@ -284,4 +284,30 @@ describe PackageRifCsWrapper do
       wrapper.grant_numbers.should eq(['GN1', 'GN2'])
     end
   end
+
+  describe "Contributorss" do
+    it "should return contributors from the package" do
+      exp1 = Factory(:experiment, :subject => "Fred")
+      exp2 = Factory(:experiment, :subject => "Fred")
+      exp3 = Factory(:experiment, :subject => "Bob")
+      exp4 = Factory(:experiment, :subject => "Jane")
+
+      df1 = Factory(:data_file, :experiment_id => exp1.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id)
+
+      user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
+      facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
+      experiment = Factory(:experiment, :facility => facility)
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+      package.contributors << Factory(:contributor, :name => 'CONT1')
+      package.contributors << Factory(:contributor, :name => 'CONT2')
+
+      wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {})
+      wrapper.contributors.should eq(['CONT1', 'CONT2'])
+    end
+  end
 end
