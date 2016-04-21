@@ -697,7 +697,7 @@ class DataFilesController < ApplicationController
     parse_starttime_endtime(start_time, end_time, errors)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
-    contributor_ids = parse_contributors(contributor_names, errors)
+    contributor_ids = validate_contributors(contributor_names, errors)
 
     access_to_all_institutional_users_flag = ''
     access_to_user_groups_flag = ''
@@ -797,12 +797,15 @@ class DataFilesController < ApplicationController
     label_ids
   end
 
-  def parse_contributors(contributor_names, errors)
-    return [] if contributor_names.blank?
+  def validate_contributors(contributor_names, errors)
+    if !contributor_names.is_a? Array
+      errors << 'contributor_names must be an Array'
+      return
+    end
+    return [] if contributor_names.empty?
     contributor_ids = []
     begin
-      contributors_array = CSV.parse_line(contributor_names)
-      contributors_array.each do |contributor|
+      contributor_names.each do |contributor|
         existing = Contributor.where('lower(name) = ?', contributor.downcase).first
         if existing.nil?
           contributor_ids << Contributor.create(:name => contributor).id
@@ -810,8 +813,6 @@ class DataFilesController < ApplicationController
           contributor_ids << existing.id
         end
       end
-    rescue CSV::MalformedCSVError
-      errors << 'Incorrect format for contributors - contributors must be double-quoted and comma separated'
     end
     contributor_ids
   end

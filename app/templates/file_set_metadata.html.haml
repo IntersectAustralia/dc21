@@ -85,8 +85,10 @@
         %span{:property => "http://schema.org/url"}
           &= package.related_websites.pluck(:url).join(", ")
         %h1 Contributors
-        %span{:property => "http://schema.org/name"}
-          &= package.contributors.pluck(:name).join(", ")
+        - package.contributors.each do |contributor|
+          %span{:property => "http://schema.org/name"}
+            &= contributor.name
+          %br/
         %h1 Software Information
         %section{:property => "http://purl.org/dc/terms/creator", :typeof => "http://schema.org/softwareApplication", :resource => "##{config.name}"}
           %table

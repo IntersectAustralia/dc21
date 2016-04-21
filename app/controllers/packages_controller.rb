@@ -90,7 +90,7 @@ class PackagesController < DataFilesController
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
-    contributor_ids = parse_contributors(contributor_names, errors)
+    contributor_ids = validate_contributors(contributor_names, errors)
 
     params[:license] = AccessRightsLookup.new.get_url(params[:license])
 
