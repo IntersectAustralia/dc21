@@ -798,11 +798,11 @@ class DataFilesController < ApplicationController
   end
 
   def validate_contributors(contributor_names, errors)
+    return [] if contributor_names.blank? || contributor_names.empty?
     if !contributor_names.is_a? Array
       errors << 'contributor_names must be an Array'
       return
     end
-    return [] if contributor_names.empty?
     contributor_ids = []
     begin
       contributor_names.each do |contributor|

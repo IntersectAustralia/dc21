@@ -154,9 +154,9 @@ Feature: Edit data files metadata
     And I edit data file "file.txt"
     And I wait for 2 seconds
     And I should see select2 field "data_file_contributor_list" with value ""
-    And I fill in "data_file_contributor_list" with "bebb@|Abba|cu,ba|AA<script></script>"
+    And I fill in "data_file_contributor_list" with "bebb@|Abba|cuba|AA<script></script>"
     And I press "Update"
-    Then I should see field "Contributors" with value "AA<script></script>, Abba, bebb@, cu,ba"
+    And file "file.txt" should have contributors "AA<script></script>,Abba,bebb@,cuba"
 
   @javascript
   Scenario: Make a data file private with access groups
@@ -208,7 +208,7 @@ Feature: Edit data files metadata
     And I remove "that2" from the select2 field
     And I check select2 field "data_file_contributor_list" updated value to "test1,this3"
     And I press "Update"
-    Then I should see field "Contributors" with value "test1, this3"
+    Then file "file_with_contributors.txt" should have contributors "test1,this3"
 
 #EYETRACKER-155
   Scenario: Package filename should not allow illegal characters
@@ -263,7 +263,7 @@ Feature: Edit data files metadata
 
   @javascript
   Scenario: Remove unused contributors from users view
-    Given I have labels "label_1, label_2, label_3, label_4, label_5, terrier"
+    Given I have contributors "cont_1, cont_2, cont_3, cont_4, cont_5, prof"
     And I have data files
       | filename      | created_at       | uploaded_by                 | file_processing_status | experiment    | contributor_list |
       | datafile1.dat | 04/12/2013 11:53 | researcher@intersect.org.au | RAW                    | My Experiment | cont_1    |
@@ -284,7 +284,7 @@ Feature: Edit data files metadata
     And I remove "cont_5" from the select2 field
     And I wait for 1 seconds
     And I press "Update"
-    Then I should see field "Contributors" with value "cont_1, cont_2, this3"
+    Then file "sample2.txt" should have contributors "cont_1,cont_2,this3"
     When I am on the list data files page
     And I edit data file "file.txt"
     And I fill in "Contributors" with "c"

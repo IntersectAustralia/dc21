@@ -502,7 +502,7 @@ Feature: Upload files
     And I fill in "Contributors" with "bebba|Abba"
     And I press "Update"
     And I am on the data file details page for sample1.txt
-    Then I should see field "Contributors" with value "Abba, bebba"
+    Then file "sample1.txt" should have contributors "Abba,bebba"
 
 #EYETRACKER-7
 

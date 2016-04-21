@@ -257,7 +257,7 @@ Feature: Create a package from the API
       | description        | some friendly description |
       | access_rights_type | Restricted                |
       | run_in_background  | false                     |
-      | contributor_names     | "CONT-1","CONT-2"       |
+      | contributor_names     | CONT-1 , CONT-2       |
     Then I should get a 200 response code
     And I should get a JSON response with message "Package was successfully created."
     And I should get a JSON response with package name "my_package.zip"

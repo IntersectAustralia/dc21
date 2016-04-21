@@ -307,7 +307,7 @@ Feature: Create a package
     When I should be on the data file details page for my_package1.zip
     Then I should see field "Grant Numbers" with value "AA<script></script>, Abba, bebb@, cuba"
     Then I should see field "Related Websites" with value "ftp://127.0.0.1/test, http://example.com, https://test.com"
-    Then I should see field "Contributors" with value "AAdd<>, CONT@, cont3"
+    Then file "my_package1.zip" should have contributors "AAdd<>,CONT@,cont3"
     Then I should see field "Access Rights Type" with value "Conditional"
     Then I should see field "Licence" with value "CC BY: Attribution"
 

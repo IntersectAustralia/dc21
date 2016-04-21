@@ -77,7 +77,7 @@ group :development, :test do
   gem 'rspec_junit_formatter'
 end
 
-group :development do
+group :development, :test  do
   gem "rails3-generators"
   gem 'better_errors'
   gem 'binding_of_caller'

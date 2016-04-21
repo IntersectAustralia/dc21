@@ -271,3 +271,9 @@ Given /^I have labels (.+)$/ do |label_names|
   end
 end
 
+Given /^I have contributors (.+)$/ do |contributor_names|
+  contributor_names.split(', ').each do |contributor_name|
+    Factory(:contributor, :name => contributor_name)
+  end
+end
+

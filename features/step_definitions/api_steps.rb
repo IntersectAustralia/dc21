@@ -279,6 +279,10 @@ When /^I perform an API package create with the following parameters as user "([
     params["file_ids"] = params["file_ids"].split(',')
   end
 
+  if params["contributor_names"]
+    params["contributor_names"] = params["contributor_names"].split(',')
+  end
+
   user = User.find_by_email!(email)
   post api_create_packages_path(:format => :json, :auth_token => user.authentication_token), params
 end
@@ -291,6 +295,9 @@ end
 
 When /^I perform an API update with the following parameters as user "([^"]*)"$/ do |email,table|
   params = Hash[*table.raw.flatten]
+  if params["contributor_names"]
+    params["contributor_names"] = params["contributor_names"].split(',')
+  end
   user = User.find_by_email!(email)
   post api_update_data_files_path(:format => :json, :auth_token => user.authentication_token), params
 end
