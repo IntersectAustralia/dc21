@@ -75,7 +75,7 @@
           .control-group#contributors
             = label_tag "files[#{file.id}][contributor_list]", "Contributors:", class: "control-label"
             .controls
-              = text_field_tag "files[#{file.id}][contributor_list]", file.contributors.pluck(:name).join(','), :class => 'select2_contributors', data: {labels: contributors}
+              = text_field_tag "files[#{file.id}][contributor_list]", file.contributors.pluck(:name).join('|'), :class => 'select2_contributors', data: {labels: contributors}
           - unless file.time_parsable?
             .control-group
               .date-format yyyy-mm-dd

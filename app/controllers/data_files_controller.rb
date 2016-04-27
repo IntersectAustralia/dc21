@@ -135,7 +135,7 @@ class DataFilesController < ApplicationController
       l = params[:data_file].delete(:label_list)
       labels = l.split(',').map{|name| Label.find_or_create_by_name(name).id}
       c = params[:data_file].delete(:contributor_list)
-      contributors = c.split(',').map{|name| Contributor.find_or_create_by_name(name).id}
+      contributors = c.split('|').map{|name| Contributor.find_or_create_by_name(name).id}
 
       parents = []
       if params[:data_file][:parent_ids]

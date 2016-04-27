@@ -498,11 +498,11 @@ Feature: Upload files
     And I fill in "data_file_contributor_list" with "bebba,Abba,cuba,AA<script></script>"
     And I select "samples/sample1.txt" to upload
     And I press "Upload"
-    And the uploaded files display should include "sample1.txt" with contributors "AA<script></script>,Abba,bebba,cuba"
+    And the uploaded files display should include "sample1.txt" with contributors "bebba,Abba,cuba,AA<script></script>"
     And I fill in "Contributors" with "bebba|Abba"
     And I press "Update"
     And I am on the data file details page for sample1.txt
-    Then file "sample1.txt" should have contributors "Abba,bebba"
+    Then file "sample1.txt" should have contributors "bebba,Abba"
 
 #EYETRACKER-7
 
