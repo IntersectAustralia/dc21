@@ -672,3 +672,17 @@ Feature: Upload files
     | Test_OCR.jpg | researcher@intersect.org.au | ocr  |
     | Test_SR.wav  | admin@intersect.org.au      | sr   |
     | Test_SR.wav  | researcher@intersect.org.au | sr   |
+
+  #UWSHIEVMOD-131
+  Scenario: Creator is the logged in user by default and changeable
+    Given I am on the upload page
+    When I select "RAW" from "File type"
+    And I select "My Experiment" from "Experiment"
+    And "Fred Bloggs (researcher@intersect.org.au)" should be selected for "Creator"
+    And I select "samples/sample1.txt" to upload
+    And I press "Upload"
+    Then "Fred Bloggs (researcher@intersect.org.au)" should be selected for "Creator"
+    And I select "Fred Bloggs (admin@intersect.org.au)" from the creator select box
+    And I press "Update"
+    And I am on the data file details page for sample1.txt
+    Then I should see field "Creator" with value "Fred Bloggs (admin@intersect.org.au)"

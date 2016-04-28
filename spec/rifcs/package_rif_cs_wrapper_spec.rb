@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe PackageRifCsWrapper do
 
+  let (:creator) {
+    Factory(:user)
+  }
+
   describe "Static values" do
     it "should use system configuration to determine the group" do
       config = SystemConfiguration.instance
@@ -74,12 +78,12 @@ describe PackageRifCsWrapper do
       experiment2 = Factory(:experiment, :facility => facility1)
       experiment3 = Factory(:experiment, :facility => facility2)
 
-      df1 = Factory(:data_file, :experiment_id => experiment1.id)
-      df2 = Factory(:data_file, :experiment_id => experiment2.id)
-      df3 = Factory(:data_file, :experiment_id => experiment3.id)
-      df4 = Factory(:data_file, :experiment_id => experiment3.id)
+      df1 = Factory(:data_file, :experiment_id => experiment1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => experiment2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => experiment3.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => experiment3.id, :creator_id => creator.id)
 
-      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment1.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment1.id, :creator_id => creator.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
                         file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user1, access_rights_type: 'Open')
       wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {:submitter => Factory(:user, :email => "georgina@intersect.org.au", :first_name => "Georgina", :last_name => "Edwards")})
       wrapper.notes.size.should eq(2)
@@ -110,11 +114,11 @@ describe PackageRifCsWrapper do
       exp3 = Factory(:experiment, :subject => "Bob")
       exp4 = Factory(:experiment, :subject => "Jane")
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => exp2.id)
-      df3 = Factory(:data_file, :experiment_id => exp1.id)
-      df4 = Factory(:data_file, :experiment_id => exp3.id)
-      df5 = Factory(:data_file, :experiment_id => exp4.id)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id, :creator_id => creator.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id, :creator_id => creator.id)
 
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.local_subjects.should eq([])
@@ -126,16 +130,16 @@ describe PackageRifCsWrapper do
       exp3 = Factory(:experiment, :subject => "Bob")
       exp4 = Factory(:experiment, :subject => "Jane")
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => exp2.id)
-      df3 = Factory(:data_file, :experiment_id => exp1.id)
-      df4 = Factory(:data_file, :experiment_id => exp3.id)
-      df5 = Factory(:data_file, :experiment_id => exp4.id)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id, :creator_id => creator.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id, :creator_id => creator.id)
 
       user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
       facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
       experiment = Factory(:experiment, :facility => facility)
-      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, creator_id: user.id,  file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
                         file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
       package.labels << Factory(:label, :name => 'Label 1')
       package.labels << Factory(:label, :name => 'Label 2')
@@ -155,13 +159,13 @@ describe PackageRifCsWrapper do
       exp3 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nd/4.0")
       exp_reserved = Factory(:experiment, :access_rights => "N/A")
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
-      df2 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
-      df3 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
-      df4 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
-      df_reserved = Factory(:data_file, :experiment_id => exp_reserved.id, :path => data_file_path)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id,  :path => data_file_path)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id,  :path => data_file_path)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id, :path => data_file_path)
+      df4 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id, :path => data_file_path)
+      df_reserved = Factory(:data_file, :experiment_id => exp_reserved.id, :creator_id => creator.id, :path => data_file_path)
 
-      package = Factory(:package, :experiment_id => exp3.id, :filename => 'open package', :path => data_file_path, :license => "http://creativecommons.org/licenses/by-nd/4.0")
+      package = Factory(:package, :experiment_id => exp3.id,:creator_id => creator.id,  :filename => 'open package', :path => data_file_path, :license => "http://creativecommons.org/licenses/by-nd/4.0")
       CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id, df_reserved.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
@@ -176,12 +180,12 @@ describe PackageRifCsWrapper do
       exp2 = Factory(:experiment, :access_rights => "http://creativecommons.org/licenses/by-nc-sa/4.0")
       exp_reserved = Factory(:experiment, :access_rights => "N/A")
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
-      df2 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
-      df3 = Factory(:data_file, :experiment_id => exp1.id, :path => data_file_path)
-      df4 = Factory(:data_file, :experiment_id => exp2.id, :path => data_file_path)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id, :path => data_file_path)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id, :path => data_file_path)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id,:path => data_file_path)
+      df4 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id,:path => data_file_path)
 
-      package = Factory(:package, :experiment_id => exp_reserved.id, :filename => 'non-open package', :path => data_file_path, :license => "N/A")
+      package = Factory(:package, :experiment_id => exp_reserved.id, :creator_id => creator.id, :filename => 'non-open package', :path => data_file_path, :license => "N/A")
       CustomDownloadBuilder.bagit_for_files_with_ids([df1.id, df2.id, df3.id, df4.id], package) do |zip_file|
         attachment_builder = AttachmentBuilder.new(APP_CONFIG['files_root'], nil, nil, nil)
         files = attachment_builder.build_package(package, zip_file)
@@ -205,11 +209,11 @@ describe PackageRifCsWrapper do
       Factory(:experiment_for_code, :url => 'asdf', :experiment => exp3)
       Factory(:experiment_for_code, :url => 'http://purl.org/asc/1297.0/2008/for/020103', :experiment => exp4)
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => exp2.id)
-      df3 = Factory(:data_file, :experiment_id => exp1.id)
-      df4 = Factory(:data_file, :experiment_id => exp3.id)
-      df5 = Factory(:data_file, :experiment_id => exp4.id)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id, :creator_id => creator.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id, :creator_id => creator.id)
 
       wrapper = PackageRifCsWrapper.new(nil, [df1, df2, df3, df4], {})
       wrapper.for_codes.should eq(%w(asdf 0101 02 0234 05))
@@ -266,16 +270,16 @@ describe PackageRifCsWrapper do
       exp3 = Factory(:experiment, :subject => "Bob")
       exp4 = Factory(:experiment, :subject => "Jane")
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => exp2.id)
-      df3 = Factory(:data_file, :experiment_id => exp1.id)
-      df4 = Factory(:data_file, :experiment_id => exp3.id)
-      df5 = Factory(:data_file, :experiment_id => exp4.id)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id, :creator_id => creator.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id, :creator_id => creator.id)
 
       user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
       facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
       experiment = Factory(:experiment, :facility => facility)
-      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, creator_id: user.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
                         file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
       package.grant_numbers << Factory(:grant_number, :name => 'GN1')
       package.grant_numbers << Factory(:grant_number, :name => 'GN2')
@@ -292,22 +296,46 @@ describe PackageRifCsWrapper do
       exp3 = Factory(:experiment, :subject => "Bob")
       exp4 = Factory(:experiment, :subject => "Jane")
 
-      df1 = Factory(:data_file, :experiment_id => exp1.id)
-      df2 = Factory(:data_file, :experiment_id => exp2.id)
-      df3 = Factory(:data_file, :experiment_id => exp1.id)
-      df4 = Factory(:data_file, :experiment_id => exp3.id)
-      df5 = Factory(:data_file, :experiment_id => exp4.id)
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id, :creator_id => creator.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id, :creator_id => creator.id)
 
       user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
       facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
       experiment = Factory(:experiment, :facility => facility)
-      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, creator_id: user.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
                         file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
       package.contributors << Factory(:contributor, :name => 'CONT1')
       package.contributors << Factory(:contributor, :name => 'CONT2')
 
       wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {})
       wrapper.contributors.should eq(['CONT1', 'CONT2'])
+    end
+  end
+
+  describe "creator" do
+    it "should return contributors from the package" do
+      exp1 = Factory(:experiment, :subject => "Fred")
+      exp2 = Factory(:experiment, :subject => "Fred")
+      exp3 = Factory(:experiment, :subject => "Bob")
+      exp4 = Factory(:experiment, :subject => "Jane")
+
+      df1 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df2 = Factory(:data_file, :experiment_id => exp2.id, :creator_id => creator.id)
+      df3 = Factory(:data_file, :experiment_id => exp1.id, :creator_id => creator.id)
+      df4 = Factory(:data_file, :experiment_id => exp3.id, :creator_id => creator.id)
+      df5 = Factory(:data_file, :experiment_id => exp4.id, :creator_id => creator.id)
+
+      user = Factory(:user, :first_name => 'Fred', :last_name => 'Smith', :email => 'fred@intersect.org.au')
+      facility = Factory(:facility, :name => 'Fac1', :primary_contact => user)
+      experiment = Factory(:experiment, :facility => facility)
+      package = Factory(:package, filename: 'notepackage.zip', experiment_id: experiment.id, creator_id: user.id, file_processing_status: 'PACKAGE', format: "BAGIT", created_at: "2012-12-27 14:09:24",
+                        file_processing_description: "This package contains a lot of cats. Be warned.", created_by: user, access_rights_type: 'Open')
+
+      wrapper = PackageRifCsWrapper.new(package, [df1, df2, df3, df4], {})
+      wrapper.creator_name.should eq("Fred Smith (fred@intersect.org.au)")
     end
   end
 end

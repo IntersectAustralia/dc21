@@ -65,9 +65,11 @@ def create_data_file(filename, uploader)
 
   experiment_id = Experiment.first.id
 
+  creator_id = User.find_by_email(uploader).id
+
   experiment_id = Experiment.last.id if filename == "VeryLongFileNameForTestingFileNameExtremeLength_2011Data_TestOnly.dat"
 
-  builder.build(file, experiment_id, DataFile::STATUS_RAW, "")
+  builder.build(file, experiment_id, creator_id, DataFile::STATUS_RAW, "")
   df = DataFile.last
   rand_mins = rand(10000)
   # make the created at semi-random

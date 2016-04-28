@@ -129,6 +129,7 @@ class DataFilesController < ApplicationController
       params[:files].each { |file_group| files << file_group } if params[:files].is_a?(Array)
 
       experiment_id = params[:data_file][:experiment_id]
+      creator_id = params[:data_file][:creator_id]
       description = params[:description]
       type = params[:file_processing_status]
       tags = params[:tags]
@@ -147,7 +148,7 @@ class DataFilesController < ApplicationController
         access_groups = params[:data_file][:access_groups].map {|id| AccessGroup.find_by_id(id)}
       end
 
-      unless validate_inputs(files, experiment_id, type, description, tags, labels, contributors, access_groups)
+      unless validate_inputs(files, experiment_id, creator_id,type, description, tags, labels,  contributors, access_groups)
         render :new
         return
       end
@@ -157,7 +158,7 @@ class DataFilesController < ApplicationController
       @error_messages = []
       files.each do |file|
         begin
-          @uploaded_files << attachment_builder.build(file, experiment_id, type, description, tags, labels, contributors, parents )
+          @uploaded_files << attachment_builder.build(file, experiment_id, creator_id,type, description,  tags, labels,  contributors, parents )
         rescue Exception => e
           @error_messages << e.message
         end
@@ -641,7 +642,7 @@ class DataFilesController < ApplicationController
 
   end
 
-  def validate_inputs(files, experiment_id, type, description, tags, labels, contributors,  access_groups )
+  def validate_inputs(files, experiment_id, creator_id,type, description,  tags, labels,  contributors,  access_groups )
     # we're creating an object to stick the errors on which is kind of weird, but works since we're creating more than one file so don't have a single object already
     @data_file = DataFile.new
     @data_file.errors.add(:base, "Please select an experiment") if experiment_id.blank?
@@ -658,6 +659,7 @@ class DataFilesController < ApplicationController
     @data_file.file_processing_description = description
     @data_file.tag_ids = tags
     @data_file.label_ids = labels
+    @data_file.creator_id = creator_id
     @data_file.contributor_ids = contributors
     @data_file.access_group_ids = access_groups
     !@data_file.errors.any?

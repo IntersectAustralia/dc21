@@ -7,10 +7,10 @@ Feature: View the list of data files
   Background:
     Given I am logged in as "admin@intersect.org.au"
     And I have data files
-      | filename     |
-      | datafile.dat |
-      | sample.txt   |
-      | sample2.txt  |
+      | filename     | uploaded_by|
+      | datafile.dat | admin@intersect.org.au           |
+      | sample.txt   | admin@intersect.org.au           |
+      | sample2.txt  | admin@intersect.org.au            |
 
   Scenario: Add to cart from view details page
     Given I am on the data file details page for sample.txt

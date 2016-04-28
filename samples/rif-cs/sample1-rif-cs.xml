@@ -33,6 +33,12 @@
       <identifier type="uri">http://handle.westernsydney.edu.au:8081/1959.7/hiev_3</identifier>
       <identifier type="handle">hdl.handle.net/1959.7/hiev_3</identifier>
       <relatedObject>
+        <key>Fred Bloggs (admin@intersect.org.au)</key>
+        <relation type="hasCollector">
+          <description>Creator</description>
+        </relation>
+      </relatedObject>
+      <relatedObject>
         <key>Fred Bloggs</key>
         <relation type="hasCollector">
           <description>Creator</description>

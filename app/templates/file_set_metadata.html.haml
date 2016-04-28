@@ -84,6 +84,9 @@
         %h1 Related Websites
         %span{:property => "http://schema.org/url"}
           &= package.related_websites.pluck(:url).join(", ")
+        %h1 Creator
+        %span{:property => "http://schema.org/name"}
+          &= package.creator_name
         %h1 Contributors
         - package.contributors.each do |contributor|
           %span{:property => "http://schema.org/name"}
