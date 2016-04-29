@@ -39,12 +39,6 @@
         </relation>
       </relatedObject>
       <relatedObject>
-        <key>Fred Bloggs</key>
-        <relation type="hasCollector">
-          <description>Creator</description>
-        </relation>
-      </relatedObject>
-      <relatedObject>
         <key>Intersect Research</key>
         <relation type="isManagedBy"/>
       </relatedObject>

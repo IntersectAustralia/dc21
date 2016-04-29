@@ -113,14 +113,7 @@ class RifCsGenerator
               end
             end
           end
-
-          xml.relatedObject do
-            xml.key wrapper_object.created_by
-            xml.relation type: 'hasCollector' do
-              xml.description 'Creator'
-            end
-          end
-
+          
           xml.relatedObject do
             xml.key wrapper_object.managed_by
             xml.relation type: 'isManagedBy'
