@@ -85,7 +85,9 @@ Given /^I have data files$/ do |table|
     related_websites_csv = attributes.delete('related_websites')
     contributors_csv = attributes.delete('contributors')
 
-    attributes["creator_id"] = user.id
+    creator = attributes.delete('creator')
+    creator_id= (creator.nil? || creator.eql?("")) ? user.id : User.approved.find_by_email(creator).id
+    attributes["creator_id"] = creator_id
 
     if attributes['file_processing_status'] == 'PACKAGE'
       df = Factory(:package, attributes)
@@ -126,6 +128,7 @@ Given /^I have data files$/ do |table|
       output_location = File.join(dir, "rif-cs-#{df.id}.xml")
       `touch #{output_location}`
     end
+
   end
 end
 
@@ -478,6 +481,12 @@ Then /^file "([^"]*)" should have contributor "([^"]*)"$/ do |filename, contribu
   data_file = DataFile.find_by_filename!(filename)
   contributors = data_file.contributors.map { |cont| cont.name}
   contributors.should include(contributor)
+end
+
+Then /^file "([^"]*)" should have creator "([^"]*)"$/ do |filename, creator|
+  data_file = DataFile.find_by_filename!(filename)
+  creator = data_file.creator_name
+  creator.should eq(creator)
 end
 
 Then /^file "([^"]*)" should have tag "([^"]*)"$/ do |filename, tag|

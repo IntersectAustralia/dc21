@@ -338,6 +338,7 @@ class DataFilesController < ApplicationController
       experiment_id = params[:org_level2_id] || params[:experiment_id]
       tag_names = params[:tag_names]
       label_names = params[:label_names]
+      creator_email = params[:creator_email]
       contributor_names = params[:contributor_names]
       parent_files = clean_params_list_string(params[:parent_filenames])
       parent_file_ids = DataFile.where(:filename => parent_files).pluck(:id)
@@ -346,15 +347,14 @@ class DataFilesController < ApplicationController
       start_time = params[:start_time]
       end_time = params[:end_time]
 
-      errors, tag_ids, label_ids, contributor_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, contributor_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups],  false)
-
+      errors, creator_id, tag_ids, label_ids, contributor_ids, access, access_to_all_institutional_users, access_to_user_groups = validate_api_inputs(file, type, experiment_id, creator_email, start_time, end_time, tag_names, label_names, contributor_names, params[:access], params[:access_to_all_institutional_users], params[:access_to_user_groups], params[:access_groups],  false)
       if errors.empty?
         begin
           if !start_time.nil? and !end_time.nil?
             start_time += ' UTC'
             end_time += ' UTC'
           end
-          uploaded_file = attachment_builder.build(file, experiment_id, type, params[:description] || "", tag_ids, label_ids,contributor_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids, start_time, end_time)
+          uploaded_file = attachment_builder.build(file, experiment_id, creator_id, type, params[:description] || "", tag_ids, label_ids,contributor_ids, parent_file_ids, [], access, access_to_all_institutional_users, access_to_user_groups, access_group_ids, start_time, end_time)
           messages = uploaded_file.messages.collect { |m| m[:message] }
         rescue Exception => e
           # Exit if attachment builder fails to build the uploaded file
@@ -399,6 +399,7 @@ class DataFilesController < ApplicationController
 
     tag_names = params[:tag_names]
     label_names = params[:label_names]
+    creator_email = params[:creator_email]
     contributor_names = params[:contributor_names]
     grant_numbers = params[:grant_numbers]
     related_websites = params[:related_websites]
@@ -415,7 +416,7 @@ class DataFilesController < ApplicationController
     end_time = params[:end_time]
 
     data_file = validate_file_id(file_id, current_user, errors, warnings)
-    validation_errors, tag_ids, label_ids,contributor_ids, parsed_access, parsed_access_to_all_institutional_users, parsed_access_to_user_groups  = validate_api_inputs(nil, nil, experiment_id, start_time, end_time, tag_names, label_names,contributor_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, true)
+    validation_errors, creator_id, tag_ids, label_ids,contributor_ids, parsed_access, parsed_access_to_all_institutional_users, parsed_access_to_user_groups  = validate_api_inputs(nil, nil, experiment_id, creator_email, start_time, end_time, tag_names, label_names,contributor_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups, true)
     errors.push(*validation_errors)
 
     if errors.empty?
@@ -442,6 +443,11 @@ class DataFilesController < ApplicationController
       if label_names
         data_file.label_ids = label_ids
       end
+
+      if creator_email
+        data_file.creator_id = creator_id
+      end
+
       if contributor_names
         data_file.contributor_ids = contributor_ids
       end
@@ -583,6 +589,11 @@ class DataFilesController < ApplicationController
   end
 
   def do_search(search_params)
+
+    unless search_params.nil? || !search_params.has_key?(:creators)
+      search_params[:creators] = search_params[:creators].map {|creator_display_name| creator_display_name[/(?<=\().+?(?=\))/]}
+    end
+
     @search = DataFileSearch.new(search_params)
 
     @data_files = @search.do_search(@data_files)
@@ -602,6 +613,7 @@ class DataFilesController < ApplicationController
     @selected_automation_stati = @search.automation_stati
     @selected_tags = @search.tags
     @selected_labels = @search.labels
+    @selected_creators =  @search.creators.map {|creator_email| User.find_by_email(creator_email).display_name }
     @selected_grant_numbers = @search.grant_numbers
     @selected_related_websites = @search.related_websites
     @selected_contributors = @search.contributors
@@ -638,6 +650,7 @@ class DataFilesController < ApplicationController
     @data_files = @search.do_search(@data_files)
     @data_files.each do |data_file|
         data_file.url = download_data_file_url(data_file.id, :format => :json)
+        data_file.creator = data_file.creator_name
     end
 
   end
@@ -665,7 +678,7 @@ class DataFilesController < ApplicationController
     !@data_file.errors.any?
   end
 
-  def validate_api_inputs(file, type, experiment_id, start_time, end_time, tag_names, label_names, contributor_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups,  is_update)
+  def validate_api_inputs(file, type, experiment_id, creator_email, start_time, end_time, tag_names, label_names, contributor_names, access, access_to_all_institutional_users, access_to_user_groups, access_groups,  is_update)
     errors = []
 
     if experiment_id.blank? && !is_update
@@ -699,6 +712,7 @@ class DataFilesController < ApplicationController
     parse_starttime_endtime(start_time, end_time, errors)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
+    creator_id = parse_creator(creator_email, errors)
     contributor_ids = validate_contributors(contributor_names, errors)
 
     access_to_all_institutional_users_flag = ''
@@ -736,7 +750,7 @@ class DataFilesController < ApplicationController
     access_to_all_institutional_users_flag = true if access.blank? and access_to_user_groups.blank? and access_groups.nil?
     access = access.blank? ? DataFile::ACCESS_PRIVATE : access
 
-    [errors, tag_ids, label_ids, contributor_ids,  access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
+    [errors, creator_id, tag_ids, label_ids, contributor_ids,  access, access_to_all_institutional_users_flag, access_to_user_groups_flag]
   end
 
   def parse_starttime_endtime(start_time, end_time, errors)
@@ -797,6 +811,16 @@ class DataFilesController < ApplicationController
       errors << 'Incorrect format for labels - labels must be double-quoted and comma separated'
     end
     label_ids
+  end
+
+  def parse_creator(creator_email, errors)
+    return current_user.id if creator_email.blank?
+    begin
+      creator_id = User.approved.find_by_email(creator_email).id
+    rescue RuntimeError
+      errors << 'Can not find an approved user with provided email'
+    end
+    creator_id
   end
 
   def validate_contributors(contributor_names, errors)

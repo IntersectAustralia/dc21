@@ -19,15 +19,15 @@ Feature: Search data files by date range
       | Video |
       | Audio |
     And I have data files
-      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | label_list | experiment    | facility            | external_id | id | transfer_status | format      | access_rights_type | grant_numbers | related_websites           | contributors |license                                    | title      |
-      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | A, B       | My Experiment | HFE Weather Station | test ID     |    | QUEUED          | TOA5        |                    | 1,2           | http://test1, http://test2 |              |                                          |            |
-      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | B, C       | My Experiment | HFE Weather Station |             | 1  | WORKING         | BAGIT       | Open               | 2,3           |                            | cont1, cont2 |http://creativecommons.org/licenses/by/4.0 | My Package |
-      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | A          | My Experiment | HFE Weather Station |             |    | FAILED          | Unknown     |                    | 1             |                            |              |                                         |            |
-      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | C          | My Experiment | HFE Weather Station |             |    | COMPLETE        | image/jpeg  |                    | 2             |                            | cont4, cont3 |                                         |            |
-      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | D          | Other         | ROS_WS              |             |    | COMPLETE        | image/png   |                    | 4             | http://test3               |              |                                         |            |
-      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |            | Experiment 2  | Tree Chambers       |             |    | FAILED          | video/mpeg  |                    |               |                            |  cont5       |                                         |            |
-      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |            | My Experiment | HFE Weather Station |             |    | WORKING         | audio/mpeg  |                    |               |                            |              |                                         |            |
-      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              |            | Experiment 2  | Tree Chambers       |             |    | QUEUED          | audio/x-wav |                    |               |                            |  cont5, cont1|                                        |            |
+      | filename      | created_at       | uploaded_by            | start_time            | end_time               | file_processing_status | file_processing_description | tags         | label_list | experiment    | facility            | external_id | id | transfer_status | format      | access_rights_type | grant_numbers | related_websites           | contributors |license                                    | title      | creator|
+      | mydata8.dat   | 08/11/2011 10:15 | one@intersect.org.au   | 1/5/2010 6:42:01 UTC  | 30/5/2010 18:05:23 UTC | RAW                    | words words words           | Photo, Video | A, B       | My Experiment | HFE Weather Station | test ID     |    | QUEUED          | TOA5        |                    | 1,2           | http://test1, http://test2 |              |                                          |            | two@intersect.org.au|
+      | mydata7.dat   | 30/11/2011 10:15 | one@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 10/6/2010 18:05:23 UTC | PROCESSED              | blah                        |              | B, C       | My Experiment | HFE Weather Station |             | 1  | WORKING         | BAGIT       | Open               | 2,3           |                            | cont1, cont2 |http://creativecommons.org/licenses/by/4.0 | My Package |                    |
+      | mydata6.dat   | 30/12/2011 10:15 | two@intersect.org.au   | 1/6/2010 6:42:01 UTC  | 11/6/2010 18:05:23 UTC | CLEANSED               | theword                     | Photo        | A          | My Experiment | HFE Weather Station |             |    | FAILED          | Unknown     |                    | 1             |                            |              |                                         |            |                      |
+      | datafile5.dat | 30/11/2011 19:00 | three@intersect.org.au | 1/6/2010 6:42:01 UTC  | 12/6/2010 18:05:23 UTC | RAW                    | asdf                        | Video        | C          | My Experiment | HFE Weather Station |             |    | COMPLETE        | image/jpeg  |                    | 2             |                            | cont4, cont3 |                                         |            |                      |
+      | datafile4.dat | 1/11/2011 10:15  | four@intersect.org.au  | 10/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | CLEANSED               |                             | Audio        | D          | Other         | ROS_WS              |             |    | COMPLETE        | image/png   |                    | 4             | http://test3               |              |                                         |            |                      |
+      | datafile3.dat | 30/1/2010 10:15  | five@intersect.org.au  | 11/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | ERROR                  |                             |              |            | Experiment 2  | Tree Chambers       |             |    | FAILED          | video/mpeg  |                    |               |                            |  cont5       |                                         |            |                      |
+      | datafile2.dat | 30/11/2011 8:45  | two@intersect.org.au   | 12/6/2010 6:42:01 UTC | 30/6/2010 18:05:23 UTC | RAW                    | myword                      | Video        |            | My Experiment | HFE Weather Station |             |    | WORKING         | audio/mpeg  |                    |               |                            |              |                                         |            |five@intersect.org.au|
+      | datafile1.dat | 01/12/2011 13:45 | five@intersect.org.au  |                       |                        | UNKNOWN                |                             |              |            | Experiment 2  | Tree Chambers       |             |    | QUEUED          | audio/x-wav |                    |               |                            |  cont5, cont1|                                        |            |                      |
     And file "mydata8.dat" has metadata item "station_name" with value "ROS_WS"
     And file "mydata7.dat" has metadata item "station_name" with value "TC"
     And file "mydata6.dat" has metadata item "station_name" with value "HFE_WS"
@@ -351,6 +351,29 @@ Feature: Search data files by date range
       | Filename      |
       | datafile1.dat |
       | mydata7.dat   |
+      | datafile3.dat   |
+
+  Scenario: Search for files by creators
+    Given I am on the list data files page
+    Then the "search_creators" select should contain
+      | Fred Bloggs (admin@intersect.org.au)|
+      | Fifth Five (five@intersect.org.au) |
+      | Fourth Four (four@intersect.org.au) |
+      | First One (one@intersect.org.au) |
+      | Third Three (three@intersect.org.au) |
+      | Second Two (two@intersect.org.au) |
+    And nothing should be selected in the "Creators:" select
+    And I select "Second Two (two@intersect.org.au)" from "Creators:"
+    And I select "Fifth Five (five@intersect.org.au)" from "Creators:"
+    And I press "Search"
+    Then "Second Two (two@intersect.org.au)" should be selected in the "Creators:" select
+    Then "Fifth Five (five@intersect.org.au)" should be selected in the "Creators:" select
+    And I should see "exploredata" table with
+      | Filename      |
+      | mydata6.dat     |
+      | datafile1.dat |
+      | datafile2.dat   |
+      | mydata8.dat     |
       | datafile3.dat   |
 
 

@@ -267,6 +267,28 @@ Feature: Create a package from the API
     And file "my_package.zip" should have description "some friendly description"
     And file "my_package.zip" should have contributor "CONT-1"
     And file "my_package.zip" should have contributor "CONT-2"
+    And file "my_package.zip" should have creator "Admin User (tao@intersect.org.au)"
+
+  Scenario: Package is created with creator
+    Given I have a user "tao@intersect.org.au" with role "Admin User"
+    And user "tao@intersect.org.au" has an API token
+    When I perform an API package create with the following parameters as user "researcher@intersect.org.au"
+      | file_ids           | 1,2,3                     |
+      | filename           | my_package                |
+      | experiment_id      | 1                         |
+      | title              | my magic package          |
+      | description        | some friendly description |
+      | access_rights_type | Restricted                |
+      | run_in_background  | false                     |
+      | creator_email      | tao@intersect.org.au      |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Package was successfully created."
+    And I should get a JSON response with package name "my_package.zip"
+    And file "my_package.zip" should have experiment "My Experiment"
+    And file "my_package.zip" should have title "my magic package"
+    And file "my_package.zip" should have transfer status "COMPLETE"
+    And file "my_package.zip" should have description "some friendly description"
+    And file "my_package.zip" should have creator "Admin User (tao@intersect.org.au)"
 
   Scenario: Package can be created with a specified license
     When I perform an API package create with the following parameters as user "researcher@intersect.org.au"

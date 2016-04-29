@@ -94,6 +94,22 @@ $(function () {
         $('.searchcategory .labels').hide();
     }
 
+    // Creators
+    if ( $('.searchcategory .creators option[selected]').length > 0 ) {
+        $('#creators_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .creators').hide();
+    }
+
+    // Contributors
+    if ( $('.searchcategory .contributors option[selected]').length > 0 ) {
+        $('#contributors_category').toggleClass('current');
+    }
+    else {
+        $('.searchcategory .contributors').hide();
+    }
+
     // Grant Numbers
     if ( $('.searchcategory .grant_numbers option[selected]').length > 0 ) {
         $('#grant_numbers_category').toggleClass('current');
@@ -108,14 +124,6 @@ $(function () {
     }
     else {
         $('.searchcategory .related_websites').hide();
-    }
-
-    // Contributors
-    if ( $('.searchcategory .contributors option[selected]').length > 0 ) {
-        $('#contributors_category').toggleClass('current');
-    }
-    else {
-        $('.searchcategory .contributors').hide();
     }
 
     // File Format
@@ -249,6 +257,16 @@ $(function () {
         $(this).toggleClass('current');
     });
 
+    $('#creators_category').click(function (event) {
+        $('.searchcategory .creators').toggle();
+        $(this).toggleClass('current');
+    });
+
+    $('#contributors_category').click(function (event) {
+        $('.searchcategory .contributors').toggle();
+        $(this).toggleClass('current');
+    });
+
     $('#grant_numbers_category').click(function (event) {
         $('.searchcategory .grant_numbers').toggle();
         $(this).toggleClass('current');
@@ -256,11 +274,6 @@ $(function () {
 
     $('#related_websites_category').click(function (event) {
         $('.searchcategory .related_websites').toggle();
-        $(this).toggleClass('current');
-    });
-
-    $('#contributors_category').click(function (event) {
-        $('.searchcategory .contributors').toggle();
         $(this).toggleClass('current');
     });
 

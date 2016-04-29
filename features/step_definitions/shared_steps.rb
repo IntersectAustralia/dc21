@@ -271,6 +271,11 @@ Given /^I have labels (.+)$/ do |label_names|
   end
 end
 
+Then /^file "([^"]*)" should have (\d+) contributors/ do |file, count|
+  file = DataFile.find_by_filename!(file)
+  file.contributors.count.should eq(count.to_i)
+end
+
 Given /^I have contributors (.+)$/ do |contributor_names|
   contributor_names.split(', ').each do |contributor_name|
     Factory(:contributor, :name => contributor_name)

@@ -13,6 +13,7 @@ class DataFileSearch
   attr_accessor :access_rights_types
   attr_accessor :tags
   attr_accessor :labels
+  attr_accessor :creators
   attr_accessor :grant_numbers
   attr_accessor :related_websites
   attr_accessor :contributors
@@ -50,6 +51,7 @@ class DataFileSearch
     self.access_rights_types = @search_params[:access_rights_types] || []
     self.tags = @search_params[:tags]|| []
     self.labels = @search_params[:labels]|| []
+    self.creators = @search_params[:creators]|| []
     self.grant_numbers = @search_params[:grant_numbers]|| []
     self.related_websites = @search_params[:related_websites]|| []
     self.contributors = @search_params[:contributors]|| []
@@ -86,6 +88,7 @@ class DataFileSearch
         access_rights_types.empty? &&
         tags.empty? &&
         labels.empty? &&
+        creators.empty? &&
         grant_numbers.empty? &&
         related_websites.empty? &&
         contributors.empty? &&
@@ -178,6 +181,10 @@ class DataFileSearch
     unless labels.nil? || labels.empty?
       search_result = search_result.with_any_of_these_labels(labels)
       attrs_array << "Labels"
+    end
+    unless creators.nil? || creators.empty?
+      search_result = search_result.with_any_of_these_creators(creators)
+      attrs_array << "Creators"
     end
     unless grant_numbers.nil? || grant_numbers.empty?
       search_result = search_result.with_any_of_these_grant_numbers(grant_numbers)
