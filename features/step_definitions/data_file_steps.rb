@@ -85,6 +85,10 @@ Given /^I have data files$/ do |table|
     related_websites_csv = attributes.delete('related_websites')
     contributors_csv = attributes.delete('contributors')
 
+    creator = attributes.delete('creator')
+    creator_id= (creator.nil? || creator.eql?("")) ? user.id : User.approved.find_by_email(creator).id
+    attributes["creator_id"] = creator_id
+
     if attributes['file_processing_status'] == 'PACKAGE'
       df = Factory(:package, attributes)
     else
@@ -124,6 +128,7 @@ Given /^I have data files$/ do |table|
       output_location = File.join(dir, "rif-cs-#{df.id}.xml")
       `touch #{output_location}`
     end
+
   end
 end
 
@@ -478,6 +483,12 @@ Then /^file "([^"]*)" should have contributor "([^"]*)"$/ do |filename, contribu
   contributors.should include(contributor)
 end
 
+Then /^file "([^"]*)" should have creator "([^"]*)"$/ do |filename, creator|
+  data_file = DataFile.find_by_filename!(filename)
+  creator = data_file.creator_name
+  creator.should eq(creator)
+end
+
 Then /^file "([^"]*)" should have tag "([^"]*)"$/ do |filename, tag|
   data_file = DataFile.find_by_filename!(filename)
   tag_names = data_file.tags.map { |t| t.name}
@@ -605,7 +616,8 @@ def create_data_file(filename, user, type=DataFile::STATUS_RAW, description="des
   parent_ids = DataFile.where(:filename => parents.split(", ")).pluck(:id)
   child_ids = DataFile.where(:filename => children.split(", ")).pluck(:id)
   group_ids = AccessGroup.where(:name => access_groups.split(", ")).pluck(:id)
-  attachment_builder.build(file, experiment.id, type, "desc", [], [], [], parent_ids, child_ids, access, access_to_all_institutional_users, access_to_user_groups, group_ids)
+
+  attachment_builder.build(file, experiment.id, user.id, type, "desc", [], [], [], parent_ids, child_ids, access, access_to_all_institutional_users, access_to_user_groups, group_ids)
 end
 
 
@@ -824,4 +836,13 @@ Then /^file "([^"]*)" should have the private access options: "([^"]*)" to all i
   end
   file.access_to_all_institutional_users.should eq inst_flag
   file.access_to_user_groups.should eq groups_flag
+end
+
+When /^I select "([^"]*)" from the creator select box$/ do |option|
+  field = "Creator"
+  select(option, :from => field)
+end
+
+Then /^"([^"]*)" should be selected for "([^"]*)"$/ do |selected_text, dropdown|
+  expect(page).to have_select(dropdown, :selected => selected_text)
 end

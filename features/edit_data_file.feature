@@ -343,3 +343,15 @@ Feature: Edit data files metadata
     And I check select2 field "data_file_related_website_list" updated value to "webweb|test:123|http://sdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksdsdjfklsdjfklsdjflksdjfklsdjflsdjfksdjflsdjflksdjklfjsdlkfjskdljflksdjfklsdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflksdjfklsdjflksdjfklsdjfkldsjfklsdjflksdjflksdjfklsdjfklsdjfklsdjflksdjflksdjfklsdjflksdjfklsdjflkdsjflksdjfklsdjflksdjfklsdjfklsjfklsdjfklsdjfklsdjfklsdjfklsdjfklsdjflksd.com"
     And I press "Update"
     Then I should see "Please correct the following before continuing: Related websites url webweb is not a valid url Related websites url test:123 is not a valid url Related websites url is too long (maximum is 80 characters)"
+
+#UWSHIEVMOD-131
+  @javascript
+  Scenario: Creator should be the logged in user by default and changeable
+    Given I am logged in as "researcher@intersect.org.au"
+    When I am on the list data files page
+    And I edit data file "file.txt"
+    And I wait for 2 seconds
+    And "Fred Bloggs (researcher@intersect.org.au)" should be selected for "Creator"
+    And I select "Fred Bloggs (admin@intersect.org.au)" from the creator select box
+    And I press "Update"
+    Then I should see field "Creator" with value "Fred Bloggs (admin@intersect.org.au)"

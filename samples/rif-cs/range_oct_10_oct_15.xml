@@ -40,7 +40,7 @@
         </temporal>
       </coverage>
       <relatedObject>
-        <key>Fred Bloggs</key>
+        <key>Fred Bloggs (admin@intersect.org.au)</key>
         <relation type="hasCollector">
           <description>Creator</description>
         </relation>

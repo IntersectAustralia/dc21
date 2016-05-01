@@ -43,6 +43,7 @@ class Package < DataFile
     datafile.file_processing_status = STATUS_PACKAGE
     datafile.file_processing_description = params[:file_processing_description]
     datafile.experiment_id = params[:experiment_id]
+    datafile.creator_id = params[:creator_id]
     datafile.published = false
     datafile.title = params[:title]
     datafile.transfer_status = RESQUE_QUEUED

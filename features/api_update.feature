@@ -129,6 +129,23 @@ Feature: Perform updates to data files and packages via API
     And file "sample2.txt" should have label "new_label1"
     And file "sample2.txt" should have label "new_label2"
 
+  Scenario: Try to update the creator of the data file
+    When I perform an API update with the following parameters as user "admin@intersect.org.au"
+      | file_id          | 5                        |
+      | creator_email      | researcher@intersect.org.au    |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Data file successfully updated"
+    And file "sample2.txt" should have creator "Researcher (researcher@intersect.org.au)"
+
+  Scenario: Try to update the contributors of a data file
+    When I perform an API update with the following parameters as user "admin@intersect.org.au"
+      | file_id               | 5                                                    |
+      | contributor_names         | contributor_1,contributor_2                        |
+    Then I should get a 200 response code
+    And I should get a JSON response with message "Data file successfully updated"
+    And file "sample2.txt" should have contributor "contributor_1"
+    And file "sample2.txt" should have contributor "contributor_2"
+
   Scenario: Try to update the access to Private of the data file
     When I perform an API update with the following parameters as user "admin@intersect.org.au"
       | file_id          | 5                        |
@@ -208,12 +225,3 @@ Feature: Perform updates to data files and packages via API
     And file "package2.zip" should have grant number "grant_number_1"
     And file "package2.zip" should have grant number "grant_number_2"
 
-  Scenario: Try to update the contributors of a package
-    When I perform an API update with the following parameters as user "admin@intersect.org.au"
-      | file_id               | 2                                                    |
-      | contributor_names         | contributor_1,contributor_2                        |
-    Then I should get a 200 response code
-    And I should get a JSON response with message "Data file successfully updated"
-    And I should get a JSON response with warning "Updating a package will not cause rif-cs to be regenerated"
-    And file "package2.zip" should have contributor "contributor_1"
-    And file "package2.zip" should have contributor "contributor_2"

@@ -46,6 +46,7 @@
         %span{:title => tag.name}= tag.name
         %br/
     - render_field "Labels", @data_file.label_list_display
+    - render_field "Creator", @data_file.creator_name
     - render_field_with_block "Contributors" do
       - @data_file.contributors.each do |contributor|
         %span{:title => contributor.name}= contributor.name

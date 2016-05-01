@@ -97,6 +97,10 @@ class PackageRifCsWrapper < RifCsWrapper
     SystemConfiguration.instance.research_centre_name
   end
 
+  def creator_name
+    collection_object.creator_name
+  end
+
   def grant_numbers
     collection_object.grant_numbers.collect(&:name)
   end

@@ -77,6 +77,7 @@ Feature: Edit data file relationships
     And I have data files
       | filename    | created_at       | uploaded_by            | parents      | children                                              |
       | related.txt | 30/11/2011 10:15 | admin@intersect.org.au | datafile.dat | sample.txt, file.txt, error.txt, file_with_labels.txt |
+    And I am on the data file details page for related.txt
     And I am on the edit data file page for related.txt
     And I should see "sample.txt"
     And I should see "datafile.dat"

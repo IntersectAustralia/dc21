@@ -72,7 +72,7 @@ class DataFile < ActiveRecord::Base
   has_many :related_websites, :through => :data_file_related_websites, :uniq => true, autosave: true
 
   attr_accessible :filename, :format, :created_at, :updated_at, :start_time, :end_time, :interval, :file_processing_status, :file_processing_description, :experiment_id, :file_size, :external_id, :title, :uuid, :parent_ids, :child_ids, :label_list, :tag_ids, :access, :access_to_all_institutional_users, :access_to_user_groups, :access_groups, :access_rights_type, :access_rights_text,
-                  :grant_number_list, :related_website_list, :license, :contributor_list
+                  :grant_number_list, :related_website_list, :license, :contributor_list, :creator_id
 
   before_validation :strip_whitespaces
   before_validation :truncate_file_processing_description
@@ -135,7 +135,7 @@ class DataFile < ActiveRecord::Base
   scope :search_display_fields, joins(:created_by).joins(:experiment => :facility).select('data_files.id, data_files.filename, data_files.created_at, data_files.file_size, data_files.file_processing_status, experiments.name as experiment_name, users.email as uploader_email, data_files.access, data_files.access_to_all_institutional_users, data_files.access_to_user_groups, data_files.created_by_id')
   scope :relationship_fields, select([:id, 'filename as text', 'experiment_id as exp_id'])
 
-  attr_accessor :messages, :url
+  attr_accessor :messages, :url, :creator
 
 
   def private_access_check
@@ -151,7 +151,7 @@ class DataFile < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super(options).merge(:url => url)
+    super(options).merge(:url => url, :creator => creator)
   end
 
   def is_published?
@@ -180,6 +180,10 @@ class DataFile < ActiveRecord::Base
 
   def label_names
     self.labels.pluck(:name)
+  end
+
+  def creator_name
+    User.find(self.creator_id).display_name
   end
 
   def contributor_list
@@ -318,6 +322,12 @@ class DataFile < ActiveRecord::Base
 
   def self.with_any_of_these_labels(label_params)
     data_file_ids = DataFile.unscoped.joins(:labels).where { labels.name >> label_params }.pluck(:id).uniq
+    where(:id => data_file_ids)
+  end
+
+  def self.with_any_of_these_creators(creator_params)
+    creator_ids = creator_params.map {|creator_email| User.find_by_email(creator_email).id}
+    data_file_ids = DataFile.unscoped.where( creator_id: creator_ids )
     where(:id => data_file_ids)
   end
 

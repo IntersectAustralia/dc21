@@ -73,12 +73,14 @@ class PackagesController < DataFilesController
   end
 
   def api_create
+
     errors = []
     warnings = []
 
     file_ids = params[:file_ids]
     tag_names = params[:tag_names]
     label_names = params[:label_names]
+    creator_email = params[:creator_email]
     grant_numbers = params[:grant_numbers]
     contributor_names = params[:contributor_names]
     params[:experiment_id] = params[:org_level2_id] || params[:experiment_id]
@@ -89,12 +91,14 @@ class PackagesController < DataFilesController
     data_files = validate_file_ids(file_ids, current_user, errors, warnings, include_invalid_content)
     tag_ids = parse_tags(tag_names, errors)
     label_ids = parse_labels(label_names, errors)
+    creator_id = parse_creator(creator_email, errors)
     grant_number_ids = parse_grant_numbers(grant_numbers, errors)
     contributor_ids = validate_contributors(contributor_names, errors)
 
     params[:license] = AccessRightsLookup.new.get_url(params[:license])
 
     package = Package.create_package(params, nil, current_user)
+
     if errors.empty? && package.save
       save_tags(package, tag_ids)
       save_labels(package, label_ids)
@@ -104,6 +108,7 @@ class PackagesController < DataFilesController
       data_file_ids = data_files.map { |data_file| data_file.id }
       package.label_list = params[:label_list] if params[:label_list]
       package.parent_ids = data_file_ids
+      package.creator_id = creator_id
 
       begin
         if run_in_background
@@ -200,6 +205,12 @@ class PackagesController < DataFilesController
   def save_labels(package, labels)
     pkg = DataFile.find(package.id)
     pkg.label_ids = labels
+    pkg.save
+  end
+
+  def save_creator(package, creator)
+    pkg = DataFile.find(package.id)
+    pkg.creator_id = creator
     pkg.save
   end
 

@@ -282,11 +282,13 @@ Feature: Create a package
     Then I should see field "Labels" with value "test1, this3"
 
   @javascript
-  Scenario: Create package specifying access rights type, grant numbers, related websites and contributors
+  Scenario: Create package specifying access rights type, grant numbers, related websites , creator and contributors
     Given I am on the list data files page
     And I add sample1.txt to the cart
     And I wait for 4 seconds
     When I am on the create package page
+    And I wait for 4 seconds
+    And "Fred Bloggs (admin@intersect.org.au)" should be selected for "Creator"
     And I fill in "package_grant_number_list" with "bebb@|Abba|cuba|AA<script></script>"
     And I check select2 field "package_grant_number_list" updated value to "Abba,bebb@,cuba,AA<script></script>"
     And I fill in "package_related_website_list" with "http://example.com | https://test.com| ftp://127.0.0.1/test"
@@ -310,6 +312,7 @@ Feature: Create a package
     Then file "my_package1.zip" should have contributors "AAdd<>,CONT@,cont3"
     Then I should see field "Access Rights Type" with value "Conditional"
     Then I should see field "Licence" with value "CC BY: Attribution"
+    Then I should see field "Creator" with value "Fred Bloggs (admin@intersect.org.au)"
 
 
   @javascript

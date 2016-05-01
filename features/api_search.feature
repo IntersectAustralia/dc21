@@ -5,18 +5,22 @@ Feature: Perform searching via API
   Background:
     Given I have a user "researcher@intersect.org.au" with role "Institutional User"
     And user "researcher@intersect.org.au" has an API token
+    Given I have a user "tao@intersect.org.au" with role "Admin User"
+    And user "tao@intersect.org.au" has an API token
+    Given I have a user "test@intersect.org.au" with role "Researcher"
+    And user "test@intersect.org.au" has an API token
     And I have tags
       | name  |
       | Photo |
       | Video |
       | Audio |
     And I have data files
-      | filename    | created_at       | uploaded_by               | file_processing_status | file_processing_description | experiment  | id | external_id | tags         | label_list | facility | transfer_status | access_rights_type | grant_numbers | related_websites     | contributors |
-      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | ends with a                 | Experiment4 | 4  | sean        | Photo, Video | sean       | fac10    | COMPLETE        | Open               | 1             | http://www.google.com       |   cont1    |
-      | sample2.txt | 01/12/2011 12:45 | kali@intersect.org.au     | CLEANSED               | ends with A                 | Experiment2 | 2  | kali        | Photo        | kali       | fac10    | FAILED          | Open               | 2             | http://www.intersect.org.au |   cont2    |
-      | sample3.txt | 01/12/2011 11:45 | georgina@intersect.org.au | RAW                    | nothing common              | Experiment5 | 5  | georgina    | Video        | georgina   | fac20    | WORKING         | Open               | 3             | http://www.sydney.edu.au    |   cont3    |
-      | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     | Audio        | matthew    | fac20    | QUEUED          | Restricted         | 4             | http://www.uts.edu.au       |   cont4    |
-      | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |              | admin      | fac30    | WORKING         | Conditional        | 5             | http://www.unsw.edu.au      |   cont5    |
+      | filename    | created_at       | uploaded_by               | file_processing_status | file_processing_description | experiment  | id | external_id | tags         | label_list | facility | transfer_status | access_rights_type | grant_numbers | related_websites     | contributors | creator |
+      | sample1.txt | 01/12/2011 13:45 | sean@intersect.org.au     | RAW                    | ends with a                 | Experiment4 | 4  | sean        | Photo, Video | sean       | fac10    | COMPLETE        | Open               | 1             | http://www.google.com       |   cont1    |test@intersect.org.au|
+      | sample2.txt | 01/12/2011 12:45 | kali@intersect.org.au     | CLEANSED               | ends with A                 | Experiment2 | 2  | kali        | Photo        | kali       | fac10    | FAILED          | Open               | 2             | http://www.intersect.org.au |   cont2    |                     |
+      | sample3.txt | 01/12/2011 11:45 | georgina@intersect.org.au | RAW                    | nothing common              | Experiment5 | 5  | georgina    | Video        | georgina   | fac20    | WORKING         | Open               | 3             | http://www.sydney.edu.au    |   cont3    |                     |
+      | sample4.txt | 01/12/2011 10:45 | matthew@intersect.org.au  | CLEANSED               | starts with                 | Experiment1 | 1  | matthew     | Audio        | matthew    | fac20    | QUEUED          | Restricted         | 4             | http://www.uts.edu.au       |   cont4    | tao@intersect.org.au|
+      | sample5.txt | 01/12/2011 09:45 | admin@intersect.org.au    | RAW                    | no description              | Experiment3 | 3  | admin       |              | admin      | fac30    | WORKING         | Conditional        | 5             | http://www.unsw.edu.au      |   cont5    |                     |
 
   Scenario: Try to search without an API token
     When I perform an API search without an API token
@@ -146,6 +150,17 @@ Feature: Perform searching via API
       | filename    |
       | sample1.txt |
       | sample3.txt |
+    And I should have file download link for each entry
+
+  Scenario: Search by Creators via the API
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | creators | tao@intersect.org.au, test@intersect.org.au, admin@intersect.org.au |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample1.txt |
+      | sample4.txt |
+      | sample5.txt |
     And I should have file download link for each entry
 
 #EYETRACKER-135
