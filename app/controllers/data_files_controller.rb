@@ -817,7 +817,7 @@ class DataFilesController < ApplicationController
     return current_user.id if creator_email.blank?
     begin
       creator_id = User.approved.find_by_email(creator_email).id
-    rescue RuntimeError
+    rescue Exception
       errors << 'Can not find an approved user with provided email'
     end
     creator_id
