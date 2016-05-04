@@ -163,6 +163,22 @@ Feature: Perform searching via API
       | sample5.txt |
     And I should have file download link for each entry
 
+  Scenario: Prevent searching a not approved Creator
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | creators | tao@intersect.org.au, hahaha@intersect.org.au, admin@intersect.org.au |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+      | sample4.txt |
+      | sample5.txt |
+    And I should have file download link for each entry
+    When I perform an API search with the following parameters as user "researcher@intersect.org.au"
+      | creators | hahaha@intersect.org.au |
+    Then I should get a 200 response code
+    And I should get a JSON response with
+      | filename    |
+
+
 #EYETRACKER-135
 
   Scenario: Search by Automation Stati via API

@@ -598,6 +598,7 @@ class DataFilesController < ApplicationController
 
     @data_files = @search.do_search(@data_files)
 
+    creators = @search.creators.map {|creator_email| User.find_by_email(creator_email).nil? ? nil:User.find_by_email(creator_email).display_name}
     @from_date = @search.search_params[:from_date]
     @to_date = @search.search_params[:to_date]
     @selected_facilities = @search.facilities
@@ -613,7 +614,7 @@ class DataFilesController < ApplicationController
     @selected_automation_stati = @search.automation_stati
     @selected_tags = @search.tags
     @selected_labels = @search.labels
-    @selected_creators =  @search.creators.map {|creator_email| User.find_by_email(creator_email).display_name }
+    @selected_creators = creators.compact
     @selected_grant_numbers = @search.grant_numbers
     @selected_related_websites = @search.related_websites
     @selected_contributors = @search.contributors

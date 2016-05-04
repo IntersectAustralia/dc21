@@ -326,8 +326,8 @@ class DataFile < ActiveRecord::Base
   end
 
   def self.with_any_of_these_creators(creator_params)
-    creator_ids = creator_params.map {|creator_email| User.find_by_email(creator_email).id}
-    data_file_ids = DataFile.unscoped.where( creator_id: creator_ids )
+    creator_ids = creator_params.map {|creator_email| User.find_by_email(creator_email).nil? ? nil:User.find_by_email(creator_email).id}
+    data_file_ids = DataFile.unscoped.where( creator_id: creator_ids.compact )
     where(:id => data_file_ids)
   end
 
