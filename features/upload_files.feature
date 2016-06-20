@@ -485,7 +485,7 @@ Feature: Upload files
     And I fill in "data_file_label_list" with "bebba,Abba,cuba,AA<script></script>"
     And I select "samples/sample1.txt" to upload
     And I press "Upload"
-    And the uploaded files display should include "sample1.txt" with labels "AA<script></script>,Abba,bebba,cuba"
+    And the uploaded files display should include "sample1.txt" with labels "bebba,Abba,cuba,AA<script></script>"
     And I fill in "Labels" with "bebba|Abba"
     And I press "Update"
     And I am on the data file details page for sample1.txt

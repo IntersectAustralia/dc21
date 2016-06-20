@@ -71,7 +71,7 @@
           .control-group#labels
             = label_tag "files[#{file.id}][label_list]", "Labels:", class: "control-label"
             .controls
-              = text_field_tag "files[#{file.id}][label_list]", file.labels.pluck(:name).join(','), :class => 'select2_labels', data: {labels: labels}
+              = text_field_tag "files[#{file.id}][label_list]", file.labels.pluck(:name).join('|'), :class => 'select2_labels', data: {labels: labels}
           .control-group
             = label_tag "file_#{file.id}_creator", "Creator:", class: "control-label"
             .controls
