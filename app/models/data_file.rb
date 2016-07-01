@@ -228,7 +228,7 @@ class DataFile < ActiveRecord::Base
 
 
   def label_list=(new_value)
-    label_names = new_value.split(/\|\s*/)
+    label_names = new_value.split(/\|\s*/).uniq
     self.labels = label_names.map { |name|
       existing = Label.where('lower(name) = ?', name.downcase).first
       existing ||= Label.create(:name => name)

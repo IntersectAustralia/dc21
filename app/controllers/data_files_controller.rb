@@ -792,7 +792,7 @@ class DataFilesController < ApplicationController
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for tags - tags must be double-quoted and comma separated'
     end
-    tag_ids
+    tag_ids.uniq
   end
 
   def parse_labels(label_names, errors)
@@ -811,7 +811,7 @@ class DataFilesController < ApplicationController
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for labels - labels must be double-quoted and comma separated'
     end
-    label_ids
+    label_ids.uniq
   end
 
   def parse_creator(creator_email, errors)
@@ -841,7 +841,7 @@ class DataFilesController < ApplicationController
         end
       end
     end
-    contributor_ids
+    contributor_ids.uniq
   end
 
   def parse_grant_numbers(grant_numbers, errors)
@@ -860,7 +860,7 @@ class DataFilesController < ApplicationController
     rescue CSV::MalformedCSVError
       errors << 'Incorrect format for grant numbers - grant numbers must be double-quoted and comma separated'
     end
-    grant_number_ids
+    grant_number_ids.uniq
   end
 
   def sort_column
