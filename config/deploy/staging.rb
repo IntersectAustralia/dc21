@@ -1,9 +1,9 @@
 # Your HTTP server, Apache/etc
-set :web_server, 'ic2-dc21-staging-vm.intersect.org.au'
+set :web_server, 'ic2-diver-staging-vm.intersect.org.au'
 # This may be the same as your Web server
-set :app_server, 'ic2-dc21-staging-vm.intersect.org.au'
+set :app_server, 'ic2-diver-staging-vm.intersect.org.au'
 # This is where Rails migrations will run
-set :db_server, 'ic2-dc21-staging-vm.intersect.org.au'
+set :db_server, 'ic2-diver-staging-vm.intersect.org.au'
 # The user configured to run the rails app
 set :user, 'devel'
 
